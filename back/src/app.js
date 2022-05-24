@@ -1,27 +1,59 @@
-const express = require('express')
-const cors = require('cors')
-const cookieParser = require("cookie-parser");
+require("dotenv").config();
 const morgan = require("morgan");
-const routes = require("./routes/index.js.js.js");
+const mongoose = require("mongoose");
+const express = require("express");
+const cors = require("cors");
+const passport = require("passport");
+const passportLocal = require("passport-local").Strategy;
+const cookieParser = require("cookie-parser");
+const session = require("express-session");
+const bodyParser = require("body-parser");
+const { DB_URL, DB_USER, DB_PASSWORD } = process.env;
+const router = require("./routes/index");
 
-const app = express()
+const app = express();
 
-var whitelist = ['http://localhost:3000/', 'otro dominio']
-var corsOptions = {
+mongoose.connect(
+  `${DB_URL}`,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  },
+  () => {
+    console.log("Mongoose connected");
+  }
+);
+
+let whitelist = ["http://localhost:3000", "otro dominio"];
+let corsOptions = {
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1 || !origin) {
-      callback(null, true)
+      callback(null, true);
     } else {
-      callback(new Error('Not allowed by CORS'))
+      callback(new Error("Not allowed by CORS"));
     }
-  }
-}
+  },
+  credentials: true,
+};
 
-app.use(express.urlencoded({ extended: true, limit: "50mb" }));
-app.use(express.json({ limit: "50mb" }));
-app.use(cookieParser());
+// ---------------- MIDDLEWARES
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
 app.use(morgan("dev"));
-app.use("/", cors(corsOptions), routes);
+
+app.use(
+  session({
+    secret: "secretcode",
+    resave: true,
+    saveUninitialized: true,
+  })
+);
+app.use(cookieParser("secretcode"));
+app.use(passport.initialize());
+app.use(passport.session());
+
+app.use("/", cors(corsOptions), router);
+require("./passportConfig")(passport);
 
 app.use((err, req, res, next) => {
   const status = err.status || 500;
