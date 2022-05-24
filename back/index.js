@@ -1,18 +1,12 @@
-const app = require("./src/app.js");
-//const { db } = require("./src/db.js");
-
-// db.sync({ force: false }).then(
-//   () => {
-//     console.log("Conection with DB: OK");
-//     app.listen( process.env.PORT || 3001, () => {
-//       console.log("CORS enabled / Server listening on port 3001 . . .");
-//     });
-//   },
-//   err => {
-//     console.error(err);
-//   }
-// );
+/* const app = require("./src/app.js");
 
 app.listen( process.env.PORT || 3001, () => {
-      console.log("CORS enabled / Server listening on port 3001 . . .");
-    });
+  console.log("CORS enabled / Server listening on port 3001 . . .");
+}); */
+
+//! ---------------- START SERVER
+const app = require("./src/app.js");
+
+app.listen(4000, () => {
+  console.log("Server listening on port 4000");
+});
