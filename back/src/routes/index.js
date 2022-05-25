@@ -1,7 +1,5 @@
 const { Router } = require("express");
 const router = Router();
-const passport = require("passport");
-const bcrypt = require("bcryptjs");
 const { test } = require("../controllers/test");
 const productsRouter = require("./products.router");
 const userRouter = require("./user.router");
