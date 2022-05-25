@@ -8,7 +8,7 @@ const passportLocal = require("passport-local").Strategy;
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const bodyParser = require("body-parser");
-const { DB_URL, DB_USER, DB_PASSWORD } = process.env;
+const { DB_URL } = process.env;
 const router = require("./routes/index");
 
 const app = express();
