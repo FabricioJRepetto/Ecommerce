@@ -1,11 +1,18 @@
-const { Router } = require('express');
+const { Router } = require("express");
 const router = Router();
-const { getUserCart, addToCart, removeFromCart, emptyCart, deleteCart } = require('../controllers/cart.ctrl.js');
+const {
+  getUserCart,
+  addToCart,
+  removeFromCart,
+  emptyCart,
+  deleteCart,
+} = require("../controllers/cart.ctrl.js");
+const verifyUser = require("../middlewares/verifyUser.js");
 
-router.get('/', getUserCart);
-router.put('/', addToCart);
-router.delete('/', removeFromCart);
-router.delete('/empty', emptyCart);
-router.delete('/delete', deleteCart);
+router.get("/", verifyUser, getUserCart);
+router.put("/", verifyUser, addToCart);
+router.delete("/", verifyUser, removeFromCart);
+router.delete("/empty", verifyUser, emptyCart);
+router.delete("/delete", verifyUser, deleteCart);
 
 module.exports = router;

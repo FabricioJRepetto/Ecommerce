@@ -7,6 +7,8 @@ app.listen( process.env.PORT || 3001, () => {
 //! ---------------- START SERVER
 const app = require("./src/app.js");
 
-app.listen(4000, () => {
-  console.log("Server listening on port 4000");
+const PORT = 4000;
+
+app.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`);
 });

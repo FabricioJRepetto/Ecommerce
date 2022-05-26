@@ -4,11 +4,10 @@ const mongoose = require("mongoose");
 const express = require("express");
 const cors = require("cors");
 const passport = require("passport");
-const passportLocal = require("passport-local").Strategy;
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const bodyParser = require("body-parser");
-const { DB_URL } = process.env;
+const { DB_URL, SESSION_SECRET_CODE } = process.env;
 const router = require("./routes/index");
 
 const app = express();
@@ -43,17 +42,17 @@ app.use(morgan("dev"));
 
 app.use(
   session({
-    secret: "secretcode",
+    secret: `${SESSION_SECRET_CODE}`,
     resave: true,
     saveUninitialized: true,
   })
 );
-app.use(cookieParser("secretcode"));
+app.use(cookieParser(`${SESSION_SECRET_CODE}`));
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.use("/", cors(corsOptions), router);
-require("./passportConfig")(passport);
+require("./config/auth");
 
 app.use((err, req, res, next) => {
   const status = err.status || 500;

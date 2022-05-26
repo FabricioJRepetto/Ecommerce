@@ -1,12 +1,13 @@
 import { useState } from "react";
 import Axios from "axios";
+//import axios from "axios";
 
 const initialSignup = {
-  username: "",
+  email: "",
   password: "",
 };
 const initialSignin = {
-  username: "",
+  email: "",
   password: "",
 };
 
@@ -18,12 +19,11 @@ const Authetication = () => {
   const signup = (e) => {
     e.preventDefault();
     Axios({
-      //! VOLVER A VER ¿cambiar axios por Axios?
       method: "POST",
       data: signupData,
       withCredentials: true,
-      url: "http://localhost:4000/signup", //! VOLVER A VER cambiar
-    }).then((res) => console.log(res));
+      url: "http://localhost:4000/user/signup", //! VOLVER A VER cambiar
+    }).then((res) => console.log(res.data));
   };
   const signin = (e) => {
     e.preventDefault();
@@ -31,18 +31,29 @@ const Authetication = () => {
       method: "POST",
       data: signinData,
       withCredentials: true,
-      url: "http://localhost:4000/signin", //! VOLVER A VER cambiar
-    }).then((res) => console.log(res));
+      url: "http://localhost:4000/user/signin", //! VOLVER A VER cambiar
+    }).then((res) => {
+      console.log(res.data);
+    });
   };
   const getUser = () => {
     Axios({
       method: "GET",
       withCredentials: true,
-      url: "http://localhost:4000/user", //! VOLVER A VER cambiar
+      url: "http://localhost:4000/user/profile", //! VOLVER A VER cambiar
     }).then((res) => {
       setUserData(res.data);
       console.log(res.data);
     });
+  };
+
+  const signOut = () => {
+    /* axios
+      .get("http://localhost:4000/user/signout") */
+    Axios({
+      method: "GET",
+      url: "http://localhost:4000/user/signout",
+    }).then((res) => console.log("sesion cerrada"));
   };
 
   const handleSignup = ({ target }) => {
@@ -64,10 +75,10 @@ const Authetication = () => {
         <h2>Sign Up</h2>
         <input
           type="text"
-          name="username"
-          placeholder="Username"
+          name="email"
+          placeholder="email"
           onChange={handleSignup}
-          value={signupData.username}
+          value={signupData.email}
         />
         <input
           type="text"
@@ -82,10 +93,10 @@ const Authetication = () => {
         <h2>Sign In</h2>
         <input
           type="text"
-          name="username"
-          placeholder="Username"
+          name="email"
+          placeholder="email"
           onChange={handleSignin}
-          value={signinData.username}
+          value={signinData.email}
         />
         <input
           type="text"
@@ -97,7 +108,8 @@ const Authetication = () => {
         <input type="submit" value="Sign In" />
       </form>
       <button onClick={getUser}>Get User</button>
-      {userData && <h1>{userData.username}</h1>}
+      {userData && <h1>{userData.email}</h1>}
+      <button onClick={signOut}>Sign Out</button>
     </div>
   );
 };
