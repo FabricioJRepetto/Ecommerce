@@ -21,7 +21,6 @@ const addToCart = async (req, res, next) => {
             cart.products.push(productToAdd);
             await cart.save();
             res.json('Product added to the cart.');
-
         } else {
             const newCart = new Cart({products: productToAdd, owner: userId});
             await newCart.save();            
@@ -42,7 +41,6 @@ const removeFromCart = async (req, res, next) => {
         await cart.save();
 
         res.json('Product deleted from cart.');
-
     } catch (error) {
         next(error);
     }
@@ -82,4 +80,4 @@ const emptyCart = async (req, res, next) => {
      deleteCart
  };
 
- //* update está deprecated, buscar como eliminar un producto del array
+ //* Comprobar si el usuario existe (?)
