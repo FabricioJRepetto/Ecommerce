@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Axios from "axios";
+//import axios from "axios";
 
 const initialSignup = {
   email: "",
@@ -14,7 +15,6 @@ const Authetication = () => {
   const [signupData, setSignupData] = useState(initialSignup);
   const [signinData, setSigninData] = useState(initialSignin);
   const [userData, setUserData] = useState(null);
-  const [token, setToken] = useState(null);
 
   const signup = (e) => {
     e.preventDefault();
@@ -34,18 +34,26 @@ const Authetication = () => {
       url: "http://localhost:4000/user/signin", //! VOLVER A VER cambiar
     }).then((res) => {
       console.log(res.data);
-      setToken(res.data.token);
     });
   };
   const getUser = () => {
     Axios({
       method: "GET",
       withCredentials: true,
-      url: `http://localhost:4000/user/profile?secret_token=${token}`, //! VOLVER A VER cambiar
+      url: "http://localhost:4000/user/profile", //! VOLVER A VER cambiar
     }).then((res) => {
       setUserData(res.data);
       console.log(res.data);
     });
+  };
+
+  const signOut = () => {
+    /* axios
+      .get("http://localhost:4000/user/signout") */
+    Axios({
+      method: "GET",
+      url: "http://localhost:4000/user/signout",
+    }).then((res) => console.log("sesion cerrada"));
   };
 
   const handleSignup = ({ target }) => {
@@ -101,6 +109,7 @@ const Authetication = () => {
       </form>
       <button onClick={getUser}>Get User</button>
       {userData && <h1>{userData.email}</h1>}
+      <button onClick={signOut}>Sign Out</button>
     </div>
   );
 };
