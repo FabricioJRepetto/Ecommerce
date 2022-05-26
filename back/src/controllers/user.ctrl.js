@@ -49,7 +49,7 @@ const signup = async (req, res, next) => {
 
   try {
     let user = await User.findOne({ email });
-    if (user) throw new Error("This email is already in use");
+    if (user) throw new Error("This email is already in use"); //!VOLVER A VER manejo de errores
     user = new User({ email, password });
     await user.save();
     res.json({ email });

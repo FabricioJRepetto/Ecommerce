@@ -12,7 +12,7 @@ router.post("/signin", signin);
 
 router.post("/signup", signup);
 
-router.get("/signout", signout);
+router.get("/signout", verifyUser, signout);
 
 router.get("/profile", verifyUser, profile);
 
