@@ -2,7 +2,7 @@ const Cart = require("../models/cart");
 
 const getUserCart = async (req, res, next) => {
   try {
-    const userId = req.body.id; //! req.userdata.id
+    const userId = req.user.id;
     const cart = await Cart.findOne({ owner: userId });
     res.json(cart);
   } catch (error) {
