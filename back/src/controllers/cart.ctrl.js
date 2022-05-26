@@ -2,7 +2,7 @@ const Cart = require('../models/cart');
 
 const getUserCart = async (req, res, next) => { 
     try {
-        const userId = req.body.id; //! req.userdata.id
+        const userId = req.userdata.id;
         const cart = await Cart.findOne({owner: userId});
         res.json(cart);
 
@@ -13,7 +13,7 @@ const getUserCart = async (req, res, next) => {
 
 const addToCart = async (req, res, next) => { 
     try {
-        const userId = req.body.id; //! req.userdata.id
+        const userId = req.userdata.id;
         const productToAdd = req.body.product;
         const cart = await Cart.findOne({owner: userId});
 
@@ -33,7 +33,7 @@ const addToCart = async (req, res, next) => {
 
 const removeFromCart = async (req, res, next) => { 
     try {
-        const userId = req.body.id; //! req.userdata.id
+        const userId = req.userdata.id;
         let removeTarget = req.body.product;
         const cart = await Cart.findOne({owner: userId});
 
@@ -48,7 +48,7 @@ const removeFromCart = async (req, res, next) => {
 
 const emptyCart = async (req, res, next) => { 
     try {
-        const userId = req.body.id; //! req.userdata.id
+        const userId = req.userdata.id;
         const cart = await Cart.findOneAndUpdate(
             {owner: userId}, 
             {products: []},
@@ -63,7 +63,7 @@ const emptyCart = async (req, res, next) => {
 
  const deleteCart = async (req, res, next) => { 
     try {
-        const userId = req.body.id; //! req.userdata.id
+        const userId = req.userdata.id;
         await Cart.findOneAndDelete({owner: userId});
         res.json('Done.');
 
