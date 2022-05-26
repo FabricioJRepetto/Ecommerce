@@ -1,43 +1,81 @@
-const { Router } = require('express');
+const { Router } = require("express");
 const router = Router();
 const passport = require("passport");
-const bcrypt = require("bcryptjs");
-const User = require("../models/user"); //!------------- EXPORT
+const jwt = require("jsonwebtoken");
+const User = require("../models/user");
+const { body } = require("express-validator");
+const { validationResult } = require("express-validator");
+const verifyUser = require("../middlewares/verifyUser");
 
-router.post("/signin", (req, res, next) => {
-  passport.authenticate("local", (err, user, info) => {
-    if (err) throw err;
-    if (!user) res.send("No User Exists");
-    else {
-      //! VOLVER A VER ¿quitar else?
-      req.logIn(user, (err) => {
-        if (err) throw err;
-        res.send("Successfully Authenticated");
-        console.log(req.user);
-      });
+router.post(
+  "/signin",
+  [
+    body("email", "Invalid email").trim().notEmpty().escape(),
+    //body("email", "Invalid email").trim().isEmail().normalizeEmail(),
+    //body("username", "Invalid username").trim().notEmpty().escape(),
+    body("password", "Password must have 6 characters at least")
+      .trim()
+      // .isLength({ min: 6 })
+      .escape(),
+  ],
+  async (req, res, next) => {
+    const { email, password } = req.body;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.json(errors.array());
     }
-  })(req, res, next);
-});
 
-router.post("/signup", (req, res) => {
-  const { username, password } = req.body;
-  User.findOne({ username: username }, async (err, doc) => {
-    if (err) throw err;
-    if (doc) res.send("User Already Exists");
-    if (!doc) {
-      const hashedPassword = await bcrypt.hash(password, 10);
-      const newUser = new User({
-        username: username,
-        password: hashedPassword,
+    try {
+      const user = await User.findOne({ email: email });
+      if (!user) throw new Error("Invalid email or password");
+      const passwordMatch = await user.comparePassword(password);
+      if (!passwordMatch) throw new Error("Invalid email or password");
+      req.login(user, function (err) {
+        if (err) throw new Error("Error at create a session");
+        //return res.redirect("/"); //! VOLVER A VER redireccionamiento no funca
+        return res.send("shiiii forkyyy");
       });
-      await newUser.save();
-      res.send("User Created");
+    } catch (err) {
+      return res.json({ error: err.message });
     }
+  }
+);
+
+router.post(
+  "/signup",
+  [
+    body("email", "Invalid email").trim().notEmpty().escape(),
+    //body("email", "Invalid email").trim().isEmail().normalizeEmail(),
+    //body("username", "Invalid username").trim().notEmpty().escape(),
+    body("password", "Password must have 6 characters at least")
+      .trim()
+      //  .isLength({ min: 6 })
+      .escape(),
+  ],
+
+  async (req, res) => {
+    const { email, password } = req.body;
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) return res.json(errors.array());
+
+    try {
+      let user = await User.findOne({ email });
+      if (user) throw new Error("This email is already in use");
+      user = new User({ email, password });
+      await user.save();
+      res.json(user);
+      //! VOLVER A VER agregar redireccionamiento a /user/signin
+    } catch (err) {
+      res.json({ error: err.message });
+    }
+  }
+);
+
+router.get("/profile", verifyUser, (req, res, next) => {
+  res.json({
+    message: "You did it!",
+    user: req.user,
   });
-});
-
-router.get("/profile", (req, res) => {
-  res.send(req.user);
 });
 
 module.exports = router;
