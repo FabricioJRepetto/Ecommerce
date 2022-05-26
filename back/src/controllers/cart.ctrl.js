@@ -18,8 +18,8 @@ const addToCart = async (req, res, next) => {
         const cart = await Cart.findOne({user: userId});
 
         if (cart) {
-            let updateProducts = [...cart.products, productToAdd];
-            await cart.update({products: updateProducts});
+            let updatedProducts = [...cart.products, productToAdd];
+            await cart.update({products: updatedProducts});
             res.json(`Product added to the cart.`);
 
         } else {
@@ -34,7 +34,16 @@ const addToCart = async (req, res, next) => {
 
 const removeFromCart = async (req, res, next) => { 
     try {
-        
+        const userId = req.body.id; // req.userdata.id
+        const productToRemove = req.body.product; //? debería ser string
+        const cart = await Cart.findOne({user: userId});
+
+        let updatedProducts = cart.products.filter(e => {
+            e.productId !== productToRemove
+        });
+        await cart.update({products: updatedProducts});
+        res.json('Product deleted from cart.')
+
     } catch (error) {
         next(error);
     }
@@ -42,7 +51,11 @@ const removeFromCart = async (req, res, next) => {
 
 const emptyCart = async (req, res, next) => { 
     try {
-        
+        const userId = req.body.id; // req.userdata.id
+        const cart = await Cart.findOne({user: userId});
+        await cart.update({products: []});
+        res.json('Cart emptied.')
+
     } catch (error) {
         next(error);
     }

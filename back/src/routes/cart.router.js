@@ -5,6 +5,6 @@ const { getUserCart, addToCart, removeFromCart, emptyCart } = require('../contro
 router.get('/', getUserCart);
 router.put('/', addToCart);
 router.delete('/', removeFromCart);
-router.delete('/', emptyCart);
+router.delete('/empty', emptyCart);
 
 module.exports = router;
