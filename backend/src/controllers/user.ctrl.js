@@ -1,23 +1,11 @@
 const User = require("../models/user");
-const { body } = require("express-validator");
 const { validationResult } = require("express-validator");
 
 const signin = async (req, res, next) => {
-  [
-    body("email", "Invalid email").trim().notEmpty().escape(),
-    //body("email", "Invalid email").trim().isEmail().normalizeEmail(),
-    //body("username", "Invalid username").trim().notEmpty().escape(),
-    body("password", "Password must have 6 characters at least")
-      .trim()
-      // .isLength({ min: 6 })
-      .escape(),
-  ];
-  const { email, password } = req.body;
   const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.json(errors.array());
-  }
+  if (!errors.isEmpty()) return res.json(errors.array());
 
+  const { email, password } = req.body;
   try {
     const user = await User.findOne({ email: email });
     if (!user) throw new Error("Invalid email or password");
@@ -34,19 +22,10 @@ const signin = async (req, res, next) => {
 };
 
 const signup = async (req, res, next) => {
-  [
-    body("email", "Invalid email").trim().notEmpty().escape(),
-    //body("email", "Invalid email").trim().isEmail().normalizeEmail(),
-    //body("username", "Invalid username").trim().notEmpty().escape(),
-    body("password", "Password must have 6 characters at least")
-      .trim()
-      //  .isLength({ min: 6 })
-      .escape(),
-  ];
-  const { email, password } = req.body;
   const errors = validationResult(req);
   if (!errors.isEmpty()) return res.json(errors.array());
 
+  const { email, password } = req.body;
   try {
     let user = await User.findOne({ email });
     if (user) throw new Error("This email is already in use"); //!VOLVER A VER manejo de errores
@@ -63,6 +42,8 @@ const signout = (req, res, next) => {
   req.logout(function (err) {
     if (err) return next(err);
     console.log("sesion cerrada");
+    res.status(200).clearCookie("connect.sid", { path: "/" });
+
     //return res.redirect("/user/signin");
   });
 };
