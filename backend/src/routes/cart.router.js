@@ -1,11 +1,11 @@
 const { Router } = require("express");
 const router = Router();
 const {
-  getUserCart,
-  addToCart,
-  removeFromCart,
-  emptyCart,
-  deleteCart,
+    getUserCart,
+    addToCart,
+    removeFromCart,
+    emptyCart,
+    deleteCart,
 } = require("../controllers/cart.ctrl.js");
 const verifyUser = require("../middlewares/verifyUser.js");
 

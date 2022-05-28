@@ -19,7 +19,7 @@ const addToCart = async (req, res, next) => {
     if (cart) {
       cart.products.push(productToAdd);
       await cart.save();
-      res.json("Product added to the cart.");
+      res.json("Product added to your cart.");
     } else {
       const newCart = new Cart({ products: productToAdd, owner: userId });
       await newCart.save();

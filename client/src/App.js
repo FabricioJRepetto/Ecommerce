@@ -6,7 +6,7 @@ function App() {
   return (
     <div className="App">
       <div>
-        <h1>e-commerce</h1>
+        <h1>eCommerce</h1>
         <Authetication />
       </div>
     </div>
