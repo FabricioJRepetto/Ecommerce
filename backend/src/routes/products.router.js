@@ -1,6 +1,13 @@
 const { Router } = require('express');
 const router = Router();
-const { getAll, getById, createProduct, updateProduct, deleteProduct, deleteAll } = require('../controllers/products.ctrl.js');
+const { 
+    getAll, 
+    getById, 
+    createProduct, 
+    updateProduct, 
+    deleteProduct, 
+    deleteAll
+} = require('../controllers/products.ctrl.js');
 
 router.get('/', getAll);
 router.get('/:id', getById);
