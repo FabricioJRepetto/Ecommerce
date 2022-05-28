@@ -1,7 +1,8 @@
 const { Router } = require("express");
 const router = Router();
-const verifyUser = require("../middlewares/verifyUser");
+const verifyToken = require("../middlewares/verifyToken");
 const { body } = require("express-validator");
+const passport = require("passport");
 const {
   signin,
   signup,
@@ -33,12 +34,17 @@ router.post(
       .trim()
       //  .isLength({ min: 6 })
       .escape(),
+    passport.authenticate("signup", { session: false }),
   ],
   signup
 );
 
-router.get("/signout", /* verifyUser, */ signout);
+router.delete("/signout", /* verifyToken, */ signout);
 
-router.get("/profile", verifyUser, profile);
+router.get(
+  "/profile",
+  verifyToken /* passport.authenticate("jwt", { session: false }) */,
+  profile
+);
 
 module.exports = router;
