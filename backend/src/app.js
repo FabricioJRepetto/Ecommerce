@@ -1,14 +1,17 @@
 require("dotenv").config();
 const morgan = require("morgan");
 const mongoose = require("mongoose");
+const multer = require('multer');
 const express = require("express");
 const cors = require("cors");
+const path = require('path');
 const passport = require("passport");
 const cookieParser = require("cookie-parser");
 const session = require("express-session");
 const bodyParser = require("body-parser");
 const { DB_URL, SESSION_SECRET_CODE } = process.env;
 const router = require("./routes/index");
+const { v4: uuidv4 } = require('uuid')
 
 const app = express();
 
@@ -36,9 +39,17 @@ let corsOptions = {
 };
 
 // ---------------- MIDDLEWARES
-app.use(bodyParser.json({ limit: "50mb" }));
-app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(morgan("dev"));
+
+const storage = multer.diskStorage({
+    destination: path.join(__dirname, 'public/uploads'),
+    filename: (req, file, cb) => {
+        cb(null, uuidv4() + path.extname(file.originalname));
+    }
+});
+app.use(multer({ storage }).single('image')); //? single tiene el nombre del input
 
 app.use(
   session({

@@ -1,6 +1,6 @@
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
-import Authetication from "./components/common/Authetication";
+import Authetication from "./test/Authetication";
 
 function App() {
   return (
