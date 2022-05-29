@@ -33,11 +33,11 @@ const getById = async (req, res, next) => {
 
 const createProduct = async (req, res, next) => {
     try {
-        const {name, price, description, attributes, main_features} = JSON.parse(req.body.data);
+        const {name, price, description, attributes, main_features, available_quantity} = JSON.parse(req.body.data);
         const { url: imgURL, public_id } = await cloudinary.uploader.upload(req.file.path); // public_id es la id que le da cloudinary, sirve para eliminarla
         fs.unlink(req.file.path); // elimina el archivo del directorio 'public/uploads'
 
-        const newProduct = new Product({name, price, description, attributes, main_features, imgURL, public_id});
+        const newProduct = new Product({name, price, description, attributes, main_features, available_quantity, imgURL, public_id});
         const productSaved = await newProduct.save();
         res.json(productSaved);
     } catch (error) {

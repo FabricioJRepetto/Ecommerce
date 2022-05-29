@@ -86,7 +86,8 @@ const Authetication = () => {
         price: 0,
         description: '',
         attributes: ['rojo', 'azul'],
-        main_features: ['rojo', 'azul']
+        main_features: ['rojo', 'azul'],
+        available_quantity: 0
      });
     const [productImg, setProductImg] = useState();
     
@@ -173,18 +174,63 @@ const Authetication = () => {
         <h1>Product Form</h1>
         <form encType="multipart/form-data" onSubmit={submitProduct}>
             <div>
-                <input type="text" name="name" placeholder="Title/Name" onChange={e => setProduct({...product, [e.target.name]: e.target.value})}/>
-                <input type="number" name="price" placeholder="Price" onChange={e => setProduct({...product, [e.target.name]: e.target.value})}/>
+                <input type="text" name="name" 
+                placeholder="Title/Name" 
+                onChange={e => 
+                    setProduct({
+                        ...product, 
+                        [e.target.name]: e.target.value
+                    })
+                }/>
+                <input type="number" name="price" 
+                placeholder="Price" 
+                onChange={e => 
+                    setProduct({
+                        ...product, 
+                        [e.target.name]: e.target.value
+                    })
+                }/>
+                <input type="number" name="available_quantity" placeholder="Stock" 
+                onChange={e => 
+                    setProduct({
+                        ...product, 
+                        [e.target.name]: e.target.value
+                    })
+                }/>
             </div>
             <div>
-                <input type="text" name="main_features" placeholder="Main features" onChange={e => setProduct({...product, [e.target.name]: [e.target.value]})}/>
-                <input type="text" name="attributes" placeholder="Attributes" onChange={e => setProduct({...product, [e.target.name]: [e.target.value]})}/>
+                <input type="text" name="main_features" 
+                placeholder="Main features" 
+                onChange={e => 
+                    setProduct({
+                        ...product, 
+                        [e.target.name]: [e.target.value]
+                    })
+                }/>
+                <input type="text" name="attributes" 
+                placeholder="Attributes" 
+                onChange={e => 
+                    setProduct({
+                        ...product, 
+                        [e.target.name]: [e.target.value]
+                    })
+                }/>
             </div>
             <div>
-                <textarea name="description" placeholder="Description" onChange={e => setProduct({...product, [e.target.name]: e.target.value})}/>
+                <textarea name="description" 
+                placeholder="Description" 
+                onChange={e => 
+                    setProduct({
+                        ...product, 
+                        [e.target.name]: e.target.value
+                    })
+                }/>
             </div>
             <div>
-                <input type="file" name="image" onChange={e => setProductImg(e.target.files[0])} />
+                <input type="file" name="image" 
+                onChange={e => 
+                    setProductImg(e.target.files[0])
+                } />
             </div>
             <input type="submit" value='Send'/>
         </form>

@@ -7,6 +7,7 @@ const productSchema = new Schema(
     description: String,
     attributes: [String],
     main_features: [String],
+    available_quantity: Number,
     imgURL: String,
     public_id: String
   },
