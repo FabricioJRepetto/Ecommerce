@@ -12,7 +12,7 @@ const getUserList = async (req, res, next) => {
 const addToList = async (req, res, next) => {
     try {
         const userId = req.user.id;
-        const productToAdd = req.body.product;        
+        const productToAdd = req.params.id;        
         const list = await Whishlist.findOne({ 
             owner: userId 
         });
@@ -38,7 +38,7 @@ const addToList = async (req, res, next) => {
 const removeFromList = async (req, res, next) => {
     try {
         const userId = req.user.id;
-        const target = req.body.product;
+        const target = req.params.id;
         const list = await Whishlist.findOne({ 
             owner: userId 
         });

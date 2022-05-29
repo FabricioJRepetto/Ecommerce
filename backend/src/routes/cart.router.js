@@ -10,8 +10,8 @@ const {
 const verifyUser = require("../middlewares/verifyUser.js");
 
 router.get("/", verifyUser, getUserCart);
-router.put("/", verifyUser, addToCart);
-router.delete("/", verifyUser, removeFromCart);
+router.put("/:id", verifyUser, addToCart);
+router.delete("/:id", verifyUser, removeFromCart);
 router.delete("/empty", verifyUser, emptyCart);
 router.delete("/delete", verifyUser, deleteCart);
 

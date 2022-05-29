@@ -7,7 +7,7 @@ const {
 } = require("../controllers/whishlist.ctrl.js");
 
 router.get("/", getUserList);
-router.put("/", addToList);
-router.delete("/", removeFromList);
+router.put("/:id", addToList);
+router.delete("/:id", removeFromList);
 
 module.exports = router;
