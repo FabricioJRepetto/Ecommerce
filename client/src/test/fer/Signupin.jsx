@@ -9,8 +9,8 @@ const initialSignup = {
   password: "",
 };
 const initialSignin = {
-  email: "asdasdasd",
-  password: "asdasdasd",
+  email: "test",
+  password: "test",
 };
 
 const Signupin = () => {

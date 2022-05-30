@@ -19,18 +19,3 @@ module.exports = async (req, res, next) => {
     return res.status(401).json({ message: "Unauthorized" });
   }
 };
-
-/* async function isAdmin(req, res, next) {
-  const id = req.user._id;
-  const user = await Users.findById(id);
-  if (user.role === "admin") {
-    next();
-  } else {
-    res.sendStatus(401);
-  }
-}
-
-module.exports = {
-  verifyToken,
-  isAdmin,
-}; */
