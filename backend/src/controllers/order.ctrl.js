@@ -4,7 +4,8 @@ const getOrder = async (req, res, next) => {
     try {
         const userId = req.user.id;
         let userOrders = await Order.find({user: userId});
-        // let response = userOrders.map(e => {...e, total: e.total });
+        // let response = userOrders.toObject().total;
+        // console.log(response);
         res.json(userOrders);
     } catch (error) {
         next(error)
