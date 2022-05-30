@@ -1,17 +1,17 @@
 const { Router } = require("express");
 const router = Router();
 const {
-  getUserCart,
-  addToCart,
-  removeFromCart,
-  emptyCart,
-  deleteCart,
+    getUserCart,
+    addToCart,
+    removeFromCart,
+    emptyCart,
+    deleteCart,
 } = require("../controllers/cart.ctrl.js");
 const verifyToken = require("../middlewares/verifyToken.js");
 
 router.get("/", verifyToken, getUserCart);
-router.put("/", verifyToken, addToCart);
-router.delete("/", verifyToken, removeFromCart);
+router.put("/:id", verifyToken, addToCart);
+router.delete("/:id", verifyToken, removeFromCart);
 router.delete("/empty", verifyToken, emptyCart);
 router.delete("/delete", verifyToken, deleteCart);
 

@@ -20,13 +20,17 @@ const getUserCart = async (req, res, next) => {
 const addToCart = async (req, res, next) => {
   try {
     const userId = req.user._id;
-    const productToAdd = req.body;
+    const productToAdd = req.params.id;
+
     const cart = await Cart.findOne({ owner: userId });
 
     if (cart) {
-      cart.products.push(productToAdd);
+        cart.products.push({
+            productId: productToAdd, 
+            quantity: 1
+        });
       await cart.save();
-      res.json(cart.products);
+      res.json("Product added to your cart.");
     } else {
       const newCart = new Cart({ products: productToAdd, owner: userId });
       await newCart.save();
@@ -40,7 +44,7 @@ const addToCart = async (req, res, next) => {
 const removeFromCart = async (req, res, next) => {
   try {
     const userId = req.user._id;
-    let removeTarget = req.body;
+    let removeTarget = req.params.id;
     const cart = await Cart.findOne({ owner: userId });
 
     cart.products = cart.products.filter((e) => e.productId !== removeTarget);

@@ -8,6 +8,7 @@ const productSchema = new Schema(
     attributes: [String],
     main_features: [String],
     imgURL: String,
+    public_id: String
   },
   {
     versionKey: false,
