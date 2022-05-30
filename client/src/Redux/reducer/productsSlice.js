@@ -10,8 +10,13 @@ export const productsSlice = createSlice({
     order: {},
     productsFiltered: [],
     productDetails: {},
+    token: "",
   },
   reducers: {
+    loadToken: (state, action) => {
+      state.token = action.payload;
+    },
+
     loadProductsFound: (state, action) => {
       state.productsFound = action.payload;
     },
@@ -57,6 +62,7 @@ export const {
   filterProducts,
   orderProducts,
   loadProductDetails,
+  loadToken,
 } = productsSlice.actions;
 
 export default productsSlice.reducer;
