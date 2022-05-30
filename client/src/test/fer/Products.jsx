@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import Axios from "axios";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Products = () => {
   const [products, setProducts] = useState(null);
+  const token = useSelector((state) => state.sessionReducer.token);
+
   const getProducts = () => {
     Axios({
       method: "GET",
@@ -20,7 +23,10 @@ const Products = () => {
       method: "PUT",
       data: { productId: id, quantity: 2 },
       withCredentials: true,
-      url: "http://localhost:4000/cart", //! VOLVER A VER cambiar
+      url: "http://localhost:4000/cart",
+      headers: {
+        Authorization: `token ${token}`,
+      }, //! VOLVER A VER cambiar
     }).then((res) => {
       console.log(res.data);
     });

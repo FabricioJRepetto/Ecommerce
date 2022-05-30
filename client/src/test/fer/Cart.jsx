@@ -5,10 +5,9 @@ import { useSelector } from "react-redux";
 
 const Cart = () => {
   const [cart, setCart] = useState(null);
-  const token = useSelector((state) => state.productsReducer.token);
+  const token = useSelector((state) => state.sessionReducer.token);
 
   const getCart = () => {
-    console.log(token);
     Axios({
       method: "GET",
       withCredentials: true,
@@ -18,7 +17,6 @@ const Cart = () => {
       },
     }).then((res) => {
       console.log(res.data);
-      console.log(typeof res.data);
       typeof res.data !== "string" && setCart(res.data);
     });
   };

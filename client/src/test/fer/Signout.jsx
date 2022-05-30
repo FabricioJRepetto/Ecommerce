@@ -2,16 +2,22 @@ import React, { useState } from "react";
 import Axios from "axios";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { loadToken } from "../../Redux/reducer/sessionSlice";
 
 const Signout = () => {
   const [userData, setUserData] = useState(null);
-  const token = useSelector((state) => state.productsReducer.token);
+  const token = useSelector((state) => state.sessionReducer.token);
+  const dispatch = useDispatch();
 
   const getUser = () => {
     Axios({
       method: "GET",
       withCredentials: true,
       url: "http://localhost:4000/user/profile", //! VOLVER A VER cambiar
+      headers: {
+        Authorization: `token ${token}`,
+      },
     }).then((res) => {
       setUserData(res.data.user);
       console.log(res.data);
@@ -19,12 +25,8 @@ const Signout = () => {
   };
 
   const signOut = () => {
-    /* axios
-      .get("http://localhost:4000/user/signout") */
-    Axios({
-      method: "DELETE",
-      url: "http://localhost:4000/user/signout",
-    }).then((res) => console.log("sesion cerrada"));
+    window.localStorage.removeItem("loggedTokenEcommerce");
+    dispatch(loadToken(""));
   };
 
   return (

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Axios from "axios";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { loadToken } from "../../Redux/reducer/productsSlice";
+import { loadToken } from "../../Redux/reducer/sessionSlice";
 
 const initialSignup = {
   email: "",
@@ -35,6 +35,7 @@ const Signupin = () => {
       withCredentials: true,
       url: "http://localhost:4000/user/signin", //! VOLVER A VER cambiar
     }).then((res) => {
+      window.localStorage.setItem("loggedTokenEcommerce", res.data.token);
       console.log(res.data);
       dispatch(loadToken(res.data.token));
     });

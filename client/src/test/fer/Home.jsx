@@ -1,10 +1,20 @@
+import { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import Cart from "./Cart";
 import Products from "./Products";
 import Signout from "./Signout";
 import Signupin from "./Signupin";
+import { useDispatch } from "react-redux";
+import { loadToken } from "../../Redux/reducer/sessionSlice";
 
 const Home = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const loggedUserToken = window.localStorage.getItem("loggedTokenEcommerce");
+    loggedUserToken && dispatch(loadToken(loggedUserToken));
+  }, []);
+
   return (
     <Routes>
       <Route path="/signin" element={<Signupin />} />

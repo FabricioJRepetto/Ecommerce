@@ -18,14 +18,11 @@ const getUserCart = async (req, res, next) => {
 };
 
 const addToCart = async (req, res, next) => {
-  console.log("req.body", req.body);
-  console.log("req.user", req.user);
   try {
-    const userId = req.user.id;
+    const userId = req.user._id;
     const productToAdd = req.body;
     const cart = await Cart.findOne({ owner: userId });
 
-    console.log("product", productToAdd);
     if (cart) {
       cart.products.push(productToAdd);
       await cart.save();
@@ -42,7 +39,7 @@ const addToCart = async (req, res, next) => {
 
 const removeFromCart = async (req, res, next) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user._id;
     let removeTarget = req.body;
     const cart = await Cart.findOne({ owner: userId });
 
@@ -57,7 +54,7 @@ const removeFromCart = async (req, res, next) => {
 
 const emptyCart = async (req, res, next) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user._id;
     const cart = await Cart.findOneAndUpdate(
       { owner: userId },
       { products: [] },
@@ -71,7 +68,7 @@ const emptyCart = async (req, res, next) => {
 
 const deleteCart = async (req, res, next) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user._id;
     await Cart.findOneAndDelete({ owner: userId });
     res.json("Done.");
   } catch (error) {
