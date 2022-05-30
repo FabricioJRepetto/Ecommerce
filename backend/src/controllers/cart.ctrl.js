@@ -1,30 +1,45 @@
 const Cart = require("../models/cart");
+const Product = require("../models/product");
 
 const getUserCart = async (req, res, next) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user._id;
     const cart = await Cart.findOne({ owner: userId });
-    res.json(cart);
+    if (!cart) return res.json(cart);
+    let userCart = [];
+    for (const product of cart.products) {
+      const productDetail = await Product.findById(product.productId);
+      productDetail && userCart.push(productDetail);
+    }
+    res.json(userCart);
   } catch (error) {
     next(error);
   }
 };
 
 const addToCart = async (req, res, next) => {
+  console.log(req.user._id);
   try {
-    const userId = req.user.id;
+    const userId = req.user._id;
     const productToAdd = req.params.id;
+
     const cart = await Cart.findOne({ owner: userId });
 
     if (cart) {
-        cart.products.push({
-            productId: productToAdd, 
-            quantity: 1
-        });
+      cart.products.push({
+        productId: productToAdd,
+        quantity: 1,
+      });
       await cart.save();
       res.json("Product added to your cart.");
     } else {
-      const newCart = new Cart({ products: productToAdd, owner: userId });
+      const newCart = new Cart({
+        products: {
+          productId: productToAdd,
+          quantity: 1,
+        },
+        owner: userId,
+      });
       await newCart.save();
       res.json(newCart);
     }
@@ -35,7 +50,7 @@ const addToCart = async (req, res, next) => {
 
 const removeFromCart = async (req, res, next) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user._id;
     let removeTarget = req.params.id;
     const cart = await Cart.findOne({ owner: userId });
 
@@ -50,7 +65,7 @@ const removeFromCart = async (req, res, next) => {
 
 const emptyCart = async (req, res, next) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user._id;
     const cart = await Cart.findOneAndUpdate(
       { owner: userId },
       { products: [] },
@@ -64,7 +79,7 @@ const emptyCart = async (req, res, next) => {
 
 const deleteCart = async (req, res, next) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user._id;
     await Cart.findOneAndDelete({ owner: userId });
     res.json("Done.");
   } catch (error) {
