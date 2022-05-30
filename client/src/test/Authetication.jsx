@@ -2,15 +2,6 @@ import React, { useState } from "react";
 import axios from "axios";
 //import axios from "axios";
 
-const initialSignup = {
-  email: "",
-  password: "",
-};
-const initialSignin = {
-  email: "",
-  password: "",
-};
-
 const Authetication = () => {
   const [products, setProducts] = useState(null);
   const getProducts = () => {
