@@ -21,9 +21,9 @@ const Products = () => {
   const addToCart = (id) => {
     Axios({
       method: "PUT",
-      data: { productId: id, quantity: 2 },
+      data: { /* productId: id, */ quantity: 2 },
       withCredentials: true,
-      url: "http://localhost:4000/cart",
+      url: `http://localhost:4000/cart/${id}`,
       headers: {
         Authorization: `token ${token}`,
       }, //! VOLVER A VER cambiar

@@ -3,17 +3,17 @@ const morgan = require("morgan");
 const MongoStore = require("connect-mongo");
 const mongoSanitize = require("express-mongo-sanitize");
 const mongoose = require("mongoose");
-const multer = require('multer');
+const multer = require("multer");
 const express = require("express");
 const cors = require("cors");
-const path = require('path');
+const path = require("path");
 const passport = require("passport");
 const passportLocal = require("passport-local").Strategy;
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const { DB_NAME, SESSION_SECRET_CODE } = process.env;
 const router = require("./routes/index");
-const { v4: uuidv4 } = require('uuid')
+const { v4: uuidv4 } = require("uuid");
 
 const clientDb = require("./database/db");
 
@@ -37,14 +37,14 @@ app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(morgan("dev"));
 
 const storage = multer.diskStorage({
-    destination: path.join(__dirname, 'public/uploads'),
-    filename: (req, file, cb) => {
-        cb(null, uuidv4() + path.extname(file.originalname));
-    }
+  destination: path.join(__dirname, "public/uploads"),
+  filename: (req, file, cb) => {
+    cb(null, uuidv4() + path.extname(file.originalname));
+  },
 });
-app.use(multer({ storage }).single('image')); //? single tiene el nombre del input
+app.use(multer({ storage }).single("image")); //? single tiene el nombre del input
 
-app.use(
+/* app.use(
   session({
     secret: SESSION_SECRET_CODE,
     resave: true,
@@ -53,7 +53,7 @@ app.use(
     //  clientPromise: clientDb,
     //  dbName: DB_NAME,
     })
-  )
+  ) */
 
 app.use(cookieParser(/* SESSION_SECRET_CODE */));
 /* app.use(passport.initialize());

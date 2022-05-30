@@ -18,6 +18,7 @@ const getUserCart = async (req, res, next) => {
 };
 
 const addToCart = async (req, res, next) => {
+  console.log(req.user._id);
   try {
     const userId = req.user._id;
     const productToAdd = req.params.id;
@@ -25,14 +26,20 @@ const addToCart = async (req, res, next) => {
     const cart = await Cart.findOne({ owner: userId });
 
     if (cart) {
-        cart.products.push({
-            productId: productToAdd, 
-            quantity: 1
-        });
+      cart.products.push({
+        productId: productToAdd,
+        quantity: 1,
+      });
       await cart.save();
       res.json("Product added to your cart.");
     } else {
-      const newCart = new Cart({ products: productToAdd, owner: userId });
+      const newCart = new Cart({
+        products: {
+          productId: productToAdd,
+          quantity: 1,
+        },
+        owner: userId,
+      });
       await newCart.save();
       res.json(newCart);
     }
