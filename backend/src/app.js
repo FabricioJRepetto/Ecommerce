@@ -7,7 +7,6 @@ const cors = require("cors");
 const passport = require("passport");
 const passportLocal = require("passport-local").Strategy;
 const cookieParser = require("cookie-parser");
-const session = require("express-session");
 const bodyParser = require("body-parser");
 const { DB_NAME, SESSION_SECRET_CODE } = process.env;
 const router = require("./routes/index");
@@ -33,24 +32,24 @@ app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
 app.use(morgan("dev"));
 
-app.use(
+/* app.use(
   session({
     secret: SESSION_SECRET_CODE,
     resave: true,
     saveUninitialized: true,
-    /* store: MongoStore.create({
-      clientPromise: clientDb,
-      dbName: DB_NAME,
-    }), */
+    // store: MongoStore.create({
+    //  clientPromise: clientDb,
+    //  dbName: DB_NAME,
+    }), 
   })
-);
-app.use(cookieParser(SESSION_SECRET_CODE));
-app.use(passport.initialize());
-app.use(passport.session());
+); */
+app.use(cookieParser(/* SESSION_SECRET_CODE */));
+/* app.use(passport.initialize());
+app.use(passport.session()); */
 
 app.use(mongoSanitize());
 app.use("/", cors(corsOptions), router);
-require("./config/auth"); /* (passport); */
+require("./config/auth");
 
 app.use((err, req, res, next) => {
   const status = err.status || 500;
