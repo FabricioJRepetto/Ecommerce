@@ -29,6 +29,7 @@ export const productsSlice = createSlice({
       let productsToFilter;
       state.productsFiltered.length === 0
         ? (productsToFilter = state[action.payload.source])
+        // eslint-disable-next-line
         : (productsToFilter = state.productsFiltered);
     },
 

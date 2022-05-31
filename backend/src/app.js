@@ -10,7 +10,6 @@ const path = require("path");
 const passport = require("passport");
 const passportLocal = require("passport-local").Strategy;
 const cookieParser = require("cookie-parser");
-const bodyParser = require("body-parser");
 const { DB_NAME, SESSION_SECRET_CODE } = process.env;
 const router = require("./routes/index");
 const { v4: uuidv4 } = require("uuid");
@@ -19,6 +18,7 @@ const clientDb = require("./database/db");
 
 const app = express();
 
+// ---------------- Config
 let whitelist = ["http://localhost:3000", "otro dominio"];
 let corsOptions = {
   origin: function (origin, callback) {
@@ -31,18 +31,28 @@ let corsOptions = {
   credentials: true,
 };
 
-// ---------------- MIDDLEWARES
-app.use(express.json({ limit: "50mb" }));
-app.use(express.urlencoded({ extended: true, limit: "50mb" }));
-app.use(morgan("dev"));
-
-const storage = multer.diskStorage({
+const fileFilters=(req,file,cb)=>{
+    if(file.mimetype==='image/jpeg' || file.mimetype ==='image/png'){
+        cb(null, true);
+    }
+    else{
+        cb(null, false);
+    }
+};
+const StorageConfig = multer.diskStorage({
   destination: path.join(__dirname, "public/uploads"),
   filename: (req, file, cb) => {
     cb(null, uuidv4() + path.extname(file.originalname));
   },
 });
-app.use(multer({ storage }).single("image")); //? single tiene el nombre del input
+const Multerupload = multer({ storage: StorageConfig, fileFilter: fileFilters});
+
+// ---------------- MIDDLEWARES
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ extended: true, limit: "50mb" }));
+app.use(morgan("dev"));
+
+app.use(Multerupload.any("images")); //? single/array/any tiene el nombre del objeto que viene en el req.
 
 /* app.use(
   session({

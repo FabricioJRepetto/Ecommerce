@@ -7,8 +7,11 @@ const productSchema = new Schema(
     description: String,
     attributes: [String],
     main_features: [String],
-    imgURL: String,
-    public_id: String
+    available_quantity: Number,
+    images: [{
+        imgURL: String,
+        public_id: String
+  }]
   },
   {
     versionKey: false,

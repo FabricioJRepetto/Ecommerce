@@ -7,13 +7,12 @@ const {
     emptyCart,
     deleteCart,
 } = require("../controllers/cart.ctrl.js");
-const verifyToken = require("../middlewares/verifyToken.js");
 
-router.get("/", verifyToken, getUserCart);
-router.put("/:id", verifyToken, addToCart);
-router.delete("/:id", verifyToken, removeFromCart);
-router.delete("/empty", verifyToken, emptyCart);
-router.delete("/delete", verifyToken, deleteCart);
+router.get("/", getUserCart);
+router.put("/:id", addToCart);
+router.delete("/:id", removeFromCart);
+router.delete("/empty", emptyCart);
+router.delete("/delete", deleteCart);
 
 module.exports = router;
 /* pelado 629038b0dd969557733d2eb1
