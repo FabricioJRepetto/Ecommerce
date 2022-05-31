@@ -33,7 +33,8 @@ const ProductForm = () => {
         setProductImg([...e.target.files])
      }
   return (
-    <div>      
+    <div>
+        <hr />
         <h2>Product CREATION</h2>
         <form encType="multipart/form-data" onSubmit={submitProduct}>
             <div>

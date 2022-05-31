@@ -46,18 +46,6 @@ const Products = () => {
           </div>
         ))
       )}
-      <hr />
-      <div>
-        <Link to="/signin">
-          <h3>Sign in</h3>
-        </Link>
-        <Link to="/signout">
-          <h3>Sign out</h3>
-        </Link>
-        <Link to="/cart">
-          <h3>Cart</h3>
-        </Link>
-      </div>
     </>
   );
 };

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
-import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { loadToken } from "../../Redux/reducer/sessionSlice";
 import jwt_decode from "jwt-decode";
@@ -19,6 +18,7 @@ const Signupin = () => {
   const [signupData, setSignupData] = useState(initialSignup);
   const [signinData, setSigninData] = useState(initialSignin);
   const dispatch = useDispatch();
+// eslint-disable-next-line
   const [user, setUser] = useState(null);
 
   const signup = (e) => {
@@ -117,23 +117,6 @@ const Signupin = () => {
         />
         <input type="submit" value="Sign In" />
       </form>
-      <hr />
-      <div id="signInDiv"></div>
-      <hr />
-      <div>
-        <Link to="/signout">
-          <h3>Sign out</h3>
-        </Link>
-        <Link to="/products">
-          <h3>Products</h3>
-        </Link>
-        <Link to="/productForm">
-          <h3>Create Products</h3>
-        </Link>
-        <Link to="/cart">
-          <h3>Cart</h3>
-        </Link>
-      </div>
     </>
   );
 };

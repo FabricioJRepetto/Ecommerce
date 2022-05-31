@@ -1,0 +1,11 @@
+.navBar {    
+    display: flex;
+    justify-content: center;
+}
+.navBar a {
+    color: beige;
+    font-size: 1rem;
+    font-weight: 800;
+    text-decoration: none;
+    margin: 0 1vw 0 1vw;
+}
