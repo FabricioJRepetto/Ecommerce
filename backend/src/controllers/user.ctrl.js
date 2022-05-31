@@ -46,8 +46,25 @@ const profile = (req, res, next) => {
   });
 };
 
+const role = async (req, res, next) => {
+  try {
+    const userFound = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        role: req.body.role,
+      },
+      { new: true }
+    );
+    if (!userFound) return res.status(404).json({ message: "No user found" });
+    return res.send(userFound);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   signin,
   signup,
   profile,
+  role,
 };
