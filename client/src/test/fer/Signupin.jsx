@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { loadToken } from "../../Redux/reducer/sessionSlice";
+import jwt_decode from "jwt-decode";
 
+const { REACT_APP_OAUTH_CLIENT_ID } = process.env;
 const initialSignup = {
   email: "",
   password: "",
@@ -17,6 +19,7 @@ const Signupin = () => {
   const [signupData, setSignupData] = useState(initialSignup);
   const [signinData, setSigninData] = useState(initialSignin);
   const dispatch = useDispatch();
+  const [user, setUser] = useState(null);
 
   const signup = (e) => {
     e.preventDefault();
@@ -53,6 +56,26 @@ const Signupin = () => {
       [target.name]: target.value,
     });
   };
+
+  const handleCallbackResponse = (response) => {
+    console.log("shii forkii", response.credential);
+    const userDecoded = jwt_decode(response.credential);
+    setUser(userDecoded);
+    document.getElementById("signInDiv").hidden = true;
+  };
+
+  useEffect(() => {
+    /* global google */
+    google.accounts.id.initialize({
+      client_id: REACT_APP_OAUTH_CLIENT_ID,
+      callback: handleCallbackResponse,
+    });
+
+    google.accounts.id.renderButton(document.getElementById("signInDiv"), {
+      theme: "outline",
+      size: "large",
+    });
+  }, []);
 
   return (
     <>
@@ -94,6 +117,8 @@ const Signupin = () => {
         />
         <input type="submit" value="Sign In" />
       </form>
+      <hr />
+      <div id="signInDiv"></div>
       <hr />
       <div>
         <Link to="/signout">
