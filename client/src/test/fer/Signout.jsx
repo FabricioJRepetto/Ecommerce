@@ -36,18 +36,6 @@ const Signout = () => {
       {userData && <h1>{userData.email}</h1>}
       <button onClick={getUser}>Get User</button>
       <button onClick={signOut}>Sign Out</button>
-      <hr />
-      <div>
-        <Link to="/signin">
-          <h3>Sign in</h3>
-        </Link>
-        <Link to="/products">
-          <h3>Products</h3>
-        </Link>
-        <Link to="/cart">
-          <h3>Cart</h3>
-        </Link>
-      </div>
     </>
   );
 };

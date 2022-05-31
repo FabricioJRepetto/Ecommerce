@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
+import NavBar from "./NavBar";
 import Cart from "./Cart";
 import Products from "./Products";
 import Signout from "./Signout";
@@ -18,13 +19,16 @@ const Home = () => {
   }, []);
 
   return (
-    <Routes>
-      <Route path="/signin" element={<Signupin />} />
-      <Route path="/signout" element={<Signout />} />
-      <Route path="/products" element={<Products />} />
-      <Route path="/productForm" element={<ProductForm />} />
-      <Route path="/cart" element={<Cart />} />
-    </Routes>
+      <>        
+        <NavBar />
+        <Routes>
+        <Route path="/signin" element={<Signupin />} />
+        <Route path="/signout" element={<Signout />} />
+        <Route path="/products" element={<Products />} />
+        <Route path="/productForm" element={<ProductForm />} />
+        <Route path="/cart" element={<Cart />} />
+        </Routes>
+      </>
   );
 };
 
