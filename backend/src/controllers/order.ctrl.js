@@ -2,10 +2,8 @@ const Order = require('../models/order');
 
 const getOrder = async (req, res, next) => { 
     try {
-        const userId = req.user.id;
+        const userId = req.user._id;
         let userOrders = await Order.find({user: userId});
-        // let response = userOrders.toObject().total;
-        // console.log(response);
         res.json(userOrders);
     } catch (error) {
         next(error)
@@ -23,7 +21,7 @@ const getOrdersAdminMode = async (req, res, next) => { //! SOLO ADMIN
 
 const createOrder = async (req, res, next) => { 
     try {
-        const userId = req.user.id;
+        const userId = req.user._id;
         const products = req.body.products;
         const status = req.body.status;
 

@@ -102,6 +102,9 @@ const Signupin = () => {
         <Link to="/products">
           <h3>Products</h3>
         </Link>
+        <Link to="/productForm">
+          <h3>Create Products</h3>
+        </Link>
         <Link to="/cart">
           <h3>Cart</h3>
         </Link>

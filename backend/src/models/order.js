@@ -18,13 +18,14 @@ const orderSchema = new Schema(
   {
     timestamps: true,
     versionKey: false,
-    toJSON: { virtuals: true },
-    toObject: { virtuals: true }
+    toJSON: { getters: true, virtuals: true },
+    toObject: { getters: true, virtuals: true }
   }
 );
+
 // Order.total
 orderSchema.virtual('total').get(function() {
-    let total;    
+    let total = 0;    
     this.products.forEach(product => {
         total += product.price * product.quantity;
     });
