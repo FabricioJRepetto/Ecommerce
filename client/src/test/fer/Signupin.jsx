@@ -18,8 +18,6 @@ const Signupin = () => {
   const [signupData, setSignupData] = useState(initialSignup);
   const [signinData, setSigninData] = useState(initialSignin);
   const dispatch = useDispatch();
-// eslint-disable-next-line
-  const [user, setUser] = useState(null);
 
   const signup = (e) => {
     e.preventDefault();
@@ -58,9 +56,12 @@ const Signupin = () => {
   };
 
   const handleCallbackResponse = (response) => {
-    console.log("shii forkii", response.credential);
+    //response.credential = Google user token
+    const googleToken = "google" + response.credential;
+    dispatch(loadToken(googleToken));
+    //userDecoded contains Google user data
     const userDecoded = jwt_decode(response.credential);
-    setUser(userDecoded);
+
     document.getElementById("signInDiv").hidden = true;
   };
 
@@ -117,6 +118,8 @@ const Signupin = () => {
         />
         <input type="submit" value="Sign In" />
       </form>
+      <hr />
+      <div id="signInDiv"></div>
     </>
   );
 };

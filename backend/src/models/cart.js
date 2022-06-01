@@ -13,9 +13,8 @@ const cartSchema = new Schema(
       },
     ],
     owner: {
-      ref: "User",
-      type: Schema.Types.ObjectId,
-      require: true,
+      type: String,
+      required: true,
     },
   },
   {

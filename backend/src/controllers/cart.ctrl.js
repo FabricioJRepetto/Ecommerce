@@ -18,7 +18,6 @@ const getUserCart = async (req, res, next) => {
 };
 
 const addToCart = async (req, res, next) => {
-  console.log(req.user._id);
   try {
     const userId = req.user._id;
     const productToAdd = req.params.id;
