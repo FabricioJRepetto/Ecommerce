@@ -18,9 +18,6 @@ const Signupin = () => {
   const [signupData, setSignupData] = useState(initialSignup);
   const [signinData, setSigninData] = useState(initialSignin);
   const dispatch = useDispatch();
-  // eslint-disable-next-line
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(null);
 
   const signup = (e) => {
     e.preventDefault();
@@ -59,47 +56,13 @@ const Signupin = () => {
   };
 
   const handleCallbackResponse = (response) => {
-    //response.credential = google user token
+    //response.credential = Google user token
     const googleToken = "google" + response.credential;
     dispatch(loadToken(googleToken));
+    //userDecoded contains Google user data
     const userDecoded = jwt_decode(response.credential);
-    setUser(userDecoded);
+
     document.getElementById("signInDiv").hidden = true;
-  };
-
-  let userGoogle1 = {
-    aud: "1092031009479-73reo300d0ja70b214b1n2v09grv3c26.apps.googleusercontent.com",
-    azp: "1092031009479-73reo300d0ja70b214b1n2v09grv3c26.apps.googleusercontent.com",
-    email: "el.ninio@live.com.ar",
-    email_verified: true,
-    exp: 1654027598,
-    given_name: "cumpaMirá",
-    iat: 1654023998,
-    iss: "https://accounts.google.com",
-    jti: "bc750c1451f8ebb6b60f6b8b995813c25f555446",
-    name: "cumpaMirá",
-    nbf: 1654023698,
-    picture:
-      "https://lh3.googleusercontent.com/a-/AOh14GjIlq1XqXtccF0LK7YDAeSf4IziyWMc1uv0h4rb3A=s96-c",
-    sub: "109754491233849488161",
-  };
-
-  let userGoogle2 = {
-    aud: "1092031009479-73reo300d0ja70b214b1n2v09grv3c26.apps.googleusercontent.com",
-    azp: "1092031009479-73reo300d0ja70b214b1n2v09grv3c26.apps.googleusercontent.com",
-    email: "fer.eze.ram@gmail.com",
-    email_verified: true,
-    exp: 1654027810,
-    family_name: "Ramirez",
-    given_name: "Fernando",
-    iat: 1654024210,
-    iss: "https://accounts.google.com",
-    jti: "02004a8bb43310b54f95a8bfedd4e259b7e9d789",
-    name: "Fernando Ramirez",
-    nbf: 1654023910,
-    picture:
-      "https://lh3.googleusercontent.com/a/AATXAJxOQzh6iezBeW7wD4PAhlTlB-lfVu07iEh-p7XJ=s96-c",
-    sub: "103519818468996423776",
   };
 
   useEffect(() => {
