@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import Axios from "axios";
-import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { loadToken } from "../../Redux/reducer/sessionSlice";
+import { BACK_URL } from "./constants";
 
 const Signout = () => {
   const [userData, setUserData] = useState(null);
@@ -14,7 +14,7 @@ const Signout = () => {
     Axios({
       method: "GET",
       withCredentials: true,
-      url: "http://localhost:4000/user/profile", //! VOLVER A VER cambiar
+      url: `${BACK_URL}/user/profile`, //! VOLVER A VER cambiar
       headers: {
         Authorization: `token ${token}`,
       },

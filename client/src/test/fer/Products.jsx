@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Axios from "axios";
-import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { BACK_URL } from "./constants";
 
 const Products = () => {
   const [products, setProducts] = useState(null);
@@ -11,7 +11,7 @@ const Products = () => {
     Axios({
       method: "GET",
       withCredentials: true,
-      url: "http://localhost:4000/product", //! VOLVER A VER cambiar
+      url: `${BACK_URL}/product`, //! VOLVER A VER cambiar
     }).then((res) => {
       setProducts(res.data);
       console.log(res.data);
@@ -20,10 +20,9 @@ const Products = () => {
 
   const addToCart = (id) => {
     Axios({
-      method: "PUT",
-      /* data: { productId: id, quantity: 2 }, */
+      method: "POST",
       withCredentials: true,
-      url: `http://localhost:4000/cart/${id}`,
+      url: `${BACK_URL}/cart/${id}`,
       headers: {
         Authorization: `token ${token}`,
       }, //! VOLVER A VER cambiar

@@ -3,6 +3,7 @@ import Axios from "axios";
 import { useDispatch } from "react-redux";
 import { loadToken } from "../../Redux/reducer/sessionSlice";
 import jwt_decode from "jwt-decode";
+import { BACK_URL } from "./constants";
 
 const { REACT_APP_OAUTH_CLIENT_ID } = process.env;
 const initialSignup = {
@@ -27,7 +28,7 @@ const Signupin = () => {
       method: "POST",
       data: signupData,
       withCredentials: true,
-      url: "http://localhost:4000/user/signup", //! VOLVER A VER cambiar
+      url: `${BACK_URL}/user/signup`, //! VOLVER A VER cambiar
     }).then((res) => console.log(res.data));
   };
   const signin = (e) => {
@@ -36,7 +37,7 @@ const Signupin = () => {
       method: "POST",
       data: signinData,
       withCredentials: true,
-      url: "http://localhost:4000/user/signin", //! VOLVER A VER cambiar
+      url: `${BACK_URL}/user/signin`, //! VOLVER A VER cambiar
     }).then((res) => {
       window.localStorage.setItem("loggedTokenEcommerce", res.data.token);
       console.log(res.data);
@@ -62,6 +63,7 @@ const Signupin = () => {
     const userDecoded = jwt_decode(response.credential);
     setUser(userDecoded);
     document.getElementById("signInDiv").hidden = true;
+    console.log(userDecoded);
   };
 
   useEffect(() => {
@@ -117,6 +119,8 @@ const Signupin = () => {
         />
         <input type="submit" value="Sign In" />
       </form>
+      <hr />
+      <div id="signInDiv"></div>
     </>
   );
 };
