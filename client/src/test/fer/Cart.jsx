@@ -1,25 +1,51 @@
 import React, { useState } from "react";
-import Axios from "axios";
-import { Link } from "react-router-dom";
+import axios from "axios";
 import { useSelector } from "react-redux";
+import { BACK_URL } from "./constants";
 
 const Cart = () => {
   const [cart, setCart] = useState(null);
   const token = useSelector((state) => state.sessionReducer.token);
 
-  const getCart = () => {
-    Axios({
+  const getCart = async () => {
+    const { data } = await axios({
       method: "GET",
       withCredentials: true,
-      url: "http://localhost:4000/cart", //! VOLVER A VER cambiar
+      url: `${BACK_URL}/cart`, //! VOLVER A VER cambiar
       headers: {
         Authorization: `token ${token}`,
       },
-    }).then((res) => {
-      console.log(res.data);
-      typeof res.data !== "string" && setCart(res.data);
     });
+      console.log(data);
+      typeof data !== 'string' &&
+      setCart(data);
   };
+
+  const handleQuantity = async (id, num) => {
+        const { data } = await axios({
+            method: "PUT",
+            withCredentials: true,
+            url: `${BACK_URL}/cart/quantity/?id=${id}&amount=${num}`,
+            headers: {
+                Authorization: `token ${token}`,
+            }
+        });
+        console.log(data);
+        num>0
+        ? document.getElementById(id).innerHTML++
+        : document.getElementById(id).innerHTML--;
+  };
+  const handleQuantityEx = async (id, num) => { 
+        const { data } = await axios({
+            method: "PUT",
+            withCredentials: true,
+            url: `${BACK_URL}/cart/quantityEx?id=${id}&amount=${num}`,
+            headers: {
+                Authorization: `token ${token}`,
+            }
+        });
+        document.getElementById(id).value = data;
+   }
 
   return (
     <>
@@ -29,7 +55,18 @@ const Cart = () => {
       {React.Children.toArray(
         cart?.map((prod) => (
           <div>
-            {prod.name} - ${prod.price}
+                {prod.details.name} - ${prod.details.price} - 
+                <button onClick={() => handleQuantity(prod.details._id, -1)}>-</button>
+                <span id={prod.details._id}>{prod.quantity}</span>
+                <button onClick={() => handleQuantity(prod.details._id, 1)}>+</button>
+                {/*<input type="number"
+                    id={prod.details._id}
+                    defaultValue={prod.quantity}
+                    onChange={(e) => handleQuantityEx(
+                        prod.details._id,
+                        e.target.value
+                    )}
+                     />*/}
           </div>
         ))
       )}
