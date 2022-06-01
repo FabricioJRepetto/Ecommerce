@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import { useDispatch } from "react-redux";
-import { loadToken } from "../../Redux/reducer/sessionSlice";
+import { loadToken, loadUsername } from "../../Redux/reducer/sessionSlice";
 import jwt_decode from "jwt-decode";
 import { BACK_URL } from "./constants";
 
@@ -36,10 +36,13 @@ const Signupin = () => {
       data: signinData,
       withCredentials: true,
       url: `${BACK_URL}/user/signin`, //! VOLVER A VER cambiar
-    }).then((res) => {
-      window.localStorage.setItem("loggedTokenEcommerce", res.data.token);
-      console.log(res.data);
-      dispatch(loadToken(res.data.token));
+    }).then(({ data }) => {
+      window.localStorage.setItem("loggedTokenEcommerce", data.token);
+      console.log(data);
+      dispatch(loadToken(data.token));
+
+      const username = data.user.name || data.user.email;
+      dispatch(loadUsername(username));
     });
   };
 
@@ -62,8 +65,11 @@ const Signupin = () => {
     dispatch(loadToken(googleToken));
     //userDecoded contains Google user data
     const userDecoded = jwt_decode(response.credential);
+    const username =
+      userDecoded.name || userDecoded.email || `Guest ${userDecoded.sub}`;
 
-    document.getElementById("signInDiv").hidden = true;
+    dispatch(loadUsername(username));
+
     console.log(userDecoded);
   };
 

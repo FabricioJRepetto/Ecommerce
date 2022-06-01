@@ -3,14 +3,11 @@ import { createSlice } from "@reduxjs/toolkit";
 export const sessionSlice = createSlice({
   name: "session",
   initialState: {
-    email: "",
-    token: "",
-    id: "",
+    username: null,
+    token: null,
+    id: null,
   },
   reducers: {
-    loadEmail: (state, action) => {
-      state.email = action.payload;
-    },
     loadUsername: (state, action) => {
       state.username = action.payload;
     },
@@ -23,7 +20,6 @@ export const sessionSlice = createSlice({
   },
 });
 
-export const { loadEmail, loadToken, loadId, loadUsername } =
-  sessionSlice.actions;
+export const { loadUsername, loadToken, loadId } = sessionSlice.actions;
 
 export default sessionSlice.reducer;

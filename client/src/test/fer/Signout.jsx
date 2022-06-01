@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Axios from "axios";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { loadToken } from "../../Redux/reducer/sessionSlice";
+import { loadToken, loadUsername } from "../../Redux/reducer/sessionSlice";
 import { BACK_URL } from "./constants";
 
 const Signout = () => {
@@ -26,7 +26,8 @@ const Signout = () => {
 
   const signOut = () => {
     window.localStorage.removeItem("loggedTokenEcommerce");
-    dispatch(loadToken(""));
+    dispatch(loadToken(null));
+    dispatch(loadUsername(null));
   };
 
   return (
