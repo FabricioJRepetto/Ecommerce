@@ -3,7 +3,7 @@ import Axios from "axios";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { loadToken } from "../../Redux/reducer/sessionSlice";
-import { BACK_URL } from "./constants";
+import { BACK_URL } from "../../constants";
 
 const Signout = () => {
   const [userData, setUserData] = useState(null);

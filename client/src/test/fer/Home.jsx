@@ -7,6 +7,7 @@ import Signout from "./Signout";
 import Signupin from "./Signupin";
 import Imagen from "./Imagen";
 import ProductForm from "./ProductForm";
+import Checkout from "./Checkout";
 import { useDispatch } from "react-redux";
 import { loadToken } from "../../Redux/reducer/sessionSlice";
 
@@ -29,6 +30,7 @@ const Home = () => {
         <Route path="/products" element={<Products />} />
         <Route path="/productForm" element={<ProductForm />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/checkout/:id" element={<Checkout />} />
         </Routes>
       </>
   );

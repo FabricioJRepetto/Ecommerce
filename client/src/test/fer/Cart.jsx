@@ -1,11 +1,15 @@
+//: handleQuantityEx crear el input para mostrar/modificar la cantidad de unidades
+
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { BACK_URL } from "./constants";
+import { BACK_URL } from "../../constants";
 
 const Cart = () => {
-  const [cart, setCart] = useState(null);
-  const token = useSelector((state) => state.sessionReducer.token);
+    const [cart, setCart] = useState(null);
+    const token = useSelector((state) => state.sessionReducer.token);
+    const navigate = useNavigate();
 
   const getCart = async () => {
     const { data } = await axios({
@@ -47,6 +51,34 @@ const Cart = () => {
         document.getElementById(id).value = data;
    }
 
+    const goCheckout = async () => {
+        // crear order
+        let products = [];
+        cart.forEach(e => {
+            products.push({
+                product_name: e.details?.name,
+                product_id: e.details?._id,
+                price: e.details?.price,
+                quantity: e.quantity
+            });
+        });
+
+        const { data } = await axios({
+            method: "POST",
+            withCredentials: true,
+            url: `${BACK_URL}/order/`,
+            headers: {
+                Authorization: `token ${token}`,
+            }
+        },
+        {
+            products,
+            status: 'pending'
+        });
+
+        navigate(`/checkout/${data}`)
+    };
+
   return (
     <>
       <hr />
@@ -70,6 +102,8 @@ const Cart = () => {
           </div>
         ))
       )}
+      <br />
+      <button onClick={goCheckout}>Proceed to checkout</button>
     </>
   );
 };

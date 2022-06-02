@@ -3,7 +3,7 @@ import Axios from "axios";
 import { useDispatch } from "react-redux";
 import { loadToken } from "../../Redux/reducer/sessionSlice";
 import jwt_decode from "jwt-decode";
-import { BACK_URL } from "./constants";
+import { BACK_URL } from "../../constants";
 
 const { REACT_APP_OAUTH_CLIENT_ID } = process.env;
 const initialSignup = {
