@@ -32,4 +32,13 @@ orderSchema.virtual('total').get(function() {
     return total;
 });
 
+// Order.description
+orderSchema.virtual('description').get(function() {
+    let desc = 'Order summary: ';    
+    this.products.forEach(product => {
+        desc += `- ${product.product_name} x${product.quantity}. `;
+    });
+    return desc;
+});
+
 module.exports = model("Order", orderSchema);
