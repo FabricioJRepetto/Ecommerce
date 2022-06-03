@@ -35,17 +35,16 @@ const getOrdersAdmin= async (req, res, next) => { //! SOLO ADMIN
 
 const createOrder = async (req, res, next) => { 
     try {
-        console.log(req.body);
-        // const userId = req.user._id;
-        // const { products, status } = req.body;
+        const userId = req.user._id;
+        const { products, status } = req.body;
 
-        // const newOrder = new Order({
-        //     user: userId,
-        //     status,
-        //     products
-        // });
-        // await newOrder.save();
-        // res.json(newOrder._id);
+        const newOrder = new Order({
+            user: userId,
+            status,
+            products
+        });
+        await newOrder.save();
+        res.json(newOrder._id);
     } catch (error) {
         next(error)
     }
@@ -62,10 +61,32 @@ const deleteOrder = async (req, res, next) => { //! SOLO ADMIN
     }
  };
 
+ const updateOrder = async (req, res, next) => { 
+     //: añadir mas opciones de status ?
+     try {
+        const userId = req.user._id;
+        const orderId = req.params.id;
+         
+        const order = await Order.findOneAndUpdate({
+            user: userId,
+            _id: orderId
+        },
+        { 
+            status: 'Paid'
+        },
+        { new: true }
+        );
+        res.json(order)
+     } catch (error) {
+         next(error)
+     }
+  }
+
  module.exports = {
      getOrder,
      createOrder,
      deleteOrder,
      getOrdersUser,
-     getOrdersAdmin
+     getOrdersAdmin,
+     updateOrder
  };

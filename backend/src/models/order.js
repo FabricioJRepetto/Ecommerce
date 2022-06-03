@@ -36,7 +36,7 @@ orderSchema.virtual('total').get(function() {
 orderSchema.virtual('description').get(function() {
     let desc = 'Order summary: ';    
     this.products.forEach(product => {
-        desc += `- ${product.product_name} x${product.quantity}. `;
+        desc += `·${product.product_name} x${product.quantity}. `;
     });
     return desc;
 });

@@ -85,7 +85,7 @@ const emptyCart = async (req, res, next) => {
       { products: [] },
       { new: true }
     );
-    res.json(cart);
+    res.json('Cart emptied succefully');
   } catch (error) {
     next(error);
   }

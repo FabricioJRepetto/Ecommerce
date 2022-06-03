@@ -10,7 +10,6 @@ import { useParams } from 'react-router-dom';
 //esto deberia estar en todas las paginas para detectar comportamientos extraños
 const stripePromise = loadStripe('pk_test_51L5zx4CyWZVtXgfrkpwfv0WgFKi326kk8x8U1D7xCKUAQ9pX67C52EZm7aY6yxWTLOyd8q8rzSO8lmJebxskBYlY0051pV1GsW');
 
-
 const CheckoutForm =  () => {
     const stripe = useStripe();
     const elements = useElements();
@@ -28,48 +27,73 @@ const CheckoutForm =  () => {
                     Authorization: `token ${token}`,
                 }
             });
-            console.log(data); //: setear order
+            setOrder(data)
         };
         mountPetition();
         return () => {
         }
-    }, [])
-    
+    // eslint-disable-next-line
+    }, []);
 
     const handleSubmit = async (e) => { 
         e.preventDefault();
-
+        // prepara el pago
         const {error, paymentMethod} = await stripe.createPaymentMethod({
             type: 'card',
             card: elements.getElement(CardElement)
         });
         if (!error) {
+            // intenta el pago
             const { id } = paymentMethod;
+            const { data } = await axios.post(`${BACK_URL}/checkout/`, 
+            {
+                id,
+                description: order.description,
+                amount: order.total * 100
+            }, {
+                    withCredentials: true,
+                    headers: {
+                        Authorization: `token ${token}`,
+                    }
+            });            
+            console.log(data);
+            success(orderId);
+        } else {
+            console.error(error);
+        }
+    };
 
-           const { data } = await axios({
-                method: "POST",
+    const success = async (orderId) => { //! preguntarle a fer
+            //? cambiar orden a pagada            
+            const { data: orderUpdt } = await axios({ 
+                method: "PUT",
                 withCredentials: true,
-                url: `${BACK_URL}/checkout`,
+                url: `${BACK_URL}/order/${orderId}`,
                 headers: {
                     Authorization: `token ${token}`,
                 }
-           }, {
-               id,
-               amount: 0
-           });
-        };
+             });
+            console.log(orderUpdt);
+
+            //? vaciar carrito
+            const { data: cartEmpty } = await axios.delete(`${BACK_URL}/cart/empty`);
+            console.log(cartEmpty);
+
+            //? muestra mensaje de exito y redirecciona
+            console.log('felicitaciones compraste tu mierda');
     };
 
     return (
             <form onSubmit={handleSubmit}>
-                <CardElement/>
-                <button>BUY</button>
+                    <CardElement/>
+                    <button>BUY</button>
             </form>
     )
-}
+};
+
 
 const Checkout = () => {
-  return (
+    return (
         <div>
             <h1>Checkout</h1>
             <p><b>resumen de compra</b></p>
@@ -81,7 +105,7 @@ const Checkout = () => {
                 <CheckoutForm />
             </Elements>
         </div>
-  )
+    )
 }
 
 export default Checkout

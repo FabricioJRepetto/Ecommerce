@@ -4,6 +4,6 @@ const {
     create
 } = require("../controllers/checkout.ctrl.js");
 
-router.get("/", create);
+router.post("/", create);
 
 module.exports = router;
