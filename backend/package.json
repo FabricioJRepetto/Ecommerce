@@ -30,6 +30,7 @@
     "multer": "github:jlourenc/multer#fix/CVE-2022-24434",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
+    "stripe": "^9.6.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {

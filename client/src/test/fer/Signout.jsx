@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { loadToken, loadUsername } from "../../Redux/reducer/sessionSlice";
-import { BACK_URL } from "./constants";
+import { BACK_URL } from "../../constants";
 import { useNavigate } from "react-router-dom";
 
 const Signout = () => {
@@ -33,6 +33,7 @@ const Signout = () => {
 
   useEffect(() => {
     if (!token) navigate("/signin");
+    // eslint-disable-next-line
   }, []);
 
   return (
