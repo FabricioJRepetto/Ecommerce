@@ -1,4 +1,5 @@
 //: handleQuantityEx crear el input para mostrar/modificar la cantidad de unidades
+//: armar constantes para HEADER, CREDENTIALS
 
 import React, { useState } from "react";
 import axios from "axios";
@@ -56,27 +57,25 @@ const Cart = () => {
         let products = [];
         cart.forEach(e => {
             products.push({
-                product_name: e.details?.name,
-                product_id: e.details?._id,
-                price: e.details?.price,
+                product_name: e.details.name,
+                product_id: e.details._id,
+                price: e.details.price,
                 quantity: e.quantity
             });
         });
-
-        const { data } = await axios({
-            method: "POST",
-            withCredentials: true,
-            url: `${BACK_URL}/order/`,
-            headers: {
-                Authorization: `token ${token}`,
-            }
-        },
+        
+        const { data: id } = await axios.post(`${BACK_URL}/order/`,
         {
             products,
             status: 'pending'
+        }, {
+            withCredentials: true,
+            headers: {
+                Authorization: `token ${token}`,
+            }
         });
 
-        navigate(`/checkout/${data}`)
+        navigate(`/checkout/${id}`)
     };
 
   return (

@@ -35,16 +35,17 @@ const getOrdersAdmin= async (req, res, next) => { //! SOLO ADMIN
 
 const createOrder = async (req, res, next) => { 
     try {
-        const userId = req.user._id;
-        const { products, status } = req.body;
+        console.log(req.body);
+        // const userId = req.user._id;
+        // const { products, status } = req.body;
 
-        const newOrder = new Order({
-            user: userId,
-            status,
-            products
-        });
-        await newOrder.save();
-        res.json(newOrder._id);        
+        // const newOrder = new Order({
+        //     user: userId,
+        //     status,
+        //     products
+        // });
+        // await newOrder.save();
+        // res.json(newOrder._id);
     } catch (error) {
         next(error)
     }
