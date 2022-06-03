@@ -8,7 +8,11 @@ const getOrder = async (req, res, next) => {
             user: userId,
             _id: orderId
         });
-        order ? res.json(order) : res.status(404).json('Order not found');
+        if (order) {
+            return res.json(order)
+        } else {
+            return res.status(404).json('Order not found')
+        };
     } catch (error) {
         next(error)
     }
@@ -18,7 +22,7 @@ const getOrdersUser = async (req, res, next) => {
     try {
         const userId = req.user._id;
         let userOrders = await Order.find({user: userId});
-        res.json(userOrders);
+        return res.json(userOrders);
     } catch (error) {
         next(error)
     }
@@ -27,7 +31,7 @@ const getOrdersUser = async (req, res, next) => {
 const getOrdersAdmin= async (req, res, next) => { //! SOLO ADMIN
     try {
         const allOrders = await Order.find();
-        res.json(allOrders);
+        return res.json(allOrders);
     } catch (error) {
         next(error)
     }
@@ -44,7 +48,7 @@ const createOrder = async (req, res, next) => {
             products
         });
         await newOrder.save();
-        res.json(newOrder._id);
+        return res.json(newOrder._id);
     } catch (error) {
         next(error)
     }
@@ -55,7 +59,7 @@ const deleteOrder = async (req, res, next) => { //! SOLO ADMIN
         req.params.id
         ? await Order.deleteMany({user: req.params.id})
         : await Order.deleteMany({});
-        res.json('Done.');
+        return res.json('Done.');
     } catch (error) {
         next(error)
     }
@@ -76,7 +80,7 @@ const deleteOrder = async (req, res, next) => { //! SOLO ADMIN
         },
         { new: true }
         );
-        res.json(order)
+        return res.json(order)
      } catch (error) {
          next(error)
      }

@@ -76,8 +76,9 @@ const Cart = () => {
                     }
                 }
         );
+        console.log(id);
         // con la id inicia el checkout
-        navigate(`/checkout/${id}`)
+        navigate(`/checkout/${id}`);
     };
 
   return (

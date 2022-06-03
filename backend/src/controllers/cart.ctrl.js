@@ -14,7 +14,7 @@ const getUserCart = async (req, res, next) => {
             quantity: product.quantity
         });
     }
-    res.json(userCart);
+    return res.json(userCart);
   } catch (error) {
     next(error);
   }
@@ -45,7 +45,7 @@ const addToCart = async (req, res, next) => {
             });
         };
         await cart.save();
-        res.json("Product added to your cart.");
+        return res.json("Product added to your cart.");
     } else {
       const newCart = new Cart({
         products: {
@@ -55,7 +55,7 @@ const addToCart = async (req, res, next) => {
         owner: userId,
       });
       await newCart.save();
-      res.json(newCart);
+      return res.json(newCart);
     }
   } catch (error) {
         next(error);
@@ -71,7 +71,7 @@ const removeFromCart = async (req, res, next) => {
     cart.products = cart.products.filter((e) => e.productId !== removeTarget);
     await cart.save();
 
-    res.json("Product deleted from cart.");
+    return res.json("Product deleted from cart.");
   } catch (error) {
     next(error);
   }
@@ -85,7 +85,7 @@ const emptyCart = async (req, res, next) => {
       { products: [] },
       { new: true }
     );
-    res.json('Cart emptied succefully');
+    return res.json('Cart emptied succefully');
   } catch (error) {
     next(error);
   }
@@ -95,7 +95,7 @@ const deleteCart = async (req, res, next) => {
   try {
     const userId = req.user._id;
     await Cart.findOneAndDelete({ owner: userId });
-    res.json("Done.");
+    return res.json("Done.");
   } catch (error) {
     next(error);
   }
@@ -117,7 +117,7 @@ const quantity = async (req, res, next) => {
             }
         }, {new: true}
         );
-        res.json(cart.products.map(e => e.quantity))
+        return res.json(cart.products.map(e => e.quantity))
     } catch (error) {
         next(error);
     }
@@ -138,7 +138,7 @@ const quantityEx = async (req, res, next) => {
                 "products.$.quantity": amount
             }
         });
-        res.json(amount)
+        return res.json(amount)
     } catch (error) {
         next(error);
     }

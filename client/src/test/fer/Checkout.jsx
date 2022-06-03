@@ -3,6 +3,7 @@ import { loadStripe } from '@stripe/stripe-js'
 import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import './Checkout.css';
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
 import { BACK_URL } from '../../constants';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
@@ -13,6 +14,7 @@ const stripePromise = loadStripe('pk_test_51L5zx4CyWZVtXgfrkpwfv0WgFKi326kk8x8U1
 const CheckoutForm =  () => {
     const stripe = useStripe();
     const elements = useElements();
+    const navigate = useNavigate();
     const token = useSelector((state) => state.sessionReducer.token);
     const [order, setOrder] = useState(null);
     const { id: orderId } = useParams();
@@ -57,13 +59,7 @@ const CheckoutForm =  () => {
                     }
             });            
             console.log(data);
-            success(orderId);
-        } else {
-            console.error(error);
-        }
-    };
 
-    const success = async (orderId) => { //! preguntarle a fer
             //? cambiar orden a pagada            
             const { data: orderUpdt } = await axios({ 
                 method: "PUT",
@@ -76,11 +72,19 @@ const CheckoutForm =  () => {
             console.log(orderUpdt);
 
             //? vaciar carrito
-            const { data: cartEmpty } = await axios.delete(`${BACK_URL}/cart/empty`);
+            const { data: cartEmpty } = await axios.delete(`${BACK_URL}/cart/empty`, { 
+            headers: {
+                    Authorization: `token ${token}`,
+                }
+             });
             console.log(cartEmpty);
 
             //? muestra mensaje de exito y redirecciona
-            console.log('felicitaciones compraste tu mierda');
+            navigate(`/`);
+            
+        } else {
+            console.error(error);
+        }
     };
 
     return (

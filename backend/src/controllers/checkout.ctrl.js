@@ -16,10 +16,9 @@ const create = async (req, res) => {
             confirm: true
         });
 
-        res.json('Succefull payment')
+        return res.json('Succefull payment');
     } catch (error) {
-        res.json(error.raw.message)
-        
+        return res.json(error.raw.message);
     }
 };
 

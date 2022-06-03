@@ -9,9 +9,8 @@ const orderSchema = new Schema(
         quantity: Number
     }],
     user: {
-        ref: "User",
-        type: Schema.Types.ObjectId,
-        require: true,
+        type: String,
+        required: true,
     },
     status: String
   },
