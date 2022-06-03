@@ -26,6 +26,7 @@ const Home = () => {
       <Routes>
         <Route path="/" element={<Imagen />} />
         <Route path="/signin" element={token ? <Signout /> : <Signupin />} />
+        <Route path="/signout" element={token ? <Signout /> : <Signupin />} />
         <Route path="/products" element={<Products />} />
         <Route path="/productForm" element={<ProductForm />} />
         <Route path="/cart" element={<Cart />} />

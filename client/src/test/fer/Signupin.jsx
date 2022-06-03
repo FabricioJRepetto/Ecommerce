@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { loadToken, loadUsername } from "../../Redux/reducer/sessionSlice";
 import jwt_decode from "jwt-decode";
 import { BACK_URL } from "./constants";
+import { useNavigate } from "react-router-dom";
 
 const { REACT_APP_OAUTH_CLIENT_ID } = process.env;
 const initialSignup = {
@@ -19,6 +20,8 @@ const Signupin = () => {
   const [signupData, setSignupData] = useState(initialSignup);
   const [signinData, setSigninData] = useState(initialSignin);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const token = useSelector((state) => state.sessionReducer.token);
 
   const signup = (e) => {
     e.preventDefault();
@@ -74,6 +77,8 @@ const Signupin = () => {
   };
 
   useEffect(() => {
+    if (token) navigate("/signout");
+
     /* global google */
     google.accounts.id.initialize({
       client_id: REACT_APP_OAUTH_CLIENT_ID,

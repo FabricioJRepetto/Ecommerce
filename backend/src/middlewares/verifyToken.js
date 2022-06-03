@@ -22,7 +22,13 @@ module.exports = async (req, res, next) => {
           audience: OAUTH_CLIENT_ID,
         });
         const payload = ticket.getPayload();
-        req.user = { _id: payload["sub"] };
+        console.log(payload);
+        const { sub, name, email } = payload;
+        req.user = {
+          /* _id: payload["sub"], */
+          _id: sub,
+          email: name || email || `Guest ${userDecoded.sub}`,
+        };
       } catch (error) {
         return res.status(400).send("Invalid credentials");
       }
