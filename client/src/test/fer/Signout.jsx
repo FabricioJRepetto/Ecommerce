@@ -1,14 +1,15 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Axios from "axios";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-import { loadToken } from "../../Redux/reducer/sessionSlice";
+import { useSelector, useDispatch } from "react-redux";
+import { loadToken, loadUsername } from "../../Redux/reducer/sessionSlice";
 import { BACK_URL } from "./constants";
+import { useNavigate } from "react-router-dom";
 
 const Signout = () => {
   const [userData, setUserData] = useState(null);
   const token = useSelector((state) => state.sessionReducer.token);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const getUser = () => {
     Axios({
@@ -26,8 +27,13 @@ const Signout = () => {
 
   const signOut = () => {
     window.localStorage.removeItem("loggedTokenEcommerce");
-    dispatch(loadToken(""));
+    dispatch(loadToken(null));
+    dispatch(loadUsername(null));
   };
+
+  useEffect(() => {
+    if (!token) navigate("/signin");
+  }, []);
 
   return (
     <>

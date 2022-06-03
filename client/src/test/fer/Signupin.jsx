@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
-import { useDispatch } from "react-redux";
-import { loadToken } from "../../Redux/reducer/sessionSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { loadToken, loadUsername } from "../../Redux/reducer/sessionSlice";
 import jwt_decode from "jwt-decode";
 import { BACK_URL } from "./constants";
+import { useNavigate } from "react-router-dom";
 
 const { REACT_APP_OAUTH_CLIENT_ID } = process.env;
 const initialSignup = {
@@ -19,6 +20,8 @@ const Signupin = () => {
   const [signupData, setSignupData] = useState(initialSignup);
   const [signinData, setSigninData] = useState(initialSignin);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const token = useSelector((state) => state.sessionReducer.token);
 
   const signup = (e) => {
     e.preventDefault();
@@ -36,10 +39,13 @@ const Signupin = () => {
       data: signinData,
       withCredentials: true,
       url: `${BACK_URL}/user/signin`, //! VOLVER A VER cambiar
-    }).then((res) => {
-      window.localStorage.setItem("loggedTokenEcommerce", res.data.token);
-      console.log(res.data);
-      dispatch(loadToken(res.data.token));
+    }).then(({ data }) => {
+      window.localStorage.setItem("loggedTokenEcommerce", data.token);
+      console.log(data);
+      dispatch(loadToken(data.token));
+
+      const username = data.user.name || data.user.email;
+      dispatch(loadUsername(username));
     });
   };
 
@@ -62,12 +68,17 @@ const Signupin = () => {
     dispatch(loadToken(googleToken));
     //userDecoded contains Google user data
     const userDecoded = jwt_decode(response.credential);
+    const username =
+      userDecoded.name || userDecoded.email || `Guest ${userDecoded.sub}`;
 
-    document.getElementById("signInDiv").hidden = true;
+    dispatch(loadUsername(username));
+
     console.log(userDecoded);
   };
 
   useEffect(() => {
+    if (token) navigate("/signout");
+
     /* global google */
     google.accounts.id.initialize({
       client_id: REACT_APP_OAUTH_CLIENT_ID,
