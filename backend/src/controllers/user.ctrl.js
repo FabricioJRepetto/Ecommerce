@@ -1,51 +1,43 @@
 const User = require("../models/user");
-const { validationResult } = require("express-validator");
-
-const signin = async (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) return res.json(errors.array());
-
-  const { email, password } = req.body;
-  try {
-    const user = await User.findOne({ email: email });
-    if (!user) throw new Error("Invalid email or password");
-    const passwordMatch = await user.comparePassword(password);
-    if (!passwordMatch) throw new Error("Invalid email or password");
-    req.login(user, function (err) {
-      if (err) throw new Error("Error at create a session");
-      //return res.redirect("/"); //! VOLVER A VER redireccionamiento no funca
-      return res.send("shiiii forkyyy");
-    });
-  } catch (err) {
-    return res.json({ error: err.message });
-  }
-};
+const passport = require("passport");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
+const { JWT_SECRET_CODE } = process.env;
 
 const signup = async (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) return res.json(errors.array());
-
-  const { email, password } = req.body;
-  try {
-    let user = await User.findOne({ email });
-    if (user) throw new Error("This email is already in use"); //!VOLVER A VER manejo de errores
-    user = new User({ email, password });
-    await user.save();
-    res.json({ email });
-    //! VOLVER A VER agregar redireccionamiento a /user/signin
-  } catch (err) {
-    res.json({ error: err.message });
-  }
+  res.json({
+    message: req.authInfo,
+    /* user: req.user, */
+  });
 };
 
-const signout = (req, res, next) => {
-  req.logout(function (err) {
-    if (err) return next(err);
-    console.log("sesion cerrada");
-    res.status(200).clearCookie("connect.sid", { path: "/" });
+const signin = async (req, res, next) => {
+  passport.authenticate("signin", async (err, user, info) => {
+    try {
+      if (err || !user) {
+        console.log(err);
+        const error = new Error(err);
+        return next(error);
+      }
 
-    //return res.redirect("/user/signin");
-  });
+      req.login(user, { session: false }, async (err) => {
+        if (err) return next(err);
+        const body = { _id: user._id, email: user.email };
+
+        const token = jwt.sign({ user: body }, JWT_SECRET_CODE, {
+          expiresIn: 86400,
+        });
+        console.log(user);
+        return res.json({
+          message: info.message,
+          token,
+          user: { _id: user._id, email: user.email },
+        });
+      });
+    } catch (e) {
+      return next(e);
+    }
+  })(req, res, next);
 };
 
 const profile = (req, res, next) => {
@@ -54,9 +46,25 @@ const profile = (req, res, next) => {
   });
 };
 
+const role = async (req, res, next) => {
+  try {
+    const userFound = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        role: req.body.role,
+      },
+      { new: true }
+    );
+    if (!userFound) return res.status(404).json({ message: "No user found" });
+    return res.send(userFound);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   signin,
   signup,
-  signout,
   profile,
+  role,
 };

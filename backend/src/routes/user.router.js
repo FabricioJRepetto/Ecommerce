@@ -1,44 +1,20 @@
 const { Router } = require("express");
 const router = Router();
-const verifyUser = require("../middlewares/verifyUser");
-const { body } = require("express-validator");
-const {
-  signin,
-  signup,
-  signout,
-  profile,
-} = require("../controllers/user.ctrl");
-
-router.post(
-  "/signin",
-  [
-    body("email", "Invalid email").trim().notEmpty().escape(),
-    //body("email", "Invalid email").trim().isEmail().normalizeEmail(),
-    //body("username", "Invalid username").trim().notEmpty().escape(),
-    body("password", "Password must have 6 characters at least")
-      .trim()
-      // .isLength({ min: 6 })
-      .escape(),
-  ],
-  signin
-);
+const verifyToken = require("../middlewares/verifyToken");
+const verifySuperAdmin = require("../middlewares/verifySuperAdmin");
+const passport = require("passport");
+const { signin, signup, profile, role } = require("../controllers/user.ctrl");
 
 router.post(
   "/signup",
-  [
-    body("email", "Invalid email").trim().notEmpty().escape(),
-    //body("email", "Invalid email").trim().isEmail().normalizeEmail(),
-    //body("username", "Invalid username").trim().notEmpty().escape(),
-    body("password", "Password must have 6 characters at least")
-      .trim()
-      //  .isLength({ min: 6 })
-      .escape(),
-  ],
+  passport.authenticate("signup", { session: false }),
   signup
 );
 
-router.get("/signout", /* verifyUser, */ signout);
+router.post("/signin", signin);
 
-router.get("/profile", verifyUser, profile);
+router.get("/profile", verifyToken, profile);
+
+router.put("/role", [verifyToken, verifySuperAdmin], role); //! VOLVER A VER mover a ruta de superadmin
 
 module.exports = router;

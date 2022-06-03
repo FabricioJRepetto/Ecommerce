@@ -1,10 +1,20 @@
 const Cart = require("../models/cart");
+const Product = require("../models/product");
 
 const getUserCart = async (req, res, next) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user._id;
     const cart = await Cart.findOne({ owner: userId });
-    res.json(cart);
+    if (!cart) return res.json('empty cart');
+    let userCart = [];
+    for (const product of cart.products) {
+        const productDetail = await Product.findById(product.productId);
+        productDetail && userCart.push({
+            details: productDetail, 
+            quantity: product.quantity
+        });
+    }
+    res.json(userCart);
   } catch (error) {
     next(error);
   }
@@ -12,28 +22,50 @@ const getUserCart = async (req, res, next) => {
 
 const addToCart = async (req, res, next) => {
   try {
-    const userId = req.user.id;
-    const productToAdd = req.body.product;
+    const userId = req.user._id;
+    const productToAdd = req.params.id;
     const cart = await Cart.findOne({ owner: userId });
 
     if (cart) {
-      cart.products.push(productToAdd);
-      await cart.save();
-      res.json("Product added to the cart.");
+        let flag = false; 
+        cart.products.forEach(e => {
+            e.productId.toString() === productToAdd && (flag = true)
+        });
+
+        if (flag) { // si el prod ya existe
+            cart.products.map(e => {
+                if (e.productId.toString() === productToAdd) {
+                    e.quantity ++;
+                }
+            });
+        } else { // si todavia no existe
+            cart.products.push({
+                productId: productToAdd,
+                quantity: 1
+            });
+        };
+        await cart.save();
+        res.json("Product added to your cart.");
     } else {
-      const newCart = new Cart({ products: productToAdd, owner: userId });
+      const newCart = new Cart({
+        products: {
+          productId: productToAdd,
+          quantity: 1
+        },
+        owner: userId,
+      });
       await newCart.save();
       res.json(newCart);
     }
   } catch (error) {
-    next(error);
+        next(error);
   }
 };
 
 const removeFromCart = async (req, res, next) => {
   try {
-    const userId = req.user.id;
-    let removeTarget = req.body.product;
+    const userId = req.user._id;
+    let removeTarget = req.params.id;
     const cart = await Cart.findOne({ owner: userId });
 
     cart.products = cart.products.filter((e) => e.productId !== removeTarget);
@@ -47,7 +79,7 @@ const removeFromCart = async (req, res, next) => {
 
 const emptyCart = async (req, res, next) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user._id;
     const cart = await Cart.findOneAndUpdate(
       { owner: userId },
       { products: [] },
@@ -61,12 +93,55 @@ const emptyCart = async (req, res, next) => {
 
 const deleteCart = async (req, res, next) => {
   try {
-    const userId = req.user.id;
+    const userId = req.user._id;
     await Cart.findOneAndDelete({ owner: userId });
     res.json("Done.");
   } catch (error) {
     next(error);
   }
+};
+
+const quantity = async (req, res, next) => {
+    try {
+        let userId = req.user._id;
+        let target = req.query.id;
+        let amount = req.query.amount;
+
+        const cart = await Cart.findOneAndUpdate({
+            'owner': userId,
+            'products.productId': target
+        },
+        { 
+            "$inc": {
+                "products.$.quantity": amount
+            }
+        }, {new: true}
+        );
+        res.json(cart.products.map(e => e.quantity))
+    } catch (error) {
+        next(error);
+    }
+};
+
+const quantityEx = async (req, res, next) => {
+    try {
+        let userId = req.user._id;
+        let target = req.query.id;
+        let amount = req.query.amount;
+
+        const cart = await Cart.findOneAndUpdate({
+            'owner': userId,
+            'products.productId': target
+        },
+        { 
+            "$set": {
+                "products.$.quantity": amount
+            }
+        });
+        res.json(amount)
+    } catch (error) {
+        next(error);
+    }
 };
 
 module.exports = {
@@ -75,6 +150,6 @@ module.exports = {
   removeFromCart,
   emptyCart,
   deleteCart,
+  quantity,
+  quantityEx
 };
-
-//* Comprobar si el usuario existe (?)
