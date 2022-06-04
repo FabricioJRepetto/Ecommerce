@@ -21,26 +21,16 @@ const Home = () => {
 
     loggedUserToken &&
       Axios({
-        method: "POST",
+        method: "GET",
         withCredentials: true,
-        url: `${BACK_URL}/user/session`, //! VOLVER A VER cambiar
+        url: `${BACK_URL}/user/profile`, //! VOLVER A VER cambiar
         headers: {
           Authorization: `token ${loggedUserToken}`,
         },
       })
         .then(({ data }) => {
           dispatch(loadToken(loggedUserToken));
-          Axios({
-            method: "GET",
-            withCredentials: true,
-            url: `${BACK_URL}/user/profile`, //! VOLVER A VER cambiar
-            headers: {
-              Authorization: `token ${loggedUserToken}`,
-            },
-          }).then(({ data }) => {
-            dispatch(loadUsername(data.user.email));
-            console.log(data.user);
-          });
+          dispatch(loadUsername(data.user.email));
         })
         .catch((_) => window.localStorage.removeItem("loggedTokenEcommerce"));
     // eslint-disable-next-line react-hooks/exhaustive-deps
