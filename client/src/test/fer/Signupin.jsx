@@ -32,6 +32,7 @@ const Signupin = () => {
       url: `${BACK_URL}/user/signup`, //! VOLVER A VER cambiar
     }).then((res) => console.log(res.data));
   };
+
   const signin = (e) => {
     e.preventDefault();
     Axios({
@@ -46,7 +47,9 @@ const Signupin = () => {
 
       const username = data.user.name || data.user.email;
       dispatch(loadUsername(username));
+      navigate("/signout");
     });
+    //.catch((err) => console.log(err));
   };
 
   const handleSignup = ({ target }) => {
@@ -66,6 +69,8 @@ const Signupin = () => {
     //response.credential = Google user token
     const googleToken = "google" + response.credential;
     dispatch(loadToken(googleToken));
+    window.localStorage.setItem("loggedTokenEcommerce", googleToken);
+
     //userDecoded contains Google user data
     const userDecoded = jwt_decode(response.credential);
     const username =
@@ -74,6 +79,7 @@ const Signupin = () => {
     dispatch(loadUsername(username));
 
     console.log(userDecoded);
+    navigate("/signout");
   };
 
   useEffect(() => {
@@ -89,7 +95,7 @@ const Signupin = () => {
       theme: "outline",
       size: "large",
     });
-  }, []);
+  }, [token]);
 
   return (
     <>
