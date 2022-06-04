@@ -3,6 +3,7 @@ const passport = require("passport");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const { JWT_SECRET_CODE } = process.env;
+const { OAuth2Client } = require("google-auth-library");
 
 const signup = async (req, res, next) => {
   res.json({
@@ -14,11 +15,9 @@ const signup = async (req, res, next) => {
 const signin = async (req, res, next) => {
   passport.authenticate("signin", async (err, user, info) => {
     try {
-      if (err || !user) {
-        console.log(err);
-        const error = new Error(err);
-        return next(error);
-      }
+      if (err || !user) throw new Error(info.message);
+      //const error = new Error(info);
+      //return next(info);
 
       req.login(user, { session: false }, async (err) => {
         if (err) return next(err);
@@ -27,6 +26,7 @@ const signin = async (req, res, next) => {
         const token = jwt.sign({ user: body }, JWT_SECRET_CODE, {
           expiresIn: 86400,
         });
+
         console.log(user);
         return res.json({
           message: info.message,
@@ -62,9 +62,17 @@ const role = async (req, res, next) => {
   }
 };
 
+const session = async (req, res, next) => {
+  return res.json({
+    message: "Welcome",
+    //user: { _id: user._id, email: user.email },
+  });
+};
+
 module.exports = {
   signin,
   signup,
   profile,
   role,
+  session,
 };
