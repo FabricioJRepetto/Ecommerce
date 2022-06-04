@@ -3,18 +3,10 @@ const Product = require("../models/product");
 
 const getUserCart = async (req, res, next) => {
   try {
-    const userId = req.user._id;
-    const cart = await Cart.findOne({ owner: userId });
-    if (!cart) return res.json('empty cart');
-    let userCart = [];
-    for (const product of cart.products) {
-        const productDetail = await Product.findById(product.productId);
-        productDetail && userCart.push({
-            details: productDetail, 
-            quantity: product.quantity
-        });
-    }
-    return res.json(userCart);
+        const userId = req.user._id;
+        const cart = await Cart.findOne({ owner: userId });
+        if (!cart) return res.json('empty cart');
+        return res.json(cart);
   } catch (error) {
     next(error);
   }
@@ -26,21 +18,25 @@ const addToCart = async (req, res, next) => {
     const productToAdd = req.params.id;
     const cart = await Cart.findOne({ owner: userId });
 
+    const {name, price} = await Product.findById(productToAdd);
+
     if (cart) {
         let flag = false; 
         cart.products.forEach(e => {
-            e.productId.toString() === productToAdd && (flag = true)
+            e.product_id === productToAdd && (flag = true)
         });
 
         if (flag) { // si el prod ya existe
             cart.products.map(e => {
-                if (e.productId.toString() === productToAdd) {
+                if (e.product_id === productToAdd) {
                     e.quantity ++;
                 }
             });
         } else { // si todavia no existe
             cart.products.push({
-                productId: productToAdd,
+                product_id: productToAdd,
+                product_name: name,
+                price,
                 quantity: 1
             });
         };
@@ -49,7 +45,9 @@ const addToCart = async (req, res, next) => {
     } else {
       const newCart = new Cart({
         products: {
-          productId: productToAdd,
+          product_id: productToAdd,
+          product_name: name,
+          price,
           quantity: 1
         },
         owner: userId,
@@ -109,7 +107,7 @@ const quantity = async (req, res, next) => {
 
         const cart = await Cart.findOneAndUpdate({
             'owner': userId,
-            'products.productId': target
+            'products.product_id': target
         },
         { 
             "$inc": {
@@ -131,7 +129,7 @@ const quantityEx = async (req, res, next) => {
 
         const cart = await Cart.findOneAndUpdate({
             'owner': userId,
-            'products.productId': target
+            'products.product_id': target
         },
         { 
             "$set": {

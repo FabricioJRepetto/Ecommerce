@@ -1,6 +1,6 @@
 //: handleQuantityEx crear el input para mostrar/modificar la cantidad de unidades
 //: investigar withCredentials: true
-//: actualizar el estado 'cart' cada vez que cambia la cantidad de un producto
+//: checkear 'cart' al crear orden
 
 import React, { useState } from "react";
 import axios from "axios";
@@ -14,17 +14,17 @@ const Cart = () => {
     const navigate = useNavigate();
 
   const getCart = async () => {
-    const { data } = await axios({
-      method: "GET",
-      withCredentials: true,
-      url: `${BACK_URL}/cart`, //! VOLVER A VER cambiar
-      headers: {
-        Authorization: `token ${token}`,
-      },
-    });
-      console.log(data);
-      typeof data !== 'string' &&
-      setCart(data);
+        const { data } = await axios({
+        method: "GET",
+        withCredentials: true,
+        url: `${BACK_URL}/cart`, //! VOLVER A VER cambiar
+        headers: {
+            Authorization: `token ${token}`,
+        },
+        });
+        console.log(data);
+        typeof data !== 'string' &&
+        setCart(data.products);
   };
 
   const handleQuantity = async (id, num) => {
@@ -54,29 +54,12 @@ const Cart = () => {
    }
 
     const goCheckout = async () => {
-        // crea la order
-        let payload = {
-            products: [],
-            status: 'pending'
-        };
-        cart.forEach(e => {
-            payload.products.push({
-                product_name: e.details.name,
-                product_id: e.details._id,
-                price: e.details.price,
-                quantity: e.quantity
-            });
-        });        
-        const { data: id } = await axios.post(`${BACK_URL}/order/`,
-                payload, 
-                {
-                    withCredentials: true,
-                    headers: {
-                        Authorization: `token ${token}`,
-                    }
+        //! crea la order       
+        const { data: id } = await axios.get(`${BACK_URL}/order/`, { 
+            headers: {
+                    Authorization: `token ${token}`,
                 }
-        );
-        console.log(id);
+        });
         // con la id inicia el checkout
         navigate(`/checkout/${id}`);
     };
@@ -89,18 +72,10 @@ const Cart = () => {
       {React.Children.toArray(
         cart?.map((prod) => (
           <div>
-                {prod.details.name} - ${prod.details.price} - 
-                <button onClick={() => handleQuantity(prod.details._id, -1)}>-</button>
-                <span id={prod.details._id}>{prod.quantity}</span>
-                <button onClick={() => handleQuantity(prod.details._id, 1)}>+</button>
-                {/*<input type="number"
-                    id={prod.details._id}
-                    defaultValue={prod.quantity}
-                    onChange={(e) => handleQuantityEx(
-                        prod.details._id,
-                        e.target.value
-                    )}
-                     />*/}
+                {prod.product_name} - ${prod.price} - 
+                <button onClick={() => handleQuantity(prod.product_id, -1)}>-</button>
+                <span id={prod.product_id}>{prod.quantity}</span>
+                <button onClick={() => handleQuantity(prod.product_id, 1)}>+</button>
           </div>
         ))
       )}
