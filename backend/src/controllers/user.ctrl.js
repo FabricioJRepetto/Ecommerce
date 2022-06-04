@@ -62,17 +62,9 @@ const role = async (req, res, next) => {
   }
 };
 
-const session = async (req, res, next) => {
-  return res.json({
-    message: "Welcome",
-    //user: { _id: user._id, email: user.email },
-  });
-};
-
 module.exports = {
   signin,
   signup,
   profile,
   role,
-  session,
 };
