@@ -1,11 +1,17 @@
+//: handleQuantityEx crear el input para mostrar/modificar la cantidad de unidades
+//: investigar withCredentials: true
+//: actualizar el estado 'cart' cada vez que cambia la cantidad de un producto
+
 import React, { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { BACK_URL } from "./constants";
+import { BACK_URL } from "../../constants";
 
 const Cart = () => {
-  const [cart, setCart] = useState(null);
-  const token = useSelector((state) => state.sessionReducer.token);
+    const [cart, setCart] = useState(null);
+    const token = useSelector((state) => state.sessionReducer.token);
+    const navigate = useNavigate();
 
   const getCart = async () => {
     const { data } = await axios({
@@ -47,6 +53,34 @@ const Cart = () => {
         document.getElementById(id).value = data;
    }
 
+    const goCheckout = async () => {
+        // crea la order
+        let payload = {
+            products: [],
+            status: 'pending'
+        };
+        cart.forEach(e => {
+            payload.products.push({
+                product_name: e.details.name,
+                product_id: e.details._id,
+                price: e.details.price,
+                quantity: e.quantity
+            });
+        });        
+        const { data: id } = await axios.post(`${BACK_URL}/order/`,
+                payload, 
+                {
+                    withCredentials: true,
+                    headers: {
+                        Authorization: `token ${token}`,
+                    }
+                }
+        );
+        console.log(id);
+        // con la id inicia el checkout
+        navigate(`/checkout/${id}`);
+    };
+
   return (
     <>
       <hr />
@@ -70,6 +104,8 @@ const Cart = () => {
           </div>
         ))
       )}
+      <br />
+      <button onClick={goCheckout}>Proceed to checkout</button>
     </>
   );
 };

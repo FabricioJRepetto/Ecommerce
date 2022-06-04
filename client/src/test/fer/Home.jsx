@@ -8,8 +8,9 @@ import Signupin from "./Signupin";
 import Imagen from "./Imagen";
 import ProductForm from "./ProductForm";
 import { useDispatch } from "react-redux";
+import Checkout from "./Checkout";
 import { loadToken, loadUsername } from "../../Redux/reducer/sessionSlice";
-import { BACK_URL } from "./constants";
+import { BACK_URL } from "../../constants";
 import Axios from "axios";
 
 const Home = () => {
@@ -55,6 +56,7 @@ const Home = () => {
         <Route path="/products" element={<Products />} />
         <Route path="/productForm" element={<ProductForm />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/checkout/:id" element={<Checkout />} />
       </Routes>
     </>
   );

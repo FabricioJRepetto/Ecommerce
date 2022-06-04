@@ -3,17 +3,35 @@ const Order = require('../models/order');
 const getOrder = async (req, res, next) => { 
     try {
         const userId = req.user._id;
-        let userOrders = await Order.find({user: userId});
-        res.json(userOrders);
+        const orderId = req.params.id;
+        let order = await Order.findOne({
+            user: userId,
+            _id: orderId
+        });
+        if (order) {
+            return res.json(order)
+        } else {
+            return res.status(404).json('Order not found')
+        };
     } catch (error) {
         next(error)
     }
  };
 
-const getOrdersAdminMode = async (req, res, next) => { //! SOLO ADMIN
+const getOrdersUser = async (req, res, next) => { 
+    try {
+        const userId = req.user._id;
+        let userOrders = await Order.find({user: userId});
+        return res.json(userOrders);
+    } catch (error) {
+        next(error)
+    }
+ };
+
+const getOrdersAdmin= async (req, res, next) => { //! SOLO ADMIN
     try {
         const allOrders = await Order.find();
-        res.json(allOrders);
+        return res.json(allOrders);
     } catch (error) {
         next(error)
     }
@@ -22,8 +40,7 @@ const getOrdersAdminMode = async (req, res, next) => { //! SOLO ADMIN
 const createOrder = async (req, res, next) => { 
     try {
         const userId = req.user._id;
-        const products = req.body.products;
-        const status = req.body.status;
+        const { products, status } = req.body;
 
         const newOrder = new Order({
             user: userId,
@@ -31,7 +48,7 @@ const createOrder = async (req, res, next) => {
             products
         });
         await newOrder.save();
-        res.json(newOrder);        
+        return res.json(newOrder._id);
     } catch (error) {
         next(error)
     }
@@ -42,15 +59,38 @@ const deleteOrder = async (req, res, next) => { //! SOLO ADMIN
         req.params.id
         ? await Order.deleteMany({user: req.params.id})
         : await Order.deleteMany({});
-        res.json('Done.');
+        return res.json('Done.');
     } catch (error) {
         next(error)
     }
  };
 
+ const updateOrder = async (req, res, next) => { 
+     //: añadir mas opciones de status ?
+     try {
+        const userId = req.user._id;
+        const orderId = req.params.id;
+         
+        const order = await Order.findOneAndUpdate({
+            user: userId,
+            _id: orderId
+        },
+        { 
+            status: 'Paid'
+        },
+        { new: true }
+        );
+        return res.json(order)
+     } catch (error) {
+         next(error)
+     }
+  }
+
  module.exports = {
      getOrder,
      createOrder,
      deleteOrder,
-     getOrdersAdminMode
+     getOrdersUser,
+     getOrdersAdmin,
+     updateOrder
  };

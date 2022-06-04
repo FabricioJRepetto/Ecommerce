@@ -17,8 +17,8 @@ const Signout = () => {
   };
 
   useEffect(() => {
-    console.log(username);
     if (!token) navigate("/signin");
+    // eslint-disable-next-line
   }, []);
 
   return (

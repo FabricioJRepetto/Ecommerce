@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Axios from "axios";
 import { useSelector } from "react-redux";
-import { BACK_URL } from "./constants";
+import { BACK_URL } from "../../constants";
 
 const Products = () => {
   const [products, setProducts] = useState(null);

@@ -9,9 +9,8 @@ const orderSchema = new Schema(
         quantity: Number
     }],
     user: {
-        ref: "User",
-        type: Schema.Types.ObjectId,
-        require: true,
+        type: String,
+        required: true,
     },
     status: String
   },
@@ -30,6 +29,15 @@ orderSchema.virtual('total').get(function() {
         total += product.price * product.quantity;
     });
     return total;
+});
+
+// Order.description
+orderSchema.virtual('description').get(function() {
+    let desc = 'Order summary: ';    
+    this.products.forEach(product => {
+        desc += `·${product.product_name} x${product.quantity}. `;
+    });
+    return desc;
 });
 
 module.exports = model("Order", orderSchema);

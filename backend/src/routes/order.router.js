@@ -2,13 +2,18 @@ const { Router } = require("express");
 const router = Router();
 const {
     getOrder,
+    getOrdersUser,
+    getOrdersAdmin,
     createOrder,
-    deleteOrder
+    deleteOrder,
+    updateOrder
 } = require("../controllers/order.ctrl.js");
 
-router.get("/", getOrder);
-router.get("/all", getOrder);
+router.get("/userall", getOrdersUser);
+router.get("/adminall", getOrdersAdmin);
+router.get("/:id", getOrder);
 router.post("/", createOrder);
-router.delete("/:id", deleteOrder);
+router.put("/:id", updateOrder);
+router.delete("/", deleteOrder);
 
 module.exports = router;

@@ -19,6 +19,3 @@ router.delete("/delete", deleteCart);
 router.delete("/:id", removeFromCart);
 
 module.exports = router;
-/* pelado 629038b0dd969557733d2eb1
-test 628d90b1ba05728fcea1ada3
- */

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { BACK_URL } from "./constants";
+import { BACK_URL } from "../../constants";
 
 const ProductForm = () => {
     const [product, setProduct] = useState({
