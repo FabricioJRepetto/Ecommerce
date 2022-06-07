@@ -18,7 +18,7 @@ const addToCart = async (req, res, next) => {
     const productToAdd = req.params.id;
     const cart = await Cart.findOne({ owner: userId });
 
-    const {name, price} = await Product.findById(productToAdd);
+    const {name, price, images} = await Product.findById(productToAdd);
 
     if (cart) {
         let flag = false; 
@@ -36,6 +36,7 @@ const addToCart = async (req, res, next) => {
             cart.products.push({
                 product_id: productToAdd,
                 product_name: name,
+                img: [images[0].imgURL],
                 price,
                 quantity: 1
             });
@@ -47,6 +48,7 @@ const addToCart = async (req, res, next) => {
         products: {
           product_id: productToAdd,
           product_name: name,
+          img: [images[0].imgURL],
           price,
           quantity: 1
         },
@@ -62,16 +64,20 @@ const addToCart = async (req, res, next) => {
 
 const removeFromCart = async (req, res, next) => {
   try {
-    const userId = req.user._id;
-    let removeTarget = req.params.id;
-    const cart = await Cart.findOne({ owner: userId });
-
-    cart.products = cart.products.filter((e) => e.productId !== removeTarget);
-    await cart.save();
-
-    return res.json("Product deleted from cart.");
+        const userId = req.user._id;
+        let target = req.params.id;
+        const cart = await Cart.updateOne({ 
+            'owner': userId 
+        },
+        {
+            $pull: {
+                'products': {'product_id': target}
+            }
+        }
+        );
+        return res.json(cart);
   } catch (error) {
-    next(error);
+        next(error);
   }
 };
 

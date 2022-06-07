@@ -6,17 +6,10 @@ const cartSchema = new Schema(
       {
             product_name: String,
             product_id: String,
+            img: [String],
             price: Number,
             quantity: Number,
-      },
-    //   {
-    //     productId: {
-    //       ref: "Product",
-    //       type: Schema.Types.ObjectId,
-    //       require: true,
-    //     },
-    //     quantity: Number,
-    //   },
+      }
     ],
     owner: {
       type: String,
