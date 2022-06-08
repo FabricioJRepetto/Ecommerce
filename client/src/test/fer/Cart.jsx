@@ -1,113 +1,92 @@
-//: handleQuantityEx crear el input para mostrar/modificar la cantidad de unidades
-//: investigar withCredentials: true
-//: actualizar el estado 'cart' cada vez que cambia la cantidad de un producto
+//: checkear 'cart' al crear orden
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { BACK_URL } from "../../constants";
+import Modal from "../../components/common/Modal";
+import {useModal} from "../../hooks/useModal";
+import { cartTotal } from "../../Redux/reducer/cartSlice";
+import QuantityInput from "./QuantityInput";
 
 const Cart = () => {
     const [cart, setCart] = useState(null);
     const token = useSelector((state) => state.sessionReducer.token);
+    const total = useSelector((state) => state.cartReducer.total);
+    const [isOpen, openModal, closeModal, prop] = useModal();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
-  const getCart = async () => {
-    const { data } = await axios({
-      method: "GET",
-      withCredentials: true,
-      url: `${BACK_URL}/cart`, //! VOLVER A VER cambiar
-      headers: {
-        Authorization: `token ${token}`,
-      },
-    });
-      console.log(data);
-      typeof data !== 'string' &&
-      setCart(data);
-  };
+    useEffect(() => {
+        getCart();
+    // eslint-disable-next-line    
+    }, [])
 
-  const handleQuantity = async (id, num) => {
+    const getCart = async () => {
         const { data } = await axios({
-            method: "PUT",
-            withCredentials: true,
-            url: `${BACK_URL}/cart/quantity/?id=${id}&amount=${num}`,
-            headers: {
-                Authorization: `token ${token}`,
-            }
+        method: "GET",
+        withCredentials: true,
+        url: `${BACK_URL}/cart`, //! VOLVER A VER cambiar
+        headers: {
+            Authorization: `token ${token}`,
+        },
         });
         console.log(data);
-        num>0
-        ? document.getElementById(id).innerHTML++
-        : document.getElementById(id).innerHTML--;
-  };
-  const handleQuantityEx = async (id, num) => { 
-        const { data } = await axios({
-            method: "PUT",
-            withCredentials: true,
-            url: `${BACK_URL}/cart/quantityEx?id=${id}&amount=${num}`,
+        typeof data !== 'string' &&
+        setCart(data.products);
+        dispatch(cartTotal(data.total));
+    };
+
+    const deleteProduct = async (id) => {
+        await axios.delete(`${BACK_URL}/cart/${id}`,{
             headers: {
                 Authorization: `token ${token}`,
             }
         });
-        document.getElementById(id).value = data;
-   }
-
-    const goCheckout = async () => {
-        // crea la order
-        let payload = {
-            products: [],
-            status: 'pending'
-        };
-        cart.forEach(e => {
-            payload.products.push({
-                product_name: e.details.name,
-                product_id: e.details._id,
-                price: e.details.price,
-                quantity: e.quantity
-            });
-        });        
-        const { data: id } = await axios.post(`${BACK_URL}/order/`,
-                payload, 
-                {
-                    withCredentials: true,
-                    headers: {
-                        Authorization: `token ${token}`,
-                    }
-                }
-        );
-        console.log(id);
-        // con la id inicia el checkout
-        navigate(`/checkout/${id}`);
+        getCart();
+        closeModal();
     };
 
-  return (
-    <>
-      <hr />
-      <h2>Cart</h2>
-      <button onClick={getCart}>GET CART</button>
-      {React.Children.toArray(
-        cart?.map((prod) => (
-          <div>
-                {prod.details.name} - ${prod.details.price} - 
-                <button onClick={() => handleQuantity(prod.details._id, -1)}>-</button>
-                <span id={prod.details._id}>{prod.quantity}</span>
-                <button onClick={() => handleQuantity(prod.details._id, 1)}>+</button>
-                {/*<input type="number"
-                    id={prod.details._id}
-                    defaultValue={prod.quantity}
-                    onChange={(e) => handleQuantityEx(
-                        prod.details._id,
-                        e.target.value
-                    )}
-                     />*/}
-          </div>
-        ))
-      )}
-      <br />
-      <button onClick={goCheckout}>Proceed to checkout</button>
-    </>
-  );
+    const goCheckout = async () => {
+        // crea la order       
+        const { data: id } = await axios.get(`${BACK_URL}/order/`, { 
+            headers: {
+                    Authorization: `token ${token}`,
+                }
+        });
+        // con la id inicia el checkout
+        navigate(`/checkout/${id}`);
+    };    
+
+    return (
+        <>
+        <Modal isOpen={isOpen} closeModal={closeModal}>
+            <h1>You want to delete this product?</h1>
+            <div>
+                <button onClick={closeModal}>Cancel</button>
+                <button onClick={()=> deleteProduct(prop)}>Delete</button>
+            </div>
+        </Modal>
+        <hr />
+        <h2>Cart</h2>
+        {cart?.map((prod) => (
+            <div key={prod.product_id}>
+                <img src={prod.img[0]} alt='product img' height={60}/>
+                    {prod.product_name} - ${prod.price} - 
+                        <QuantityInput prodId={prod.product_id} prodQuantity={prod.quantity}
+                        stock={prod.stock} 
+                        price={prod.price}
+                    />
+                    <p onClick={()=> openModal(prod.product_id)}><b> Delete </b></p>
+            </div>
+        ))}
+        <br />
+        <h2>Total: {total}</h2>
+        <br />
+        <button onClick={goCheckout}>Proceed to checkout</button>
+        </>
+    );
 };
 
 export default Cart;

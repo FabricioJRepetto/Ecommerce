@@ -20,24 +20,24 @@ const CheckoutForm =  () => {
     const { id: orderId } = useParams();
     
     useEffect(() => {
-        const mountPetition = async () => {
-            const { data } = await axios({
-                method: "GET",
-                withCredentials: true,
-                url: `${BACK_URL}/order/${orderId}`,
-                headers: {
-                    Authorization: `token ${token}`,
-                }
-            });
-            setOrder(data)
-        };
-        mountPetition();
-        return () => {
-        }
+      const mountPetition = async () => {
+        const { data } = await axios({
+            method: "GET",
+            withCredentials: true,
+            url: `${BACK_URL}/order/${orderId}`,
+            headers: {
+                Authorization: `token ${token}`,
+            }
+        });
+        console.log(data);
+        setOrder(data)
+    };
+    mountPetition();
     // eslint-disable-next-line
-    }, []);
+    }, [])
+    
 
-    const handleSubmit = async (e) => { 
+    const handleSubmit = async (e) => {
         e.preventDefault();
         // prepara el pago
         const {error, paymentMethod} = await stripe.createPaymentMethod({
@@ -78,8 +78,9 @@ const CheckoutForm =  () => {
                 }
              });
             console.log(cartEmpty);
+            //: restar unidades de cada stock
 
-            //? muestra mensaje de exito y redirecciona
+            //: muestra mensaje de exito y redirecciona
             navigate(`/`);
             
         } else {
@@ -88,10 +89,20 @@ const CheckoutForm =  () => {
     };
 
     return (
+        <>
+            <h1>Checkout</h1>
+            <p><b>Order summary</b></p>
+            <ul>
+                {order?.products.map(e =>
+                    <li key={e._id} >{`${e.product_name} (x${e.quantity}): ${e.price * e.quantity}`}</li>
+                )} 
+            </ul>
+            <p><b>TOTAL: {order?.total}</b></p>
             <form onSubmit={handleSubmit}>
-                    <CardElement/>
-                    <button>BUY</button>
+                <CardElement/>
+                <button>BUY</button>
             </form>
+        </>
     )
 };
 
@@ -99,12 +110,6 @@ const CheckoutForm =  () => {
 const Checkout = () => {
     return (
         <div>
-            <h1>Checkout</h1>
-            <p><b>resumen de compra</b></p>
-            <p>· item 1</p>
-            <p>· item 2</p>
-            <p>· item 3</p>
-            <p><b>TOTAL 123</b></p>
             <Elements stripe={stripePromise}>
                 <CheckoutForm />
             </Elements>
