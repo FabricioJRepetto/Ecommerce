@@ -12,8 +12,8 @@ const initialSignup = {
   password: "",
 };
 const initialSignin = {
-  email: "test",
-  password: "test",
+  email: "test@test.com",
+  password: "test@test.com",
 };
 
 const Signupin = () => {
@@ -41,13 +41,17 @@ const Signupin = () => {
       withCredentials: true,
       url: `${BACK_URL}/user/signin`, //! VOLVER A VER cambiar
     }).then(({ data }) => {
-      window.localStorage.setItem("loggedTokenEcommerce", data.token);
-      console.log(data);
-      dispatch(loadToken(data.token));
+      if (data.user) {
+        window.localStorage.setItem("loggedTokenEcommerce", data.token);
+        console.log(data);
+        dispatch(loadToken(data.token));
 
-      const username = data.user.name || data.user.email;
-      dispatch(loadUsername(username));
-      navigate("/signout");
+        const username = data.user.name || data.user.email;
+        dispatch(loadUsername(username));
+        navigate("/signout");
+      } else {
+        console.log(data);
+      }
     });
     //.catch((err) => console.log(err));
   };

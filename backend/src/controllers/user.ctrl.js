@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const { JWT_SECRET_CODE } = process.env;
 const { OAuth2Client } = require("google-auth-library");
+const { validationResult } = require("express-validator");
 
 const signup = async (req, res, next) => {
   res.json({
@@ -13,6 +14,14 @@ const signup = async (req, res, next) => {
 };
 
 const signin = async (req, res, next) => {
+  const errors = validationResult(req);
+
+  console.log("-----------------ENTRA");
+  if (!errors.isEmpty()) {
+    const message = errors.errors.map((err) => err.msg);
+    return res.json({ message });
+  }
+
   passport.authenticate("signin", async (err, user, info) => {
     try {
       if (err || !user) throw new Error(info.message);
