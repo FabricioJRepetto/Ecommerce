@@ -6,6 +6,7 @@ const getUserCart = async (req, res, next) => {
         const userId = req.user._id;
         const cart = await Cart.findOne({ owner: userId });
         if (!cart) return res.json('empty cart');
+        console.log(cart);
         return res.json(cart);
   } catch (error) {
     next(error);
@@ -18,7 +19,7 @@ const addToCart = async (req, res, next) => {
     const productToAdd = req.params.id;
     const cart = await Cart.findOne({ owner: userId });
 
-    const {name, price, images} = await Product.findById(productToAdd);
+    const {name, price, available_quantity:stock, images} = await Product.findById(productToAdd);
 
     if (cart) {
         let flag = false; 
@@ -38,6 +39,7 @@ const addToCart = async (req, res, next) => {
                 product_name: name,
                 img: [images[0].imgURL],
                 price,
+                stock,
                 quantity: 1
             });
         };
@@ -46,11 +48,12 @@ const addToCart = async (req, res, next) => {
     } else {
       const newCart = new Cart({
         products: {
-          product_id: productToAdd,
-          product_name: name,
-          img: [images[0].imgURL],
-          price,
-          quantity: 1
+            product_id: productToAdd,
+            product_name: name,
+            img: [images[0].imgURL],
+            price,
+            stock,
+            quantity: 1
         },
         owner: userId,
       });
@@ -109,7 +112,8 @@ const quantity = async (req, res, next) => {
     try {
         let userId = req.user._id;
         let target = req.query.id;
-        let amount = req.query.amount;
+        let amount = 1;
+        req.query.mode === 'add' || (amount = -1);
 
         const cart = await Cart.findOneAndUpdate({
             'owner': userId,
@@ -133,7 +137,7 @@ const quantityEx = async (req, res, next) => {
         let target = req.query.id;
         let amount = req.query.amount;
 
-        const cart = await Cart.findOneAndUpdate({
+        await Cart.findOneAndUpdate({
             'owner': userId,
             'products.product_id': target
         },

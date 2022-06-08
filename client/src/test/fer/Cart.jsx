@@ -1,22 +1,25 @@
-//: handleQuantityEx crear el input para mostrar/modificar la cantidad de unidades
-//: investigar withCredentials: true
 //: checkear 'cart' al crear orden
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { BACK_URL } from "../../constants";
 import Modal from "../../components/common/Modal";
 import {useModal} from "../../hooks/useModal";
+import { cartTotal } from "../../Redux/reducer/cartSlice";
+import QuantityInput from "./QuantityInput";
 
 const Cart = () => {
     const [cart, setCart] = useState(null);
     const token = useSelector((state) => state.sessionReducer.token);
-    const navigate = useNavigate();
+    const total = useSelector((state) => state.cartReducer.total);
     const [isOpen, openModal, closeModal, prop] = useModal();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
-    const getCart = async () => {
+    useEffect(() => {
+      const getCart = async () => {
         const { data } = await axios({
         method: "GET",
         withCredentials: true,
@@ -28,7 +31,12 @@ const Cart = () => {
         console.log(data);
         typeof data !== 'string' &&
         setCart(data.products);
+        dispatch(cartTotal(data.total));
     };
+    getCart();
+    // eslint-disable-next-line    
+    }, [])
+    
 
     const deleteProduct = async (id) => {
         const { data } = await axios.delete(`${BACK_URL}/cart/${id}`,{
@@ -36,36 +44,12 @@ const Cart = () => {
                 Authorization: `token ${token}`,
             }
         });
-        setCart(data.products)
+        //setCart(data.products)
+        console.log(data.products);
+        setCart(cart.filter(e=>e.product_id !== id));
+
         closeModal();
     };
-
-    const handleQuantity = async (id, num) => {
-        const { data } = await axios({
-            method: "PUT",
-            withCredentials: true,
-            url: `${BACK_URL}/cart/quantity/?id=${id}&amount=${num}`,
-            headers: {
-                Authorization: `token ${token}`,
-            }
-        });
-        console.log(data);
-        num>0
-        ? document.getElementById(id).innerHTML++
-        : document.getElementById(id).innerHTML--;
-    };
-
-    const handleQuantityEx = async (id, num) => { 
-        const { data } = await axios({
-            method: "PUT",
-            withCredentials: true,
-            url: `${BACK_URL}/cart/quantityEx?id=${id}&amount=${num}`,
-            headers: {
-                Authorization: `token ${token}`,
-            }
-        });
-        document.getElementById(id).value = data;
-    }
 
     const goCheckout = async () => {
         // crea la order       
@@ -76,7 +60,7 @@ const Cart = () => {
         });
         // con la id inicia el checkout
         navigate(`/checkout/${id}`);
-    };
+    };    
 
     return (
         <>
@@ -89,19 +73,18 @@ const Cart = () => {
         </Modal>
         <hr />
         <h2>Cart</h2>
-        <button onClick={getCart}>GET CART</button>
-        {
-            cart?.map((prod) => (
+        {/* <button onClick={getCart}>GET CART</button> */}
+        {cart?.map((prod) => (
             <div key={prod.product_id}>
                 <img src={prod.img[0]} alt='product img' height={60}/>
                     {prod.product_name} - ${prod.price} - 
-                    <button onClick={() => handleQuantity(prod.product_id, -1)}>-</button>
-                    <span id={prod.product_id}>{prod.quantity}</span>
-                    <button onClick={() => handleQuantity(prod.product_id, 1)}>+</button>
+                    <QuantityInput prodId={prod.product_id} prodQuantity={prod.quantity}
+                    stock={prod.stock} />
                     <p onClick={()=> openModal(prod.product_id)}><b> Delete </b></p>
             </div>
-            ))
-        }
+        ))}
+        <br />
+        <h2>Total: {total}</h2>
         <br />
         <button onClick={goCheckout}>Proceed to checkout</button>
         </>

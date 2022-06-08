@@ -78,8 +78,9 @@ const CheckoutForm =  () => {
                 }
              });
             console.log(cartEmpty);
+            //: restar unidades de cada stock
 
-            //? muestra mensaje de exito y redirecciona
+            //: muestra mensaje de exito y redirecciona
             navigate(`/`);
             
         } else {

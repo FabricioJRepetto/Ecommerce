@@ -11,6 +11,7 @@ const getOrder = async (req, res, next) => {
             _id: orderId
         });
         if (order) {
+            console.log(order);
             return res.json(order)
         } else {
             return res.status(404).json('Order not found')
