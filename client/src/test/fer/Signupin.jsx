@@ -8,8 +8,9 @@ import { useNavigate } from "react-router-dom";
 
 const { REACT_APP_OAUTH_CLIENT_ID } = process.env;
 const initialSignup = {
-  email: "",
-  password: "",
+  email: "asdasd@asdasd.com",
+  password: "asdasd@asdasd.com",
+  repPassword: "asdasd@asdasd.com",
 };
 const initialSignin = {
   email: "test@test.com",
@@ -119,6 +120,13 @@ const Signupin = () => {
           placeholder="Password"
           onChange={handleSignup}
           value={signupData.password}
+        />
+        <input
+          type="text"
+          name="repPassword"
+          placeholder="repPassword"
+          onChange={handleSignup}
+          value={signupData.repPassword}
         />
         <input type="submit" value="Sign Up" />
       </form>

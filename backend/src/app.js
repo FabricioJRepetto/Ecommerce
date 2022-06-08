@@ -13,6 +13,7 @@ const cookieParser = require("cookie-parser");
 const { DB_NAME, SESSION_SECRET_CODE } = process.env;
 const router = require("./routes/index");
 const { v4: uuidv4 } = require("uuid");
+//const csrf = require("csurf");
 
 const clientDb = require("./database/db");
 
@@ -31,13 +32,12 @@ let corsOptions = {
   credentials: true,
 };
 
-const fileFilters=(req,file,cb)=>{
-    if(file.mimetype==='image/jpeg' || file.mimetype ==='image/png'){
-        cb(null, true);
-    }
-    else{
-        cb(null, false);
-    }
+const fileFilters = (req, file, cb) => {
+  if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
 };
 const StorageConfig = multer.diskStorage({
   destination: path.join(__dirname, "public/uploads"),
@@ -45,11 +45,15 @@ const StorageConfig = multer.diskStorage({
     cb(null, uuidv4() + path.extname(file.originalname));
   },
 });
-const Multerupload = multer({ storage: StorageConfig, fileFilter: fileFilters});
+const Multerupload = multer({
+  storage: StorageConfig,
+  fileFilter: fileFilters,
+});
 
 // ---------------- MIDDLEWARES
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
+//app.use(csrf());
 app.use(morgan("dev"));
 
 app.use(Multerupload.any("images")); //? single/array/any tiene el nombre del objeto que viene en el req.

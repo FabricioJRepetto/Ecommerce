@@ -19,7 +19,14 @@ router.post(
       .trim()
       .notEmpty()
       .isLength({ min: 8 })
-      .escape(),
+      .escape()
+      .custom((value, { req }) => {
+        if (value !== req.body.repPassword) {
+          throw new Error("Passwords are not equal");
+        } else {
+          return value;
+        }
+      }),
     passport.authenticate("signup", { session: false }),
   ],
   signup
