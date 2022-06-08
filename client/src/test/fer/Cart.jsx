@@ -19,7 +19,11 @@ const Cart = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-      const getCart = async () => {
+        getCart();
+    // eslint-disable-next-line    
+    }, [])
+
+    const getCart = async () => {
         const { data } = await axios({
         method: "GET",
         withCredentials: true,
@@ -33,21 +37,14 @@ const Cart = () => {
         setCart(data.products);
         dispatch(cartTotal(data.total));
     };
-    getCart();
-    // eslint-disable-next-line    
-    }, [])
-    
 
     const deleteProduct = async (id) => {
-        const { data } = await axios.delete(`${BACK_URL}/cart/${id}`,{
+        await axios.delete(`${BACK_URL}/cart/${id}`,{
             headers: {
                 Authorization: `token ${token}`,
             }
         });
-        //setCart(data.products)
-        console.log(data.products);
-        setCart(cart.filter(e=>e.product_id !== id));
-
+        getCart();
         closeModal();
     };
 
@@ -73,13 +70,14 @@ const Cart = () => {
         </Modal>
         <hr />
         <h2>Cart</h2>
-        {/* <button onClick={getCart}>GET CART</button> */}
         {cart?.map((prod) => (
             <div key={prod.product_id}>
                 <img src={prod.img[0]} alt='product img' height={60}/>
                     {prod.product_name} - ${prod.price} - 
-                    <QuantityInput prodId={prod.product_id} prodQuantity={prod.quantity}
-                    stock={prod.stock} />
+                        <QuantityInput prodId={prod.product_id} prodQuantity={prod.quantity}
+                        stock={prod.stock} 
+                        price={prod.price}
+                    />
                     <p onClick={()=> openModal(prod.product_id)}><b> Delete </b></p>
             </div>
         ))}

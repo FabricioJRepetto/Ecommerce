@@ -5,7 +5,7 @@ import { BACK_URL } from '../../constants';
 import { cartTotal } from '../../Redux/reducer/cartSlice';
 import './QuantityInput.css';
 
-const QuantityInput = ({prodId: id, prodQuantity, stock}) => {
+const QuantityInput = ({prodId: id, prodQuantity, stock, price}) => {
     const token = useSelector((state) => state.sessionReducer.token);
     const [quantity, setQuantity] = useState(prodQuantity);
     const total = useSelector((state) => state.cartReducer.total);
@@ -21,9 +21,13 @@ const QuantityInput = ({prodId: id, prodQuantity, stock}) => {
             }
         });
 
-        mode === 'add'
-        ? setQuantity(quantity+1)
-        : setQuantity(quantity-1);
+        if (mode === 'add') {
+            setQuantity(quantity+1);
+            dispatch(cartTotal(total + (price)));
+        } else {
+            setQuantity(quantity-1);
+            dispatch(cartTotal(total - (price)));
+        }
     };
 
     const handleQuantityEx = async (e) => { 
