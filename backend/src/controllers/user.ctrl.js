@@ -96,25 +96,19 @@ const forgotPassword = async (req, res, next) => {
 
 const changePassword = async (req, res, next) => {
   const errors = validationResult(req);
-  console.log(errors.errors);
   if (!errors.isEmpty()) {
     const message = errors.errors.map((err) => err.msg);
-    console.log("entra");
     return res.json({ message });
   }
 
   const { password } = req.body;
 
   try {
-    const userFound = await User.findByIdAndUpdate(
-      req.user._id,
-      {
-        password,
-      }
-      //  { new: true }
-    );
+    const userFound = await User.findById(req.user._id);
     if (!userFound) return res.status(404).json({ message: "User not found" });
-    return res.send(userFound);
+    userFound.password = password;
+    await userFound.save();
+    return res.json({ message: "Password changed successfully" });
   } catch (error) {
     next(error);
   }

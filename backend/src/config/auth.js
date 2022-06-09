@@ -19,8 +19,6 @@ passport.use(
       try {
         const errors = validationResult(req);
 
-        console.log("-----------------ENTRA");
-        console.log(errors.errors);
         if (!errors.isEmpty()) {
           const message = errors.errors.map((err) => err.msg);
           return done(null, email, message);

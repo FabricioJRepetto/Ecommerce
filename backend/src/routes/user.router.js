@@ -2,7 +2,6 @@ const { Router } = require("express");
 const router = Router();
 const verifyToken = require("../middlewares/verifyToken");
 const verifySuperAdmin = require("../middlewares/verifySuperAdmin");
-const verifyChangePassword = require("../middlewares/verifyChangePassword");
 const passport = require("passport");
 const {
   signin,
@@ -64,7 +63,6 @@ router.put(
       .isLength({ min: 6 })
       .escape()
       .custom((value, { req }) => {
-        console.log(req.body);
         if (value !== req.body.repPassword) {
           throw new Error("Passwords are not equal");
         } else {
