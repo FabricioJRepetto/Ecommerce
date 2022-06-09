@@ -13,9 +13,13 @@ const initialSignup = {
   repPassword: "asdasd@asdasd.com",
 };
 const initialSignin = {
+  email: "bar@example.com",
+  password: "bar@example.com",
+};
+/* const initialSignin = {
   email: "test@test.com",
   password: "test@test.com",
-};
+}; */
 
 const Signupin = () => {
   const [signupData, setSignupData] = useState(initialSignup);
@@ -41,20 +45,21 @@ const Signupin = () => {
       data: signinData,
       withCredentials: true,
       url: `${BACK_URL}/user/signin`, //! VOLVER A VER cambiar
-    }).then(({ data }) => {
-      if (data.user) {
-        window.localStorage.setItem("loggedTokenEcommerce", data.token);
-        console.log(data);
-        dispatch(loadToken(data.token));
+    })
+      .then(({ data }) => {
+        if (data.user) {
+          window.localStorage.setItem("loggedTokenEcommerce", data.token);
+          console.log(data);
+          dispatch(loadToken(data.token));
 
-        const username = data.user.name || data.user.email;
-        dispatch(loadUsername(username));
-        navigate("/signout");
-      } else {
-        console.log(data);
-      }
-    });
-    //.catch((err) => console.log(err));
+          const username = data.user.name || data.user.email;
+          dispatch(loadUsername(username));
+          navigate("/signout");
+        } else {
+          console.log(data);
+        }
+      })
+      .catch((err) => console.log(err));
   };
 
   const handleSignup = ({ target }) => {
@@ -100,7 +105,22 @@ const Signupin = () => {
       theme: "outline",
       size: "large",
     });
+    // eslint-disable-next-line
   }, [token]);
+
+  const forgotPassword = () => {
+    if (!signinData.email) return console.log("Please enter an email");
+    Axios({
+      method: "PUT",
+      data: signinData,
+      withCredentials: true,
+      url: `${BACK_URL}/user/forgotPassword`, //! VOLVER A VER cambiar
+    })
+      .then(({ data }) => {
+        console.log(data);
+      })
+      .catch((err) => console.log(err));
+  };
 
   return (
     <>
@@ -147,6 +167,7 @@ const Signupin = () => {
           onChange={handleSignin}
           value={signinData.password}
         />
+        <span onClick={forgotPassword}>Forgot password?</span>
         <input type="submit" value="Sign In" />
       </form>
       <hr />

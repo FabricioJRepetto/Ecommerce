@@ -5,6 +5,7 @@ require("dotenv").config();
 const { JWT_SECRET_CODE } = process.env;
 const { OAuth2Client } = require("google-auth-library");
 const { validationResult } = require("express-validator");
+const sendEmail = require("../utils/sendEmail");
 
 const signup = async (req, res, next) => {
   res.json({
@@ -64,7 +65,55 @@ const role = async (req, res, next) => {
       },
       { new: true }
     );
-    if (!userFound) return res.status(404).json({ message: "No user found" });
+    if (!userFound) return res.status(404).json({ message: "User not found" });
+    return res.send(userFound);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const forgotPassword = async (req, res, next) => {
+  const { email } = req.body;
+  if (!email) return res.status(401).send({ message: "Email is required" });
+
+  try {
+    let user = await User.findOne({ email });
+    if (!user) return res.status(404).send({ message: "User not found" });
+
+    const body = { _id: user._id, email: user.email };
+    const resetToken = jwt.sign({ user: body }, JWT_SECRET_CODE, {
+      expiresIn: 86400,
+    });
+
+    const link = `http://localhost:3000/reset/${resetToken}`;
+    await sendEmail(user.email, link);
+
+    return res.json({ message: "Check your email to reset your password" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const changePassword = async (req, res, next) => {
+  const errors = validationResult(req);
+  console.log(errors.errors);
+  if (!errors.isEmpty()) {
+    const message = errors.errors.map((err) => err.msg);
+    console.log("entra");
+    return res.json({ message });
+  }
+
+  const { password } = req.body;
+
+  try {
+    const userFound = await User.findByIdAndUpdate(
+      req.user._id,
+      {
+        password,
+      }
+      //  { new: true }
+    );
+    if (!userFound) return res.status(404).json({ message: "User not found" });
     return res.send(userFound);
   } catch (error) {
     next(error);
@@ -76,4 +125,6 @@ module.exports = {
   signup,
   profile,
   role,
+  forgotPassword,
+  changePassword,
 };

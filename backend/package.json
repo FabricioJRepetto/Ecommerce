@@ -28,6 +28,7 @@
     "mongoose": "^6.3.4",
     "morgan": "^1.10.0",
     "multer": "github:jlourenc/multer#fix/CVE-2022-24434",
+    "nodemailer": "^6.7.5",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
     "stripe": "^9.6.0",
