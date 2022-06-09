@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { BACK_URL } from "../../constants";
 
 const ProductForm = () => {
     const [product, setProduct] = useState({
@@ -23,7 +22,7 @@ const ProductForm = () => {
         //formData.append('images', productImg);
         formData.append('data', JSON.stringify(product));
         
-        const imgURL = await axios.post(`${BACK_URL}/product/`, formData, {
+        const imgURL = await axios.post(`/product/`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }

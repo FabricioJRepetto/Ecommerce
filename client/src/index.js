@@ -8,15 +8,13 @@ import { BrowserRouter } from "react-router-dom";
 import axios from "axios";
 import { BACK_URL } from "./constants";
 
-//? defaults para axios
-axios.defaults.baseURL = BACK_URL;
-let token = localStorage.getItem('loggedTokenEcommerce');
-if (token) {
-    if (/google/.test(token)) {
-        token = token.slice(6)
-    } 
-    axios.defaults.headers.common['Authorization'] = `token ${token}`
-};
+//? cosas de axios
+axios.interceptors.request.use(function (config) {
+    axios.defaults.baseURL = BACK_URL;
+    const { token } = store.getState().sessionReducer;
+    config.headers.Authorization =  `token ${token}`;
+    return config;
+});
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

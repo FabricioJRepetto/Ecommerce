@@ -1,25 +1,20 @@
 //: checkear 'cart' al crear orden
 
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { BACK_URL } from "../../constants";
 import Modal from "../../components/common/Modal";
 import {useModal} from "../../hooks/useModal";
 import { cartTotal } from "../../Redux/reducer/cartSlice";
 import QuantityInput from "./QuantityInput";
+import axios from "axios";
 
 const Cart = () => {
     const [cart, setCart] = useState(null);
-    const token = useSelector((state) => state.sessionReducer.token);
     const total = useSelector((state) => state.cartReducer.total);
     const [isOpen, openModal, closeModal, prop] = useModal();
     const navigate = useNavigate();
     const dispatch = useDispatch();
-
-    axios.defaults.baseURL = BACK_URL;
-    axios.defaults.headers.common['Authorization'] = `token ${token}`
 
     useEffect(() => {
         getCart();
@@ -27,15 +22,6 @@ const Cart = () => {
     }, [])
 
     const getCart = async () => {
-        // const { data, } = await axios({
-        // method: "GET",
-        // withCredentials: true,
-        // url: `${BACK_URL}/cart`, //! VOLVER A VER cambiar
-        // headers: {
-        //     Authorization: `token ${token}`,
-        // },
-        // });
-
         const { data } = await axios('/cart');
 
         console.log(data);
@@ -45,28 +31,18 @@ const Cart = () => {
     };
 
     const deleteProduct = async (id) => {
-        // await axios.delete(`${BACK_URL}/cart/${id}`,{
-        //     headers: {
-        //         Authorization: `token ${token}`,
-        //     }
-        // });
-
         await axios.delete(`/cart/${id}`)
+
         getCart();
         closeModal();
     };
 
     const goCheckout = async () => {
         // crea la order       
-        const { data: id } = await axios.get(`${BACK_URL}/order/`, { 
-            headers: {
-                    Authorization: `token ${token}`,
-                }
-        });
+        const { data: id } = await axios(`/order/`);
         // con la id inicia el checkout
         navigate(`/checkout/${id}`);
     };
-
     return (
         <>
         <Modal isOpen={isOpen} closeModal={closeModal}>
@@ -78,6 +54,7 @@ const Cart = () => {
         </Modal>
         <hr />
         <h2>Cart</h2>
+        <br />
         {(cart && cart.length > 0)
         ? <div> 
             {cart.map((prod) => (

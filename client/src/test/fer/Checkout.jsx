@@ -21,14 +21,7 @@ const CheckoutForm =  () => {
     
     useEffect(() => {
       const mountPetition = async () => {
-        const { data } = await axios({
-            method: "GET",
-            withCredentials: true,
-            url: `${BACK_URL}/order/${orderId}`,
-            headers: {
-                Authorization: `token ${token}`,
-            }
-        });
+        const { data } = await axios(`/order/${orderId}`);
         console.log(data);
         setOrder(data)
     };
@@ -47,36 +40,20 @@ const CheckoutForm =  () => {
         if (!error) {
             // intenta el pago
             const { id } = paymentMethod;
-            const { data } = await axios.post(`${BACK_URL}/checkout/`, 
+            const { data } = await axios.post(`/checkout/`, 
             {
                 id,
                 description: order.description,
                 amount: order.total * 100
-            }, {
-                    withCredentials: true,
-                    headers: {
-                        Authorization: `token ${token}`,
-                    }
             });            
             console.log(data);
 
             //? cambiar orden a pagada            
-            const { data: orderUpdt } = await axios({ 
-                method: "PUT",
-                withCredentials: true,
-                url: `${BACK_URL}/order/${orderId}`,
-                headers: {
-                    Authorization: `token ${token}`,
-                }
-             });
+            const { data: orderUpdt } = await axios(`/order/${orderId}`);
             console.log(orderUpdt);
 
             //? vaciar carrito
-            const { data: cartEmpty } = await axios.delete(`${BACK_URL}/cart/empty`, { 
-            headers: {
-                    Authorization: `token ${token}`,
-                }
-             });
+            const { data: cartEmpty } = await axios.delete(`/cart/empty`);
             console.log(cartEmpty);
 
             //: restar unidades de cada stock

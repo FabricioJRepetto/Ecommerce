@@ -1,25 +1,16 @@
 import axios from 'axios';
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { BACK_URL } from '../../constants';
 import { cartTotal } from '../../Redux/reducer/cartSlice';
 import './QuantityInput.css';
 
 const QuantityInput = ({prodId: id, prodQuantity, stock, price}) => {
-    const token = useSelector((state) => state.sessionReducer.token);
     const [quantity, setQuantity] = useState(prodQuantity);
     const total = useSelector((state) => state.cartReducer.total);
     const dispatch = useDispatch();
 
     const handleQuantity = async (id, mode) => {
-        await axios({
-            method: "PUT",
-            withCredentials: true,
-            url: `${BACK_URL}/cart/quantity/?id=${id}&mode=${mode}`,
-            headers: {
-                Authorization: `token ${token}`,
-            }
-        });
+        await axios.put(`/cart/quantity/?id=${id}&mode=${mode}`);
 
         if (mode === 'add') {
             setQuantity(quantity+1);
@@ -39,14 +30,7 @@ const QuantityInput = ({prodId: id, prodQuantity, stock, price}) => {
             setQuantity(stock);
             e.target.value = stock;
         } else {
-            const test = await axios({
-                method: "PUT",
-                withCredentials: true,
-                url: `${BACK_URL}/cart/quantityEx?id=${id}&amount=${value}`,
-                headers: {
-                    Authorization: `token ${token}`,
-                }
-            });
+            const test = await axios.put(`/cart/quantityEx?id=${id}&amount=${value}`);
             console.log(test);
             setQuantity(value);
         }
