@@ -103,11 +103,35 @@ const deleteAll = async (req, res, next) => {
     }
 };
 
+const stock = async (req, res, next) => { 
+    let list = req.body;
+    console.log(req.body)
+//    try {
+//         for (const prod of list) {
+//             let { id, amount } = prod;
+    
+//             await Product.findOneAndUpdate({ _id: id },
+//             {
+//                 "$inc": {
+//                     "available_quantity": - amount
+//                 }
+//             }
+//             );
+//         };
+//         res.json('stock updated')
+//    } catch (error) {
+//        next(error)
+//    }
+
+    
+ }
+
 module.exports = {
     getAll,
     getById,
     createProduct,
     updateProduct,
     deleteProduct,
-    deleteAll
+    deleteAll,
+    stock
 }

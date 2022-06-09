@@ -20,14 +20,7 @@ const Home = () => {
     const loggedUserToken = window.localStorage.getItem("loggedTokenEcommerce");
 
     loggedUserToken &&
-      Axios({
-        method: "GET",
-        withCredentials: true,
-        url: `${BACK_URL}/user/profile`, //! VOLVER A VER cambiar
-        headers: {
-          Authorization: `token ${loggedUserToken}`,
-        },
-      })
+      Axios(`/user/profile`)
         .then(({ data }) => {
           dispatch(loadToken(loggedUserToken));
           dispatch(loadUsername(data.user.email));

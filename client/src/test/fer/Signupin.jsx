@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import Axios from "axios";
+import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { loadToken, loadUsername } from "../../Redux/reducer/sessionSlice";
 import jwt_decode from "jwt-decode";
-import { BACK_URL } from "../../constants";
 import { useNavigate } from "react-router-dom";
 
 const { REACT_APP_OAUTH_CLIENT_ID } = process.env;
@@ -25,22 +24,12 @@ const Signupin = () => {
 
   const signup = (e) => {
     e.preventDefault();
-    Axios({
-      method: "POST",
-      data: signupData,
-      withCredentials: true,
-      url: `${BACK_URL}/user/signup`, //! VOLVER A VER cambiar
-    }).then((res) => console.log(res.data));
+    axios.post(`/user/signup`, signupData).then((res) => console.log(res.data));
   };
 
   const signin = (e) => {
     e.preventDefault();
-    Axios({
-      method: "POST",
-      data: signinData,
-      withCredentials: true,
-      url: `${BACK_URL}/user/signin`, //! VOLVER A VER cambiar
-    }).then(({ data }) => {
+    axios.post(`/user/signin`, signinData).then(({ data }) => {
       window.localStorage.setItem("loggedTokenEcommerce", data.token);
       console.log(data);
       dispatch(loadToken(data.token));
@@ -95,6 +84,7 @@ const Signupin = () => {
       theme: "outline",
       size: "large",
     });
+    // eslint-disable-next-line
   }, [token]);
 
   return (
