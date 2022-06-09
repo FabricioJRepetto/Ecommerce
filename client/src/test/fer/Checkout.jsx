@@ -78,7 +78,17 @@ const CheckoutForm =  () => {
                 }
              });
             console.log(cartEmpty);
+
             //: restar unidades de cada stock
+            // const { data: stockUpdt } = await axios({ 
+            //     method: "PUT",
+            //     withCredentials: true,
+            //     url: `${BACK_URL}/product/updateStock/`,
+            //     headers: {
+            //         Authorization: `token ${token}`,
+            //     }
+            //  });
+            // console.log(stockUpdt);
 
             //: muestra mensaje de exito y redirecciona
             navigate(`/`);

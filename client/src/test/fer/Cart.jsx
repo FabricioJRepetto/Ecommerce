@@ -18,20 +18,26 @@ const Cart = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
+    axios.defaults.baseURL = BACK_URL;
+    axios.defaults.headers.common['Authorization'] = `token ${token}`
+
     useEffect(() => {
         getCart();
     // eslint-disable-next-line    
     }, [])
 
     const getCart = async () => {
-        const { data } = await axios({
-        method: "GET",
-        withCredentials: true,
-        url: `${BACK_URL}/cart`, //! VOLVER A VER cambiar
-        headers: {
-            Authorization: `token ${token}`,
-        },
-        });
+        // const { data, } = await axios({
+        // method: "GET",
+        // withCredentials: true,
+        // url: `${BACK_URL}/cart`, //! VOLVER A VER cambiar
+        // headers: {
+        //     Authorization: `token ${token}`,
+        // },
+        // });
+
+        const { data } = await axios('/cart');
+
         console.log(data);
         typeof data !== 'string' &&
         setCart(data.products);
@@ -39,11 +45,13 @@ const Cart = () => {
     };
 
     const deleteProduct = async (id) => {
-        await axios.delete(`${BACK_URL}/cart/${id}`,{
-            headers: {
-                Authorization: `token ${token}`,
-            }
-        });
+        // await axios.delete(`${BACK_URL}/cart/${id}`,{
+        //     headers: {
+        //         Authorization: `token ${token}`,
+        //     }
+        // });
+
+        await axios.delete(`/cart/${id}`)
         getCart();
         closeModal();
     };
@@ -57,7 +65,7 @@ const Cart = () => {
         });
         // con la id inicia el checkout
         navigate(`/checkout/${id}`);
-    };    
+    };
 
     return (
         <>
@@ -70,21 +78,26 @@ const Cart = () => {
         </Modal>
         <hr />
         <h2>Cart</h2>
-        {cart?.map((prod) => (
-            <div key={prod.product_id}>
-                <img src={prod.img[0]} alt='product img' height={60}/>
-                    {prod.product_name} - ${prod.price} - 
-                        <QuantityInput prodId={prod.product_id} prodQuantity={prod.quantity}
-                        stock={prod.stock} 
-                        price={prod.price}
-                    />
-                    <p onClick={()=> openModal(prod.product_id)}><b> Delete </b></p>
-            </div>
-        ))}
+        {(cart && cart.length > 0)
+        ? <div> 
+            {cart.map((prod) => (
+                <div key={prod.product_id}>
+                    <img src={prod.img[0]} alt='product img' height={60}/>
+                        {prod.product_name} - ${prod.price} - 
+                            <QuantityInput prodId={prod.product_id} prodQuantity={prod.quantity}
+                            stock={prod.stock} 
+                            price={prod.price}
+                        />
+                        <p onClick={()=> openModal(prod.product_id)}><b> Delete </b></p>
+                </div>
+            ))}
+            <h2>{`Total: ${total}`}</h2>
+        </div>
+        : <h1>your cart is empty</h1>
+        }
         <br />
-        <h2>Total: {total}</h2>
         <br />
-        <button onClick={goCheckout}>Proceed to checkout</button>
+        <button disabled={cart?.length < 1 && true } onClick={goCheckout}>Proceed to checkout</button>
         </>
     );
 };

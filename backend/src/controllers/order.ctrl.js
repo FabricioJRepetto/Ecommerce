@@ -1,6 +1,5 @@
 const Order = require('../models/order');
 const Cart = require('../models/cart');
-const { getUserCart } = require('./cart.ctrl');
 
 const getOrder = async (req, res, next) => { 
     try {
@@ -42,8 +41,7 @@ const getOrdersAdmin= async (req, res, next) => { //! SOLO ADMIN
 
 const createOrder = async (req, res, next) => { 
     try {
-        const userId = req.user._id;        
-        //const { products, status } = req.body;
+        const userId = req.user._id;
 
         const cart = await Cart.findOne({owner: userId});
         let products = cart.products;
