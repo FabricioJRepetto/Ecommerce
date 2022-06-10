@@ -1,27 +1,51 @@
 const nodemailer = require("nodemailer");
+const { google } = require("googleapis");
 require("dotenv").config();
-const { NODEMAILER_USER, NODEMAILER_PASSWORD } = process.env;
+const {
+  NODEMAILER_USER,
+  NODEMAILER_PASSWORD,
+  EMAIL_OAUTH_CLIENT_ID,
+  EMAIL_CLIENT_SECRET,
+  REDIRECT_URI,
+  REFRESH_TOKEN,
+  EMAIL_EPROVIDER,
+} = process.env;
+
+const oAuth2Client = new google.auth.OAuth2(
+  EMAIL_OAUTH_CLIENT_ID,
+  EMAIL_CLIENT_SECRET,
+  REDIRECT_URI
+);
+oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
 
 const sendEmail = async (email, link) => {
   try {
-    const transporter = nodemailer.createTransport({
-      host: "smtp.mailtrap.io",
-      port: 2525,
+    const accessToken = await oAuth2Client.getAccessToken();
+    const transport = nodemailer.createTransport({
+      service: "gmail",
       auth: {
-        user: NODEMAILER_USER,
-        pass: NODEMAILER_PASSWORD,
+        type: "OAuth2",
+        user: EMAIL_EPROVIDER,
+        clientId: EMAIL_OAUTH_CLIENT_ID,
+        clientSecret: EMAIL_CLIENT_SECRET,
+        refreshToken: REFRESH_TOKEN,
+        accessToken: accessToken,
       },
     });
 
-    await transporter.sendMail({
-      from: '"Fred Foo 👻" <foo@example.com>',
-      to: "bar@example.com, baz@example.com", //email
-      subject: "Prueba",
-      text: "Prueba en texto plano",
+    const mailOptions = {
+      from: `eProvider Store <${EMAIL_EPROVIDER}>`,
+      to: email,
+      subject: "Hello from gmail using API",
+      text: "Hello from gmail email using API",
       html: `<h1>Prueba </h1><b>en html </b><a href=${link}>linkkkkk </a>`,
-    });
+    };
+
+    const result = await transport.sendMail(mailOptions);
+    return result;
   } catch (error) {
-    throw new Error("Email not sent");
+    console.log(error);
+    throw new Error(error);
   }
 };
 

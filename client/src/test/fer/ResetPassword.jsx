@@ -23,7 +23,6 @@ const ResetPassword = () => {
         Authorization: `token ${resetToken}`,
       },
     }).catch((err) => {
-      console.log("tira error");
       console.log(err); //! VOLVER A VER agregar mensaje y timeout antes de redirigir
       navigate("/signin");
     });
@@ -49,6 +48,7 @@ const ResetPassword = () => {
     })
       .then(({ data }) => {
         console.log(data);
+        //  navigate("/home"); //! VOLVER A VER agregar mensaje y timeout antes de redirigir
       })
       .catch((err) => {
         console.log(err);
