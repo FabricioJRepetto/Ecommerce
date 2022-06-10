@@ -70,8 +70,6 @@ app.use(Multerupload.any("images")); //? single/array/any tiene el nombre del ob
   ) */
 
 app.use(cookieParser(/* SESSION_SECRET_CODE */));
-/* app.use(passport.initialize());
-app.use(passport.session()); */
 
 app.use(mongoSanitize());
 app.use("/", cors(corsOptions), router);
@@ -81,7 +79,7 @@ app.use((err, req, res, next) => {
   const status = err.status || 500;
   const message = err.message || err;
   console.error(err);
-  res.status(status).send(message);
+  return res.status(status).send(message);
 });
 
 module.exports = app;

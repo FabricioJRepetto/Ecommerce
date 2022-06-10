@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
-import Axios from "axios";
+import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { loadToken, loadUsername } from "../../Redux/reducer/sessionSlice";
 import jwt_decode from "jwt-decode";
-import { BACK_URL } from "../../constants";
 import { useNavigate } from "react-router-dom";
 
 const { REACT_APP_OAUTH_CLIENT_ID } = process.env;
@@ -13,13 +12,9 @@ const initialSignup = {
   repPassword: "asdasd@asdasd.com",
 };
 const initialSignin = {
-  email: "bar@example.com",
-  password: "bar@example.com",
-};
-/* const initialSignin = {
   email: "test@test.com",
   password: "test@test.com",
-}; */
+};
 
 const Signupin = () => {
   const [signupData, setSignupData] = useState(initialSignup);
@@ -30,22 +25,13 @@ const Signupin = () => {
 
   const signup = (e) => {
     e.preventDefault();
-    Axios({
-      method: "POST",
-      data: signupData,
-      withCredentials: true,
-      url: `${BACK_URL}/user/signup`, //! VOLVER A VER cambiar
-    }).then((res) => console.log(res.data));
+    axios.post(`/user/signup`, signupData).then((res) => console.log(res.data));
   };
 
   const signin = (e) => {
     e.preventDefault();
-    Axios({
-      method: "POST",
-      data: signinData,
-      withCredentials: true,
-      url: `${BACK_URL}/user/signin`, //! VOLVER A VER cambiar
-    })
+    axios
+      .post(`/user/signin`, signinData)
       .then(({ data }) => {
         if (data.user) {
           window.localStorage.setItem("loggedTokenEcommerce", data.token);
@@ -110,12 +96,8 @@ const Signupin = () => {
 
   const forgotPassword = () => {
     if (!signinData.email) return console.log("Please enter an email");
-    Axios({
-      method: "PUT",
-      data: signinData,
-      withCredentials: true,
-      url: `${BACK_URL}/user/forgotPassword`, //! VOLVER A VER cambiar
-    })
+    axios
+      .put("/user/forgotPassword", signinData)
       .then(({ data }) => {
         console.log(data);
       })

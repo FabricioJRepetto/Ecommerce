@@ -11,7 +11,7 @@ import { useDispatch } from "react-redux";
 import Checkout from "./Checkout";
 import { loadToken, loadUsername } from "../../Redux/reducer/sessionSlice";
 import { BACK_URL } from "../../constants";
-import Axios from "axios";
+import axios from "axios";
 import ResetPassword from "./ResetPassword";
 
 const Home = () => {
@@ -21,14 +21,7 @@ const Home = () => {
     const loggedUserToken = window.localStorage.getItem("loggedTokenEcommerce");
 
     loggedUserToken &&
-      Axios({
-        method: "GET",
-        withCredentials: true,
-        url: `${BACK_URL}/user/profile`, //! VOLVER A VER cambiar
-        headers: {
-          Authorization: `token ${loggedUserToken}`,
-        },
-      })
+      axios(`/user/profile`)
         .then(({ data }) => {
           dispatch(loadToken(loggedUserToken));
           dispatch(loadUsername(data.user.email));

@@ -1,113 +1,82 @@
-//: handleQuantityEx crear el input para mostrar/modificar la cantidad de unidades
-//: investigar withCredentials: true
-//: actualizar el estado 'cart' cada vez que cambia la cantidad de un producto
+//: checkear 'cart' al crear orden
 
-import React, { useState } from "react";
-import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { BACK_URL } from "../../constants";
+import { useDispatch, useSelector } from "react-redux";
+import Modal from "../../components/common/Modal";
+import {useModal} from "../../hooks/useModal";
+import { cartTotal } from "../../Redux/reducer/cartSlice";
+import QuantityInput from "./QuantityInput";
+import axios from "axios";
 
 const Cart = () => {
     const [cart, setCart] = useState(null);
-    const token = useSelector((state) => state.sessionReducer.token);
+    const total = useSelector((state) => state.cartReducer.total);
+    const [isOpen, openModal, closeModal, prop] = useModal();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
-  const getCart = async () => {
-    const { data } = await axios({
-      method: "GET",
-      withCredentials: true,
-      url: `${BACK_URL}/cart`, //! VOLVER A VER cambiar
-      headers: {
-        Authorization: `token ${token}`,
-      },
-    });
-      console.log(data);
-      typeof data !== 'string' &&
-      setCart(data);
-  };
+    useEffect(() => {
+        getCart();
+    // eslint-disable-next-line    
+    }, [])
 
-  const handleQuantity = async (id, num) => {
-        const { data } = await axios({
-            method: "PUT",
-            withCredentials: true,
-            url: `${BACK_URL}/cart/quantity/?id=${id}&amount=${num}`,
-            headers: {
-                Authorization: `token ${token}`,
-            }
-        });
+    const getCart = async () => {
+        const { data } = await axios('/cart');
+
         console.log(data);
-        num>0
-        ? document.getElementById(id).innerHTML++
-        : document.getElementById(id).innerHTML--;
-  };
-  const handleQuantityEx = async (id, num) => { 
-        const { data } = await axios({
-            method: "PUT",
-            withCredentials: true,
-            url: `${BACK_URL}/cart/quantityEx?id=${id}&amount=${num}`,
-            headers: {
-                Authorization: `token ${token}`,
-            }
-        });
-        document.getElementById(id).value = data;
-   }
+        typeof data !== 'string' &&
+        setCart(data.products);
+        dispatch(cartTotal(data.total));
+    };
+
+    const deleteProduct = async (id) => {
+        await axios.delete(`/cart/${id}`)
+
+        getCart();
+        closeModal();
+    };
 
     const goCheckout = async () => {
-        // crea la order
-        let payload = {
-            products: [],
-            status: 'pending'
-        };
-        cart.forEach(e => {
-            payload.products.push({
-                product_name: e.details.name,
-                product_id: e.details._id,
-                price: e.details.price,
-                quantity: e.quantity
-            });
-        });        
-        const { data: id } = await axios.post(`${BACK_URL}/order/`,
-                payload, 
-                {
-                    withCredentials: true,
-                    headers: {
-                        Authorization: `token ${token}`,
-                    }
-                }
-        );
-        console.log(id);
+        // crea la order       
+        const { data: id } = await axios(`/order/`);
         // con la id inicia el checkout
         navigate(`/checkout/${id}`);
     };
-
-  return (
-    <>
-      <hr />
-      <h2>Cart</h2>
-      <button onClick={getCart}>GET CART</button>
-      {React.Children.toArray(
-        cart?.map((prod) => (
-          <div>
-                {prod.details.name} - ${prod.details.price} - 
-                <button onClick={() => handleQuantity(prod.details._id, -1)}>-</button>
-                <span id={prod.details._id}>{prod.quantity}</span>
-                <button onClick={() => handleQuantity(prod.details._id, 1)}>+</button>
-                {/*<input type="number"
-                    id={prod.details._id}
-                    defaultValue={prod.quantity}
-                    onChange={(e) => handleQuantityEx(
-                        prod.details._id,
-                        e.target.value
-                    )}
-                     />*/}
-          </div>
-        ))
-      )}
-      <br />
-      <button onClick={goCheckout}>Proceed to checkout</button>
-    </>
-  );
+    return (
+        <>
+        <Modal isOpen={isOpen} closeModal={closeModal}>
+            <h1>You want to delete this product?</h1>
+            <div>
+                <button onClick={closeModal}>Cancel</button>
+                <button onClick={()=> deleteProduct(prop)}>Delete</button>
+            </div>
+        </Modal>
+        <hr />
+        <h2>Cart</h2>
+        <br />
+        {(cart && cart.length > 0)
+        ? <div> 
+            {cart.map((prod) => (
+                <div key={prod.product_id}>
+                    <img src={prod.img[0]} alt='product img' height={60}/>
+                        {prod.product_name} - ${prod.price} - 
+                            <QuantityInput prodId={prod.product_id} prodQuantity={prod.quantity}
+                            stock={prod.stock} 
+                            price={prod.price}
+                        />
+                        <p onClick={()=> openModal(prod.product_id)}><b> Delete </b></p>
+                </div>
+            ))}
+            <h2>{`Total: ${total}`}</h2>
+        </div>
+        : <h1>your cart is empty</h1>
+        }
+        <br />
+        <br />
+        <button disabled={cart?.length < 1 && true } onClick={goCheckout}>Proceed to checkout</button>
+        </>
+    );
 };
 
 export default Cart;
