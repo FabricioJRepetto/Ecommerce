@@ -11,6 +11,8 @@ import { useDispatch } from "react-redux";
 import Checkout from "./Checkout";
 import { loadToken, loadUsername } from "../../Redux/reducer/sessionSlice";
 import axios from "axios";
+import ResetPassword from "./ResetPassword";
+
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -39,6 +41,7 @@ const Home = () => {
         <Route path="/productForm" element={<ProductForm />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout/:id" element={<Checkout />} />
+        <Route path="/reset/:resetToken" element={<ResetPassword />} />
       </Routes>
     </>
   );

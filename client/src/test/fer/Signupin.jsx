@@ -7,12 +7,13 @@ import { useNavigate } from "react-router-dom";
 
 const { REACT_APP_OAUTH_CLIENT_ID } = process.env;
 const initialSignup = {
-  email: "",
-  password: "",
+  email: "asdasd@asdasd.com",
+  password: "asdasd@asdasd.com",
+  repPassword: "asdasd@asdasd.com",
 };
 const initialSignin = {
-  email: "test",
-  password: "test",
+  email: "test@test.com",
+  password: "test@test.com",
 };
 
 const Signupin = () => {
@@ -29,16 +30,22 @@ const Signupin = () => {
 
   const signin = (e) => {
     e.preventDefault();
-    axios.post(`/user/signin`, signinData).then(({ data }) => {
-      window.localStorage.setItem("loggedTokenEcommerce", data.token);
-      console.log(data);
-      dispatch(loadToken(data.token));
+    axios
+      .post(`/user/signin`, signinData)
+      .then(({ data }) => {
+        if (data.user) {
+          window.localStorage.setItem("loggedTokenEcommerce", data.token);
+          console.log(data);
+          dispatch(loadToken(data.token));
 
-      const username = data.user.name || data.user.email;
-      dispatch(loadUsername(username));
-      navigate("/signout");
-    });
-    //.catch((err) => console.log(err));
+          const username = data.user.name || data.user.email;
+          dispatch(loadUsername(username));
+          navigate("/signout");
+        } else {
+          console.log(data);
+        }
+      })
+      .catch((err) => console.log(err));
   };
 
   const handleSignup = ({ target }) => {
@@ -87,6 +94,16 @@ const Signupin = () => {
     // eslint-disable-next-line
   }, [token]);
 
+  const forgotPassword = () => {
+    if (!signinData.email) return console.log("Please enter an email");
+    axios
+      .put("/user/forgotPassword", signinData)
+      .then(({ data }) => {
+        console.log(data);
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
     <>
       <hr />
@@ -105,6 +122,13 @@ const Signupin = () => {
           placeholder="Password"
           onChange={handleSignup}
           value={signupData.password}
+        />
+        <input
+          type="text"
+          name="repPassword"
+          placeholder="repPassword"
+          onChange={handleSignup}
+          value={signupData.repPassword}
         />
         <input type="submit" value="Sign Up" />
       </form>
@@ -125,6 +149,7 @@ const Signupin = () => {
           onChange={handleSignin}
           value={signinData.password}
         />
+        <span onClick={forgotPassword}>Forgot password?</span>
         <input type="submit" value="Sign In" />
       </form>
       <hr />
