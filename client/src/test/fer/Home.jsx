@@ -10,7 +10,6 @@ import ProductForm from "./ProductForm";
 import { useDispatch } from "react-redux";
 import Checkout from "./Checkout";
 import { loadToken, loadUsername } from "../../Redux/reducer/sessionSlice";
-import { BACK_URL } from "../../constants";
 import axios from "axios";
 import ResetPassword from "./ResetPassword";
 
