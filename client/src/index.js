@@ -10,7 +10,7 @@ import { BACK_URL } from "./constants";
 
 //? cosas de axios
 axios.interceptors.request.use(function (config) {
-    axios.defaults.baseURL = BACK_URL;
+    config.baseURL = BACK_URL;
     const { token } = store.getState().sessionReducer;
     config.headers.Authorization =  `token ${token}`;
     return config;

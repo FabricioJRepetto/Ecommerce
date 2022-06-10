@@ -4,8 +4,6 @@ import { Elements, CardElement, useStripe, useElements } from "@stripe/react-str
 import './Checkout.css';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-import { BACK_URL } from '../../constants';
-import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
 //esto deberia estar en todas las paginas para detectar comportamientos extraños
@@ -15,7 +13,6 @@ const CheckoutForm =  () => {
     const stripe = useStripe();
     const elements = useElements();
     const navigate = useNavigate();
-    const token = useSelector((state) => state.sessionReducer.token);
     const [order, setOrder] = useState(null);
     const { id: orderId } = useParams();
     
