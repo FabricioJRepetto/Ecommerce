@@ -1,17 +1,17 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import "./index.css";
 import App from "./App";
 import { Provider } from "react-redux";
-import store from "./Redux/store";
 import { BrowserRouter } from "react-router-dom";
+import store from "./Redux/store";
 import axios from "axios";
 import { BACK_URL } from "./constants";
+import "./index.css";
 
 //? cosas de axios
 axios.interceptors.request.use(function (config) {
     config.baseURL = BACK_URL;
-    const { token } = store.getState().sessionReducer;
+    let token = localStorage.getItem('loggedTokenEcommerce');
     config.headers.Authorization =  `token ${token}`;
     return config;
 });
