@@ -39,8 +39,10 @@ module.exports = async (req, res, next) => {
         req.user = userDecoded.user;
 
         const userFound = await User.findById(req.user._id);
-        if (!userFound)
+
+        if (!userFound) {
           return res.status(404).json({ message: "User not found" });
+        }
       } catch (error) {
         return res.status(403).json({ message: "Invalid token" });
       }
