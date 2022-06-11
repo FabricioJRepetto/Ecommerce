@@ -8,10 +8,10 @@ import Signupin from "./Signupin";
 import Imagen from "./Imagen";
 import ProductForm from "./ProductForm";
 import { useDispatch } from "react-redux";
-import Checkout from "./Checkout";
+import Checkout from "./Checkout.jsx";
+import CheckoutTest from "./CheckoutTest.jsx";
 import { loadToken, loadUsername } from "../../Redux/reducer/sessionSlice";
-import { BACK_URL } from "../../constants";
-import Axios from "axios";
+import axios from "axios";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -20,7 +20,7 @@ const Home = () => {
     const loggedUserToken = window.localStorage.getItem("loggedTokenEcommerce");
 
     loggedUserToken &&
-      Axios(`/user/profile`)
+      axios(`/user/profile`)
         .then(({ data }) => {
           dispatch(loadToken(loggedUserToken));
           dispatch(loadUsername(data.user.email));
@@ -40,6 +40,7 @@ const Home = () => {
         <Route path="/productForm" element={<ProductForm />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout/:id" element={<Checkout />} />
+        <Route path="/checkout-test/" element={<CheckoutTest />} />
       </Routes>
     </>
   );

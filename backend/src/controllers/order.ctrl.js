@@ -48,7 +48,7 @@ const createOrder = async (req, res, next) => {
 
         const newOrder = new Order({
             user: userId,
-            status: 'pending',
+            status: 'Pending',
             products
         });
 
@@ -59,12 +59,13 @@ const createOrder = async (req, res, next) => {
     }
  };
 
-const deleteOrder = async (req, res, next) => { //! SOLO ADMIN
+const deleteOrder = async (req, res, next) => {
     try {
-        req.params.id
-        ? await Order.deleteMany({user: req.params.id})
-        : await Order.deleteMany({});
-        return res.json('Done.');
+        await Order.deleteMany({
+            user: req.user._id,
+            status: 'Pending'    
+        })
+        return res.json('ORDER DELETED');
     } catch (error) {
         next(error)
     }
@@ -73,19 +74,14 @@ const deleteOrder = async (req, res, next) => { //! SOLO ADMIN
  const updateOrder = async (req, res, next) => { 
      //: añadir mas opciones de status ?
      try {
-        const userId = req.user._id;
-        const orderId = req.params.id;
-         
-        const order = await Order.findOneAndUpdate({
-            user: userId,
-            _id: orderId
-        },
-        { 
-            status: 'Paid'
-        },
-        { new: true }
-        );
-        return res.json(order)
+        const order = await Order.findByIdAndUpdate(req.params.id,
+        {
+            "$set": {
+                status: "Paid"
+            }
+        });
+        
+        return res.json(`Order status: ${order.status}`)
      } catch (error) {
          next(error)
      }

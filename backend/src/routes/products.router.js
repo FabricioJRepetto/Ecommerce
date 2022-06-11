@@ -13,7 +13,7 @@ const {
 router.get('/', getAll);
 router.get('/:id', getById);
 router.post('/', createProduct);
-router.put('/updateStock/', stock);
+router.put('/stock/', stock);
 router.put('/:id', updateProduct);
 router.delete('/deleteall', deleteAll);
 router.delete('/:id', deleteProduct);

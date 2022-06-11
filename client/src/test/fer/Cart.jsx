@@ -22,7 +22,7 @@ const Cart = () => {
     }, [])
 
     const getCart = async () => {
-        const { data } = await axios('/cart');
+        const { data } = await axios('/cart/');
 
         console.log(data);
         typeof data !== 'string' &&
@@ -39,7 +39,7 @@ const Cart = () => {
 
     const goCheckout = async () => {
         // crea la order       
-        const { data: id } = await axios(`/order/`);
+        const { data: id } = await axios.post(`/order/`);
         // con la id inicia el checkout
         navigate(`/checkout/${id}`);
     };
@@ -74,7 +74,8 @@ const Cart = () => {
         }
         <br />
         <br />
-        <button disabled={cart?.length < 1 && true } onClick={goCheckout}>Proceed to checkout</button>
+        <button disabled={(!cart || cart.length < 1) && true } onClick={goCheckout}>Proceed to checkout</button>
+        <button onClick={()=>navigate(`/checkout-test/`)}>TESTING</button>
         </>
     );
 };
