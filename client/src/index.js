@@ -10,10 +10,10 @@ import "./index.css";
 
 //? cosas de axios
 axios.interceptors.request.use(function (config) {
-    config.baseURL = BACK_URL;
-    let token = localStorage.getItem('loggedTokenEcommerce');
-    config.headers.Authorization =  `token ${token}`;
-    return config;
+  config.baseURL = BACK_URL;
+  let token = localStorage.getItem("loggedTokenEcommerce");
+  config.headers.Authorization = `token ${token}`;
+  return config;
 });
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

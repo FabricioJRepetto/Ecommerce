@@ -7,10 +7,9 @@ const { OAuth2Client } = require("google-auth-library");
 module.exports = async (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
-    if (!authHeader)
-      return res.status(403).json({ message: "No token provided" });
-
-    const token = authHeader.split(" ")[1];
+    /*     if (!authHeader)
+      return res.status(403).json({ message: "No token provided" }); */
+    let token = authHeader.split(" ")[1];
     const isGoogleUser = token.slice(0, 6);
 
     if (isGoogleUser === "google") {
@@ -34,6 +33,10 @@ module.exports = async (req, res, next) => {
         return res.status(403).send("Invalid credentials");
       }
     } else {
+      if (token === "null") {
+        token = req.body.resetToken || req.body.verifyToken || token;
+      }
+
       try {
         const userDecoded = await jwt.verify(token, JWT_SECRET_CODE);
         req.user = userDecoded.user;

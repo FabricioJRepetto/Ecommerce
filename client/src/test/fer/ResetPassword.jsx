@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import Axios from "axios";
+import axios from "axios";
 import { BACK_URL } from "../../constants";
 
 const initialPassword = {
@@ -11,19 +11,12 @@ const initialPassword = {
 const ResetPassword = () => {
   const navigate = useNavigate();
   const { resetToken } = useParams();
-
   const [passwordData, setPasswordData] = useState(initialPassword);
 
   useEffect(() => {
-    Axios({
-      method: "PUT",
-      withCredentials: true,
-      url: `${BACK_URL}/user/resetPassword`,
-      headers: {
-        Authorization: `token ${resetToken}`,
-      },
-    }).catch((err) => {
-      console.log(err); //! VOLVER A VER agregar mensaje y timeout antes de redirigir
+    axios.put("/user/resetPassword", { resetToken }).catch((err) => {
+      //! VOLVER A VER agregar mensaje y timeout antes de redirigir
+      console.log(err);
       navigate("/signin");
     });
   }, []);
@@ -37,18 +30,12 @@ const ResetPassword = () => {
 
   const changePassword = (e) => {
     e.preventDefault();
-    Axios({
-      method: "PUT",
-      data: passwordData,
-      withCredentials: true,
-      url: `${BACK_URL}/user/changePassword`,
-      headers: {
-        Authorization: `token ${resetToken}`,
-      },
-    })
+    axios
+      .put("/user/changePassword", { ...passwordData, resetToken })
       .then(({ data }) => {
+        //! VOLVER A VER agregar mensaje y timeout antes de redirigir
         console.log(data);
-        //  navigate("/home"); //! VOLVER A VER agregar mensaje y timeout antes de redirigir
+        //  navigate("/home");
       })
       .catch((err) => {
         console.log(err);

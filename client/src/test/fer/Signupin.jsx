@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { loadToken, loadUsername } from "../../Redux/reducer/sessionSlice";
+import { sessionActive, loadUsername } from "../../Redux/reducer/sessionSlice";
 import jwt_decode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 
 const { REACT_APP_OAUTH_CLIENT_ID } = process.env;
 const initialSignup = {
-  email: "asdasd@asdasd.com",
-  password: "asdasd@asdasd.com",
-  repPassword: "asdasd@asdasd.com",
+  email: "",
+  password: "",
+  repPassword: "",
 };
 const initialSignin = {
   email: "test@test.com",
@@ -21,7 +21,7 @@ const Signupin = () => {
   const [signinData, setSigninData] = useState(initialSignin);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const token = useSelector((state) => state.sessionReducer.token);
+  const session = useSelector((state) => state.sessionReducer.session);
 
   const signup = (e) => {
     e.preventDefault();
@@ -36,7 +36,7 @@ const Signupin = () => {
         if (data.user) {
           window.localStorage.setItem("loggedTokenEcommerce", data.token);
           console.log(data);
-          dispatch(loadToken(data.token));
+          dispatch(sessionActive(true));
 
           const username = data.user.name || data.user.email;
           dispatch(loadUsername(username));
@@ -64,7 +64,7 @@ const Signupin = () => {
   const handleCallbackResponse = (response) => {
     //response.credential = Google user token
     const googleToken = "google" + response.credential;
-    dispatch(loadToken(googleToken));
+    dispatch(sessionActive(true));
     window.localStorage.setItem("loggedTokenEcommerce", googleToken);
 
     //userDecoded contains Google user data
@@ -79,7 +79,7 @@ const Signupin = () => {
   };
 
   useEffect(() => {
-    if (token) navigate("/signout");
+    if (session) navigate("/signout");
 
     /* global google */
     google.accounts.id.initialize({
@@ -92,7 +92,7 @@ const Signupin = () => {
       size: "large",
     });
     // eslint-disable-next-line
-  }, [token]);
+  }, [session]);
 
   const forgotPassword = () => {
     if (!signinData.email) return console.log("Please enter an email");
@@ -126,7 +126,7 @@ const Signupin = () => {
         <input
           type="text"
           name="repPassword"
-          placeholder="repPassword"
+          placeholder="Repeat Password"
           onChange={handleSignup}
           value={signupData.repPassword}
         />

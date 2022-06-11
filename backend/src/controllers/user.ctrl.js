@@ -8,16 +8,22 @@ const { validationResult } = require("express-validator");
 const sendEmail = require("../utils/sendEmail");
 
 const signup = async (req, res, next) => {
+  const { _id, email } = req.user;
+
+  const body = { _id, email };
+  const verifyToken = jwt.sign({ user: body }, JWT_SECRET_CODE);
+
+  const link = `http://localhost:3000/verify/${verifyToken}`;
+  await sendEmail(email, "Verify Email", link);
+
   res.json({
     message: req.authInfo,
-    /* user: req.user, */
   });
 };
 
 const signin = async (req, res, next) => {
   const errors = validationResult(req);
 
-  console.log("-----------------ENTRA");
   if (!errors.isEmpty()) {
     const message = errors.errors.map((err) => err.msg);
     return res.json({ message });
@@ -72,6 +78,22 @@ const role = async (req, res, next) => {
   }
 };
 
+const verifyEmail = async (req, res, next) => {
+  const { _id } = req.user;
+  if (!_id) return res.status(401).send({ message: "No user ID provided" });
+
+  try {
+    const userFound = await User.findById(_id);
+    if (!userFound) return res.status(404).json({ message: "User not found" });
+    userFound.emailVerified = true;
+    await userFound.save();
+
+    return res.json({ message: "Email verified successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const forgotPassword = async (req, res, next) => {
   const { email } = req.body;
   if (!email) return res.status(401).send({ message: "Email is required" });
@@ -86,7 +108,7 @@ const forgotPassword = async (req, res, next) => {
     });
 
     const link = `http://localhost:3000/reset/${resetToken}`;
-    await sendEmail(user.email, link);
+    await sendEmail(user.email, "Reset Password", link);
 
     return res.json({ message: "Check your email to reset your password" });
   } catch (error) {
@@ -114,11 +136,15 @@ const changePassword = async (req, res, next) => {
   }
 };
 
+const editProfile = async (req, res, next) => {};
+
 module.exports = {
   signin,
   signup,
   profile,
   role,
+  verifyEmail,
   forgotPassword,
   changePassword,
+  editProfile,
 };

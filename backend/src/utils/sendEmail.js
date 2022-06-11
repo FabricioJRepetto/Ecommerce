@@ -2,8 +2,6 @@ const nodemailer = require("nodemailer");
 const { google } = require("googleapis");
 require("dotenv").config();
 const {
-  NODEMAILER_USER,
-  NODEMAILER_PASSWORD,
   EMAIL_OAUTH_CLIENT_ID,
   EMAIL_CLIENT_SECRET,
   REDIRECT_URI,
@@ -18,7 +16,7 @@ const oAuth2Client = new google.auth.OAuth2(
 );
 oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
 
-const sendEmail = async (email, link) => {
+const sendEmail = async (email, subject, link, html) => {
   try {
     const accessToken = await oAuth2Client.getAccessToken();
     const transport = nodemailer.createTransport({
@@ -36,8 +34,7 @@ const sendEmail = async (email, link) => {
     const mailOptions = {
       from: `eProvider Store <${EMAIL_EPROVIDER}>`,
       to: email,
-      subject: "Hello from gmail using API",
-      text: "Hello from gmail email using API",
+      subject,
       html: `<h1>Prueba </h1><b>en html </b><a href=${link}>linkkkkk </a>`,
     };
 
