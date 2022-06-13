@@ -10,13 +10,8 @@ export const productsSlice = createSlice({
     order: {},
     productsFiltered: [],
     productDetails: {},
-    token: "",
   },
   reducers: {
-    loadToken: (state, action) => {
-      state.token = action.payload;
-    },
-
     loadProductsFound: (state, action) => {
       state.productsFound = action.payload;
     },
@@ -29,8 +24,8 @@ export const productsSlice = createSlice({
       let productsToFilter;
       state.productsFiltered.length === 0
         ? (productsToFilter = state[action.payload.source])
-        // eslint-disable-next-line
-        : (productsToFilter = state.productsFiltered);
+        : // eslint-disable-next-line
+          (productsToFilter = state.productsFiltered);
     },
 
     orderProducts: (state, action) => {
@@ -63,7 +58,6 @@ export const {
   filterProducts,
   orderProducts,
   loadProductDetails,
-  loadToken,
 } = productsSlice.actions;
 
 export default productsSlice.reducer;

@@ -30,11 +30,13 @@ passport.use(
             email,
             password,
           });
-          const message = "Signup successfully";
+          const message =
+            "Signup successfully, check your email to verify your account";
           return done(null, newUser, message);
         } else {
           const message = "Email already registered";
-          return done(null, user, message);
+          throw new Error(message);
+          // return done(null, user, message);
         }
       } catch (e) {
         done(e);

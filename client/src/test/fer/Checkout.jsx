@@ -58,9 +58,9 @@ const CheckoutForm =  () => {
             const { data: orderUpdt } = await axios.put(`/order/${orderId}`);
             console.log(orderUpdt);
 
-            //? vaciar carrito
-            const { data: cartEmpty } = await axios.delete(`/cart/empty`);
-            console.log(cartEmpty);
+      //? vaciar carrito
+      const { data: cartEmpty } = await axios.delete(`/cart/empty`);
+      console.log(cartEmpty);
 
             //? restar unidades de cada stock
             let list = order.products.map(e => ({id: e.product_id, amount: e.quantity}));
@@ -132,15 +132,14 @@ const CheckoutForm =  () => {
     )
 };
 
-
 const Checkout = () => {
-    return (
-        <div>
-            <Elements stripe={stripePromise}>
-                <CheckoutForm />
-            </Elements>
-        </div>
-    )
-}
+  return (
+    <div>
+      <Elements stripe={stripePromise}>
+        <CheckoutForm />
+      </Elements>
+    </div>
+  );
+};
 
-export default Checkout
+export default Checkout;

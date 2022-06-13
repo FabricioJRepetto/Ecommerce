@@ -1,15 +1,21 @@
 const { Router } = require("express");
 const router = Router();
-const verifyToken = require("../middlewares/verifyToken");
-const verifySuperAdmin = require("../middlewares/verifySuperAdmin");
+const {
+  verifyToken,
+  verifyEmailVerified,
+  verifyAdmin,
+  verifySuperAdmin,
+} = require("../middlewares/verify");
 const passport = require("passport");
 const {
   signin,
   signup,
   profile,
   role,
+  verifyEmail,
   forgotPassword,
   changePassword,
+  editProfile,
 } = require("../controllers/user.ctrl");
 const { body } = require("express-validator");
 
@@ -47,6 +53,8 @@ router.get("/profile", verifyToken, profile);
 
 router.put("/role", [verifyToken, verifySuperAdmin], role); //! VOLVER A VER mover a ruta de superadmin
 
+router.put("/verifyEmail", verifyToken, verifyEmail);
+
 router.put("/forgotPassword", forgotPassword);
 
 router.put("/resetPassword", verifyToken, async (req, res, next) =>
@@ -72,5 +80,7 @@ router.put(
   ],
   changePassword
 );
+
+router.put("/editProfile", verifyToken, editProfile);
 
 module.exports = router;

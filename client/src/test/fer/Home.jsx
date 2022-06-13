@@ -8,12 +8,11 @@ import Signupin from "./Signupin";
 import Imagen from "./Imagen";
 import ProductForm from "./ProductForm";
 import { useDispatch } from "react-redux";
-import Checkout from "./Checkout.jsx";
-import CheckoutTest from "./CheckoutTest.jsx";
-import { loadToken, loadUsername } from "../../Redux/reducer/sessionSlice";
+import Checkout from "./Checkout";
+import { sessionActive, loadUsername } from "../../Redux/reducer/sessionSlice";
 import axios from "axios";
 import ResetPassword from "./ResetPassword";
-
+import VerifyEmail from "./VerifyEmail";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -24,7 +23,7 @@ const Home = () => {
     loggedUserToken &&
       axios(`/user/profile`)
         .then(({ data }) => {
-          dispatch(loadToken(loggedUserToken));
+          dispatch(sessionActive(true));
           dispatch(loadUsername(data.user.email));
         })
         .catch((_) => window.localStorage.removeItem("loggedTokenEcommerce"));
@@ -42,8 +41,8 @@ const Home = () => {
         <Route path="/productForm" element={<ProductForm />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout/:id" element={<Checkout />} />
-        <Route path="/checkout-test/" element={<CheckoutTest />} />
         <Route path="/reset/:resetToken" element={<ResetPassword />} />
+        <Route path="/verify/:verifyToken" element={<VerifyEmail />} />
       </Routes>
     </>
   );
