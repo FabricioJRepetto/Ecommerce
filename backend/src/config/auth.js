@@ -35,7 +35,8 @@ passport.use(
           return done(null, newUser, message);
         } else {
           const message = "Email already registered";
-          return done(null, user, message);
+          throw new Error(message);
+          // return done(null, user, message);
         }
       } catch (e) {
         done(e);

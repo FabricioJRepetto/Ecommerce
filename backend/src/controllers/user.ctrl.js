@@ -16,7 +16,7 @@ const signup = async (req, res, next) => {
   const link = `http://localhost:3000/verify/${verifyToken}`;
   await sendEmail(email, "Verify Email", link);
 
-  res.json({
+  return res.status(201).json({
     message: req.authInfo,
   });
 };
@@ -40,10 +40,9 @@ const signin = async (req, res, next) => {
         const body = { _id: user._id, email: user.email };
 
         const token = jwt.sign({ user: body }, JWT_SECRET_CODE, {
-          expiresIn: 86400,
+          expiresIn: 864000,
         });
 
-        console.log(user);
         return res.json({
           message: info.message,
           token,
@@ -63,16 +62,14 @@ const profile = (req, res, next) => {
 };
 
 const role = async (req, res, next) => {
+  const { email, role } = req.body;
+  if (!email) return res.status(403).json({ message: "No email provided" });
   try {
-    const userFound = await User.findByIdAndUpdate(
-      req.user._id,
-      {
-        role: req.body.role,
-      },
-      { new: true }
-    );
+    const userFound = await User.findOne({ email });
     if (!userFound) return res.status(404).json({ message: "User not found" });
-    return res.send(userFound);
+    userFound.role = role;
+    await userFound.save();
+    return res.json({ message: "Role changed successfully" });
   } catch (error) {
     next(error);
   }
@@ -88,7 +85,7 @@ const verifyEmail = async (req, res, next) => {
     userFound.emailVerified = true;
     await userFound.save();
 
-    return res.json({ message: "Email verified successfully" });
+    return res.status(204).json({ message: "Email verified successfully" });
   } catch (error) {
     next(error);
   }
@@ -130,13 +127,28 @@ const changePassword = async (req, res, next) => {
     if (!userFound) return res.status(404).json({ message: "User not found" });
     userFound.password = password;
     await userFound.save();
-    return res.json({ message: "Password changed successfully" });
+    return res.status(204).json({ message: "Password changed successfully" });
   } catch (error) {
     next(error);
   }
 };
 
-const editProfile = async (req, res, next) => {};
+const editProfile = async (req, res, next) => {
+  const dataAllowedToEdit = ["firstName", "lastName", "address"];
+  const dataToEdit = Object.keys(req.body);
+  try {
+    const userToEdit = await User.findById(req.user._id);
+    if (!userToEdit) return res.status(404).json({ message: "User not found" });
+    for (const property of dataToEdit) {
+      if (dataAllowedToEdit.includes(property))
+        userToEdit[property] = req.body[property];
+    }
+    await userToEdit.save();
+    return res.json({ userToEdit, message: "Edited successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
 
 module.exports = {
   signin,

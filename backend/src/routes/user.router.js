@@ -1,7 +1,11 @@
 const { Router } = require("express");
 const router = Router();
-const verifyToken = require("../middlewares/verifyToken");
-const verifySuperAdmin = require("../middlewares/verifySuperAdmin");
+const {
+  verifyToken,
+  verifyEmailVerified,
+  verifyAdmin,
+  verifySuperAdmin,
+} = require("../middlewares/verify");
 const passport = require("passport");
 const {
   signin,
