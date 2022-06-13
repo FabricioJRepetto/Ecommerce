@@ -14,11 +14,17 @@ const ResetPassword = () => {
   const [passwordData, setPasswordData] = useState(initialPassword);
 
   useEffect(() => {
-    axios.put("/user/resetPassword", { resetToken }).catch((err) => {
-      //! VOLVER A VER agregar mensaje y timeout antes de redirigir
-      console.log(err);
-      navigate("/signin");
-    });
+    axios
+      .put("/user/resetPassword", null, {
+        headers: {
+          Authorization: `Bearer ${resetToken}`,
+        },
+      })
+      .catch((err) => {
+        //! VOLVER A VER agregar mensaje y timeout antes de redirigir
+        console.log(err);
+        navigate("/signin");
+      });
   }, []);
 
   const handleChange = ({ target }) => {
@@ -31,11 +37,15 @@ const ResetPassword = () => {
   const changePassword = (e) => {
     e.preventDefault();
     axios
-      .put("/user/changePassword", { ...passwordData, resetToken })
+      .put("/user/changePassword", passwordData, {
+        headers: {
+          Authorization: `Bearer ${resetToken}`,
+        },
+      })
       .then(({ data }) => {
         //! VOLVER A VER agregar mensaje y timeout antes de redirigir
         console.log(data);
-        //  navigate("/home");
+        navigate("/signin");
       })
       .catch((err) => {
         console.log(err);

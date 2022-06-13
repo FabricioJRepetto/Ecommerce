@@ -12,9 +12,15 @@ import "./index.css";
 axios.interceptors.request.use(function (config) {
   config.baseURL = BACK_URL;
   let token = localStorage.getItem("loggedTokenEcommerce");
-  config.headers.Authorization = `token ${token}`;
+  token &&
+    (config.headers.Authorization =
+      config.headers.Authorization || `Bearer ${token}`);
   return config;
 });
+
+/* axios.defaults.baseURL = BACK_URL;
+let token = localStorage.getItem("loggedTokenEcommerce");
+axios.defaults.headers.common["Authorization"] = `Bearer ${token}`; */
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

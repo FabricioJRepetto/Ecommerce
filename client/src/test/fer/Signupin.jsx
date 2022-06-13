@@ -7,13 +7,13 @@ import { useNavigate } from "react-router-dom";
 
 const { REACT_APP_OAUTH_CLIENT_ID } = process.env;
 const initialSignup = {
-  email: "",
-  password: "",
-  repPassword: "",
+  email: "fer.eze.ram@gmail.com",
+  password: "fer.eze.ram@gmail.com",
+  repPassword: "fer.eze.ram@gmail.com",
 };
 const initialSignin = {
-  email: "test@test.com",
-  password: "test@test.com",
+  email: "fer.eze.ram@gmail.com",
+  password: "fer.eze.ram@gmail.com",
 };
 
 const Signupin = () => {

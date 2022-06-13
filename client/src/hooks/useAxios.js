@@ -8,7 +8,7 @@ export const useAxios = (method, endpoint, payload) => {
     [error, setError] = useState(null),
     [loading, setLoading] = useState(true),
     token = useSelector((state) => state.sessionReducer.token), //! ojo con esto, el estado token ya no existe
-    headers = { Authorization: `token ${token}` },
+    headers = { Authorization: `Bearer ${token}` },
     url = BACK_URL + endpoint;
 
   useEffect(() => {

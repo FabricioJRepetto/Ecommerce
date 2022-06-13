@@ -10,7 +10,11 @@ const VerifyEmail = () => {
 
   useEffect(() => {
     axios
-      .put("/user/verifyEmail", { verifyToken })
+      .put("/user/verifyEmail", null, {
+        headers: {
+          Authorization: `Bearer ${verifyToken}`,
+        },
+      })
       .then(({ data }) => {
         //! VOLVER A VER agregar mensaje y timeout antes de redirigir
         console.log("Email verified successfully");
