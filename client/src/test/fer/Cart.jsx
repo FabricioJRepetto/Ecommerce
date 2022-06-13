@@ -51,8 +51,7 @@ const Cart = () => {
         redirectToMercadoPago(data.id);
      }
 
-    const checkpayment = async () => { 
-        const response = await mercado.payment.capture(id, mercadopago);
+    const checkpayment = async () => {
      }
 
     return (
