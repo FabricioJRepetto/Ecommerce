@@ -8,6 +8,7 @@ import {useModal} from "../../hooks/useModal";
 import { cartTotal } from "../../Redux/reducer/cartSlice";
 import QuantityInput from "./QuantityInput";
 import axios from "axios";
+import { redirectToMercadoPago } from "../../helpers/mpCho";
 
 const Cart = () => {
     const [cart, setCart] = useState(null);
@@ -45,15 +46,13 @@ const Cart = () => {
     };
 
     const openMP = async () => { 
-        const {data}  = await axios.get('/mercadopago/')
-        const script = document.createElement('script');
-        script.type = 'text/javascript';
-        // script.src = 'https://www.mercadopago.com.ar/integrations/v1/web-payment-checkout.js';
-        // script.setAttribute('data-preference-id', data);
-        script.src = 'https://sdk.mercadopago.com/js/v2';
-        script.setAttribute('data-preference-id', data);
-        const container = document.getElementById('checkout-container');
-        container.appendChild(script);
+        const { data }  = await axios.get('/mercadopago/')
+        console.log(data.id);
+        redirectToMercadoPago(data.id);
+     }
+
+    const checkpayment = async () => { 
+        const response = await mercado.payment.capture(id, mercadopago);
      }
 
     return (
@@ -90,6 +89,8 @@ const Cart = () => {
             <button disabled={(!cart || cart.length < 1) && true } onClick={goCheckout}>Proceed to checkout</button>
             <br />
             <button onClick={openMP}> MercadoPago </button>
+            <br />
+            <button onClick={checkpayment}> Checkear el estado del pago </button>
         </div>
     );
 };
