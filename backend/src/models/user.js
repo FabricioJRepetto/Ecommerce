@@ -10,18 +10,25 @@ const UserSchema = new Schema({
     required: true,
     unique: true,
   },
-  /* username: {
+  password: {
     type: String,
     required: true,
-  }, */
+  },
   role: {
     type: String,
     enum: ["client", "admin"],
     default: "client",
   },
-  password: {
-    type: String,
-    required: true,
+  firstName: String,
+  lastName: String,
+  address: {
+    zip_code: String,
+    street_name: String,
+    street_number: Number,
+  },
+  emailVerified: {
+    type: Boolean,
+    default: false,
   },
 });
 

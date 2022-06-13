@@ -8,16 +8,22 @@ const { validationResult } = require("express-validator");
 const sendEmail = require("../utils/sendEmail");
 
 const signup = async (req, res, next) => {
-  res.json({
+  const { _id, email } = req.user;
+
+  const body = { _id, email };
+  const verifyToken = jwt.sign({ user: body }, JWT_SECRET_CODE);
+
+  const link = `http://localhost:3000/verify/${verifyToken}`;
+  await sendEmail(email, "Verify Email", link);
+
+  return res.status(201).json({
     message: req.authInfo,
-    /* user: req.user, */
   });
 };
 
 const signin = async (req, res, next) => {
   const errors = validationResult(req);
 
-  console.log("-----------------ENTRA");
   if (!errors.isEmpty()) {
     const message = errors.errors.map((err) => err.msg);
     return res.json({ message });
@@ -34,10 +40,9 @@ const signin = async (req, res, next) => {
         const body = { _id: user._id, email: user.email };
 
         const token = jwt.sign({ user: body }, JWT_SECRET_CODE, {
-          expiresIn: 86400,
+          expiresIn: 864000,
         });
 
-        console.log(user);
         return res.json({
           message: info.message,
           token,
@@ -57,16 +62,30 @@ const profile = (req, res, next) => {
 };
 
 const role = async (req, res, next) => {
+  const { email, role } = req.body;
+  if (!email) return res.status(403).json({ message: "No email provided" });
   try {
-    const userFound = await User.findByIdAndUpdate(
-      req.user._id,
-      {
-        role: req.body.role,
-      },
-      { new: true }
-    );
+    const userFound = await User.findOne({ email });
     if (!userFound) return res.status(404).json({ message: "User not found" });
-    return res.send(userFound);
+    userFound.role = role;
+    await userFound.save();
+    return res.json({ message: "Role changed successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const verifyEmail = async (req, res, next) => {
+  const { _id } = req.user;
+  if (!_id) return res.status(401).send({ message: "No user ID provided" });
+
+  try {
+    const userFound = await User.findById(_id);
+    if (!userFound) return res.status(404).json({ message: "User not found" });
+    userFound.emailVerified = true;
+    await userFound.save();
+
+    return res.status(204).json({ message: "Email verified successfully" });
   } catch (error) {
     next(error);
   }
@@ -86,7 +105,7 @@ const forgotPassword = async (req, res, next) => {
     });
 
     const link = `http://localhost:3000/reset/${resetToken}`;
-    await sendEmail(user.email, link);
+    await sendEmail(user.email, "Reset Password", link);
 
     return res.json({ message: "Check your email to reset your password" });
   } catch (error) {
@@ -108,7 +127,24 @@ const changePassword = async (req, res, next) => {
     if (!userFound) return res.status(404).json({ message: "User not found" });
     userFound.password = password;
     await userFound.save();
-    return res.json({ message: "Password changed successfully" });
+    return res.status(204).json({ message: "Password changed successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const editProfile = async (req, res, next) => {
+  const dataAllowedToEdit = ["firstName", "lastName", "address"];
+  const dataToEdit = Object.keys(req.body);
+  try {
+    const userToEdit = await User.findById(req.user._id);
+    if (!userToEdit) return res.status(404).json({ message: "User not found" });
+    for (const property of dataToEdit) {
+      if (dataAllowedToEdit.includes(property))
+        userToEdit[property] = req.body[property];
+    }
+    await userToEdit.save();
+    return res.json({ userToEdit, message: "Edited successfully" });
   } catch (error) {
     next(error);
   }
@@ -119,6 +155,8 @@ module.exports = {
   signup,
   profile,
   role,
+  verifyEmail,
   forgotPassword,
   changePassword,
+  editProfile,
 };

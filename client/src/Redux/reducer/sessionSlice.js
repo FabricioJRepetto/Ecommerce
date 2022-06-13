@@ -4,15 +4,15 @@ export const sessionSlice = createSlice({
   name: "session",
   initialState: {
     username: null,
-    token: null,
+    session: false,
     id: null,
   },
   reducers: {
     loadUsername: (state, action) => {
       state.username = action.payload;
     },
-    loadToken: (state, action) => {
-      state.token = action.payload;
+    sessionActive: (state, action) => {
+      state.session = action.payload;
     },
     loadId: (state, action) => {
       state.id = action.payload;
@@ -20,6 +20,6 @@ export const sessionSlice = createSlice({
   },
 });
 
-export const { loadUsername, loadToken, loadId } = sessionSlice.actions;
+export const { loadUsername, sessionActive, loadId } = sessionSlice.actions;
 
 export default sessionSlice.reducer;

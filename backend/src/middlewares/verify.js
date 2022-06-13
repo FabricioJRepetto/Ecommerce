@@ -4,13 +4,13 @@ require("dotenv").config();
 const { JWT_SECRET_CODE, OAUTH_CLIENT_ID } = process.env;
 const { OAuth2Client } = require("google-auth-library");
 
-module.exports = async (req, res, next) => {
+async function verifyToken(req, res, next) {
   try {
     const authHeader = req.headers.authorization;
+
     if (!authHeader)
       return res.status(403).json({ message: "No token provided" });
-
-    const token = authHeader.split(" ")[1];
+    let token = authHeader.split(" ")[1];
     const isGoogleUser = token.slice(0, 6);
 
     if (isGoogleUser === "google") {
@@ -23,7 +23,6 @@ module.exports = async (req, res, next) => {
           audience: OAUTH_CLIENT_ID,
         });
         const payload = ticket.getPayload();
-        console.log(payload);
         const { sub, name, email } = payload;
         req.user = {
           /* _id: payload["sub"], */
@@ -34,6 +33,8 @@ module.exports = async (req, res, next) => {
         return res.status(403).send("Invalid credentials");
       }
     } else {
+      /* token = req.body.resetToken || req.body.verifyToken || token; */
+
       try {
         const userDecoded = await jwt.verify(token, JWT_SECRET_CODE);
         req.user = userDecoded.user;
@@ -52,4 +53,38 @@ module.exports = async (req, res, next) => {
   } catch (error) {
     return res.status(401).json({ message: "Unauthorized" });
   }
+}
+
+async function verifyEmailVerified(req, res, next) {
+  const user = await User.findById(req.user._id);
+  if (user.emailVerified === true) {
+    next();
+  } else {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+}
+
+async function verifyAdmin(req, res, next) {
+  const user = await User.findById(req.user._id);
+  if (user.role === "admin") {
+    next();
+  } else {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+}
+
+async function verifySuperAdmin(req, res, next) {
+  const user = await User.findById(req.user._id);
+  if (user.role === "superadmin") {
+    next();
+  } else {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+}
+
+module.exports = {
+  verifyToken,
+  verifyEmailVerified,
+  verifyAdmin,
+  verifySuperAdmin,
 };

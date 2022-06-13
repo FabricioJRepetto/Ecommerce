@@ -1,23 +1,23 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { loadToken, loadUsername } from "../../Redux/reducer/sessionSlice";
+import { sessionActive, loadUsername } from "../../Redux/reducer/sessionSlice";
 import { useNavigate } from "react-router-dom";
 
 const Signout = () => {
   const sessionState = useSelector((state) => state.sessionReducer);
-  const { token, username } = sessionState;
+  const { session, username } = sessionState;
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const signOut = () => {
     window.localStorage.removeItem("loggedTokenEcommerce");
-    dispatch(loadToken(null));
+    dispatch(sessionActive(false));
     dispatch(loadUsername(null));
     navigate("/signin");
   };
 
   useEffect(() => {
-    if (!token) navigate("/signin");
+    if (!session) navigate("/signin");
     // eslint-disable-next-line
   }, []);
 

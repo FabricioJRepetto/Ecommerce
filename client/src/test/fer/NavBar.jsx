@@ -3,11 +3,11 @@ import "./NavBar.css";
 import { useSelector } from "react-redux";
 
 const NavBar = () => {
-  const token = useSelector((state) => state.sessionReducer.token);
+  const session = useSelector((state) => state.sessionReducer.session);
 
   return (
     <div className="navBar">
-      {!token ? (
+      {!session ? (
         <NavLink to={"signin"}>
           <p>Log In</p>
         </NavLink>
