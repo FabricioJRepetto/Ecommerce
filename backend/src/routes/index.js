@@ -7,6 +7,7 @@ const cartRouter = require("./cart.router");
 const whishlistRouter = require("./whishlist.router");
 const orderRouter = require("./order.router");
 const checkoutRouter = require("./checkout.router");
+const mpRouter = require("./mercadopago.router");
 
 const verifyToken = require("../middlewares/verifyToken.js");
 
@@ -16,6 +17,7 @@ router.use("/cart", verifyToken, cartRouter);
 router.use("/whishlist", verifyToken, whishlistRouter);
 router.use("/order", verifyToken, orderRouter);
 router.use("/checkout", verifyToken, checkoutRouter);
+router.use("/mercadopago", verifyToken, mpRouter);
 
 router.get('/test', test);
 

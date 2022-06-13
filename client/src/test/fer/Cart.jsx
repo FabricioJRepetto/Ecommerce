@@ -43,40 +43,54 @@ const Cart = () => {
         // con la id inicia el checkout
         navigate(`/checkout/${id}`);
     };
+
+    const openMP = async () => { 
+        const {data}  = await axios.get('/mercadopago/')
+        const script = document.createElement('script');
+        script.type = 'text/javascript';
+        // script.src = 'https://www.mercadopago.com.ar/integrations/v1/web-payment-checkout.js';
+        // script.setAttribute('data-preference-id', data);
+        script.src = 'https://sdk.mercadopago.com/js/v2';
+        script.setAttribute('data-preference-id', data);
+        const container = document.getElementById('checkout-container');
+        container.appendChild(script);
+     }
+
     return (
-        <>
-        <Modal isOpen={isOpen} closeModal={closeModal}>
-            <h1>You want to delete this product?</h1>
-            <div>
-                <button onClick={closeModal}>Cancel</button>
-                <button onClick={()=> deleteProduct(prop)}>Delete</button>
-            </div>
-        </Modal>
-        <hr />
-        <h2>Cart</h2>
-        <br />
-        {(cart && cart.length > 0)
-        ? <div> 
-            {cart.map((prod) => (
-                <div key={prod.product_id}>
-                    <img src={prod.img[0]} alt='product img' height={60}/>
-                        {prod.product_name} - ${prod.price} - 
-                            <QuantityInput prodId={prod.product_id} prodQuantity={prod.quantity}
-                            stock={prod.stock} 
-                            price={prod.price}
-                        />
-                        <p onClick={()=> openModal(prod.product_id)}><b> Delete </b></p>
+        <div id="checkout-container">
+            <Modal isOpen={isOpen} closeModal={closeModal}>
+                <h1>You want to delete this product?</h1>
+                <div>
+                    <button onClick={closeModal}>Cancel</button>
+                    <button onClick={()=> deleteProduct(prop)}>Delete</button>
                 </div>
-            ))}
-            <h2>{`Total: ${total}`}</h2>
+            </Modal>
+            <hr />
+            <h2>Cart</h2>
+            <br />
+            {(cart && cart.length > 0)
+            ? <div> 
+                {cart.map((prod) => (
+                    <div key={prod.product_id}>
+                        <img src={prod.img[0]} alt='product img' height={60}/>
+                            {prod.product_name} - ${prod.price} - 
+                                <QuantityInput prodId={prod.product_id} prodQuantity={prod.quantity}
+                                stock={prod.stock} 
+                                price={prod.price}
+                            />
+                            <p onClick={()=> openModal(prod.product_id)}><b> Delete </b></p>
+                    </div>
+                ))}
+                <h2>{`Total: ${total}`}</h2>
+            </div>
+            : <h1>your cart is empty</h1>
+            }
+            <br />
+            <br />
+            <button disabled={(!cart || cart.length < 1) && true } onClick={goCheckout}>Proceed to checkout</button>
+            <br />
+            <button onClick={openMP}> MercadoPago </button>
         </div>
-        : <h1>your cart is empty</h1>
-        }
-        <br />
-        <br />
-        <button disabled={(!cart || cart.length < 1) && true } onClick={goCheckout}>Proceed to checkout</button>
-        <button onClick={()=>navigate(`/checkout-test/`)}>TESTING</button>
-        </>
     );
 };
 
