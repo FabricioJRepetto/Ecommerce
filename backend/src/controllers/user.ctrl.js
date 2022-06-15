@@ -179,16 +179,6 @@ const editProfile = async (req, res, next) => {
   }
 };
 
-const getAddress = async (req, res, next) => { 
-    try {
-        const user = await User.findById(req.user._id);
-        
-        return res.json(user);
-    } catch (error) {
-        next(error);
-    }
- }
-
 module.exports = {
   signin,
   signup,
@@ -199,5 +189,4 @@ module.exports = {
   resetPassword,
   changePassword,
   editProfile,
-  getAddress
 };

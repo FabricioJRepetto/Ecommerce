@@ -21,11 +21,6 @@ const UserSchema = new Schema({
   },
   firstName: String,
   lastName: String,
-  address: [{
-    zip_code: String,
-    street_name: String,
-    street_number: Number,
-  }],
   emailVerified: {
     type: Boolean,
     default: false,
