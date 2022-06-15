@@ -96,18 +96,39 @@ const forgotPassword = async (req, res, next) => {
   if (!email) return res.status(401).send({ message: "Email is required" });
 
   try {
-    let user = await User.findOne({ email });
-    if (!user) return res.status(404).send({ message: "User not found" });
+    let userFound = await User.findOne({ email });
+    if (!userFound) return res.status(404).send({ message: "User not found" });
 
-    const body = { _id: user._id, email: user.email };
-    const resetToken = jwt.sign({ user: body }, JWT_SECRET_CODE, {
-      expiresIn: 86400,
-    });
+    const body = { _id: userFound._id, email: userFound.email };
+    const resetToken = jwt.sign(
+      { user: body },
+      JWT_SECRET_CODE + userFound.password,
+      { expiresIn: "15m" }
+    );
 
-    const link = `http://localhost:3000/reset/${resetToken}`;
-    await sendEmail(user.email, "Reset Password", link);
+    const link = `http://localhost:3000/reset/${body._id}/${resetToken}`;
+    await sendEmail(userFound.email, "Reset Password", link);
 
     return res.json({ message: "Check your email to reset your password" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const resetPassword = async (req, res, next) => {
+  const { _id } = req.body;
+  const authHeader = req.headers.authorization;
+
+  if (!_id) return res.status(403).json({ message: "No id provided" });
+  if (!authHeader)
+    return res.status(403).json({ message: "No token provided" });
+  let resetToken = authHeader.split(" ")[1];
+
+  try {
+    const userFound = await User.findById(_id);
+    if (!userFound) return res.status(404).json({ message: "User not found" });
+
+    await jwt.verify(resetToken, JWT_SECRET_CODE + userFound.password);
   } catch (error) {
     next(error);
   }
@@ -120,14 +141,22 @@ const changePassword = async (req, res, next) => {
     return res.json({ message });
   }
 
-  const { password } = req.body;
+  const { password, _id } = req.body;
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader)
+    return res.status(403).json({ message: "No token provided" });
+  let resetToken = authHeader.split(" ")[1];
 
   try {
-    const userFound = await User.findById(req.user._id);
+    const userFound = await User.findById(_id);
     if (!userFound) return res.status(404).json({ message: "User not found" });
+
+    await jwt.verify(resetToken, JWT_SECRET_CODE + userFound.password);
+
     userFound.password = password;
     await userFound.save();
-    return res.status(204).json({ message: "Password changed successfully" });
+    return res.json({ message: "Password changed successfully" });
   } catch (error) {
     next(error);
   }
@@ -167,6 +196,7 @@ module.exports = {
   role,
   verifyEmail,
   forgotPassword,
+  resetPassword,
   changePassword,
   editProfile,
   getAddress

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
-import { BACK_URL } from "../../constants";
 
 const initialPassword = {
   password: "asdasd@asdasd.com",
@@ -10,16 +9,20 @@ const initialPassword = {
 
 const ResetPassword = () => {
   const navigate = useNavigate();
-  const { resetToken } = useParams();
+  const { resetToken, userId } = useParams();
   const [passwordData, setPasswordData] = useState(initialPassword);
 
   useEffect(() => {
     axios
-      .put("/user/resetPassword", null, {
-        headers: {
-          Authorization: `Bearer ${resetToken}`,
-        },
-      })
+      .put(
+        "/user/resetPassword",
+        { _id: userId },
+        {
+          headers: {
+            Authorization: `Bearer ${resetToken}`,
+          },
+        }
+      )
       .catch((err) => {
         //! VOLVER A VER agregar mensaje y timeout antes de redirigir
         console.log(err);
@@ -37,11 +40,15 @@ const ResetPassword = () => {
   const changePassword = (e) => {
     e.preventDefault();
     axios
-      .put("/user/changePassword", passwordData, {
-        headers: {
-          Authorization: `Bearer ${resetToken}`,
-        },
-      })
+      .put(
+        "/user/changePassword",
+        { ...passwordData, _id: userId },
+        {
+          headers: {
+            Authorization: `Bearer ${resetToken}`,
+          },
+        }
+      )
       .then(({ data }) => {
         //! VOLVER A VER agregar mensaje y timeout antes de redirigir
         console.log(data);
