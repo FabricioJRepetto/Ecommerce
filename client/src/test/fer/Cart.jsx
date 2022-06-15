@@ -56,9 +56,6 @@ const Cart = () => {
         redirectToMercadoPago(data.id);
      }
 
-    const checkpayment = async () => {
-    }
-
     return (
         <div >
             <Modal isOpen={isOpen} closeModal={closeModal}>
@@ -90,15 +87,34 @@ const Cart = () => {
             }
             <br />
             <br />
-            <button disabled={(!cart || cart.length < 1) && true } onClick={goCheckout}>Proceed to checkout</button>
+            <button disabled={(!cart || cart.length < 1) && true } 
+            onClick={goCheckout}> Stripe checkout </button>
             <br />
-            <button onClick={openMP}> MercadoPago </button>
-            <br />
-            <button onClick={checkpayment}> Checkear el estado del pago </button>
+            <button disabled={(!cart || cart.length < 1) && true } 
+            onClick={openMP}> MercadoPago checkout </button>
             <form 
             id='checkout-container'
             method="GET"
             action={`/orders/post-sale/${orderId}`}></form>
+            <br />
+            <br />
+            <br />
+            <br />
+            <hr />
+            <ul>
+                <br/>
+                <p><b>stripe</b></p>
+                <li><p>card: <i>4242 4242 4242 4242</i></p></li>
+                <li><p>expiration: <i>fecha mayor a la actual</i></p></li>
+                <li><p>cvc: <i>123</i></p></li>
+                <br/>
+                <p><b>mercadopago</b></p>
+                <li><p>card: <i>5416 7526 0258 2580</i></p></li>
+                <li><p>expiration: <i>11/25</i></p></li>
+                <li><p>cvc: <i>123</i></p></li>
+                <li><p>nombre: <i>APRO</i></p></li>
+                <li><p>dni: <i>12345678</i></p></li>
+            </ul>
         </div>
     );
 };
