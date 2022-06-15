@@ -1,14 +1,12 @@
-//: checkear 'cart' al crear orden
-
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import Modal from "../../components/common/Modal";
-import {useModal} from "../../hooks/useModal";
+import { useModal } from "../../hooks/useModal";
 import { cartTotal } from "../../Redux/reducer/cartSlice";
 import QuantityInput from "./QuantityInput";
-import axios from "axios";
-import { redirectToMercadoPago } from "../../helpers/loadMP";
+import { loadMercadoPago } from "../../helpers/loadMP";
 
 const Cart = () => {
     const [cart, setCart] = useState(null);
@@ -53,8 +51,13 @@ const Cart = () => {
         // crea la preferencia para mp con la order
         const { data }  = await axios.get(`/mercadopago/${id}`);
         // abre el modal de mp con la id de la preferencia
-        redirectToMercadoPago(data.id);
+        loadMercadoPago(data.id);
      }
+
+     const getAddress = async () => { 
+        const { data } = await axios('/user/address');
+        console.log(data);
+    };
 
     return (
         <div >
@@ -82,6 +85,16 @@ const Cart = () => {
                     </div>
                 ))}
                 <h2>{`Total: ${total}`}</h2>
+                <div>
+                    <p><b>Shipping address:</b></p>
+                    <button onClick={getAddress}> get address</button>
+                </div>
+                {/* <select onChange={changeHandler} defaultValue={16}>
+                        <option>8</option>
+                        <option >16</option>
+                        <option>24</option>
+                        <option>32</option>
+                </select> */}
             </div>
             : <h1>your cart is empty</h1>
             }

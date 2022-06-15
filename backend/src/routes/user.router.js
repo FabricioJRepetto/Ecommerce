@@ -16,6 +16,7 @@ const {
   forgotPassword,
   changePassword,
   editProfile,
+  getAddress,
 } = require("../controllers/user.ctrl");
 const { body } = require("express-validator");
 
@@ -82,5 +83,7 @@ router.put(
 );
 
 router.put("/editProfile", verifyToken, editProfile);
+
+router.get('/address', verifyToken, getAddress);
 
 module.exports = router;

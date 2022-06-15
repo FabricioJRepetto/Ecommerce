@@ -54,13 +54,13 @@ const CheckoutForm =  () => {
             });            
             console.log(data);
 
-            //? cambiar orden a pagada            
+            //? cambiar orden a pagada
             const { data: orderUpdt } = await axios.put(`/order/${orderId}`);
             console.log(orderUpdt);
 
-      //? vaciar carrito
-      const { data: cartEmpty } = await axios.delete(`/cart/empty`);
-      console.log(cartEmpty);
+            //? vaciar carrito
+            const { data: cartEmpty } = await axios.delete(`/cart/empty`);
+            console.log(cartEmpty);
 
             //? restar unidades de cada stock
             let list = order.products.map(e => ({id: e.product_id, amount: e.quantity}));
