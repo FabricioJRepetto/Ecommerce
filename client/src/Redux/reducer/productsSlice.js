@@ -68,10 +68,10 @@ https://api.mercadolibre.com/sites/MLA/
          search?q=${BUSQUEDA}
          &category=MLA454379 //!perifericos pc
          &official_store=all
-         &discount=[5,10...30]-100
-         &shipping_cost=free
          &has_pictures=yes
          &limit=${LIMITE}
+         &discount=[5,10...30]-100
+         &shipping_cost=free
          &promotion_type=deal_of_the_day
 
 {
