@@ -42,8 +42,8 @@ const Home = () => {
         <Route path="/productForm" element={<ProductForm />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout/:id" element={<Checkout />} />
+        <Route path="/reset/:userId/:resetToken" element={<ResetPassword />} />
         <Route path="/orders/post-sale/:id" element={<PostSale />} />
-        <Route path="/reset/:resetToken" element={<ResetPassword />} />
         <Route path="/verify/:verifyToken" element={<VerifyEmail />} />
       </Routes>
     </>

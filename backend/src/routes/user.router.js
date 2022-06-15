@@ -14,6 +14,7 @@ const {
   role,
   verifyEmail,
   forgotPassword,
+  resetPassword,
   changePassword,
   editProfile,
 } = require("../controllers/user.ctrl");
@@ -57,14 +58,11 @@ router.put("/verifyEmail", verifyToken, verifyEmail);
 
 router.put("/forgotPassword", forgotPassword);
 
-router.put("/resetPassword", verifyToken, async (req, res, next) =>
-  res.json({ message: "ok" })
-);
+router.put("/resetPassword", resetPassword);
 
 router.put(
   "/changePassword",
   [
-    verifyToken,
     body("password", "Password must be 6 characters long at least")
       .trim()
       .notEmpty()
