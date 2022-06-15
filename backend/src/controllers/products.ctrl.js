@@ -31,11 +31,15 @@ const getAll = async (req, res, next) => {
 const getByQuery = async (req, res, next) => {
   const q = req.query.q;
   if (!q) return res.status(400).json({ message: "No query to search" });
+
   try {
+    const resultsDB = await Product.find({
+      name: { $regex: q, $options: "i" },
+    });
     const { data } = await axios.get(
       `${MELI_SEARCH_URL}${q}${MELI_SEARCH_URL_ADDONS}`
     );
-    let results = [];
+    let resultsMeli = [];
     const usefulAttributeData = ["name", "id", "value_name"];
 
     for (const product of data.results) {
@@ -68,8 +72,9 @@ const getByQuery = async (req, res, next) => {
       }
       newProduct.catalog_product_id = product.catalog_product_id;
 
-      results.push(newProduct);
+      resultsMeli.push(newProduct);
     }
+    let results = [...resultsDB, ...resultsMeli];
 
     return res.json(results);
   } catch (error) {
