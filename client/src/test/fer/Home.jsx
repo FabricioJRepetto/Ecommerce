@@ -1,5 +1,7 @@
 import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { Routes, Route } from "react-router-dom";
+import axios from "axios";
 import NavBar from "./NavBar";
 import Cart from "./Cart";
 import Products from "./Products";
@@ -7,12 +9,11 @@ import Signout from "./Signout";
 import Signupin from "./Signupin";
 import Imagen from "./Imagen";
 import ProductForm from "./ProductForm";
-import { useDispatch } from "react-redux";
+import PostSale from "./PostSale";
 import Checkout from "./Checkout";
-import { sessionActive, loadUsername } from "../../Redux/reducer/sessionSlice";
-import axios from "axios";
 import ResetPassword from "./ResetPassword";
 import VerifyEmail from "./VerifyEmail";
+import { sessionActive, loadUsername } from "../../Redux/reducer/sessionSlice";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -41,6 +42,7 @@ const Home = () => {
         <Route path="/productForm" element={<ProductForm />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout/:id" element={<Checkout />} />
+        <Route path="/orders/post-sale/:id" element={<PostSale />} />
         <Route path="/reset/:resetToken" element={<ResetPassword />} />
         <Route path="/verify/:verifyToken" element={<VerifyEmail />} />
       </Routes>

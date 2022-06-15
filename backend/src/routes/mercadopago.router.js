@@ -1,9 +1,12 @@
 const { Router } = require("express");
 const router = Router();
 const {
-    mpCho
+    mpCho,
+    notifications
 } = require("../controllers/mercadopago.ctrl.js");
 
-router.get("/", mpCho);
+router.get("/:id", mpCho);
+//! es un POST o una GET ???
+router.get("/ipn", notifications);
 
 module.exports = router;

@@ -73,11 +73,13 @@ const deleteOrder = async (req, res, next) => {
 
  const updateOrder = async (req, res, next) => { 
      //: añadir mas opciones de status ?
+     let newStatus = req.body.status;
+
      try {
         const order = await Order.findByIdAndUpdate(req.params.id,
         {
             "$set": {
-                status: "Paid"
+                status: newStatus
             }
         });
         

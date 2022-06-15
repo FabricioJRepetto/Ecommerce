@@ -7,7 +7,7 @@ export const useAxios = (method, endpoint, payload) => {
   const [data, setData] = useState(null),
     [error, setError] = useState(null),
     [loading, setLoading] = useState(true),
-    token = useSelector((state) => state.sessionReducer.token), //! ojo con esto, el estado token ya no existe
+    token = localStorage.getItem("loggedTokenEcommerce"),
     headers = { Authorization: `Bearer ${token}` },
     url = BACK_URL + endpoint;
 

@@ -8,10 +8,11 @@ import {useModal} from "../../hooks/useModal";
 import { cartTotal } from "../../Redux/reducer/cartSlice";
 import QuantityInput from "./QuantityInput";
 import axios from "axios";
-import { redirectToMercadoPago } from "../../helpers/mpCho";
+import { redirectToMercadoPago } from "../../helpers/loadMP";
 
 const Cart = () => {
     const [cart, setCart] = useState(null);
+    const [orderId, setOrderId] = useState('');
     const total = useSelector((state) => state.cartReducer.total);
     const [isOpen, openModal, closeModal, prop] = useModal();
     const navigate = useNavigate();
@@ -46,16 +47,20 @@ const Cart = () => {
     };
 
     const openMP = async () => { 
-        const { data }  = await axios.get('/mercadopago/')
-        console.log(data.id);
+        // crea la order       
+        const { data: id } = await axios.post(`/order/`);
+        setOrderId(id);
+        // crea la preferencia para mp con la order
+        const { data }  = await axios.get(`/mercadopago/${id}`);
+        // abre el modal de mp con la id de la preferencia
         redirectToMercadoPago(data.id);
      }
 
     const checkpayment = async () => {
-     }
+    }
 
     return (
-        <div id="checkout-container">
+        <div >
             <Modal isOpen={isOpen} closeModal={closeModal}>
                 <h1>You want to delete this product?</h1>
                 <div>
@@ -90,6 +95,10 @@ const Cart = () => {
             <button onClick={openMP}> MercadoPago </button>
             <br />
             <button onClick={checkpayment}> Checkear el estado del pago </button>
+            <form 
+            id='checkout-container'
+            method="GET"
+            action={`/orders/post-sale/${orderId}`}></form>
         </div>
     );
 };
