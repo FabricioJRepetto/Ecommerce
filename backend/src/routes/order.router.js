@@ -9,10 +9,10 @@ const {
     updateOrder
 } = require("../controllers/order.ctrl.js");
 
-router.get("/", createOrder);
 router.get("/userall", getOrdersUser);
 router.get("/adminall", getOrdersAdmin);
 router.get("/:id", getOrder);
+router.post("/", createOrder);
 router.put("/:id", updateOrder);
 router.delete("/", deleteOrder);
 

@@ -5,12 +5,19 @@ const orderSchema = new Schema(
     products: [{
         product_name: String,
         product_id: String,
+        description: String,
+        img: [String],
         price: Number,
         quantity: Number
     }],
     user: {
         type: String,
         required: true,
+    },
+    shipping_address: {
+        zip_code: String,
+        street_name: String,
+        street_number: Number,
     },
     status: String
   },
@@ -35,7 +42,7 @@ orderSchema.virtual('total').get(function() {
 orderSchema.virtual('description').get(function() {
     let desc = 'Order summary: ';    
     this.products.forEach(product => {
-        desc += `·${product.product_name} x${product.quantity}. `;
+        desc += `${product.product_name} x${product.quantity}. `;
     });
     return desc;
 });

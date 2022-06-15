@@ -18,10 +18,6 @@ axios.interceptors.request.use(function (config) {
   return config;
 });
 
-/* axios.defaults.baseURL = BACK_URL;
-let token = localStorage.getItem("loggedTokenEcommerce");
-axios.defaults.headers.common["Authorization"] = `Bearer ${token}`; */
-
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
