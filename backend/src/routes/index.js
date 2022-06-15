@@ -10,8 +10,6 @@ const checkoutRouter = require("./checkout.router");
 const { verifyToken } = require("../middlewares/verify");
 const mpRouter = require("./mercadopago.router");
 
-
-
 router.use("/product", productsRouter);
 router.use("/user", userRouter);
 router.use("/cart", verifyToken, cartRouter);
