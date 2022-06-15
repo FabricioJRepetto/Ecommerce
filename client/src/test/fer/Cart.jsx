@@ -8,9 +8,11 @@ import {useModal} from "../../hooks/useModal";
 import { cartTotal } from "../../Redux/reducer/cartSlice";
 import QuantityInput from "./QuantityInput";
 import axios from "axios";
+import { redirectToMercadoPago } from "../../helpers/loadMP";
 
 const Cart = () => {
     const [cart, setCart] = useState(null);
+    const [orderId, setOrderId] = useState('');
     const total = useSelector((state) => state.cartReducer.total);
     const [isOpen, openModal, closeModal, prop] = useModal();
     const navigate = useNavigate();
@@ -22,7 +24,7 @@ const Cart = () => {
     }, [])
 
     const getCart = async () => {
-        const { data } = await axios('/cart');
+        const { data } = await axios('/cart/');
 
         console.log(data);
         typeof data !== 'string' &&
@@ -39,43 +41,81 @@ const Cart = () => {
 
     const goCheckout = async () => {
         // crea la order       
-        const { data: id } = await axios(`/order/`);
+        const { data: id } = await axios.post(`/order/`);
         // con la id inicia el checkout
         navigate(`/checkout/${id}`);
     };
+
+    const openMP = async () => { 
+        // crea la order       
+        const { data: id } = await axios.post(`/order/`);
+        setOrderId(id);
+        // crea la preferencia para mp con la order
+        const { data }  = await axios.get(`/mercadopago/${id}`);
+        // abre el modal de mp con la id de la preferencia
+        redirectToMercadoPago(data.id);
+     }
+
     return (
-        <>
-        <Modal isOpen={isOpen} closeModal={closeModal}>
-            <h1>You want to delete this product?</h1>
-            <div>
-                <button onClick={closeModal}>Cancel</button>
-                <button onClick={()=> deleteProduct(prop)}>Delete</button>
-            </div>
-        </Modal>
-        <hr />
-        <h2>Cart</h2>
-        <br />
-        {(cart && cart.length > 0)
-        ? <div> 
-            {cart.map((prod) => (
-                <div key={prod.product_id}>
-                    <img src={prod.img[0]} alt='product img' height={60}/>
-                        {prod.product_name} - ${prod.price} - 
-                            <QuantityInput prodId={prod.product_id} prodQuantity={prod.quantity}
-                            stock={prod.stock} 
-                            price={prod.price}
-                        />
-                        <p onClick={()=> openModal(prod.product_id)}><b> Delete </b></p>
+        <div >
+            <Modal isOpen={isOpen} closeModal={closeModal}>
+                <h1>You want to delete this product?</h1>
+                <div>
+                    <button onClick={closeModal}>Cancel</button>
+                    <button onClick={()=> deleteProduct(prop)}>Delete</button>
                 </div>
-            ))}
-            <h2>{`Total: ${total}`}</h2>
+            </Modal>
+            <hr />
+            <h2>Cart</h2>
+            <br />
+            {(cart && cart.length > 0)
+            ? <div> 
+                {cart.map((prod) => (
+                    <div key={prod.product_id}>
+                        <img src={prod.img[0]} alt='product img' height={60}/>
+                            {prod.product_name} - ${prod.price} - 
+                                <QuantityInput prodId={prod.product_id} prodQuantity={prod.quantity}
+                                stock={prod.stock} 
+                                price={prod.price}
+                            />
+                            <p onClick={()=> openModal(prod.product_id)}><b> Delete </b></p>
+                    </div>
+                ))}
+                <h2>{`Total: ${total}`}</h2>
+            </div>
+            : <h1>your cart is empty</h1>
+            }
+            <br />
+            <br />
+            <button disabled={(!cart || cart.length < 1) && true } 
+            onClick={goCheckout}> Stripe checkout </button>
+            <br />
+            <button disabled={(!cart || cart.length < 1) && true } 
+            onClick={openMP}> MercadoPago checkout </button>
+            <form 
+            id='checkout-container'
+            method="GET"
+            action={`/orders/post-sale/${orderId}`}></form>
+            <br />
+            <br />
+            <br />
+            <br />
+            <hr />
+            <ul>
+                <br/>
+                <p><b>stripe</b></p>
+                <li><p>card: <i>4242 4242 4242 4242</i></p></li>
+                <li><p>expiration: <i>fecha mayor a la actual</i></p></li>
+                <li><p>cvc: <i>123</i></p></li>
+                <br/>
+                <p><b>mercadopago</b></p>
+                <li><p>card: <i>5416 7526 0258 2580</i></p></li>
+                <li><p>expiration: <i>11/25</i></p></li>
+                <li><p>cvc: <i>123</i></p></li>
+                <li><p>nombre: <i>APRO</i></p></li>
+                <li><p>dni: <i>12345678</i></p></li>
+            </ul>
         </div>
-        : <h1>your cart is empty</h1>
-        }
-        <br />
-        <br />
-        <button disabled={cart?.length < 1 && true } onClick={goCheckout}>Proceed to checkout</button>
-        </>
     );
 };
 
