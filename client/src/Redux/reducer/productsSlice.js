@@ -1,12 +1,32 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const filterFunction = (state, source, type, value) => {
+  let productsToFilter;
+  state.productsFiltered.length === 0
+    ? (productsToFilter = state[source])
+    : (productsToFilter = state.productsFiltered);
+
+  if (type === "price") {
+    let minPrice = value.split("-")[0];
+    let maxPrice = value.split("-")[1];
+
+    state.productsFiltered = state[productsToFilter].filter(
+      (product) => product[type] > minPrice && product[type] < maxPrice
+    );
+  } else {
+    state.productsFiltered = state[productsToFilter].filter(
+      (product) => product[type] === value
+    );
+  }
+};
+
 export const productsSlice = createSlice({
   name: "products",
   initialState: {
     productsOwn: [],
     productsRandom: [],
     productsFound: [],
-    filter: {},
+    filtersApplied: {},
     order: {},
     productsFiltered: [],
     productDetails: {},
@@ -19,13 +39,38 @@ export const productsSlice = createSlice({
     filterProducts: (state, action) => {
       /* action.payload = {
           source: "productsOwn" || "productsFound" || "productsRandom",
-          filter: 
+          type: 'brand' || 'free_shipping' || 'price',
+          value: STRING || BOOLEAN || MIN-MAX || null
        } */
-      let productsToFilter;
-      state.productsFiltered.length === 0
-        ? (productsToFilter = state[action.payload.source])
-        : // eslint-disable-next-line
-          (productsToFilter = state.productsFiltered);
+      const { source, type, value } = action.payload;
+
+      /* filtersApplied = [
+            {
+               type: 'brand' || 'free_shipping' || 'price',
+               value: STRING || BOOLEAN || MIN-MAX
+            }, {}
+        ] */
+      if (value === null) {
+        state.filtersApplied = state.filtersApplied.filter(
+          (filterApplied) => filterApplied.type !== type
+        );
+        if (state.filtersApplied.length === 0) {
+          state.productsFiltered = [];
+        } else {
+          for (const filterApplied of state.filtersApplied) {
+            filterFunction(
+              state,
+              source,
+              filterApplied.type,
+              filterApplied.value
+            );
+          }
+        }
+      } else {
+        state.filtersApplied = [...state.filtersApplied, { type, value }];
+
+        filterFunction(state, source, type, value);
+      }
     },
 
     orderProducts: (state, action) => {
