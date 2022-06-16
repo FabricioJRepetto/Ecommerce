@@ -136,47 +136,48 @@ const getById = async (req, res, next) => {
 
 const createProduct = async (req, res, next) => {
   try {
-    const {
-      name,
-      price,
-      description,
-      attributes,
-      main_features,
-      available_quantity,
-    } = JSON.parse(req.body.data);
-    let images = [];
+        const {
+        name,
+        price,
+        description,
+        attributes,
+        main_features,
+        available_quantity,
+        } = JSON.parse(req.body.data);
+        let images = [];
 
-    let aux = [];
-    // creamos una promise por cada archivo.
-    req.files.forEach((img) => {
-      aux.push(cloudinary.uploader.upload(img.path));
-    });
-    // esperamos que se suban.
-    const promiseAll = await Promise.all(aux);
-    // guardamos los datos de cada imagen.
-    promiseAll.forEach((e) => {
-      images.push({
-        imgURL: e.url,
-        public_id: e.public_id,
-      });
-    });
-    // borramos los archivos de este directorio.
-    req.files.forEach((img) => {
-      fs.unlink(img.path);
-    });
+        let aux = [];
+        // creamos una promise por cada archivo.
+        req.files.forEach((img) => {
+        aux.push(cloudinary.uploader.upload(img.path));
+        });
+        // esperamos que se suban.
+        const promiseAll = await Promise.all(aux);
+        // guardamos los datos de cada imagen.
+        promiseAll.forEach((e) => {
+            images.push({
+                imgURL: e.url,
+                public_id: e.public_id,
+            });
+        });
 
-    const newProduct = new Product({
-      name,
-      price,
-      description,
-      attributes,
-      main_features,
-      available_quantity,
-      images,
-    });
-    const productSaved = await newProduct.save();
+        // borramos los archivos de este directorio.
+        req.files.forEach((img) => {
+        fs.unlink(img.path);
+        });
 
-    res.json(productSaved);
+        const newProduct = new Product({
+        name,
+        price,
+        description,
+        attributes,
+        main_features,
+        available_quantity,
+        images,
+        });
+        const productSaved = await newProduct.save();
+
+        res.json(productSaved);
   } catch (error) {
     next(error);
   }
