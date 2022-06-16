@@ -128,10 +128,12 @@ const getById = async (req, res, next) => {
 };
 
 const createProduct = async (req, res, next) => {
+  console.log(req.body);
   try {
     const {
       name,
       price,
+      brand,
       description,
       attributes,
       main_features,
@@ -161,6 +163,7 @@ const createProduct = async (req, res, next) => {
     const newProduct = new Product({
       name,
       price,
+      brand,
       description,
       attributes,
       main_features,

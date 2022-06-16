@@ -10,11 +10,11 @@ const filterFunction = (state, source, type, value) => {
     let minPrice = value.split("-")[0];
     let maxPrice = value.split("-")[1];
 
-    state.productsFiltered = state[productsToFilter].filter(
-      (product) => product[type] > minPrice && product[type] < maxPrice
+    state.productsFiltered = productsToFilter.filter(
+      (product) => product[type] >= minPrice && product[type] <= maxPrice
     );
   } else {
-    state.productsFiltered = state[productsToFilter].filter(
+    state.productsFiltered = productsToFilter.filter(
       (product) => product[type] === value
     );
   }
@@ -26,7 +26,7 @@ export const productsSlice = createSlice({
     productsOwn: [],
     productsRandom: [],
     productsFound: [],
-    filtersApplied: {},
+    filtersApplied: [],
     order: {},
     productsFiltered: [],
     productDetails: {},
@@ -37,6 +37,7 @@ export const productsSlice = createSlice({
     },
 
     filterProducts: (state, action) => {
+      console.log(action.payload);
       /* action.payload = {
           source: "productsOwn" || "productsFound" || "productsRandom",
           type: 'brand' || 'free_shipping' || 'price',

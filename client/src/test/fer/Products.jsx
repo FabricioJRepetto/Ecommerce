@@ -1,19 +1,73 @@
-import React, { useState } from "react";
-import Axios from "axios";
+import React, { useState, useRef } from "react";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  filterProducts,
+  loadProductsFound,
+} from "../../Redux/reducer/productsSlice";
 
 const Products = () => {
-  const [products, setProducts] = useState(null);
+  // const [products, setProducts] = useState(null);
+  const [pricesFilter, setPricesFilter] = useState({
+    min: "300",
+    max: "3000",
+  });
+  const brands = useRef();
+  const dispatch = useDispatch();
+  const { productsFound, productsFiltered } = useSelector(
+    (state) => state.productsReducer
+  );
+
+  let productsToShow;
+  productsFiltered.length === 0
+    ? (productsToShow = productsFound)
+    : (productsToShow = productsFiltered);
 
   const getProducts = () => {
-    Axios(`/product`).then((res) => {
-      setProducts(res.data);
-      console.log(res.data);
+    axios.get("/product").then((res) => {
+      dispatch(loadProductsFound(res.data));
+      //     setProducts(res.data);
+      brands.current = [];
+      for (const product of res.data) {
+        !brands.current.includes(product.brand) &&
+          product.brand &&
+          brands.current.push(product.brand);
+      }
     });
   };
 
   const addToCart = (id) => {
-    Axios.post(`/cart/${id}`).then((res) => {
+    axios.post(`/cart/${id}`).then((res) => {
       console.log(res.data);
+    });
+  };
+
+  const handleFilter = (brand) => {
+    dispatch(
+      filterProducts({
+        source: "productsFound",
+        type: "brand",
+        value: brand,
+      })
+    );
+  };
+
+  const filterPrices = (e) => {
+    e.preventDefault();
+    console.log("entra?");
+    dispatch(
+      filterProducts({
+        source: "productsFound",
+        type: "price",
+        value: `${pricesFilter.min}-${pricesFilter.max}`,
+      })
+    );
+  };
+
+  const handleChange = ({ target }) => {
+    setPricesFilter({
+      ...pricesFilter,
+      [target.name]: [target.value],
     });
   };
 
@@ -23,7 +77,7 @@ const Products = () => {
       <h2>PRODUCTS</h2>
       <button onClick={getProducts}>GET ALL PRODUCTS</button>
       {React.Children.toArray(
-        products?.map((prod) => (
+        productsToShow?.map((prod) => (
           <div>
             {prod.name} - ${prod.price}
             {"    "}
@@ -31,6 +85,39 @@ const Products = () => {
           </div>
         ))
       )}
+      <br />
+      <hr />
+      <br />
+      <h3>BRANDS</h3>
+      {React.Children.toArray(
+        brands.current?.map((brand) => (
+          <button onClick={() => handleFilter(brand)}>{brand}</button>
+        ))
+      )}
+      {brands.current && (
+        <button onClick={() => handleFilter(null)}>Clear</button>
+      )}
+      <br />
+      <hr />
+      <br />
+      <h3>PRICES</h3>
+      <form onSubmit={filterPrices}>
+        <input
+          type="number"
+          placeholder="min"
+          name="min"
+          onChange={handleChange}
+          value={pricesFilter.min}
+        />
+        <input
+          type="number"
+          placeholder="max"
+          name="max"
+          onChange={handleChange}
+          value={pricesFilter.max}
+        />
+        <input type="submit" value="filter" />
+      </form>
     </>
   );
 };
