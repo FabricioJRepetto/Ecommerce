@@ -10,8 +10,7 @@ const getOrder = async (req, res, next) => {
             _id: orderId
         });
         if (order) {
-            console.log(order);
-            return res.json(order)
+            return res.json(order);
         } else {
             return res.status(404).json('Order not found')
         };
@@ -42,17 +41,32 @@ const getOrdersAdmin= async (req, res, next) => { //! SOLO ADMIN
 const createOrder = async (req, res, next) => { 
     try {
         const userId = req.user._id;
-
+        const {
+            state,
+            city,
+            zip_code,
+            street_name,
+            street_number
+        } = req.body;
+        
         const cart = await Cart.findOne({owner: userId});
         let products = cart.products;
 
         const newOrder = new Order({
             user: userId,
-            status: 'Pending',
-            products
+            status: 'pending',
+            products,
+            shipping_address: {
+                state,
+                city,
+                zip_code,
+                street_name,
+                street_number
+            }
         });
 
         await newOrder.save();
+        console.log(newOrder);
         return res.json(newOrder._id);
     } catch (error) {
         next(error)
@@ -63,7 +77,7 @@ const deleteOrder = async (req, res, next) => {
     try {
         await Order.deleteMany({
             user: req.user._id,
-            status: 'Pending'    
+            status: 'pending'    
         })
         return res.json('ORDER DELETED');
     } catch (error) {
@@ -73,15 +87,14 @@ const deleteOrder = async (req, res, next) => {
 
  const updateOrder = async (req, res, next) => { 
      //: añadir mas opciones de status ?
-     let newStatus = req.body.status;
-
      try {
         const order = await Order.findByIdAndUpdate(req.params.id,
         {
             "$set": {
-                status: newStatus
+                status: req.body.status
             }
-        });
+        },
+        {new: true});
         
         return res.json(`Order status: ${order.status}`)
      } catch (error) {

@@ -15,7 +15,7 @@ const CheckoutForm =  () => {
     const navigate = useNavigate();
     const [order, setOrder] = useState(null);
     const [loading, setLoading] = useState(false);
-    const [isOpen, openModal, closeModal, prop] = useModal();
+    const [isOpen, openModal, closeModal] = useModal();
     const { id: orderId } = useParams();
     
     useEffect(() => {
@@ -55,7 +55,7 @@ const CheckoutForm =  () => {
             console.log(data);
 
             //? cambiar orden a pagada
-            const { data: orderUpdt } = await axios.put(`/order/${orderId}`);
+            const { data: orderUpdt } = await axios.put(`/order/${orderId}`, {status: 'approved'});
             console.log(orderUpdt);
 
             //? vaciar carrito

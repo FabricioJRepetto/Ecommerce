@@ -9,6 +9,7 @@ import Signout from "./Signout";
 import Signupin from "./Signupin";
 import Imagen from "./Imagen";
 import ProductForm from "./ProductForm";
+import Profile from "./Profile";
 import PostSale from "./PostSale";
 import Checkout from "./Checkout";
 import ResetPassword from "./ResetPassword";
@@ -38,6 +39,7 @@ const Home = () => {
         <Route path="/" element={<Imagen />} />
         <Route path="/signin" element={<Signupin />} />
         <Route path="/signout" element={<Signout />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/products" element={<Products />} />
         <Route path="/productForm" element={<ProductForm />} />
         <Route path="/cart" element={<Cart />} />

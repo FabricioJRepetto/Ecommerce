@@ -43,18 +43,33 @@ const Cart = () => {
         }
     };
 
+    const handleChange = ({ target }) => {
+        const { name, value, validity } = target;
+        let validatedValue;
+
+        if (!validity.valid) {
+        validatedValue = newAdd[name];
+        } else {
+        validatedValue = value;
+        }
+        setNewAdd({
+        ...newAdd,
+        [name]: validatedValue,
+        })
+    };
+
     const handleSubmit = async (e) => { 
         e.preventDefault();
-        closeAddForm();
-        const {data} = await axios.post(`/user/address`, newAdd);
-        console.log(data);
-        setNewAdd({});
-        getAddress();
+        if (newAdd.state && newAdd.city && newAdd.zip_code && newAdd.street_name && newAdd.street_number) {
+            closeAddForm();
+            const {data} = await axios.post(`/user/address`, newAdd);
+            setSelectedAdd(data.address.pop());
+            getAddress();
+        }
      };
-
+     
      const handleSelect = (id) => { 
         let aux = address.filter(e => e._id.toString() === id.toString());
-        console.log(aux[0]);
         setSelectedAdd(aux[0]);
         closeAddList();
      };
@@ -67,14 +82,14 @@ const Cart = () => {
 
     const goCheckout = async () => {
         // crea la order       
-        const { data: id } = await axios.post(`/order/`);
+        const { data: id } = await axios.post(`/order/`, selectedAdd);
         // con la id inicia el checkout
         navigate(`/checkout/${id}`);
     };
 
     const openMP = async () => { 
         // crea la order       
-        const { data: id } = await axios.post(`/order/`);
+        const { data: id } = await axios.post(`/order/`, selectedAdd);
         setOrderId(id);
         // crea la preferencia para mp con la order
         const { data }  = await axios.get(`/mercadopago/${id}`);
@@ -82,14 +97,10 @@ const Cart = () => {
         loadMercadoPago(data.id);
      };
 
-     const test = () => {
-        console.log(address);
-      }
-
     return (
         <div >            
             <Modal isOpen={isOpen} closeModal={closeModal}>
-                <h1>You want to delete this product?</h1>
+                <h1>Remove this product from the cart?</h1>
                 <div>
                     <button onClick={closeModal}>Cancel</button>
                     <button onClick={()=> deleteProduct(prop)}>Delete</button>
@@ -99,60 +110,59 @@ const Cart = () => {
             <Modal isOpen={isOpenAddForm} closeModal={closeAddForm}>
                 <h1>New shipping address</h1>
                 <form onSubmit={handleSubmit}>
-                    <input                        
+                    <input
                         type="text" 
                         name="state" 
                         onChange={(e) => setNewAdd({
-                            ...newAdd, 
-                            [e.target.name]: e.target.value
+                                ...newAdd,
+                                [e.target.name] : e.target.value
                         })} 
                         placeholder='state' 
                         value={newAdd.state ? newAdd.state : ''}
                     />
 
-                    <input                        
+                    <input
                         type="text" 
                         name="city" 
                         onChange={(e) => setNewAdd({
-                            ...newAdd, 
-                            [e.target.name]: e.target.value
+                                ...newAdd,
+                                [e.target.name] : e.target.value
                         })} 
                         placeholder='city' 
                         value={newAdd.city ? newAdd.city : ''}
                     />
 
-                    <input                        
+                    <input
                         type="text" 
                         name="zip_code" 
                         onChange={(e) => setNewAdd({
-                            ...newAdd, 
-                            [e.target.name]: e.target.value
+                                ...newAdd,
+                                [e.target.name] : e.target.value
                         })} 
                         placeholder='zip code' 
                         value={newAdd.zip_code ? newAdd.zip_code : ''}
                     />
 
-                    <input                        
+                    <input
                         type="text" 
                         name="street_name" 
                         onChange={(e) => setNewAdd({
-                            ...newAdd, 
-                            [e.target.name]: e.target.value
+                                ...newAdd,
+                                [e.target.name] : e.target.value
                         })} 
                         placeholder='street name' 
                         value={newAdd.street_name ? newAdd.street_name : ''}
                     />
 
-                    <input                        
-                        type="number" 
-                        name="street_number" 
-                        onChange={(e) => setNewAdd({
-                            ...newAdd, 
-                            [e.target.name]: e.target.value
-                        })} 
-                        placeholder='street number' 
-                        value={newAdd.street_number ? newAdd.street_number : ''}
-                    />
+                    <input
+                            
+                            type="number"
+                            name="street_number" 
+                            pattern="[1-9]"
+                            placeholder='street number' 
+                            value={newAdd.street_number ? newAdd.street_number : ''}
+                            onChange={handleChange}
+                        />
 
                     <button>Create</button>
                 </form>
@@ -168,7 +178,10 @@ const Cart = () => {
                                 <button onClick={()=>handleSelect(e._id.toString())}> Select </button>
                             </div>
                         )}
-                        <button onClick={openAddForm}>Create address</button>
+                        <button onClick={() =>{
+                            openAddForm();
+                            closeAddList();
+                        }}>Select another address</button>
                     </div>
                 </div>
             </Modal>
@@ -190,12 +203,13 @@ const Cart = () => {
                     </div>
                 ))}
                 <h2>{`Total: ${total}`}</h2>
+                <br/>
                 <div>
                     <p><b>Shipping address:</b></p>
                     {selectedAdd
                         ? <div>
                             <div name={'address-container'}>{selectedAdd.street_name+' '+selectedAdd.street_number+', '+selectedAdd.city}</div>
-                                <button onClick={openAddList}>create or edit an address</button>
+                                <button onClick={openAddList}>Select another address</button>
                             </div>
                         : <div>
                             <p><b>You have no address asociated,</b> 
@@ -203,7 +217,6 @@ const Cart = () => {
                             <button onClick={openAddForm}>Create address</button>
                         </div>}
                 </div>
-                <button onClick={test}># T E S T #</button>
             </div>
             : <h1>your cart is empty</h1>
             }

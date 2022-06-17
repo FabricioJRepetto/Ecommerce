@@ -28,7 +28,9 @@ const PostSale = () => {
 
             if (orderStatus === 'approved') {
                 //? cambiar orden a pagada
-                const { data: orderUpdt } = await axios.put(`/order/${id}`);
+                const { data: orderUpdt } = await axios.put(`/order/${id}`,{
+                    status: 'approved'
+                });
                 console.log(orderUpdt);
     
                 //? vaciar carrito

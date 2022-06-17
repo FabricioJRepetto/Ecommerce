@@ -3,8 +3,9 @@ const Address = require('../models/Address');
 const getAddress = async (req, res, next) => { 
     try {
         const address = await Address.findOne({ user: req.user._id })
-        if (address) return res.json(address);            
-        return res.json({message: 'No address found'});
+        console.log(address);
+        if (address === null) return res.json({message: 'No address found'});
+        return res.json(address);
     } catch (error) {
         next(error);
     }
@@ -12,13 +13,6 @@ const getAddress = async (req, res, next) => {
  
 const addAddress = async (req, res, next) => { 
     try {
-        // const {
-        //     state, 
-        //     city, 
-        //     zip_code, 
-        //     street_name, 
-        //     street_number } = req.body;
-
         const add = await Address.findOne({
             user: req.user._id 
         });
@@ -27,14 +21,17 @@ const addAddress = async (req, res, next) => {
             add.address.push(req.body);
             await add.save();
 
-            return res.json({message: 'New address registered.'});
+            return res.json(add);
+            //return res.json({message: 'New address registered.'});
         } else {
             const newAdd = new Address({
                 address: [req.body],
                 user: req.user._id
             });
             await newAdd.save();
-            return res.json({message: 'Address registered.'});
+
+            return res.json(newAdd);
+            //return res.json({message: 'Address registered.'});
         };
     } catch (error) {
         next(error);
