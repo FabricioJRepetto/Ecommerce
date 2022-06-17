@@ -1,9 +1,10 @@
 const Whishlist = require('../models/whishlist');
+const Product = require('../models/product');
 
 const getUserList = async (req, res, next) => {
     try {
-        const {products} = await Whishlist.findOne({owner: req.user.id});
-        res.json(products)
+        const { products } = await Whishlist.findOne({owner: req.user.id});
+        return res.json(products)
     } catch (error) {
         next(error);
     }
@@ -12,15 +13,20 @@ const getUserList = async (req, res, next) => {
 const addToList = async (req, res, next) => {
     try {
         const userId = req.user.id;
-        const productToAdd = req.params.id;        
+        const productId = req.params.id;
+
+        const product = await Product.findbyId(productId);
+        console.log(product);
+        if (!product) return res.json({message: 'Product not found.'});
+
         const list = await Whishlist.findOne({ 
             owner: userId 
         });
 
         if (list) {
-            list.products.push(productToAdd);
+            list.products.push(product);
             await list.save();
-            res.json("Product added to the whishlist.");
+            return res.json({message: "Product added to the whishlist."});
         } else {
             const newList = new Whishlist({ 
                 products: productToAdd, 
@@ -28,7 +34,7 @@ const addToList = async (req, res, next) => {
             });
             await newList.save();
 
-            res.json('Whishlist created and product added.');
+            return res.json({message: 'Whishlist created and product added.'});
         }
     } catch (error) {
         next(error);
@@ -48,7 +54,7 @@ const removeFromList = async (req, res, next) => {
         );
         await list.save();
 
-        res.json("Product removed from whishlist.");
+        return res.json({message: "Product removed from whishlist."});
     } catch (error) {
         next(error);
     }

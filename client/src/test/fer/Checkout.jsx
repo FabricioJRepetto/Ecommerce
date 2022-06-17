@@ -15,7 +15,7 @@ const CheckoutForm =  () => {
     const navigate = useNavigate();
     const [order, setOrder] = useState(null);
     const [loading, setLoading] = useState(false);
-    const [isOpen, openModal, closeModal, prop] = useModal();
+    const [isOpen, openModal, closeModal] = useModal();
     const { id: orderId } = useParams();
     
     useEffect(() => {
@@ -54,13 +54,13 @@ const CheckoutForm =  () => {
             });            
             console.log(data);
 
-            //? cambiar orden a pagada            
-            const { data: orderUpdt } = await axios.put(`/order/${orderId}`);
+            //? cambiar orden a pagada
+            const { data: orderUpdt } = await axios.put(`/order/${orderId}`, {status: 'approved'});
             console.log(orderUpdt);
 
-      //? vaciar carrito
-      const { data: cartEmpty } = await axios.delete(`/cart/empty`);
-      console.log(cartEmpty);
+            //? vaciar carrito
+            const { data: cartEmpty } = await axios.delete(`/cart/empty`);
+            console.log(cartEmpty);
 
             //? restar unidades de cada stock
             let list = order.products.map(e => ({id: e.product_id, amount: e.quantity}));

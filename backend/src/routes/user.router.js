@@ -18,7 +18,11 @@ const {
   changePassword,
   editProfile,
 } = require("../controllers/user.ctrl");
+const addressRouter = require('./address.router');
 const { body } = require("express-validator");
+
+//? Address router
+router.use('/address', verifyToken, addressRouter);
 
 router.post(
   "/signup",
@@ -80,5 +84,6 @@ router.put(
 );
 
 router.put("/editProfile", verifyToken, editProfile);
+
 
 module.exports = router;

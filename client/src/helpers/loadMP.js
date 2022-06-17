@@ -1,6 +1,6 @@
 import { MP_PKEY } from '../constants'
 
-export const redirectToMercadoPago = (preferenceId) => {
+export const loadMercadoPago = (preferenceId) => {
   const handleScriptLoad = () => {
     const mp = new window.MercadoPago(MP_PKEY, {
       locale: 'es-AR'

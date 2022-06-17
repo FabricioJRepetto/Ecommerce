@@ -15,7 +15,9 @@ const ProductForm = () => {
     const submitProduct = async (e) => {
         e.preventDefault();
         let formData = new FormData();
-        console.log(productImg);
+        //: verificar datos
+        
+       // agarra las images
         productImg.forEach(pic => {
             formData.append('images', pic)
         });

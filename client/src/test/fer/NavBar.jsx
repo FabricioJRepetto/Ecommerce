@@ -19,6 +19,9 @@ const NavBar = () => {
       <NavLink to={"products"}>
         <p>Products</p>
       </NavLink>
+      <NavLink to={"profile"}>
+        <p>Profile</p>
+      </NavLink>
       <NavLink to={"productForm"}>
         <p>Create Products</p>
       </NavLink>

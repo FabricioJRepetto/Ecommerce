@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import { BACK_URL } from "../constants";
 
 export const useAxios = (method, endpoint, payload) => {

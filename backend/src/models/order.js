@@ -15,6 +15,8 @@ const orderSchema = new Schema(
         required: true,
     },
     shipping_address: {
+        state: String,
+        city: String,
         zip_code: String,
         street_name: String,
         street_number: Number,
