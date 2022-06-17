@@ -1,10 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const filterFunction = (state, source, type, value) => {
+const filterFunction = (state, source, type, value, firstRemove) => {
   let productsToFilter;
-  state.productsFiltered.length === 0
-    ? (productsToFilter = state[source])
-    : (productsToFilter = state.productsFiltered);
+
+  if (firstRemove) {
+    productsToFilter = state[source];
+  } else {
+    state.productsFiltered.length === 0
+      ? (productsToFilter = state[source])
+      : (productsToFilter = state.productsFiltered);
+  }
 
   if (type === "price") {
     let minPrice = value.split("-")[0];
@@ -27,7 +32,6 @@ export const productsSlice = createSlice({
     productsRandom: [],
     productsFound: [],
     filtersApplied: [],
-    order: {},
     productsFiltered: [],
     productDetails: {},
   },
@@ -37,7 +41,6 @@ export const productsSlice = createSlice({
     },
 
     filterProducts: (state, action) => {
-      console.log(action.payload);
       /* action.payload = {
           source: "productsOwn" || "productsFound" || "productsRandom",
           type: 'brand' || 'free_shipping' || 'price',
@@ -58,13 +61,18 @@ export const productsSlice = createSlice({
         if (state.filtersApplied.length === 0) {
           state.productsFiltered = [];
         } else {
+          let firstRemove = true;
           for (const filterApplied of state.filtersApplied) {
+            console.log(filterApplied.type);
+            console.log(filterApplied.value);
             filterFunction(
               state,
               source,
               filterApplied.type,
-              filterApplied.value
+              filterApplied.value,
+              firstRemove
             );
+            firstRemove = false;
           }
         }
       } else {

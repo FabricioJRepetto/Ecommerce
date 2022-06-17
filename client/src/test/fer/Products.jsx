@@ -12,6 +12,7 @@ const Products = () => {
     min: "300",
     max: "3000",
   });
+
   const brands = useRef();
   const dispatch = useDispatch();
   const { productsFound, productsFiltered } = useSelector(
@@ -54,7 +55,7 @@ const Products = () => {
 
   const filterPrices = (e) => {
     e.preventDefault();
-    console.log("entra?");
+
     dispatch(
       filterProducts({
         source: "productsFound",
@@ -63,6 +64,8 @@ const Products = () => {
       })
     );
   };
+
+  const [filtersApplied, setFiltersApplied] = useState([]);
 
   const handleChange = ({ target }) => {
     setPricesFilter({
@@ -118,6 +121,19 @@ const Products = () => {
         />
         <input type="submit" value="filter" />
       </form>
+      <button
+        onClick={() =>
+          dispatch(
+            filterProducts({
+              source: "productsFound",
+              type: "price",
+              value: null,
+            })
+          )
+        }
+      >
+        clear
+      </button>
     </>
   );
 };

@@ -18,7 +18,12 @@ const productSchema = new Schema(
       type: String,
       //  required: true,
     },
-    attributes: [String],
+    attributes: [
+      {
+        value_name: String,
+        name: String,
+      },
+    ],
     main_features: [String],
     available_quantity: Number,
     images: [
