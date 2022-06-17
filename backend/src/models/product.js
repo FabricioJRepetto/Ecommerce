@@ -18,12 +18,18 @@ const productSchema = new Schema(
       type: String,
       //  required: true,
     },
-    attributes: [
+    free_shipping: {
+      type: Boolean,
+      //  required: true,
+      default: false,
+    },
+    /* attributes: [
       {
         value_name: String,
         name: String,
       },
-    ],
+    ], */
+    attributes: [String],
     main_features: [String],
     available_quantity: Number,
     images: [

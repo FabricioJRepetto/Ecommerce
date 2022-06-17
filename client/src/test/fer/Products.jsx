@@ -10,7 +10,7 @@ const Products = () => {
   // const [products, setProducts] = useState(null);
   const [pricesFilter, setPricesFilter] = useState({
     min: "300",
-    max: "3000",
+    max: "500",
   });
 
   const brands = useRef();
@@ -43,7 +43,7 @@ const Products = () => {
     });
   };
 
-  const handleFilter = (brand) => {
+  const filterBrand = (brand) => {
     dispatch(
       filterProducts({
         source: "productsFound",
@@ -65,7 +65,28 @@ const Products = () => {
     );
   };
 
-  const [filtersApplied, setFiltersApplied] = useState([]);
+  const [free, setFree] = useState(true);
+  const filterShipping = () => {
+    console.log("antes:", free);
+    setFree(!free);
+    dispatch(
+      filterProducts({
+        source: "productsFound",
+        type: "free_shipping",
+        value: !free,
+      })
+    );
+    console.log("despues:", free);
+  };
+  const clearShipping = () => {
+    dispatch(
+      filterProducts({
+        source: "productsFound",
+        type: "free_shipping",
+        value: null,
+      })
+    );
+  };
 
   const handleChange = ({ target }) => {
     setPricesFilter({
@@ -94,11 +115,11 @@ const Products = () => {
       <h3>BRANDS</h3>
       {React.Children.toArray(
         brands.current?.map((brand) => (
-          <button onClick={() => handleFilter(brand)}>{brand}</button>
+          <button onClick={() => filterBrand(brand)}>{brand}</button>
         ))
       )}
       {brands.current && (
-        <button onClick={() => handleFilter(null)}>Clear</button>
+        <button onClick={() => filterBrand(null)}>Clear</button>
       )}
       <br />
       <hr />
@@ -134,6 +155,9 @@ const Products = () => {
       >
         clear
       </button>
+      <br />
+      <button onClick={filterShipping}>free shipping</button>
+      <button onClick={clearShipping}>clear</button>
     </>
   );
 };
