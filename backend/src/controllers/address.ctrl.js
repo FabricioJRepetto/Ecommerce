@@ -63,17 +63,17 @@ const removeAddress = async (req, res, next) => {
     try {
         const target = req.params.id
 
-        const removed = await Address.updateOne({ 
+        const updated = await Address.updateOne({ 
             'user': req.user._id 
         },
         {
             $pull: {
                 'address': {'_id': target}
             }
-        }
+        }, { new: true }
         );
-        
-        return res.json(removed);
+        console.log(updated.address);
+        return res.json(updated.address);
     } catch (error) {
         next(error);
     }

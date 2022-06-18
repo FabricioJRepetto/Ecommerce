@@ -1,20 +1,31 @@
 import axios from "axios";
 import React, { useState } from "react";
+import { useEffect } from "react";
 import { useAxios } from "../../hooks/useAxios";
 
 const Profile = () => {
     const [render, setRender] = useState('details');
-    const {data: orders, oLoading} = useAxios('GET', `/order/userall`);
-    const {data: address, aLoading} = useAxios('GET', `/user/address/`);
+    const [address, setAddress] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const {data: orders, oLoading} = useAxios('GET', `/order/userall/`);
 
-    if (!aLoading) {
-        console.log(address);
-    }
+    useEffect(() => {
+        (async () => { 
+            const { data } = await axios(`/user/address/`);
+            setAddress(data);
+            setLoading(false)
+         })();
+    }, []);    
 
-    const deleteAddress = async (id) => { 
-        await axios.delete(`/user/address/${id}`);
-        //: recargar orders
+    const deleteAddress = async (id) => {
+        setLoading(true);
+        const { data } = await axios.delete(`/user/address/${id}`);
+        data ? setAddress(data) : setAddress(null);
+        setLoading(false);
     };
+
+    //: edit
+    //: set favorite, index 0 = fav
     
   return (
   <div>
@@ -54,7 +65,7 @@ const Profile = () => {
         {(render === 'address') && 
         <div>
             <h1>Address</h1>
-            {!aLoading
+            {!loading
                 ? React.Children.toArray(address?.address.map(e=>
                     <div key={e.id}>
                         <p>{`${e.street_name} ${e.street_number}, ${e.zip_code}, ${e.city}, ${e.state}.`}</p>
