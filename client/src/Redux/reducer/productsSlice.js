@@ -54,7 +54,7 @@ export const productsSlice = createSlice({
                value: STRING || BOOLEAN || MIN-MAX
             }, {}
         ] */
-      if (value === null) {
+      if (value === null || value === false) {
         state.filtersApplied = state.filtersApplied.filter(
           (filterApplied) => filterApplied.type !== type
         );
@@ -80,6 +80,7 @@ export const productsSlice = createSlice({
 
         filterFunction(state, source, type, value);
       }
+      //   if (!state.productsFiltered) state.productsFiltered = [null];
     },
 
     orderProducts: (state, action) => {
