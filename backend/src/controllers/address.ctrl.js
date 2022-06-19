@@ -19,7 +19,7 @@ const addAddress = async (req, res, next) => {
         });
 
         if (add) {
-            add.address.push(req.body);
+            add.address.push({...req.body, isDefault: false});
             await add.save();
 
             return res.json(add.address);

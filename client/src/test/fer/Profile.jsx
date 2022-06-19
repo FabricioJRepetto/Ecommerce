@@ -1,25 +1,36 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { useAxios } from "../../hooks/useAxios";
-import Modal from "../../components/common/Modal";
 import { useModal } from "../../hooks/useModal";
+import Modal from "../../components/common/Modal";
+
 
 const Profile = () => {
     const [render, setRender] = useState('details');
     const [address, setAddress] = useState(null);
     const [newAdd, setNewAdd] = useState({})
     const [loading, setLoading] = useState(true);
+
     const {data: orders, oLoading} = useAxios('GET', `/order/userall/`);
+    const { session, username, avatar, email } = useSelector((state) => state.sessionReducer);
+    //const { session, username, avatar, email } = sessionState;
 
     const [isOpenAddForm, openModalAddForm, closeAddForm, prop] = useModal();
+    const navigate = useNavigate();
 
     useEffect(() => {
-        (async () => { 
-            const { data } = await axios(`/user/address/`);
-            console.log(data);
-            data.address ? setAddress(data.address) : setAddress(null);
-            setLoading(false)
-         })();
+        if (!session) {
+            navigate("/signin");
+        } else {
+            (async () => { 
+                const { data } = await axios(`/user/address/`);
+                data.address ? setAddress(data.address) : setAddress(null);
+                setLoading(false);
+             })();
+        }
+         // eslint-disable-next-line
     }, []);    
 
     const deleteAddress = async (id) => {
@@ -100,7 +111,15 @@ const Profile = () => {
     <hr/>
     <div>
         {(render === 'details') && 
-        <div>detalles</div>}
+        <div>
+            <img src={avatar ? avatar : require('../../assets/avatardefault.png')} alt="avatar" />
+            <h2>{username}</h2>
+            <p>{email}</p>
+            <br />
+            <p></p>
+            <p></p>
+            <p></p>
+        </div>}
 
         {(render === 'orders') && 
         <div>

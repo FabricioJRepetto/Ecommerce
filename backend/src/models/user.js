@@ -25,7 +25,14 @@ const UserSchema = new Schema({
     type: Boolean,
     default: false,
   },
-});
+  avatar: String
+},
+  {
+    versionKey: false,
+    toJSON: { getters: true, virtuals: true },
+    toObject: { getters: true, virtuals: true }
+  }
+);
 
 UserSchema.pre("save", async function (next) {
   const user = this;
@@ -41,5 +48,10 @@ UserSchema.methods.comparePassword = async function (candidatePassword) {
   const compare = await bcrypt.compare(candidatePassword, user.password);
   return compare;
 };
+
+UserSchema.virtual('name').get(function() {
+    if (this.firstName && this.lastName) return `${this.firstName} ${this.lastName}`    
+    return this.email.split('@')[0];
+});
 
 module.exports = mongoose.model("User", UserSchema);

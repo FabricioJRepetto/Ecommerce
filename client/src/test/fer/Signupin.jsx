@@ -38,9 +38,9 @@ const Signupin = () => {
           console.log(data);
           dispatch(sessionActive(true));
 
-          const username = data.user.name || data.user.email;
+          const username = data.user.name || data.user.email.split('@')[0];
           dispatch(loadUsername(username));
-          navigate("/signout");
+          navigate("/profile");
         } else {
           console.log(data);
         }
@@ -75,11 +75,11 @@ const Signupin = () => {
     dispatch(loadUsername(username));
 
     console.log(userDecoded);
-    navigate("/signout");
+    navigate("/profile");
   };
 
   useEffect(() => {
-    if (session) navigate("/signout");
+    if (session) navigate("/profile");
 
     /* global google */
     google.accounts.id.initialize({

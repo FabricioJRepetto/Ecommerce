@@ -14,21 +14,28 @@ import PostSale from "./PostSale";
 import Checkout from "./Checkout";
 import ResetPassword from "./ResetPassword";
 import VerifyEmail from "./VerifyEmail";
-import { sessionActive, loadUsername } from "../../Redux/reducer/sessionSlice";
+import { sessionActive, loadUsername, loadEmail, loadAvatar } from "../../Redux/reducer/sessionSlice";
 
 const Home = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
     const loggedUserToken = window.localStorage.getItem("loggedTokenEcommerce");
-
-    loggedUserToken &&
-      axios(`/user/profile`)
-        .then(({ data }) => {
-          dispatch(sessionActive(true));
-          dispatch(loadUsername(data.user.email));
-        })
-        .catch((_) => window.localStorage.removeItem("loggedTokenEcommerce"));
+    
+        (async ()=>{
+            try {
+                if (loggedUserToken) {                    
+                    const { data } = await axios(`/user/profile/${loggedUserToken}`);
+                    console.log(data);
+                    dispatch(sessionActive(true));
+                    dispatch(loadUsername(data.name));
+                    dispatch(loadEmail(data.email));
+                    dispatch(loadAvatar(data.avatar));
+                }
+            } catch (error) {
+                window.localStorage.removeItem("loggedTokenEcommerce")
+            }
+        })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

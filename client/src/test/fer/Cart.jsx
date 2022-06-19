@@ -38,7 +38,10 @@ const Cart = () => {
         if (data.address) {
             setAddress(data.address);
             if (!selectedAdd) {
-                setSelectedAdd(data.address[0]);
+                const def = data.address.find(e =>
+                    e.isDefault === true
+                )
+                setSelectedAdd(def);
             }
         }
     };
@@ -62,7 +65,8 @@ const Cart = () => {
         e.preventDefault();
         if (newAdd.state && newAdd.city && newAdd.zip_code && newAdd.street_name && newAdd.street_number) {
             closeAddForm();
-            const {data} = await axios.post(`/user/address`, newAdd);
+            const { data } = await axios.post(`/user/address`, newAdd);
+            console.log(data);
             setSelectedAdd(data.address.pop());
             getAddress();
         }
@@ -181,7 +185,7 @@ const Cart = () => {
                         <button onClick={() =>{
                             openAddForm();
                             closeAddList();
-                        }}>Select another address</button>
+                        }}>Add new address</button>
                     </div>
                 </div>
             </Modal>

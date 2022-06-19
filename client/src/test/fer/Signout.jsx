@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { sessionActive, loadUsername } from "../../Redux/reducer/sessionSlice";
+import { sessionActive, loadUsername, loadAvatar, loadEmail } from "../../Redux/reducer/sessionSlice";
 import { useNavigate } from "react-router-dom";
 
 const Signout = () => {
@@ -13,6 +13,8 @@ const Signout = () => {
     window.localStorage.removeItem("loggedTokenEcommerce");
     dispatch(sessionActive(false));
     dispatch(loadUsername(null));
+    dispatch(loadAvatar(null));
+    dispatch(loadEmail(null));
     navigate("/signin");
   };
 
