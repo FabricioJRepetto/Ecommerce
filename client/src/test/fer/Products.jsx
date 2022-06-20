@@ -12,6 +12,7 @@ const Products = () => {
     max: "500",
   });
   const [shippingFilter, setShippingFilter] = useState(false);
+  const [brandsFilter, setBrandsFilter] = useState();
 
   const brands = useRef();
   const dispatch = useDispatch();
@@ -25,16 +26,23 @@ const Products = () => {
     : (productsToShow = productsFiltered);
 
   const getProducts = () => {
-    axios.get("/product").then((res) => {
-      dispatch(loadProductsFound(res.data));
-      //     setProducts(res.data);
-      brands.current = [];
-      for (const product of res.data) {
-        !brands.current.includes(product.brand) &&
-          product.brand &&
-          brands.current.push(product.brand);
-      }
-    });
+    axios
+      .get("/product")
+      .then((res) => {
+        dispatch(loadProductsFound(res.data));
+        brands.current = [];
+        let brandsCheckbox = {};
+        for (const product of res.data) {
+          !brands.current.includes(product.brand) &&
+            product.brand &&
+            brands.current.push(product.brand);
+          brandsCheckbox[product.brand] = false;
+        }
+        console.log(brandsCheckbox);
+        brands.current.sort();
+        setBrandsFilter(brandsCheckbox);
+      })
+      .catch((err) => console.log(err));
   };
 
   const addToCart = (id) => {
@@ -77,16 +85,29 @@ const Products = () => {
     );
   };
 
-  const [brandsFilter, setBrandsFilter] = useState([]);
-  const filterBrand = (brand) => {
+  const handleBrands = ({ target }) => {
+    setBrandsFilter({
+      ...brandsFilter,
+      [target.name]: !brandsFilter[target.name],
+    });
+
     dispatch(
       filterProducts({
         source: "productsFound",
         type: "brand",
-        value: brand,
+        value: [target.name, !brandsFilter[target.name]],
       })
     );
   };
+  /*   const filterBrand = (brand) => {
+    dispatch(
+      filterProducts({
+        source: "productsFound",
+        type: "brand",
+        value: [brand, true],
+      })
+    );
+  }; */
 
   return (
     <>
@@ -111,16 +132,20 @@ const Products = () => {
       <>
         {React.Children.toArray(
           brands.current?.map((brand) => (
-            // <button onClick={() => filterBrand(brand)}>{brand}</button>
             <label>
-              <input type="checkbox" name={brand} />
+              <input
+                type="checkbox"
+                name={brand}
+                checked={brandsFilter[brand]}
+                onChange={handleBrands}
+              />
               {brand}
             </label>
           ))
         )}
-        {brands.current && (
+        {/* {brands.current && (
           <button onClick={() => filterBrand(null)}>Clear</button>
-        )}
+        )} */}
         <br />
         <hr />
         <br />

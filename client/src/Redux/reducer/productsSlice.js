@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const filterFunction = (state, source, type, value, firstRemove) => {
+const filterFunction = (state, source, type, value, firstIteration) => {
   let productsToFilter;
 
-  if (firstRemove) {
+  if (firstIteration) {
     productsToFilter = state[source];
   } else {
     state.productsFiltered.length === 0
@@ -18,6 +18,10 @@ const filterFunction = (state, source, type, value, firstRemove) => {
     state.productsFiltered = productsToFilter.filter(
       (product) => product[type] >= minPrice && product[type] <= maxPrice
     );
+  } else if (type === "brand") {
+    state.productsFiltered = productsToFilter.filter((product) =>
+      state.filtersApplied.brand.includes(product.brand)
+    );
   } else {
     state.productsFiltered = productsToFilter.filter(
       (product) => product[type] === value
@@ -31,7 +35,7 @@ export const productsSlice = createSlice({
     productsOwn: [],
     productsRandom: [],
     productsFound: [],
-    filtersApplied: [],
+    filtersApplied: {},
     productsFiltered: [],
     productDetails: {},
   },
@@ -43,42 +47,59 @@ export const productsSlice = createSlice({
     filterProducts: (state, action) => {
       /* action.payload = {
           source: "productsOwn" || "productsFound" || "productsRandom",
-          type: 'brand' || 'free_shipping' || 'price',
-          value: STRING || BOOLEAN || MIN-MAX || null
+          type:      'brand'      || 'free_shipping' ||     'price',
+          value [STRING, BOOLEAN] ||     BOOLEAN     || STRING => min-max || null
        } */
       const { source, type, value } = action.payload;
+      /* filtersApplied = {
+          brand: [STRING],
+          free_shipping: BOOLEAN,
+          price: STRING => min-max
+       } */
 
-      /* filtersApplied = [
-            {
-               type: 'brand' || 'free_shipping' || 'price',
-               value: STRING || BOOLEAN || MIN-MAX
-            }, {}
-        ] */
       if (value === null || value === false) {
-        state.filtersApplied = state.filtersApplied.filter(
-          (filterApplied) => filterApplied.type !== type
-        );
-        if (state.filtersApplied.length === 0) {
-          state.productsFiltered = [];
-        } else {
-          let firstRemove = true;
-          for (const filterApplied of state.filtersApplied) {
-            console.log(filterApplied.type);
-            console.log(filterApplied.value);
-            filterFunction(
-              state,
-              source,
-              filterApplied.type,
-              filterApplied.value,
-              firstRemove
-            );
-            firstRemove = false;
-          }
-        }
+        delete state.filtersApplied[type];
       } else {
-        state.filtersApplied = [...state.filtersApplied, { type, value }];
+        if (type === "brand") {
+          if (value[1]) {
+            state.filtersApplied = {
+              ...state.filtersApplied,
+              brand: state.filtersApplied.brand
+                ? [...state.filtersApplied.brand, value[0]]
+                : [value[0]],
+            };
+          } else {
+            state.filtersApplied = {
+              ...state.filtersApplied,
+              brand: state.filtersApplied.brand.filter(
+                (brand) => brand !== value[0]
+              ),
+            };
+            if (state.filtersApplied.brand.length === 0)
+              delete state.filtersApplied.brand;
+          }
+        } else {
+          state.filtersApplied = {
+            ...state.filtersApplied,
+            [type]: value,
+          };
+        }
+      }
 
-        filterFunction(state, source, type, value);
+      if (Object.keys(state.filtersApplied).length === 0) {
+        state.productsFiltered = [];
+      } else {
+        let firstIteration = true;
+        for (const filterApplied in state.filtersApplied) {
+          filterFunction(
+            state,
+            source,
+            filterApplied,
+            state.filtersApplied[filterApplied],
+            firstIteration
+          );
+          firstIteration = false;
+        }
       }
       //   if (!state.productsFiltered) state.productsFiltered = [null];
     },
