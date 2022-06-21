@@ -2,18 +2,18 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Routes, Route } from "react-router-dom";
 import axios from "axios";
-import NavBar from "./NavBar";
-import Cart from "./Cart";
+import NavBar from "../../components/NavBar/NavBar";
+import Cart from "../../components/Cart/Cart";
 import Products from "./Products";
-import Signout from "./Signout";
-import Signupin from "./Signupin";
+import Signout from "../../components/session/Signout";
+import Signupin from "../../components/session/Signupin";
 import Imagen from "./Imagen";
 import ProductForm from "./ProductForm";
-import Profile from "./Profile";
-import PostSale from "./PostSale";
-import Checkout from "./Checkout";
-import ResetPassword from "./ResetPassword";
-import VerifyEmail from "./VerifyEmail";
+import Profile from "../../components/Profile/Profile";
+import PostSale from "../../components/Cart/PostSale";
+import Checkout from "../../components/Cart/Checkout";
+import ResetPassword from "../../components/session/ResetPassword";
+import VerifyEmail from "../../components/session/ResetPassword";
 import { sessionActive, loadUsername, loadEmail, loadAvatar } from "../../Redux/reducer/sessionSlice";
 
 const Home = () => {

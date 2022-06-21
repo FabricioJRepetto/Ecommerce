@@ -3,7 +3,7 @@ import axios from 'axios';
 import { loadStripe } from '@stripe/stripe-js'
 import { Elements, CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
 import { useNavigate, useParams } from "react-router-dom";
-import Modal from "../../components/common/Modal";
+import Modal from "../common/Modal";
 import {useModal} from "../../hooks/useModal";
 import { STRIPE_PKEY } from '../../constants';
 

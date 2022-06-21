@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Modal from "../../components/common/Modal";
+import Modal from "../common/Modal";
 import { useModal } from "../../hooks/useModal";
 import { cartTotal } from "../../Redux/reducer/cartSlice";
 import QuantityInput from "./QuantityInput";

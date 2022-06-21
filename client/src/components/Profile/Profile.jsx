@@ -4,8 +4,8 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useAxios } from "../../hooks/useAxios";
 import { useModal } from "../../hooks/useModal";
-import Modal from "../../components/common/Modal";
-import Signout from "./Signout";
+import Modal from "../common/Modal";
+import Signout from "../session/Signout";
 import { resizer } from "../../helpers/resizer";
 
 const Profile = () => {
