@@ -40,7 +40,6 @@ const getByQuery = async (req, res, next) => {
       `${MELI_SEARCH_URL}${q}${MELI_SEARCH_URL_ADDONS}`
     );
     let resultsMeli = [];
-    const usefulAttributeData = ["name", "id", "value_name"];
 
     for (const product of data.results) {
       let newProduct = { name: "" };
@@ -55,18 +54,9 @@ const getByQuery = async (req, res, next) => {
         imgURL: product.thumbnail,
         public_id: product.thumbnail_id,
       });
-      newProduct.attributes = [];
       for (const attribute of product.attributes) {
-        let newObject = {};
-        let newAttribute = {};
         if (attribute.id === "BRAND") {
-          for (const attributeKey in attribute) {
-            if (usefulAttributeData.includes(attributeKey)) {
-              newObject[attributeKey] = attribute[attributeKey];
-            }
-          }
-          Object.assign(newAttribute, newObject);
-          newProduct.attributes.push(newAttribute);
+          newProduct.brand = attribute.value_name;
           break;
         }
       }
@@ -106,6 +96,9 @@ const getById = async (req, res, next) => {
       newProduct.main_features = product.main_features;
       newProduct.attributes = [];
       for (const attribute of product.attributes) {
+        if (attribute.id === "BRAND") {
+          newProduct.brand = attribute.value_name;
+        }
         let newObject = {};
         let newAttribute = {};
         newAttribute.id = attribute.id;
@@ -135,16 +128,19 @@ const getById = async (req, res, next) => {
 };
 
 const createProduct = async (req, res, next) => {
+  console.log(req.body);
   try {
-        const {
-        name,
-        price,
-        description,
-        attributes,
-        main_features,
-        available_quantity,
-        } = JSON.parse(req.body.data);
-        let images = [];
+    const {
+      name,
+      price,
+      brand,
+      description,
+      attributes,
+      main_features,
+      available_quantity,
+    } = JSON.parse(req.body.data);
+    let images = [];
+
 
         let aux = [];
         // creamos una promise por cada archivo.
@@ -169,6 +165,7 @@ const createProduct = async (req, res, next) => {
         const newProduct = new Product({
         name,
         price,
+        brand,
         description,
         attributes,
         main_features,
@@ -229,27 +226,27 @@ const deleteAll = async (req, res, next) => {
   }
 };
 
+const stock = async (req, res, next) => {
+  let list = req.body;
 
-const stock = async (req, res, next) => { 
-    let list = req.body;
-        
-    try {
-        for (const prod of list) {
-            let { id, amount } = prod;
-    
-            await Product.findOneAndUpdate({ _id: id },
-            {
-                "$inc": {
-                    "available_quantity": - amount
-                }
-            }
-            );
-        };
-        return res.json('stock updated')
-    } catch (error) {
-        next(error)
+  try {
+    for (const prod of list) {
+      let { id, amount } = prod;
+
+      await Product.findOneAndUpdate(
+        { _id: id },
+        {
+          $inc: {
+            available_quantity: -amount,
+          },
+        }
+      );
     }
- }
+    return res.json("stock updated");
+  } catch (error) {
+    next(error);
+  }
+};
 
 module.exports = {
   getAll,
