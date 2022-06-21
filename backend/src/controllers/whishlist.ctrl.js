@@ -3,8 +3,9 @@ const Product = require('../models/product');
 
 const getUserList = async (req, res, next) => {
     try {
-        const { products } = await Whishlist.findOne({owner: req.user.id});
-        return res.json(products)
+        const list = await Whishlist.findOne({user: req.user._id});
+        if (!list) return res.json({message: 'Empty whishlist'})
+        return res.json(list)
     } catch (error) {
         next(error);
     }
@@ -12,28 +13,45 @@ const getUserList = async (req, res, next) => {
 
 const addToList = async (req, res, next) => {
     try {
-        const userId = req.user.id;
+        const userId = req.user._id;
         const productId = req.params.id;
 
-        const product = await Product.findbyId(productId);
-        console.log(product);
-        if (!product) return res.json({message: 'Product not found.'});
+        const {
+            name,
+            _id,
+            price,
+            images
+        } = await Product.findById(productId);
+        if (!_id) return res.json({message: 'Incorrect ID. Product not found.'});
 
         const list = await Whishlist.findOne({ 
-            owner: userId 
+            user: userId 
         });
 
         if (list) {
-            list.products.push(product);
-            await list.save();
-            return res.json({message: "Product added to the whishlist."});
+            let aux = list.products.find(e => e.product_id === productId)
+            if (!aux) {
+                list.products.push({
+                    product_name: name,
+                    product_id: _id,
+                    price,
+                    img: images[0].imgURL
+                });
+                await list.save();
+                return res.json({message: "Product added to the whishlist."});
+            }
+            return res.json({message: "Product already on whishlist."});
         } else {
             const newList = new Whishlist({ 
-                products: productToAdd, 
-                owner: userId 
+                products: [{
+                    product_name: name,
+                    product_id: _id,
+                    price,
+                    img: images[0].imgURL
+                }], 
+                user: userId 
             });
             await newList.save();
-
             return res.json({message: 'Whishlist created and product added.'});
         }
     } catch (error) {
@@ -43,18 +61,19 @@ const addToList = async (req, res, next) => {
 
 const removeFromList = async (req, res, next) => {
     try {
-        const userId = req.user.id;
+        const userId = req.user._id;
         const target = req.params.id;
-        const list = await Whishlist.findOne({ 
-            owner: userId 
-        });
-
-        list.products = list.products.filter(e => 
-            e !== target
+        const list = await Whishlist.findOneAndUpdate({ 
+            'user': userId 
+        },
+        {
+            $pull: {
+                'products': {'product_id': target}
+            }
+        },
+        {new: true}
         );
-        await list.save();
-
-        return res.json({message: "Product removed from whishlist."});
+        return res.json(list);
     } catch (error) {
         next(error);
     }

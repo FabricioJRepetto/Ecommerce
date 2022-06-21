@@ -11,6 +11,7 @@ const Profile = () => {
     const [render, setRender] = useState('details');
     const [address, setAddress] = useState(null);
     const [newAdd, setNewAdd] = useState({})
+    const [whishlist, setWhishlist] = useState(null);
     const [loading, setLoading] = useState(true);
 
     const {data: orders, oLoading} = useAxios('GET', `/order/userall/`);
@@ -27,6 +28,9 @@ const Profile = () => {
             (async () => { 
                 const { data } = await axios(`/user/address/`);
                 data.address ? setAddress(data.address) : setAddress(null);
+                const { data: list } = await axios(`/whishlist/`);
+                list.products ? setWhishlist(list.products) : setWhishlist(null);
+
                 setLoading(false);
              })();
         }
@@ -36,7 +40,6 @@ const Profile = () => {
     const deleteAddress = async (id) => {
         setLoading(true);
         const { data } = await axios.delete(`/user/address/${id}`);
-        console.log(data);
         data ? setAddress(data) : setAddress(null);
         setLoading(false);
     };
@@ -79,7 +82,7 @@ const Profile = () => {
         }
      };
 
-    //: set favorite
+    //: set default address
     const setDefault = async (id) => { 
         const { data } = await axios.put(`/user/address/default/${id}`);
         console.log(data);
@@ -100,6 +103,17 @@ const Profile = () => {
         [name]: validatedValue,
         })
     };
+
+    //: Whishlist
+    const removeFromWL = async (id) => { 
+        const { data } = await axios.delete(`/whishlist/${id}`);
+        data.products ? setWhishlist(data.products) : setWhishlist(null);
+    };
+
+    const formatDate = (date) => {
+        let fecha = new Date(date.slice(0, -1));
+        return fecha.toString().slice(0, 21);
+     }
     
   return (
   <div>
@@ -125,22 +139,28 @@ const Profile = () => {
         <div>
             <h2>Orders</h2>
             {!oLoading
-                ? orders?.map(e=>
-                    <div key={e.id}>
-                        {e.products?.map(pic=>
-                            <img key={pic.id} src={pic.img} height={50} alt={'product'}/>
-                        )}
-                        <p>{e.description}</p>
-                        <p>shipment address: {`
-                            ${e.shipping_address.street_name} 
-                            ${e.shipping_address.street_number}, 
-                            ${e.shipping_address.city} 
-                        `}</p>
-                        <p>payment status: {e.status}</p>
-                        <p>total payment: ${e.total}</p>
-                        <p>- - -</p>
-                    </div>
-                )
+                ? <div>
+                    {orders.length
+                       ? React.Children.toArray(orders?.map(e=>
+                        <div key={e.id}>
+                            {e.products?.map(pic=>
+                                <img key={pic.img} src={pic.img} height={50} alt={'product'}/>
+                            )}
+                            <p>{e.description}</p>
+                            <p>shipping address: {`
+                                ${e.shipping_address?.street_name} 
+                                ${e.shipping_address?.street_number}, 
+                                ${e.shipping_address?.city} 
+                            `}</p>
+                            <p>date: {formatDate(e.createdAt)}</p>
+                            <p>payment status: {e.status}</p>
+                            <p>total payment: ${e.total}</p>
+                            <p>- - -</p>
+                        </div>
+                        ))
+                        : <p>No orders yet</p>
+                    }
+                </div>
                 : <p>LOADING</p>}
         </div>}
 
@@ -166,7 +186,23 @@ const Profile = () => {
         </div>}
 
         {(render === 'whishlist') && 
-        <div>deseados</div>}
+        <div>
+            <h1>Whishlist</h1>
+            {!loading
+                ? <div>
+                    {whishlist.length
+                     ? React.Children.toArray(whishlist?.map(e=>
+                        <div key={e.product_id}>
+                            <img src={e.img} alt="product" height={50}/>
+                            <p>{e.product_name}</p>
+                            <p>${e.price}</p>
+                            <button onClick={() => removeFromWL(e.product_id)}>💔</button>
+                        </div>))
+                     : <p>Whishlist empty</p>}
+                </div>
+                : <div>LOADING</div>
+            }
+        </div>}
         
     </div>
 

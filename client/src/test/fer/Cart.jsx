@@ -67,7 +67,7 @@ const Cart = () => {
             closeAddForm();
             const { data } = await axios.post(`/user/address`, newAdd);
             console.log(data);
-            setSelectedAdd(data.address.pop());
+            setSelectedAdd(data.pop());
             getAddress();
         }
      };
@@ -226,10 +226,10 @@ const Cart = () => {
             }
             <br />
             <br />
-            <button disabled={(!cart || cart.length < 1) && true } 
+            <button disabled={(!cart || cart.length < 1 || !selectedAdd) && true } 
             onClick={goCheckout}> Stripe checkout </button>
             <br />
-            <button disabled={(!cart || cart.length < 1) && true } 
+            <button disabled={(!cart || cart.length < 1 || !selectedAdd) && true } 
             onClick={openMP}> MercadoPago checkout </button>
             <form 
             id='checkout-container'

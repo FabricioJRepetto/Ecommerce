@@ -26,7 +26,7 @@ const PostSale = () => {
             console.log(data.results[0].status);
             setOrderStatus(data.results[0].status);
 
-            if (orderStatus === 'approved') {
+            if (data.results[0].status === 'approved') {
                 //? cambiar orden a pagada
                 const { data: orderUpdt } = await axios.put(`/order/${id}`,{
                     status: 'approved'
@@ -35,7 +35,7 @@ const PostSale = () => {
     
                 //? vaciar carrito
                 const { data: cartEmpty } = await axios.delete(`/cart/empty`);
-                console.log(cartEmpty);
+                console.log(cartEmpty.message);
     
                 //? restar unidades de cada stock
                 const { data: order } = await axios(`/order/${id}`);
@@ -63,9 +63,10 @@ const PostSale = () => {
                         ))}
                     </div>
                     <p>{`Estado de la orden: ${orderStatus}`}</p>
-                    <p>{data?.id}</p>
+                    <p><i>{data?.id}</i></p>
                     <p>{data?.description}</p>
                     <p><i>shipping info</i></p>
+                    <p>{`${data.shipping_address.street_name} ${data.shipping_address.street_number}, ${data.shipping_address.city}, ${data.shipping_address.state}.`}</p>
             </>}
         </div>
     )

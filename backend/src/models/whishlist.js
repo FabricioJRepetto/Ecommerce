@@ -8,11 +8,7 @@ const whishlistSchema = new Schema(
         price: Number,
         img: String
     }],
-    owner: {
-      ref: "User",
-      type: Schema.Types.ObjectId,
-      require: true,
-    },
+    user: String,
   },
   {
     versionKey: false,
