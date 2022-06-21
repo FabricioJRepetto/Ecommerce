@@ -1,6 +1,7 @@
 .navBar {    
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
+    align-items: flex-end;
 }
 .navBar a {
     color: beige;
@@ -8,4 +9,8 @@
     font-weight: 800;
     text-decoration: none;
     margin: 0 1vw 0 1vw;
+}
+.navBar h1 {
+    color: #FFA500;
+    cursor: pointer;
 }
