@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Modal from "../common/Modal";
 import { useModal } from "../../hooks/useModal";
-import { cartTotal } from "../../Redux/reducer/cartSlice";
+import { cartTotal, mainMinus } from "../../Redux/reducer/cartSlice";
 import QuantityInput from "./QuantityInput";
 import { loadMercadoPago } from "../../helpers/loadMP";
 import { resizer } from "../../helpers/resizer";
@@ -82,6 +82,7 @@ const Cart = () => {
     const deleteProduct = async (id) => {
         await axios.delete(`/cart/${id}`);
         getCart();
+        dispatch(mainMinus());
         closeModal();
     };
 
@@ -108,7 +109,7 @@ const Cart = () => {
                 <h1>Remove this product from the cart?</h1>
                 <div>
                     <button onClick={closeModal}>Cancel</button>
-                    <button onClick={()=> deleteProduct(prop)}>Delete</button>
+                    <button onClick={() => deleteProduct(prop)}>Delete</button>
                 </div>
             </Modal>
             

@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export const cartSlice = createSlice({
   name: "cart",
   initialState: {
-    main: [],
+    main: 0, //: array si queremos mostrar en cart en un modal
     total: 0,
   },
   reducers: {

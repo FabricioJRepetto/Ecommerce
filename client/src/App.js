@@ -10,7 +10,7 @@ import {
 } from "./Redux/reducer/sessionSlice";
 import { loadProducts } from "./Redux/reducer/cartSlice";
 import { Routes, Route } from "react-router-dom";
-import Home from "./test/fer/Home";
+import Home from "./components/Home/Home";
 import NavBar from "./components/NavBar/NavBar";
 import Signupin from "./components/Session/Signupin";
 import Signout from "./components/Session/Signout";
