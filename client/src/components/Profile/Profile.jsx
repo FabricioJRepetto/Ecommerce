@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useAxios } from "../../hooks/useAxios";
 import { useModal } from "../../hooks/useModal";
 import Modal from "../common/Modal";
-import Signout from "../session/Signout";
+import Signout from "../Session/Signout";
 import { resizer } from "../../helpers/resizer";
 
 const Profile = () => {
