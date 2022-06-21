@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import Modal from "../../components/common/Modal";
+import Modal from "../common/Modal";
 import { useModal } from "../../hooks/useModal";
 import { cartTotal } from "../../Redux/reducer/cartSlice";
 import QuantityInput from "./QuantityInput";
 import { loadMercadoPago } from "../../helpers/loadMP";
+import { resizer } from "../../helpers/resizer";
 
 const Cart = () => {
     const [cart, setCart] = useState(null);
@@ -38,7 +39,10 @@ const Cart = () => {
         if (data.address) {
             setAddress(data.address);
             if (!selectedAdd) {
-                setSelectedAdd(data.address[0]);
+                const def = data.address.find(e =>
+                    e.isDefault === true
+                )
+                setSelectedAdd(def);
             }
         }
     };
@@ -62,8 +66,9 @@ const Cart = () => {
         e.preventDefault();
         if (newAdd.state && newAdd.city && newAdd.zip_code && newAdd.street_name && newAdd.street_number) {
             closeAddForm();
-            const {data} = await axios.post(`/user/address`, newAdd);
-            setSelectedAdd(data.address.pop());
+            const { data } = await axios.post(`/user/address`, newAdd);
+            console.log(data);
+            setSelectedAdd(data.pop());
             getAddress();
         }
      };
@@ -181,7 +186,7 @@ const Cart = () => {
                         <button onClick={() =>{
                             openAddForm();
                             closeAddList();
-                        }}>Select another address</button>
+                        }}>Add new address</button>
                     </div>
                 </div>
             </Modal>
@@ -193,7 +198,7 @@ const Cart = () => {
             ? <div> 
                 {cart.map((prod) => (
                     <div key={prod.product_id}>
-                        <img src={prod.img[0]} alt='product img' height={60}/>
+                        <img src={resizer(prod.img)} alt='product img' />
                             {prod.product_name} - ${prod.price} - 
                                 <QuantityInput prodId={prod.product_id} prodQuantity={prod.quantity}
                                 stock={prod.stock} 
@@ -222,10 +227,10 @@ const Cart = () => {
             }
             <br />
             <br />
-            <button disabled={(!cart || cart.length < 1) && true } 
+            <button disabled={(!cart || cart.length < 1 || !selectedAdd) && true } 
             onClick={goCheckout}> Stripe checkout </button>
             <br />
-            <button disabled={(!cart || cart.length < 1) && true } 
+            <button disabled={(!cart || cart.length < 1 || !selectedAdd) && true } 
             onClick={openMP}> MercadoPago checkout </button>
             <form 
             id='checkout-container'

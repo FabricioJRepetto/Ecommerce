@@ -66,7 +66,6 @@ const createOrder = async (req, res, next) => {
         });
 
         await newOrder.save();
-        console.log(newOrder);
         return res.json(newOrder._id);
     } catch (error) {
         next(error)

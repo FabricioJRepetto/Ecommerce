@@ -25,7 +25,7 @@ const mpCho = async (req, res, next) => {
             id: prod.product_id,
             title: prod.product_name,
             description: prod.description,
-            picture_url: prod.img[0],
+            picture_url: prod.img,
             unit_price: prod.price,
             quantity: prod.quantity,
         })

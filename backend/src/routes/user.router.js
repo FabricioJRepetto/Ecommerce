@@ -64,7 +64,7 @@ router.post(
 
 router.post("/signin", [emailValidation, passwordValidationSignin], signin);
 
-router.get("/profile", verifyToken, profile);
+router.get("/profile/:token", verifyToken, profile);
 
 router.put("/role", [verifyToken, verifySuperAdmin], role); //! VOLVER A VER mover a ruta de superadmin
 

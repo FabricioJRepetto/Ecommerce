@@ -24,6 +24,8 @@ const signup = async (req, res, next) => {
 const signin = async (req, res, next) => {
   const errors = validationResult(req);
 
+  const {avatar} = await User.findOne({'email': req.body.email});
+
   if (!errors.isEmpty()) {
     const message = errors.errors.map((err) => err.msg);
     return res.json({ message });
@@ -45,6 +47,7 @@ const signin = async (req, res, next) => {
 
         return res.json({
           message: info.message,
+          avatar: avatar,
           token,
           user: { _id: user._id, email: user.email },
         });
@@ -55,10 +58,15 @@ const signin = async (req, res, next) => {
   })(req, res, next);
 };
 
-const profile = (req, res, next) => {
-  res.json({
-    user: req.user,
-  });
+const profile = async (req, res, next) => {
+    try {
+        console.log(req.user);
+        if (req.params.token.slice(0,6) === 'google') return res.json({name: req.user.email});
+        const { email, name, avatar } = await User.findById(req.user._id);
+        return res.json({ email, name, avatar });
+    } catch (error) {
+        next(error);
+    }
 };
 
 const role = async (req, res, next) => {
