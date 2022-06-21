@@ -5,15 +5,15 @@ import axios from "axios";
 import NavBar from "../../components/NavBar/NavBar";
 import Cart from "../../components/Cart/Cart";
 import Products from "./Products";
-import Signout from "../../components/session/Signout";
-import Signupin from "../../components/session/Signupin";
+import Signout from "../../components/Session/Signout";
+import Signupin from "../../components/Session/Signupin";
 import Imagen from "./Imagen";
 import ProductForm from "./ProductForm";
 import Profile from "../../components/Profile/Profile";
 import PostSale from "../../components/Cart/PostSale";
 import Checkout from "../../components/Cart/Checkout";
-import ResetPassword from "../../components/session/ResetPassword";
-import VerifyEmail from "../../components/session/ResetPassword";
+import ResetPassword from "../../components/Session/ResetPassword";
+import VerifyEmail from "../../components/Session/ResetPassword";
 import { sessionActive, loadUsername, loadEmail, loadAvatar } from "../../Redux/reducer/sessionSlice";
 
 const Home = () => {
