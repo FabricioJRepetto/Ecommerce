@@ -5,7 +5,7 @@ const getUserCart = async (req, res, next) => {
   try {
         const userId = req.user._id;
         const cart = await Cart.findOne({ owner: userId });
-        if (!cart) return res.json('empty cart');
+        if (!cart) return res.json({message: 'empty cart'});
         console.log(cart);
         return res.json(cart);
   } catch (error) {
@@ -45,7 +45,7 @@ const addToCart = async (req, res, next) => {
             });
         };
         await cart.save();
-        return res.json("Product added to your cart.");
+        return res.json({message: "Product added to your cart."});
     } else {
       const newCart = new Cart({
         products: {
@@ -94,7 +94,7 @@ const emptyCart = async (req, res, next) => {
       { products: [] },
       { new: true }
     );
-    return res.json('Cart emptied succefully');
+    return res.json({message: 'Cart emptied succefully'});
   } catch (error) {
     next(error);
   }

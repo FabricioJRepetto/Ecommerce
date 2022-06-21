@@ -41,9 +41,9 @@ const QuantityInput = ({prodId: id, prodQuantity, stock, price}) => {
             <button disabled={quantity < 2 && true} 
                 onClick={() => handleQuantity(id, 'sub')}> - </button>
             <input type="number" 
+                min={1}
                 id={id}
                 className={'quantityInput'}
-                min={1}
                 value={quantity} 
                 style={{width: '50px'}}
                 onChange={handleQuantityEx}

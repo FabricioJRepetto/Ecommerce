@@ -30,6 +30,7 @@ const productSchema = new Schema(
       },
     ],
     //attributes: [String],
+
     main_features: [String],
     available_quantity: Number,
     images: [

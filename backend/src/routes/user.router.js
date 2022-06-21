@@ -18,6 +18,7 @@ const {
   changePassword,
   editProfile,
 } = require("../controllers/user.ctrl");
+const addressRouter = require('./address.router');
 const { body } = require("express-validator");
 
 const emailValidation = body("email", "Enter a valid e-mail")
@@ -46,6 +47,10 @@ const passwordValidationSignin = body("password", "Enter a valid password")
   .trim()
   .notEmpty()
   .escape();
+
+//? Address router
+router.use('/address', verifyToken, addressRouter);
+
 
 router.post(
   "/signup",

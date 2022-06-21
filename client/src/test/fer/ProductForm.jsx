@@ -12,26 +12,29 @@ const ProductForm = () => {
   });
   const [productImg, setProductImg] = useState();
 
-  const submitProduct = async (e) => {
-    e.preventDefault();
-    let formData = new FormData();
-    console.log(productImg);
-    productImg.forEach((pic) => {
-      formData.append("images", pic);
-    });
-    //formData.append('images', productImg);
-    formData.append("data", JSON.stringify(product));
+    const submitProduct = async (e) => {
+        e.preventDefault();
+        let formData = new FormData();
+        //: verificar datos
+        
+       // agarra las images
+        productImg.forEach(pic => {
+            formData.append('images', pic)
+        });
+        //formData.append('images', productImg);
+        formData.append('data', JSON.stringify(product));
+        
+        const imgURL = await axios.post(`/product/`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        console.log(imgURL);
+    };
+    const handleFiles = (e) => { 
+        setProductImg([...e.target.files])
+     }
 
-    const imgURL = await axios.post(`/product/`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-    console.log(imgURL);
-  };
-  const handleFiles = (e) => {
-    setProductImg([...e.target.files]);
-  };
   return (
     <div>
       <hr />

@@ -141,38 +141,40 @@ const createProduct = async (req, res, next) => {
     } = JSON.parse(req.body.data);
     let images = [];
 
-    let aux = [];
-    // creamos una promise por cada archivo.
-    req.files.forEach((img) => {
-      aux.push(cloudinary.uploader.upload(img.path));
-    });
-    // esperamos que se suban.
-    const promiseAll = await Promise.all(aux);
-    // guardamos los datos de cada imagen.
-    promiseAll.forEach((e) => {
-      images.push({
-        imgURL: e.url,
-        public_id: e.public_id,
-      });
-    });
-    // borramos los archivos de este directorio.
-    req.files.forEach((img) => {
-      fs.unlink(img.path);
-    });
 
-    const newProduct = new Product({
-      name,
-      price,
-      brand,
-      description,
-      attributes,
-      main_features,
-      available_quantity,
-      images,
-    });
-    const productSaved = await newProduct.save();
+        let aux = [];
+        // creamos una promise por cada archivo.
+        req.files.forEach((img) => {
+        aux.push(cloudinary.uploader.upload(img.path));
+        });
+        // esperamos que se suban.
+        const promiseAll = await Promise.all(aux);
+        // guardamos los datos de cada imagen.
+        promiseAll.forEach((e) => {
+            images.push({
+                imgURL: e.url,
+                public_id: e.public_id,
+            });
+        });
 
-    res.json(productSaved);
+        // borramos los archivos de este directorio.
+        req.files.forEach((img) => {
+        fs.unlink(img.path);
+        });
+
+        const newProduct = new Product({
+        name,
+        price,
+        brand,
+        description,
+        attributes,
+        main_features,
+        available_quantity,
+        images,
+        });
+        const productSaved = await newProduct.save();
+
+        res.json(productSaved);
   } catch (error) {
     next(error);
   }
