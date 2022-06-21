@@ -5,6 +5,7 @@ import {
   filterProducts,
   loadProductsFound,
 } from "../../Redux/reducer/productsSlice";
+import { useEffect } from "react";
 
 const Products = () => {
   const [pricesFilter, setPricesFilter] = useState({
@@ -38,9 +39,8 @@ const Products = () => {
             brands.current.push(product.brand);
           brandsCheckbox[product.brand] = false;
         }
-        console.log(brandsCheckbox);
-        brands.current.sort();
         setBrandsFilter(brandsCheckbox);
+        brands.current.sort();
       })
       .catch((err) => console.log(err));
   };
@@ -74,7 +74,7 @@ const Products = () => {
     });
   };
 
-  const filterShipping = ({ target }) => {
+  const filterShipping = () => {
     setShippingFilter(!shippingFilter);
     dispatch(
       filterProducts({

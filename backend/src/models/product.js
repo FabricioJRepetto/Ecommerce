@@ -16,20 +16,20 @@ const productSchema = new Schema(
     },
     description: {
       type: String,
-      //  required: true,
+      required: true,
     },
     free_shipping: {
       type: Boolean,
-      //  required: true,
+      required: true,
       default: false,
     },
-    /* attributes: [
+    attributes: [
       {
         value_name: String,
         name: String,
       },
-    ], */
-    attributes: [String],
+    ],
+    //attributes: [String],
     main_features: [String],
     available_quantity: Number,
     images: [
