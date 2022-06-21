@@ -8,7 +8,15 @@ const productSchema = new Schema(
     },
     price: {
       type: Number,
-      //  required: true,
+      required: true,
+    },
+    sale_price: {
+      type: Number,
+      default: 0,
+    },
+    on_sale: {
+      type: Boolean,
+      default: false,
     },
     brand: {
       type: String,

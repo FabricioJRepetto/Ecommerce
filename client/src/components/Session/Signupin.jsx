@@ -1,9 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import { sessionActive, loadUsername, loadEmail, loadAvatar } from "../../Redux/reducer/sessionSlice";
+import {
+  sessionActive,
+  loadUsername,
+  loadEmail,
+  loadAvatar,
+} from "../../Redux/reducer/sessionSlice";
 import jwt_decode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
 
 const { REACT_APP_OAUTH_CLIENT_ID } = process.env;
 const initialSignup = {
@@ -22,6 +28,11 @@ const Signupin = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const session = useSelector((state) => state.sessionReducer.session);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
   const signup = (e) => {
     e.preventDefault();
@@ -30,27 +41,27 @@ const Signupin = () => {
 
   const signin = async (e) => {
     e.preventDefault();
-        try {
-            const { data } = await axios.post(`/user/signin`, signinData);
+    try {
+      const { data } = await axios.post(`/user/signin`, signinData);
 
-            if (data.user) {
-                window.localStorage.setItem("loggedTokenEcommerce", data.token);
-                console.log(data);
-                dispatch(sessionActive(true));
+      if (data.user) {
+        window.localStorage.setItem("loggedTokenEcommerce", data.token);
+        console.log(data);
+        dispatch(sessionActive(true));
 
-                const username = data.user.name || data.user.email.split('@')[0];
-                const email = data.user.email;
-                const avatar = data.avatar || null;
+        const username = data.user.name || data.user.email.split("@")[0];
+        const email = data.user.email;
+        const avatar = data.avatar || null;
 
-                dispatch(loadUsername(username));
-                dispatch(loadEmail(email));
-                dispatch(loadAvatar(avatar));
-                
-                navigate("/profile");
-            }
-        } catch (error) {
-            console.log(error);
-        }
+        dispatch(loadUsername(username));
+        dispatch(loadEmail(email));
+        dispatch(loadAvatar(avatar));
+
+        navigate("/profile");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleSignup = ({ target }) => {
@@ -119,7 +130,7 @@ const Signupin = () => {
   return (
     <>
       <hr />
-      <form onSubmit={signup}>
+      <form onSubmit={handleSubmit(signup)}>
         <h2>Sign Up</h2>
         <input
           type="text"
@@ -127,25 +138,42 @@ const Signupin = () => {
           placeholder="email"
           onChange={handleSignup}
           value={signupData.email}
+          {...register("email", {
+            required: true,
+            pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i,
+          })}
         />
+        {errors.email?.type === "required" && <p>campo requerido</p>}
+        {errors.email?.type === "pattern" && <p>email incorrecto</p>}
+
         <input
           type="text"
           name="password"
           placeholder="Password"
           onChange={handleSignup}
           value={signupData.password}
+          {...register("password", {
+            required: true,
+          })}
         />
+        {errors.password?.type === "required" && <p>campo requerido</p>}
+
         <input
           type="text"
           name="repPassword"
           placeholder="Repeat Password"
           onChange={handleSignup}
           value={signupData.repPassword}
+          {...register("repPassword", {
+            required: true,
+          })}
         />
+        {errors.repPassword?.type === "required" && <p>campo requerido</p>}
+
         <input type="submit" value="Sign Up" />
       </form>
       <hr />
-      <form onSubmit={signin}>
+      <form onSubmit={handleSubmit(signin)}>
         <h2>Sign In</h2>
         <input
           type="text"
@@ -153,14 +181,26 @@ const Signupin = () => {
           placeholder="email"
           onChange={handleSignin}
           value={signinData.email}
+          {...register("email", {
+            required: true,
+            pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i,
+          })}
         />
+        {errors.email?.type === "required" && <p>campo requerido</p>}
+        {errors.email?.type === "pattern" && <p>email incorrecto</p>}
+
         <input
           type="text"
           name="password"
           placeholder="Password"
           onChange={handleSignin}
           value={signinData.password}
+          {...register("password", {
+            required: true,
+          })}
         />
+        {errors.password?.type === "required" && <p>campo requerido</p>}
+
         <span onClick={forgotPassword}>Forgot password?</span>
         <input type="submit" value="Sign In" />
       </form>
