@@ -2,6 +2,7 @@ import axios from 'axios'
 import { useState } from 'react';
 import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
+import { resizer } from '../../helpers/resizer';
 import { useAxios } from '../../hooks/useAxios';
 
 const { REACT_APP_MP_SKEY } = process.env;
@@ -56,9 +57,8 @@ const PostSale = () => {
                 : <>
                     <div >
                         {data?.products.map(e =>(
-                            <img src={e.img[0]} 
-                            alt="product" 
-                            height={50} 
+                            <img src={resizer(e.img)} 
+                            alt="product"
                             key={e.product_id}/>
                         ))}
                     </div>

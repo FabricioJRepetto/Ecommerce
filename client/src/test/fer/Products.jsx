@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useEffect } from "react";
+import { resizer } from "../../helpers/resizer";
 
 const Products = () => {
   const [products, setProducts] = useState(null);
@@ -38,8 +39,8 @@ const Products = () => {
       {React.Children.toArray(
         products?.map((prod) => (
           <div>
-            {prod.name} - ${prod.price}
-            {"    "}
+            <img src={resizer(prod.images[0].imgURL)} alt="" />
+            {prod.name} - ${prod.price} -
             <button onClick={() => addToCart(prod._id)}>Add to cart</button>
             {whishlist.includes(prod._id)
                 ?<button onClick={() => removeFromWL(prod._id)}>💔</button>

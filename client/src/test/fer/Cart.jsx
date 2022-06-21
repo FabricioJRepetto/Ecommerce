@@ -7,6 +7,7 @@ import { useModal } from "../../hooks/useModal";
 import { cartTotal } from "../../Redux/reducer/cartSlice";
 import QuantityInput from "./QuantityInput";
 import { loadMercadoPago } from "../../helpers/loadMP";
+import { resizer } from "../../helpers/resizer";
 
 const Cart = () => {
     const [cart, setCart] = useState(null);
@@ -197,7 +198,7 @@ const Cart = () => {
             ? <div> 
                 {cart.map((prod) => (
                     <div key={prod.product_id}>
-                        <img src={prod.img[0]} alt='product img' height={60}/>
+                        <img src={resizer(prod.img)} alt='product img' />
                             {prod.product_name} - ${prod.price} - 
                                 <QuantityInput prodId={prod.product_id} prodQuantity={prod.quantity}
                                 stock={prod.stock} 

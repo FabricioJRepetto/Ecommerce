@@ -6,7 +6,7 @@ import { useAxios } from "../../hooks/useAxios";
 import { useModal } from "../../hooks/useModal";
 import Modal from "../../components/common/Modal";
 import Signout from "./Signout";
-
+import { resizer } from "../../helpers/resizer";
 
 const Profile = () => {
     const [render, setRender] = useState('details');
@@ -14,12 +14,12 @@ const Profile = () => {
     const [newAdd, setNewAdd] = useState({})
     const [whishlist, setWhishlist] = useState(null);
     const [loading, setLoading] = useState(true);
-
-    const {data: orders, oLoading} = useAxios('GET', `/order/userall/`);
     const { session, username, avatar, email } = useSelector((state) => state.sessionReducer);
-
     const [isOpenAddForm, openModalAddForm, closeAddForm, prop] = useModal();
     const navigate = useNavigate();
+
+    const {data: orders, oLoading} = useAxios('GET', `/order/userall/`);
+    !oLoading && console.log(orders);
 
     useEffect(() => {
         if (!session) {
@@ -118,7 +118,7 @@ const Profile = () => {
   return (
   <div>
     <h1>Profile</h1>
-    <button onClick={()=> setRender('details')}>Account Details</button>
+    <button onClick={()=> setRender('details')}>Details</button>
     <button onClick={()=> setRender('orders')}>Orders</button>
     <button onClick={()=> setRender('address')}>Shipping address</button>
     <button onClick={()=> setRender('whishlist')}>Whishlist</button>
@@ -146,7 +146,7 @@ const Profile = () => {
                        ? React.Children.toArray(orders?.map(e=>
                         <div key={e.id}>
                             {e.products?.map(pic=>
-                                <img key={pic.img} src={pic.img} height={50} alt={'product'}/>
+                                <img key={pic.img} src={resizer(pic.img)} alt={'product'}/>
                             )}
                             <p>{e.description}</p>
                             <p>shipping address: {`
@@ -195,7 +195,7 @@ const Profile = () => {
                     {whishlist.length
                      ? React.Children.toArray(whishlist?.map(e=>
                         <div key={e.product_id}>
-                            <img src={e.img} alt="product" height={50}/>
+                            <img src={resizer(e.img)} alt="product" />
                             <p>{e.product_name}</p>
                             <p>${e.price}</p>
                             <button onClick={() => removeFromWL(e.product_id)}>💔</button>

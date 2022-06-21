@@ -37,7 +37,7 @@ const addToCart = async (req, res, next) => {
                 product_id: productToAdd,
                 product_name: name,
                 description,
-                img: [images[0].imgURL],
+                img: images[0].imgURL,
                 price,
                 stock,
                 quantity: 1
@@ -47,15 +47,15 @@ const addToCart = async (req, res, next) => {
         return res.json({message: "Product added to your cart."});
     } else {
       const newCart = new Cart({
-        products: {
+        products: [{
             product_id: productToAdd,
             product_name: name,
             description,
-            img: [images[0].imgURL],
+            img: images[0].imgURL,
             price,
             stock,
             quantity: 1
-        },
+        }],
         owner: userId,
       });
       await newCart.save();
