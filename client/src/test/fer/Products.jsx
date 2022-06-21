@@ -1,20 +1,24 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useEffect } from "react";
 
 const Products = () => {
   const [products, setProducts] = useState(null);
+  const [whishlist, setWhishlist] = useState([]);
 
-  const getProducts = () => {
-    axios(`/product`).then((res) => {
-      setProducts(res.data);
-      console.log(res.data);
-    });
-  };
+  useEffect(() => {
+    (async () => {
+        const { data: products } = await axios('/product');
+        setProducts(products);
+        const { data: wl } = await axios('/whishlist');
+        let aux = wl.products.map(e => e.product_id);
+        setWhishlist(aux);
+    })();  
+  }, []);
 
-  const addToCart = (id) => {
-    axios.post(`/cart/${id}`).then((res) => {
-      console.log(res.data);
-    });
+  const addToCart = async (id) => {
+    const { data } = await axios.post(`/cart/${id}`);
+    console.log(data);
   };
 
   const addToWL = async (id) => { 
@@ -31,15 +35,16 @@ const Products = () => {
     <>
       <hr />
       <h2>PRODUCTS</h2>
-      <button onClick={getProducts}>GET ALL PRODUCTS</button>
       {React.Children.toArray(
         products?.map((prod) => (
           <div>
             {prod.name} - ${prod.price}
             {"    "}
             <button onClick={() => addToCart(prod._id)}>Add to cart</button>
-            <button onClick={() => addToWL(prod._id)}>💚</button>
-            <button onClick={() => removeFromWL(prod._id)}>💔</button>
+            {whishlist.includes(prod._id)
+                ?<button onClick={() => removeFromWL(prod._id)}>💔</button>
+                :<button onClick={() => addToWL(prod._id)}>💚</button>
+            }
           </div>
         ))
       )}

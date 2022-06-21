@@ -6,7 +6,6 @@ const getUserCart = async (req, res, next) => {
         const userId = req.user._id;
         const cart = await Cart.findOne({ owner: userId });
         if (!cart) return res.json({message: 'empty cart'});
-        console.log(cart);
         return res.json(cart);
   } catch (error) {
     next(error);

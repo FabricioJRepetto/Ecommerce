@@ -5,12 +5,14 @@ import { useNavigate } from "react-router-dom";
 
 const Signout = () => {
   const sessionState = useSelector((state) => state.sessionReducer);
-  const { session, username } = sessionState;
+  const { session } = sessionState;
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const signOut = () => {
     window.localStorage.removeItem("loggedTokenEcommerce");
+    window.localStorage.removeItem("loggedAvatarEcommerce");
+    window.localStorage.removeItem("loggedEmailEcommerce");
     dispatch(sessionActive(false));
     dispatch(loadUsername(null));
     dispatch(loadAvatar(null));
@@ -25,10 +27,7 @@ const Signout = () => {
 
   return (
     <>
-      <hr />
-      <h2>USER</h2>
-      {username && <h1>{username}</h1>}
-      <button onClick={signOut}>Sign Out</button>
+      <button onClick={signOut}><b>Sign Out</b></button>
     </>
   );
 };

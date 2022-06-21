@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useAxios } from "../../hooks/useAxios";
 import { useModal } from "../../hooks/useModal";
 import Modal from "../../components/common/Modal";
+import Signout from "./Signout";
 
 
 const Profile = () => {
@@ -16,7 +17,6 @@ const Profile = () => {
 
     const {data: orders, oLoading} = useAxios('GET', `/order/userall/`);
     const { session, username, avatar, email } = useSelector((state) => state.sessionReducer);
-    //const { session, username, avatar, email } = sessionState;
 
     const [isOpenAddForm, openModalAddForm, closeAddForm, prop] = useModal();
     const navigate = useNavigate();
@@ -122,17 +122,19 @@ const Profile = () => {
     <button onClick={()=> setRender('orders')}>Orders</button>
     <button onClick={()=> setRender('address')}>Shipping address</button>
     <button onClick={()=> setRender('whishlist')}>Whishlist</button>
+    <Signout />
     <hr/>
     <div>
         {(render === 'details') && 
         <div>
-            <img src={avatar ? avatar : require('../../assets/avatardefault.png')} alt="avatar" />
+            <img src={avatar ? avatar : require('../../assets/avatardefault.png')} alt="avatar" height={96}/>
             <h2>{username}</h2>
             <p>{email}</p>
             <br />
-            <p></p>
-            <p></p>
-            <p></p>
+            <br />
+            <br />
+            <br />
+            <br />
         </div>}
 
         {(render === 'orders') && 

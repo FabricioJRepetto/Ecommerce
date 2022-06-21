@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import { sessionActive, loadUsername } from "../../Redux/reducer/sessionSlice";
+import { sessionActive, loadUsername, loadEmail, loadAvatar } from "../../Redux/reducer/sessionSlice";
 import jwt_decode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 
@@ -28,24 +28,29 @@ const Signupin = () => {
     axios.post(`/user/signup`, signupData).then((res) => console.log(res.data));
   };
 
-  const signin = (e) => {
+  const signin = async (e) => {
     e.preventDefault();
-    axios
-      .post(`/user/signin`, signinData)
-      .then(({ data }) => {
-        if (data.user) {
-          window.localStorage.setItem("loggedTokenEcommerce", data.token);
-          console.log(data);
-          dispatch(sessionActive(true));
+        try {
+            const { data } = await axios.post(`/user/signin`, signinData);
 
-          const username = data.user.name || data.user.email.split('@')[0];
-          dispatch(loadUsername(username));
-          navigate("/profile");
-        } else {
-          console.log(data);
+            if (data.user) {
+                window.localStorage.setItem("loggedTokenEcommerce", data.token);
+                console.log(data);
+                dispatch(sessionActive(true));
+
+                const username = data.user.name || data.user.email.split('@')[0];
+                const email = data.user.email;
+                const avatar = data.avatar || null;
+
+                dispatch(loadUsername(username));
+                dispatch(loadEmail(email));
+                dispatch(loadAvatar(avatar));
+                
+                navigate("/profile");
+            }
+        } catch (error) {
+            console.log(error);
         }
-      })
-      .catch((err) => console.log(err));
   };
 
   const handleSignup = ({ target }) => {
@@ -71,8 +76,15 @@ const Signupin = () => {
     const userDecoded = jwt_decode(response.credential);
     const username =
       userDecoded.name || userDecoded.email || `Guest ${userDecoded.sub}`;
+    const avatar = userDecoded.picture;
+    const email = userDecoded.email;
 
     dispatch(loadUsername(username));
+    dispatch(loadAvatar(avatar));
+    dispatch(loadEmail(email));
+
+    window.localStorage.setItem("loggedAvatarEcommerce", avatar);
+    window.localStorage.setItem("loggedEmailEcommerce", email);
 
     console.log(userDecoded);
     navigate("/profile");
