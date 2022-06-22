@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom'
 import { useAxios } from '../../hooks/useAxios';
 import { mainPlus } from '../../Redux/reducer/cartSlice';
+import Galery from './Galery';
 
 const Details = () => {
     const { id } = useParams();
@@ -30,15 +31,16 @@ const Details = () => {
         {error && <p>{error}</p>}
         {data && 
             <div>
-                <img src={data.images[0].imgURL} alt="product" height={300} />
+                {/* <img src={data.images[0].imgURL} alt="product" height={300} /> */}
+                <Galery imgs={data.images} />
                 <div>
                     <p>{data.brand.toUpperCase()}</p>
                     <h2>{data.name}</h2>
                     <h3>${data.price}</h3>
                     <p>{data.free_shipping && 'free shipping'}</p>
                     <button onClick={() => addToCart(data._id)}>Add to cart</button>
-                    <button>Buy</button>
-                    <button>❤</button>
+                    <button disabled>Buy</button>
+                    <button disabled>❤</button>
                 </div>
                 <div>
                     <br />
