@@ -17,6 +17,7 @@ import Checkout from "./components/Cart/Checkout";
 import PostSale from "./components/Cart/PostSale";
 import Products from "./test/fer/Products";
 import ProductForm from "./test/fer/ProductForm";
+import Details from "./components/Products/Details";
 
 function App() {
     const dispatch = useDispatch();
@@ -64,6 +65,7 @@ function App() {
                 <Route path="/reset/:userId/:resetToken" element={<ResetPassword />} />
                 <Route path="/orders/post-sale/:id" element={<PostSale />} />
                 <Route path="/verify/:verifyToken" element={<VerifyEmail />} />
+                <Route path="/details/:id" element={<Details />} />
             </Routes>
         </div>
     );

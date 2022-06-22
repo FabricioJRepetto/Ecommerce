@@ -19,7 +19,6 @@ const Profile = () => {
     const navigate = useNavigate();
 
     const {data: orders, oLoading} = useAxios('GET', `/order/userall/`);
-    !oLoading && console.log(orders);
 
     useEffect(() => {
         if (!session) {
@@ -85,7 +84,6 @@ const Profile = () => {
     //: set default address
     const setDefault = async (id) => { 
         const { data } = await axios.put(`/user/address/default/${id}`);
-        console.log(data);
         setAddress(data);
      };
 

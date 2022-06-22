@@ -1,10 +1,27 @@
-import React from 'react'
+import axios from 'axios';
+import React, { useState, useEffect} from 'react';
+import { random } from '../../helpers/random';
+import MiniCard from '../Products/MiniCard';
+import "./Home.css";
 
 const Home = () => {
+    const [products, setProducts] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        (async () => {
+            const {data} = await axios(`/product/`);
+            let indexes = random(data.length, 3)
+            let aux = data.filter((e, index) =>(
+                indexes.includes(index)
+            ));
+            setProducts(aux);
+            setLoading(false);
+        })();
+    }, []);
 
     return (
         <>
-            <h1>Home</h1>
             <div>
                 <p>Banner Ofertas</p>
                 <img src={require('../../assets/banner/bannertest.webp')} alt="" />
@@ -18,10 +35,39 @@ const Home = () => {
                 <button>🥰</button>
                 <button>🤑</button>
             </div>
-            <div>productos random</div>
-            <div>footer</div>
+            <p>productos random</p>
+            <div>
+                {loading
+                    ? <h1>LOADING</h1>
+                    : <div className='random-container'>
+                        {React.Children.toArray(products?.map(p => (
+                            <MiniCard 
+                                img={p.images[0].imgURL} 
+                                name={p.name} 
+                                price={p.price} 
+                                brand={p.brand} 
+                                prodId={p._id} 
+                                free_shipping={p.free_shipping}
+                                fav={false}/>
+                        )))}
+                    </div>
+                }
+            </div>
+            <br/>
+            <div>
+                <hr/>
+                <p>subscribe to our newsletter</p>
+                <input type="text" />
+                <br/>
+                <p><u>Contact us</u></p>
+                <p><u>About us</u></p>
+                <p><u>Work with us</u></p>
+                <p><u>FAQ's</u></p>
+                <br/>
+                <p>Provider™ · 2022 all rights reserved</p>
+            </div>
         </>
     )
 };
 
-export default Home
+export default Home;

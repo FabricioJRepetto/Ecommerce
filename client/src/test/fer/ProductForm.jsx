@@ -6,9 +6,10 @@ const ProductForm = () => {
     name: "",
     price: 0,
     description: "",
-    attributes: ["rojo", "azul"],
+    attributes: [{name: 'color', value_name:"rojo"}, {name: 'color secundario', value_name:"azul"}],
     main_features: ["rojo", "azul"],
     available_quantity: 0,
+    free_shiping: false,
   });
   const [productImg, setProductImg] = useState();
 
