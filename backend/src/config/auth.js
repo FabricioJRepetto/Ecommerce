@@ -21,7 +21,7 @@ passport.use(
 
         if (!errors.isEmpty()) {
           const message = errors.errors.map((err) => err.msg);
-          return done(null, email, message);
+          return done(null, email, { message });
         }
 
         const user = await User.exists({ email });
@@ -30,13 +30,12 @@ passport.use(
             email,
             password,
           });
-          const message =
-            "Signup successfully, check your email to verify your account";
-          return done(null, newUser, message);
+          return done(null, newUser, {
+            message:
+              "Signup successfully, check your email to verify your account",
+          });
         } else {
-          const message = "Email already registered";
-          throw new Error(message);
-          // return done(null, user, message);
+          return done(null, user, { message: "Email already registered" });
         }
       } catch (e) {
         done(e);

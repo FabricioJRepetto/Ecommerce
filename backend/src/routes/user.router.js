@@ -18,7 +18,7 @@ const {
   changePassword,
   editProfile,
 } = require("../controllers/user.ctrl");
-const addressRouter = require('./address.router');
+const addressRouter = require("./address.router");
 const { body } = require("express-validator");
 
 const emailValidation = body("email", "Enter a valid e-mail")
@@ -37,7 +37,7 @@ const passwordValidation = body(
   .escape()
   .custom((value, { req }) => {
     if (value !== req.body.repPassword) {
-      throw new Error("Passwords are not equal");
+      throw new Error("Passwords do not match");
     } else {
       return value;
     }
@@ -49,8 +49,7 @@ const passwordValidationSignin = body("password", "Enter a valid password")
   .escape();
 
 //? Address router
-router.use('/address', verifyToken, addressRouter);
-
+router.use("/address", verifyToken, addressRouter);
 
 router.post(
   "/signup",
