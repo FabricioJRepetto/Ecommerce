@@ -190,7 +190,7 @@ const Signupin = () => {
               required: true,
               validate: (repPassword) => {
                 if (watch("password") !== repPassword) {
-                  return "Passwords do not match";
+                  return "Passwords don't match";
                 }
               },
             })}
@@ -199,7 +199,7 @@ const Signupin = () => {
             <p>Repeat your password</p>
           )}
           {errors.repPassword?.type === "validate" && (
-            <p>Passwords do not match</p>
+            <p>Passwords don't match</p>
           )}
 
           <input type="submit" value="Sign Up" />

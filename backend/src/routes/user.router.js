@@ -37,7 +37,7 @@ const passwordValidation = body(
   .escape()
   .custom((value, { req }) => {
     if (value !== req.body.repPassword) {
-      throw new Error("Passwords do not match");
+      throw new Error("Passwords don't match");
     } else {
       return value;
     }
