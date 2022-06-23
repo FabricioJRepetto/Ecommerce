@@ -2,6 +2,8 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import "./NavBar.css";
 
+import { ReactComponent as Cart } from "../../assets/svg/cart.svg";
+
 const NavBar = () => {
     const session = useSelector((state) => state.sessionReducer.session);
     const cart = useSelector((state) => state.cartReducer.main);
@@ -27,10 +29,13 @@ const NavBar = () => {
                 ) : (
                 <>
                     <NavLink to={"profile"}>
-                    <p>Profile</p>
+                        <p>Profile</p>
                     </NavLink>
                     <NavLink to={"cart"}>
-                    <p>🛒{cart > 0 && cart}</p>
+                        <div className="cart-icon-container">
+                            <Cart className='cart-icon'/>
+                            <div className="cart-number">{cart > 0 && cart}</div>
+                        </div>
                     </NavLink>
                 </>
                 )}

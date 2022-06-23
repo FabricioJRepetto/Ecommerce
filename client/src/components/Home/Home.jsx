@@ -2,18 +2,29 @@ import axios from 'axios';
 import React, { useState, useEffect} from 'react';
 import { random } from '../../helpers/random';
 import MiniCard from '../Products/MiniCard';
-import Slider from './Carousel/Slider';
+import Carousel from './Carousel/Carousel';
 import "./Home.css";
+
+import { ReactComponent as One } from "../../assets/svg/bloom-svgrepo-com.svg";
+import { ReactComponent as Two } from "../../assets/svg/build-svgrepo-com.svg";
+import { ReactComponent as Three } from "../../assets/svg/code-svgrepo-com.svg";
+import { ReactComponent as Four } from "../../assets/svg/crop-svgrepo-com.svg";
+import { ReactComponent as Five } from "../../assets/svg/explode-svgrepo-com.svg";
+import { ReactComponent as Six } from "../../assets/svg/perform-svgrepo-com.svg";
 
 const Home = () => {
     const [products, setProducts] = useState(null);
     const [loading, setLoading] = useState(true);
 
     const images = [
-        'https://http2.mlstatic.com/D_NQ_674809-MLA50293741186_062022-OO.webp',
-        'https://http2.mlstatic.com/D_NQ_977617-MLA50409269868_062022-OO.webp',
-        'https://http2.mlstatic.com/D_NQ_745108-MLA50330042982_062022-OO.webp',
-        'https://http2.mlstatic.com/D_NQ_751727-MLA50292961776_062022-OO.webp'
+        {img:'https://http2.mlstatic.com/D_NQ_674809-MLA50293741186_062022-OO.webp',
+         url: '/products'},
+        {img:'https://http2.mlstatic.com/D_NQ_977617-MLA50409269868_062022-OO.webp',
+         url: '/products'},
+        {img:'https://http2.mlstatic.com/D_NQ_745108-MLA50330042982_062022-OO.webp',
+         url: '/products'},
+        {img:'https://http2.mlstatic.com/D_NQ_751727-MLA50292961776_062022-OO.webp',
+         url: '/products'}
     ]
     
     useEffect(() => {
@@ -31,19 +42,34 @@ const Home = () => {
     return (
         <>
             <div>
-                <p>Banner Ofertas</p>
-                <Slider images={images} controls indicators width='100%'/>
+                <Carousel images={images} controls indicators pointer width='100%'/>
             </div>
-            <div>
-                <p>Categorias</p>
-                <button>😀</button>
-                <button>😋</button>
-                <button>😎</button>
-                <button>🤩</button>
-                <button>🥰</button>
-                <button>🤑</button>
+            <div className='categories'>
+                <div>
+                    <One className={'svg'}/>
+                    <p>Smartphones</p>
+                </div>
+                <div>
+                    <Two className={'svg'}/>
+                    <p>Computers</p>
+                </div>
+                <div>
+                    <Three className={'svg'}/>
+                    <p>Cameras</p>
+                </div>
+                <div>
+                    <Four className={'svg'}/>
+                    <p>Audio & Video</p>
+                </div>
+                <div>
+                    <Five className={'svg'}/>
+                    <p>Videogames</p>
+                </div>
+                <div>
+                    <Six className={'svg'}/>
+                    <p>TVs</p>
+                </div>
             </div>
-            <p>productos random</p>
             <div>
                 {loading
                     ? <h1>LOADING</h1>

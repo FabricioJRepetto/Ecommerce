@@ -53,8 +53,12 @@
     background: #FFA500;
 }
 
-
-
+.arrow path {
+    fill: white;
+}
+.left-arrow {
+    transform: rotate(180deg);
+}
 
 
 

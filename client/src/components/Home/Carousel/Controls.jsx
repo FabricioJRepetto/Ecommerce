@@ -1,4 +1,6 @@
 import React from 'react'
+import { ReactComponent as Arrow } from "../../../assets/svg/arrow-right.svg";
+
 
 const Controls = ({ prev, next, start, stop }) => {
   return (
@@ -8,13 +10,13 @@ const Controls = ({ prev, next, start, stop }) => {
             className='carousel-control left'
             onMouseEnter={stop}
             onMouseLeave={start}
-            >Prev</button>
+            ><Arrow className='arrow left-arrow'/></button>
         <button 
             onClick={next}
             className='carousel-control right'
             onMouseEnter={stop}
             onMouseLeave={start}
-            >Next</button>
+            ><Arrow className='arrow'/></button>
     </div>
   )
 }

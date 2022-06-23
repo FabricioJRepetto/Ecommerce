@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom';
 import Controls from './Controls';
 import Indicators from './Indicators';
-import './Slider.css'
+import './Carousel.css'
 
-const Slider = ({ images, interval = 5000, controls = false, indicators = false, width }) => {
+const Slider = ({ images, interval = 5000, controls = false, indicators = false, pointer = false, width }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const slideInterval = useRef();
-    
+    const navigate = useNavigate();
+
     useEffect(() => {
         startSlideTimer();
         return () => stopSlideTimer();
@@ -53,9 +55,11 @@ const Slider = ({ images, interval = 5000, controls = false, indicators = false,
                         onMouseLeave={startSlideTimer}>
                             {images?.map(e => (
                                 <div 
-                                    key={e}
+                                    key={e.img}
+                                    style={ pointer ? {cursor: 'pointer'} : ''}
+                                    onClick={() => navigate(e.url || '')}
                                     className="slide-item">
-                                    <img src={e} alt="img" />
+                                    <img src={e.img} alt="img" />
                                 </div>
                             ))}
                     </div>
