@@ -4,3 +4,10 @@
     cursor: pointer;
     padding: 25px;
 }
+.visible {
+    visibility: hidden;
+    color: black;
+}
+.product-mini-card:hover .visible {
+    visibility: visible;
+}

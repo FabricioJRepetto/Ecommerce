@@ -31,7 +31,6 @@ const Details = () => {
         {error && <p>{error}</p>}
         {data && 
             <div>
-                {/* <img src={data.images[0].imgURL} alt="product" height={300} /> */}
                 <Galery imgs={data.images} />
                 <div>
                     <p>{data.brand.toUpperCase()}</p>

@@ -4,7 +4,7 @@ import { resizer } from '../../helpers/resizer';
 import './Galery.css'
 
 const Galery = ({ imgs }) => {
-    const [current, setCurrent] = useState(5);
+    const [current, setCurrent] = useState(0);
 
     const handleHover = (index) => { 
         setCurrent(index)

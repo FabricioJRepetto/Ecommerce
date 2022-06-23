@@ -2,16 +2,24 @@ import axios from 'axios';
 import React, { useState, useEffect} from 'react';
 import { random } from '../../helpers/random';
 import MiniCard from '../Products/MiniCard';
+import Slider from './Carousel/Slider';
 import "./Home.css";
 
 const Home = () => {
     const [products, setProducts] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    const images = [
+        'https://http2.mlstatic.com/D_NQ_674809-MLA50293741186_062022-OO.webp',
+        'https://http2.mlstatic.com/D_NQ_977617-MLA50409269868_062022-OO.webp',
+        'https://http2.mlstatic.com/D_NQ_745108-MLA50330042982_062022-OO.webp',
+        'https://http2.mlstatic.com/D_NQ_751727-MLA50292961776_062022-OO.webp'
+    ]
+    
     useEffect(() => {
         (async () => {
             const {data} = await axios(`/product/`);
-            let indexes = random(data.length, 3)
+            let indexes = random(data.length, 5)
             let aux = data.filter((e, index) =>(
                 indexes.includes(index)
             ));
@@ -24,7 +32,7 @@ const Home = () => {
         <>
             <div>
                 <p>Banner Ofertas</p>
-                <img src={require('../../assets/banner/bannertest.webp')} alt="" />
+                <Slider images={images} controls indicators width='100%'/>
             </div>
             <div>
                 <p>Categorias</p>
