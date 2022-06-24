@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { close } from '../../Redux/reducer/notificationSlice';
@@ -10,12 +10,10 @@ const Notification = () => {
     const dispatch = useDispatch();
     const isOpen = useSelector((state) => state.notificationSlice.open);
     const { message, type, url } = useSelector((state) => state.notificationSlice.main);
+    const timeout = useRef();
 
     useEffect(() => {
-            console.log(`sale notificacion: ${message}`);
-            setTimeout(() => {
-                closeNotification();
-            }, 4000);
+            startTimeout();
         // eslint-disable-next-line
     }, [isOpen]);
 
@@ -27,22 +25,37 @@ const Notification = () => {
         case 'warning':
             color = 'orange';
             break;
-        default: color = 'green';
+        case 'success':
+            color = 'green';
+            break;
+        default: color = 'rgba(0, 0, 0, .3)';
             break;
     };
 
+    const startTimeout = () => { 
+        timeout.current = setTimeout(() => {
+                closeNotification();
+            }, 6000);
+     }
+
     const closeNotification = () => { 
         dispatch(close());
+        if (timeout.current) clearTimeout(timeout.current);
      };
 
     return (
         <div 
             style={{ borderLeft: `4px solid ${color}`}}
             onClick={() => ( url
-                ? navigate(url)
+                ? [navigate(url), closeNotification()]
                 : closeNotification())}
             className={`notification-container ${isOpen && 'notif-open'}`}>
-            <p className='notification-message'>{message}</p>
+            <div className={`notification-inner`}>
+                <div className={`notification-timer ${isOpen && 'timer-active'}`}></div>
+                <div className='notification-message'>
+                    <p>{message}</p>
+                </div>
+            </div>
         </div>
     )
 }

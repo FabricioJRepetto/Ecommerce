@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Modal from "../common/Modal";
 import { useModal } from "../../hooks/useModal";
+import { useNotification } from "../../hooks/useNotification";
 import { cartTotal, loadProducts } from "../../Redux/reducer/cartSlice";
 import QuantityInput from "./QuantityInput";
 import { loadMercadoPago } from "../../helpers/loadMP";
@@ -21,6 +22,7 @@ const Cart = () => {
     const [isOpenAddList, openAddList, closeAddList] = useModal();
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [notification] = useNotification();
 
     useEffect(() => {
         getCart();
@@ -83,9 +85,9 @@ const Cart = () => {
      };
 
     const deleteProduct = async (id) => {
-        await axios.delete(`/cart/${id}`);
+        const { data } = await axios.delete(`/cart/${id}`);
         getCart();
-        closeModal();
+        notification(data.message, '', 'warning');
     };
 
     const goCheckout = async () => {
@@ -207,7 +209,7 @@ const Cart = () => {
                                 stock={prod.stock} 
                                 price={prod.price}
                             />
-                            <p onClick={()=> openModal(prod.product_id)}><b> Delete </b></p>
+                            <p onClick={()=> deleteProduct(prod.product_id)}><b> Delete </b></p>
                     </div>
                 ))}
                 <h2>{`Total: ${total}`}</h2>

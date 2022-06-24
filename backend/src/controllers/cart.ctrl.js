@@ -79,7 +79,7 @@ const removeFromCart = async (req, res, next) => {
             }
         }
         );
-        return res.json(cart);
+        return res.json({ message: 'Product removed.'});
   } catch (error) {
         next(error);
   }

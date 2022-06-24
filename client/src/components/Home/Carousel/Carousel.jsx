@@ -23,10 +23,8 @@ const Slider = ({ images, interval = 5000, controls = false, indicators = false,
      };
 
      const stopSlideTimer = () => { 
-        if (slideInterval.current) {
-            clearInterval(slideInterval.current)
-        }
-      };
+        if (slideInterval.current) clearInterval(slideInterval.current)
+    };
 
     const prev = () => {
         stopSlideTimer();

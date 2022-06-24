@@ -3,8 +3,8 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom'
 import { useAxios } from '../../hooks/useAxios';
+import { useNotification } from '../../hooks/useNotification';
 import { addCart } from '../../Redux/reducer/cartSlice';
-import { sendNotif } from '../../Redux/reducer/notificationSlice';
 import Galery from './Galery';
 
 const Details = () => {
@@ -12,6 +12,7 @@ const Details = () => {
     const { data, loading, error } = useAxios('GET', `/product/${id}`);
     const cart = useSelector((state) => state.cartReducer.main);
     const dispatch = useDispatch();
+    const [notification] = useNotification();
 
     // useEffect(() => {
     //     (async () => {
@@ -26,7 +27,7 @@ const Details = () => {
         if (data && !cart.includes(id)) {
             dispatch(addCart(id));
         };
-        dispatch(sendNotif(data));
+        notification(data.message, '/cart', 'success')
   };
 
   return (
