@@ -15,38 +15,58 @@ const validateNumbers = (value) => {
   return /^[0-9]*$/.test(value);
 };
 
+const clearInputs = (
+  featuresQuantity,
+  setFeaturesQuantity,
+  removeFeature,
+  appendFeature
+) => {
+  /* const ids = ["name_id", "price_id", "brand_id", "stock_id", "description_id"];
+  for (const id of ids) {
+    let input = document.getElementById(id);
+    input.value = "";
+  } */
+  console.log(featuresQuantity);
+  if (featuresQuantity > 1) {
+    removeFeature();
+    setFeaturesQuantity(1);
+    appendFeature("");
+  } else {
+    let input = document.getElementById("main_feature_0");
+    input.value = "";
+  }
+};
+
 const ProductForm = () => {
-  const [productImg, setProductImg] = useState();
+  // const [productImg, setProductImg] = useState();
   const [featuresQuantity, setFeaturesQuantity] = useState(1);
   const [attributesQuantity, setAttributesQuantity] = useState(1);
 
   const validationSchema = yup.object().shape({
-    name: yup.string().required("Nombre es requerido"),
-    price: yup
-      .string()
-      .required("Precio es requerido")
+    /* name: yup.string().required("Nombre es requerido"),
+    price: yup.string()
+     .required("Precio es requerido")
       .test(
         "price",
         "Precio debe ser un número válido (ej: '1234.56')",
         (value) => validatePrice(value)
-      ),
-    brand: yup.string().required("Marca es requerida"),
+      ),  brand: yup.string().required("Marca es requerida"),
     available_quantity: yup
       .string()
       .required("Stock es requerido")
       .test("stock", "Stock debe ser un número", (value) =>
         validateNumbers(value)
       ),
-    description: yup.string().required("Descripción es requerida"),
+    description: yup.string().required("Descripción es requerida"), */
     main_features: yup
       .array()
       .of(yup.string().required("Principales características requeridas")),
-    attributes: yup.array().of(
+    /* attributes: yup.array().of(
       yup.object().shape({
         name: yup.string().required("Nombre de atributo es requerido"),
         value_name: yup.string().required("Valor de atributo es requerido"),
       })
-    ),
+    ),  */
   });
 
   const formOptions = { resolver: yupResolver(validationSchema) };
@@ -54,7 +74,6 @@ const ProductForm = () => {
     register,
     control,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm(formOptions);
 
@@ -67,32 +86,30 @@ const ProductForm = () => {
     control,
   });
 
-  useEffect(() => {
-    const newValue = featuresQuantity || 0;
-    const oldValue = fieldsFeatures.length;
-    if (newValue > oldValue) {
-      for (let i = oldValue; i < newValue; i++) {
-        appendFeature("");
-      }
+  const handleAddFeature = () => {
+    const feature = document.getElementById(
+      `main_feature_${featuresQuantity - 1}`
+    );
+    if (feature.value !== "") {
+      appendFeature("");
+      setFeaturesQuantity(featuresQuantity + 1);
     } else {
-      for (let i = oldValue; i > newValue; i--) {
-        removeFeature(i - 1);
-      }
+      console.log("completa campo antes de agregar uno nuevo"); //!VOLVER A VER renderizar mensaje warn
     }
-  }, [featuresQuantity]);
-
-  const handleFeatures = (value) => {
-    if (value === "add") {
-      const feature = document.getElementById(
-        `main_feature_${featuresQuantity - 1}`
-      );
-      feature.value !== "" && setFeaturesQuantity(featuresQuantity + 1);
-    }
-    if (value === "remove" && featuresQuantity > 1)
-      setFeaturesQuantity(featuresQuantity - 1);
   };
 
-  const {
+  const handleRemoveFeature = (i) => {
+    if (featuresQuantity > 1) {
+      removeFeature(i);
+      setFeaturesQuantity(featuresQuantity - 1);
+    }
+  };
+
+  useEffect(() => {
+    appendFeature("");
+  }, []);
+
+  /*     const {
     fields: fieldsAttributes,
     append: appendAttribute,
     remove: removeAttribute,
@@ -100,6 +117,22 @@ const ProductForm = () => {
     name: "attributes",
     control,
   });
+
+  const handleAddAttribute = () => {
+      const attribute_name = document.getElementById(
+        `attribute_name_${attributesQuantity - 1}`
+      );
+      const attribute_value = document.getElementById(
+        `attribute_value_${attributesQuantity - 1}`
+      );
+
+      attribute_name.value !== "" &&
+        attribute_value.value !== "" &&
+        setAttributesQuantity(attributesQuantity + 1);
+
+    if ( attributesQuantity > 1)
+      setAttributesQuantity(attributesQuantity - 1);
+  };
 
   useEffect(() => {
     const newValue = attributesQuantity || 0;
@@ -113,41 +146,20 @@ const ProductForm = () => {
         removeAttribute(i - 1);
       }
     }
-  }, [attributesQuantity]);
-
-  const handleAttributes = (value) => {
-    if (value === "add") {
-      const attribute_name = document.getElementById(
-        `attribute_name_${attributesQuantity - 1}`
-      );
-      const attribute_value = document.getElementById(
-        `attribute_value_${attributesQuantity - 1}`
-      );
-
-      attribute_name.value !== "" &&
-        attribute_value.value !== "" &&
-        setAttributesQuantity(attributesQuantity + 1);
-    }
-    if (value === "remove" && attributesQuantity > 1)
-      setAttributesQuantity(attributesQuantity - 1);
-
-    /* if (value === "add") setAttributesQuantity(attributesQuantity + 1);
-    if (value === "remove" && attributesQuantity > 1)
-      setAttributesQuantity(attributesQuantity - 1); */
-  };
+    // eslint-disable-next-line
+  }, [attributesQuantity]); */
 
   const submitProduct = async (productData) => {
     console.log(productData);
-    //   e.preventDefault();
     let formData = new FormData();
     //: verificar datos
 
     // agarra las images
-    /*  productImg.forEach((pic) => {
+    /*   productImg.forEach((pic) => {
         formData.append("images", pic);
-      }); */
-    //formData.append('images', productImg);
-    formData.append("data", JSON.stringify(productData));
+      }); 
+    formData.append('images', productImg);
+    formData.append("data", JSON.stringify(productData)); */
 
     /*   const imgURL = await axios.post(`/product/`, formData, {
         headers: {
@@ -155,11 +167,19 @@ const ProductForm = () => {
         },
       });
       console.log(imgURL); */
+
+    clearInputs(
+      featuresQuantity,
+      setFeaturesQuantity,
+      removeFeature,
+      appendFeature,
+      fieldsFeatures
+    );
   };
 
-  const handleFiles = (e) => {
+  /*   const handleFiles = (e) => {
     setProductImg([...e.target.files]);
-  };
+  }; */
 
   return (
     <div>
@@ -169,12 +189,13 @@ const ProductForm = () => {
         encType="multipart/form-data"
         onSubmit={handleSubmit(submitProduct)}
       >
-        <div>
+        <>
+          {/* <div>
           <input
             type="text"
             placeholder="Título/Nombre"
-            name="name"
             autoComplete="off"
+            id="name_id"
             {...register("name")}
           />
           <div>{errors.name?.message}</div>
@@ -182,8 +203,8 @@ const ProductForm = () => {
           <input
             type="text"
             placeholder="Precio"
-            name="price"
             autoComplete="off"
+            id="price_id"
             {...register("price")}
           />
           <div>{errors.price?.message}</div>
@@ -191,8 +212,8 @@ const ProductForm = () => {
           <input
             type="text"
             placeholder="Marca"
-            name="brand"
             autoComplete="off"
+            id="brand_id"
             {...register("brand")}
           />
           <div>{errors.brand?.message}</div>
@@ -200,8 +221,8 @@ const ProductForm = () => {
           <input
             type="text"
             placeholder="Stock"
-            name="available_quantity"
             autoComplete="off"
+            id="stock_id"
             {...register("available_quantity", {
               required: true,
               pattern: /^[0-9]*$/,
@@ -211,30 +232,29 @@ const ProductForm = () => {
         </div>
         <br />
         <hr />
-        <br />
+        <br /> */}
+        </>
         <div>
           {React.Children.toArray(
             fieldsFeatures.map((item, i) => (
               <>
                 <input
                   type="text"
-                  placeholder="Características Principales"
-                  name={`main_features[${i}]`}
+                  placeholder="Característica principal"
                   autoComplete="off"
                   id={`main_feature_${i}`}
                   {...register(`main_features.${i}`)}
                 />
+                <span onClick={() => handleRemoveFeature(i)}> X</span>
                 <p>{errors.main_features?.[i]?.message}</p>
               </>
             ))
           )}
-          <h3 onClick={() => handleFeatures("add")}>
+          <h3 onClick={() => handleAddFeature()}>
             Agregar campo de característica
           </h3>
-          <h3 onClick={() => handleFeatures("remove")}>
-            Quitar campo de característica
-          </h3>
-          <br />
+          <>
+            {/* <br />
           <hr />
           <br />
 
@@ -244,7 +264,7 @@ const ProductForm = () => {
                 <input
                   type="text"
                   placeholder="Nombre del atributo"
-                  name={`attributes[${i}]name`}
+                   name={`attributes[${i}]name`} //!VOLVER A VER COMENTAR ESTO
                   autoComplete="off"
                   id={`attribute_name_${i}`}
                   {...register(`attributes.${i}.name`)}
@@ -263,23 +283,28 @@ const ProductForm = () => {
             ))
           )}
           <h3 onClick={() => handleAttributes("add")}>
-            Agregar campo de atributo
+            Agregar campos de atributo
           </h3>
           <h3 onClick={() => handleAttributes("remove")}>
-            Quitar campo de atributo
-          </h3>
+            Quitar campos de atributo
+          </h3> 
         </div>
         <br />
         <hr />
         <br />
         <div>
-          <textarea placeholder="Descripción" {...register("description")} />
+          <textarea
+            placeholder="Descripción"
+            id="description_id"
+            {...register("description")}
+          />
           <div>{errors.description?.message}</div>
         </div>
         <br />
         <hr />
-        <br />
-        <div>
+        <br />*/}
+          </>
+          {/* <div>
           <input
             type="file"
             name="image"
@@ -287,9 +312,12 @@ const ProductForm = () => {
             accept=".jpeg,.jpg,.png"
             onChange={handleFiles}
           />
+        </div> */}
         </div>
+        {/*  //!ELMINAR ESTE CIERRE DE DIV */}
         <input type="submit" value="Crear producto" />
       </form>
+      {/* <button onClick={() => clearInputs()}>RESETEAR</button> */}
     </div>
   );
 };
