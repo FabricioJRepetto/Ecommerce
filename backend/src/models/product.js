@@ -31,6 +31,7 @@ const productSchema = new Schema(
       required: true,
       default: false,
     },
+    main_features: [String],
     attributes: [
       {
         value_name: String,
@@ -39,7 +40,6 @@ const productSchema = new Schema(
     ],
     //attributes: [String],
 
-    main_features: [String],
     available_quantity: Number,
     images: [
       {

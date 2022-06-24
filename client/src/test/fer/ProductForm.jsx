@@ -1,127 +1,284 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useForm, useFieldArray } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { useEffect } from "react";
+
+const validatePrice = (value) => {
+  if (value === undefined) return false;
+  return /^\d+(.\d{1,2})?$/.test(value);
+};
+
+const validateNumbers = (value) => {
+  if (value === undefined) return false;
+  return /^[0-9]*$/.test(value);
+};
 
 const ProductForm = () => {
-  const [product, setProduct] = useState({
-    name: "",
-    price: 0,
-    description: "",
-    attributes: ["rojo", "azul"],
-    main_features: ["rojo", "azul"],
-    available_quantity: 0,
-  });
   const [productImg, setProductImg] = useState();
+  const [featuresQuantity, setFeaturesQuantity] = useState(1);
+  const [attributesQuantity, setAttributesQuantity] = useState(1);
 
-    const submitProduct = async (e) => {
-        e.preventDefault();
-        let formData = new FormData();
-        //: verificar datos
-        
-       // agarra las images
-        productImg.forEach(pic => {
-            formData.append('images', pic)
-        });
-        //formData.append('images', productImg);
-        formData.append('data', JSON.stringify(product));
-        
-        const imgURL = await axios.post(`/product/`, formData, {
-            headers: {
-                'Content-Type': 'multipart/form-data'
-            }
-        });
-        console.log(imgURL);
-    };
-    const handleFiles = (e) => { 
-        setProductImg([...e.target.files])
-     }
+  const validationSchema = yup.object().shape({
+    name: yup.string().required("Nombre es requerido"),
+    price: yup
+      .string()
+      .required("Precio es requerido")
+      .test(
+        "price",
+        "Precio debe ser un número válido (ej: '1234.56')",
+        (value) => validatePrice(value)
+      ),
+    brand: yup.string().required("Marca es requerida"),
+    available_quantity: yup
+      .string()
+      .required("Stock es requerido")
+      .test("stock", "Stock debe ser un número", (value) =>
+        validateNumbers(value)
+      ),
+    description: yup.string().required("Descripción es requerida"),
+    main_features: yup
+      .array()
+      .of(yup.string().required("Principales características requeridas")),
+    attributes: yup.array().of(
+      yup.object().shape({
+        name: yup.string().required("Nombre de atributo es requerido"),
+        value_name: yup.string().required("Valor de atributo es requerido"),
+      })
+    ),
+  });
+
+  const formOptions = { resolver: yupResolver(validationSchema) };
+  const {
+    register,
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm(formOptions);
+
+  const {
+    fields: fieldsFeatures,
+    append: appendFeature,
+    remove: removeFeature,
+  } = useFieldArray({
+    name: "main_features",
+    control,
+  });
+
+  useEffect(() => {
+    const newValue = featuresQuantity || 0;
+    const oldValue = fieldsFeatures.length;
+    if (newValue > oldValue) {
+      for (let i = oldValue; i < newValue; i++) {
+        appendFeature("");
+      }
+    } else {
+      for (let i = oldValue; i > newValue; i--) {
+        removeFeature(i - 1);
+      }
+    }
+  }, [featuresQuantity]);
+
+  const handleFeatures = (value) => {
+    if (value === "add") {
+      const feature = document.getElementById(
+        `main_feature_${featuresQuantity - 1}`
+      );
+      feature.value !== "" && setFeaturesQuantity(featuresQuantity + 1);
+    }
+    if (value === "remove" && featuresQuantity > 1)
+      setFeaturesQuantity(featuresQuantity - 1);
+  };
+
+  const {
+    fields: fieldsAttributes,
+    append: appendAttribute,
+    remove: removeAttribute,
+  } = useFieldArray({
+    name: "attributes",
+    control,
+  });
+
+  useEffect(() => {
+    const newValue = attributesQuantity || 0;
+    const oldValue = fieldsAttributes.length;
+    if (newValue > oldValue) {
+      for (let i = oldValue; i < newValue; i++) {
+        appendAttribute({ name: "", value_name: "" });
+      }
+    } else {
+      for (let i = oldValue; i > newValue; i--) {
+        removeAttribute(i - 1);
+      }
+    }
+  }, [attributesQuantity]);
+
+  const handleAttributes = (value) => {
+    if (value === "add") {
+      const attribute_name = document.getElementById(
+        `attribute_name_${attributesQuantity - 1}`
+      );
+      const attribute_value = document.getElementById(
+        `attribute_value_${attributesQuantity - 1}`
+      );
+
+      attribute_name.value !== "" &&
+        attribute_value.value !== "" &&
+        setAttributesQuantity(attributesQuantity + 1);
+    }
+    if (value === "remove" && attributesQuantity > 1)
+      setAttributesQuantity(attributesQuantity - 1);
+
+    /* if (value === "add") setAttributesQuantity(attributesQuantity + 1);
+    if (value === "remove" && attributesQuantity > 1)
+      setAttributesQuantity(attributesQuantity - 1); */
+  };
+
+  const submitProduct = async (productData) => {
+    console.log(productData);
+    //   e.preventDefault();
+    let formData = new FormData();
+    //: verificar datos
+
+    // agarra las images
+    /*  productImg.forEach((pic) => {
+        formData.append("images", pic);
+      }); */
+    //formData.append('images', productImg);
+    formData.append("data", JSON.stringify(productData));
+
+    /*   const imgURL = await axios.post(`/product/`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      console.log(imgURL); */
+  };
+
+  const handleFiles = (e) => {
+    setProductImg([...e.target.files]);
+  };
 
   return (
     <div>
       <hr />
       <h2>Product CREATION</h2>
-      <form encType="multipart/form-data" onSubmit={submitProduct}>
+      <form
+        encType="multipart/form-data"
+        onSubmit={handleSubmit(submitProduct)}
+      >
         <div>
           <input
             type="text"
+            placeholder="Título/Nombre"
             name="name"
-            placeholder="Title/Name"
-            onChange={(e) =>
-              setProduct({
-                ...product,
-                [e.target.name]: e.target.value,
-              })
-            }
+            autoComplete="off"
+            {...register("name")}
           />
+          <div>{errors.name?.message}</div>
+
           <input
-            type="number"
+            type="text"
+            placeholder="Precio"
             name="price"
-            placeholder="Price"
-            onChange={(e) =>
-              setProduct({
-                ...product,
-                [e.target.name]: e.target.value,
-              })
-            }
+            autoComplete="off"
+            {...register("price")}
           />
+          <div>{errors.price?.message}</div>
+
           <input
             type="text"
+            placeholder="Marca"
             name="brand"
-            placeholder="Brand"
-            onChange={(e) =>
-              setProduct({
-                ...product,
-                [e.target.name]: e.target.value,
-              })
-            }
+            autoComplete="off"
+            {...register("brand")}
           />
+          <div>{errors.brand?.message}</div>
+
           <input
-            type="number"
-            name="available_quantity"
+            type="text"
             placeholder="Stock"
-            onChange={(e) =>
-              setProduct({
-                ...product,
-                [e.target.name]: e.target.value,
-              })
-            }
+            name="available_quantity"
+            autoComplete="off"
+            {...register("available_quantity", {
+              required: true,
+              pattern: /^[0-9]*$/,
+            })}
           />
+          <div>{errors.available_quantity?.message}</div>
         </div>
+        <br />
+        <hr />
+        <br />
         <div>
-          <input
-            type="text"
-            name="main_features"
-            placeholder="Main features"
-            onChange={(e) =>
-              setProduct({
-                ...product,
-                [e.target.name]: [e.target.value],
-              })
-            }
-          />
-          <input
-            type="text"
-            name="attributes"
-            placeholder="Attributes"
-            onChange={(e) =>
-              setProduct({
-                ...product,
-                [e.target.name]: [e.target.value],
-              })
-            }
-          />
+          {React.Children.toArray(
+            fieldsFeatures.map((item, i) => (
+              <>
+                <input
+                  type="text"
+                  placeholder="Características Principales"
+                  name={`main_features[${i}]`}
+                  autoComplete="off"
+                  id={`main_feature_${i}`}
+                  {...register(`main_features.${i}`)}
+                />
+                <p>{errors.main_features?.[i]?.message}</p>
+              </>
+            ))
+          )}
+          <h3 onClick={() => handleFeatures("add")}>
+            Agregar campo de característica
+          </h3>
+          <h3 onClick={() => handleFeatures("remove")}>
+            Quitar campo de característica
+          </h3>
+          <br />
+          <hr />
+          <br />
+
+          {React.Children.toArray(
+            fieldsAttributes.map((item, i) => (
+              <>
+                <input
+                  type="text"
+                  placeholder="Nombre del atributo"
+                  name={`attributes[${i}]name`}
+                  autoComplete="off"
+                  id={`attribute_name_${i}`}
+                  {...register(`attributes.${i}.name`)}
+                />
+                <p>{errors.attributes?.[i]?.name?.message}</p>
+                <input
+                  type="text"
+                  placeholder="Valor del atributo"
+                  name={`attributes[${i}]value_name`}
+                  autoComplete="off"
+                  id={`attribute_value_${i}`}
+                  {...register(`attributes.${i}.value_name`)}
+                />
+                <p>{errors.attributes?.[i]?.value_name?.message}</p>
+              </>
+            ))
+          )}
+          <h3 onClick={() => handleAttributes("add")}>
+            Agregar campo de atributo
+          </h3>
+          <h3 onClick={() => handleAttributes("remove")}>
+            Quitar campo de atributo
+          </h3>
         </div>
+        <br />
+        <hr />
+        <br />
         <div>
-          <textarea
-            name="description"
-            placeholder="Description"
-            onChange={(e) =>
-              setProduct({
-                ...product,
-                [e.target.name]: e.target.value,
-              })
-            }
-          />
+          <textarea placeholder="Descripción" {...register("description")} />
+          <div>{errors.description?.message}</div>
         </div>
+        <br />
+        <hr />
+        <br />
         <div>
           <input
             type="file"
@@ -131,7 +288,7 @@ const ProductForm = () => {
             onChange={handleFiles}
           />
         </div>
-        <input type="submit" value="Send" />
+        <input type="submit" value="Crear producto" />
       </form>
     </div>
   );
