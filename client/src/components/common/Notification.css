@@ -1,0 +1,16 @@
+.notification-container {
+    position: fixed;
+    top: 10%;
+    right: -250px;
+    padding: 20px;
+    height: 80px;
+    width: 250px;
+    z-index: 99;
+    background: rgba(0, 0, 0, .5);
+    cursor: pointer;
+    transition: .4s ease;
+}
+
+.notif-open {
+    transform: translateX(-100%);
+}

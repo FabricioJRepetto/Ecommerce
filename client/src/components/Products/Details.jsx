@@ -1,14 +1,16 @@
 import axios from 'axios';
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom'
 import { useAxios } from '../../hooks/useAxios';
-import { mainPlus } from '../../Redux/reducer/cartSlice';
+import { addCart } from '../../Redux/reducer/cartSlice';
+import { sendNotif } from '../../Redux/reducer/notificationSlice';
 import Galery from './Galery';
 
 const Details = () => {
     const { id } = useParams();
     const { data, loading, error } = useAxios('GET', `/product/${id}`);
+    const cart = useSelector((state) => state.cartReducer.main);
     const dispatch = useDispatch();
 
     // useEffect(() => {
@@ -19,10 +21,13 @@ const Details = () => {
     // }, []);
 
     const addToCart = async (id) => {
-        const {data} = await axios.post(`/cart/${id}`)
+        const {data} = await axios.post(`/cart/${id}`);
         console.log(data);
-        data && dispatch(mainPlus());
-    };
+        if (data && !cart.includes(id)) {
+            dispatch(addCart(id));
+        };
+        dispatch(sendNotif(data));
+  };
 
   return (
     <div>

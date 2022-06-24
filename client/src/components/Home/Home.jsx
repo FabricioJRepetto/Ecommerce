@@ -24,6 +24,8 @@ const Home = () => {
         {img:'https://http2.mlstatic.com/D_NQ_745108-MLA50330042982_062022-OO.webp',
          url: '/products'},
         {img:'https://http2.mlstatic.com/D_NQ_751727-MLA50292961776_062022-OO.webp',
+         url: '/products'},
+        {img:'https://http2.mlstatic.com/D_NQ_627971-MLA50423148467_062022-OO.webp',
          url: '/products'}
     ]
     

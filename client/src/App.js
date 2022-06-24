@@ -6,6 +6,7 @@ import { loadAvatar, loadEmail, loadUsername, sessionActive } from "./Redux/redu
 import { loadProducts } from "./Redux/reducer/cartSlice";
 import { Routes, Route } from "react-router-dom";
 import Home from "./components/Home/Home";
+import Notification from "./components/common/Notification";
 import NavBar from "./components/NavBar/NavBar";
 import Signupin from "./components/Session/Signupin";
 import Signout from "./components/Session/Signout";
@@ -38,7 +39,7 @@ function App() {
                         dispatch(loadEmail(data.email ? data.email : loggedEmail));
 
                         const { data: cart } = await axios(`/cart`);
-                        dispatch(loadProducts(cart.products.length));
+                        dispatch(loadProducts(cart.products.map(e => e.product_id)));
                     }
                 } catch (error) {
                     window.localStorage.removeItem("loggedTokenEcommerce");
@@ -53,6 +54,7 @@ function App() {
     return (
         <div className="App">
             <NavBar />
+            <Notification />
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/signin" element={<Signupin />} />

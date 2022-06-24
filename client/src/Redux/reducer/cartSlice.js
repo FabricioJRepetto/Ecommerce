@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export const cartSlice = createSlice({
   name: "cart",
   initialState: {
-    main: 0, //: array si queremos mostrar en cart en un modal
+    main: [],
     total: 0,
   },
   reducers: {
@@ -13,15 +13,12 @@ export const cartSlice = createSlice({
     cartTotal: (state, action) => {
       state.total = action.payload;
     },
-    mainPlus: (state, action) => {
-        state.main += 1;
-    },
-    mainMinus: (state, action) => {
-        state.main -= 1;
-    },
+    addCart: (state, action) => {
+        state.main = [...state.main, action.payload];
+    }
   },
 });
 
-export const { loadProducts, cartTotal, mainPlus, mainMinus } = cartSlice.actions;
+export const { loadProducts, cartTotal, addCart } = cartSlice.actions;
 
 export default cartSlice.reducer;

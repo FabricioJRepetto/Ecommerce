@@ -6,21 +6,23 @@ import {
   loadProductsFound,
 } from "../../Redux/reducer/productsSlice";
 import { useEffect } from "react";
-import { mainPlus } from "../../Redux/reducer/cartSlice";
+import { loadProducts, addCart } from "../../Redux/reducer/cartSlice";
 
 const Products = () => {
-  const [pricesFilter, setPricesFilter] = useState({
-    min: "300",
-    max: "500",
-  });
-  const [shippingFilter, setShippingFilter] = useState(false);
-  const [brandsFilter, setBrandsFilter] = useState();
+    const [pricesFilter, setPricesFilter] = useState({
+        min: "300",
+        max: "500",
+    });
+    const [shippingFilter, setShippingFilter] = useState(false);
+    const [brandsFilter, setBrandsFilter] = useState();
 
-  const brands = useRef();
-  const dispatch = useDispatch();
-  const { productsFound, productsFiltered } = useSelector(
-    (state) => state.productsReducer
-  );
+    const brands = useRef();
+    const dispatch = useDispatch();
+    const { productsFound, productsFiltered } = useSelector(
+        (state) => state.productsReducer
+    );
+    const cart = useSelector((state) => state.cartReducer.main);
+
 
   let productsToShow;
   productsFiltered.length === 0
@@ -49,7 +51,7 @@ const Products = () => {
   const addToCart = async (id) => {
         const {data} = await axios.post(`/cart/${id}`)
         console.log(data);
-        data && dispatch(mainPlus());
+        (data && !cart.includes(id)) && dispatch(addCart(id));
   };
 
   const filterPrices = (e) => {
