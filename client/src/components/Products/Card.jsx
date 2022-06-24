@@ -2,7 +2,7 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { resizer } from '../../helpers/resizer';
 
-const Card = ({ img, name, price, brand, prodId, free_shipping, fav, on_sale}) => {
+const Card = ({ img, name, price, brand, prodId, free_shipping, fav, on_sale }) => {
     const navigate = useNavigate();
 
   return (
@@ -11,7 +11,7 @@ const Card = ({ img, name, price, brand, prodId, free_shipping, fav, on_sale}) =
         className='product-card'>
         <img src={resizer(img)} alt="product" />
         <div>
-            <p>{brand.toUpperCase()}</p>
+            <p>{ brand && brand.toUpperCase()}</p>
             <p>{name}</p>
             <p>${price}</p>
             <p>{free_shipping && 'envio gratis'}</p>

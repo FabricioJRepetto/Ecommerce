@@ -6,3 +6,30 @@ input[type=number] {
     appearance: textfield;
     margin: 0; 
 }
+
+.q-input-inner {
+    height: 3.1rem;
+    margin-bottom: 1rem;
+    border: 1px solid grey;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+.q-input-inner  button{
+    font-size: 1.5rem;
+    height: 3rem;
+    width: 2rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+.q-input-inner input {
+    height: 3rem;
+    width: 4rem;
+    text-align: center;    
+    border: none;
+}
+.q-input-inner input:focus {
+    outline: none;
+}

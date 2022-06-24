@@ -9,6 +9,7 @@ const cartSchema = new Schema(
             description: String,
             img: String,
             price: Number,
+            brand: String,
             stock: Number,
             quantity: Number,
       }
