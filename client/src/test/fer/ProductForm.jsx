@@ -16,30 +16,44 @@ const validateNumbers = (value) => {
 };
 
 const clearInputs = (
-  featuresQuantity,
+  /* featuresQuantity,
   setFeaturesQuantity,
   removeFeature,
-  appendFeature
+  appendFeature, */
+  attributesQuantity,
+  setAttributesQuantity,
+  removeAttribute,
+  appendAttribute
 ) => {
   /* const ids = ["name_id", "price_id", "brand_id", "stock_id", "description_id"];
   for (const id of ids) {
     let input = document.getElementById(id);
     input.value = "";
   } */
-  console.log(featuresQuantity);
-  if (featuresQuantity > 1) {
+  /* if (featuresQuantity > 1) {
     removeFeature();
     setFeaturesQuantity(1);
     appendFeature("");
   } else {
-    let input = document.getElementById("main_feature_0");
-    input.value = "";
+    let mainFeature = document.getElementById("main_feature_0");
+    mainFeature.value = "";
+  } */
+  console.log(attributesQuantity);
+  if (attributesQuantity > 1) {
+    removeAttribute();
+    setAttributesQuantity(1);
+    appendAttribute({ name: "", value_name: "" });
+  } else {
+    let attributeName = document.getElementById("attribute_name_0");
+    let attributeValue = document.getElementById("attribute_value_0");
+    attributeName.value = "";
+    attributeValue.value = "";
   }
 };
 
 const ProductForm = () => {
   // const [productImg, setProductImg] = useState();
-  const [featuresQuantity, setFeaturesQuantity] = useState(1);
+  // const [featuresQuantity, setFeaturesQuantity] = useState(1);
   const [attributesQuantity, setAttributesQuantity] = useState(1);
 
   const validationSchema = yup.object().shape({
@@ -57,16 +71,16 @@ const ProductForm = () => {
       .test("stock", "Stock debe ser un número", (value) =>
         validateNumbers(value)
       ),
-    description: yup.string().required("Descripción es requerida"), */
+    description: yup.string().required("Descripción es requerida"), 
     main_features: yup
       .array()
-      .of(yup.string().required("Principales características requeridas")),
-    /* attributes: yup.array().of(
+      .of(yup.string().required("Principales características requeridas")),*/
+    attributes: yup.array().of(
       yup.object().shape({
         name: yup.string().required("Nombre de atributo es requerido"),
         value_name: yup.string().required("Valor de atributo es requerido"),
       })
-    ),  */
+    ),
   });
 
   const formOptions = { resolver: yupResolver(validationSchema) };
@@ -77,7 +91,7 @@ const ProductForm = () => {
     formState: { errors },
   } = useForm(formOptions);
 
-  const {
+  /*   const {
     fields: fieldsFeatures,
     append: appendFeature,
     remove: removeFeature,
@@ -107,9 +121,9 @@ const ProductForm = () => {
 
   useEffect(() => {
     appendFeature("");
-  }, []);
+  }, []); */
 
-  /*     const {
+  const {
     fields: fieldsAttributes,
     append: appendAttribute,
     remove: removeAttribute,
@@ -119,39 +133,36 @@ const ProductForm = () => {
   });
 
   const handleAddAttribute = () => {
-      const attribute_name = document.getElementById(
-        `attribute_name_${attributesQuantity - 1}`
-      );
-      const attribute_value = document.getElementById(
-        `attribute_value_${attributesQuantity - 1}`
-      );
+    const attribute_name = document.getElementById(
+      `attribute_name_${attributesQuantity - 1}`
+    );
+    const attribute_value = document.getElementById(
+      `attribute_value_${attributesQuantity - 1}`
+    );
 
-      attribute_name.value !== "" &&
-        attribute_value.value !== "" &&
-        setAttributesQuantity(attributesQuantity + 1);
+    if (attribute_name.value !== "" && attribute_value.value !== "") {
+      appendAttribute({ name: "", value_name: "" });
+      setAttributesQuantity(attributesQuantity + 1);
+    } else {
+      console.log("completa campos antes de agregar uno nuevo"); //!VOLVER A VER renderizar mensaje warn
+    }
+  };
 
-    if ( attributesQuantity > 1)
+  const handleRemoveAttribute = (i) => {
+    if (attributesQuantity > 1) {
+      removeAttribute(i);
       setAttributesQuantity(attributesQuantity - 1);
+    }
   };
 
   useEffect(() => {
-    const newValue = attributesQuantity || 0;
-    const oldValue = fieldsAttributes.length;
-    if (newValue > oldValue) {
-      for (let i = oldValue; i < newValue; i++) {
-        appendAttribute({ name: "", value_name: "" });
-      }
-    } else {
-      for (let i = oldValue; i > newValue; i--) {
-        removeAttribute(i - 1);
-      }
-    }
+    appendAttribute({ name: "", value_name: "" });
     // eslint-disable-next-line
-  }, [attributesQuantity]); */
+  }, []);
 
   const submitProduct = async (productData) => {
     console.log(productData);
-    let formData = new FormData();
+    // let formData = new FormData();
     //: verificar datos
 
     // agarra las images
@@ -169,11 +180,14 @@ const ProductForm = () => {
       console.log(imgURL); */
 
     clearInputs(
-      featuresQuantity,
+      /* featuresQuantity,
       setFeaturesQuantity,
       removeFeature,
-      appendFeature,
-      fieldsFeatures
+      appendFeature, */
+      attributesQuantity,
+      setAttributesQuantity,
+      removeAttribute,
+      appendAttribute
     );
   };
 
@@ -235,8 +249,9 @@ const ProductForm = () => {
         <br /> */}
         </>
         <div>
-          {React.Children.toArray(
-            fieldsFeatures.map((item, i) => (
+          <>
+            {/* {React.Children.toArray(
+            fieldsFeatures.map((_, i) => (
               <>
                 <input
                   type="text"
@@ -253,18 +268,19 @@ const ProductForm = () => {
           <h3 onClick={() => handleAddFeature()}>
             Agregar campo de característica
           </h3>
-          <>
-            {/* <br />
-          <hr />
+
           <br />
+          <hr />
+          <br /> */}
+          </>
 
           {React.Children.toArray(
-            fieldsAttributes.map((item, i) => (
+            fieldsAttributes.map((_, i) => (
               <>
                 <input
                   type="text"
                   placeholder="Nombre del atributo"
-                   name={`attributes[${i}]name`} //!VOLVER A VER COMENTAR ESTO
+                  /*  name={`attributes[${i}]name`} //!VOLVER A VER COMENTAR ESTO */
                   autoComplete="off"
                   id={`attribute_name_${i}`}
                   {...register(`attributes.${i}.name`)}
@@ -273,23 +289,22 @@ const ProductForm = () => {
                 <input
                   type="text"
                   placeholder="Valor del atributo"
-                  name={`attributes[${i}]value_name`}
+                  /* name={`attributes[${i}]value_name`} */
                   autoComplete="off"
                   id={`attribute_value_${i}`}
                   {...register(`attributes.${i}.value_name`)}
                 />
+                <span onClick={() => handleRemoveAttribute(i)}> X</span>
                 <p>{errors.attributes?.[i]?.value_name?.message}</p>
               </>
             ))
           )}
-          <h3 onClick={() => handleAttributes("add")}>
+          <h3 onClick={() => handleAddAttribute()}>
             Agregar campos de atributo
           </h3>
-          <h3 onClick={() => handleAttributes("remove")}>
-            Quitar campos de atributo
-          </h3> 
         </div>
-        <br />
+        <>
+          {/*  <br />
         <hr />
         <br />
         <div>
@@ -302,22 +317,37 @@ const ProductForm = () => {
         </div>
         <br />
         <hr />
-        <br />*/}
-          </>
-          {/* <div>
-          <input
+        <br /> */}
+        </>
+
+        <div>
+          {/*           <input
             type="file"
             name="image"
             multiple
             accept=".jpeg,.jpg,.png"
             onChange={handleFiles}
-          />
-        </div> */}
+          /> */}
         </div>
-        {/*  //!ELMINAR ESTE CIERRE DE DIV */}
+
         <input type="submit" value="Crear producto" />
       </form>
-      {/* <button onClick={() => clearInputs()}>RESETEAR</button> */}
+      <button
+        onClick={() =>
+          clearInputs(
+            /* featuresQuantity,
+      setFeaturesQuantity,
+      removeFeature,
+      appendFeature, */
+            attributesQuantity,
+            setAttributesQuantity,
+            removeAttribute,
+            appendAttribute
+          )
+        }
+      >
+        RESETEAR
+      </button>
     </div>
   );
 };
