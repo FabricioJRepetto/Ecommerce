@@ -7,6 +7,7 @@ import { useNotification } from '../../hooks/useNotification';
 import { addCart } from '../../Redux/reducer/cartSlice';
 import Galery from './Galery';
 import { WhishlistButton as Fav } from './WhishlistButton';
+import './Details.css'
 
 const Details = () => {
     const { id } = useParams();
@@ -30,16 +31,19 @@ const Details = () => {
         {error && <p>{error}</p>}
         {data && 
             <div>
-                <Galery imgs={data.images} />
-                <div>
-                    <p>{data.brand.toUpperCase()}</p>
-                    <h2>{data.name}</h2>
-                    <h3>${data.price}</h3>
-                    <p>{data.free_shipping && 'free shipping'}</p>
-                    <button onClick={() => addToCart(data._id)}>Add to cart</button>
-                    <button disabled>Buy</button>
-                    <Fav prodId={data._id} fav={true}/>
+                <div className='details-head-container'>
+                    <Galery imgs={data.images} />
+                    <div className='details-price-section'>
+                        <Fav prodId={data._id} fav={true}/>
+                        <p>{data.brand.toUpperCase()}</p>
+                        <h2>{data.name}</h2>
+                        <h3>${data.price}</h3>
+                        <p>{data.free_shipping && 'free shipping'}</p>
+                        <button onClick={() => addToCart(data._id)}>Add to cart</button>
+                        <button disabled>Buy</button>
+                    </div>
                 </div>
+                
                 <div>
                     <br />
                     <p><b>Main features</b></p>

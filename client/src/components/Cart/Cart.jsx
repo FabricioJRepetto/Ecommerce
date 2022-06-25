@@ -162,6 +162,7 @@ const Cart = () => {
                         <div className="cart-button-section">
                             <button 
                                 disabled
+                                style={{ background: 'grey', cursor: 'default' }}
                                 onClick={goCheckout}> Stripe checkout </button>
                             <br />
                             <button disabled={(!cart || cart.length < 1 || !selectedAdd)} 

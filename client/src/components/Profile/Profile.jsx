@@ -8,6 +8,8 @@ import Modal from "../common/Modal";
 import Signout from "../Session/Signout";
 import { resizer } from "../../helpers/resizer";
 import { useNotification } from "../../hooks/useNotification";
+import Card from "../Products/Card";
+import './Profile.css'
 
 const Profile = () => {
   const [render, setRender] = useState("details");
@@ -15,6 +17,11 @@ const Profile = () => {
   const [newAdd, setNewAdd] = useState({});
   const [whishlist, setWhishlist] = useState([]);
   const [loading, setLoading] = useState(true);
+  const wl_id = useSelector(
+    (state) => state.cartReducer.whishlist
+  );
+    //const whishlist = useSelector((state) => state.cartReducer.whishlist);
+
   const { session, username, avatar, email } = useSelector(
     (state) => state.sessionReducer
   );
@@ -239,18 +246,20 @@ const Profile = () => {
           <div>
             <h1>Whishlist</h1>
             {!loading ? (
-              <div>
+              <div className="profile-whishlistcard-container">
                 {whishlist.length ? (
                   React.Children.toArray(
                     whishlist?.map((e) => (
-                      <div key={e.product_id}>
-                        <img src={resizer(e.img)} alt="product" />
-                        <p>{e.product_name}</p>
-                        <p>${e.price}</p>
-                        <button onClick={() => removeFromWL(e.product_id)}>
-                          💔
-                        </button>
-                      </div>
+                        <Card 
+                            img={e.img}
+                            name={e.product_name}
+                            price={e.price}
+                            brand={e.brand}
+                            prodId={e.product_id}
+                            free_shipping={e.free_shipping}
+                            fav={wl_id.includes(e.product_id)}
+                            on_sale={e.on_sale}
+                        />
                     ))
                   )
                 ) : (

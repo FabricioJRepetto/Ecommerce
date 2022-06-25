@@ -27,7 +27,7 @@ const Galery = ({ imgs }) => {
                     <img 
                     key={e.imgURL}
                     className={`galery-img ${(current === index) && 'visible'}`}
-                    src={resizer(e.imgURL, 500)} 
+                    src={resizer(e.imgURL, 500, false)} 
                     alt="img" />
                 )}
             </div>

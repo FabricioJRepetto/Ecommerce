@@ -12,6 +12,7 @@ import { ReactComponent as Three } from "../../assets/svg/code-svgrepo-com.svg";
 import { ReactComponent as Four } from "../../assets/svg/crop-svgrepo-com.svg";
 import { ReactComponent as Five } from "../../assets/svg/explode-svgrepo-com.svg";
 import { ReactComponent as Six } from "../../assets/svg/perform-svgrepo-com.svg";
+import Footer from '../common/Footer';
 
 const Home = () => {
     const [products, setProducts] = useState(null);
@@ -44,7 +45,7 @@ const Home = () => {
     }, []);
 
     return (
-        <>
+        <div className='home-container'>
             <div>
                 <Carousel images={images} controls indicators pointer width='100%'/>
             </div>
@@ -74,7 +75,7 @@ const Home = () => {
                     <p>TVs</p>
                 </div>
             </div>
-            <div>
+            <div >
                 {loading
                     ? <h1>LOADING</h1>
                     : <div className='random-container'>
@@ -92,19 +93,8 @@ const Home = () => {
                 }
             </div>
             <br/>
-            <div>
-                <hr/>
-                <p>subscribe to our newsletter</p>
-                <input type="text" />
-                <br/>
-                <p><u>Contact us</u></p>
-                <p><u>About us</u></p>
-                <p><u>Work with us</u></p>
-                <p><u>FAQ's</u></p>
-                <br/>
-                <p>Provider™ · 2022 all rights reserved</p>
-            </div>
-        </>
+            <Footer />
+        </div>
     )
 };
 

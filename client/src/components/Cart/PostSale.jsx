@@ -1,16 +1,17 @@
 import axios from 'axios'
-import { useState } from 'react';
-import { useEffect } from 'react'
+import { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom'
 import { resizer } from '../../helpers/resizer';
 import { useAxios } from '../../hooks/useAxios';
+import { loadCart } from '../../Redux/reducer/cartSlice';
 
 const { REACT_APP_MP_SKEY } = process.env;
 
 const PostSale = () => {
     const [orderStatus, setOrderStatus] = useState();
+    const dispatch = useDispatch();
     const { id } = useParams();
-
     const { data, loading, error } = useAxios('GET', `/order/${id}`);
     
     useEffect(() => {
@@ -46,7 +47,8 @@ const PostSale = () => {
                 const { data: stockUpdt } = await axios.put(`/product/stock/`, list);
                 console.log(stockUpdt);
 
-                //: Vaciar el estado de redux onCart
+                //? Vaciar el estado de redux onCart
+                dispatch(loadCart([]))
             };
         })();
       // eslint-disable-next-line

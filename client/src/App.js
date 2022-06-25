@@ -29,10 +29,8 @@ function App() {
     const loggedUserToken = window.localStorage.getItem("loggedTokenEcommerce");
     const loggedAvatar = window.localStorage.getItem("loggedAvatarEcommerce");
     const loggedEmail = window.localStorage.getItem("loggedEmailEcommerce");
-
                 
     (async () => {
-        //!! que pasa caaaaaa???
       try {
         if (loggedUserToken) {
             const { data } = await axios(`/user/profile/${loggedUserToken}`);
@@ -43,11 +41,9 @@ function App() {
             dispatch(loadEmail(data.email ? data.email : loggedEmail));
             
             const { data: cart } = await axios(`/cart`);
-            console.log(cart);
             dispatch(loadCart(cart.id_list));
             
             const { data: whish } = await axios(`/whishlist`);
-            console.log(whish);
             dispatch(loadWhishlist(whish.id_list));
         }
       } catch (error) {
