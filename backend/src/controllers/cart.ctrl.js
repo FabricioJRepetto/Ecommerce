@@ -3,9 +3,16 @@ const Product = require("../models/product");
 
 const getUserCart = async (req, res, next) => {
   try {
-        const userId = req.user._id;
-        const cart = await Cart.findOne({ owner: userId });
-        if (!cart) return res.json({message: 'empty cart'});
+        if (!req.user._id) return res.status(400).json({message: 'User ID not given.'});
+
+        const cart = await Cart.findOne({ owner: req.user._id });
+        if (!cart) {
+            const newCart = await Cart.create({
+                products: [],
+                owner: req.user._id
+            })
+            return res.json(newCart)
+        }
         return res.json(cart);
   } catch (error) {
     next(error);

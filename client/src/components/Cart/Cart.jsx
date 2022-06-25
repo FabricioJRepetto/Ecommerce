@@ -6,7 +6,7 @@ import CartCard from "../Products/CartCard";
 import Modal from "../common/Modal";
 import { useModal } from "../../hooks/useModal";
 import { useNotification } from "../../hooks/useNotification";
-import { cartTotal, loadProducts } from "../../Redux/reducer/cartSlice";
+import { cartTotal, loadProducts, loadCart } from "../../Redux/reducer/cartSlice";
 import { loadMercadoPago } from "../../helpers/loadMP";
 import './Cart.css'
 
@@ -34,10 +34,9 @@ const Cart = () => {
     const getCart = async () => {
         const { data } = await axios('/cart/');
         typeof data !== 'string' && setCart(data.products);
+        console.log(data);
         dispatch(cartTotal(data.total));
-        let aux = data.products?.map(e => e.product_id);
-        console.log(aux);
-        dispatch(loadProducts(aux));
+        dispatch(loadCart(data.id_list));
     };
 
     const getAddress = async () => { 
@@ -112,7 +111,7 @@ const Cart = () => {
         <div className="cart-container">
 
             <div className="cart-inner">
-                <h2>Cart</h2>
+                <h2 style={{ color: 'black' }}>Cart</h2>
                 {(cart && cart.length > 0)
                 ? <div className="">
                     
@@ -161,8 +160,9 @@ const Cart = () => {
                     </div>
                     
                         <div className="cart-button-section">
-                            <button disabled={(!cart || cart.length < 1 || !selectedAdd)} 
-                            onClick={goCheckout}> Stripe checkout </button>
+                            <button 
+                                disabled
+                                onClick={goCheckout}> Stripe checkout </button>
                             <br />
                             <button disabled={(!cart || cart.length < 1 || !selectedAdd)} 
                             onClick={openMP}> MercadoPago checkout </button>
@@ -171,11 +171,6 @@ const Cart = () => {
                 </div>
                 : <h1>your cart is empty</h1>}
             </div>
-
-
-
-
-            
 
             <form 
             id='checkout-container'

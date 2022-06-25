@@ -6,7 +6,7 @@ import { ReactComponent as Cart } from "../../assets/svg/cart.svg";
 
 const NavBar = () => {
     const session = useSelector((state) => state.sessionReducer.session);
-    const cart = useSelector((state) => state.cartReducer.main);
+    const cart = useSelector((state) => state.cartReducer.onCart);
     const navigate =useNavigate();
 
     return (

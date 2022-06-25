@@ -11,24 +11,16 @@ import { WhishlistButton as Fav } from './WhishlistButton';
 const Details = () => {
     const { id } = useParams();
     const { data, loading, error } = useAxios('GET', `/product/${id}`);
-    const cart = useSelector((state) => state.cartReducer.main);
+    const cart = useSelector((state) => state.cartReducer.onCart);
     const dispatch = useDispatch();
     const [notification] = useNotification();
 
-    // useEffect(() => {
-    //     (async () => {
-    //         const { data } = await axios(`/product/${id}`)
-    //         console.log(data)
-    //     })();
-    // }, []);
-
     const addToCart = async (id) => {
-        const {data} = await axios.post(`/cart/${id}`);
-        console.log(data);
-        if (data && !cart.includes(id)) {
-            dispatch(addCart(id));
-        };
-        notification(data.message, '/cart', 'success')
+        const { statusText, data } = await axios.post(`/cart/${id}`);
+        statusText === 'OK' && !cart.includes(id) && dispatch(addCart(id));
+        
+        statusText === 'OK' && notification(data.message, '/cart', 'success')
+        statusText !== 'OK' && notification(data.message, '/cart', 'warning')
   };
 
   return (

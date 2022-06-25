@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Routes, Route } from "react-router-dom";
 import { loadAvatar, loadEmail, loadUsername, sessionActive } from "./Redux/reducer/sessionSlice";
-import { loadProducts, loadWhishlist } from "./Redux/reducer/cartSlice";
+import { loadCart, loadWhishlist } from "./Redux/reducer/cartSlice";
 import axios from "axios";
 import "./App.css";
 
@@ -32,6 +32,7 @@ function App() {
 
                 
     (async () => {
+        //!! que pasa caaaaaa???
       try {
         if (loggedUserToken) {
             const { data } = await axios(`/user/profile/${loggedUserToken}`);
@@ -40,11 +41,13 @@ function App() {
             dispatch(loadUsername(data.name));
             dispatch(loadAvatar(data.avatar ? data.avatar : loggedAvatar));
             dispatch(loadEmail(data.email ? data.email : loggedEmail));
-
+            
             const { data: cart } = await axios(`/cart`);
-            dispatch(loadProducts(cart.products.length));
+            console.log(cart);
+            dispatch(loadCart(cart.id_list));
             
             const { data: whish } = await axios(`/whishlist`);
+            console.log(whish);
             dispatch(loadWhishlist(whish.id_list));
         }
       } catch (error) {

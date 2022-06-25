@@ -11,9 +11,9 @@ import { useNotification } from "../../hooks/useNotification";
 
 const Profile = () => {
   const [render, setRender] = useState("details");
-  const [address, setAddress] = useState(null);
+  const [address, setAddress] = useState([]);
   const [newAdd, setNewAdd] = useState({});
-  const [whishlist, setWhishlist] = useState(null);
+  const [whishlist, setWhishlist] = useState([]);
   const [loading, setLoading] = useState(true);
   const { session, username, avatar, email } = useSelector(
     (state) => state.sessionReducer
@@ -22,7 +22,7 @@ const Profile = () => {
   const navigate = useNavigate();
   const [notification] = useNotification();
 
-    const {data: orders, oLoading} = useAxios('GET', `/order/userall/`);
+    const {data: orders, oLoading, error} = useAxios('GET', `/order/userall/`);
 
     useEffect(() => {
         if (!session) {
@@ -30,9 +30,9 @@ const Profile = () => {
         } else {
             (async () => { 
                 const { data } = await axios(`/user/address/`);
-                data.address ? setAddress(data.address) : setAddress(null);
+                data.address ? setAddress(data.address) : setAddress([]);
                 const { data: list } = await axios(`/whishlist/`);
-                list.products ? setWhishlist(list.products) : setWhishlist(null);
+                list.products ? setWhishlist(list.products) : setWhishlist([]);
 
                 setLoading(false);
              })();
@@ -44,7 +44,7 @@ const Profile = () => {
         setLoading(true);
         const { data } = await axios.delete(`/user/address/${id}`);
         console.log(data);
-        data ? setAddress(data) : setAddress(null);
+        data ? setAddress(data) : setAddress([]);
         setLoading(false);
     };
 
@@ -120,7 +120,7 @@ const Profile = () => {
   const removeFromWL = async (id) => {
     const { data } = await axios.delete(`/whishlist/${id}`);
     console.log(data);
-    data.list.id_list ? setWhishlist(data.list.id_list) : setWhishlist(null);
+    data.list.id_list ? setWhishlist(data.list.id_list) : setWhishlist([]);
     notification(data.message, '', 'success')
   };
 
@@ -161,7 +161,7 @@ const Profile = () => {
             <h2>Orders</h2>
             {!oLoading ? (
               <div>
-                {orders.length ? (
+                {orders?.length ? (
                   React.Children.toArray(
                     orders?.map((e) => (
                       <div key={e.id}>

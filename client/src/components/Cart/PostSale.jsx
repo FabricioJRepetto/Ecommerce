@@ -26,10 +26,10 @@ const PostSale = () => {
             });
             console.log(data.results[0].status);
             setOrderStatus(data.results[0].status);
-
+            
             if (data.results[0].status === 'approved') {
                 //? cambiar orden a pagada
-                const { data: orderUpdt } = await axios.put(`/order/${id}`,{
+                const orderUpdt = await axios.put(`/order/${id}`,{
                     status: 'approved'
                 });
                 console.log(orderUpdt);
@@ -39,10 +39,14 @@ const PostSale = () => {
                 console.log(cartEmpty.message);
     
                 //? restar unidades de cada stock
+                //: crear un virtual para ids de order ?
                 const { data: order } = await axios(`/order/${id}`);
                 let list = order.products.map(e => ({id: e.product_id, amount: e.quantity}));
+
                 const { data: stockUpdt } = await axios.put(`/product/stock/`, list);
                 console.log(stockUpdt);
+
+                //: Vaciar el estado de redux onCart
             };
         })();
       // eslint-disable-next-line

@@ -4,16 +4,15 @@ const Cart = require('../models/cart');
 const getOrder = async (req, res, next) => { 
     try {
         const userId = req.user._id;
-        const orderId = req.params.id;
+
+        if (!userId || !req.params.id) return res.status(400).json({message: 'User ID or Order ID not given.'});
+
         let order = await Order.findOne({
             user: userId,
-            _id: orderId
+            _id: req.params.id
         });
-        if (order) {
-            return res.json(order);
-        } else {
-            return res.status(404).json('Order not found')
-        };
+        if (!order) return res.json({message: 'No orders.'});
+        return res.json(order);
     } catch (error) {
         next(error)
     }
@@ -86,6 +85,7 @@ const deleteOrder = async (req, res, next) => {
 
  const updateOrder = async (req, res, next) => { 
      //: añadir mas opciones de status ?
+     console.log(req.headers);
      try {
         const order = await Order.findByIdAndUpdate(req.params.id,
         {
