@@ -56,25 +56,27 @@ const clearInputs = (
 const ProductForm = () => {
   const [productImg, setProductImg] = useState([]);
   const [productImgUrls, setProductImgUrls] = useState([]);
-  // const [featuresQuantity, setFeaturesQuantity] = useState(1);
-  // const [attributesQuantity, setAttributesQuantity] = useState(1);
+  const [featuresQuantity, setFeaturesQuantity] = useState(1);
+  const [attributesQuantity, setAttributesQuantity] = useState(1);
 
   const validationSchema = yup.object().shape({
-    /* name: yup.string().required("Nombre es requerido"),
-    price: yup.string()
-     .required("Precio es requerido")
+    name: yup.string().required("Nombre es requerido"),
+    price: yup
+      .string()
+      .required("Precio es requerido")
       .test(
         "price",
         "Precio debe ser un número válido (ej: '1234.56')",
         (value) => validatePrice(value)
-      ),  brand: yup.string().required("Marca es requerida"),
+      ),
+    brand: yup.string().required("Marca es requerida"),
     available_quantity: yup
       .string()
       .required("Stock es requerido")
       .test("stock", "Stock debe ser un número", (value) =>
         validateNumbers(value)
       ),
-    description: yup.string().required("Descripción es requerida"), 
+    description: yup.string().required("Descripción es requerida"),
     main_features: yup
       .array()
       .of(yup.string().required("Principales características requeridas")),
@@ -83,7 +85,7 @@ const ProductForm = () => {
         name: yup.string().required("Nombre de atributo es requerido"),
         value_name: yup.string().required("Valor de atributo es requerido"),
       })
-    ),*/
+    ),
   });
 
   const formOptions = { resolver: yupResolver(validationSchema) };
@@ -94,7 +96,7 @@ const ProductForm = () => {
     formState: { errors },
   } = useForm(formOptions);
 
-  /*   const {
+  const {
     fields: fieldsFeatures,
     append: appendFeature,
     remove: removeFeature,
@@ -124,9 +126,10 @@ const ProductForm = () => {
 
   useEffect(() => {
     appendFeature("");
-  }, []); */
+    // eslint-disable-next-line
+  }, []);
 
-  /*   const {
+  const {
     fields: fieldsAttributes,
     append: appendAttribute,
     remove: removeAttribute,
@@ -161,15 +164,15 @@ const ProductForm = () => {
   useEffect(() => {
     appendAttribute({ name: "", value_name: "" });
     // eslint-disable-next-line
-  }, []); */
+  }, []);
 
   const submitProduct = async (productData) => {
     if (productImg.length === 0) return console.log("subir img"); //!VOLVER A VER renderizar mensaje warn
-    //  let formData = new FormData();
+    let formData = new FormData();
     //: verificar datos
 
     // agarra las images
-    /* productImg.forEach((pic) => {
+    productImg.forEach((pic) => {
       formData.append("images", pic);
     });
     formData.append("images", productImg);
@@ -179,24 +182,23 @@ const ProductForm = () => {
       headers: {
         "Content-Type": "multipart/form-data",
       },
-    }); 
-    console.log(imgURL);*/
+    });
+    console.log(imgURL);
 
-    /* clearInputs(
-       featuresQuantity,
+    clearInputs(
+      featuresQuantity,
       setFeaturesQuantity,
       removeFeature,
-      appendFeature, 
+      appendFeature,
       attributesQuantity,
       setAttributesQuantity,
       removeAttribute,
       appendAttribute,
       setProductImg
-    ); */
+    );
   };
 
   useEffect(() => {
-    console.log(productImg.length);
     //  if (productImg.length > 0) {
     const newImageUrls = [];
     for (const image of productImg) {
@@ -223,117 +225,115 @@ const ProductForm = () => {
         onSubmit={handleSubmit(submitProduct)}
       >
         <>
-          {/*  <div>
-          <input
-            type="text"
-            placeholder="Título/Nombre"
-            autoComplete="off"
-            id="name_id"
-            {...register("name")}
-          />
-          <div>{errors.name?.message}</div>
+          <div>
+            <input
+              type="text"
+              placeholder="Título/Nombre"
+              autoComplete="off"
+              id="name_id"
+              {...register("name")}
+            />
+            <div>{errors.name?.message}</div>
 
-          <input
-            type="text"
-            placeholder="Precio"
-            autoComplete="off"
-            id="price_id"
-            {...register("price")}
-          />
-          <div>{errors.price?.message}</div>
+            <input
+              type="text"
+              placeholder="Precio"
+              autoComplete="off"
+              id="price_id"
+              {...register("price")}
+            />
+            <div>{errors.price?.message}</div>
 
-          <input
-            type="text"
-            placeholder="Marca"
-            autoComplete="off"
-            id="brand_id"
-            {...register("brand")}
-          />
-          <div>{errors.brand?.message}</div>
+            <input
+              type="text"
+              placeholder="Marca"
+              autoComplete="off"
+              id="brand_id"
+              {...register("brand")}
+            />
+            <div>{errors.brand?.message}</div>
 
-          <input
-            type="text"
-            placeholder="Stock"
-            autoComplete="off"
-            id="stock_id"
-            {...register("available_quantity", {
-              required: true,
-              pattern: /^[0-9]*$/,
-            })}
-          />
-          <div>{errors.available_quantity?.message}</div>
-        </div>
-        <br />
-        <hr />
-        <br />
-        
-        <div>
-
-            {React.Children.toArray(
-            fieldsFeatures.map((_, i) => (
-              <>
-                <input
-                  type="text"
-                  placeholder="Característica principal"
-                  autoComplete="off"
-                  id={`main_feature_${i}`}
-                  {...register(`main_features.${i}`)}
-                />
-                <span onClick={() => handleRemoveFeature(i)}> X</span>
-                <p>{errors.main_features?.[i]?.message}</p>
-              </>
-            ))
-          )}
-          <h3 onClick={() => handleAddFeature()}>
-            Agregar campo de característica
-          </h3>
-
+            <input
+              type="text"
+              placeholder="Stock"
+              autoComplete="off"
+              id="stock_id"
+              {...register("available_quantity", {
+                required: true,
+                pattern: /^[0-9]*$/,
+              })}
+            />
+            <div>{errors.available_quantity?.message}</div>
+          </div>
           <br />
           <hr />
           <br />
 
+          <div>
+            {React.Children.toArray(
+              fieldsFeatures.map((_, i) => (
+                <>
+                  <input
+                    type="text"
+                    placeholder="Característica principal"
+                    autoComplete="off"
+                    id={`main_feature_${i}`}
+                    {...register(`main_features.${i}`)}
+                  />
+                  <span onClick={() => handleRemoveFeature(i)}> X</span>
+                  <p>{errors.main_features?.[i]?.message}</p>
+                </>
+              ))
+            )}
+            <h3 onClick={() => handleAddFeature()}>
+              Agregar campo de característica
+            </h3>
 
-          {React.Children.toArray(
-            fieldsAttributes.map((_, i) => (
-              <>
-                <input
-                  type="text"
-                  placeholder="Nombre del atributo"
-                  autoComplete="off"
-                  id={`attribute_name_${i}`}
-                  {...register(`attributes.${i}.name`)}
-                />
-                <p>{errors.attributes?.[i]?.name?.message}</p>
-                <input
-                  type="text"
-                  placeholder="Valor del atributo"
-                  autoComplete="off"
-                  id={`attribute_value_${i}`}
-                  {...register(`attributes.${i}.value_name`)}
-                />
-                <span onClick={() => handleRemoveAttribute(i)}> X</span>
-                <p>{errors.attributes?.[i]?.value_name?.message}</p>
-              </>
-            ))
-          )}
-          <h3 onClick={() => handleAddAttribute()}>
-            Agregar campos de atributo
-          </h3>
-        </div> 
             <br />
-        <hr />
-        <br />
-        <div>
-          <textarea
-            placeholder="Descripción"
-            id="description_id"
-            {...register("description")}
-          />
-          <div>{errors.description?.message}</div>
-        </div>
-        <br />
-        <hr />
-        <br /> */}
+            <hr />
+            <br />
+
+            {React.Children.toArray(
+              fieldsAttributes.map((_, i) => (
+                <>
+                  <input
+                    type="text"
+                    placeholder="Nombre del atributo"
+                    autoComplete="off"
+                    id={`attribute_name_${i}`}
+                    {...register(`attributes.${i}.name`)}
+                  />
+                  <p>{errors.attributes?.[i]?.name?.message}</p>
+                  <input
+                    type="text"
+                    placeholder="Valor del atributo"
+                    autoComplete="off"
+                    id={`attribute_value_${i}`}
+                    {...register(`attributes.${i}.value_name`)}
+                  />
+                  <span onClick={() => handleRemoveAttribute(i)}> X</span>
+                  <p>{errors.attributes?.[i]?.value_name?.message}</p>
+                </>
+              ))
+            )}
+            <h3 onClick={() => handleAddAttribute()}>
+              Agregar campos de atributo
+            </h3>
+          </div>
+          <br />
+          <hr />
+          <br />
+          <div>
+            <textarea
+              placeholder="Descripción"
+              id="description_id"
+              {...register("description")}
+            />
+            <div>{errors.description?.message}</div>
+          </div>
+          <br />
+          <hr />
+          <br />
         </>
 
         <div>
@@ -352,12 +352,7 @@ const ProductForm = () => {
         {React.Children.toArray(
           productImgUrls.map((imageUrl, i) => (
             <>
-              <img
-                src={imageUrl}
-                alt="sd"
-                className="imgs-product"
-                /*  id={`product_img_${i}`} */
-              />
+              <img src={imageUrl} alt="sd" className="imgs-product" />
               <span onClick={() => handleRemoveImg(i)}> X</span>
             </>
           ))
@@ -365,13 +360,13 @@ const ProductForm = () => {
 
         <input type="submit" value="Crear producto" />
       </form>
-      {/*  <button
+      <button
         onClick={() =>
           clearInputs(
-             featuresQuantity,
-      setFeaturesQuantity,
-      removeFeature,
-      appendFeature, 
+            featuresQuantity,
+            setFeaturesQuantity,
+            removeFeature,
+            appendFeature,
             attributesQuantity,
             setAttributesQuantity,
             removeAttribute,
@@ -380,7 +375,7 @@ const ProductForm = () => {
         }
       >
         RESETEAR
-      </button> */}
+      </button>
     </div>
   );
 };
