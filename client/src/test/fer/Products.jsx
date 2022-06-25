@@ -5,21 +5,30 @@ import {
   filterProducts,
   loadProductsFound,
 } from "../../Redux/reducer/productsSlice";
-import { mainPlus } from "../../Redux/reducer/cartSlice";
+import { useEffect } from "react";
+import { loadProducts, addCart } from "../../Redux/reducer/cartSlice";
+import Card from "../../components/Products/Card";
 
 const Products = () => {
-  const [pricesFilter, setPricesFilter] = useState({
-    min: "300",
-    max: "500",
-  });
-  const [shippingFilter, setShippingFilter] = useState(false);
-  const [brandsFilter, setBrandsFilter] = useState();
+    const [pricesFilter, setPricesFilter] = useState({
+        min: "300",
+        max: "500",
+    });
+    const [shippingFilter, setShippingFilter] = useState(false);
+    const [brandsFilter, setBrandsFilter] = useState();
 
-  const brands = useRef();
-  const dispatch = useDispatch();
-  const { productsFound, productsFiltered } = useSelector(
-    (state) => state.productsReducer
-  );
+    const brands = useRef();
+    const dispatch = useDispatch();
+    const { productsFound, productsFiltered } = useSelector(
+        (state) => state.productsReducer
+    );
+    const cart = useSelector((state) => state.cartReducer.main);
+    const whishlist = useSelector((state) => state.cartReducer.whishlist);
+
+useEffect(() => {
+  getProducts();
+  // eslint-disable-next-line
+}, [])
 
   let productsToShow;
   productsFiltered.length === 0
@@ -43,13 +52,7 @@ const Products = () => {
         brands.current.sort();
       })
       .catch((err) => console.log(err));
-  };
-
-  const addToCart = async (id) => {
-    const { data } = await axios.post(`/cart/${id}`);
-    console.log(data);
-    data && dispatch(mainPlus());
-  };
+  };  
 
   const filterPrices = (e) => {
     e.preventDefault();
@@ -110,92 +113,103 @@ const Products = () => {
   }; */
 
   return (
-    <>
-      <hr />
-      <h2>PRODUCTS</h2>
-      <>
-        <button onClick={getProducts}>GET ALL PRODUCTS</button>
-        {React.Children.toArray(
-          productsToShow?.map((prod) => (
-            <div>
-              {prod.name} - ${prod.price}
-              {"    "}
-              <button onClick={() => addToCart(prod._id)}>Add to cart</button>
+    <div className="products-container">
+
+      <div className="products-results-container">
+        <div className="products-results-inner">
+            {React.Children.toArray(
+            productsToShow?.map((prod) => (
+                <Card
+                    img={prod.images[0].imgURL}
+                    name={prod.name}
+                    price={prod.price}
+                    brand={prod.brand}
+                    prodId={prod._id}
+                    free_shipping={prod.free_shipping}
+                    fav={whishlist.includes(prod._id)}
+                    on_sale={prod.on_sale}
+                />
+            )))}
+        </div>
+      </div>
+
+        <div className="products-filters">
+            <h3>BRANDS</h3>
+            <div className="filter-brand-checkbox-container">
+                {React.Children.toArray(
+                brands.current?.map((brand) => (
+                    <label>
+                    <input
+                        type="checkbox"
+                        name={brand}
+                        checked={brandsFilter[brand]}
+                        onChange={handleBrands}
+                    />
+                    {brand}
+                    </label>
+                ))
+                )}
+                {/* {brands.current && (
+                <button onClick={() => filterBrand(null)}>Clear</button>
+                )} */}
+                <br />
+                <hr />
+                <br />
             </div>
-          ))
-        )}
-        <br />
-        <hr />
-        <br />
-      </>
-      <h3>BRANDS</h3>
-      <>
-        {React.Children.toArray(
-          brands.current?.map((brand) => (
+
+            <h3>PRICES</h3>
+            <>
+                <form onSubmit={filterPrices}>
+                    <div>
+                        <input
+                            type="text"
+                            pattern="[0-9]*"
+                            placeholder="min"
+                            name="min"
+                            onChange={handlePrices}
+                            value={pricesFilter.min}
+                        />
+                    </div>
+                    <div>
+                        <input
+                            type="text"
+                            pattern="[0-9]*"
+                            placeholder="max"
+                            name="max"
+                            onChange={handlePrices}
+                            value={pricesFilter.max}
+                        />
+                    </div>
+                <input type="submit" value="filter" />
+                </form>
+                <button
+                onClick={() =>
+                    dispatch(
+                    filterProducts({
+                        source: "productsFound",
+                        type: "price",
+                        value: null,
+                    })
+                    )
+                }
+                >
+                clear
+                </button>
+            </>
+
+            <br />
             <label>
-              <input
+                <input
                 type="checkbox"
-                name={brand}
-                checked={brandsFilter[brand]}
-                onChange={handleBrands}
-              />
-              {brand}
+                name="free_shipping"
+                checked={shippingFilter}
+                onChange={filterShipping}
+                />
+                free shipping
             </label>
-          ))
-        )}
-        {/* {brands.current && (
-          <button onClick={() => filterBrand(null)}>Clear</button>
-        )} */}
-        <br />
-        <hr />
-        <br />
-      </>
-      <h3>PRICES</h3>
-      <>
-        <form onSubmit={filterPrices}>
-          <input
-            type="text"
-            pattern="[0-9]*"
-            placeholder="min"
-            name="min"
-            onChange={handlePrices}
-            value={pricesFilter.min}
-          />
-          <input
-            type="text"
-            pattern="[0-9]*"
-            placeholder="max"
-            name="max"
-            onChange={handlePrices}
-            value={pricesFilter.max}
-          />
-          <input type="submit" value="filter" />
-        </form>
-        <button
-          onClick={() =>
-            dispatch(
-              filterProducts({
-                source: "productsFound",
-                type: "price",
-                value: null,
-              })
-            )
-          }
-        >
-          clear
-        </button>
-      </>
-      <br />
-      <label>
-        <input
-          type="checkbox"
-          name="free_shipping"
-          checked={shippingFilter}
-          onChange={filterShipping}
-        />
-        free shipping
-      </label>
-    </>
+        </div>
+
+    </div>
   );
 };
 

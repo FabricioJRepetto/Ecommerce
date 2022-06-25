@@ -9,6 +9,7 @@ const cartSchema = new Schema(
             description: String,
             img: String,
             price: Number,
+            brand: String,
             stock: Number,
             quantity: Number,
       }
@@ -25,6 +26,7 @@ const cartSchema = new Schema(
   }
 );
 
+// tiene que ser 'function', no funciona con una '() =>'
 cartSchema.virtual('total').get(function() {
     let total = 0;
     this.products.forEach(p => {
@@ -32,4 +34,9 @@ cartSchema.virtual('total').get(function() {
     });
     return total;
 });
+
+cartSchema.virtual('id_list').get(function() {
+    return this.products?.map(p => p.product_id);
+})
+
 module.exports = model("Cart", cartSchema);

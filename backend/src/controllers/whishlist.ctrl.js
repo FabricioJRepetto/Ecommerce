@@ -38,7 +38,7 @@ const addToList = async (req, res, next) => {
                     img: images[0].imgURL
                 });
                 await list.save();
-                return res.json({message: "Product added to the whishlist."});
+                return res.json({message: "Product added to the whishlist.", list});
             }
             return res.json({message: "Product already on whishlist."});
         } else {
@@ -73,7 +73,8 @@ const removeFromList = async (req, res, next) => {
         },
         {new: true}
         );
-        return res.json(list);
+        console.log(list);
+        return res.json({message: 'Product removed', list});
     } catch (error) {
         next(error);
     }

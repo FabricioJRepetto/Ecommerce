@@ -17,7 +17,7 @@ const addAddress = async (req, res, next) => {
         });
 
         if (add) {
-            if (add.length > 0) {
+            if (add.address.length > 0) {
                 add.address.push({...req.body, isDefault: false});
             } else {
                 add.address.push({...req.body, isDefault: true});

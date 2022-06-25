@@ -1,0 +1,22 @@
+.backtotop-button {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    background-color: rgba(0, 0, 0, .8);
+    box-shadow: 0 0px 10px #FFCBCB;
+    position: fixed;
+    bottom: -60px;
+    right: 30px;
+    cursor: pointer;
+    transition: all .3s ease-out;
+}
+.icon-up {
+    transform: scale(.5) rotate(90deg);
+}
+.icon-up path{
+    fill: #FFCBCB;
+}
+.visible-btt {
+    transition: all .3s ease;
+    bottom: 20px;
+}

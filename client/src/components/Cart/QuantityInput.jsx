@@ -21,36 +21,49 @@ const QuantityInput = ({prodId: id, prodQuantity, stock, price}) => {
         }
     };
 
-    const handleQuantityEx = async (e) => { 
-        let value = Number(e.target.value);
-        if (value < 1) {
-            setQuantity(1);
-            e.target.value = 1;
-        } else if (value > stock) {
-            setQuantity(stock);
-            e.target.value = stock;
+    const handleQuantityEx = async ({ target }) => { 
+        const { name, value, validity } = target;
+        let validatedValue;
+
+        if (!validity.valid) {
+            validatedValue = quantity[name];
         } else {
-            const test = await axios.put(`/cart/quantityEx?id=${id}&amount=${value}`);
-            console.log(test);
-            setQuantity(value);
+            validatedValue = value;
         }
-    }
+
+        if (validatedValue < 1) {
+            setQuantity(1);
+            validatedValue = 1;
+        } else if (validatedValue > stock) {
+            setQuantity(stock);
+            validatedValue = stock;
+        } else {
+            const test = await axios.put(`/cart/quantityEx?id=${id}&amount=${validatedValue}`);
+            console.log(test);
+            setQuantity(validatedValue);
+        }
+    };
 
     return (
-        <>
-            <button disabled={quantity < 2 && true} 
-                onClick={() => handleQuantity(id, 'sub')}> - </button>
-            <input type="number" 
-                min={1}
-                id={id}
-                className={'quantityInput'}
-                value={quantity} 
-                style={{width: '50px'}}
-                onChange={handleQuantityEx}
-            />
-            <button disabled={quantity >= stock && true} 
-                onClick={() => handleQuantity(id, 'add')}> + </button>
-        </>        
+        <div className='q-input-container'>
+            <div className='q-input-inner'>
+                <button disabled={quantity < 2} 
+                    onClick={() => handleQuantity(id, 'sub')}> - </button>
+                <input type="number" 
+                    min={1}
+                    pattern="[1-9]"
+                    id={id}
+                    className={'quantityInput'}
+                    value={quantity}
+                    onChange={handleQuantityEx}
+                />
+                <button disabled={quantity >= stock} 
+                    onClick={() => handleQuantity(id, 'add')}> + </button>
+            </div>
+            <div>
+                <p>{`stock ${stock}`}</p>
+            </div>
+        </div>
     )
 }
 

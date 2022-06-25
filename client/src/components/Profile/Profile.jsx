@@ -7,6 +7,7 @@ import { useModal } from "../../hooks/useModal";
 import Modal from "../common/Modal";
 import Signout from "../Session/Signout";
 import { resizer } from "../../helpers/resizer";
+import { useNotification } from "../../hooks/useNotification";
 
 const Profile = () => {
   const [render, setRender] = useState("details");
@@ -19,32 +20,39 @@ const Profile = () => {
   );
   const [isOpenAddForm, openModalAddForm, closeAddForm, prop] = useModal();
   const navigate = useNavigate();
+  const [notification] = useNotification();
 
-  const { data: orders, oLoading } = useAxios("GET", `/order/userall/`);
-  !oLoading && console.log(orders);
+    const {data: orders, oLoading} = useAxios('GET', `/order/userall/`);
 
-  useEffect(() => {
-    if (!session) {
-      navigate("/signin");
-    } else {
-      (async () => {
-        const { data } = await axios(`/user/address/`);
-        data.address ? setAddress(data.address) : setAddress(null);
-        const { data: list } = await axios(`/whishlist/`);
-        list.products ? setWhishlist(list.products) : setWhishlist(null);
+    useEffect(() => {
+        if (!session) {
+            navigate("/signin");
+        } else {
+            (async () => { 
+                const { data } = await axios(`/user/address/`);
+                data.address ? setAddress(data.address) : setAddress(null);
+                const { data: list } = await axios(`/whishlist/`);
+                list.products ? setWhishlist(list.products) : setWhishlist(null);
 
+                setLoading(false);
+             })();
+        }
+         // eslint-disable-next-line
+    }, []);    
+
+    const deleteAddress = async (id) => {
+        setLoading(true);
+        const { data } = await axios.delete(`/user/address/${id}`);
+        console.log(data);
+        data ? setAddress(data) : setAddress(null);
         setLoading(false);
-      })();
-    }
-    // eslint-disable-next-line
-  }, []);
+    };
 
-  const deleteAddress = async (id) => {
-    setLoading(true);
-    const { data } = await axios.delete(`/user/address/${id}`);
-    data ? setAddress(data) : setAddress(null);
-    setLoading(false);
-  };
+    //: set default address
+    const setDefault = async (id) => { 
+        const { data } = await axios.put(`/user/address/default/${id}`);
+        setAddress(data);
+     };     
 
   //: edit
   const editAddress = async (id) => {
@@ -58,7 +66,7 @@ const Profile = () => {
       street_name: target.street_name,
       street_number: target.street_number,
     });
-    openModalAddForm(false);
+    openModalAddForm();
   };
 
   const handleAddress = async (e, n) => {
@@ -78,27 +86,20 @@ const Profile = () => {
         street_number: newAdd.street_number,
       };
 
-      if (!n) {
+      if (n) {
+        const { data: updated } = await axios.post(`/user/address/`, data);
+        setAddress(updated);
+      } else {
         const { data: updated } = await axios.put(
           `/user/address/${newAdd.id}`,
           data
         );
         setAddress(updated);
-      } else {
-        const { data: updated } = await axios.post(`/user/address/`, data);
-        setAddress(updated);
       }
       setNewAdd({});
       closeAddForm();
     }
-  };
-
-  //: set default address
-  const setDefault = async (id) => {
-    const { data } = await axios.put(`/user/address/default/${id}`);
-    console.log(data);
-    setAddress(data);
-  };
+  }; 
 
   const handleChange = ({ target }) => {
     const { name, value, validity } = target;
@@ -118,7 +119,9 @@ const Profile = () => {
   //: Whishlist
   const removeFromWL = async (id) => {
     const { data } = await axios.delete(`/whishlist/${id}`);
-    data.products ? setWhishlist(data.products) : setWhishlist(null);
+    console.log(data);
+    data.list.id_list ? setWhishlist(data.list.id_list) : setWhishlist(null);
+    notification(data.message, '', 'success')
   };
 
   const formatDate = (date) => {

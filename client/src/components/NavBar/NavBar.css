@@ -2,6 +2,8 @@
     display: flex;
     justify-content: space-around;
     align-items: flex-end;
+    padding: 10px;
+    margin-bottom: 20px;
 }
 .navBar a {
     color: beige;
@@ -13,4 +15,19 @@
 .navBar h1 {
     color: #FFA500;
     cursor: pointer;
+}
+
+.cart-icon-container {
+    position: relative;
+}
+.cart-icon {
+    transform: scale(.5);
+}
+.cart-icon path {
+    fill: white;
+}
+.cart-number {
+    position: absolute;
+    top: 5px;
+    right: 5px;
 }

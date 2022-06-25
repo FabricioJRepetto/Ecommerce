@@ -2,12 +2,15 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import CartCard from "../Products/CartCard";
 import Modal from "../common/Modal";
 import { useModal } from "../../hooks/useModal";
-import { cartTotal, mainMinus } from "../../Redux/reducer/cartSlice";
-import QuantityInput from "./QuantityInput";
+import { useNotification } from "../../hooks/useNotification";
+import { cartTotal, loadProducts } from "../../Redux/reducer/cartSlice";
 import { loadMercadoPago } from "../../helpers/loadMP";
-import { resizer } from "../../helpers/resizer";
+import './Cart.css'
+
+import { ReactComponent as Arrow } from '../../assets/svg/arrow-right.svg'
 
 const Cart = () => {
     const [cart, setCart] = useState(null);
@@ -16,11 +19,11 @@ const Cart = () => {
     const [newAdd, setNewAdd] = useState({});
     const [selectedAdd, setSelectedAdd] = useState(null);
     const total = useSelector((state) => state.cartReducer.total);
-    const [isOpen, openModal, closeModal, prop] = useModal();
     const [isOpenAddForm, openAddForm, closeAddForm] = useModal();
     const [isOpenAddList, openAddList, closeAddList] = useModal();
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const [notification] = useNotification();
 
     useEffect(() => {
         getCart();
@@ -32,6 +35,9 @@ const Cart = () => {
         const { data } = await axios('/cart/');
         typeof data !== 'string' && setCart(data.products);
         dispatch(cartTotal(data.total));
+        let aux = data.products?.map(e => e.product_id);
+        console.log(aux);
+        dispatch(loadProducts(aux));
     };
 
     const getAddress = async () => { 
@@ -80,10 +86,9 @@ const Cart = () => {
      };
 
     const deleteProduct = async (id) => {
-        await axios.delete(`/cart/${id}`);
+        const { data } = await axios.delete(`/cart/${id}`);
         getCart();
-        dispatch(mainMinus());
-        closeModal();
+        notification(data.message, '', 'warning');
     };
 
     const goCheckout = async () => {
@@ -104,15 +109,98 @@ const Cart = () => {
      };
 
     return (
-        <div >            
-            <Modal isOpen={isOpen} closeModal={closeModal}>
-                <h1>Remove this product from the cart?</h1>
-                <div>
-                    <button onClick={closeModal}>Cancel</button>
-                    <button onClick={() => deleteProduct(prop)}>Delete</button>
+        <div className="cart-container">
+
+            <div className="cart-inner">
+                <h2>Cart</h2>
+                {(cart && cart.length > 0)
+                ? <div className="">
+                    
+                    {cart.map((p) => (
+                        <CartCard
+                            key={p.product_id}
+                            on_cart={true}
+                            img={p.img}
+                            name={p.product_name}
+                            prodId={p.product_id}
+                            price={p.price}
+                            brand={p.brand}
+                            deleteP={deleteProduct}
+                            prodQuantity={p.quantity}
+                            stock={p.stock}
+                            />
+                    ))}
+
+                    <div className="total-section-container">
+                        {selectedAdd
+                            ? <div className="total-section-inner">
+                                    <div 
+                                        onClick={openAddList}
+                                        className='cart-address-selector'
+                                        name={'address-container'}>
+                                            {selectedAdd.street_name+' '+selectedAdd.street_number+', '+selectedAdd.city}
+                                        <Arrow className='arrow-address-selector'/>
+                                    </div>
+                                    <div className="cart-total">Gratis WIP</div>
+                                </div>
+                            : <div className="total-section-inner" >
+                                <div 
+                                    onClick={openAddForm}
+                                    className="cart-address-selector">
+                                    <b>You have no address asociated,</b> 
+                                    please create one to proceed. 
+                                    <Arrow className='arrow-address-selector'/>
+                                </div>
+                                <div className="cart-total">Gratis WIP</div>
+                            </div>}
+
+                        <div className="total-section-inner">
+                            <h2>Total:</h2>
+                            <h2 className="cart-total">${total}</h2>
+                        </div>
+                    </div>
+                    
+                        <div className="cart-button-section">
+                            <button disabled={(!cart || cart.length < 1 || !selectedAdd)} 
+                            onClick={goCheckout}> Stripe checkout </button>
+                            <br />
+                            <button disabled={(!cart || cart.length < 1 || !selectedAdd)} 
+                            onClick={openMP}> MercadoPago checkout </button>
+                        </div>
+                    
                 </div>
-            </Modal>
+                : <h1>your cart is empty</h1>}
+            </div>
+
+
+
+
             
+
+            <form 
+            id='checkout-container'
+            method="GET"
+            action={`/orders/post-sale/${orderId}`}></form>
+            <br />
+            <br />
+            <br />
+            <br />
+            <hr />
+            <ul>
+                <br/>
+                <p><b>stripe</b></p>
+                <li><p>card: <i>4242 4242 4242 4242</i></p></li>
+                <li><p>expiration: <i>fecha mayor a la actual</i></p></li>
+                <li><p>cvc: <i>123</i></p></li>
+                <br/>
+                <p><b>mercadopago</b></p>
+                <li><p>card: <i>5416 7526 0258 2580</i></p></li>
+                <li><p>expiration: <i>11/25</i></p></li>
+                <li><p>cvc: <i>123</i></p></li>
+                <li><p>nombre: <i>APRO</i></p></li>
+                <li><p>dni: <i>12345678</i></p></li>
+            </ul>
+
             <Modal isOpen={isOpenAddForm} closeModal={closeAddForm}>
                 <h1>New shipping address</h1>
                 <form onSubmit={handleSubmit}>
@@ -161,7 +249,6 @@ const Cart = () => {
                     />
 
                     <input
-                            
                             type="number"
                             name="street_number" 
                             pattern="[1-9]"
@@ -192,70 +279,6 @@ const Cart = () => {
                 </div>
             </Modal>
 
-            <hr />
-            <h2>Cart</h2>
-            <br />
-            {(cart && cart.length > 0)
-            ? <div> 
-                {cart.map((prod) => (
-                    <div key={prod.product_id}>
-                        <img src={resizer(prod.img)} alt='product img' />
-                            {prod.product_name} - ${prod.price} - 
-                                <QuantityInput prodId={prod.product_id} prodQuantity={prod.quantity}
-                                stock={prod.stock} 
-                                price={prod.price}
-                            />
-                            <p onClick={()=> openModal(prod.product_id)}><b> Delete </b></p>
-                    </div>
-                ))}
-                <h2>{`Total: ${total}`}</h2>
-                <br/>
-                <div>
-                    <p><b>Shipping address:</b></p>
-                    {selectedAdd
-                        ? <div>
-                            <div name={'address-container'}>{selectedAdd.street_name+' '+selectedAdd.street_number+', '+selectedAdd.city}</div>
-                                <button onClick={openAddList}>Select another address</button>
-                            </div>
-                        : <div>
-                            <p><b>You have no address asociated,</b> 
-                            please create one to proceed.</p>
-                            <button onClick={openAddForm}>Create address</button>
-                        </div>}
-                </div>
-            </div>
-            : <h1>your cart is empty</h1>
-            }
-            <br />
-            <br />
-            <button disabled={(!cart || cart.length < 1 || !selectedAdd) && true } 
-            onClick={goCheckout}> Stripe checkout </button>
-            <br />
-            <button disabled={(!cart || cart.length < 1 || !selectedAdd) && true } 
-            onClick={openMP}> MercadoPago checkout </button>
-            <form 
-            id='checkout-container'
-            method="GET"
-            action={`/orders/post-sale/${orderId}`}></form>
-            <br />
-            <br />
-            <br />
-            <br />
-            <hr />
-            <ul>
-                <br/>
-                <p><b>stripe</b></p>
-                <li><p>card: <i>4242 4242 4242 4242</i></p></li>
-                <li><p>expiration: <i>fecha mayor a la actual</i></p></li>
-                <li><p>cvc: <i>123</i></p></li>
-                <br/>
-                <p><b>mercadopago</b></p>
-                <li><p>card: <i>5416 7526 0258 2580</i></p></li>
-                <li><p>expiration: <i>11/25</i></p></li>
-                <li><p>cvc: <i>123</i></p></li>
-                <li><p>nombre: <i>APRO</i></p></li>
-                <li><p>dni: <i>12345678</i></p></li>
-            </ul>
         </div>
     );
 };
