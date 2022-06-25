@@ -22,6 +22,14 @@ const productSchema = new Schema(
       type: String,
       required: true,
     },
+    available_quantity: Number,
+    main_features: [String],
+    attributes: [
+      {
+        value_name: String,
+        name: String,
+      },
+    ],
     description: {
       type: String,
       required: true,
@@ -31,16 +39,6 @@ const productSchema = new Schema(
       required: true,
       default: false,
     },
-    main_features: [String],
-    attributes: [
-      {
-        value_name: String,
-        name: String,
-      },
-    ],
-    //attributes: [String],
-
-    available_quantity: Number,
     images: [
       {
         imgURL: String,

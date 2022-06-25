@@ -23,7 +23,7 @@ export const validateImgs = (imagesList) => {
   }
 };
 
-export const validationSchema = yup.object().shape({
+export const validationProductFormSchema = yup.object().shape({
   name: yup.string().required("Nombre es requerido"),
   price: yup
     .string()
@@ -50,4 +50,5 @@ export const validationSchema = yup.object().shape({
       value_name: yup.string().required("Valor de atributo es requerido"),
     })
   ),
+  free_shipping: yup.bool().required("Tipo de envío es requerido"),
 });

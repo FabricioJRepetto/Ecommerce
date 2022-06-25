@@ -22,37 +22,37 @@ const Profile = () => {
   const navigate = useNavigate();
   const [notification] = useNotification();
 
-    const {data: orders, oLoading} = useAxios('GET', `/order/userall/`);
+  const { data: orders, oLoading } = useAxios("GET", `/order/userall/`);
 
-    useEffect(() => {
-        if (!session) {
-            navigate("/signin");
-        } else {
-            (async () => { 
-                const { data } = await axios(`/user/address/`);
-                data.address ? setAddress(data.address) : setAddress(null);
-                const { data: list } = await axios(`/whishlist/`);
-                list.products ? setWhishlist(list.products) : setWhishlist(null);
+  useEffect(() => {
+    if (!session) {
+      navigate("/signin");
+    } else {
+      (async () => {
+        const { data } = await axios(`/user/address/`);
+        data.address ? setAddress(data.address) : setAddress([]);
+        const { data: list } = await axios(`/whishlist/`);
+        list.products ? setWhishlist(list.products) : setWhishlist([]);
 
-                setLoading(false);
-             })();
-        }
-         // eslint-disable-next-line
-    }, []);    
-
-    const deleteAddress = async (id) => {
-        setLoading(true);
-        const { data } = await axios.delete(`/user/address/${id}`);
-        console.log(data);
-        data ? setAddress(data) : setAddress(null);
         setLoading(false);
-    };
+      })();
+    }
+    // eslint-disable-next-line
+  }, []);
 
-    //: set default address
-    const setDefault = async (id) => { 
-        const { data } = await axios.put(`/user/address/default/${id}`);
-        setAddress(data);
-     };     
+  const deleteAddress = async (id) => {
+    setLoading(true);
+    const { data } = await axios.delete(`/user/address/${id}`);
+    console.log(data);
+    data ? setAddress(data) : setAddress([]);
+    setLoading(false);
+  };
+
+  //: set default address
+  const setDefault = async (id) => {
+    const { data } = await axios.put(`/user/address/default/${id}`);
+    setAddress(data);
+  };
 
   //: edit
   const editAddress = async (id) => {
@@ -99,7 +99,7 @@ const Profile = () => {
       setNewAdd({});
       closeAddForm();
     }
-  }; 
+  };
 
   const handleChange = ({ target }) => {
     const { name, value, validity } = target;
@@ -120,8 +120,8 @@ const Profile = () => {
   const removeFromWL = async (id) => {
     const { data } = await axios.delete(`/whishlist/${id}`);
     console.log(data);
-    data.list.id_list ? setWhishlist(data.list.id_list) : setWhishlist(null);
-    notification(data.message, '', 'success')
+    data.list.id_list ? setWhishlist(data.list.id_list) : setWhishlist([]);
+    notification(data.message, "", "success");
   };
 
   const formatDate = (date) => {
