@@ -8,7 +8,15 @@ const productSchema = new Schema(
     },
     price: {
       type: Number,
-      //  required: true,
+      required: true,
+    },
+    sale_price: {
+      type: Number,
+      default: 0,
+    },
+    on_sale: {
+      type: Boolean,
+      default: false,
     },
     brand: {
       type: String,
@@ -23,6 +31,7 @@ const productSchema = new Schema(
       required: true,
       default: false,
     },
+    main_features: [String],
     attributes: [
       {
         value_name: String,
@@ -31,7 +40,6 @@ const productSchema = new Schema(
     ],
     //attributes: [String],
 
-    main_features: [String],
     available_quantity: Number,
     images: [
       {

@@ -5,7 +5,6 @@ import {
   filterProducts,
   loadProductsFound,
 } from "../../Redux/reducer/productsSlice";
-import { useEffect } from "react";
 import { mainPlus } from "../../Redux/reducer/cartSlice";
 
 const Products = () => {
@@ -47,9 +46,9 @@ const Products = () => {
   };
 
   const addToCart = async (id) => {
-        const {data} = await axios.post(`/cart/${id}`)
-        console.log(data);
-        data && dispatch(mainPlus());
+    const { data } = await axios.post(`/cart/${id}`);
+    console.log(data);
+    data && dispatch(mainPlus());
   };
 
   const filterPrices = (e) => {

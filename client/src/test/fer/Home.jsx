@@ -14,7 +14,12 @@ import PostSale from "../../components/Cart/PostSale";
 import Checkout from "../../components/Cart/Checkout";
 import ResetPassword from "../../components/Session/ResetPassword";
 import VerifyEmail from "../../components/Session/ResetPassword";
-import { sessionActive, loadUsername, loadEmail, loadAvatar } from "../../Redux/reducer/sessionSlice";
+import {
+  sessionActive,
+  loadUsername,
+  loadEmail,
+  loadAvatar,
+} from "../../Redux/reducer/sessionSlice";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -23,23 +28,22 @@ const Home = () => {
     const loggedUserToken = window.localStorage.getItem("loggedTokenEcommerce");
     const loggedAvatar = window.localStorage.getItem("loggedAvatarEcommerce");
     const loggedEmail = window.localStorage.getItem("loggedEmailEcommerce");
-    
-        (async ()=>{
-            try {
-                if (loggedUserToken) {                    
-                    const { data } = await axios(`/user/profile/${loggedUserToken}`);
-                    console.log(data);
-                    dispatch(sessionActive(true));
-                    dispatch(loadUsername(data.name));
-                    dispatch(loadAvatar(data.avatar ? data.avatar : loggedAvatar));
-                    dispatch(loadEmail(data.email ? data.email : loggedEmail));
-                }
-            } catch (error) {
-                window.localStorage.removeItem("loggedTokenEcommerce");
-                window.localStorage.removeItem("loggedAvatarEcommerce");
-                window.localStorage.removeItem("loggedEmailEcommerce");
-            }
-        })();
+
+    (async () => {
+      try {
+        if (loggedUserToken) {
+          const { data } = await axios(`/user/profile/${loggedUserToken}`);
+          dispatch(sessionActive(true));
+          dispatch(loadUsername(data.name));
+          dispatch(loadAvatar(data.avatar ? data.avatar : loggedAvatar));
+          dispatch(loadEmail(data.email ? data.email : loggedEmail));
+        }
+      } catch (error) {
+        window.localStorage.removeItem("loggedTokenEcommerce");
+        window.localStorage.removeItem("loggedAvatarEcommerce");
+        window.localStorage.removeItem("loggedEmailEcommerce");
+      }
+    })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

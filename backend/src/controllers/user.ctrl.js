@@ -14,7 +14,7 @@ const signup = async (req, res, next) => {
   const verifyToken = jwt.sign({ user: body }, JWT_SECRET_CODE);
 
   const link = `http://localhost:3000/verify/${verifyToken}`;
-  await sendEmail(email, "Verify Email", link);
+  // await sendEmail(email, "Verify Email", link); //!VOLVER A VER crashea la app al intentar enviar email
 
   return res.status(201).json({
     message: req.authInfo,
@@ -24,7 +24,7 @@ const signup = async (req, res, next) => {
 const signin = async (req, res, next) => {
   const errors = validationResult(req);
 
-  const {avatar} = await User.findOne({'email': req.body.email});
+  const { avatar } = await User.findOne({ email: req.body.email });
 
   if (!errors.isEmpty()) {
     const message = errors.errors.map((err) => err.msg);
@@ -59,14 +59,15 @@ const signin = async (req, res, next) => {
 };
 
 const profile = async (req, res, next) => {
-    try {
-        console.log(req.user);
-        if (req.params.token.slice(0,6) === 'google') return res.json({name: req.user.email});
-        const { email, name, avatar } = await User.findById(req.user._id);
-        return res.json({ email, name, avatar });
-    } catch (error) {
-        next(error);
-    }
+  try {
+    console.log(req.user);
+    if (req.params.token.slice(0, 6) === "google")
+      return res.json({ name: req.user.email });
+    const { email, name, avatar } = await User.findById(req.user._id);
+    return res.json({ email, name, avatar });
+  } catch (error) {
+    next(error);
+  }
 };
 
 const role = async (req, res, next) => {

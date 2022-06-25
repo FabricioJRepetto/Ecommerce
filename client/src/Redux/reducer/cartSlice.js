@@ -14,14 +14,15 @@ export const cartSlice = createSlice({
       state.total = action.payload;
     },
     mainPlus: (state, action) => {
-        state.main += 1;
+      state.main += 1;
     },
     mainMinus: (state, action) => {
-        state.main -= 1;
+      state.main -= 1;
     },
   },
 });
 
-export const { loadProducts, cartTotal, mainPlus, mainMinus } = cartSlice.actions;
+export const { loadProducts, cartTotal, mainPlus, mainMinus } =
+  cartSlice.actions;
 
 export default cartSlice.reducer;
