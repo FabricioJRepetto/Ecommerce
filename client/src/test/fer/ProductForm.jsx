@@ -24,7 +24,8 @@ const clearInputs = (
   attributesQuantity,
   setAttributesQuantity,
   removeAttribute,
-  appendAttribute
+  appendAttribute,
+  setProductImg
 ) => {
   const ids = ["name_id", "price_id", "brand_id", "stock_id", "description_id"];
   for (const id of ids) {
@@ -49,6 +50,7 @@ const clearInputs = (
     attributeName.value = "";
     attributeValue.value = "";
   }
+  setProductImg([]);
 };
 
 const ProductForm = () => {
@@ -163,12 +165,11 @@ const ProductForm = () => {
 
   const submitProduct = async (productData) => {
     if (productImg.length === 0) return console.log("subir img"); //!VOLVER A VER renderizar mensaje warn
-    console.log(productData);
-    let formData = new FormData();
+    //  let formData = new FormData();
     //: verificar datos
 
     // agarra las images
-    productImg.forEach((pic) => {
+    /* productImg.forEach((pic) => {
       formData.append("images", pic);
     });
     formData.append("images", productImg);
@@ -178,8 +179,8 @@ const ProductForm = () => {
       headers: {
         "Content-Type": "multipart/form-data",
       },
-    });
-    console.log(imgURL);
+    }); 
+    console.log(imgURL);*/
 
     /* clearInputs(
        featuresQuantity,
@@ -189,11 +190,13 @@ const ProductForm = () => {
       attributesQuantity,
       setAttributesQuantity,
       removeAttribute,
-      appendAttribute
+      appendAttribute,
+      setProductImg
     ); */
   };
 
   useEffect(() => {
+    console.log(productImg.length);
     //  if (productImg.length > 0) {
     const newImageUrls = [];
     for (const image of productImg) {
