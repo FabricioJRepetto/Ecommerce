@@ -54,6 +54,7 @@
 }
 .cart-button-section button {
     border: none;
+    margin: 5px;
     width: 10rem;
     height: 3rem;
     border-radius: 4px;

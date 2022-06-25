@@ -1,10 +1,11 @@
-import axios from "axios";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import "./App.css";
-import { loadAvatar, loadEmail, loadUsername, sessionActive } from "./Redux/reducer/sessionSlice";
-import { loadProducts } from "./Redux/reducer/cartSlice";
 import { Routes, Route } from "react-router-dom";
+import { loadAvatar, loadEmail, loadUsername, sessionActive } from "./Redux/reducer/sessionSlice";
+import { loadProducts, loadWhishlist } from "./Redux/reducer/cartSlice";
+import axios from "axios";
+import "./App.css";
+
 import Home from "./components/Home/Home";
 import Notification from "./components/common/Notification";
 import NavBar from "./components/NavBar/NavBar";
@@ -19,6 +20,7 @@ import PostSale from "./components/Cart/PostSale";
 import Products from "./test/fer/Products";
 import ProductForm from "./test/fer/ProductForm";
 import Details from "./components/Products/Details";
+import BackToTop from "./helpers/backToTop/BackToTop";
 
 function App() {
     const dispatch = useDispatch();
@@ -38,8 +40,11 @@ function App() {
                         dispatch(loadAvatar(data.avatar ? data.avatar : loggedAvatar));
                         dispatch(loadEmail(data.email ? data.email : loggedEmail));
 
+                        const { data: whish } = await axios(`/whishlist`);
+                        dispatch(loadWhishlist(whish.id_list));
+
                         const { data: cart } = await axios(`/cart`);
-                        dispatch(loadProducts(cart.products.map(e => e.product_id)));
+                        dispatch(loadProducts(cart.id_list));
                     }
                 } catch (error) {
                     window.localStorage.removeItem("loggedTokenEcommerce");
@@ -52,9 +57,10 @@ function App() {
 
 
     return (
-        <div className="App">
+        <div className="App" id='scroller'>
             <NavBar />
             <Notification />
+            <BackToTop />
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/signin" element={<Signupin />} />

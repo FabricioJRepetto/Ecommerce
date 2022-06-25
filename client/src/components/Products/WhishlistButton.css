@@ -1,0 +1,36 @@
+.fav-button-container  {
+    z-index: 20;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    opacity: 0;
+}
+.visible {
+    transition: opacity .3s ease;
+    opacity: 1;
+}
+.fav-button-container button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, .8);
+    border: none; 
+    cursor: pointer;
+    border-radius: 50%;
+    position: relative;
+}
+.fav-button-svg  {
+    position: absolute;
+    top: 1px;
+}
+
+.fav-heart {
+    transform: scale(.5);    
+}
+.fav-button-svg path {
+    fill:rgba(72, 72, 72, 1)   
+}
+.faved path {
+    opacity: 1;
+    fill: rgb(192, 108, 108);
+}

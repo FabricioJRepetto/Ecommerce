@@ -28,6 +28,7 @@ const Profile = () => {
                 const { data } = await axios(`/user/address/`);
                 data.address ? setAddress(data.address) : setAddress(null);
                 const { data: list } = await axios(`/whishlist/`);
+                console.log(list);
                 list.products ? setWhishlist(list.products) : setWhishlist(null);
 
                 setLoading(false);
@@ -105,7 +106,8 @@ const Profile = () => {
     //: Whishlist
     const removeFromWL = async (id) => { 
         const { data } = await axios.delete(`/whishlist/${id}`);
-        data.products ? setWhishlist(data.products) : setWhishlist(null);
+        console.log(data);
+        data.list.products ? setWhishlist(data.list.products) : setWhishlist(null);
     };
 
     const formatDate = (date) => {

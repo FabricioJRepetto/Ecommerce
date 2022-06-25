@@ -1,0 +1,71 @@
+.products-container {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+}
+.products-results-container {
+    padding: 20px;
+    border-radius: 4px;
+    background: white;
+}
+.products-results-inner {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+.products-filters {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.filter-brand-checkbox-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    max-width: 100px;
+}
+
+
+
+.c-mrgn {
+    margin-top: 6px;
+}
+.product-card {
+    width: 60vw;
+    padding: 10px;
+    position: relative;
+    border-bottom: 1px solid rgb(211, 211, 211);
+    color: black;
+}
+
+.card-img-container {    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 180px;
+    width: 180px;
+    margin: 0 24px;
+}
+
+.card-main-container {
+    display: flex;    
+}
+.card-details-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.card-price-container {
+    text-align: left;
+}
+.card-original-price {
+    text-align: left;
+    height: 15px;
+}
+.card-price-section {
+    display: flex;
+}

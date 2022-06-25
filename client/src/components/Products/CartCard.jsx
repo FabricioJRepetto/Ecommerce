@@ -11,20 +11,22 @@ const CartCard = ({ img, name, price, brand, prodId, free_shipping, on_cart, sto
     <div
         className='cart-card-container'>
         <div className='product-cart-card-head'>
-            <img src={resizer(img)} alt="product" />
+            <div className='product-cart-image-container'>
+                <img src={resizer(img)} alt="product" />
+            </div>
             <div className='cart-prod-details'>
                 <div className='cart-main-details'>
                     <p 
-                        className='cart-pointer bold'
+                        className='pointer bold'
                         onClick={() => navigate(`/details/${prodId}`)} >{name}</p>
                     <div>{brand && brand.toUpperCase()}</div>
                     <div>{free_shipping && 'envio gratis'}</div>
                 </div>
                 <div className='cart-product-options'>
                     <p 
-                        className='cart-pointer'
+                        className='pointer'
                         onClick={() => deleteP(prodId)}>Delete</p>
-                    <p className='cart-pointer'>Buy later</p>
+                    <p className='pointer'>Buy later</p>
                 </div>
             </div>
         </div>

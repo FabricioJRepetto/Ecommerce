@@ -4,6 +4,7 @@
   color: rgb(255, 255, 255);
   width: 100;
   min-height: 110vh;
+    overflow-y: auto;
 }
 
 * {

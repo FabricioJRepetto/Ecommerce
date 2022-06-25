@@ -5,6 +5,7 @@ export const cartSlice = createSlice({
   initialState: {
     main: [],
     total: 0,
+    whishlist: [],
   },
   reducers: {
     loadProducts: (state, action) => {
@@ -15,10 +16,13 @@ export const cartSlice = createSlice({
     },
     addCart: (state, action) => {
         state.main = [...state.main, action.payload];
-    }
+    },
+    loadWhishlist: (state, action) => {
+        state.whishlist = action.payload
+    },
   },
 });
 
-export const { loadProducts, cartTotal, addCart } = cartSlice.actions;
+export const { loadProducts, cartTotal, addCart, loadWhishlist } = cartSlice.actions;
 
 export default cartSlice.reducer;

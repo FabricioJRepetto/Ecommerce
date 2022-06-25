@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useState, useEffect} from 'react';
+import { useSelector } from 'react-redux';
 import { random } from '../../helpers/random';
 import MiniCard from '../Products/MiniCard';
 import Carousel from './Carousel/Carousel';
@@ -15,6 +16,7 @@ import { ReactComponent as Six } from "../../assets/svg/perform-svgrepo-com.svg"
 const Home = () => {
     const [products, setProducts] = useState(null);
     const [loading, setLoading] = useState(true);
+    const whishlist = useSelector((state) => state.cartReducer.whishlist);
 
     const images = [
         {img:'https://http2.mlstatic.com/D_NQ_674809-MLA50293741186_062022-OO.webp',
@@ -84,7 +86,7 @@ const Home = () => {
                                 brand={p.brand} 
                                 prodId={p._id} 
                                 free_shipping={p.free_shipping}
-                                fav={false}/>
+                                fav={whishlist.includes(p._id)}/>
                         )))}
                     </div>
                 }

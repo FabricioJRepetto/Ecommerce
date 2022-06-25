@@ -1,11 +1,12 @@
 import axios from 'axios';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom'
 import { useAxios } from '../../hooks/useAxios';
 import { useNotification } from '../../hooks/useNotification';
 import { addCart } from '../../Redux/reducer/cartSlice';
 import Galery from './Galery';
+import { WhishlistButton as Fav } from './WhishlistButton';
 
 const Details = () => {
     const { id } = useParams();
@@ -45,7 +46,7 @@ const Details = () => {
                     <p>{data.free_shipping && 'free shipping'}</p>
                     <button onClick={() => addToCart(data._id)}>Add to cart</button>
                     <button disabled>Buy</button>
-                    <button disabled>❤</button>
+                    <Fav prodId={data._id} fav={true}/>
                 </div>
                 <div>
                     <br />
