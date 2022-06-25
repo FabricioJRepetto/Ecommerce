@@ -1,92 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useForm, useFieldArray } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { useEffect } from "react";
 import "./ProductForm.css";
-
-const validatePrice = (value) => {
-  if (value === undefined) return false;
-  return /^\d+(.\d{1,2})?$/.test(value);
-};
-
-const validateNumbers = (value) => {
-  if (value === undefined) return false;
-  return /^[0-9]*$/.test(value);
-};
-
-const clearInputs = (
-  featuresQuantity,
-  setFeaturesQuantity,
-  removeFeature,
-  appendFeature,
-  attributesQuantity,
-  setAttributesQuantity,
-  removeAttribute,
-  appendAttribute,
-  setProductImg
-) => {
-  const ids = ["name_id", "price_id", "brand_id", "stock_id", "description_id"];
-  for (const id of ids) {
-    let input = document.getElementById(id);
-    input.value = "";
-  }
-  if (featuresQuantity > 1) {
-    removeFeature();
-    setFeaturesQuantity(1);
-    appendFeature("");
-  } else {
-    let mainFeature = document.getElementById("main_feature_0");
-    mainFeature.value = "";
-  }
-  if (attributesQuantity > 1) {
-    removeAttribute();
-    setAttributesQuantity(1);
-    appendAttribute({ name: "", value_name: "" });
-  } else {
-    let attributeName = document.getElementById("attribute_name_0");
-    let attributeValue = document.getElementById("attribute_value_0");
-    attributeName.value = "";
-    attributeValue.value = "";
-  }
-  setProductImg([]);
-};
+import { validateImgs, validationSchema } from "../../helpers/validations";
 
 const ProductForm = () => {
   const [productImg, setProductImg] = useState([]);
   const [productImgUrls, setProductImgUrls] = useState([]);
   const [featuresQuantity, setFeaturesQuantity] = useState(1);
   const [attributesQuantity, setAttributesQuantity] = useState(1);
-
-  const validationSchema = yup.object().shape({
-    name: yup.string().required("Nombre es requerido"),
-    price: yup
-      .string()
-      .required("Precio es requerido")
-      .test(
-        "price",
-        "Precio debe ser un número válido (ej: '1234.56')",
-        (value) => validatePrice(value)
-      ),
-    brand: yup.string().required("Marca es requerida"),
-    available_quantity: yup
-      .string()
-      .required("Stock es requerido")
-      .test("stock", "Stock debe ser un número", (value) =>
-        validateNumbers(value)
-      ),
-    description: yup.string().required("Descripción es requerida"),
-    main_features: yup
-      .array()
-      .of(yup.string().required("Principales características requeridas")),
-    attributes: yup.array().of(
-      yup.object().shape({
-        name: yup.string().required("Nombre de atributo es requerido"),
-        value_name: yup.string().required("Valor de atributo es requerido"),
-      })
-    ),
-  });
 
   const formOptions = { resolver: yupResolver(validationSchema) };
   const {
@@ -124,11 +47,6 @@ const ProductForm = () => {
     }
   };
 
-  useEffect(() => {
-    appendFeature("");
-    // eslint-disable-next-line
-  }, []);
-
   const {
     fields: fieldsAttributes,
     append: appendAttribute,
@@ -163,19 +81,42 @@ const ProductForm = () => {
 
   useEffect(() => {
     appendAttribute({ name: "", value_name: "" });
+    appendFeature("");
     // eslint-disable-next-line
   }, []);
+
+  const handleAddImg = (e) => {
+    const fileListArray = Array.from(e.target.files);
+    validateImgs(fileListArray);
+    setProductImg([...productImg, ...fileListArray]);
+  };
+
+  const handleRemoveImg = (i) => {
+    setProductImg(productImg.filter((_, index) => index !== i));
+  };
+
+  useEffect(() => {
+    //  if (productImg.length > 0) {
+    const newImageUrls = [];
+    for (const image of productImg) {
+      newImageUrls.push(URL.createObjectURL(image));
+    }
+    setProductImgUrls(newImageUrls);
+    // }
+  }, [productImg]);
 
   const submitProduct = async (productData) => {
     if (productImg.length === 0) return console.log("subir img"); //!VOLVER A VER renderizar mensaje warn
     let formData = new FormData();
-    //: verificar datos
 
     // agarra las images
-    productImg.forEach((pic) => {
+    const fileListArray = Array.from(productImg);
+    validateImgs(fileListArray);
+
+    fileListArray.forEach((pic) => {
       formData.append("images", pic);
     });
-    formData.append("images", productImg);
+    formData.append("images", fileListArray);
     formData.append("data", JSON.stringify(productData));
 
     const imgURL = await axios.post(`/product/`, formData, {
@@ -198,22 +139,37 @@ const ProductForm = () => {
     );
   };
 
-  useEffect(() => {
-    //  if (productImg.length > 0) {
-    const newImageUrls = [];
-    for (const image of productImg) {
-      newImageUrls.push(URL.createObjectURL(image));
+  const clearInputs = () => {
+    const idsToClear = [
+      "name_id",
+      "price_id",
+      "brand_id",
+      "stock_id",
+      "description_id",
+    ];
+    for (const id of idsToClear) {
+      let input = document.getElementById(id);
+      input.value = "";
     }
-    setProductImgUrls(newImageUrls);
-    // }
-  }, [productImg]);
-
-  const handleFiles = (e) => {
-    setProductImg([...productImg, ...e.target.files]);
-  };
-
-  const handleRemoveImg = (i) => {
-    setProductImg(productImg.filter((_, index) => index !== i));
+    if (featuresQuantity > 1) {
+      removeFeature();
+      setFeaturesQuantity(1);
+      appendFeature("");
+    } else {
+      let mainFeature = document.getElementById("main_feature_0");
+      mainFeature.value = "";
+    }
+    if (attributesQuantity > 1) {
+      removeAttribute();
+      setAttributesQuantity(1);
+      appendAttribute({ name: "", value_name: "" });
+    } else {
+      let attributeName = document.getElementById("attribute_name_0");
+      let attributeValue = document.getElementById("attribute_value_0");
+      attributeName.value = "";
+      attributeValue.value = "";
+    }
+    setProductImg([]);
   };
 
   return (
@@ -342,8 +298,8 @@ const ProductForm = () => {
             type="file"
             name="image"
             multiple
-            accept=".jpeg,.jpg,.png"
-            onChange={handleFiles}
+            accept="image/png, image/jpeg"
+            onChange={handleAddImg}
             style={{ visibility: "hidden" }}
             id="filesButton"
           />
@@ -352,7 +308,7 @@ const ProductForm = () => {
         {React.Children.toArray(
           productImgUrls.map((imageUrl, i) => (
             <>
-              <img src={imageUrl} alt="sd" className="imgs-product" />
+              <img src={imageUrl} alt={`img_${i}`} className="imgs-product" />
               <span onClick={() => handleRemoveImg(i)}> X</span>
             </>
           ))
@@ -360,22 +316,7 @@ const ProductForm = () => {
 
         <input type="submit" value="Crear producto" />
       </form>
-      <button
-        onClick={() =>
-          clearInputs(
-            featuresQuantity,
-            setFeaturesQuantity,
-            removeFeature,
-            appendFeature,
-            attributesQuantity,
-            setAttributesQuantity,
-            removeAttribute,
-            appendAttribute
-          )
-        }
-      >
-        RESETEAR
-      </button>
+      <button onClick={() => clearInputs()}>RESETEAR</button>
     </div>
   );
 };
