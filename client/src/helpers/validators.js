@@ -50,5 +50,7 @@ export const validationProductFormSchema = yup.object().shape({
       value_name: yup.string().required("Valor de atributo es requerido"),
     })
   ),
-  free_shipping: yup.bool().required("Tipo de envío es requerido"),
+  free_shipping: yup
+    .bool('Tipo de envío solo acepta "true" o "false" como valor')
+    .required("Tipo de envío es requerido"),
 });

@@ -37,7 +37,7 @@ const productSchema = new Schema(
     free_shipping: {
       type: Boolean,
       required: true,
-      default: false,
+      //  default: false,
     },
     images: [
       {

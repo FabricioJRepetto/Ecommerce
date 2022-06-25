@@ -15,14 +15,13 @@ const Products = () => {
     max: "500",
   });
   const [shippingFilter, setShippingFilter] = useState(false);
-  const [brandsFilter, setBrandsFilter] = useState();
+  const [brandsFilter, setBrandsFilter] = useState({});
 
   const brands = useRef();
   const dispatch = useDispatch();
   const { productsFound, productsFiltered } = useSelector(
     (state) => state.productsReducer
   );
-  const cart = useSelector((state) => state.cartReducer.main);
   const whishlist = useSelector((state) => state.cartReducer.whishlist);
 
   useEffect(() => {
@@ -43,10 +42,17 @@ const Products = () => {
         brands.current = [];
         let brandsCheckbox = {};
         for (const product of res.data) {
-          !brands.current.includes(product.brand) &&
-            product.brand &&
-            brands.current.push(product.brand);
-          brandsCheckbox[product.brand] = false;
+          // brands.current => renderiza checkboxes
+          // brandsCheckbox => {BRAND: boolean}
+          //      => para cargar BrandsFilter
+          // brandsFilter => estado que maneja checkboxes
+          if (product.brand) {
+            const brandCamelCase =
+              product.brand.charAt(0).toUpperCase() + product.brand.slice(1);
+            !Object.keys(brandsCheckbox).includes(brandCamelCase) &&
+              brands.current.push(brandCamelCase);
+            brandsCheckbox[brandCamelCase] = false;
+          }
         }
         setBrandsFilter(brandsCheckbox);
         brands.current.sort();

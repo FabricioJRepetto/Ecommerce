@@ -184,15 +184,6 @@ const ProductForm = () => {
         encType="multipart/form-data"
         onSubmit={handleSubmit(submitProduct)}
       >
-        <label>
-          <input
-            type="checkbox"
-            //  id="free_shipping_id"
-            {...register("free_shipping")}
-          />
-          Envío gratis
-        </label>
-        <div>{errors.free_shipping?.message}</div>
         <>
           <div>
             <input
@@ -233,6 +224,16 @@ const ProductForm = () => {
               })}
             />
             <div>{errors.available_quantity?.message}</div>
+
+            <label>
+              <input
+                type="checkbox"
+                //  id="free_shipping_id"
+                {...register("free_shipping")}
+              />
+              Envío gratis
+            </label>
+            <div>{errors.free_shipping?.message}</div>
           </div>
           <br />
           <hr />
