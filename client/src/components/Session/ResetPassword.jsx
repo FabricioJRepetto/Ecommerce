@@ -1,16 +1,23 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { useForm } from "react-hook-form";
 
-const initialPassword = {
+/* const initialPassword = {
   password: "asdasd@asdasd.com",
   repPassword: "asdasd@asdasd.com",
-};
+}; */
 
 const ResetPassword = () => {
   const navigate = useNavigate();
   const { resetToken, userId } = useParams();
-  const [passwordData, setPasswordData] = useState(initialPassword);
+  //const [passwordData, setPasswordData] = useState(initialPassword);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch,
+  } = useForm();
 
   useEffect(() => {
     axios
@@ -30,15 +37,15 @@ const ResetPassword = () => {
       });
   }, []);
 
-  const handleChange = ({ target }) => {
+  /*   const handleChange = ({ target }) => {
     setPasswordData({
       ...passwordData,
       [target.name]: target.value,
     });
-  };
+  }; */
 
-  const changePassword = (e) => {
-    e.preventDefault();
+  const changePassword = (passwordData) => {
+    //  e.preventDefault();
     axios
       .put(
         "/user/changePassword",
@@ -61,22 +68,42 @@ const ResetPassword = () => {
 
   return (
     <>
-      <form onSubmit={changePassword}>
-        <h2>Change password</h2>
+      <form onSubmit={handleSubmit(changePassword)}>
         <input
           type="text"
-          name="password"
           placeholder="Password"
-          onChange={handleChange}
-          value={passwordData.password}
+          /* name="password"
+          onChange={handleSignup}
+          value={signupData.password} */
+          {...register("password", {
+            required: true,
+            minLength: 6,
+          })}
         />
+        {errors.password?.type === "required" && <p>Enter a password</p>}
+        {errors.password?.type === "minLength" && (
+          <p>Password must be 6 characters long at least</p>
+        )}
+
         <input
           type="text"
-          name="repPassword"
-          placeholder="repPassword"
-          onChange={handleChange}
-          value={passwordData.repPassword}
+          placeholder="Repeat Password"
+          /* name="repPassword"
+          onChange={handleSignup}
+          value={signupData.repPassword} */
+          {...register("repPassword", {
+            required: true,
+            validate: (repPassword) => {
+              if (watch("password") !== repPassword) {
+                return "Passwords don't match";
+              }
+            },
+          })}
         />
+        {errors.repPassword?.type === "required" && <p>Repeat your password</p>}
+        {errors.repPassword?.type === "validate" && (
+          <p>Passwords don't match</p>
+        )}
         <input type="submit" value="Change password" />
       </form>
     </>

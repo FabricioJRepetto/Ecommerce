@@ -23,38 +23,38 @@ import Details from "./components/Products/Details";
 import BackToTop from "./helpers/backToTop/BackToTop";
 
 function App() {
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-    useEffect(() => {
-        const loggedUserToken = window.localStorage.getItem("loggedTokenEcommerce");
-        const loggedAvatar = window.localStorage.getItem("loggedAvatarEcommerce");
-        const loggedEmail = window.localStorage.getItem("loggedEmailEcommerce");
-        
-            (async ()=>{
-                try {
-                    if (loggedUserToken) {                    
-                        const { data } = await axios(`/user/profile/${loggedUserToken}`);
-                        console.log(data);
-                        dispatch(sessionActive(true));
-                        dispatch(loadUsername(data.name));
-                        dispatch(loadAvatar(data.avatar ? data.avatar : loggedAvatar));
-                        dispatch(loadEmail(data.email ? data.email : loggedEmail));
+  useEffect(() => {
+    const loggedUserToken = window.localStorage.getItem("loggedTokenEcommerce");
+    const loggedAvatar = window.localStorage.getItem("loggedAvatarEcommerce");
+    const loggedEmail = window.localStorage.getItem("loggedEmailEcommerce");
 
-                        const { data: whish } = await axios(`/whishlist`);
-                        dispatch(loadWhishlist(whish.id_list));
+                
+    (async () => {
+      try {
+        if (loggedUserToken) {
+            const { data } = await axios(`/user/profile/${loggedUserToken}`);
+            console.log(data);
+            dispatch(sessionActive(true));
+            dispatch(loadUsername(data.name));
+            dispatch(loadAvatar(data.avatar ? data.avatar : loggedAvatar));
+            dispatch(loadEmail(data.email ? data.email : loggedEmail));
 
-                        const { data: cart } = await axios(`/cart`);
-                        dispatch(loadProducts(cart.id_list));
-                    }
-                } catch (error) {
-                    window.localStorage.removeItem("loggedTokenEcommerce");
-                    window.localStorage.removeItem("loggedAvatarEcommerce");
-                    window.localStorage.removeItem("loggedEmailEcommerce");
-                }
-            })();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
+            const { data: cart } = await axios(`/cart`);
+            dispatch(loadProducts(cart.products.length));
+            
+            const { data: whish } = await axios(`/whishlist`);
+            dispatch(loadWhishlist(whish.id_list));
+        }
+      } catch (error) {
+        window.localStorage.removeItem("loggedTokenEcommerce");
+        window.localStorage.removeItem("loggedAvatarEcommerce");
+        window.localStorage.removeItem("loggedEmailEcommerce");
+      }
+    })();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
     return (
         <div className="App" id='scroller'>
