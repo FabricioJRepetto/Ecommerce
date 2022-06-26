@@ -6,14 +6,16 @@ import CartCard from "../Products/CartCard";
 import Modal from "../common/Modal";
 import { useModal } from "../../hooks/useModal";
 import { useNotification } from "../../hooks/useNotification";
-import { cartTotal, loadProducts, loadCart } from "../../Redux/reducer/cartSlice";
+import { cartTotal, loadCart } from "../../Redux/reducer/cartSlice";
 import { loadMercadoPago } from "../../helpers/loadMP";
 import './Cart.css'
 
 import { ReactComponent as Arrow } from '../../assets/svg/arrow-right.svg'
+import { ReactComponent as Ship } from '../../assets/svg/ship.svg'
 
 const Cart = () => {
     const [cart, setCart] = useState(null);
+    const [free_ship_cart, setFree_ship_cart] = useState(false);
     const [orderId, setOrderId] = useState('');
     const [address, setAddress] = useState(null);
     const [newAdd, setNewAdd] = useState({});
@@ -25,6 +27,8 @@ const Cart = () => {
     const dispatch = useDispatch();
     const [notification] = useNotification();
 
+    const SHIP_COST = 300;
+
     useEffect(() => {
         getCart();
         getAddress();
@@ -33,7 +37,12 @@ const Cart = () => {
 
     const getCart = async () => {
         const { data } = await axios('/cart/');
-        typeof data !== 'string' && setCart(data.products);
+        if (typeof data !== 'string') {
+            setCart(data.products);
+            setFree_ship_cart(data.free_ship_cart);
+        };
+
+        console.log('cart');
         console.log(data);
         dispatch(cartTotal(data.total));
         dispatch(loadCart(data.id_list));
@@ -119,10 +128,14 @@ const Cart = () => {
                         <CartCard
                             key={p.product_id}
                             on_cart={true}
+                            on_sale={p.on_sale}
                             img={p.img}
                             name={p.product_name}
                             prodId={p.product_id}
                             price={p.price}
+                            sale_price={p.sale_price}
+                            free_shipping={p.free_shipping}
+                            discount={p.discount}
                             brand={p.brand}
                             deleteP={deleteProduct}
                             prodQuantity={p.quantity}
@@ -140,7 +153,16 @@ const Cart = () => {
                                             {selectedAdd.street_name+' '+selectedAdd.street_number+', '+selectedAdd.city}
                                         <Arrow className='arrow-address-selector'/>
                                     </div>
-                                    <div className="cart-total">Gratis WIP</div>
+
+                                    <div className="cart-total">
+                                    {free_ship_cart 
+                                    ? <div className="cart-ship-total green">
+                                        <Ship className='ship-svg'/>
+                                        <h2>Gratis!</h2>
+                                    </div>
+                                    : '$300' }
+                                </div>
+
                                 </div>
                             : <div className="total-section-inner" >
                                 <div 
@@ -150,12 +172,20 @@ const Cart = () => {
                                     please create one to proceed. 
                                     <Arrow className='arrow-address-selector'/>
                                 </div>
-                                <div className="cart-total">Gratis WIP</div>
+                                
+                                <div className="cart-total">
+                                    {free_ship_cart 
+                                    ? <div>
+                                        <Ship/>Envío gratis!
+                                    </div>
+                                    : '$'+SHIP_COST }
+                                </div>
+
                             </div>}
 
                         <div className="total-section-inner">
                             <h2>Total:</h2>
-                            <h2 className="cart-total">${total}</h2>
+                            <h2 className="cart-total">${free_ship_cart ? total : total+SHIP_COST}</h2>
                         </div>
                     </div>
                     
@@ -170,7 +200,7 @@ const Cart = () => {
                         </div>
                     
                 </div>
-                : <h1>your cart is empty</h1>}
+                : <h1 style={{ color: 'black'}}>Your cart is empty.</h1>}
             </div>
 
             <form 

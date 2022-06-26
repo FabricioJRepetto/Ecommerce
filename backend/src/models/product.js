@@ -39,7 +39,6 @@ const productSchema = new Schema(
       },
     ],
     //attributes: [String],
-
     available_quantity: Number,
     images: [
       {
@@ -50,7 +49,13 @@ const productSchema = new Schema(
   },
   {
     versionKey: false,
+    toJSON: { getters: true, virtuals: true },
+    toObject: { getters: true, virtuals: true }
   }
 );
+
+productSchema.virtual('discount').get(function() {
+    return (`${(100 - Math.round((this.sale_price / this.price) * 100))}%`);
+});
 
 module.exports = model("Product", productSchema);

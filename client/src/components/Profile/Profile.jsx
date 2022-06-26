@@ -156,6 +156,10 @@ const Profile = () => {
                 </div>
                 <h2>{username}</h2>
                 <p>{email}</p>
+                <br />
+                <button disabled>Edit details</button>
+                <br />
+                <button disabled>Change password</button>
             </div>
         )}
 

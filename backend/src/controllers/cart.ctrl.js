@@ -25,8 +25,8 @@ const addToCart = async (req, res, next) => {
     const productToAdd = req.params.id;
     const cart = await Cart.findOne({ owner: userId });
 
-    const {name, price, description, available_quantity:stock, images} = await Product.findById(productToAdd);
-
+    const {name, price, sale_price, on_sale, free_shipping, discount, description, available_quantity:stock, images} = await Product.findById(productToAdd);
+    console.log(discount);
     if (cart) {
         let flag = false; 
         cart.products.forEach(e => {
@@ -46,6 +46,10 @@ const addToCart = async (req, res, next) => {
                 description,
                 img: images[0].imgURL,
                 price,
+                sale_price,
+                on_sale,
+                discount,
+                free_shipping,
                 stock,
                 quantity: 1
             });
@@ -60,6 +64,10 @@ const addToCart = async (req, res, next) => {
             description,
             img: images[0].imgURL,
             price,
+            sale_price,
+            on_sale,
+            discount,
+            free_shipping,
             stock,
             quantity: 1
         }],

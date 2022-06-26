@@ -8,7 +8,9 @@ const orderSchema = new Schema(
         description: String,
         img: String,
         price: Number,
-        quantity: Number
+        quantity: Number,
+        sale_price: Number,
+        free_shipping: Boolean,
     }],
     user: {
         type: String,
@@ -21,7 +23,9 @@ const orderSchema = new Schema(
         street_name: String,
         street_number: Number,
     },
-    status: String
+    status: String,
+    free_shipping: Boolean,
+    shipping_cost: Number,
   },
   {
     timestamps: true,

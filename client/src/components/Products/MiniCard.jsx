@@ -11,7 +11,7 @@ import { useEffect } from 'react';
 
 //: acomodar propiedades de sale
 
-const MiniCard = ({ img, name, price, prodId, free_shipping, fav, on_sale, loading}) => {    
+const MiniCard = ({ img, name, price, sale_price, discount, prodId, free_shipping, fav, on_sale, loading}) => {    
     const navigate = useNavigate();
     const [visible, setVisible] = useState(false);
     const [ready, setReady] = useState(false);
@@ -65,16 +65,19 @@ const MiniCard = ({ img, name, price, prodId, free_shipping, fav, on_sale, loadi
                     <div className='minicard-details-section'>
                         <div className={`minicard-original-price ${visible && visible}`}>{(visible && on_sale) &&<del>${price}</del>}</div>
                         <div className='minicard-price-section'>
-                            <div><h2>${price}</h2></div>
+                            <div><h2>{on_sale ? '$'+sale_price : '$'+price}</h2></div>
                             { on_sale && <div className='minicard-sale-section'>
                                 <Sale className='onsale-svg'/>
-                                <p>30% off</p>
+                                <p>{discount} off</p>
                             </div>}
                         </div>
 
                         <div className='free-shipping mc-mrgn'>{free_shipping && 'envío gratis'}</div>
 
-                        <div className={`minicard-prod-name mc-mrgn ${visible && 'visible'}`}>{name}</div>
+                        <div className={`minicard-prod-name-container mc-mrgn `}>
+                            <div className={`minicard-prod-name ${visible && 'visible'}`}>{name}</div>
+                        </div>
+                            
                     </div>
 
                 </div>

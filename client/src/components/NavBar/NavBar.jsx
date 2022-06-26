@@ -48,8 +48,8 @@ const NavBar = () => {
                                         <Fav className='whishlist-icon'/>
                                     </NavLink>
 
-                                    <NavLink to={"cart"}>
-                                        <div className="cart-icon-container">
+                                    <NavLink to={"cart"}
+                                        className="cart-icon-container">
                                             <Cart className='cart-icon'/>
                                             <div className="cart-number">
                                                 {cart.length > 0 
@@ -58,7 +58,6 @@ const NavBar = () => {
                                                         : '9+'
                                                     : ''}
                                             </div>
-                                        </div>
                                     </NavLink>
                                 </>
                             )}

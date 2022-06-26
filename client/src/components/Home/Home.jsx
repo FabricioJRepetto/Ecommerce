@@ -80,11 +80,14 @@ const Home = () => {
             <div >
                 <div className='random-container'>
                     {Array.from(Array(SpecialProds).keys()).map((_, index) =>(
-                        <MiniCard 
+                        <MiniCard
+                            key={`specials ${index}`}
                             loading={loading}
                             img={products[index]?.images[0]?.imgURL} 
                             name={products[index]?.name} 
-                            price={products[index]?.price} 
+                            price={products[index]?.price}
+                            sale_price={products[index]?.sale_price}
+                            discount={products[index]?.discount}
                             prodId={products[index]?._id} 
                             free_shipping={products[index]?.free_shipping}
                             on_sale={products[index]?.on_sale} 

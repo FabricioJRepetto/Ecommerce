@@ -10,7 +10,7 @@
     font-size: 1rem;
     font-weight: 600;
     text-decoration: none;
-    margin: 0 1vw;
+    margin: 0 1vw 0 0;
 }
 .navBar h1 {
     color: #FFA500;
@@ -21,19 +21,18 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    margin: 0 100px;
 }
 .navbar-central-subsection {
     display: flex;
     flex-direction: row;
     align-items: center;
-
 }
 .navBar input[type=text]{
     border: none;
     width: 500px;
     height: 35px;
-    margin-left: 2rem;
-    padding: 0 2rem;
+    padding: 0 1rem;
 }
 
 .navbar-profile-section {

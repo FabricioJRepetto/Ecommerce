@@ -9,6 +9,9 @@ import Galery from './Galery';
 import { WhishlistButton as Fav } from './WhishlistButton';
 import './Details.css'
 
+import { ReactComponent as Sale } from '../../assets/svg/sale.svg'
+
+
 const Details = () => {
     const { id } = useParams();
     const { data, loading, error } = useAxios('GET', `/product/${id}`);
@@ -35,10 +38,16 @@ const Details = () => {
                         <Fav prodId={data._id} fav={true}/>
                         <p>{data.brand.toUpperCase()}</p>
                         <h2>{data.name}</h2>
-                        <h3>${data.price}</h3>
+                        <del>{data.on_sale && '$'+data.price}</del>
+                        <h2>{data.on_sale ? '$'+data.sale_price : '$'+data.price}</h2>
+                        { data.on_sale && <div className='details-sale-section'>
+                                <Sale className='onsale-svg'/>
+                                <p>{data.discount} off</p>
+                            </div>}
                         <p>{data.free_shipping && 'free shipping'}</p>
                         <button onClick={() => addToCart(data._id)}>Add to cart</button>
-                        <button disabled>Buy</button>
+                        <br />
+                        <button disabled>Buy now</button>
                     </div>
                 </div>
                 

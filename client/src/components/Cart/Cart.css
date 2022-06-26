@@ -47,8 +47,11 @@
 .cart-total {
     margin-left: 100px;
     width: 7rem;
+    text-align: right;
 }
-
+.green {
+    color: #39b54a;
+}
 .cart-button-section {
     display: flex;
     flex-direction: column;
@@ -66,4 +69,22 @@
 }
 .cart-button-section input:focus {
     outline: none;
+}
+
+.cart-ship-total {
+    display: flex;
+    justify-content: flex-end;
+    position: relative;
+}
+.cart-ship-total h2 {
+    font-weight: 400;
+}
+.ship-svg {
+    transform: scale(.7);
+    position: absolute;
+    top: -2px;
+    left: 10px;
+}
+.ship-svg path {
+    fill: #39b54a;
 }
