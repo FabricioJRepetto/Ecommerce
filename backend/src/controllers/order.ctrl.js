@@ -39,7 +39,7 @@ const getOrdersAdmin= async (req, res, next) => { //! SOLO ADMIN
 
 const createOrder = async (req, res, next) => { 
     try {
-        const userId = req.user._id;
+        //: recibir la id de la address en vez de los datos?
         const {
             state,
             city,
@@ -48,23 +48,27 @@ const createOrder = async (req, res, next) => {
             street_number
         } = req.body;
         
-        const cart = await Cart.findOne({owner: userId});
+        const cart = await Cart.findOne({owner: req.user._id});
         let products = cart.products;
 
+        let free = cart.free_ship_cart;       
+
         const newOrder = new Order({
-            user: userId,
-            status: 'pending',
             products,
+            user: req.user._id,
             shipping_address: {
                 state,
                 city,
                 zip_code,
                 street_name,
                 street_number
-            }
+            },
+            status: 'pending',
+            free_shipping: free,
+            shipping_cost: free ? 0 : 300,
         });
-
         await newOrder.save();
+
         return res.json(newOrder._id);
     } catch (error) {
         next(error)
@@ -95,7 +99,7 @@ const deleteOrder = async (req, res, next) => {
         },
         {new: true});
         
-        return res.json(`Order status: ${order.status}`)
+        return res.json({message: `Order status: ${order.status}`})
      } catch (error) {
          next(error)
      }

@@ -49,6 +49,8 @@ const Profile = () => {
     //? ORDERS
     const {data: orders, oLoading} = useAxios('GET', `/order/userall/`);
 
+    !oLoading && console.log(orders)
+
     // Date formater
   const formatDate = (date) => {
     let fecha = new Date(date.slice(0, -1));
@@ -190,6 +192,8 @@ const Profile = () => {
                         </p>
                         <p>date: {formatDate(e.createdAt)}</p>
                         <p>payment status: {e.status}</p>
+                        <p>free shipping: {e.free_shipping ? 'Yes' : 'No'}</p>
+                        <p>shipping cost: {e.shipping_cost}</p>
                         <p>total payment: ${e.total}</p>
                         <p>- - -</p>
                       </div>

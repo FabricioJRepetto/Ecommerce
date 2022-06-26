@@ -20,6 +20,37 @@ const mpCho = async (req, res, next) => {
     const order = await Order.findById(id);
     console.log(order.id);
 
+    //: precio segun oferta
+
+    //? costo de envio
+    // https://www.mercadopago.cl/developers/es/reference/preferences/_checkout_preferences/post
+
+    /* 
+    : por si no sirven las notificaciones de meli usar esto ?
+    tracks:     Array
+    Localización: Body
+    Tracks que se ejecutarán durante la interacción de los usuarios en el flujo de Pago. El usuario puede configurar sus propios tracks. Actualmente soportamos Google y Facebook. El collector debe enviar el pixel ID (de google o facebook), y cuando finalice el flujo de la transacción, el vendedor será notificado de la venta.
+
+    : no anda esto
+        payment_methods: {
+            installments: 0,
+        },
+        shipments: {
+            mode: custom,
+            cost: order.shipping_cost,
+            receiver_address: {
+                zip_code: order.shipping_address.zip_code,
+                street_name: order.shipping_address.street_name,
+                city_name: order.shipping_address.city,
+                state_name: order.shipping_address.state,
+                street_number: order.shipping_address.street_number,
+                floor: '1',
+                apartment: '4B',
+            },
+        },
+
+    */
+
     for (const prod of order.products) {
         items.push({
             id: prod.product_id,

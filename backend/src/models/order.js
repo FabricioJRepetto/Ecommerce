@@ -8,9 +8,9 @@ const orderSchema = new Schema(
         description: String,
         img: String,
         price: Number,
-        quantity: Number,
         sale_price: Number,
-        free_shipping: Boolean,
+        quantity: Number,
+        on_sale: Boolean,
     }],
     user: {
         type: String,
@@ -38,10 +38,10 @@ const orderSchema = new Schema(
 // Order.total
 orderSchema.virtual('total').get(function() {
     let total = 0;    
-    this.products.forEach(product => {
-        total += product.price * product.quantity;
+    this.products.forEach(p => {
+        total += (p.on_sale ? p.sale_price : p.price) * p.quantity;
     });
-    return total;
+    return this.shipping_cost + total;
 });
 
 // Order.description

@@ -10,6 +10,7 @@ const { REACT_APP_MP_SKEY } = process.env;
 
 const PostSale = () => {
     const [orderStatus, setOrderStatus] = useState();
+    const [firstLoad, setFirstLoad] = useState(true)
     const dispatch = useDispatch();
     const { id } = useParams();
     const { data, loading, error } = useAxios('GET', `/order/${id}`);
@@ -19,7 +20,7 @@ const PostSale = () => {
         //! solo pedir la order al back para mostrar detalles
 
         //: peticion a mp para saber status del pago
-        (async () => {
+        firstLoad && (async () => {
             const { data } = await axios.get(`https://api.mercadopago.com/v1/payments/search?sort=date_created&criteria=desc&external_reference=${id}`, {
                 headers: {
                     Authorization: `Bearer ${REACT_APP_MP_SKEY}`,
@@ -28,12 +29,14 @@ const PostSale = () => {
             console.log(data.results[0].status);
             setOrderStatus(data.results[0].status);
             
-            if (data.results[0].status === 'approved') {
+            const { data: order } = await axios(`/order/${id}`);
+
+            if (data.results[0].status === 'approved' && order.status !== 'approved') {
                 //? cambiar orden a pagada
                 const orderUpdt = await axios.put(`/order/${id}`,{
                     status: 'approved'
                 });
-                console.log(orderUpdt);
+                console.log(orderUpdt.data.message);
     
                 //? vaciar carrito
                 const { data: cartEmpty } = await axios.delete(`/cart/empty`);
@@ -48,7 +51,10 @@ const PostSale = () => {
                 console.log(stockUpdt);
 
                 //? Vaciar el estado de redux onCart
-                dispatch(loadCart([]))
+                dispatch(loadCart([]));
+
+                //: first load solo sirve pre deploy
+                setFirstLoad(false);                
             };
         })();
       // eslint-disable-next-line
