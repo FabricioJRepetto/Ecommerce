@@ -102,7 +102,6 @@ const Signupin = () => {
     window.localStorage.setItem("loggedAvatarEcommerce", avatar);
     window.localStorage.setItem("loggedEmailEcommerce", email);
 
-    console.log(userDecoded);
     navigate("/profile");
   };
 

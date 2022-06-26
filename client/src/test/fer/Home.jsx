@@ -39,6 +39,7 @@ const Home = () => {
           dispatch(loadEmail(data.email ? data.email : loggedEmail));
         }
       } catch (error) {
+        console.log("HOME.JSX");
         window.localStorage.removeItem("loggedTokenEcommerce");
         window.localStorage.removeItem("loggedAvatarEcommerce");
         window.localStorage.removeItem("loggedEmailEcommerce");

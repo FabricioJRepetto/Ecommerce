@@ -1,6 +1,11 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { sessionActive, loadUsername, loadAvatar, loadEmail } from "../../Redux/reducer/sessionSlice";
+import {
+  sessionActive,
+  loadUsername,
+  loadAvatar,
+  loadEmail,
+} from "../../Redux/reducer/sessionSlice";
 import { useNavigate } from "react-router-dom";
 
 const Signout = () => {
@@ -10,6 +15,8 @@ const Signout = () => {
   const navigate = useNavigate();
 
   const signOut = () => {
+    console.log("SIGNOUT.JSX");
+
     window.localStorage.removeItem("loggedTokenEcommerce");
     window.localStorage.removeItem("loggedAvatarEcommerce");
     window.localStorage.removeItem("loggedEmailEcommerce");
@@ -27,7 +34,9 @@ const Signout = () => {
 
   return (
     <>
-      <button onClick={signOut}><b>Sign Out</b></button>
+      <button onClick={signOut}>
+        <b>Sign Out</b>
+      </button>
     </>
   );
 };

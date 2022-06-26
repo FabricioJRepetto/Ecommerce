@@ -22,15 +22,7 @@ const productSchema = new Schema(
       type: String,
       required: true,
     },
-    description: {
-      type: String,
-      required: true,
-    },
-    free_shipping: {
-      type: Boolean,
-      required: true,
-      default: false,
-    },
+    available_quantity: Number,
     main_features: [String],
     attributes: [
       {
@@ -38,9 +30,15 @@ const productSchema = new Schema(
         name: String,
       },
     ],
-    //attributes: [String],
-
-    available_quantity: Number,
+    description: {
+      type: String,
+      required: true,
+    },
+    free_shipping: {
+      type: Boolean,
+      required: true,
+      //  default: false,
+    },
     images: [
       {
         imgURL: String,
