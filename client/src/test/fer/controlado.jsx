@@ -6,6 +6,7 @@ import {
   loadProductsFound,
 } from "../../Redux/reducer/productsSlice";
 import { useEffect } from "react";
+import { loadProducts, addCart } from "../../Redux/reducer/cartSlice";
 import Card from "../../components/Products/Card";
 
 const Products = () => {
@@ -14,20 +15,18 @@ const Products = () => {
     max: "500",
   });
   const [shippingFilter, setShippingFilter] = useState(false);
-  const [brandsFilter, setBrandsFilter] = useState(); //! Uncaught TypeError: brandsFilter is undefined
-  // const [brandsFilter, setBrandsFilter] = useState({}); //! A component is changing an uncontrolled input to be controlled
-  const [loading, setLoading] = useState(true);
+  const [brandsFilter, setBrandsFilter] = useState();
+
   const brands = useRef();
   const dispatch = useDispatch();
   const { productsFound, productsFiltered } = useSelector(
     (state) => state.productsReducer
   );
+  const cart = useSelector((state) => state.cartReducer.main);
   const whishlist = useSelector((state) => state.cartReducer.whishlist);
 
   useEffect(() => {
     getProducts();
-    console.log("2");
-    setLoading(false);
     // eslint-disable-next-line
   }, []);
 
@@ -44,27 +43,15 @@ const Products = () => {
         brands.current = [];
         let brandsCheckbox = {};
         for (const product of res.data) {
-          // brands.current => renderiza checkboxes
-          // brandsCheckbox => {BRAND: boolean}
-          //      => para cargar BrandsFilter
-          // brandsFilter => estado que maneja checkboxes
-          if (product.brand) {
-            const brandCamelCase =
-              product.brand.charAt(0).toUpperCase() + product.brand.slice(1);
-            !Object.keys(brandsCheckbox).includes(brandCamelCase) &&
-              brands.current.push(brandCamelCase);
-            brandsCheckbox[brandCamelCase] = false;
-          }
-          /* !brands.current.includes(product.brand) &&
+          !brands.current.includes(product.brand) &&
             product.brand &&
             brands.current.push(product.brand);
-          brandsCheckbox[product.brand] = false; */
+          brandsCheckbox[product.brand] = false;
         }
         setBrandsFilter(brandsCheckbox);
         brands.current.sort();
       })
-      .catch((err) => console.log(err))
-      .finally(console.log("1"));
+      .catch((err) => console.log(err));
   };
 
   const filterPrices = (e) => {
@@ -140,24 +127,18 @@ const Products = () => {
       <div className="products-filters">
         <h3>BRANDS</h3>
         <div className="filter-brand-checkbox-container">
-          {loading ? (
-            <h1>CARGANDO</h1>
-          ) : (
-            brandsFilter &&
-            Object.keys(brandsFilter).length > 0 &&
-            React.Children.toArray(
-              brands.current?.map((brand) => (
-                <label>
-                  <input
-                    type="checkbox"
-                    name={brand}
-                    checked={brandsFilter[brand]}
-                    onChange={handleBrands}
-                  />
-                  {brand}
-                </label>
-              ))
-            )
+          {React.Children.toArray(
+            brands.current?.map((brand) => (
+              <label>
+                <input
+                  type="checkbox"
+                  name={brand}
+                  checked={brandsFilter[brand]}
+                  onChange={handleBrands}
+                />
+                {brand}
+              </label>
+            ))
           )}
           <br />
           <hr />

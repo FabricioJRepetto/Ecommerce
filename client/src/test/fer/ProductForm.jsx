@@ -48,6 +48,8 @@ const ProductForm = () => {
     if (featuresQuantity > 1) {
       removeFeature(i);
       setFeaturesQuantity(featuresQuantity - 1);
+    } else {
+      console.log("debes agregar al menos una caracteristica"); //!VOLVER A VER renderizar mensaje warn
     }
   };
 
@@ -80,6 +82,8 @@ const ProductForm = () => {
     if (attributesQuantity > 1) {
       removeAttribute(i);
       setAttributesQuantity(attributesQuantity - 1);
+    } else {
+      console.log("debes agregar al menos un atributo"); //!VOLVER A VER renderizar mensaje warn
     }
   };
 
