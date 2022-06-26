@@ -1,14 +1,24 @@
+.loading-mini-card {
+    padding: 25px;
+    position: relative;
+    overflow: hidden;
+}
 .product-mini-card {
     background-color: white;
     color: black;
-    border-radius: 0px;
+    border-radius: 2px;
     cursor: pointer;
-    padding: 25px;
+    padding: 35px 25px 25px 25px;
     position: relative;
     height: 290px;
-    transition: height .4s ease;
+    overflow: hidden;
+    opacity: 0;
 }
-
+.fade-in {
+    transition: all .3s ease;
+    padding: 25px;
+    opacity: 1;
+}
 .visible {
     visibility: hidden;
     color: black;
@@ -26,10 +36,8 @@
 
 .minicard-img-section {
     height: 180px;
-    width: 180;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    width: 180px;
+    overflow: hidden;
 }
 
 .minicard-price-section {

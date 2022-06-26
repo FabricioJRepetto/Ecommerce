@@ -19,9 +19,7 @@ const Details = () => {
     const addToCart = async (id) => {
         const { statusText, data } = await axios.post(`/cart/${id}`);
         statusText === 'OK' && !cart.includes(id) && dispatch(addCart(id));
-        
-        statusText === 'OK' && notification(data.message, '/cart', 'success')
-        statusText !== 'OK' && notification(data.message, '/cart', 'warning')
+        notification(data.message, '/cart', `${statusText === 'OK' ? 'success' : 'warning'}`);
   };
 
   return (

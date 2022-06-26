@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { useAxios } from "../../hooks/useAxios";
 import { useModal } from "../../hooks/useModal";
 import Modal from "../common/Modal";
@@ -12,24 +12,23 @@ import Card from "../Products/Card";
 import './Profile.css'
 
 const Profile = () => {
-  const [render, setRender] = useState("details");
-  const [address, setAddress] = useState([]);
-  const [newAdd, setNewAdd] = useState({});
-  const [whishlist, setWhishlist] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const wl_id = useSelector(
-    (state) => state.cartReducer.whishlist
-  );
-    //const whishlist = useSelector((state) => state.cartReducer.whishlist);
+    const navigate = useNavigate();
+    const [notification] = useNotification();
+    const [isOpenAddForm, openModalAddForm, closeAddForm, prop] = useModal();
+    const { section } = useParams();
 
-  const { session, username, avatar, email } = useSelector(
-    (state) => state.sessionReducer
-  );
-  const [isOpenAddForm, openModalAddForm, closeAddForm, prop] = useModal();
-  const navigate = useNavigate();
-  const [notification] = useNotification();
+    const [render, setRender] = useState(section);
+    const [address, setAddress] = useState([]);
+    const [newAdd, setNewAdd] = useState({});
+    const [whishlist, setWhishlist] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    const {data: orders, oLoading, error} = useAxios('GET', `/order/userall/`);
+    const wl_id = useSelector((state) => state.cartReducer.whishlist);
+    const { session, username, avatar, email } = useSelector((state) => state.sessionReducer);
+
+    useEffect(() => {
+      setRender(section || 'details');
+    }, [section]);
 
     useEffect(() => {
         if (!session) {
@@ -45,23 +44,35 @@ const Profile = () => {
              })();
         }
          // eslint-disable-next-line
-    }, []);    
+    }, [wl_id]);
 
+    //? ORDERS
+    const {data: orders, oLoading} = useAxios('GET', `/order/userall/`);
+
+    // Date formater
+  const formatDate = (date) => {
+    let fecha = new Date(date.slice(0, -1));
+    return fecha.toString().slice(0, 21);
+  };
+
+    //? ADDRESS
     const deleteAddress = async (id) => {
         setLoading(true);
-        const { data } = await axios.delete(`/user/address/${id}`);
-        console.log(data);
-        data ? setAddress(data) : setAddress([]);
+        const { data, statusText } = await axios.delete(`/user/address/${id}`);
+        data.address ? setAddress(data.address) : setAddress([]);
         setLoading(false);
+        notification(data.message, '/cart', `${statusText === 'OK' ? 'success' : 'warning'}`);
     };
 
-    //: set default address
+    // set default address ⭐
     const setDefault = async (id) => { 
-        const { data } = await axios.put(`/user/address/default/${id}`);
-        setAddress(data);
+        const { data, statusText } = await axios.put(`/user/address/default/${id}`);
+        setAddress(data.address);
+        notification(data.message, '/cart', `${statusText === 'OK' ? 'success' : 'warning'}`);
      };     
 
-  //: edit
+  // edit/create address
+    // set and open modal
   const editAddress = async (id) => {
     const { data } = await axios(`/user/address/`);
     const target = data.address?.find((e) => e._id === id);
@@ -75,8 +86,8 @@ const Profile = () => {
     });
     openModalAddForm();
   };
-
-  const handleAddress = async (e, n) => {
+    // handle submit
+  const handleAddress = async (e, n = false) => {
     e.preventDefault();
     if (
       newAdd.state &&
@@ -94,24 +105,22 @@ const Profile = () => {
       };
 
       if (n) {
-        const { data: updated } = await axios.post(`/user/address/`, data);
-        setAddress(updated);
+        const { data: updated, statusText } = await axios.post(`/user/address/`, data);
+        setAddress(updated.address);
+        notification(updated.message, '', `${statusText === 'OK' ? 'success' : 'warning'}`);
       } else {
-        const { data: updated } = await axios.put(
-          `/user/address/${newAdd.id}`,
-          data
-        );
-        setAddress(updated);
+        const { data: updated, statusText}  = await axios.put(`/user/address/${newAdd.id}`, data);
+        setAddress(updated.address);
+        notification(updated.message, '', `${statusText === 'OK' ? 'success' : 'warning'}`);
       }
       setNewAdd({});
       closeAddForm();
     }
-  }; 
-
+  };
+    // Input Number onChange Handler
   const handleChange = ({ target }) => {
     const { name, value, validity } = target;
     let validatedValue;
-
     if (!validity.valid) {
       validatedValue = newAdd[name];
     } else {
@@ -123,44 +132,31 @@ const Profile = () => {
     });
   };
 
-  //: Whishlist
-  const removeFromWL = async (id) => {
-    const { data } = await axios.delete(`/whishlist/${id}`);
-    console.log(data);
-    data.list.id_list ? setWhishlist(data.list.id_list) : setWhishlist([]);
-    notification(data.message, '', 'success')
-  };
-
-  const formatDate = (date) => {
-    let fecha = new Date(date.slice(0, -1));
-    return fecha.toString().slice(0, 21);
-  };
-
   return (
     <div>
       <h1>Profile</h1>
-      <button onClick={() => setRender("details")}>Details</button>
-      <button onClick={() => setRender("orders")}>Orders</button>
-      <button onClick={() => setRender("address")}>Shipping address</button>
-      <button onClick={() => setRender("whishlist")}>Whishlist</button>
-      <Signout />
+        
+      <div className="profile-menu-container">
+        <NavLink to={"/profile/details"}>Details</NavLink>
+        <NavLink to={"/profile/orders"}>Orders</NavLink>
+        <NavLink to={"/profile/address"}>Shipping address</NavLink>
+        <NavLink to={"/profile/whishlist"}>Whishlist</NavLink>
+        <NavLink to={"/profile/details"}><del>History</del></NavLink>
+        <Signout />
+      </div>
+
       <hr />
       <div>
         {render === "details" && (
-          <div>
-            <img
-              src={avatar ? avatar : require("../../assets/avatardefault.png")}
-              alt="avatar"
-              height={96}
-            />
-            <h2>{username}</h2>
-            <p>{email}</p>
-            <br />
-            <br />
-            <br />
-            <br />
-            <br />
-          </div>
+            <div className="profile-details-container">
+                <div className='profile-avatar-container'>
+                    <img src={avatar ? avatar : require("../../assets/avatardefault.png")}
+                    alt="avatar"
+                    />
+                </div>
+                <h2>{username}</h2>
+                <p>{email}</p>
+            </div>
         )}
 
         {render === "orders" && (

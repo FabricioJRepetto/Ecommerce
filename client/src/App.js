@@ -64,7 +64,8 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/signin" element={<Signupin />} />
                 <Route path="/signout" element={<Signout />} />
-                <Route path="/profile" element={<Profile />} />
+                <Route path="/profile/" element={<Profile />} />
+                <Route path="/profile/:section" element={<Profile />} />
                 <Route path="/products" element={<Products />} />
                 <Route path="/productForm" element={<ProductForm />} />
                 <Route path="/cart" element={<Cart />} />

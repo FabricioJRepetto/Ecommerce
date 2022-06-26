@@ -1,24 +1,84 @@
 .navBar {    
     display: flex;
-    justify-content: space-around;
-    align-items: flex-end;
+    justify-content: center;
+    align-items: center;
     padding: 10px;
     margin-bottom: 20px;
 }
 .navBar a {
-    color: beige;
+    color: rgb(255, 255, 255);
     font-size: 1rem;
-    font-weight: 800;
+    font-weight: 600;
     text-decoration: none;
-    margin: 0 1vw 0 1vw;
+    margin: 0 1vw;
 }
 .navBar h1 {
     color: #FFA500;
     cursor: pointer;
 }
 
+.navbar-central-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+.navbar-central-subsection {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+}
+.navBar input[type=text]{
+    border: none;
+    width: 500px;
+    height: 35px;
+    margin-left: 2rem;
+    padding: 0 2rem;
+}
+
+.navbar-profile-section {
+    padding-left: 200px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 0;
+}
+
+.navbar-profile-button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+}
+.navbar-avatar {
+    height: 1.5rem;
+    width: 1.5rem;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 1rem;
+}
+.navbar-avatar img {
+    height: 100%;
+    width: 100%;
+}
+.navbar-avatar-svg  {
+    transform: scale(.7);
+    margin-right: .5rem;
+}
+.navbar-avatar-svg path {
+    fill: white;
+}
+
+.whishlist-icon {
+    transform: scale(.7);
+}
+.whishlist-icon path {
+    fill: white;
+}
+
 .cart-icon-container {
     position: relative;
+    margin: 0px;
 }
 .cart-icon {
     transform: scale(.5);
@@ -27,7 +87,10 @@
     fill: white;
 }
 .cart-number {
+    font-weight: 600;
+    width: 2rem;
+    text-align: left;
     position: absolute;
     top: 5px;
-    right: 5px;
+    right: -20px;
 }
