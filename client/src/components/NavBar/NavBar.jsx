@@ -44,7 +44,9 @@ const NavBar = () => {
                                     <NavLink to={"/profile/details"} className='navbar-profile-button'>
                                         { avatar
                                         ? <div className="navbar-avatar">
-                                            <img src={avatar} alt="navbar-avatar" />
+                                            <img src={avatar} 
+                                            referrerpolicy="no-referrer"
+                                            alt="navbar-avatar" />
                                             </div>
                                         : <Avatar className="navbar-avatar-svg"/>}
                                         <p>Profile</p>

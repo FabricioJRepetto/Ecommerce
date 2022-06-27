@@ -151,6 +151,7 @@ const Profile = () => {
             <div className="profile-details-container">
                 <div className='profile-avatar-container'>
                     <img src={avatar ? avatar : require("../../assets/avatardefault.png")}
+                    referrerpolicy="no-referrer"
                     alt="avatar"
                     />
                 </div>

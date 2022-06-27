@@ -11,6 +11,7 @@ import jwt_decode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { loadCart, loadWhishlist } from "../../Redux/reducer/cartSlice";
+import './Signupin.css'
 
 const { REACT_APP_OAUTH_CLIENT_ID } = process.env;
 
@@ -97,6 +98,8 @@ const Signupin = () => {
     const userDecoded = jwt_decode(response.credential);
     const username =
       userDecoded.name || userDecoded.email || `Guest ${userDecoded.sub}`;
+
+      //: (https://lh3.googleusercontent.com/a-/AOh14GilAqwqC7Na70IrMsk0bJ8XGwz8HLFjlurl830D5g=s96-c).split('=')[0]
     const avatar = userDecoded.picture;
     const email = userDecoded.email;
 
@@ -126,8 +129,8 @@ const Signupin = () => {
     });
 
     google.accounts.id.renderButton(document.getElementById("signInDiv"), {
-      theme: "outline",
-      size: "large",
+        'width': 240,
+        'theme': 'light',
     });
     // eslint-disable-next-line
   }, [session]);
@@ -262,7 +265,7 @@ const Signupin = () => {
         </form>
       )}
       <hr />
-      <div id="signInDiv"></div>
+      <div className="google-signin-container" id="signInDiv"></div>
       <hr />
     </>
   );
