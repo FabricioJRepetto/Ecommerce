@@ -12,20 +12,25 @@ import './Cart.css'
 
 import { ReactComponent as Arrow } from '../../assets/svg/arrow-right.svg'
 import { ReactComponent as Ship } from '../../assets/svg/ship.svg'
+import { ReactComponent as Spinner } from '../../assets/svg/spinner.svg'
 
 const Cart = () => {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const [notification] = useNotification();
+
     const [cart, setCart] = useState(null);
     const [free_ship_cart, setFree_ship_cart] = useState(false);
     const [orderId, setOrderId] = useState('');
     const [address, setAddress] = useState(null);
     const [newAdd, setNewAdd] = useState({});
     const [selectedAdd, setSelectedAdd] = useState(null);
+    const [loadingPayment, setLoadingPayment] = useState(false);
+    const [loading, setLoading] = useState(true);
     const total = useSelector((state) => state.cartReducer.total);
+
     const [isOpenAddForm, openAddForm, closeAddForm] = useModal();
     const [isOpenAddList, openAddList, closeAddList] = useModal();
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const [notification] = useNotification();
 
     const SHIP_COST = 300;
 
@@ -41,11 +46,9 @@ const Cart = () => {
             setCart(data.products);
             setFree_ship_cart(data.free_ship_cart);
         };
-
-        console.log('cart');
-        console.log(data);
         dispatch(cartTotal(data.total));
         dispatch(loadCart(data.id_list));
+        setLoading(false);
     };
 
     const getAddress = async () => { 
@@ -59,6 +62,7 @@ const Cart = () => {
                 setSelectedAdd(def);
             }
         }
+        setLoading(false);
     };
 
     const handleChange = ({ target }) => {
@@ -107,6 +111,7 @@ const Cart = () => {
     };
 
     const openMP = async () => { 
+        setLoadingPayment(true);
         // crea la order       
         const { data: id } = await axios.post(`/order/`, selectedAdd);
         setOrderId(id);
@@ -114,6 +119,7 @@ const Cart = () => {
         const { data }  = await axios.get(`/mercadopago/${id}`);
         // abre el modal de mp con la id de la preferencia
         loadMercadoPago(data.id);
+        setLoadingPayment(false);
      };
 
     return (
@@ -190,13 +196,15 @@ const Cart = () => {
                     </div>
                     
                         <div className="cart-button-section">
-                            <button 
-                                disabled
-                                style={{ background: 'grey', cursor: 'default' }}
-                                onClick={goCheckout}> Stripe checkout </button>
-                            <br />
-                            <button disabled={(!cart || cart.length < 1 || !selectedAdd)} 
-                            onClick={openMP}> MercadoPago checkout </button>
+                            <button disabled={(true || loadingPayment)} 
+                            onClick={openMP}>{ loadingPayment 
+                            ? <Spinner className='cho-svg'/> 
+                            : 'Stripe checkout' }</button>
+
+                            <button disabled={(!cart || cart.length < 1 || !selectedAdd || loadingPayment)} 
+                            onClick={goCheckout}>{ loadingPayment 
+                            ? <Spinner className='cho-svg'/> 
+                            : 'MercadoPago checkout' }</button>
                         </div>
                     
                 </div>
@@ -214,17 +222,17 @@ const Cart = () => {
             <hr />
             <ul>
                 <br/>
+                <p><b>Mercadopago</b></p>
+                <li><p>card: <i>5416 7526 0258 2580</i></p></li>
+                <li><p>expiration: <i>11/25</i></p></li>
+                <li><p>cvc: <i>123</i></p></li>
+                <li><p>nombre: <i>apro</i></p></li>
+                <li><p>dni: <i>12345678</i></p></li>
+                <br/>
                 <p><b>stripe</b></p>
                 <li><p>card: <i>4242 4242 4242 4242</i></p></li>
                 <li><p>expiration: <i>fecha mayor a la actual</i></p></li>
                 <li><p>cvc: <i>123</i></p></li>
-                <br/>
-                <p><b>mercadopago</b></p>
-                <li><p>card: <i>5416 7526 0258 2580</i></p></li>
-                <li><p>expiration: <i>11/25</i></p></li>
-                <li><p>cvc: <i>123</i></p></li>
-                <li><p>nombre: <i>APRO</i></p></li>
-                <li><p>dni: <i>12345678</i></p></li>
             </ul>
 
             <Modal isOpen={isOpenAddForm} closeModal={closeAddForm}>

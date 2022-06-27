@@ -13,7 +13,9 @@ const NavBar = () => {
 
     return (
         <div className="navBar">
-            <h1 onClick={()=>navigate("/")}>provider!</h1>
+            <div className="navbar-logo-section">
+                <h1 onClick={()=>navigate("/")}>provider!</h1>
+            </div>
                     
                 <div className="navbar-central-section">
                     <input type="text" placeholder="search" />
@@ -28,6 +30,10 @@ const NavBar = () => {
                             <p>Create Products</p>
                         </NavLink>
 
+                    </div>
+                </div>
+
+                <div className="navbar-profile-container">
                         <div className="navbar-profile-section">
                             {!session ? (
                             <NavLink to={"signin"}>
@@ -62,10 +68,7 @@ const NavBar = () => {
                                 </>
                             )}
                         </div>
-                    </div>
-                    
-                </div>
-                
+                </div>                
         </div>
     );
 };

@@ -5,7 +5,7 @@
 }
 .cart-inner {
     min-width: 75vw;
-    min-height: 70vh;
+    min-height: 54vh;
     width: fit-content;
     border-radius: 4px;
     box-shadow: 0px 5px 10px rgba(0, 0, 0, .8);
@@ -67,6 +67,10 @@
     color: white;
     background: #3483fa;
 }
+.cart-button-section button:disabled {
+    background: rgb(182, 182, 182);
+    cursor: default
+}
 .cart-button-section input:focus {
     outline: none;
 }
@@ -87,4 +91,9 @@
 }
 .ship-svg path {
     fill: #39b54a;
+}
+
+.cho-svg {
+    transform:scale(.8) ;
+    color: white;
 }

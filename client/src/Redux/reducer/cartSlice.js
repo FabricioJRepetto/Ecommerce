@@ -24,9 +24,15 @@ export const cartSlice = createSlice({
     loadWhishlist: (state, action) => {
         state.whishlist = action.payload
     },
+    resetCartSlice: (state, action) => {
+        state.main = [];
+        state.onCart = [];
+        state.whishlist = [];
+        state.total = 0;
+    },
   },
 });
 
-export const { loadProducts, cartTotal, addCart, loadCart, loadWhishlist } = cartSlice.actions;
+export const { loadProducts, cartTotal, addCart, loadCart, loadWhishlist, resetCartSlice } = cartSlice.actions;
 
 export default cartSlice.reducer;

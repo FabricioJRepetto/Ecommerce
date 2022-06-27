@@ -29,7 +29,9 @@ function App() {
     const loggedUserToken = window.localStorage.getItem("loggedTokenEcommerce");
     const loggedAvatar = window.localStorage.getItem("loggedAvatarEcommerce");
     const loggedEmail = window.localStorage.getItem("loggedEmailEcommerce");
-                
+
+    console.log(loggedUserToken);
+
     (async () => {
       try {
         if (loggedUserToken) {

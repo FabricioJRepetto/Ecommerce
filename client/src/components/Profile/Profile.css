@@ -1,3 +1,8 @@
+.profile-container {
+    height: fit-content;
+    /*overflow: unset;*/
+    overflow: -moz-hidden-unscrollable;
+}
 .profile-menu-container a {
     color: rgb(255, 255, 255);
     font-size: 1rem;

@@ -49,8 +49,6 @@ const Profile = () => {
     //? ORDERS
     const {data: orders, oLoading} = useAxios('GET', `/order/userall/`);
 
-    !oLoading && console.log(orders)
-
     // Date formater
   const formatDate = (date) => {
     let fecha = new Date(date.slice(0, -1));
@@ -135,7 +133,7 @@ const Profile = () => {
   };
 
   return (
-    <div>
+    <div className="profile-container">
       <h1>Profile</h1>
         
       <div className="profile-menu-container">
