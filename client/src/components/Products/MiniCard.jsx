@@ -11,31 +11,24 @@ import { useEffect } from 'react';
 
 //: acomodar propiedades de sale
 
-const MiniCard = ({ img, name, price, sale_price, discount, prodId, free_shipping, fav, on_sale, loading}) => {    
+const MiniCard = ({ img, name, price, sale_price, discount, prodId, free_shipping, fav, on_sale, loading, fadeIn = true}) => {    
     const navigate = useNavigate();
     const [visible, setVisible] = useState(false);
-    const [ready, setReady] = useState(false);
+    const [ready, setReady] = useState(!fadeIn);
     const session = useSelector((state) => state.sessionReducer.session);
-
-    //! Esto es contraproducente pero quiero ver mi animación jeje
+    
     const [loaded, setLoaded] = useState(false)
     useEffect(() => {
-      if (loading) {
-            setTimeout(() => {
-                setLoaded(true)
-            }, 500);
-      }
+        if (!loading) {
+            setLoaded(true);
+        }
     }, [loading]);
     const readySetter = () => { 
-        //! ...y este timeout también (:
-        setTimeout(() => {
-            setReady(true)
-        }, 500);
-        //setReady(true)
+             setReady(true);
      }
 
     return (
-        <div style={{ background: 'white', height: '290px' }}>
+        <div style={{ background: 'white', height: '290px', width: '230px' }}>
             {(!loaded)
              ? <div className='loading-mini-card'>
                 <div className='minicard-img-section'>

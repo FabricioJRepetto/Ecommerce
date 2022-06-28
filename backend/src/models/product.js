@@ -38,7 +38,7 @@ const productSchema = new Schema(
         name: String,
       },
     ],
-    //attributes: [String],
+    //category: String,
     available_quantity: Number,
     images: [
       {

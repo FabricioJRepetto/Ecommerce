@@ -1,6 +1,6 @@
 .profile-container {
     height: fit-content;
-    /*overflow: unset;*/
+    overflow: hidden;
     overflow: -moz-hidden-unscrollable;
 }
 .profile-menu-container a {
@@ -38,4 +38,16 @@
 .profile-avatar-container img {
     height: 100%;
     width: 100%;
+}
+
+.profile-history-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    height: fit-content;
+    margin: 20px 0px;
+}
+.profile-history-container > div {
+    margin: 0px 15px 60px 0px;
 }

@@ -45,7 +45,7 @@ const NavBar = () => {
                                         { avatar
                                         ? <div className="navbar-avatar">
                                             <img src={avatar} 
-                                            referrerpolicy="no-referrer"
+                                            referrerPolicy="no-referrer"
                                             alt="navbar-avatar" />
                                             </div>
                                         : <Avatar className="navbar-avatar-svg"/>}

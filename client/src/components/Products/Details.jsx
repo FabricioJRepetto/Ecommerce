@@ -1,5 +1,5 @@
 import axios from 'axios';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom'
 import { useAxios } from '../../hooks/useAxios';
@@ -18,6 +18,27 @@ const Details = () => {
     const cart = useSelector((state) => state.cartReducer.onCart);
     const dispatch = useDispatch();
     const [notification] = useNotification();
+
+    useEffect(() => {
+        if (!loading) {
+            console.log(data);
+            // setear historial
+            const payload = {
+                img: data.images[0].imgURL,
+                product_name: data.name,
+                price: data.price,
+                sale_price: data.sale_price,
+                on_sale: data.on_sale,
+                product_id: data._id,
+                discount: data.discount,
+                free_shipping: data.free_shipping,
+                category: data.category || null,
+            };
+            axios.post(`/history/visited`, payload);
+        }
+        // eslint-disable-next-line
+    }, [loading])
+    
 
     const addToCart = async (id) => {
         const { statusText, data } = await axios.post(`/cart/${id}`);

@@ -64,8 +64,9 @@ const createOrder = async (req, res, next) => {
                 street_number
             },
             status: 'pending',
+            total: cart.total,
             free_shipping: free,
-            shipping_cost: free ? 0 : 300,
+            shipping_cost: cart.shipping_cost,
         });
         await newOrder.save();
 

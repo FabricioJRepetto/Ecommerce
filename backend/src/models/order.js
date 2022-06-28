@@ -23,6 +23,7 @@ const orderSchema = new Schema(
         street_name: String,
         street_number: Number,
     },
+    total: Number,
     status: String,
     free_shipping: Boolean,
     shipping_cost: Number,
@@ -34,15 +35,6 @@ const orderSchema = new Schema(
     toObject: { getters: true, virtuals: true }
   }
 );
-
-// Order.total
-orderSchema.virtual('total').get(function() {
-    let total = 0;    
-    this.products.forEach(p => {
-        total += (p.on_sale ? p.sale_price : p.price) * p.quantity;
-    });
-    return this.shipping_cost + total;
-});
 
 // Order.description
 orderSchema.virtual('description').get(function() {

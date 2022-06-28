@@ -9,7 +9,8 @@ import Signout from "../Session/Signout";
 import { resizer } from "../../helpers/resizer";
 import { useNotification } from "../../hooks/useNotification";
 import Card from "../Products/Card";
-import './Profile.css'
+import MiniCard from "../Products/MiniCard";
+import './Profile.css';
 
 const Profile = () => {
     const navigate = useNavigate();
@@ -21,6 +22,7 @@ const Profile = () => {
     const [address, setAddress] = useState([]);
     const [newAdd, setNewAdd] = useState({});
     const [whishlist, setWhishlist] = useState([]);
+    const [history, setHistory] = useState([])
     const [loading, setLoading] = useState(true);
 
     const wl_id = useSelector((state) => state.cartReducer.whishlist);
@@ -35,10 +37,12 @@ const Profile = () => {
             navigate("/signin");
         } else {
             (async () => { 
-                const { data } = await axios(`/user/address/`);
+                const { data } = await axios(`/address/`);
                 data.address ? setAddress(data.address) : setAddress([]);
                 const { data: list } = await axios(`/whishlist/`);
                 list.products ? setWhishlist(list.products) : setWhishlist([]);
+                const { data: history } = await axios(`/history/`);
+                history.products ? setHistory(history.products) : setHistory([]);
 
                 setLoading(false);
              })();
@@ -58,15 +62,15 @@ const Profile = () => {
     //? ADDRESS
     const deleteAddress = async (id) => {
         setLoading(true);
-        const { data, statusText } = await axios.delete(`/user/address/${id}`);
+        const { data, statusText } = await axios.delete(`/address/${id}`);
         data.address ? setAddress(data.address) : setAddress([]);
         setLoading(false);
-        notification(data.message, '/cart', `${statusText === 'OK' ? 'success' : 'warning'}`);
+        notification(data.message, '', `${statusText === 'OK' ? 'success' : 'warning'}`);
     };
 
     // set default address ⭐
     const setDefault = async (id) => { 
-        const { data, statusText } = await axios.put(`/user/address/default/${id}`);
+        const { data, statusText } = await axios.put(`/address/default/${id}`);
         setAddress(data.address);
         notification(data.message, '/cart', `${statusText === 'OK' ? 'success' : 'warning'}`);
      };     
@@ -74,7 +78,7 @@ const Profile = () => {
   // edit/create address
     // set and open modal
   const editAddress = async (id) => {
-    const { data } = await axios(`/user/address/`);
+    const { data } = await axios(`/address/`);
     const target = data.address?.find((e) => e._id === id);
     setNewAdd({
       id,
@@ -105,11 +109,11 @@ const Profile = () => {
       };
 
       if (n) {
-        const { data: updated, statusText } = await axios.post(`/user/address/`, data);
+        const { data: updated, statusText } = await axios.post(`/address/`, data);
         setAddress(updated.address);
         notification(updated.message, '', `${statusText === 'OK' ? 'success' : 'warning'}`);
       } else {
-        const { data: updated, statusText}  = await axios.put(`/user/address/${newAdd.id}`, data);
+        const { data: updated, statusText}  = await axios.put(`/address/${newAdd.id}`, data);
         setAddress(updated.address);
         notification(updated.message, '', `${statusText === 'OK' ? 'success' : 'warning'}`);
       }
@@ -141,7 +145,7 @@ const Profile = () => {
         <NavLink to={"/profile/orders"}>Orders</NavLink>
         <NavLink to={"/profile/address"}>Shipping address</NavLink>
         <NavLink to={"/profile/whishlist"}>Whishlist</NavLink>
-        <NavLink to={"/profile/details"}><del>History</del></NavLink>
+        <NavLink to={"/profile/history"}>History</NavLink>
         <Signout />
       </div>
 
@@ -151,7 +155,7 @@ const Profile = () => {
             <div className="profile-details-container">
                 <div className='profile-avatar-container'>
                     <img src={avatar ? avatar : require("../../assets/avatardefault.png")}
-                    referrerpolicy="no-referrer"
+                    referrerPolicy="no-referrer"
                     alt="avatar"
                     />
                 </div>
@@ -267,6 +271,41 @@ const Profile = () => {
                   )
                 ) : (
                   <p>Whishlist empty</p>
+                )}
+              </div>
+            ) : (
+              <div>LOADING</div>
+            )}
+          </div>
+        )}
+      </div>
+
+        <div>
+        {render === "history" && (
+          <div>
+            <h1>History</h1>
+            {!loading ? (
+              <div className="profile-history-container">
+                {history.length ? (
+                  React.Children.toArray(
+                    history?.map((e) => (
+                        <MiniCard 
+                            key={e.product_id}
+                            fadeIn={false}
+                            img={e.img}
+                            name={e.product_name}
+                            price={e.price}
+                            sale_price={e.sale_price}
+                            discount={e.discount}
+                            prodId={e.product_id}
+                            free_shipping={e.free_shipping ? true : false}
+                            on_sale={e.on_sale}
+                            fav={wl_id.includes(e.product_id)}
+                        />
+                    ))
+                  )
+                ) : (
+                  <p>History empty</p>
                 )}
               </div>
             ) : (

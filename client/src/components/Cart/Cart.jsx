@@ -20,7 +20,6 @@ const Cart = () => {
     const [notification] = useNotification();
 
     const [cart, setCart] = useState(null);
-    const [free_ship_cart, setFree_ship_cart] = useState(false);
     const [orderId, setOrderId] = useState('');
     const [address, setAddress] = useState(null);
     const [newAdd, setNewAdd] = useState({});
@@ -32,7 +31,7 @@ const Cart = () => {
     const [isOpenAddForm, openAddForm, closeAddForm] = useModal();
     const [isOpenAddList, openAddList, closeAddList] = useModal();
 
-    const SHIP_COST = 300;
+    const SHIP_COST = 500;
 
     useEffect(() => {
         getCart();
@@ -42,17 +41,17 @@ const Cart = () => {
 
     const getCart = async () => {
         const { data } = await axios('/cart/');
-        if (typeof data !== 'string') {
-            setCart(data.products);
-            setFree_ship_cart(data.free_ship_cart);
+        if (data?.products?.length > 0) {
+            setCart(data);
         };
+        console.log(data);
         dispatch(cartTotal(data.total));
         dispatch(loadCart(data.id_list));
         setLoading(false);
     };
 
     const getAddress = async () => { 
-        const { data } = await axios('/user/address');
+        const { data } = await axios('/address');
         if (data.address) {
             setAddress(data.address);
             if (!selectedAdd) {
@@ -84,7 +83,7 @@ const Cart = () => {
         e.preventDefault();
         if (newAdd.state && newAdd.city && newAdd.zip_code && newAdd.street_name && newAdd.street_number) {
             closeAddForm();
-            const { data } = await axios.post(`/user/address`, newAdd);
+            const { data } = await axios.post(`/address`, newAdd);
             console.log(data);
             setSelectedAdd(data.pop());
             getAddress();
@@ -127,10 +126,10 @@ const Cart = () => {
 
             <div className="cart-inner">
                 <h2 style={{ color: 'black' }}>Cart</h2>
-                {(cart && cart.length > 0)
+                {(cart && cart.products.length > 0)
                 ? <div className="">
                     
-                    {cart.map((p) => (
+                    {cart.products.map((p) => (
                         <CartCard
                             key={p.product_id}
                             on_cart={true}
@@ -150,59 +149,48 @@ const Cart = () => {
                     ))}
 
                     <div className="total-section-container">
-                        {selectedAdd
-                            ? <div className="total-section-inner">
-                                    <div 
+                        <div className="total-section-inner">
+                                    {selectedAdd
+                                    ?<div 
                                         onClick={openAddList}
                                         className='cart-address-selector'
                                         name={'address-container'}>
                                             {selectedAdd.street_name+' '+selectedAdd.street_number+', '+selectedAdd.city}
                                         <Arrow className='arrow-address-selector'/>
                                     </div>
+                                    :<div 
+                                        onClick={openAddForm}
+                                        className="cart-address-selector">
+                                        <b>You have no address asociated,</b> 
+                                        please create one to proceed. 
+                                        <Arrow className='arrow-address-selector'/>
+                                    </div>}
 
                                     <div className="cart-total">
-                                    {free_ship_cart 
+                                    {cart.free_ship_cart && <del className="grey">${cart.products.length * SHIP_COST}</del>}
+                                    {cart.shipping_cost === 0
                                     ? <div className="cart-ship-total green">
-                                        <Ship className='ship-svg'/>
-                                        <h2>Gratis!</h2>
+                                        <Ship className='ship-svg' />
+                                        <h3>Envío gratis!</h3>
                                     </div>
-                                    : '$300' }
+                                    : <h3>${cart.shipping_cost}</h3> }
                                 </div>
-
-                                </div>
-                            : <div className="total-section-inner" >
-                                <div 
-                                    onClick={openAddForm}
-                                    className="cart-address-selector">
-                                    <b>You have no address asociated,</b> 
-                                    please create one to proceed. 
-                                    <Arrow className='arrow-address-selector'/>
-                                </div>
-                                
-                                <div className="cart-total">
-                                    {free_ship_cart 
-                                    ? <div>
-                                        <Ship/>Envío gratis!
-                                    </div>
-                                    : '$'+SHIP_COST }
-                                </div>
-
-                            </div>}
+                            </div>
 
                         <div className="total-section-inner">
                             <h2>Total:</h2>
-                            <h2 className="cart-total">${free_ship_cart ? total : total+SHIP_COST}</h2>
+                            <h2 className="cart-total">${total}</h2>
                         </div>
                     </div>
                     
                         <div className="cart-button-section">
                             <button disabled={(true || loadingPayment)} 
-                            onClick={openMP}>{ loadingPayment 
+                            onClick={goCheckout}>{ loadingPayment 
                             ? <Spinner className='cho-svg'/> 
                             : 'Stripe checkout' }</button>
 
                             <button disabled={(!cart || cart.length < 1 || !selectedAdd || loadingPayment)} 
-                            onClick={goCheckout}>{ loadingPayment 
+                            onClick={openMP}>{ loadingPayment 
                             ? <Spinner className='cho-svg'/> 
                             : 'MercadoPago checkout' }</button>
                         </div>

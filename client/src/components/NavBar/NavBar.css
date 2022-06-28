@@ -34,6 +34,9 @@
     height: 35px;
     padding: 0 1rem;
 }
+.navBar input[type=text]:focus {
+    outline: none;
+}
 
 .navbar-logo-section {
     width: 200px;

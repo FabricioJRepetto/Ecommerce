@@ -2,15 +2,19 @@ const { Schema, model } = require("mongoose");
 
 const historySchema = new Schema(
   {
-    products: [
-      {     
+    products: [{     
             product_name: String,
             product_id: String,
             img: String,
             price: Number,
-      }
-    ],
-    owner: {
+            sale_price: Number,
+            on_sale: Boolean,
+            discount: String,
+            free_shipping: Boolean,
+            category: String,
+    }],
+    last_search: String,
+    user: {
       type: String,
       required: true,
     },

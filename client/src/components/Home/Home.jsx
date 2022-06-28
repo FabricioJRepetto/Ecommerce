@@ -91,7 +91,8 @@ const Home = () => {
                             prodId={products[index]?._id} 
                             free_shipping={products[index]?.free_shipping}
                             on_sale={products[index]?.on_sale} 
-                            fav={whishlist.includes(products[index]?._id)}/>
+                            fav={whishlist.includes(products[index]?._id)}
+                        />
                     ))}
                 </div>
             </div>
