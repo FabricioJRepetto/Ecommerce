@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
 import { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { close } from '../../Redux/reducer/notificationSlice';
 import './Notification.css';
+
+import { ReactComponent as LinkIcon } from "../../assets/svg/link.svg";
 
 const Notification = () => {
     const navigate = useNavigate();
@@ -13,7 +15,8 @@ const Notification = () => {
     const timeout = useRef();
 
     useEffect(() => {
-            startTimeout();
+        clearTimeout(timeout.current);
+        startTimeout();
         // eslint-disable-next-line
     }, [isOpen]);
 
@@ -40,7 +43,7 @@ const Notification = () => {
 
     const closeNotification = () => { 
         dispatch(close());
-        if (timeout.current) clearTimeout(timeout.current);
+        clearTimeout(timeout.current);
      };
 
     return (
@@ -52,6 +55,7 @@ const Notification = () => {
             className={`notification-container ${isOpen && 'notif-open'}`}>
             <div className={`notification-inner`}>
                 <div className={`notification-timer ${isOpen && 'timer-active'}`}></div>
+                {url && <LinkIcon className='link-svg' />}
                 <div className='notification-message'>
                     <p>{message}</p>
                 </div>

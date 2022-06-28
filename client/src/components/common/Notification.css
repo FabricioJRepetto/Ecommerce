@@ -21,6 +21,16 @@
     position: relative;
 }
 
+.link-svg {
+    transform: scale(.5);
+    position: absolute;
+    top: 1px;
+    right: 5px;
+}
+.link-svg path {
+    fill: white;
+}
+
 .notification-message {
     max-width: 230px;
 }
