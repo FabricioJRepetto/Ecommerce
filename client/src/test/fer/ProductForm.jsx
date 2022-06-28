@@ -118,7 +118,7 @@ const ProductForm = () => {
 
   const handleAddImg = (e) => {
     const fileListArrayImg = Array.from(e.target.files);
-    validateImgs(fileListArrayImg);
+    validateImgs(fileListArrayImg, warnTimer);
     setProductImg([...productImg, ...fileListArrayImg]);
   };
 
