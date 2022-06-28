@@ -1,57 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useForm, useFieldArray } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { useEffect } from "react";
 import "./ProductForm.css";
-
-const validatePrice = (value) => {
-  if (value === undefined) return false;
-  return /^\d+(.\d{1,2})?$/.test(value);
-};
-
-const validateNumbers = (value) => {
-  if (value === undefined) return false;
-  return /^[0-9]*$/.test(value);
-};
-
-const clearInputs = (
-  featuresQuantity,
-  setFeaturesQuantity,
-  removeFeature,
-  appendFeature,
-  attributesQuantity,
-  setAttributesQuantity,
-  removeAttribute,
-  appendAttribute,
-  setProductImg
-) => {
-  const ids = ["name_id", "price_id", "brand_id", "stock_id", "description_id"];
-  for (const id of ids) {
-    let input = document.getElementById(id);
-    input.value = "";
-  }
-  if (featuresQuantity > 1) {
-    removeFeature();
-    setFeaturesQuantity(1);
-    appendFeature("");
-  } else {
-    let mainFeature = document.getElementById("main_feature_0");
-    mainFeature.value = "";
-  }
-  if (attributesQuantity > 1) {
-    removeAttribute();
-    setAttributesQuantity(1);
-    appendAttribute({ name: "", value_name: "" });
-  } else {
-    let attributeName = document.getElementById("attribute_name_0");
-    let attributeValue = document.getElementById("attribute_value_0");
-    attributeName.value = "";
-    attributeValue.value = "";
-  }
-  setProductImg([]);
-};
+import {
+  validateImgs,
+  validationProductFormSchema,
+} from "../../helpers/validators";
 
 const ProductForm = () => {
   const [productImg, setProductImg] = useState([]);
@@ -59,40 +14,12 @@ const ProductForm = () => {
   const [featuresQuantity, setFeaturesQuantity] = useState(1);
   const [attributesQuantity, setAttributesQuantity] = useState(1);
 
-  const validationSchema = yup.object().shape({
-    name: yup.string().required("Nombre es requerido"),
-    price: yup
-      .string()
-      .required("Precio es requerido")
-      .test(
-        "price",
-        "Precio debe ser un número válido (ej: '1234.56')",
-        (value) => validatePrice(value)
-      ),
-    brand: yup.string().required("Marca es requerida"),
-    available_quantity: yup
-      .string()
-      .required("Stock es requerido")
-      .test("stock", "Stock debe ser un número", (value) =>
-        validateNumbers(value)
-      ),
-    description: yup.string().required("Descripción es requerida"),
-    main_features: yup
-      .array()
-      .of(yup.string().required("Principales características requeridas")),
-    attributes: yup.array().of(
-      yup.object().shape({
-        name: yup.string().required("Nombre de atributo es requerido"),
-        value_name: yup.string().required("Valor de atributo es requerido"),
-      })
-    ),
-  });
-
-  const formOptions = { resolver: yupResolver(validationSchema) };
+  const formOptions = { resolver: yupResolver(validationProductFormSchema) };
   const {
     register,
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm(formOptions);
 
@@ -121,13 +48,10 @@ const ProductForm = () => {
     if (featuresQuantity > 1) {
       removeFeature(i);
       setFeaturesQuantity(featuresQuantity - 1);
+    } else {
+      console.log("debes agregar al menos una caracteristica"); //!VOLVER A VER renderizar mensaje warn
     }
   };
-
-  useEffect(() => {
-    appendFeature("");
-    // eslint-disable-next-line
-  }, []);
 
   const {
     fields: fieldsAttributes,
@@ -158,44 +82,25 @@ const ProductForm = () => {
     if (attributesQuantity > 1) {
       removeAttribute(i);
       setAttributesQuantity(attributesQuantity - 1);
+    } else {
+      console.log("debes agregar al menos un atributo"); //!VOLVER A VER renderizar mensaje warn
     }
   };
 
   useEffect(() => {
     appendAttribute({ name: "", value_name: "" });
+    appendFeature("");
     // eslint-disable-next-line
   }, []);
 
-  const submitProduct = async (productData) => {
-    if (productImg.length === 0) return console.log("subir img"); //!VOLVER A VER renderizar mensaje warn
-    let formData = new FormData();
-    //: verificar datos
+  const handleAddImg = (e) => {
+    const fileListArray = Array.from(e.target.files);
+    validateImgs(fileListArray);
+    setProductImg([...productImg, ...fileListArray]);
+  };
 
-    // agarra las images
-    productImg.forEach((pic) => {
-      formData.append("images", pic);
-    });
-    formData.append("images", productImg);
-    formData.append("data", JSON.stringify(productData));
-
-    const imgURL = await axios.post(`/product/`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-    console.log(imgURL);
-
-    clearInputs(
-      featuresQuantity,
-      setFeaturesQuantity,
-      removeFeature,
-      appendFeature,
-      attributesQuantity,
-      setAttributesQuantity,
-      removeAttribute,
-      appendAttribute,
-      setProductImg
-    );
+  const handleRemoveImg = (i) => {
+    setProductImg(productImg.filter((_, index) => index !== i));
   };
 
   useEffect(() => {
@@ -208,12 +113,71 @@ const ProductForm = () => {
     // }
   }, [productImg]);
 
-  const handleFiles = (e) => {
-    setProductImg([...productImg, ...e.target.files]);
+  const submitProduct = async (productData) => {
+    console.log("registered:", productData.free_shipping);
+    if (productImg.length === 0) return console.log("subir img"); //!VOLVER A VER renderizar mensaje warn
+    let formData = new FormData();
+    formData.append("data", JSON.stringify(productData));
+
+    // agarra las images
+    const fileListArray = Array.from(productImg);
+    validateImgs(fileListArray);
+
+    fileListArray.forEach((pic) => {
+      formData.append("images", pic);
+    });
+    formData.append("images", fileListArray);
+    formData.append("data", JSON.stringify(productData));
+
+    const imgURL = await axios.post(`/product/`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    console.log(imgURL);
+
+    clearInputs();
   };
 
-  const handleRemoveImg = (i) => {
-    setProductImg(productImg.filter((_, index) => index !== i));
+  /*   const clearInputs = () => {
+    const idsToClear = [
+      "name_id",
+      "price_id",
+      "brand_id",
+      "stock_id",
+      "description_id",
+    ];
+    for (const id of idsToClear) {
+      let input = document.getElementById(id);
+      input.value = "";
+    }
+    if (featuresQuantity > 1) {
+      removeFeature();
+      setFeaturesQuantity(1);
+      appendFeature("");
+    } else {
+      let mainFeature = document.getElementById("main_feature_0");
+      mainFeature.value = "";
+    }
+    if (attributesQuantity > 1) {
+      removeAttribute();
+      setAttributesQuantity(1);
+      appendAttribute({ name: "", value_name: "" });
+    } else {
+      let attributeName = document.getElementById("attribute_name_0");
+      let attributeValue = document.getElementById("attribute_value_0");
+      attributeName.value = "";
+      attributeValue.value = "";
+    }
+    setProductImg([]);
+  }; */
+
+  const clearInputs = () => {
+    reset();
+    setAttributesQuantity(1);
+    appendAttribute({ name: "", value_name: "" });
+    setFeaturesQuantity(1);
+    appendFeature("");
   };
 
   return (
@@ -230,7 +194,7 @@ const ProductForm = () => {
               type="text"
               placeholder="Título/Nombre"
               autoComplete="off"
-              id="name_id"
+              //  id="name_id"
               {...register("name")}
             />
             <div>{errors.name?.message}</div>
@@ -239,7 +203,7 @@ const ProductForm = () => {
               type="text"
               placeholder="Precio"
               autoComplete="off"
-              id="price_id"
+              //   id="price_id"
               {...register("price")}
             />
             <div>{errors.price?.message}</div>
@@ -248,7 +212,7 @@ const ProductForm = () => {
               type="text"
               placeholder="Marca"
               autoComplete="off"
-              id="brand_id"
+              //  id="brand_id"
               {...register("brand")}
             />
             <div>{errors.brand?.message}</div>
@@ -257,13 +221,23 @@ const ProductForm = () => {
               type="text"
               placeholder="Stock"
               autoComplete="off"
-              id="stock_id"
+              //  id="stock_id"
               {...register("available_quantity", {
                 required: true,
                 pattern: /^[0-9]*$/,
               })}
             />
             <div>{errors.available_quantity?.message}</div>
+
+            <label>
+              <input
+                type="checkbox"
+                //  id="free_shipping_id"
+                {...register("free_shipping")}
+              />
+              Envío gratis
+            </label>
+            <div>{errors.free_shipping?.message}</div>
           </div>
           <br />
           <hr />
@@ -326,7 +300,7 @@ const ProductForm = () => {
           <div>
             <textarea
               placeholder="Descripción"
-              id="description_id"
+              //   id="description_id"
               {...register("description")}
             />
             <div>{errors.description?.message}</div>
@@ -342,8 +316,8 @@ const ProductForm = () => {
             type="file"
             name="image"
             multiple
-            accept=".jpeg,.jpg,.png"
-            onChange={handleFiles}
+            accept="image/png, image/jpeg"
+            onChange={handleAddImg}
             style={{ visibility: "hidden" }}
             id="filesButton"
           />
@@ -352,7 +326,7 @@ const ProductForm = () => {
         {React.Children.toArray(
           productImgUrls.map((imageUrl, i) => (
             <>
-              <img src={imageUrl} alt="sd" className="imgs-product" />
+              <img src={imageUrl} alt={`img_${i}`} className="imgs-product" />
               <span onClick={() => handleRemoveImg(i)}> X</span>
             </>
           ))
@@ -360,22 +334,7 @@ const ProductForm = () => {
 
         <input type="submit" value="Crear producto" />
       </form>
-      <button
-        onClick={() =>
-          clearInputs(
-            featuresQuantity,
-            setFeaturesQuantity,
-            removeFeature,
-            appendFeature,
-            attributesQuantity,
-            setAttributesQuantity,
-            removeAttribute,
-            appendAttribute
-          )
-        }
-      >
-        RESETEAR
-      </button>
+      <button onClick={clearInputs}>RESETEAR</button>
     </div>
   );
 };

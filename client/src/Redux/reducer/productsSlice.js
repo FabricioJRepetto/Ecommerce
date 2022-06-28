@@ -20,7 +20,7 @@ const filterFunction = (state, source, type, value, firstIteration) => {
     );
   } else if (type === "brand") {
     state.productsFiltered = productsToFilter.filter((product) =>
-      state.filtersApplied.brand.includes(product.brand)
+      state.filtersApplied.brand.includes(product.brand.toUpperCase())
     );
   } else {
     state.productsFiltered = productsToFilter.filter(
@@ -65,14 +65,14 @@ export const productsSlice = createSlice({
             state.filtersApplied = {
               ...state.filtersApplied,
               brand: state.filtersApplied.brand
-                ? [...state.filtersApplied.brand, value[0]]
-                : [value[0]],
+                ? [...state.filtersApplied.brand, value[0].toUpperCase()]
+                : [value[0].toUpperCase()],
             };
           } else {
             state.filtersApplied = {
               ...state.filtersApplied,
               brand: state.filtersApplied.brand.filter(
-                (brand) => brand !== value[0]
+                (brand) => brand.toUpperCase() !== value[0].toUpperCase()
               ),
             };
             if (state.filtersApplied.brand.length === 0)

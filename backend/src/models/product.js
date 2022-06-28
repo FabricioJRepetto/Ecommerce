@@ -22,15 +22,6 @@ const productSchema = new Schema(
       type: String,
       required: true,
     },
-    description: {
-      type: String,
-      required: true,
-    },
-    free_shipping: {
-      type: Boolean,
-      required: true,
-      default: false,
-    },
     main_features: [String],
     attributes: [
       {

@@ -30,8 +30,6 @@ function App() {
     const loggedAvatar = window.localStorage.getItem("loggedAvatarEcommerce");
     const loggedEmail = window.localStorage.getItem("loggedEmailEcommerce");
 
-    console.log(loggedUserToken);
-
     (async () => {
       try {
         if (loggedUserToken) {
@@ -49,6 +47,8 @@ function App() {
             dispatch(loadWhishlist(whish.id_list));
         }
       } catch (error) {
+        console.log("APP.JS");
+
         window.localStorage.removeItem("loggedTokenEcommerce");
         window.localStorage.removeItem("loggedAvatarEcommerce");
         window.localStorage.removeItem("loggedEmailEcommerce");
