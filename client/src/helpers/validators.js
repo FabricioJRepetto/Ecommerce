@@ -14,7 +14,6 @@ export const validateImgs = (imagesList) => {
   const fileTypesAllowed = ["image/jpeg", "image/png"];
 
   for (let i = 0; i < imagesList.length; i++) {
-    console.log(`${i}`, imagesList[i].name);
     if (!fileTypesAllowed.includes(imagesList[i].type)) {
       console.log("archivo no soportado"); //!VOLVER A VER renderizar mensaje warn
       imagesList.splice(i, 1);

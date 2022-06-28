@@ -150,6 +150,27 @@ https://api.mercadolibre.com/sites/MLA/
          &shipping_cost=free
          &promotion_type=deal_of_the_day
 
+  {
+    "id": "MLA1039",
+    "name": "Cámaras y Accesorios"
+  },
+  {
+    "id": "MLA1051",
+    "name": "Celulares y Teléfonos"
+  },
+  {
+    "id": "MLA1648",
+    "name": "Computación"
+  },
+  {
+    "id": "MLA1144",
+    "name": "Consolas y Videojuegos"
+  },
+  {
+    "id": "MLA1000",
+    "name": "Electrónica, Audio y Video"
+  },
+
 {
    results: [
       {

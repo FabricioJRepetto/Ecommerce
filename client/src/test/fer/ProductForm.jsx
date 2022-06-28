@@ -94,9 +94,9 @@ const ProductForm = () => {
   }, []);
 
   const handleAddImg = (e) => {
-    const fileListArray = Array.from(e.target.files);
-    validateImgs(fileListArray);
-    setProductImg([...productImg, ...fileListArray]);
+    const fileListArrayImg = Array.from(e.target.files);
+    validateImgs(fileListArrayImg);
+    setProductImg([...productImg, ...fileListArrayImg]);
   };
 
   const handleRemoveImg = (i) => {
@@ -114,19 +114,18 @@ const ProductForm = () => {
   }, [productImg]);
 
   const submitProduct = async (productData) => {
-    console.log("registered:", productData.free_shipping);
     if (productImg.length === 0) return console.log("subir img"); //!VOLVER A VER renderizar mensaje warn
     let formData = new FormData();
     formData.append("data", JSON.stringify(productData));
 
     // agarra las images
-    const fileListArray = Array.from(productImg);
-    validateImgs(fileListArray);
+    const fileListArrayImg = Array.from(productImg);
+    validateImgs(fileListArrayImg);
 
-    fileListArray.forEach((pic) => {
+    fileListArrayImg.forEach((pic) => {
       formData.append("images", pic);
     });
-    formData.append("images", fileListArray);
+    formData.append("images", fileListArrayImg);
     formData.append("data", JSON.stringify(productData));
 
     const imgURL = await axios.post(`/product/`, formData, {
@@ -174,6 +173,7 @@ const ProductForm = () => {
 
   const clearInputs = () => {
     reset();
+    setProductImg([]);
     setAttributesQuantity(1);
     appendAttribute({ name: "", value_name: "" });
     setFeaturesQuantity(1);
