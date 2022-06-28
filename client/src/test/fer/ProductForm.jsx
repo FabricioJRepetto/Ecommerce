@@ -7,12 +7,29 @@ import {
   validateImgs,
   validationProductFormSchema,
 } from "../../helpers/validators";
+import { useRef } from "react";
 
 const ProductForm = () => {
   const [productImg, setProductImg] = useState([]);
   const [productImgUrls, setProductImgUrls] = useState([]);
   const [featuresQuantity, setFeaturesQuantity] = useState(1);
   const [attributesQuantity, setAttributesQuantity] = useState(1);
+  const [warn, setWarn] = useState({
+    main_features: "",
+    attributes: "",
+    image: "",
+  });
+  let timeoutId = useRef();
+
+  const warnTimer = (key, message) => {
+    clearTimeout(timeoutId.current);
+    setWarn({
+      ...warn,
+      [key]: message,
+    });
+    let timeout = () => setTimeout(() => setWarn({}), 5000);
+    timeoutId.current = timeout();
+  };
 
   const formOptions = { resolver: yupResolver(validationProductFormSchema) };
   const {
@@ -40,7 +57,10 @@ const ProductForm = () => {
       appendFeature("");
       setFeaturesQuantity(featuresQuantity + 1);
     } else {
-      console.log("completa campo antes de agregar uno nuevo"); //!VOLVER A VER renderizar mensaje warn
+      warnTimer(
+        "main_features",
+        "Completa este campo antes de agregar uno nuevo"
+      );
     }
   };
 
@@ -49,7 +69,7 @@ const ProductForm = () => {
       removeFeature(i);
       setFeaturesQuantity(featuresQuantity - 1);
     } else {
-      console.log("debes agregar al menos una caracteristica"); //!VOLVER A VER renderizar mensaje warn
+      warnTimer("main_features", "Debes agregar al menos una característica");
     }
   };
 
@@ -74,7 +94,10 @@ const ProductForm = () => {
       appendAttribute({ name: "", value_name: "" });
       setAttributesQuantity(attributesQuantity + 1);
     } else {
-      console.log("completa campos antes de agregar uno nuevo"); //!VOLVER A VER renderizar mensaje warn
+      warnTimer(
+        "attributes",
+        "Completa estos campos antes de agregar uno nuevo"
+      );
     }
   };
 
@@ -83,7 +106,7 @@ const ProductForm = () => {
       removeAttribute(i);
       setAttributesQuantity(attributesQuantity - 1);
     } else {
-      console.log("debes agregar al menos un atributo"); //!VOLVER A VER renderizar mensaje warn
+      warnTimer("attributes", "Debes agregar al menos un atributo");
     }
   };
 
@@ -114,7 +137,10 @@ const ProductForm = () => {
   }, [productImg]);
 
   const submitProduct = async (productData) => {
-    if (productImg.length === 0) return console.log("subir img"); //!VOLVER A VER renderizar mensaje warn
+    if (productImg.length === 0) {
+      return warnTimer("image", "Debes subir al menos una imágen");
+    }
+
     let formData = new FormData();
     formData.append("data", JSON.stringify(productData));
 
@@ -135,44 +161,13 @@ const ProductForm = () => {
     });
     console.log(imgURL);
 
+    console.log("enviado");
     clearInputs();
   };
 
-  /*   const clearInputs = () => {
-    const idsToClear = [
-      "name_id",
-      "price_id",
-      "brand_id",
-      "stock_id",
-      "description_id",
-    ];
-    for (const id of idsToClear) {
-      let input = document.getElementById(id);
-      input.value = "";
-    }
-    if (featuresQuantity > 1) {
-      removeFeature();
-      setFeaturesQuantity(1);
-      appendFeature("");
-    } else {
-      let mainFeature = document.getElementById("main_feature_0");
-      mainFeature.value = "";
-    }
-    if (attributesQuantity > 1) {
-      removeAttribute();
-      setAttributesQuantity(1);
-      appendAttribute({ name: "", value_name: "" });
-    } else {
-      let attributeName = document.getElementById("attribute_name_0");
-      let attributeValue = document.getElementById("attribute_value_0");
-      attributeName.value = "";
-      attributeValue.value = "";
-    }
-    setProductImg([]);
-  }; */
-
   const clearInputs = () => {
     reset();
+    setWarn({});
     setProductImg([]);
     setAttributesQuantity(1);
     appendAttribute({ name: "", value_name: "" });
@@ -259,6 +254,7 @@ const ProductForm = () => {
                 </>
               ))
             )}
+            {warn.main_features && <p>{warn.main_features}</p>}
             <h3 onClick={() => handleAddFeature()}>
               Agregar campo de característica
             </h3>
@@ -290,6 +286,7 @@ const ProductForm = () => {
                 </>
               ))
             )}
+            {warn.attributes && <p>{warn.attributes}</p>}
             <h3 onClick={() => handleAddAttribute()}>
               Agregar campos de atributo
             </h3>
@@ -322,6 +319,7 @@ const ProductForm = () => {
             id="filesButton"
           />
         </div>
+        {warn.image && <p>{warn.image}</p>}
 
         {React.Children.toArray(
           productImgUrls.map((imageUrl, i) => (
