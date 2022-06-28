@@ -3,10 +3,16 @@ const Product = require("../models/product");
 
 const getUserCart = async (req, res, next) => {
   try {
-        const userId = req.user._id;
-        const cart = await Cart.findOne({ owner: userId });
-        if (!cart) return res.json('empty cart');
-        console.log(cart);
+        if (!req.user._id) return res.status(400).json({message: 'User ID not given.'});
+
+        const cart = await Cart.findOne({ owner: req.user._id });
+        if (!cart) {
+            const newCart = await Cart.create({
+                products: [],
+                owner: req.user._id
+            })
+            return res.json(newCart)
+        }
         return res.json(cart);
   } catch (error) {
     next(error);
@@ -19,8 +25,8 @@ const addToCart = async (req, res, next) => {
     const productToAdd = req.params.id;
     const cart = await Cart.findOne({ owner: userId });
 
-    const {name, price, available_quantity:stock, images} = await Product.findById(productToAdd);
-
+    const {name, price, sale_price, on_sale, free_shipping, discount, description, available_quantity:stock, images} = await Product.findById(productToAdd);
+    console.log(discount);
     if (cart) {
         let flag = false; 
         cart.products.forEach(e => {
@@ -37,24 +43,34 @@ const addToCart = async (req, res, next) => {
             cart.products.push({
                 product_id: productToAdd,
                 product_name: name,
-                img: [images[0].imgURL],
+                description,
+                img: images[0].imgURL,
                 price,
+                sale_price,
+                on_sale,
+                discount,
+                free_shipping,
                 stock,
                 quantity: 1
             });
         };
         await cart.save();
-        return res.json("Product added to your cart.");
+        return res.json({message: "Product added to your cart."});
     } else {
       const newCart = new Cart({
-        products: {
+        products: [{
             product_id: productToAdd,
             product_name: name,
-            img: [images[0].imgURL],
+            description,
+            img: images[0].imgURL,
             price,
+            sale_price,
+            on_sale,
+            discount,
+            free_shipping,
             stock,
             quantity: 1
-        },
+        }],
         owner: userId,
       });
       await newCart.save();
@@ -78,7 +94,7 @@ const removeFromCart = async (req, res, next) => {
             }
         }
         );
-        return res.json(cart);
+        return res.json({ message: 'Product removed.'});
   } catch (error) {
         next(error);
   }
@@ -92,7 +108,7 @@ const emptyCart = async (req, res, next) => {
       { products: [] },
       { new: true }
     );
-    return res.json('Cart emptied succefully');
+    return res.json({message: 'Cart emptied succefully'});
   } catch (error) {
     next(error);
   }

@@ -1,0 +1,39 @@
+.galery {
+    display: flex;
+}
+
+.galery-selector {
+    background-color: white;
+    height: 54px;
+    width: 54px;
+    margin: 5px 20px;
+    border-radius: 5px;
+    border: 2px solid rgb(107, 107, 107);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+.galery-selector img {
+    border-radius: 5px;
+}
+.selected {
+    border: 2px solid #FFA500;
+}
+
+.preview-container {
+    background-color: white;
+    height: 500px;
+    width: 500px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.galery-img {
+    position: absolute;
+    visibility: hidden;
+}
+.visible {
+    visibility: visible;
+}

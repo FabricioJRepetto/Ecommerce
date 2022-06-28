@@ -1,0 +1,110 @@
+.navBar {    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+.navBar a {
+    color: rgb(255, 255, 255);
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    margin: 0 1vw 0 0;
+}
+.navBar h1 {
+    color: #FFA500;
+    cursor: pointer;
+}
+
+.navbar-central-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+.navbar-central-subsection {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 4rem;
+}
+.navBar input[type=text]{
+    border: none;
+    width: 600px;
+    height: 35px;
+    padding: 0 1rem;
+}
+.navBar input[type=text]:focus {
+    outline: none;
+}
+
+.navbar-logo-section {
+    width: 200px;
+}
+.navbar-profile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-end;
+    height: 99px;
+    width: 400px;
+}
+.navbar-profile-section {
+    width: 200px;
+    height: 4rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 0;
+}
+
+.navbar-profile-button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+}
+.navbar-avatar {
+    height: 1.5rem;
+    width: 1.5rem;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 1rem;
+}
+.navbar-avatar img {
+    height: 100%;
+    width: 100%;
+}
+.navbar-avatar-svg  {
+    transform: scale(.7);
+    margin-right: .5rem;
+}
+.navbar-avatar-svg path {
+    fill: white;
+}
+
+.whishlist-icon {
+    transform: scale(.7);
+}
+.whishlist-icon path {
+    fill: white;
+}
+
+.cart-icon-container {
+    position: relative;
+    margin: 0px;
+}
+.cart-icon {
+    transform: scale(.5);
+}
+.cart-icon path {
+    fill: white;
+}
+.cart-number {
+    font-weight: 600;
+    width: 2rem;
+    text-align: left;
+    position: absolute;
+    top: 5px;
+    right: -20px;
+}

@@ -1,0 +1,7 @@
+.details-head-container {
+    display: flex;
+}
+.details-price-section {
+    position: relative;
+    width: 350px;
+}

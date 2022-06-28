@@ -1,0 +1,78 @@
+.cart-card-container {
+    min-width: 60vw;
+    background: white;
+    color: black;
+    border-bottom: 1px solid rgb(218, 218, 218);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 20px 0;
+}
+
+.pointer {
+    cursor: pointer;
+}
+.bold {
+    font-weight: 800;
+}
+.product-cart-card-head {
+    display: flex;
+    flex-direction: row;
+}
+
+.product-cart-image-container {
+    height: 96px;
+    width: 96px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.cart-prod-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 300px;
+    margin: 0 20px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.cart-card-name {
+    font-weight: 600;
+}
+.cart-main-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.cart-main-details div {
+    height: 1rem;
+    margin: .5rem 0 0 0;
+}
+
+.cart-product-options {
+    display: flex;
+    flex-direction: row;
+}
+.cart-product-options p {
+    margin-right:10px;
+}
+
+.cart-card-price-discount {
+    display: flex;
+    justify-content: flex-end;
+    font-size: 1.1rem;
+}
+.cart-card-price-discount div {
+    margin: 0 .5rem 0 0;
+    color: #39b54a;
+}
+.cart-card-price-discount del {
+    color: rgb(160, 160, 160);
+}
+.cart-card-price {
+    text-align: end;
+    width: 7rem;
+}

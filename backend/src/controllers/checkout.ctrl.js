@@ -1,9 +1,7 @@
 require('dotenv').config();
 const { STRIPE_SKEY } = process.env;
-const Stripe = require('stripe');
-
-
-const stripe = new Stripe(STRIPE_SKEY)
+const Order = require('../models/order')
+const stripe = require('stripe')(STRIPE_SKEY);//? se puede pasar la key aca?
 
 const create = async (req, res) => {
     try {

@@ -10,25 +10,34 @@ const UserSchema = new Schema({
     required: true,
     unique: true,
   },
-  /* username: {
+  password: {
     type: String,
     required: true,
-  }, */
+  },
   role: {
     type: String,
     enum: ["client", "admin"],
     default: "client",
   },
-  password: {
-    type: String,
-    required: true,
+  firstName: String,
+  lastName: String,
+  emailVerified: {
+    type: Boolean,
+    default: false,
   },
-});
+  avatar: String
+},
+  {
+    versionKey: false,
+    toJSON: { getters: true, virtuals: true },
+    toObject: { getters: true, virtuals: true }
+  }
+);
 
 UserSchema.pre("save", async function (next) {
   const user = this;
-
   if (!user.isModified("password")) return next();
+
   const hash = await bcrypt.hash(user.password, 10);
   user.password = hash;
   next();
@@ -39,5 +48,10 @@ UserSchema.methods.comparePassword = async function (candidatePassword) {
   const compare = await bcrypt.compare(candidatePassword, user.password);
   return compare;
 };
+
+UserSchema.virtual('name').get(function() {
+    if (this.firstName && this.lastName) return `${this.firstName} ${this.lastName}`    
+    return this.email.split('@')[0];
+});
 
 module.exports = mongoose.model("User", UserSchema);
