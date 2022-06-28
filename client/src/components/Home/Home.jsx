@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { random } from '../../helpers/random';
 import MiniCard from '../Products/MiniCard';
 import Carousel from './Carousel/Carousel';
+import Footer from '../common/Footer';
 import "./Home.css";
 
 import { ReactComponent as One } from "../../assets/svg/bloom-svgrepo-com.svg";
@@ -14,12 +15,12 @@ import { ReactComponent as Five } from "../../assets/svg/explode-svgrepo-com.svg
 import { ReactComponent as Six } from "../../assets/svg/perform-svgrepo-com.svg";
 
 const Home = () => {
-    const [products, setProducts] = useState(null);
+    const [products, setProducts] = useState(false);
     const [loading, setLoading] = useState(true);
     const whishlist = useSelector((state) => state.cartReducer.whishlist);
 
     const images = [
-        {img:'https://http2.mlstatic.com/D_NQ_674809-MLA50293741186_062022-OO.webp',
+        {img:'https://http2.mlstatic.com/D_NQ_794413-MLA50423210111_062022-OO.webp',
          url: '/products'},
         {img:'https://http2.mlstatic.com/D_NQ_977617-MLA50409269868_062022-OO.webp',
          url: '/products'},
@@ -29,12 +30,14 @@ const Home = () => {
          url: '/products'},
         {img:'https://http2.mlstatic.com/D_NQ_627971-MLA50423148467_062022-OO.webp',
          url: '/products'}
-    ]
+    ];
+    //: cuantos productos mostrar?
+    const SpecialProds = 5;
     
     useEffect(() => {
         (async () => {
             const {data} = await axios(`/product/`);
-            let indexes = random(data.length, 5)
+            let indexes = random(data.length, SpecialProds)
             let aux = data.filter((e, index) =>(
                 indexes.includes(index)
             ));
@@ -44,7 +47,7 @@ const Home = () => {
     }, []);
 
     return (
-        <>
+        <div className='home-container'>
             <div>
                 <Carousel images={images} controls indicators pointer width='100%'/>
             </div>
@@ -74,38 +77,40 @@ const Home = () => {
                     <p>TVs</p>
                 </div>
             </div>
-            <div>
-                {loading
-                    ? <h1>LOADING</h1>
-                    : <div className='random-container'>
-                        {React.Children.toArray(products?.map(p => (
-                            <MiniCard 
-                                img={p.images[0].imgURL} 
-                                name={p.name} 
-                                price={p.price} 
-                                brand={p.brand} 
-                                prodId={p._id} 
-                                free_shipping={p.free_shipping}
-                                fav={whishlist.includes(p._id)}/>
-                        )))}
-                    </div>
-                }
+            <div >
+                <div className='random-container'>
+                    {Array.from(Array(SpecialProds).keys()).map((_, index) =>(
+                        <MiniCard
+                            key={`specials ${index}`}
+                            loading={loading}
+                            img={products[index]?.images[0]?.imgURL} 
+                            name={products[index]?.name} 
+                            price={products[index]?.price}
+                            sale_price={products[index]?.sale_price}
+                            discount={products[index]?.discount}
+                            prodId={products[index]?._id} 
+                            free_shipping={products[index]?.free_shipping}
+                            on_sale={products[index]?.on_sale} 
+                            fav={whishlist.includes(products[index]?._id)}
+                        />
+                    ))}
+                </div>
             </div>
             <br/>
-            <div>
-                <hr/>
-                <p>subscribe to our newsletter</p>
-                <input type="text" />
-                <br/>
-                <p><u>Contact us</u></p>
-                <p><u>About us</u></p>
-                <p><u>Work with us</u></p>
-                <p><u>FAQ's</u></p>
-                <br/>
-                <p>Provider™ · 2022 all rights reserved</p>
-            </div>
-        </>
+            <Footer />
+        </div>
     )
 };
 
 export default Home;
+
+/*
+<MiniCard 
+    img={products[0]?.images[0]?.imgURL || false} 
+    name={products[0]?.name || false} 
+    price={products[0]?.price || false} 
+    prodId={products[0]?._id || false} 
+    free_shipping={products[0]?.free_shipping || false}
+    on_sale={products[0]?.on_sale || false} 
+    fav={whishlist.includes(products[0]?._id) || false}/>
+ */

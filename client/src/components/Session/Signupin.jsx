@@ -10,6 +10,8 @@ import {
 import jwt_decode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { loadCart, loadWhishlist } from "../../Redux/reducer/cartSlice";
+import './Signupin.css'
 
 const { REACT_APP_OAUTH_CLIENT_ID } = process.env;
 
@@ -57,12 +59,16 @@ const Signupin = () => {
         const username = data.user.name || data.user.email.split("@")[0];
         const email = data.user.email;
         const avatar = data.avatar || null;
+        const whish = await axios(`/whishlist`);
+        const cart = await axios(`/cart`);
 
         dispatch(loadUsername(username));
         dispatch(loadEmail(email));
         dispatch(loadAvatar(avatar));
+        dispatch(loadCart(cart.data.id_list));
+        dispatch(loadWhishlist(whish.data.id_list));
 
-        navigate("/profile");
+        navigate("/");
       }
     } catch (error) {
       console.log(error);
@@ -82,7 +88,7 @@ const Signupin = () => {
     });
   }; */
 
-  const handleCallbackResponse = (response) => {
+  const handleCallbackResponse = async (response) => {
     //response.credential = Google user token
     const googleToken = "google" + response.credential;
     dispatch(sessionActive(true));
@@ -92,21 +98,29 @@ const Signupin = () => {
     const userDecoded = jwt_decode(response.credential);
     const username =
       userDecoded.name || userDecoded.email || `Guest ${userDecoded.sub}`;
+
+      //: (https://lh3.googleusercontent.com/a-/AOh14GilAqwqC7Na70IrMsk0bJ8XGwz8HLFjlurl830D5g=s96-c).split('=')[0]
     const avatar = userDecoded.picture;
     const email = userDecoded.email;
+
+        const whish = await axios(`/whishlist`);
+        const cart = await axios(`/cart`);
 
     dispatch(loadUsername(username));
     dispatch(loadAvatar(avatar));
     dispatch(loadEmail(email));
+    dispatch(loadCart(cart.data.id_list));
+    dispatch(loadWhishlist(whish.data.id_list));
 
     window.localStorage.setItem("loggedAvatarEcommerce", avatar);
     window.localStorage.setItem("loggedEmailEcommerce", email);
 
-    navigate("/profile");
+    console.log(userDecoded);
+    navigate("/");
   };
 
   useEffect(() => {
-    if (session) navigate("/profile");
+    if (session) navigate("/");
 
     /* global google */
     google.accounts.id.initialize({
@@ -115,8 +129,8 @@ const Signupin = () => {
     });
 
     google.accounts.id.renderButton(document.getElementById("signInDiv"), {
-      theme: "outline",
-      size: "large",
+        'width': 240,
+        'theme': 'light',
     });
     // eslint-disable-next-line
   }, [session]);
@@ -251,7 +265,7 @@ const Signupin = () => {
         </form>
       )}
       <hr />
-      <div id="signInDiv"></div>
+      <div className="google-signin-container" id="signInDiv"></div>
       <hr />
     </>
   );

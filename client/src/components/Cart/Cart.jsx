@@ -6,24 +6,32 @@ import CartCard from "../Products/CartCard";
 import Modal from "../common/Modal";
 import { useModal } from "../../hooks/useModal";
 import { useNotification } from "../../hooks/useNotification";
-import { cartTotal, loadProducts } from "../../Redux/reducer/cartSlice";
+import { cartTotal, loadCart } from "../../Redux/reducer/cartSlice";
 import { loadMercadoPago } from "../../helpers/loadMP";
 import './Cart.css'
 
 import { ReactComponent as Arrow } from '../../assets/svg/arrow-right.svg'
+import { ReactComponent as Ship } from '../../assets/svg/ship.svg'
+import { ReactComponent as Spinner } from '../../assets/svg/spinner.svg'
 
 const Cart = () => {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const [notification] = useNotification();
+
     const [cart, setCart] = useState(null);
     const [orderId, setOrderId] = useState('');
     const [address, setAddress] = useState(null);
     const [newAdd, setNewAdd] = useState({});
     const [selectedAdd, setSelectedAdd] = useState(null);
+    const [loadingPayment, setLoadingPayment] = useState(false);
+    const [loading, setLoading] = useState(true);
     const total = useSelector((state) => state.cartReducer.total);
+
     const [isOpenAddForm, openAddForm, closeAddForm] = useModal();
     const [isOpenAddList, openAddList, closeAddList] = useModal();
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const [notification] = useNotification();
+
+    const SHIP_COST = 500;
 
     useEffect(() => {
         getCart();
@@ -33,15 +41,17 @@ const Cart = () => {
 
     const getCart = async () => {
         const { data } = await axios('/cart/');
-        typeof data !== 'string' && setCart(data.products);
+        if (data?.products?.length > 0) {
+            setCart(data);
+        };
+        console.log(data);
         dispatch(cartTotal(data.total));
-        let aux = data.products?.map(e => e.product_id);
-        console.log(aux);
-        dispatch(loadProducts(aux));
+        dispatch(loadCart(data.id_list));
+        setLoading(false);
     };
 
     const getAddress = async () => { 
-        const { data } = await axios('/user/address');
+        const { data } = await axios('/address');
         if (data.address) {
             setAddress(data.address);
             if (!selectedAdd) {
@@ -51,6 +61,7 @@ const Cart = () => {
                 setSelectedAdd(def);
             }
         }
+        setLoading(false);
     };
 
     const handleChange = ({ target }) => {
@@ -72,7 +83,7 @@ const Cart = () => {
         e.preventDefault();
         if (newAdd.state && newAdd.city && newAdd.zip_code && newAdd.street_name && newAdd.street_number) {
             closeAddForm();
-            const { data } = await axios.post(`/user/address`, newAdd);
+            const { data } = await axios.post(`/address`, newAdd);
             console.log(data);
             setSelectedAdd(data.pop());
             getAddress();
@@ -99,6 +110,7 @@ const Cart = () => {
     };
 
     const openMP = async () => { 
+        setLoadingPayment(true);
         // crea la order       
         const { data: id } = await axios.post(`/order/`, selectedAdd);
         setOrderId(id);
@@ -106,24 +118,29 @@ const Cart = () => {
         const { data }  = await axios.get(`/mercadopago/${id}`);
         // abre el modal de mp con la id de la preferencia
         loadMercadoPago(data.id);
+        setLoadingPayment(false);
      };
 
     return (
         <div className="cart-container">
 
             <div className="cart-inner">
-                <h2>Cart</h2>
-                {(cart && cart.length > 0)
+                <h2 style={{ color: 'black' }}>Cart</h2>
+                {(cart && cart.products.length > 0)
                 ? <div className="">
                     
-                    {cart.map((p) => (
+                    {cart.products.map((p) => (
                         <CartCard
                             key={p.product_id}
                             on_cart={true}
+                            on_sale={p.on_sale}
                             img={p.img}
                             name={p.product_name}
                             prodId={p.product_id}
                             price={p.price}
+                            sale_price={p.sale_price}
+                            free_shipping={p.free_shipping}
+                            discount={p.discount}
                             brand={p.brand}
                             deleteP={deleteProduct}
                             prodQuantity={p.quantity}
@@ -132,27 +149,33 @@ const Cart = () => {
                     ))}
 
                     <div className="total-section-container">
-                        {selectedAdd
-                            ? <div className="total-section-inner">
-                                    <div 
+                        <div className="total-section-inner">
+                                    {selectedAdd
+                                    ?<div 
                                         onClick={openAddList}
                                         className='cart-address-selector'
                                         name={'address-container'}>
                                             {selectedAdd.street_name+' '+selectedAdd.street_number+', '+selectedAdd.city}
                                         <Arrow className='arrow-address-selector'/>
                                     </div>
-                                    <div className="cart-total">Gratis WIP</div>
+                                    :<div 
+                                        onClick={openAddForm}
+                                        className="cart-address-selector">
+                                        <b>You have no address asociated,</b> 
+                                        please create one to proceed. 
+                                        <Arrow className='arrow-address-selector'/>
+                                    </div>}
+
+                                    <div className="cart-total">
+                                    {cart.free_ship_cart && <del className="grey">${cart.products.length * SHIP_COST}</del>}
+                                    {cart.shipping_cost === 0
+                                    ? <div className="cart-ship-total green">
+                                        <Ship className='ship-svg' />
+                                        <h3>Envío gratis!</h3>
+                                    </div>
+                                    : <h3>${cart.shipping_cost}</h3> }
                                 </div>
-                            : <div className="total-section-inner" >
-                                <div 
-                                    onClick={openAddForm}
-                                    className="cart-address-selector">
-                                    <b>You have no address asociated,</b> 
-                                    please create one to proceed. 
-                                    <Arrow className='arrow-address-selector'/>
-                                </div>
-                                <div className="cart-total">Gratis WIP</div>
-                            </div>}
+                            </div>
 
                         <div className="total-section-inner">
                             <h2>Total:</h2>
@@ -161,21 +184,20 @@ const Cart = () => {
                     </div>
                     
                         <div className="cart-button-section">
-                            <button disabled={(!cart || cart.length < 1 || !selectedAdd)} 
-                            onClick={goCheckout}> Stripe checkout </button>
-                            <br />
-                            <button disabled={(!cart || cart.length < 1 || !selectedAdd)} 
-                            onClick={openMP}> MercadoPago checkout </button>
+                            <button disabled={(true || loadingPayment)} 
+                            onClick={goCheckout}>{ loadingPayment 
+                            ? <Spinner className='cho-svg'/> 
+                            : 'Stripe checkout' }</button>
+
+                            <button disabled={(!cart || cart.length < 1 || !selectedAdd || loadingPayment)} 
+                            onClick={openMP}>{ loadingPayment 
+                            ? <Spinner className='cho-svg'/> 
+                            : 'MercadoPago checkout' }</button>
                         </div>
                     
                 </div>
-                : <h1>your cart is empty</h1>}
+                : <h1 style={{ color: 'black'}}>Your cart is empty.</h1>}
             </div>
-
-
-
-
-            
 
             <form 
             id='checkout-container'
@@ -188,17 +210,17 @@ const Cart = () => {
             <hr />
             <ul>
                 <br/>
+                <p><b>Mercadopago</b></p>
+                <li><p>card: <i>5416 7526 0258 2580</i></p></li>
+                <li><p>expiration: <i>11/25</i></p></li>
+                <li><p>cvc: <i>123</i></p></li>
+                <li><p>nombre: <i>apro</i></p></li>
+                <li><p>dni: <i>12345678</i></p></li>
+                <br/>
                 <p><b>stripe</b></p>
                 <li><p>card: <i>4242 4242 4242 4242</i></p></li>
                 <li><p>expiration: <i>fecha mayor a la actual</i></p></li>
                 <li><p>cvc: <i>123</i></p></li>
-                <br/>
-                <p><b>mercadopago</b></p>
-                <li><p>card: <i>5416 7526 0258 2580</i></p></li>
-                <li><p>expiration: <i>11/25</i></p></li>
-                <li><p>cvc: <i>123</i></p></li>
-                <li><p>nombre: <i>APRO</i></p></li>
-                <li><p>dni: <i>12345678</i></p></li>
             </ul>
 
             <Modal isOpen={isOpenAddForm} closeModal={closeAddForm}>

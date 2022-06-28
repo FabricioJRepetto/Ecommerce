@@ -39,6 +39,9 @@
     white-space: nowrap;
 }
 
+.cart-card-name {
+    font-weight: 600;
+}
 .cart-main-details {
     display: flex;
     flex-direction: column;
@@ -57,6 +60,18 @@
     margin-right:10px;
 }
 
+.cart-card-price-discount {
+    display: flex;
+    justify-content: flex-end;
+    font-size: 1.1rem;
+}
+.cart-card-price-discount div {
+    margin: 0 .5rem 0 0;
+    color: #39b54a;
+}
+.cart-card-price-discount del {
+    color: rgb(160, 160, 160);
+}
 .cart-card-price {
     text-align: end;
     width: 7rem;

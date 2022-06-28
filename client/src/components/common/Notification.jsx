@@ -35,7 +35,7 @@ const Notification = () => {
     const startTimeout = () => { 
         timeout.current = setTimeout(() => {
                 closeNotification();
-            }, 6000);
+            }, 4000);
      }
 
     const closeNotification = () => { 

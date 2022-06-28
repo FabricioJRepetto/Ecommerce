@@ -15,14 +15,14 @@ export const WhishlistButton = ({prodId: id, size = 30, fav, visible}) => {
         if (!whishlist.includes(id)) {
             const { data } = await axios.post(`/whishlist/${id}`);
             console.log(data);
-            dispatch(loadWhishlist(data.list.id_list));
-            notification(data.message, '', 'success');
+            dispatch(loadWhishlist(data.list?.id_list));
+            notification(data.message, '/profile/whishlist', 'success');
             
         } else {
             const { data } = await axios.delete(`/whishlist/${id}`);
             console.log(data);
-            dispatch(loadWhishlist(data.list.id_list));
-            notification(data.message, '', 'success');
+            dispatch(loadWhishlist(data.list?.id_list));
+            notification(data.message, '', 'warning');
         }
    };
 

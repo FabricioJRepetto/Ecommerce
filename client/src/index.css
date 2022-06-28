@@ -202,3 +202,12 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+@keyframes loaderSwipeAnim{
+  0%{
+      left: -100%;
+  }
+  100%{
+      left: 100%;
+  }
+}
