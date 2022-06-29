@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { resizer } from "../../helpers/resizer";
 import "./Card.css";
 
 import { ReactComponent as Sale } from "../../assets/svg/sale.svg";
 import { WhishlistButton as Fav } from "./WhishlistButton";
+import { loadIdProductToEdit } from "../../Redux/reducer/productsSlice";
 
 const Card = ({
   img,
@@ -20,6 +21,12 @@ const Card = ({
   const navigate = useNavigate();
   const [visible, setVisible] = useState(false);
   const session = useSelector((state) => state.sessionReducer.session);
+  const dispatch = useDispatch();
+
+  const editProduct = (prodId) => {
+    dispatch(loadIdProductToEdit(prodId));
+    navigate("/productForm");
+  };
 
   return (
     <div
@@ -66,6 +73,9 @@ const Card = ({
           <div className="free-shipping c-mrgn">
             {free_shipping && "envío gratis"}
           </div>
+          <button type="button" onClick={() => editProduct(prodId)}>
+            EDITAR
+          </button>
         </div>
       </div>
     </div>

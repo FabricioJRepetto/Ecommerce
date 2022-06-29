@@ -187,7 +187,7 @@ const createProduct = async (req, res, next) => {
 
 const updateProduct = async (req, res, next) => {
   try {
-    //: imgsOK
+    //: imgsToEdit
     let {
       name,
       price,
@@ -198,12 +198,12 @@ const updateProduct = async (req, res, next) => {
       category,
       available_quantity,
       free_shipping,
-      imgsOK,
+      imgsToEdit,
     } = JSON.parse(req.body.data);
-    let images = [...imgsOK];
+    let images = [...imgsToEdit];
 
     //: envia files si no agregan imagenes?
-    if (req.files.length > 0) {
+    if (req.files) {
       let aux = [];
       // creamos una promise por cada archivo.
       req.files.forEach((img) => {
@@ -225,11 +225,13 @@ const updateProduct = async (req, res, next) => {
     }
 
     //: como se llama el array de las imagenes a mantener?
-    if (imgsOK.length > 0) {
-      const { data } = await Product.findById(req.params.id);
+    if (imgsToEdit.length > 0) {
+      const data = await Product.findById(req.params.id);
       let deleteList = [];
+      console.log(data);
       data.images.map(
-        (img) => !list.includes(img.imgURL) && deleteList.push(img.public_id)
+        (img) =>
+          !imgsToEdit.includes(img.imgURL) && deleteList.push(img.public_id)
       );
       cloudinary.api.delete_resources(deleteList);
     }

@@ -43,7 +43,7 @@ const ProductForm = () => {
     handleSubmit,
     reset,
     setValue,
-    formState: { errors, touchedFields, shouldValidate },
+    formState: { errors },
   } = useForm(formOptions);
 
   const {
@@ -187,11 +187,11 @@ const ProductForm = () => {
     });
     // formData.append("images", fileListArrayImg);
 
-    formData.append("data", JSON.stringify(productData));
-
     let imgURL;
     if (productToEdit) {
-      formData.append("imgsToEdit", JSON.stringify(imgsToEdit));
+      let data = { ...productData, imgsToEdit };
+      formData.append("data", JSON.stringify(data));
+      //  formData.append("imgsToEdit", imgsToEdit);
 
       imgURL = await axios.put(`/product/${productToEdit}`, formData, {
         headers: {
@@ -199,6 +199,7 @@ const ProductForm = () => {
         },
       });
     } else {
+      formData.append("data", JSON.stringify(productData));
       imgURL = await axios.post(`/product/`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
