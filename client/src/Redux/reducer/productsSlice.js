@@ -38,6 +38,7 @@ export const productsSlice = createSlice({
     filtersApplied: {},
     productsFiltered: [],
     productDetails: {},
+    idProductToEdit: null,
   },
   reducers: {
     loadProductsFound: (state, action) => {
@@ -126,6 +127,10 @@ export const productsSlice = createSlice({
     loadProductDetails: (state, action) => {
       state.productDetails = action.payload;
     },
+
+    loadIdProductToEdit: (state, action) => {
+      state.idProductToEdit = action.payload;
+    },
   },
 });
 
@@ -134,6 +139,7 @@ export const {
   filterProducts,
   orderProducts,
   loadProductDetails,
+  loadIdProductToEdit,
 } = productsSlice.actions;
 
 export default productsSlice.reducer;

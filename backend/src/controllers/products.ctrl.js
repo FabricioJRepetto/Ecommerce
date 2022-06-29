@@ -133,7 +133,7 @@ const getById = async (req, res, next) => {
 };
 
 const createProduct = async (req, res, next) => {
-  console.log(req.body);
+  console.log("-----BODY", req.body);
   try {
     const {
       name,
@@ -143,6 +143,7 @@ const createProduct = async (req, res, next) => {
       attributes,
       main_features,
       available_quantity,
+      free_shipping,
     } = JSON.parse(req.body.data);
     let images = [];
 
@@ -175,6 +176,7 @@ const createProduct = async (req, res, next) => {
       main_features,
       available_quantity,
       images,
+      free_shipping,
     });
     const productSaved = await newProduct.save();
 
