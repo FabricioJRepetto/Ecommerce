@@ -12,7 +12,7 @@ const Notification = () => {
     const dispatch = useDispatch();
     const isOpen = useSelector((state) => state.notificationSlice.open);
     const { message, type, url } = useSelector((state) => state.notificationSlice.main);
-    const timeout = useRef();
+    const timeout = useRef(null);
 
     useEffect(() => {
         clearTimeout(timeout.current);

@@ -1,7 +1,6 @@
 import axios from 'axios';
 import React, { useState, useEffect} from 'react';
 import { useSelector } from 'react-redux';
-import { random } from '../../helpers/random';
 import MiniCard from '../Products/MiniCard';
 import Carousel from './Carousel/Carousel';
 import Footer from '../common/Footer';
@@ -16,6 +15,7 @@ import { ReactComponent as Six } from "../../assets/svg/perform-svgrepo-com.svg"
 
 const Home = () => {
     const [products, setProducts] = useState(false);
+    const [countdown, setCountdown] = useState('')
     const [loading, setLoading] = useState(true);
     const whishlist = useSelector((state) => state.cartReducer.whishlist);
 
@@ -31,19 +31,26 @@ const Home = () => {
         {img:'https://http2.mlstatic.com/D_NQ_627971-MLA50423148467_062022-OO.webp',
          url: '/products'}
     ];
-    //: cuantos productos mostrar?
-    const SpecialProds = 5;
     
     useEffect(() => {
+        let countdownInterv = null;
+        countdownInterv = setInterval(() => {
+            let now = new Date();
+            let h = 23 - now.getHours();
+            let m = 59 - now.getMinutes();
+            let s = 59 - now.getSeconds();
+            setCountdown(`${h < 10 ? '0'+h : h}:${m < 10 ? '0'+m : m}:${s < 10 ? '0'+s : s}`);
+        }, 100);
+
         (async () => {
-            const {data} = await axios(`/product/`);
-            let indexes = random(data.length, SpecialProds)
-            let aux = data.filter((e, index) =>(
-                indexes.includes(index)
-            ));
-            setProducts(aux);
+            const {data} = await axios(`/sales/`);
+            setProducts(data);
             setLoading(false);
         })();
+        
+        return () => (
+            clearInterval(countdownInterv)
+        )
     }, []);
 
     return (
@@ -78,8 +85,9 @@ const Home = () => {
                 </div>
             </div>
             <div >
+                <h2>Flash sales! ⏱ {countdown}</h2>
                 <div className='random-container'>
-                    {Array.from(Array(SpecialProds).keys()).map((_, index) =>(
+                    {Array.from(Array(5).keys()).map((_, index) =>(
                         <MiniCard
                             key={`specials ${index}`}
                             loading={loading}

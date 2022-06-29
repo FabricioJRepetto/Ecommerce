@@ -10,9 +10,9 @@ const productSchema = new Schema(
       type: Number,
       required: true,
     },
-    sale_price: {
-      type: Number,
-      default: 0,
+    discount: {
+        type: Number,
+        default: 0,
     },
     on_sale: {
       type: Boolean,
@@ -29,8 +29,12 @@ const productSchema = new Schema(
         name: String,
       },
     ],
-    //category: String,
+    category: {
+        type: String,
+        default: '',
+    },
     available_quantity: Number,
+    free_shipping: Boolean,
     images: [
       {
         imgURL: String,
@@ -45,7 +49,10 @@ const productSchema = new Schema(
   }
 );
 
-productSchema.virtual('discount').get(function() {
+productSchema.virtual('sale_price').get(function() {
+    return this.price - (this.price * (this.discount/100));
+});
+productSchema.virtual('_discount').get(function() {
     return (`${(100 - Math.round((this.sale_price / this.price) * 100))}%`);
 });
 
