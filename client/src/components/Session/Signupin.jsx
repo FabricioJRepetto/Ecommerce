@@ -116,7 +116,7 @@ const Signupin = () => {
   const warnTimer = (message) => {
     clearTimeout(timeoutId.current);
     setWarn(message);
-    let timeout = () => setTimeout(() => setWarn({}), 5000);
+    let timeout = () => setTimeout(() => setWarn(), 5000);
     timeoutId.current = timeout();
   };
 
@@ -214,7 +214,7 @@ const Signupin = () => {
             placeholder="email"
             {...register("email", {
               required: true,
-              pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i,
+              pattern: emailRegex,
             })}
           />
           {errors.email?.type === "required" && <p>Enter your email</p>}
