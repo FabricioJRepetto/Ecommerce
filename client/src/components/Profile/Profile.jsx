@@ -42,6 +42,7 @@ const Profile = () => {
                 const { data: list } = await axios(`/whishlist/`);
                 list.products ? setWhishlist(list.products) : setWhishlist([]);
                 const { data: history } = await axios(`/history/`);
+                console.log(history);
                 history.products ? setHistory(history.products) : setHistory([]);
 
                 setLoading(false);
@@ -292,12 +293,12 @@ const Profile = () => {
                         <MiniCard 
                             key={e.product_id}
                             fadeIn={false}
-                            img={e.img}
-                            name={e.product_name}
+                            img={e.images[0].imgURL}
+                            name={e.name}
                             price={e.price}
                             sale_price={e.sale_price}
                             discount={e.discount}
-                            prodId={e.product_id}
+                            prodId={e.id}
                             free_shipping={e.free_shipping ? true : false}
                             on_sale={e.on_sale}
                             fav={wl_id.includes(e.product_id)}

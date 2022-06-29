@@ -1,12 +1,12 @@
 const { Schema, model } = require("mongoose");
 
-const historySchema = new Schema(
+const saleSchema = new Schema(
   {
     products: [String],
-    last_search: String,
-    user: {
-      type: String,
-      required: true,
+    last_update: {
+        type: Date,
+        default: Date.now(),
+        required: true
     },
   },
   {
@@ -18,5 +18,4 @@ const historySchema = new Schema(
 
 // tiene que ser 'function', no funciona con una '() =>'
 
-
-module.exports = model("History", historySchema);
+module.exports = model("Sale", saleSchema);

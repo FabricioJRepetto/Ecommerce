@@ -6,7 +6,7 @@ import './Carousel.css'
 
 const Slider = ({ images, interval = 5000, controls = false, indicators = false, pointer = false, width }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
-    const slideInterval = useRef();
+    const slideInterval = useRef(null);
     const navigate = useNavigate();
 
     useEffect(() => {
