@@ -7,6 +7,7 @@ import {
   loadEmail,
 } from "../../Redux/reducer/sessionSlice";
 import { useNavigate } from "react-router-dom";
+import { resetCartSlice } from "../../Redux/reducer/cartSlice";
 
 const Signout = () => {
   const sessionState = useSelector((state) => state.sessionReducer);
@@ -24,6 +25,7 @@ const Signout = () => {
     dispatch(loadUsername(null));
     dispatch(loadAvatar(null));
     dispatch(loadEmail(null));
+    dispatch(resetCartSlice());
     navigate("/signin");
   };
 

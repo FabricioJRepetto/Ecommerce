@@ -22,10 +22,9 @@ const addAddress = async (req, res, next) => {
             } else {
                 add.address.push({...req.body, isDefault: true});
             }
-
             await add.save();
-            return res.json(add.address);
-            //return res.json({message: 'New address registered.'});
+
+            return res.json({message: 'New address registered.', address: add.address});
         } else {
             const newAdd = new Address({
                 address: [{...req.body, isDefault: true}],
@@ -33,8 +32,7 @@ const addAddress = async (req, res, next) => {
             });
             await newAdd.save();
 
-            return res.json(newAdd.address);
-            //return res.json({message: 'Address registered.'});
+            return res.json({message: 'New address registered.', newAdd: add.address});
         };
     } catch (error) {
         next(error);
@@ -66,8 +64,7 @@ const updateAddress = async (req, res, next) => {
             },
             {new: true}
         );
-        console.log(updated);
-        return res.json(updated.address);
+        return res.json({message: 'Address updated.', address: updated.address});
     } catch (error) {
         next(error);
     }
@@ -85,7 +82,7 @@ const removeAddress = async (req, res, next) => {
         }, { new: true }
         );
 
-        return res.json(address);
+        return res.json({message: 'Address removed', address});
     } catch (error) {
         next(error);
     }
@@ -115,9 +112,8 @@ const removeAddress = async (req, res, next) => {
             },
             {new: true}
             );
-
-
-            res.json(address)
+            
+            res.json({message: 'Address selected.', address})
         } catch (error) {
             next(error)
         };

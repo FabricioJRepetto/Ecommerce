@@ -21,6 +21,16 @@
     position: relative;
 }
 
+.link-svg {
+    transform: scale(.5);
+    position: absolute;
+    top: 1px;
+    right: 5px;
+}
+.link-svg path {
+    fill: white;
+}
+
 .notification-message {
     max-width: 230px;
 }
@@ -34,5 +44,5 @@
 .timer-active {
     border-bottom: 4px solid rgba(255, 255, 255, .3);
     transform: translateX(100%);
-    transition: transform 6.4s linear;
+    transition: transform 4.4s linear;
 }

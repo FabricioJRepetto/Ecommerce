@@ -4,16 +4,15 @@ const Cart = require('../models/cart');
 const getOrder = async (req, res, next) => { 
     try {
         const userId = req.user._id;
-        const orderId = req.params.id;
+
+        if (!userId || !req.params.id) return res.status(400).json({message: 'User ID or Order ID not given.'});
+
         let order = await Order.findOne({
             user: userId,
-            _id: orderId
+            _id: req.params.id
         });
-        if (order) {
-            return res.json(order);
-        } else {
-            return res.status(404).json('Order not found')
-        };
+        if (!order) return res.json({message: 'No orders.'});
+        return res.json(order);
     } catch (error) {
         next(error)
     }
@@ -40,7 +39,7 @@ const getOrdersAdmin= async (req, res, next) => { //! SOLO ADMIN
 
 const createOrder = async (req, res, next) => { 
     try {
-        const userId = req.user._id;
+        //: recibir la id de la address en vez de los datos?
         const {
             state,
             city,
@@ -49,23 +48,28 @@ const createOrder = async (req, res, next) => {
             street_number
         } = req.body;
         
-        const cart = await Cart.findOne({owner: userId});
+        const cart = await Cart.findOne({owner: req.user._id});
         let products = cart.products;
 
+        let free = cart.free_ship_cart;       
+
         const newOrder = new Order({
-            user: userId,
-            status: 'pending',
             products,
+            user: req.user._id,
             shipping_address: {
                 state,
                 city,
                 zip_code,
                 street_name,
                 street_number
-            }
+            },
+            status: 'pending',
+            total: cart.total,
+            free_shipping: free,
+            shipping_cost: cart.shipping_cost,
         });
-
         await newOrder.save();
+
         return res.json(newOrder._id);
     } catch (error) {
         next(error)
@@ -86,6 +90,7 @@ const deleteOrder = async (req, res, next) => {
 
  const updateOrder = async (req, res, next) => { 
      //: añadir mas opciones de status ?
+     console.log(req.headers);
      try {
         const order = await Order.findByIdAndUpdate(req.params.id,
         {
@@ -95,7 +100,7 @@ const deleteOrder = async (req, res, next) => {
         },
         {new: true});
         
-        return res.json(`Order status: ${order.status}`)
+        return res.json({message: `Order status: ${order.status}`})
      } catch (error) {
          next(error)
      }

@@ -1,13 +1,8 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Routes, Route } from "react-router-dom";
-import {
-  loadAvatar,
-  loadEmail,
-  loadUsername,
-  sessionActive,
-} from "./Redux/reducer/sessionSlice";
-import { loadProducts, loadWhishlist } from "./Redux/reducer/cartSlice";
+import { loadAvatar, loadEmail, loadUsername, sessionActive } from "./Redux/reducer/sessionSlice";
+import { loadCart, loadWhishlist } from "./Redux/reducer/cartSlice";
 import axios from "axios";
 import "./App.css";
 
@@ -38,18 +33,18 @@ function App() {
     (async () => {
       try {
         if (loggedUserToken) {
-          const { data } = await axios(`/user/profile/${loggedUserToken}`);
-          console.log(data);
-          dispatch(sessionActive(true));
-          dispatch(loadUsername(data.name));
-          dispatch(loadAvatar(data.avatar ? data.avatar : loggedAvatar));
-          dispatch(loadEmail(data.email ? data.email : loggedEmail));
-
-          const { data: cart } = await axios(`/cart`);
-          dispatch(loadProducts(cart.products.length));
-
-          const { data: whish } = await axios(`/whishlist`);
-          dispatch(loadWhishlist(whish.id_list));
+            const { data } = await axios(`/user/profile/${loggedUserToken}`);
+            console.log(data);
+            dispatch(sessionActive(true));
+            dispatch(loadUsername(data.name));
+            dispatch(loadAvatar(data.avatar ? data.avatar : loggedAvatar));
+            dispatch(loadEmail(data.email ? data.email : loggedEmail));
+            
+            const { data: cart } = await axios(`/cart`);
+            dispatch(loadCart(cart.id_list));
+            
+            const { data: whish } = await axios(`/whishlist`);
+            dispatch(loadWhishlist(whish.id_list));
         }
       } catch (error) {
         console.log("APP.JS");
@@ -62,27 +57,28 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  return (
-    <div className="App" id="scroller">
-      <NavBar />
-      <Notification />
-      <BackToTop />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/signin" element={<Signupin />} />
-        <Route path="/signout" element={<Signout />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/products" element={<Products />} />
-        <Route path="/productForm" element={<ProductForm />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/checkout/:id" element={<Checkout />} />
-        <Route path="/reset/:userId/:resetToken" element={<ResetPassword />} />
-        <Route path="/orders/post-sale/:id" element={<PostSale />} />
-        <Route path="/verify/:verifyToken" element={<VerifyEmail />} />
-        <Route path="/details/:id" element={<Details />} />
-      </Routes>
-    </div>
-  );
+    return (
+        <div className="App" id='scroller'>
+            <NavBar />
+            <Notification />
+            <BackToTop />
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/signin" element={<Signupin />} />
+                <Route path="/signout" element={<Signout />} />
+                <Route path="/profile/" element={<Profile />} />
+                <Route path="/profile/:section" element={<Profile />} />
+                <Route path="/products" element={<Products />} />
+                <Route path="/productForm" element={<ProductForm />} />
+                <Route path="/cart" element={<Cart />} />
+                <Route path="/checkout/:id" element={<Checkout />} />
+                <Route path="/reset/:userId/:resetToken" element={<ResetPassword />} />
+                <Route path="/orders/post-sale/:id" element={<PostSale />} />
+                <Route path="/verify/:verifyToken" element={<VerifyEmail />} />
+                <Route path="/details/:id" element={<Details />} />
+            </Routes>
+        </div>
+    );
 }
 
 export default App;

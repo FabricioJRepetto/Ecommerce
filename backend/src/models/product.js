@@ -10,9 +10,9 @@ const productSchema = new Schema(
       type: Number,
       required: true,
     },
-    sale_price: {
-      type: Number,
-      default: 0,
+    discount: {
+        type: Number,
+        default: 0,
     },
     on_sale: {
       type: Boolean,
@@ -22,7 +22,6 @@ const productSchema = new Schema(
       type: String,
       required: true,
     },
-    available_quantity: Number,
     main_features: [String],
     attributes: [
       {
@@ -30,15 +29,12 @@ const productSchema = new Schema(
         name: String,
       },
     ],
-    description: {
-      type: String,
-      required: true,
+    category: {
+        type: String,
+        default: '',
     },
-    free_shipping: {
-      type: Boolean,
-      required: true,
-      //  default: false,
-    },
+    available_quantity: Number,
+    free_shipping: Boolean,
     images: [
       {
         imgURL: String,
@@ -48,7 +44,16 @@ const productSchema = new Schema(
   },
   {
     versionKey: false,
+    toJSON: { getters: true, virtuals: true },
+    toObject: { getters: true, virtuals: true }
   }
 );
+
+productSchema.virtual('sale_price').get(function() {
+    return this.price - (this.price * (this.discount/100));
+});
+productSchema.virtual('_discount').get(function() {
+    return (`${(100 - Math.round((this.sale_price / this.price) * 100))}%`);
+});
 
 module.exports = model("Product", productSchema);

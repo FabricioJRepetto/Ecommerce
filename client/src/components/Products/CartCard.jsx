@@ -4,7 +4,7 @@ import { resizer } from '../../helpers/resizer';
 import QuantityInput from '../Cart/QuantityInput';
 import './CartCard.css'
 
-const CartCard = ({ img, name, price, brand, prodId, free_shipping, on_cart, stock, prodQuantity, deleteP}) => {
+const CartCard = ({ img, name, price, sale_price, on_sale, discount, brand, prodId, free_shipping, on_cart, stock, prodQuantity, deleteP}) => {
     const navigate = useNavigate();
 
   return (
@@ -17,10 +17,10 @@ const CartCard = ({ img, name, price, brand, prodId, free_shipping, on_cart, sto
             <div className='cart-prod-details'>
                 <div className='cart-main-details'>
                     <p 
-                        className='pointer bold'
+                        className='cart-card-name pointer'
                         onClick={() => navigate(`/details/${prodId}`)} >{name}</p>
                     <div>{brand && brand.toUpperCase()}</div>
-                    <div>{free_shipping && 'envio gratis'}</div>
+                    {free_shipping && <div className='free-shipping'>envío gratis</div>}
                 </div>
                 <div className='cart-product-options'>
                     <p 
@@ -30,16 +30,23 @@ const CartCard = ({ img, name, price, brand, prodId, free_shipping, on_cart, sto
                 </div>
             </div>
         </div>
+
         {on_cart && <QuantityInput 
             prodId={prodId}
-            price={price}
+            price={on_sale ? sale_price : price}
             stock={stock}
             prodQuantity={prodQuantity}
             className='quantity-input'
         />}
+
         <div className='cart-card-price'>
-            <h2>${price}</h2>
+            {on_sale && <div className='cart-card-price-discount'>
+                <div>{discount}</div>
+                <del>${price}</del>
+            </div>}
+            <h2>{on_sale ? '$'+sale_price : '$'+price}</h2>
         </div>
+
     </div>
   )
 }

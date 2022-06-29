@@ -8,7 +8,9 @@ const orderSchema = new Schema(
         description: String,
         img: String,
         price: Number,
-        quantity: Number
+        sale_price: Number,
+        quantity: Number,
+        on_sale: Boolean,
     }],
     user: {
         type: String,
@@ -21,7 +23,10 @@ const orderSchema = new Schema(
         street_name: String,
         street_number: Number,
     },
-    status: String
+    total: Number,
+    status: String,
+    free_shipping: Boolean,
+    shipping_cost: Number,
   },
   {
     timestamps: true,
@@ -30,15 +35,6 @@ const orderSchema = new Schema(
     toObject: { getters: true, virtuals: true }
   }
 );
-
-// Order.total
-orderSchema.virtual('total').get(function() {
-    let total = 0;    
-    this.products.forEach(product => {
-        total += product.price * product.quantity;
-    });
-    return total;
-});
 
 // Order.description
 orderSchema.virtual('description').get(function() {

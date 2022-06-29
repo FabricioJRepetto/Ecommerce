@@ -1,10 +1,10 @@
 .App {
-  text-align: center;
-  background: #222222;
-  color: rgb(255, 255, 255);
-  width: 100;
-  min-height: 110vh;
-    overflow-y: auto;
+    text-align: center;
+    background: #222222;
+    color: rgb(255, 255, 255);
+    width: 100;
+    min-height: 100vh;
+    overflow-y: auto; 
 }
 
 * {

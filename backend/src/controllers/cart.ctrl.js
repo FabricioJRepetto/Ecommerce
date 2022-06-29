@@ -3,9 +3,16 @@ const Product = require("../models/product");
 
 const getUserCart = async (req, res, next) => {
   try {
-        const userId = req.user._id;
-        const cart = await Cart.findOne({ owner: userId });
-        if (!cart) return res.json({message: 'empty cart'});
+        if (!req.user._id) return res.status(400).json({message: 'User ID not given.'});
+
+        const cart = await Cart.findOne({ owner: req.user._id });
+        if (!cart) {
+            const newCart = await Cart.create({
+                products: [],
+                owner: req.user._id
+            })
+            return res.json(newCart)
+        }
         return res.json(cart);
   } catch (error) {
     next(error);
@@ -18,8 +25,8 @@ const addToCart = async (req, res, next) => {
     const productToAdd = req.params.id;
     const cart = await Cart.findOne({ owner: userId });
 
-    const {name, price, description, available_quantity:stock, images} = await Product.findById(productToAdd);
-
+    const {name, price, sale_price, on_sale, free_shipping, discount, description, available_quantity:stock, images} = await Product.findById(productToAdd);
+    console.log(discount);
     if (cart) {
         let flag = false; 
         cart.products.forEach(e => {
@@ -39,6 +46,10 @@ const addToCart = async (req, res, next) => {
                 description,
                 img: images[0].imgURL,
                 price,
+                sale_price,
+                on_sale,
+                discount,
+                free_shipping,
                 stock,
                 quantity: 1
             });
@@ -53,6 +64,10 @@ const addToCart = async (req, res, next) => {
             description,
             img: images[0].imgURL,
             price,
+            sale_price,
+            on_sale,
+            discount,
+            free_shipping,
             stock,
             quantity: 1
         }],

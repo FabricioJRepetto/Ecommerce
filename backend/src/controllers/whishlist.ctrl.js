@@ -4,7 +4,13 @@ const Product = require('../models/product');
 const getUserList = async (req, res, next) => {
     try {
         const list = await Whishlist.findOne({user: req.user._id});
-        if (!list) return res.json({message: 'Empty whishlist'})
+        if (!list) {
+            const newList = await Whishlist.create({
+                products: [],
+                user: req.user._id
+            })
+            return res.json({message: 'Whishlist created', list: newList})
+        }
         return res.json(list)
     } catch (error) {
         next(error);

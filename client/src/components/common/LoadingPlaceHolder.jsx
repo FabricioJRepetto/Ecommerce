@@ -1,5 +1,4 @@
 import React from 'react';
-import './LoadingPlaceHolder.css'
 
 export const containerStyles = {
     width: '100%',
@@ -10,7 +9,7 @@ export const containerStyles = {
 function LoadingPlaceHolder(props) {
 
     const loaderStyles = {
-        backgroundColor: '#eee',
+        background: '#eee',
         width: '100%',
         overflow: 'hidden',
         position: props.container ? 'absolute' : 'relative',
@@ -22,8 +21,8 @@ function LoadingPlaceHolder(props) {
         top: '0',
         left: '0',
         width: '100%',
-        background: 'linear-gradient(to right, #eeeeee 10%, #dddddd 50%, #eeeeee 90%)',
         animation: 'loaderSwipeAnim 1s cubic-bezier(0.4, 0.0, 0.2, 1) infinite',
+        background: 'linear-gradient(to right, #eee 10%, #dddddd 50%, #eee 90%)',
         height: '100%'
     }
 

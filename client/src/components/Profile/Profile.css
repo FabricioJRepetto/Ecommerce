@@ -1,0 +1,53 @@
+.profile-container {
+    height: fit-content;
+    overflow: hidden;
+    overflow: -moz-hidden-unscrollable;
+}
+.profile-menu-container a {
+    color: rgb(255, 255, 255);
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    margin: 0 1vw;
+}
+.profile-menu-container button {
+    color: white;
+    background: none;
+    border: none;
+    margin: 0 1vw;
+    cursor: pointer;
+}
+.profile-whishlistcard-container {
+    background: white;
+    padding: 20px;    
+}
+
+.profile-details-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+}
+.profile-avatar-container {
+    height: 96px;
+    width: 96px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+.profile-avatar-container img {
+    height: 100%;
+    width: 100%;
+}
+
+.profile-history-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    height: fit-content;
+    margin: 20px 0px;
+}
+.profile-history-container > div {
+    margin: 0px 15px 60px 0px;
+}

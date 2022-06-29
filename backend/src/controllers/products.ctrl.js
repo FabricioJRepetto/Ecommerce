@@ -133,7 +133,6 @@ const getById = async (req, res, next) => {
 };
 
 const createProduct = async (req, res, next) => {
-  console.log("-----BODY", req.body);
   try {
     const {
       name,
@@ -161,7 +160,6 @@ const createProduct = async (req, res, next) => {
         public_id: e.public_id,
       });
     });
-
     // borramos los archivos de este directorio.
     req.files.forEach((img) => {
       fs.unlink(img.path);
@@ -171,12 +169,13 @@ const createProduct = async (req, res, next) => {
       name,
       price,
       brand,
-      description,
-      attributes,
       main_features,
+      attributes,
+      description,
+      category,
       available_quantity,
-      images,
       free_shipping,
+      images,
     });
     const productSaved = await newProduct.save();
 
@@ -188,22 +187,72 @@ const createProduct = async (req, res, next) => {
 
 const updateProduct = async (req, res, next) => {
   try {
-    let newData = JSON.parse(req.body.data);
+    //: imgsOK
+    let {
+      name,
+      price,
+      brand,
+      main_features,
+      attributes,
+      description,
+      category,
+      available_quantity,
+      free_shipping,
+      imgsOK,
+    } = JSON.parse(req.body.data);
+    let images = [...imgsOK];
 
-    if (req.body.new_img) {
-      // Solo si cambia la imagen
-      cloudinary.uploader.destroy(newData.public_id);
-      const { url: imgURL, public_id } = await cloudinary.uploader.upload(
-        req.file.path
-      );
-      fs.unlink(req.file.path);
-      newData = { ...newData, imgURL, public_id };
+    //: envia files si no agregan imagenes?
+    if (req.files.length > 0) {
+      let aux = [];
+      // creamos una promise por cada archivo.
+      req.files.forEach((img) => {
+        aux.push(cloudinary.uploader.upload(img.path));
+      });
+      // esperamos que se suban.
+      const promiseAll = await Promise.all(aux);
+      // guardamos los datos de cada imagen.
+      promiseAll.forEach((img) => {
+        images.push({
+          imgURL: img.url,
+          public_id: img.public_id,
+        });
+      });
+      // borramos los archivos de este directorio.
+      req.files.forEach((img) => {
+        fs.unlink(img.path);
+      });
     }
+
+    //: como se llama el array de las imagenes a mantener?
+    if (imgsOK.length > 0) {
+      const { data } = await Product.findById(req.params.id);
+      let deleteList = [];
+      data.images.map(
+        (img) => !list.includes(img.imgURL) && deleteList.push(img.public_id)
+      );
+      cloudinary.api.delete_resources(deleteList);
+    }
+
     const updatedProduct = await Product.findByIdAndUpdate(
       req.params.id,
-      newData,
+      {
+        $set: {
+          name,
+          price,
+          brand,
+          main_features,
+          attributes,
+          description,
+          category,
+          available_quantity,
+          free_shipping,
+          images,
+        },
+      },
       { new: true }
     );
+
     res.json(updatedProduct);
   } catch (error) {
     next(error);
@@ -212,8 +261,11 @@ const updateProduct = async (req, res, next) => {
 
 const deleteProduct = async (req, res, next) => {
   try {
-    const { public_id } = await Product.findById(req.params.id);
-    cloudinary.uploader.destroy(public_id);
+    const prod = await Product.findById(req.params.id);
+    let deleteList = [];
+    prod.images.forEach((img) => deleteList.push(img.public_id));
+    cloudinary.api.delete_resources(deleteList);
+
     await Product.findByIdAndDelete(req.params.id);
     res.status(204).json("deleted");
   } catch (error) {
@@ -223,8 +275,9 @@ const deleteProduct = async (req, res, next) => {
 
 const deleteAll = async (req, res, next) => {
   try {
-    let idList = await Product.find();
-    cloudinary.api.delete_resources(idList.map((e) => e.public_id));
+    // !!! CUIDADO: BORRA TODAS LAS IMAGENES !!!
+    cloudinary.api.delete_resources(true);
+    //cloudinary.api.delete_folder("products", (error, result) => { console.log(result); });
     const deleted = await Product.deleteMany();
     res.status(200).json(deleted);
   } catch (error) {

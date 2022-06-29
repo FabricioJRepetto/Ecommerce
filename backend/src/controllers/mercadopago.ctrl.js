@@ -20,13 +20,20 @@ const mpCho = async (req, res, next) => {
     const order = await Order.findById(id);
     console.log(order.id);
 
+    /* 
+    : por si no sirven las notificaciones de meli usar esto ?
+    tracks:     Array
+    Localización: Body
+    Tracks que se ejecutarán durante la interacción de los usuarios en el flujo de Pago. El usuario puede configurar sus propios tracks. Actualmente soportamos Google y Facebook. El collector debe enviar el pixel ID (de google o facebook), y cuando finalice el flujo de la transacción, el vendedor será notificado de la venta.
+    */
+
     for (const prod of order.products) {
         items.push({
             id: prod.product_id,
             title: prod.product_name,
             description: prod.description,
             picture_url: prod.img,
-            unit_price: prod.price,
+            unit_price: prod.on_sale ? prod.sale_price : prod.price,
             quantity: prod.quantity,
         })
     };
@@ -34,8 +41,24 @@ const mpCho = async (req, res, next) => {
     let preference = {
         items,
         external_reference: id,
+        payment_methods: {
+            installments: 1,
+        },
+        shipments: {
+            mode: 'not_specified',
+            cost: order.shipping_cost,
+            receiver_address: {
+                zip_code: order.shipping_address.zip_code,
+                street_name: order.shipping_address.street_name,
+                city_name: order.shipping_address.city,
+                state_name: order.shipping_address.state,
+                street_number: order.shipping_address.street_number,
+                floor: '1',
+                apartment: '4B',
+            },
+        },
         //notification_url: `${BACK_URL}/mercadopago/ipn`
-        //! esto no hacefalta cuando tenga el endpoint & deploy
+        // //! esto no hacefalta cuando tenga el endpoint & deploy
         back_urls: {
             success: `http://localhost:3000/orders/post-sale/${id}`,
             failure: `http://localhost:3000/orders/post-sale/${id}`,

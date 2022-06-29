@@ -48,9 +48,6 @@ const passwordValidationSignin = body("password", "Enter a valid password")
   .notEmpty()
   .escape();
 
-//? Address router
-router.use("/address", verifyToken, addressRouter);
-
 router.post(
   "/signup",
   [
