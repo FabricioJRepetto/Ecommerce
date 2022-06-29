@@ -219,6 +219,7 @@ const Signupin = () => {
           />
           {errors.email?.type === "required" && <p>Enter your email</p>}
           {errors.email?.type === "pattern" && <p>Enter a valid email</p>}
+          {warn && <p>{warn}</p>}
 
           <input
             type="text"
