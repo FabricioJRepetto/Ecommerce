@@ -5,7 +5,6 @@ import "./NavBar.css";
 import { ReactComponent as Cart } from "../../assets/svg/cart.svg";
 import { ReactComponent as Fav } from "../../assets/svg/fav.svg";
 import { ReactComponent as Avatar } from "../../assets/svg/avatar.svg";
-import { ReactComponent as Logo } from "../../assets/svg/provider-logo-blanco.svg";
 
 const NavBar = () => {
     const { session, avatar } = useSelector((state) => state.sessionReducer);
@@ -16,7 +15,7 @@ const NavBar = () => {
         <div className="navBar">
             <div className="navbar-logo-section">
                 {/*<h1 onClick={()=>navigate("/")}>provider!</h1>*/}
-                <Logo onClick={()=>navigate("/")} className='logo-svg'/>
+                <img onClick={()=>navigate("/")} src={require('../../assets/provider-logo.png')} alt="logo"  className="logo"/>
             </div>
                     
                 <div className="navbar-central-section">

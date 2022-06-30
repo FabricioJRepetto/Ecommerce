@@ -12,10 +12,6 @@
     text-decoration: none;
     margin: 0 1vw 0 0;
 }
-.navBar h1 {
-    color: #FFA500;
-    cursor: pointer;
-}
 
 .navbar-central-section {
     display: flex;
@@ -42,6 +38,14 @@
     width: 200px;
     position: relative;
 }
+.navBar .logo {
+    height: 80px;
+    position: absolute;
+    top: -55px;
+    left: -100px;
+    cursor: pointer;
+}
+
 .navbar-profile-container {
     display: flex;
     flex-direction: column;
@@ -108,12 +112,4 @@
     position: absolute;
     top: 5px;
     right: -20px;
-}
-
-.logo-svg {
-    transform: scale(1.2);
-    position: absolute;
-    cursor: pointer;
-    top: -70px;
-    right: 40px;
 }
