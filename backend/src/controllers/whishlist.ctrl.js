@@ -3,15 +3,41 @@ const Product = require('../models/product');
 
 const getUserList = async (req, res, next) => {
     try {
-        const list = await Whishlist.findOne({user: req.user._id});
-        if (!list) {
+        const meli = 'https://api.mercadolibre.com/products/'
+
+        const whishlist = await Whishlist.findOne({ user: req.user._id });
+
+        if (whishlist === null) {
             const newList = await Whishlist.create({
                 products: [],
                 user: req.user._id
             })
-            return res.json({message: 'Whishlist created', list: newList})
+            return res.json({ message: 'Whishlist created', products: newList.products, id_list: newList.products })
         }
-        return res.json(list)
+
+        let promises = [];
+        whishlist.products.map(e => (
+            /^MLA/.test(e)
+                ? promises.push(axios(meli + e))
+                : promises.push(Product.findById(e))
+        ));
+        const rawProds = await Promise.all(promises);
+        let response = rawProds.filter(e => e !== null);
+
+        /*
+        : parsear los resultados de la api de meli
+            img={e.images[0].imgURL}
+            name={e.name}
+            price={e.price}
+            sale_price={e.sale_price}
+            discount={e.discount}
+            prodId={e.id}
+            free_shipping={e.free_shipping ? true : false}
+            on_sale={e.on_sale}
+        */
+
+        return res.json({ products: response, id_list: whishlist.products });
+
     } catch (error) {
         next(error);
     }
@@ -19,46 +45,23 @@ const getUserList = async (req, res, next) => {
 
 const addToList = async (req, res, next) => {
     try {
-        const userId = req.user._id;
-        const productId = req.params.id;
-
-        const {
-            name,
-            _id,
-            price,
-            images
-        } = await Product.findById(productId);
-        if (!_id) return res.json({message: 'Incorrect ID. Product not found.'});
-
-        const list = await Whishlist.findOne({ 
-            user: userId 
-        });
+        const list = await Whishlist.findOne({ user: req.user._id });
 
         if (list) {
-            let aux = list.products.find(e => e.product_id === productId)
+            let aux = list.products.includes(req.params.id)
             if (!aux) {
-                list.products.push({
-                    product_name: name,
-                    product_id: _id,
-                    price,
-                    img: images[0].imgURL
-                });
+                list.products.push(req.params.id);
                 await list.save();
-                return res.json({message: "Product added to the whishlist.", list});
+                return res.json({ message: "Product added to the whishlist.", list });
             }
-            return res.json({message: "Product already on whishlist."});
+            return res.json({ message: "Product already on whishlist." });
         } else {
-            const newList = new Whishlist({ 
-                products: [{
-                    product_name: name,
-                    product_id: _id,
-                    price,
-                    img: images[0].imgURL
-                }], 
-                user: userId 
+            const newList = new Whishlist({
+                products: [req.params.id],
+                user: req.user._id
             });
             await newList.save();
-            return res.json({message: 'Whishlist created and product added.'});
+            return res.json({ message: 'Whishlist created and product added.' });
         }
     } catch (error) {
         next(error);
@@ -69,18 +72,17 @@ const removeFromList = async (req, res, next) => {
     try {
         const userId = req.user._id;
         const target = req.params.id;
-        const list = await Whishlist.findOneAndUpdate({ 
-            'user': userId 
+        const list = await Whishlist.findOneAndUpdate({
+            'user': userId
         },
-        {
-            $pull: {
-                'products': {'product_id': target}
-            }
-        },
-        {new: true}
+            {
+                $pull: {
+                    'products': target
+                }
+            },
+            { new: true }
         );
-        console.log(list);
-        return res.json({message: 'Product removed', list});
+        return res.json({ message: 'Product removed from whishlist', list });
     } catch (error) {
         next(error);
     }

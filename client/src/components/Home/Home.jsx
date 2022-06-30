@@ -56,11 +56,11 @@ const Home = () => {
       );
     }, 100);
 
-    /* (async () => {
+    (async () => {
       const { data } = await axios(`/sales/`);
       setProducts(data);
       setLoading(false);
-    })(); */
+    })();
 
     return () => clearInterval(countdownInterv);
   }, []);

@@ -14,7 +14,8 @@ const NavBar = () => {
     return (
         <div className="navBar">
             <div className="navbar-logo-section">
-                <h1 onClick={()=>navigate("/")}>provider!</h1>
+                {/*<h1 onClick={()=>navigate("/")}>provider!</h1>*/}
+                <img onClick={()=>navigate("/")} src={require('../../assets/provider-logo.png')} alt="logo"  className="logo"/>
             </div>
                     
                 <div className="navbar-central-section">

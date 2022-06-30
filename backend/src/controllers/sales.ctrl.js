@@ -3,17 +3,19 @@ const Product = require('../models/product');
 const Sales = require('../models/Sales');
 const { salesMaker } = require("../jobs/salesMaker");
 
-const getSales = async (req, res, next) => { 
+const getSales = async (req, res, next) => {
     try {
         const sales = await Sales.findOne();
+        console.log(sales);
         if (!sales) {
+            //:! generar nuevas sales
             const newSales = await Sales.create({
                 products: [],
                 last_update: Date.now()
             });
             return res.json(newSales)
         };
-        const prods = await Product.find({_id: {'$in': sales.products}})
+        const prods = await Product.find({ _id: { '$in': sales.products } })
         const response = prods.map(e => ({
             _id: e._id,
             name: e.name,
@@ -29,20 +31,20 @@ const getSales = async (req, res, next) => {
     } catch (error) {
         next(error)
     }
- };
+};
 
-const setNewSales = async (req, res, next) => { 
+const setNewSales = async (req, res, next) => {
     try {
         const response = await salesMaker();
         res.json(response);
     } catch (error) {
         next(error)
     }
- };
+};
 
-const resetSales = async (req, res, next) => { 
+const resetSales = async (req, res, next) => {
     try {
-        await Product.updateMany({},{
+        await Product.updateMany({}, {
             '$set': {
                 'on_sale': false
             }
@@ -51,11 +53,11 @@ const resetSales = async (req, res, next) => {
     } catch (error) {
         next(error)
     }
- };
+};
 
 module.exports = {
-  getSales,
-  setNewSales,
-  resetSales
+    getSales,
+    setNewSales,
+    resetSales
 };
 
