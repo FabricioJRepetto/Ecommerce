@@ -9,8 +9,6 @@ import { WhishlistButton as Fav} from './WhishlistButton';
 import LoadingPlaceHolder from '../common/LoadingPlaceHolder';
 import { useEffect } from 'react';
 
-//: acomodar propiedades de sale
-
 const MiniCard = ({ img, name, price, sale_price, discount, prodId, free_shipping, fav, on_sale, loading, fadeIn = true}) => {    
     const navigate = useNavigate();
     const [visible, setVisible] = useState(false);
