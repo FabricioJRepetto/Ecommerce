@@ -12,16 +12,17 @@ export const WhishlistButton = ({prodId: id, size = 30, fav, visible}) => {
     const [notification] = useNotification();
 
     const addToWhish = async (id) => {
+        console.log(id);
         if (!whishlist.includes(id)) {
             const { data } = await axios.post(`/whishlist/${id}`);
             console.log(data);
-            dispatch(loadWhishlist(data.list?.id_list));
+            dispatch(loadWhishlist(data.list?.products));
             notification(data.message, '/profile/whishlist', 'success');
             
         } else {
             const { data } = await axios.delete(`/whishlist/${id}`);
             console.log(data);
-            dispatch(loadWhishlist(data.list?.id_list));
+            dispatch(loadWhishlist(data.list?.products));
             notification(data.message, '', 'warning');
         }
    };

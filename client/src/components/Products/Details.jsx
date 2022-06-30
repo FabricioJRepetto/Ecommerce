@@ -11,16 +11,17 @@ import './Details.css'
 
 import { ReactComponent as Sale } from '../../assets/svg/sale.svg'
 
-
 const Details = () => {
     const { id } = useParams();
     const { data, loading, error } = useAxios('GET', `/product/${id}`);
     const cart = useSelector((state) => state.cartReducer.onCart);
+    const session = useSelector((state) => state.sessionReducer.session);
     const dispatch = useDispatch();
     const [notification] = useNotification();
+    
 
     useEffect(() => {
-        if (!loading) {
+        if (!loading && session) {
             console.log(data);
             // setear historial
             const payload = {

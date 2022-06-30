@@ -25,7 +25,7 @@ const Profile = () => {
     const [history, setHistory] = useState([])
     const [loading, setLoading] = useState(true);
 
-    const wl_id = useSelector((state) => state.cartReducer.whishlist);
+    const {whishlist: wl_id} = useSelector((state) => state.cartReducer);
     const { session, username, avatar, email } = useSelector((state) => state.sessionReducer);
 
     useEffect(() => {
@@ -39,10 +39,11 @@ const Profile = () => {
             (async () => { 
                 const { data } = await axios(`/address/`);
                 data.address ? setAddress(data.address) : setAddress([]);
+
                 const { data: list } = await axios(`/whishlist/`);
                 list.products ? setWhishlist(list.products) : setWhishlist([]);
+                
                 const { data: history } = await axios(`/history/`);
-                console.log(history);
                 history.products ? setHistory(history.products) : setHistory([]);
 
                 setLoading(false);
@@ -259,13 +260,13 @@ const Profile = () => {
                   React.Children.toArray(
                     whishlist?.map((e) => (
                         <Card 
-                            img={e.img}
-                            name={e.product_name}
+                            img={e.images[0].imgURL}
+                            name={e.name}
                             price={e.price}
                             brand={e.brand}
-                            prodId={e.product_id}
+                            prodId={e._id}
                             free_shipping={e.free_shipping}
-                            fav={wl_id.includes(e.product_id)}
+                            fav={wl_id.includes(e._id)}
                             on_sale={e.on_sale}
                         />
                     ))
@@ -291,7 +292,7 @@ const Profile = () => {
                   React.Children.toArray(
                     history?.map((e) => (
                         <MiniCard 
-                            key={e.product_id}
+                            key={e._id}
                             fadeIn={false}
                             img={e.images[0].imgURL}
                             name={e.name}
@@ -301,7 +302,7 @@ const Profile = () => {
                             prodId={e.id}
                             free_shipping={e.free_shipping ? true : false}
                             on_sale={e.on_sale}
-                            fav={wl_id.includes(e.product_id)}
+                            fav={wl_id.includes(e._id)}
                         />
                     ))
                   )
