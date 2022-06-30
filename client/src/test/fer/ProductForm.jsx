@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { loadIdProductToEdit } from "../../Redux/reducer/productsSlice";
 import axios from "axios";
 import { useForm, useFieldArray } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -13,6 +15,26 @@ const ProductForm = () => {
   const [productImgUrls, setProductImgUrls] = useState([]);
   const [featuresQuantity, setFeaturesQuantity] = useState(1);
   const [attributesQuantity, setAttributesQuantity] = useState(1);
+  const { idProductToEdit } = useSelector((state) => state.productsReducer);
+  const dispatch = useDispatch();
+  const [warn, setWarn] = useState({
+    main_features: "",
+    attributes: "",
+    image: "",
+  });
+  let timeoutId = useRef();
+  const [productToEdit, setProductToEdit] = useState(null);
+  const [imgsToEdit, setImgsToEdit] = useState([]);
+
+  const warnTimer = (key, message) => {
+    clearTimeout(timeoutId.current);
+    setWarn({
+      ...warn,
+      [key]: message,
+    });
+    let timeout = () => setTimeout(() => setWarn({}), 5000);
+    timeoutId.current = timeout();
+  };
 
   const formOptions = { resolver: yupResolver(validationProductFormSchema) };
   const {
@@ -20,6 +42,7 @@ const ProductForm = () => {
     control,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm(formOptions);
 
@@ -27,6 +50,7 @@ const ProductForm = () => {
     fields: fieldsFeatures,
     append: appendFeature,
     remove: removeFeature,
+    replace: replaceFeature,
   } = useFieldArray({
     name: "main_features",
     control,
@@ -40,7 +64,10 @@ const ProductForm = () => {
       appendFeature("");
       setFeaturesQuantity(featuresQuantity + 1);
     } else {
-      console.log("completa campo antes de agregar uno nuevo"); //!VOLVER A VER renderizar mensaje warn
+      warnTimer(
+        "main_features",
+        "Completa este campo antes de agregar uno nuevo"
+      );
     }
   };
 
@@ -49,7 +76,7 @@ const ProductForm = () => {
       removeFeature(i);
       setFeaturesQuantity(featuresQuantity - 1);
     } else {
-      console.log("debes agregar al menos una caracteristica"); //!VOLVER A VER renderizar mensaje warn
+      warnTimer("main_features", "Debes agregar al menos una característica");
     }
   };
 
@@ -57,6 +84,7 @@ const ProductForm = () => {
     fields: fieldsAttributes,
     append: appendAttribute,
     remove: removeAttribute,
+    replace: replaceAttribute,
   } = useFieldArray({
     name: "attributes",
     control,
@@ -74,7 +102,10 @@ const ProductForm = () => {
       appendAttribute({ name: "", value_name: "" });
       setAttributesQuantity(attributesQuantity + 1);
     } else {
-      console.log("completa campos antes de agregar uno nuevo"); //!VOLVER A VER renderizar mensaje warn
+      warnTimer(
+        "attributes",
+        "Completa estos campos antes de agregar uno nuevo"
+      );
     }
   };
 
@@ -83,97 +114,109 @@ const ProductForm = () => {
       removeAttribute(i);
       setAttributesQuantity(attributesQuantity - 1);
     } else {
-      console.log("debes agregar al menos un atributo"); //!VOLVER A VER renderizar mensaje warn
+      warnTimer("attributes", "Debes agregar al menos un atributo");
     }
   };
 
+  const loadInputs = (data) => {
+    setValue("name", data.name);
+    setValue("price", data.price);
+    setValue("brand", data.brand);
+    setValue("available_quantity", data.available_quantity);
+    setValue("description", data.description);
+    setValue("free_shipping", data.free_shipping);
+    replaceFeature([...data.main_features]);
+    replaceAttribute([...data.attributes]);
+    setImgsToEdit(data.images);
+  };
+
   useEffect(() => {
-    appendAttribute({ name: "", value_name: "" });
-    appendFeature("");
+    if (idProductToEdit) {
+      axios(`/product/${idProductToEdit}`).then(({ data }) => {
+        console.log(data);
+        setProductToEdit(idProductToEdit);
+        dispatch(loadIdProductToEdit(null));
+        loadInputs(data);
+      });
+    } else {
+      appendAttribute({ name: "", value_name: "" });
+      appendFeature("");
+    }
     // eslint-disable-next-line
   }, []);
 
   const handleAddImg = (e) => {
-    const fileListArray = Array.from(e.target.files);
-    validateImgs(fileListArray);
-    setProductImg([...productImg, ...fileListArray]);
+    const fileListArrayImg = Array.from(e.target.files);
+    console.log(fileListArrayImg);
+    validateImgs(fileListArrayImg, warnTimer);
+    setProductImg([...productImg, ...fileListArrayImg]);
   };
 
   const handleRemoveImg = (i) => {
     setProductImg(productImg.filter((_, index) => index !== i));
   };
+  const handleRemoveImgToEdit = (_id) => {
+    setImgsToEdit(imgsToEdit.filter((img) => img._id !== _id));
+  };
 
   useEffect(() => {
-    //  if (productImg.length > 0) {
     const newImageUrls = [];
     for (const image of productImg) {
       newImageUrls.push(URL.createObjectURL(image));
     }
     setProductImgUrls(newImageUrls);
-    // }
   }, [productImg]);
 
   const submitProduct = async (productData) => {
-    console.log("registered:", productData.free_shipping);
-    if (productImg.length === 0) return console.log("subir img"); //!VOLVER A VER renderizar mensaje warn
+    console.log(productData);
+    if (!productToEdit && productImg.length === 0) {
+      return warnTimer("image", "Debes subir al menos una imágen");
+    }
+    if (productToEdit && productImg.length === 0 && imgsToEdit.length === 0) {
+      return warnTimer("image", "Debes subir al menos una imágen");
+    }
+
     let formData = new FormData();
-    formData.append("data", JSON.stringify(productData));
 
     // agarra las images
-    const fileListArray = Array.from(productImg);
-    validateImgs(fileListArray);
+    const fileListArrayImg = Array.from(productImg);
+    validateImgs(fileListArrayImg);
 
-    fileListArray.forEach((pic) => {
+    fileListArrayImg.forEach((pic) => {
       formData.append("images", pic);
     });
-    formData.append("images", fileListArray);
-    formData.append("data", JSON.stringify(productData));
+    // formData.append("images", fileListArrayImg);
 
-    const imgURL = await axios.post(`/product/`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    let imgURL;
+    if (productToEdit) {
+      let data = { ...productData, imgsToEdit };
+      formData.append("data", JSON.stringify(data));
+      //  formData.append("imgsToEdit", imgsToEdit);
+
+      imgURL = await axios.put(`/product/${productToEdit}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    } else {
+      formData.append("data", JSON.stringify(productData));
+      imgURL = await axios.post(`/product/`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    }
     console.log(imgURL);
 
-    clearInputs();
+    console.log("enviado");
+    // clearInputs();
   };
-
-  /*   const clearInputs = () => {
-    const idsToClear = [
-      "name_id",
-      "price_id",
-      "brand_id",
-      "stock_id",
-      "description_id",
-    ];
-    for (const id of idsToClear) {
-      let input = document.getElementById(id);
-      input.value = "";
-    }
-    if (featuresQuantity > 1) {
-      removeFeature();
-      setFeaturesQuantity(1);
-      appendFeature("");
-    } else {
-      let mainFeature = document.getElementById("main_feature_0");
-      mainFeature.value = "";
-    }
-    if (attributesQuantity > 1) {
-      removeAttribute();
-      setAttributesQuantity(1);
-      appendAttribute({ name: "", value_name: "" });
-    } else {
-      let attributeName = document.getElementById("attribute_name_0");
-      let attributeValue = document.getElementById("attribute_value_0");
-      attributeName.value = "";
-      attributeValue.value = "";
-    }
-    setProductImg([]);
-  }; */
 
   const clearInputs = () => {
     reset();
+    setWarn({});
+    setProductImg([]);
+    setImgsToEdit([]);
     setAttributesQuantity(1);
     appendAttribute({ name: "", value_name: "" });
     setFeaturesQuantity(1);
@@ -183,7 +226,7 @@ const ProductForm = () => {
   return (
     <div>
       <hr />
-      <h2>Product CREATION</h2>
+      <h2>Product {productToEdit ? "EDIT" : "CREATION"}</h2>
       <form
         encType="multipart/form-data"
         onSubmit={handleSubmit(submitProduct)}
@@ -259,6 +302,7 @@ const ProductForm = () => {
                 </>
               ))
             )}
+            {warn.main_features && <p>{warn.main_features}</p>}
             <h3 onClick={() => handleAddFeature()}>
               Agregar campo de característica
             </h3>
@@ -290,6 +334,7 @@ const ProductForm = () => {
                 </>
               ))
             )}
+            {warn.attributes && <p>{warn.attributes}</p>}
             <h3 onClick={() => handleAddAttribute()}>
               Agregar campos de atributo
             </h3>
@@ -322,17 +367,30 @@ const ProductForm = () => {
             id="filesButton"
           />
         </div>
+        {warn.image && <p>{warn.image}</p>}
 
+        {imgsToEdit &&
+          React.Children.toArray(
+            imgsToEdit.map(({ imgURL, _id }) => (
+              <>
+                <img src={imgURL} alt={`img_${_id}`} className="imgs-product" />
+                <span onClick={() => handleRemoveImgToEdit(_id)}> X</span>
+              </>
+            ))
+          )}
         {React.Children.toArray(
-          productImgUrls.map((imageUrl, i) => (
+          productImgUrls.map((imageURL, i) => (
             <>
-              <img src={imageUrl} alt={`img_${i}`} className="imgs-product" />
+              <img src={imageURL} alt={`img_${i}`} className="imgs-product" />
               <span onClick={() => handleRemoveImg(i)}> X</span>
             </>
           ))
         )}
 
-        <input type="submit" value="Crear producto" />
+        <input
+          type="submit"
+          value={productToEdit ? "Editar producto" : "Crear producto"}
+        />
       </form>
       <button onClick={clearInputs}>RESETEAR</button>
     </div>

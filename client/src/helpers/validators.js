@@ -10,13 +10,15 @@ export const validateNumbers = (value) => {
   return /^[0-9]*$/.test(value);
 };
 
-export const validateImgs = (imagesList) => {
+export const validateImgs = (imagesList, warnTimer) => {
   const fileTypesAllowed = ["image/jpeg", "image/png"];
 
   for (let i = 0; i < imagesList.length; i++) {
-    console.log(`${i}`, imagesList[i].name);
     if (!fileTypesAllowed.includes(imagesList[i].type)) {
-      console.log("archivo no soportado"); //!VOLVER A VER renderizar mensaje warn
+      warnTimer(
+        "image",
+        "Formato no soportado. Seleccione imagenes .jpg .jpeg o .png"
+      );
       imagesList.splice(i, 1);
       i--;
     }
