@@ -1,4 +1,5 @@
 
+const CronJob = require('cron').CronJob;
 const Product = require('../models/product');
 const Sales = require('../models/Sales');
 const { random } = require('../utils/random');
@@ -58,6 +59,27 @@ const salesMaker = async () => {
     }
 }
 
+const salesChecker = async () => {
+    const sales = await Sales.findOne();
+    let now = Date.now();
+    let then = new Date(sales.last_update)
+    if (now - then > 86400000) {
+        console.log('Sales update missed, updating...');
+        salesMaker();
+    }
+}
+
+const flashSales = new CronJob('0 0 0 * * *', function () {
+    salesMaker();
+    console.log('New Flash Sales published.');
+},
+    null,
+    false,
+    'America/Sao_Paulo'
+);
+
 module.exports = {
-    salesMaker
+    salesMaker,
+    salesChecker,
+    flashSales,
 };
