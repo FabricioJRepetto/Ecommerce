@@ -186,6 +186,7 @@ const createProduct = async (req, res, next) => {
 };
 
 const updateProduct = async (req, res, next) => {
+  // console.log("--------------BODY.DATA", req.body.data);
   try {
     //: imgsToEdit
     let {
@@ -200,6 +201,7 @@ const updateProduct = async (req, res, next) => {
       free_shipping,
       imgsToEdit,
     } = JSON.parse(req.body.data);
+    console.log("--------------DESCRIPTION", description);
     let images = [...imgsToEdit];
 
     //: envia files si no agregan imagenes?
@@ -224,7 +226,6 @@ const updateProduct = async (req, res, next) => {
       });
     }
 
-    //: como se llama el array de las imagenes a mantener?
     if (imgsToEdit.length > 0) {
       const data = await Product.findById(req.params.id);
       let deleteList = [];

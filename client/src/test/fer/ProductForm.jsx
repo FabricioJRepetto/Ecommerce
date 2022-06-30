@@ -9,12 +9,16 @@ import {
   validateImgs,
   validationProductFormSchema,
 } from "../../helpers/validators";
+import { useNotification } from "../../hooks/useNotification";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const ProductForm = () => {
-  const [productImg, setProductImg] = useState([]);
-  const [productImgUrls, setProductImgUrls] = useState([]);
   const [featuresQuantity, setFeaturesQuantity] = useState(1);
   const [attributesQuantity, setAttributesQuantity] = useState(1);
+  const [productImg, setProductImg] = useState([]);
+  const [productImgUrls, setProductImgUrls] = useState([]);
+  const [imgsToEdit, setImgsToEdit] = useState([]);
+  const [productToEdit, setProductToEdit] = useState(null);
   const { idProductToEdit } = useSelector((state) => state.productsReducer);
   const dispatch = useDispatch();
   const [warn, setWarn] = useState({
@@ -23,8 +27,8 @@ const ProductForm = () => {
     image: "",
   });
   let timeoutId = useRef();
-  const [productToEdit, setProductToEdit] = useState(null);
-  const [imgsToEdit, setImgsToEdit] = useState([]);
+  const navigate = useNavigate();
+  const [notification] = useNotification();
 
   const warnTimer = (key, message) => {
     clearTimeout(timeoutId.current);
@@ -187,29 +191,37 @@ const ProductForm = () => {
     });
     // formData.append("images", fileListArrayImg);
 
-    let imgURL;
-    if (productToEdit) {
-      let data = { ...productData, imgsToEdit };
-      formData.append("data", JSON.stringify(data));
-      //  formData.append("imgsToEdit", imgsToEdit);
+    let response;
 
-      imgURL = await axios.put(`/product/${productToEdit}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-    } else {
-      formData.append("data", JSON.stringify(productData));
-      imgURL = await axios.post(`/product/`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+    try {
+      if (productToEdit) {
+        let data = { ...productData, imgsToEdit };
+        formData.append("data", JSON.stringify(data));
+        //  formData.append("imgsToEdit", imgsToEdit);
+
+        response = await axios.put(`/product/${productToEdit}`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        notification("Producto editado exitosamente", "", "success");
+        navigate("/products");
+      } else {
+        formData.append("data", JSON.stringify(productData));
+        response = await axios.post(`/product/`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        notification("Producto creado exitosamente", "", "success");
+        //!VOLVER A VER agregar modal para preguntar crear otro prod
+        navigate("/products");
+      }
+      // clearInputs();
+    } catch (error) {
+      //!VOLVER A VER manejo de errores
+      console.log(error);
     }
-    console.log(imgURL);
-
-    console.log("enviado");
-    // clearInputs();
   };
 
   const clearInputs = () => {
