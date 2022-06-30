@@ -11,24 +11,14 @@ import jwt_decode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { loadCart, loadWhishlist } from "../../Redux/reducer/cartSlice";
-import './Signupin.css'
+import "./Signupin.css";
+import { useRef } from "react";
 
 const { REACT_APP_OAUTH_CLIENT_ID } = process.env;
 
-/* const initialSignup = {
-  email: "",
-  password: "",
-  repPassword: "",
-};
-const initialSignin = {
-  email: "",
-  password: "",
-}; */
-
 const Signupin = () => {
-  /*   const [signupData, setSignupData] = useState(initialSignup);
-  const [signinData, setSigninData] = useState(initialSignin); */
   const [signSelect, setSignSelect] = useState("signin");
+  const [warn, setWarn] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const session = useSelector((state) => state.sessionReducer.session);
@@ -39,15 +29,16 @@ const Signupin = () => {
     watch,
     getValues,
   } = useForm();
+  let timeoutId = useRef();
+
+  const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i;
 
   const signup = (signupData) => {
-    // e.preventDefault();
     console.log(signupData);
     axios.post(`/user/signup`, signupData).then((res) => console.log(res.data));
   };
 
   const signin = async (signinData) => {
-    //  e.preventDefault();
     try {
       const { data } = await axios.post(`/user/signin`, signinData);
 
@@ -75,19 +66,6 @@ const Signupin = () => {
     }
   };
 
-  /*   const handleSignup = ({ target }) => {
-    setSignupData({
-      ...signupData,
-      [target.name]: target.value,
-    });
-  };
-  const handleSignin = ({ target }) => {
-    setSigninData({
-      ...signinData,
-      [target.name]: target.value,
-    });
-  }; */
-
   const handleCallbackResponse = async (response) => {
     //response.credential = Google user token
     const googleToken = "google" + response.credential;
@@ -99,12 +77,12 @@ const Signupin = () => {
     const username =
       userDecoded.name || userDecoded.email || `Guest ${userDecoded.sub}`;
 
-      //: (https://lh3.googleusercontent.com/a-/AOh14GilAqwqC7Na70IrMsk0bJ8XGwz8HLFjlurl830D5g=s96-c).split('=')[0]
+    //: (https://lh3.googleusercontent.com/a-/AOh14GilAqwqC7Na70IrMsk0bJ8XGwz8HLFjlurl830D5g=s96-c).split('=')[0]
     const avatar = userDecoded.picture;
     const email = userDecoded.email;
 
-        const whish = await axios(`/whishlist`);
-        const cart = await axios(`/cart`);
+    const whish = await axios(`/whishlist`);
+    const cart = await axios(`/cart`);
 
     dispatch(loadUsername(username));
     dispatch(loadAvatar(avatar));
@@ -129,15 +107,28 @@ const Signupin = () => {
     });
 
     google.accounts.id.renderButton(document.getElementById("signInDiv"), {
-        'width': 240,
-        'theme': 'light',
+      width: 240,
+      theme: "light",
     });
     // eslint-disable-next-line
   }, [session]);
 
+  const warnTimer = (message) => {
+    clearTimeout(timeoutId.current);
+    setWarn(message);
+    let timeout = () => setTimeout(() => setWarn(), 5000);
+    timeoutId.current = timeout();
+  };
+
   const forgotPassword = (email) => {
     if (!email)
-      return console.log("Please enter your email to reset your password");
+      return warnTimer("Por favor ingresa tu email para recuperar tu password"); //! VOLVER A VER agregar color a input de email al haber warn
+    if (!email.match(emailRegex)) {
+      //if (!emailRegex.test(email))
+      return warnTimer(
+        "Por favor ingresa un email válido para recuperar tu password"
+      );
+    }
     axios
       .put("/user/forgotPassword", email)
       .then(({ data }) => {
@@ -166,12 +157,9 @@ const Signupin = () => {
           <input
             type="text"
             placeholder="email"
-            /* name="email"
-          onChange={handleSignup}
-          value={signupData.email} */
             {...register("email", {
               required: true,
-              pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i,
+              pattern: emailRegex,
             })}
           />
           {errors.email?.type === "required" && <p>Enter your email</p>}
@@ -180,9 +168,6 @@ const Signupin = () => {
           <input
             type="text"
             placeholder="Password"
-            /* name="password"
-          onChange={handleSignup}
-          value={signupData.password} */
             {...register("password", {
               required: true,
               minLength: 6,
@@ -196,9 +181,6 @@ const Signupin = () => {
           <input
             type="text"
             placeholder="Repeat Password"
-            /* name="repPassword"
-          onChange={handleSignup}
-          value={signupData.repPassword} */
             {...register("repPassword", {
               required: true,
               validate: (repPassword) => {
@@ -230,23 +212,18 @@ const Signupin = () => {
           <input
             type="text"
             placeholder="email"
-            /* name="email"
-          onChange={handleSignin}
-          value={signinData.email} */
             {...register("email", {
               required: true,
-              pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i,
+              pattern: emailRegex,
             })}
           />
           {errors.email?.type === "required" && <p>Enter your email</p>}
           {errors.email?.type === "pattern" && <p>Enter a valid email</p>}
+          {warn && <p>{warn}</p>}
 
           <input
             type="text"
             placeholder="Password"
-            /* name="password"
-          onChange={handleSignin}
-          value={signinData.password} */
             {...register("password", {
               required: true,
             })}

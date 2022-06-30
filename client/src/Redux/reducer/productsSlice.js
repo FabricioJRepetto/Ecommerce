@@ -38,6 +38,7 @@ export const productsSlice = createSlice({
     filtersApplied: {},
     productsFiltered: [],
     productDetails: {},
+    idProductToEdit: null,
   },
   reducers: {
     loadProductsFound: (state, action) => {
@@ -126,6 +127,10 @@ export const productsSlice = createSlice({
     loadProductDetails: (state, action) => {
       state.productDetails = action.payload;
     },
+
+    loadIdProductToEdit: (state, action) => {
+      state.idProductToEdit = action.payload;
+    },
   },
 });
 
@@ -134,6 +139,7 @@ export const {
   filterProducts,
   orderProducts,
   loadProductDetails,
+  loadIdProductToEdit,
 } = productsSlice.actions;
 
 export default productsSlice.reducer;
@@ -149,6 +155,27 @@ https://api.mercadolibre.com/sites/MLA/
          &discount=[5,10...30]-100
          &shipping_cost=free
          &promotion_type=deal_of_the_day
+
+  {
+    "id": "MLA1039",
+    "name": "Cámaras y Accesorios"
+  },
+  {
+    "id": "MLA1051",
+    "name": "Celulares y Teléfonos"
+  },
+  {
+    "id": "MLA1648",
+    "name": "Computación"
+  },
+  {
+    "id": "MLA1144",
+    "name": "Consolas y Videojuegos"
+  },
+  {
+    "id": "MLA1000",
+    "name": "Electrónica, Audio y Video"
+  },
 
 {
    results: [
