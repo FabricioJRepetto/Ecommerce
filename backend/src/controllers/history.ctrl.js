@@ -7,7 +7,14 @@ const getHistory = async (req, res, next) => {
         const meli = 'https://api.mercadolibre.com/products/'
 
         const history = await History.findOne({ user: req.user._id });
-        if (!history.products) return res.json({ message: 'No history recorded' });
+
+        if (history === null) {
+            await History.create({
+                products: [],
+                user: req.user._id
+            })
+            return res.json({ message: 'Hostory created' })
+        }
 
         let promises = [];
         history.products.map(e => (
@@ -64,7 +71,7 @@ const postVisited = async (req, res, next) => {
         const h = await History.findOne({ 'user': req.user._id });
 
         if (h) {
-            h.products = h.products.filter(e => e.product_id !== req.body.product_id);
+            h.products = h.products.filter(e => e !== product_id);
 
             if (h.products.length < 20) {
                 h.products.unshift(product_id);
