@@ -40,6 +40,7 @@
 
 .navbar-logo-section {
     width: 200px;
+    position: relative;
 }
 .navbar-profile-container {
     display: flex;
@@ -107,4 +108,12 @@
     position: absolute;
     top: 5px;
     right: -20px;
+}
+
+.logo-svg {
+    transform: scale(1.2);
+    position: absolute;
+    cursor: pointer;
+    top: -70px;
+    right: 40px;
 }
