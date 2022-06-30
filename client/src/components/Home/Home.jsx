@@ -44,7 +44,6 @@ const Home = () => {
 
         (async () => {
             const {data} = await axios(`/sales/`);
-            console.log(data);
             setProducts(data);
             setLoading(false);
         })();

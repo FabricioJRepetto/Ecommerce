@@ -26,7 +26,6 @@ const Products = () => {
 
   useEffect(() => {
     getProducts();
-    console.log("2");
     setLoading(false);
     // eslint-disable-next-line
   }, []);
@@ -64,7 +63,6 @@ const Products = () => {
         brands.current.sort();
       })
       .catch((err) => console.log(err))
-      .finally(console.log("1"));
   };
 
   const filterPrices = (e) => {
