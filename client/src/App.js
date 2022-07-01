@@ -44,7 +44,6 @@ function App() {
                     dispatch(loadCart(cart.id_list));
 
                     const { data: whish } = await axios(`/whishlist`);
-                    console.log(whish.id_list);
                     dispatch(loadWhishlist(whish.id_list));
                 }
             } catch (error) {

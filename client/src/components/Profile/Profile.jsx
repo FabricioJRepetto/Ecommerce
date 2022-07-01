@@ -260,7 +260,7 @@ const Profile = () => {
                   React.Children.toArray(
                     whishlist?.map((e) => (
                         <Card 
-                            img={e.images[0].imgURL}
+                            img={e.thumbnail}
                             name={e.name}
                             price={e.price}
                             brand={e.brand}
@@ -294,7 +294,7 @@ const Profile = () => {
                         <MiniCard 
                             key={e._id}
                             fadeIn={false}
-                            img={e.images[0].imgURL}
+                            img={e.thumbnail}
                             name={e.name}
                             price={e.price}
                             sale_price={e.sale_price}

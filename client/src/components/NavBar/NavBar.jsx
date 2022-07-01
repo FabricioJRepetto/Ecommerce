@@ -1,23 +1,28 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import "./NavBar.css";
 
 import { ReactComponent as Cart } from "../../assets/svg/cart.svg";
 import { ReactComponent as Fav } from "../../assets/svg/fav.svg";
 import { ReactComponent as Avatar } from "../../assets/svg/avatar.svg";
+import { loadProductsFound } from "../../Redux/reducer/productsSlice";
 
 const NavBar = () => {
     const { session, avatar } = useSelector((state) => state.sessionReducer);
     const cart = useSelector((state) => state.cartReducer.onCart);
     const navigate =useNavigate();
+    const dispatch = useDispatch();
+
 
     const meliSearch = async (e) => { 
         if (e.key === 'Enter') {
             //: loguear busqueda en el historial
-            console.log(e.target.value);
+            
             const {data} = await axios(`/meli/search/${e.target.value}`);
-            console.log(`respuesta: ${data}`)
+            console.log(data);
+            
+            //dispatch(loadProductsFound());
         }
      }
 

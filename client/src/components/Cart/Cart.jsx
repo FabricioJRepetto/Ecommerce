@@ -41,10 +41,10 @@ const Cart = () => {
 
     const getCart = async () => {
         const { data } = await axios('/cart/');
-        if (data?.products?.length > 0) {
+        if (data) {
             setCart(data);
         };
-        console.log(data);
+        //console.log(data);
         dispatch(cartTotal(data.total));
         dispatch(loadCart(data.id_list));
         setLoading(false);

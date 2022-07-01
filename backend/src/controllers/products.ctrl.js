@@ -146,9 +146,6 @@ const createProduct = async (req, res, next) => {
         } = JSON.parse(req.body.data);
         let images = [];
 
-        //!! borrar
-        let category = ''
-
         let aux = [];
         // creamos una promise por cada archivo.
         req.files.forEach((img) => {

@@ -19,15 +19,12 @@ const Details = () => {
     const session = useSelector((state) => state.sessionReducer.session);
     const dispatch = useDispatch();
     const [notification] = useNotification();
-    
-    !loading && console.log(data);
 
     useEffect(() => {
         if (!loading && session) {
-            console.log(data);
             // setear historial
             const payload = {
-                img: data.images[0].imgURL,
+                img: data.thumbnail,
                 product_name: data.name,
                 price: data.price,
                 sale_price: data.sale_price,

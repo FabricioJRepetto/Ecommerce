@@ -6,7 +6,6 @@ const { salesMaker } = require("../jobs/salesMaker");
 const getSales = async (req, res, next) => {
     try {
         const sales = await Sales.findOne();
-        console.log(sales);
         if (!sales) {
             //:! generar nuevas sales
             const newSales = await Sales.create({
@@ -15,7 +14,8 @@ const getSales = async (req, res, next) => {
             });
             return res.json(newSales)
         };
-        const prods = await Product.find({ _id: { '$in': sales.products } })
+        const prods = await Product.find({ _id: { '$in': sales.products } });
+
         const response = prods.map(e => ({
             _id: e._id,
             name: e.name,
@@ -24,7 +24,7 @@ const getSales = async (req, res, next) => {
             sale_price: e.sale_price,
             discount: e._discount,
             free_shipping: e.free_shipping,
-            images: e.images
+            thumbnail: e.thumbnail
         }));
 
         return res.json(response);

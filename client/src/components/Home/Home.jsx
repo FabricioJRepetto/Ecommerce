@@ -103,7 +103,7 @@ const Home = () => {
             <MiniCard
               key={`specials ${index}`}
               loading={loading}
-              img={products[index]?.images[0]?.imgURL}
+              img={products[index]?.thumbnail}
               name={products[index]?.name}
               price={products[index]?.price}
               sale_price={products[index]?.sale_price}

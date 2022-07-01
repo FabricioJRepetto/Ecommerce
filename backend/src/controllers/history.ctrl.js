@@ -27,14 +27,7 @@ const getHistory = async (req, res, next) => {
 
         /*
         : parsear los resultados de la api de meli
-            img={e.images[0].imgURL}
-            name={e.name}
-            price={e.price}
-            sale_price={e.sale_price}
-            discount={e.discount}
-            prodId={e.id}
-            free_shipping={e.free_shipping ? true : false}
-            on_sale={e.on_sale}
+            
         */
         return res.json({ products: response });
     } catch (error) {
