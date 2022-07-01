@@ -19,6 +19,7 @@ const Details = () => {
     const dispatch = useDispatch();
     const [notification] = useNotification();
     
+    !loading && console.log(data);
 
     useEffect(() => {
         if (!loading && session) {
@@ -33,7 +34,7 @@ const Details = () => {
                 product_id: data._id,
                 discount: data.discount,
                 free_shipping: data.free_shipping,
-                category: data.category || null,
+                category: data.category || '',
             };
             axios.post(`/history/visited`, payload);
         }
