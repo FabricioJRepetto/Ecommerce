@@ -39,15 +39,22 @@
     position: relative;
     border-bottom: 1px solid rgb(211, 211, 211);
     color: black;
+    background-color: white;
 }
-
-.card-img-container {    
+.card-name {
+    text-align: left;
+}
+.card-img-container {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 180px;
-    width: 180px;
+    min-width: 180px;
+    overflow: hidden;
     margin: 0 24px;
+}
+.card-img-container img {
+    height: 100%;
 }
 
 .card-main-container {

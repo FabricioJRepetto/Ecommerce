@@ -17,12 +17,15 @@ const NavBar = () => {
 
     const meliSearch = async (e) => { 
         if (e.key === 'Enter') {
-            //: loguear busqueda en el historial
+            //: logear busqueda en el historial
             
             const {data} = await axios(`/meli/search/${e.target.value}`);
-            console.log(data);
             
-            //dispatch(loadProductsFound());
+            dispatch(loadProductsFound(data));
+            setTimeout(() => {
+                
+            navigate('/results')
+            }, 2000);
         }
      }
 
