@@ -1,5 +1,6 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import axios from "axios";
 import "./NavBar.css";
 
 import { ReactComponent as Cart } from "../../assets/svg/cart.svg";
@@ -11,6 +12,15 @@ const NavBar = () => {
     const cart = useSelector((state) => state.cartReducer.onCart);
     const navigate =useNavigate();
 
+    const meliSearch = async (e) => { 
+        if (e.key === 'Enter') {
+            //: loguear busqueda en el historial
+            console.log(e.target.value);
+            const {data} = await axios(`/meli/search/${e.target.value}`);
+            console.log(`respuesta: ${data}`)
+        }
+     }
+
     return (
         <div className="navBar">
             <div className="navbar-logo-section">
@@ -19,7 +29,8 @@ const NavBar = () => {
             </div>
                     
                 <div className="navbar-central-section">
-                    <input type="text" placeholder="search" />
+                    <input type="text" placeholder="search" 
+                    onKeyUp={meliSearch}/>
                     
                     <div className="navbar-central-subsection">
 
