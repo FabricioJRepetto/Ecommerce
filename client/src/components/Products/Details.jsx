@@ -20,6 +20,8 @@ const Details = () => {
     const dispatch = useDispatch();
     const [notification] = useNotification();
 
+    !loading && console.log(data);
+
     useEffect(() => {
         if (!loading && session) {
             // setear historial

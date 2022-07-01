@@ -14,7 +14,7 @@ const Products = () => {
     max: "500",
   });
   const [shippingFilter, setShippingFilter] = useState(false);
-  const [brandsFilter, setBrandsFilter] = useState(); //! Uncaught TypeError: brandsFilter is undefined
+  const [brandsFilter, setBrandsFilter] = useState({}); //! Uncaught TypeError: brandsFilter is undefined
   // const [brandsFilter, setBrandsFilter] = useState({}); //! A component is changing an uncontrolled input to be controlled
   const [loading, setLoading] = useState(true);
   const brands = useRef();

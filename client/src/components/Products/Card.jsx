@@ -42,9 +42,8 @@ const Card = ({
       <div className="card-main-container">
         <div
           onClick={() => navigate(`/details/${prodId}`)}
-          className="card-img-container pointer"
-        >
-          <img src={resizer(img, 180)} alt="product" />
+          className="card-img-container pointer">
+            <img src={resizer(img, 180)} alt="product" />
         </div>
 
         <div className="card-details-container">

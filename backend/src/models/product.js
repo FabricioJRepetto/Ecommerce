@@ -33,10 +33,7 @@ const productSchema = new Schema(
             type: String,
             required: true,
         },
-        category: {
-            type: String,
-            default: 'categoria',
-        },
+        category: String,
         available_quantity: Number,
         free_shipping: Boolean,
         images: [

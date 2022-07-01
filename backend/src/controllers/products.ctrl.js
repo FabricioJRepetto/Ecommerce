@@ -138,6 +138,7 @@ const createProduct = async (req, res, next) => {
             name,
             price,
             brand,
+            category,
             description,
             attributes,
             main_features,
@@ -187,7 +188,6 @@ const createProduct = async (req, res, next) => {
 
 const updateProduct = async (req, res, next) => {
     try {
-        //: imgsToEdit
         let {
             name,
             price,
@@ -202,7 +202,7 @@ const updateProduct = async (req, res, next) => {
         } = JSON.parse(req.body.data);
         let images = [...imgsToEdit];
 
-        //: envia files si no agregan imagenes?
+        //: validar data antes de subir imagenes
         if (req.files) {
             let aux = [];
             // creamos una promise por cada archivo.
@@ -277,7 +277,7 @@ const deleteProduct = async (req, res, next) => {
 
 const deleteAll = async (req, res, next) => {
     try {
-        // !!! CUIDADO: BORRA TODAS LAS IMAGENES !!!
+        //? no borra nada
         cloudinary.api.delete_resources(true);
         //cloudinary.api.delete_folder("products", (error, result) => { console.log(result); });
         const deleted = await Product.deleteMany();
