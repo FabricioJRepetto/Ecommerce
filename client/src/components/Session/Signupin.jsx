@@ -59,7 +59,7 @@ const Signupin = () => {
         dispatch(loadCart(cart.data.id_list));
         dispatch(loadWhishlist(whish.data.id_list));
 
-        navigate("/");
+        //(() =>navigate(-1))() //!!
       }
     } catch (error) {
       console.log(error);
@@ -94,11 +94,11 @@ const Signupin = () => {
     window.localStorage.setItem("loggedEmailEcommerce", email);
 
     console.log(userDecoded);
-    navigate("/");
+    //(() =>navigate(-1))()  //!!
   };
 
   useEffect(() => {
-    if (session) navigate("/");
+    if (session) navigate(-1);
 
     /* global google */
     google.accounts.id.initialize({
@@ -244,6 +244,7 @@ const Signupin = () => {
       <hr />
       <div className="google-signin-container" id="signInDiv"></div>
       <hr />
+      <button onClick={() => navigate(-1)}> go back</button>
     </>
   );
 };

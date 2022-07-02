@@ -27,7 +27,7 @@ export const WhishlistButton = ({prodId: id, size = 30, fav, visible}) => {
                 notification(data.message, '', 'warning');
             }
         } else {
-            notification('Log in to add products to your whishlist.', '/loginup', 'warning')
+            notification('Log in to add products to your whishlist.', '/signin', 'warning')
         }
    };
 

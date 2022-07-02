@@ -43,7 +43,7 @@ const Details = () => {
         } else {
             // redirigir al login
             // cuando loguea, redirigir a esta pagina otra vez
-            notification('Log in to proceed.', '/loginup', 'warning')
+            notification('Log in to proceed.', '/signin', 'warning')
         }
   };
 
