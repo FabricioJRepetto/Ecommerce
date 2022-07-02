@@ -1,41 +1,28 @@
 const History = require('../models/History');
 const Product = require('../models/product');
 const axios = require('axios');
+const { rawIdProductGetter } = require('../utils/rawIdProductGetter');
 
 const getHistory = async (req, res, next) => {
     try {
-        const meli = 'https://api.mercadolibre.com/products/'
-
         const history = await History.findOne({ user: req.user._id });
 
         if (history === null) {
             await History.create({
                 products: [],
+                last_search: '',
                 user: req.user._id
             })
-            return res.json({ message: 'Hostory created' })
+            return res.json({ message: 'History created' })
         }
 
         let promises = [];
         history.products.map(e => (
-            /^MLA/.test(e)
-                ? promises.push(axios(meli + e))
-                : promises.push(Product.findById(e))
+            promises.push(rawIdProductGetter(e))
         ));
         const rawProds = await Promise.all(promises);
         let response = rawProds.filter(e => e !== null);
 
-        /*
-        : parsear los resultados de la api de meli
-            img={e.images[0].imgURL}
-            name={e.name}
-            price={e.price}
-            sale_price={e.sale_price}
-            discount={e.discount}
-            prodId={e.id}
-            free_shipping={e.free_shipping ? true : false}
-            on_sale={e.on_sale}
-        */
         return res.json({ products: response });
     } catch (error) {
         next(error)
@@ -98,17 +85,25 @@ const postVisited = async (req, res, next) => {
 };
 
 const postSearch = async (req, res, next) => {
+    console.log(req.params.search);
     try {
-        //: req.body.last_search
-        History.findOneAndUpdate({
+        const h = await History.findOne({
             'user': req.user._id
-        },
-            {
-                '$set': {
-                    'last_search': req.body.last_search
-                }
+        });
+
+        if (!h) {
+            const nh = await History.create({
+                products: [],
+                last_search: req.params.search,
+                user: req.user._id
             });
+            await nh.save();
+            return res.json({ message: 'Last search updated' });
+        }
+        h.last_search = req.params.search;
+        await h.save()
         return res.json({ message: 'Last search updated' });
+
     } catch (error) {
         next(error)
     }

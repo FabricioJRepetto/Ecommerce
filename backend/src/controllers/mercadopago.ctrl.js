@@ -31,13 +31,12 @@ const mpCho = async (req, res, next) => {
         items.push({
             id: prod.product_id,
             title: prod.product_name,
-            description: prod.description,
             picture_url: prod.img,
             unit_price: prod.on_sale ? prod.sale_price : prod.price,
             quantity: prod.quantity,
         })
     };
-    
+
     let preference = {
         items,
         external_reference: id,
@@ -67,7 +66,7 @@ const mpCho = async (req, res, next) => {
     };
 
     try {
-        const {response} = await mercadopago.preferences.create(preference);
+        const { response } = await mercadopago.preferences.create(preference);
         res.json(response);
     } catch (error) {
         console.log(error);
@@ -81,21 +80,21 @@ const notifications = async (req, res, next) => {
 
         // con la id, pregunto a mp el estado del pago
         const { data } = await axios.get(`https://api.mercadopago.com/v1/payments/search?sort=date_created&criteria=desc&external_reference=${id}`, {
-                headers: {
-                    Authorization: `Bearer ${MP_SKEY}`,
-                }
-            });
-            
+            headers: {
+                Authorization: `Bearer ${MP_SKEY}`,
+            }
+        });
+
         const status = data.results[0].status;
 
         if (status) {
             // cambio el estado de la order
             await Order.findByIdAndUpdate(id,
-            {
-                "$set": {
-                    status: status
-                }
-            });
+                {
+                    "$set": {
+                        status: status
+                    }
+                });
 
             if (status === 'approved') {
                 // si está todo OK
@@ -105,7 +104,7 @@ const notifications = async (req, res, next) => {
 
             return res.status(200);
         };
-        
+
     } catch (error) {
         next(error);
     }

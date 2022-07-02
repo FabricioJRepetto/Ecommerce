@@ -41,9 +41,11 @@ const Profile = () => {
                 data.address ? setAddress(data.address) : setAddress([]);
 
                 const { data: list } = await axios(`/whishlist/`);
+                console.log(list);
                 list.products ? setWhishlist(list.products) : setWhishlist([]);
                 
                 const { data: history } = await axios(`/history/`);
+                console.log(history);
                 history.products ? setHistory(history.products) : setHistory([]);
 
                 setLoading(false);
@@ -174,11 +176,11 @@ const Profile = () => {
           <div>
             <h2>Orders</h2>
             {!oLoading ? (
-              <div>
+              <div className='profile-orders-container'>
                 {orders?.length ? (
                   React.Children.toArray(
                     orders?.map((e) => (
-                      <div key={e.id}>
+                      <div className="profile-img-orders-container" key={e.id}>
                         {e.products?.map((pic) => (
                           <img
                             key={pic.img}
@@ -260,7 +262,7 @@ const Profile = () => {
                   React.Children.toArray(
                     whishlist?.map((e) => (
                         <Card 
-                            img={e.images[0].imgURL}
+                            img={e.thumbnail}
                             name={e.name}
                             price={e.price}
                             brand={e.brand}
@@ -293,16 +295,16 @@ const Profile = () => {
                     history?.map((e) => (
                         <MiniCard 
                             key={e._id}
-                            fadeIn={false}
-                            img={e.images[0].imgURL}
+                            img={e.thumbnail}
                             name={e.name}
                             price={e.price}
                             sale_price={e.sale_price}
                             discount={e.discount}
-                            prodId={e.id}
+                            prodId={e._id}
                             free_shipping={e.free_shipping ? true : false}
                             on_sale={e.on_sale}
                             fav={wl_id.includes(e._id)}
+                            fadeIn={true}
                         />
                     ))
                   )

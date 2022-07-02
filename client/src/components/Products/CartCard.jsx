@@ -6,6 +6,7 @@ import './CartCard.css'
 
 const CartCard = ({ img, name, price, sale_price, on_sale, discount, brand, prodId, free_shipping, on_cart, stock, prodQuantity, deleteP}) => {
     const navigate = useNavigate();
+    console.log(img);
 
   return (
     <div
@@ -41,7 +42,7 @@ const CartCard = ({ img, name, price, sale_price, on_sale, discount, brand, prod
 
         <div className='cart-card-price'>
             {on_sale && <div className='cart-card-price-discount'>
-                <div>{discount}</div>
+                <div>{discount}%</div>
                 <del>${price}</del>
             </div>}
             <h2>{on_sale ? '$'+sale_price : '$'+price}</h2>

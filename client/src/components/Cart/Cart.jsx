@@ -41,10 +41,10 @@ const Cart = () => {
 
     const getCart = async () => {
         const { data } = await axios('/cart/');
-        if (data?.products?.length > 0) {
+        if (data) {
             setCart(data);
         };
-        console.log(data);
+        //console.log(data);
         dispatch(cartTotal(data.total));
         dispatch(loadCart(data.id_list));
         setLoading(false);
@@ -110,15 +110,15 @@ const Cart = () => {
     };
 
     const openMP = async () => { 
-        setLoadingPayment(true);
+        setLoadingPayment('MP');
         // crea la order       
         const { data: id } = await axios.post(`/order/`, selectedAdd);
         setOrderId(id);
         // crea la preferencia para mp con la order
         const { data }  = await axios.get(`/mercadopago/${id}`);
         // abre el modal de mp con la id de la preferencia
-        loadMercadoPago(data.id);
-        setLoadingPayment(false);
+        loadMercadoPago(data.id, 
+        setLoadingPayment());
      };
 
     return (
@@ -184,12 +184,12 @@ const Cart = () => {
                     </div>
                     
                         <div className="cart-button-section">
-                            <button disabled={(true || loadingPayment)} 
-                            onClick={goCheckout}>{ loadingPayment 
+                            <button disabled={(true || loadingPayment === 'S')} 
+                            onClick={goCheckout}>{ null 
                             ? <Spinner className='cho-svg'/> 
                             : 'Stripe checkout' }</button>
 
-                            <button disabled={(!cart || cart.length < 1 || !selectedAdd || loadingPayment)} 
+                            <button disabled={(!cart || cart.length < 1 || !selectedAdd || loadingPayment === 'MP')} 
                             onClick={openMP}>{ loadingPayment 
                             ? <Spinner className='cho-svg'/> 
                             : 'MercadoPago checkout' }</button>

@@ -1,25 +1,53 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
 import "./NavBar.css";
 
 import { ReactComponent as Cart } from "../../assets/svg/cart.svg";
 import { ReactComponent as Fav } from "../../assets/svg/fav.svg";
 import { ReactComponent as Avatar } from "../../assets/svg/avatar.svg";
+import { loadProductsFound, loadProductsOwn } from "../../Redux/reducer/productsSlice";
 
 const NavBar = () => {
     const { session, avatar } = useSelector((state) => state.sessionReducer);
     const cart = useSelector((state) => state.cartReducer.onCart);
     const navigate =useNavigate();
+    const dispatch = useDispatch();
+
+
+    const querySearch = async (e) => { 
+        if (e.key === 'Enter' && e.target.value) {
+            if (session) {
+                //: logear busqueda en el historial
+                axios.post(`/history/search/${e.target.value}`);
+            }
+            
+            dispatch(loadProductsOwn('loading'));
+            dispatch(loadProductsFound('loading'));
+            navigate('/results');
+            const { data } = await axios(`/product/search/?q=${e.target.value}`);
+            console.log(data);
+            dispatch(loadProductsOwn(data.db));
+            dispatch(loadProductsFound(data.meli));
+        }
+     }
+
+     const logoClick = () => {
+        dispatch(loadProductsOwn([]));
+        dispatch(loadProductsFound([]));
+        document.getElementById('navbar-searchbar').value = '';
+        navigate("/");
+      }
 
     return (
         <div className="navBar">
             <div className="navbar-logo-section">
-                {/*<h1 onClick={()=>navigate("/")}>provider!</h1>*/}
-                <img onClick={()=>navigate("/")} src={require('../../assets/provider-logo.png')} alt="logo"  className="logo"/>
+                <img onClick={logoClick} src={require('../../assets/provider-logo2.png')} alt="logo"  className="logo"/>
             </div>
                     
                 <div className="navbar-central-section">
-                    <input type="text" placeholder="search" />
+                    <input type="text" placeholder="search" 
+                    onKeyUp={querySearch} id='navbar-searchbar'/>
                     
                     <div className="navbar-central-subsection">
 
@@ -38,7 +66,7 @@ const NavBar = () => {
                         <div className="navbar-profile-section">
                             {!session ? (
                             <NavLink to={"signin"}>
-                                <p>Log In</p>
+                                <p>Log In / Sign in</p>
                             </NavLink>
                             ) : (
                                 <>

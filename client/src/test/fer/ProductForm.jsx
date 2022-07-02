@@ -9,8 +9,10 @@ import {
   validateImgs,
   validationProductFormSchema,
 } from "../../helpers/validators";
+import {useNotification} from '../../hooks/useNotification'
 
 const ProductForm = () => {
+    
   const [productImg, setProductImg] = useState([]);
   const [productImgUrls, setProductImgUrls] = useState([]);
   const [featuresQuantity, setFeaturesQuantity] = useState(1);
@@ -25,6 +27,8 @@ const ProductForm = () => {
   let timeoutId = useRef();
   const [productToEdit, setProductToEdit] = useState(null);
   const [imgsToEdit, setImgsToEdit] = useState([]);
+  const [notification] = useNotification();
+
 
   const warnTimer = (key, message) => {
     clearTimeout(timeoutId.current);
@@ -122,6 +126,7 @@ const ProductForm = () => {
     setValue("name", data.name);
     setValue("price", data.price);
     setValue("brand", data.brand);
+    setValue("category", data.category);
     setValue("available_quantity", data.available_quantity);
     setValue("description", data.description);
     setValue("free_shipping", data.free_shipping);
@@ -206,9 +211,9 @@ const ProductForm = () => {
         },
       });
     }
+    let pid = imgURL.data.id 
     console.log(imgURL);
-
-    console.log("enviado");
+     imgURL.statusText === 'OK' && notification('Producto creado', '/details/'+pid, 'success');
     // clearInputs();
   };
 
@@ -399,7 +404,7 @@ const ProductForm = () => {
 
         <input
           type="submit"
-          value={productToEdit ? "Editar producto" : "Crear producto"}
+          value={productToEdit ? "Actualizar producto" : "Crear producto"}
         />
       </form>
       <button onClick={clearInputs}>RESETEAR</button>

@@ -20,6 +20,8 @@ import PostSale from "./components/Cart/PostSale";
 import Products from "./test/fer/Products";
 import ProductForm from "./test/fer/ProductForm";
 import Details from "./components/Products/Details";
+import Results from "./components/Products/Results";
+
 import BackToTop from "./helpers/backToTop/BackToTop";
 
 function App() {
@@ -44,7 +46,6 @@ function App() {
                     dispatch(loadCart(cart.id_list));
 
                     const { data: whish } = await axios(`/whishlist`);
-                    console.log(whish.id_list);
                     dispatch(loadWhishlist(whish.id_list));
                 }
             } catch (error) {
@@ -69,6 +70,7 @@ function App() {
                 <Route path="/signout" element={<Signout />} />
                 <Route path="/profile/" element={<Profile />} />
                 <Route path="/profile/:section" element={<Profile />} />
+                <Route path="/results" element={<Results />} />
                 <Route path="/products" element={<Products />} />
                 <Route path="/productForm" element={<ProductForm />} />
                 <Route path="/cart" element={<Cart />} />

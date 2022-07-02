@@ -33,10 +33,7 @@ const productSchema = new Schema(
             type: String,
             required: true,
         },
-        category: {
-            type: String,
-            default: 'categoria',
-        },
+        category: String,
         available_quantity: Number,
         free_shipping: Boolean,
         images: [
@@ -58,6 +55,9 @@ productSchema.virtual('sale_price').get(function () {
 });
 productSchema.virtual('_discount').get(function () {
     return (`${(100 - Math.round((this.sale_price / this.price) * 100))}%`);
+});
+productSchema.virtual('thumbnail').get(function () {
+    return this.images[0].imgURL;
 });
 
 module.exports = model("Product", productSchema);

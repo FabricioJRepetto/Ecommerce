@@ -39,9 +39,9 @@
     position: relative;
 }
 .navBar .logo {
-    height: 80px;
+    height: 60px;
     position: absolute;
-    top: -55px;
+    top: -50px;
     left: -100px;
     cursor: pointer;
 }

@@ -14,7 +14,7 @@ const Products = () => {
     max: "500",
   });
   const [shippingFilter, setShippingFilter] = useState(false);
-  const [brandsFilter, setBrandsFilter] = useState(); //! Uncaught TypeError: brandsFilter is undefined
+  const [brandsFilter, setBrandsFilter] = useState({}); //! Uncaught TypeError: brandsFilter is undefined
   // const [brandsFilter, setBrandsFilter] = useState({}); //! A component is changing an uncontrolled input to be controlled
   const [loading, setLoading] = useState(true);
   const brands = useRef();
@@ -121,9 +121,11 @@ const Products = () => {
           {React.Children.toArray(
             productsToShow?.map((prod) => (
               <Card
-                img={prod.images[0].imgURL}
+                img={prod.thumbnail}
                 name={prod.name}
                 price={prod.price}
+                sale_price={prod.sale_price}
+                discount={prod.discount}
                 brand={prod.brand}
                 prodId={prod._id}
                 free_shipping={prod.free_shipping}

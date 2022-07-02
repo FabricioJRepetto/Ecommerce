@@ -23,10 +23,9 @@ const salesMaker = async () => {
         const available = products.filter(e => !e.on_sale);
 
         const indx = random(available.length - 1, 5);
-        console.log(indx);
 
         let new_ids = [];
-        let nombres = [];
+        let newList = [];
         // setea las ofertas
         for (let i = 0; i < 5; i++) {
             let aux = available;
@@ -34,7 +33,7 @@ const salesMaker = async () => {
 
             let current = aux[indx[i]];
             new_ids.push(current.id);
-            nombres.push(current.name);
+            newList.push(`${current.name}: ${discounts[i]}%`);
 
             (async () => await Product.findByIdAndUpdate(current.id, {
                 '$set': {
@@ -44,14 +43,12 @@ const salesMaker = async () => {
                 }
             }))()
         };
-        console.log(nombres);
+        console.log(newList);
 
         // guarda las id nuevas
         sales.products = new_ids;
         sales.last_update = Date.now()
         await sales.save();
-
-        console.log(sales);
 
         return sales;
     } catch (error) {
@@ -61,9 +58,15 @@ const salesMaker = async () => {
 
 const salesChecker = async () => {
     const sales = await Sales.findOne();
+
     let now = Date.now();
-    let then = new Date(sales.last_update)
-    if (now - then > 86400000) {
+    let then = new Date(sales.last_update);
+
+    if (!sales || sales.products.length < 1) {
+        console.log('Sales not found, updating...');
+        salesMaker();
+        return;
+    } else if (now - then > 86400000) {
         console.log('Sales update missed, updating...');
         salesMaker();
     }
