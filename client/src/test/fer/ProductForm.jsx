@@ -129,6 +129,7 @@ const ProductForm = () => {
     setValue("available_quantity", data.available_quantity);
     setValue("description", data.description);
     setValue("free_shipping", data.free_shipping);
+    setValue("category", "asd");
     replaceFeature([...data.main_features]);
     replaceAttribute([...data.attributes]);
     setImgsToEdit(data.images);
@@ -193,15 +194,13 @@ const ProductForm = () => {
     });
     // formData.append("images", fileListArrayImg);
 
-    let response;
-
     try {
       if (productToEdit) {
         let data = { ...productData, imgsToEdit };
         formData.append("data", JSON.stringify(data));
         //  formData.append("imgsToEdit", imgsToEdit);
 
-        response = await axios.put(`/product/${productToEdit}`, formData, {
+        await axios.put(`/product/${productToEdit}`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -210,7 +209,7 @@ const ProductForm = () => {
         navigate("/products");
       } else {
         formData.append("data", JSON.stringify(productData));
-        response = await axios.post(`/product/`, formData, {
+        await axios.post(`/product/`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -242,7 +241,14 @@ const ProductForm = () => {
     <div>
       <hr />
       <h2>Product {productToEdit ? "EDIT" : "CREATION"}</h2>
-      <a href="https://api.mercadolibre.com/sites/MLA/categories" target="_blank" rel="noreferrer" style={{ color: '#0051ff'}}><b>Lista de categorias</b></a>
+      <a
+        href="https://api.mercadolibre.com/sites/MLA/categories"
+        target="_blank"
+        rel="noreferrer"
+        style={{ color: "#0051ff" }}
+      >
+        <b>Lista de categorias</b>
+      </a>
       <br />
       <form
         encType="multipart/form-data"

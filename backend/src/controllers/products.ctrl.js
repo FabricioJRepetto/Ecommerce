@@ -226,13 +226,24 @@ const updateProduct = async (req, res, next) => {
       });
     }
 
-    if (imgsToEdit.length > 0) {
-      const data = await Product.findById(req.params.id);
+    const productFound = await Product.findById(req.params.id);
+    if (imgsToEdit.length === 0) {
       let deleteList = [];
-      data.images.map(
-        (img) =>
-          !imgsToEdit.includes(img.imgURL) && deleteList.push(img.public_id)
-      );
+      for (const img of productFound.images) {
+        deleteList.push(img.public_id);
+      }
+      cloudinary.api.delete_resources(deleteList);
+    } else if (imgsToEdit.length > 0) {
+      let deleteList = [];
+      let imgToKeepId = [];
+      for (const img of imgsToEdit) {
+        imgToKeepId.push(img.public_id);
+      }
+      for (const img of productFound.images) {
+        if (!imgToKeepId.includes(img.public_id)) {
+          deleteList.push(img.public_id);
+        }
+      }
       cloudinary.api.delete_resources(deleteList);
     }
 

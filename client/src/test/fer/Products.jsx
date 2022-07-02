@@ -10,8 +10,8 @@ import Card from "../../components/Products/Card";
 
 const Products = () => {
   const [pricesFilter, setPricesFilter] = useState({
-    min: "300",
-    max: "500",
+    min: "",
+    max: "",
   });
   const [shippingFilter, setShippingFilter] = useState(false);
   const [brandsFilter, setBrandsFilter] = useState();

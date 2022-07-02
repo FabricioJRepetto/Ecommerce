@@ -13,6 +13,7 @@ import { useForm } from "react-hook-form";
 import { loadCart, loadWhishlist } from "../../Redux/reducer/cartSlice";
 import "./Signupin.css";
 import { useRef } from "react";
+import { useNotification } from "../../hooks/useNotification";
 
 const { REACT_APP_OAUTH_CLIENT_ID } = process.env;
 
@@ -30,6 +31,7 @@ const Signupin = () => {
     getValues,
   } = useForm();
   let timeoutId = useRef();
+  const [notification] = useNotification();
 
   const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i;
 
@@ -44,7 +46,6 @@ const Signupin = () => {
 
       if (data.user) {
         window.localStorage.setItem("loggedTokenEcommerce", data.token);
-        console.log(data);
         dispatch(sessionActive(true));
 
         const username = data.user.name || data.user.email.split("@")[0];
@@ -59,6 +60,7 @@ const Signupin = () => {
         dispatch(loadCart(cart.data.id_list));
         dispatch(loadWhishlist(whish.data.id_list));
 
+        notification(`Bienvenido, ${data.username}`, "", "success");
         navigate("/");
       }
     } catch (error) {
@@ -93,7 +95,6 @@ const Signupin = () => {
     window.localStorage.setItem("loggedAvatarEcommerce", avatar);
     window.localStorage.setItem("loggedEmailEcommerce", email);
 
-    console.log(userDecoded);
     navigate("/");
   };
 
