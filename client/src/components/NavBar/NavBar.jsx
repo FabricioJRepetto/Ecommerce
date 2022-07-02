@@ -6,7 +6,7 @@ import "./NavBar.css";
 import { ReactComponent as Cart } from "../../assets/svg/cart.svg";
 import { ReactComponent as Fav } from "../../assets/svg/fav.svg";
 import { ReactComponent as Avatar } from "../../assets/svg/avatar.svg";
-import { loadProductsFound } from "../../Redux/reducer/productsSlice";
+import { loadProductsFound, loadProductsOwn } from "../../Redux/reducer/productsSlice";
 
 const NavBar = () => {
     const { session, avatar } = useSelector((state) => state.sessionReducer);
@@ -15,17 +15,19 @@ const NavBar = () => {
     const dispatch = useDispatch();
 
 
-    const meliSearch = async (e) => { 
-        if (e.key === 'Enter') {
+    const querySearch = async (e) => { 
+        if (e.key === 'Enter' && e.target.value) {
             //: logear busqueda en el historial
             
-            const {data} = await axios(`/meli/search/${e.target.value}`);
-            
-            dispatch(loadProductsFound(data));
-            setTimeout(() => {
-                
-            navigate('/results')
-            }, 2000);
+            dispatch(loadProductsOwn([]));
+            dispatch(loadProductsFound([]));
+            navigate('/results');
+            const { data } = await axios(`/product/search/?q=${e.target.value}`);
+            console.log(data);
+            dispatch(loadProductsOwn(data.db));
+            dispatch(loadProductsFound(data.meli));
+            // setTimeout(() => {
+            // }, 2000);
         }
      }
 
@@ -33,12 +35,12 @@ const NavBar = () => {
         <div className="navBar">
             <div className="navbar-logo-section">
                 {/*<h1 onClick={()=>navigate("/")}>provider!</h1>*/}
-                <img onClick={()=>navigate("/")} src={require('../../assets/provider-logo.png')} alt="logo"  className="logo"/>
+                <img onClick={()=>navigate("/")} src={require('../../assets/provider-logo2.png')} alt="logo"  className="logo"/>
             </div>
                     
                 <div className="navbar-central-section">
                     <input type="text" placeholder="search" 
-                    onKeyUp={meliSearch}/>
+                    onKeyUp={querySearch}/>
                     
                     <div className="navbar-central-subsection">
 
@@ -57,7 +59,7 @@ const NavBar = () => {
                         <div className="navbar-profile-section">
                             {!session ? (
                             <NavLink to={"signin"}>
-                                <p>Log In</p>
+                                <p>Log In / Sign in</p>
                             </NavLink>
                             ) : (
                                 <>

@@ -19,13 +19,7 @@ const Details = () => {
     const dispatch = useDispatch();
     const [notification] = useNotification();
 
-    let endpoint = `/product/${id}`;    
-    /^MLA/.test(id) && (endpoint = `/meli/product/${id}`);
-    /^item/.test(id) && (endpoint = `/meli/item/${id.replace(/item/g, '')}`);
-
-    const { data, loading, error } = useAxios('GET', endpoint);
-
-
+    const { data, loading, error } = useAxios('GET', `/product/${id}`);
 
     useEffect(() => {
         if (!loading && session) {
@@ -56,34 +50,37 @@ const Details = () => {
                 <div className='details-head-container'>
                     <Galery imgs={data.images} />
                     <div className='details-price-section'>
-                        <Fav prodId={data._id} visible={true} fav={whishlist.includes(data._id)}/>
-                        <p>{data.brand?.toUpperCase()}</p>
-                        <h2>{data.name}</h2>
-                        <del>{data.on_sale && '$'+data.price}</del>
-                        <h2>{data.on_sale ? '$'+data.sale_price : '$'+data.price}</h2>
-                        { data.on_sale && <div className='details-sale-section'>
-                                <Sale className='onsale-svg'/>
-                                <p>{data.discount}% off</p>
-                            </div>}
-                        <p>{data.free_shipping && 'free shipping'}</p>
-                        <button onClick={() => addToCart(data._id)}>Add to cart</button>
-                        <br />
-                        <button disabled>Buy now</button>
+
+                        <div>
+                            <Fav prodId={data._id} visible={true} fav={whishlist.includes(data._id)}/>
+                            <p>{data.brand?.toUpperCase()}</p>
+                            <h2>{data.name}</h2>
+                            <del>{data.on_sale && '$'+data.price}</del>
+                            <h2>{data.on_sale ? '$'+data.sale_price : '$'+data.price}</h2>
+                            { data.on_sale && <div className='details-sale-section'>
+                                    <Sale className='onsale-svg'/>
+                                    <p>{data.discount}% off</p>
+                                </div>}
+                            <p>{data.free_shipping && 'free shipping'}</p>
+                            <button onClick={() => addToCart(data._id)}>Add to cart</button>
+                            <br />
+                            <button disabled>Buy now</button>
+                        </div>
+
+                        {data.main_features &&
+                        <div>
+                            <p><b>Main features</b></p>
+                            <div>
+                                {data.main_features.map(e=>
+                                    <p key={e}>{e}</p>
+                                )}
+                            </div>
+                        </div>}
+
                     </div>
                 </div>
                 
                 <div>
-                    {data.main_features &&
-                    <div>
-                        <br/>
-                        <p><b>Main features</b></p>
-                        <div>
-                            {data.main_features.map(e=>
-                                <p key={e}>{e}</p>
-                            )}
-                        </div>
-                    </div>}
-
                     <br />
                     <p><b>attributes</b></p>
                     <div>

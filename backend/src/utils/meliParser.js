@@ -15,7 +15,7 @@ const imagesParser = (pic) => {
 
 const meliSearchParser = (results) => {
     let aux = results.map(e => ({
-        _id: e.catalog_product_id || 'item' + e.id,
+        _id: e.catalog_product_id || 'I' + e.id,
         name: e.title,
         thumbnail: `https://http2.mlstatic.com/D_NQ_NP_${e.thumbnail_id}-V.jpg`,
         price: e.original_price ? e.original_price : e.price,
@@ -57,7 +57,7 @@ const meliItemParser = (p) => {
     p.catalog_product_id && console.log(p.catalog_product_id);
     //:ITEM
     let aux = {
-        _id: p.id,
+        _id: 'I' + p.id,
         name: p.title,
         images: imagesParser(p.pictures),
         attributes: p.attributes.map(a => ({

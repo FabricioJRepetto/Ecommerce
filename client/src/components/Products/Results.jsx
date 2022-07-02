@@ -5,8 +5,10 @@ import Card from './Card'
 import './Results.css'
 
 const Results = () => {
+  const productsOwn = useSelector((state) => state.productsReducer.productsOwn);
   const productsFound = useSelector((state) => state.productsReducer.productsFound);
   const whishlist = useSelector((state) => state.cartReducer.whishlist);
+    console.log(productsOwn);
     console.log(productsFound);
 
   return (
@@ -14,8 +16,29 @@ const Results = () => {
         <div className="results-filters">filtros</div>
         <div className='results-inner'>
             <h2>Results</h2>
+
             {(productsFound && productsFound.length > 0)
-            ? <div>{React.Children.toArray(
+            ? <div>
+                <div className='own-products-container'>
+                    {productsOwn.length > 0 && React.Children.toArray(
+                    productsOwn?.map(prod => (
+                        <Card
+                            img={prod.thumbnail}
+                            name={prod.name}
+                            price={prod.price}
+                            sale_price={prod.sale_price}
+                            discount={prod.discount}
+                            brand={prod.brand}
+                            prodId={prod._id}
+                            free_shipping={prod.free_shipping}
+                            fav={whishlist.includes(prod._id)}
+                            on_sale={prod.on_sale}
+                        />
+                    ))
+                )}
+                </div>
+                <br />
+                {React.Children.toArray(
                     productsFound?.map(prod => (
                         <Card
                             img={prod.thumbnail}
@@ -30,7 +53,8 @@ const Results = () => {
                             on_sale={prod.on_sale}
                         />
                     ))
-                )}</div>
+                )}
+            </div>
 
             : <h3>no results</h3>}
 
