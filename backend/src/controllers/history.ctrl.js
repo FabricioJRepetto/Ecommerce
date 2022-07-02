@@ -11,6 +11,7 @@ const getHistory = async (req, res, next) => {
         if (history === null) {
             await History.create({
                 products: [],
+                last_search: '',
                 user: req.user._id
             })
             return res.json({ message: 'Hostory created' })
@@ -91,17 +92,25 @@ const postVisited = async (req, res, next) => {
 };
 
 const postSearch = async (req, res, next) => {
+    console.log(req.params.search);
     try {
-        //: req.body.last_search
-        History.findOneAndUpdate({
+        const h = await History.findOne({
             'user': req.user._id
-        },
-            {
-                '$set': {
-                    'last_search': req.body.last_search
-                }
+        });
+
+        if (!h) {
+            const nh = await History.create({
+                products: [],
+                last_search: req.params.search,
+                user: req.user._id
             });
+            await nh.save();
+            return res.json({ message: 'Last search updated' });
+        }
+        h.last_search = req.params.search;
+        await h.save()
         return res.json({ message: 'Last search updated' });
+
     } catch (error) {
         next(error)
     }

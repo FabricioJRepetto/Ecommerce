@@ -42,8 +42,7 @@ const getByQuery = async (req, res, next) => {
         const resultsDB = await Product.find({
             name: { '$regex': req.query.q, '$options': "i" },
         });
-        console.log(resultsMeli);
-        console.log(resultsDB);
+
         return res.json({ db: resultsDB, meli: resultsMeli, filters });
         // const q = req.query.q;
         // if (!q) return res.status(400).json({ message: "No query to search" });

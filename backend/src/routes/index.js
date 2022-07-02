@@ -11,7 +11,6 @@ const historyRouter = require("./history.router");
 const checkoutRouter = require("./checkout.router");
 const mpRouter = require("./mercadopago.router");
 const salesRouter = require("./sales.router");
-const meliRouter = require("./meli.router");
 const { verifyToken } = require("../middlewares/verify");
 
 router.use("/user", userRouter);
@@ -24,7 +23,6 @@ router.use("/product", productsRouter);
 router.use("/sales", salesRouter);
 router.use("/checkout", verifyToken, checkoutRouter);
 router.use("/mercadopago", verifyToken, mpRouter);
-router.use("/meli", meliRouter);
 
 router.get("/test", test);
 

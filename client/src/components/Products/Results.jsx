@@ -1,6 +1,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import Card from './Card'
+import {ReactComponent as Spinner } from '../../assets/svg/spinner.svg'
 
 import './Results.css'
 
@@ -17,7 +18,7 @@ const Results = () => {
         <div className='results-inner'>
             <h2>Results</h2>
 
-            {(productsFound && productsFound.length > 0)
+            {(productsFound !== 'loading' && (productsFound.length > 0 || productsFound.length > 0))
             ? <div>
                 <div className='own-products-container'>
                     {productsOwn.length > 0 && React.Children.toArray(
@@ -56,7 +57,9 @@ const Results = () => {
                 )}
             </div>
 
-            : <h3>no results</h3>}
+            : <div>
+                {productsFound === 'loading' ? <Spinner className='cho-svg'/> : <h1>No results</h1>}
+            </div>}
 
         </div>
     </div>

@@ -20,6 +20,7 @@ const Details = () => {
     const [notification] = useNotification();
 
     const { data, loading, error } = useAxios('GET', `/product/${id}`);
+    !loading && console.log(data);
 
     useEffect(() => {
         if (!loading && session) {
@@ -35,9 +36,15 @@ const Details = () => {
     
 
     const addToCart = async (id) => {
-        const { statusText, data } = await axios.post(`/cart/${id}`);
-        statusText === 'OK' && !cart.includes(id) && dispatch(addCart(id));
-        notification(data.message, '/cart', `${statusText === 'OK' ? 'success' : 'warning'}`);
+        if (session) {
+            const { statusText, data } = await axios.post(`/cart/${id}`);
+            statusText === 'OK' && !cart.includes(id) && dispatch(addCart(id));
+            notification(data.message, '/cart', `${statusText === 'OK' ? 'success' : 'warning'}`);
+        } else {
+            // redirigir al login
+            // cuando loguea, redirigir a esta pagina otra vez
+            notification('Log in to proceed.', '/loginup', 'warning')
+        }
   };
 
   return (

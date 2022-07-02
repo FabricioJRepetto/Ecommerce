@@ -101,17 +101,18 @@ const Home = () => {
         <div className="random-container">
           {Array.from(Array(5).keys()).map((_, index) => (
             <MiniCard
-              key={`specials ${index}`}
-              loading={loading}
-              img={products[index]?.thumbnail}
-              name={products[index]?.name}
-              price={products[index]?.price}
-              sale_price={products[index]?.sale_price}
-              discount={products[index]?.discount}
-              prodId={products[index]?._id}
-              free_shipping={products[index]?.free_shipping}
-              on_sale={products[index]?.on_sale}
-              fav={whishlist.includes(products[index]?._id)}
+                key={`specials ${index}`}
+                img={products[index]?.thumbnail}
+                name={products[index]?.name}
+                price={products[index]?.price}
+                sale_price={products[index]?.sale_price}
+                discount={products[index]?.discount}
+                prodId={products[index]?._id}
+                free_shipping={products[index]?.free_shipping}
+                on_sale={products[index]?.on_sale}
+                fav={whishlist.includes(products[index]?._id)}
+                loading={loading}
+                special={true}
             />
           ))}
         </div>

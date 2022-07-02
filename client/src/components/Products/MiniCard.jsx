@@ -19,6 +19,7 @@ const MiniCard = ({
   fav,
   on_sale,
   loading,
+  special = (!/MLA/g.test(prodId)),
   fadeIn = true,
 }) => {
   const navigate = useNavigate();
@@ -37,7 +38,9 @@ const MiniCard = ({
   };
 
   return (
-    <div style={{ background: "white", height: "290px", width: "230px" }}>
+    <div className={`minicard-container`}>        
+        <div className={` ${special && 'special-frame-right'} ${visible && "mimic"}`}></div>
+            <div className={` ${special && 'special-frame-left'} ${visible && "mimic"}`}></div>
       {!loaded ? (
         <div className="loading-mini-card">
           <div className="minicard-img-section">
@@ -56,10 +59,10 @@ const MiniCard = ({
         <div
           onMouseEnter={() => setVisible(true)}
           onMouseLeave={() => setVisible(false)}
-          className={`product-mini-card ${visible && "minicard-height"} ${
-            ready && "fade-in"
-          }`}
+          className={`product-mini-card ${visible && "minicard-height"} ${ready && "fade-in"} ${special && "special-frame"}`}
         >
+            
+        
           {session && <Fav visible={visible} fav={fav} prodId={prodId} />}
 
           <div onClick={() => navigate(`/details/${prodId}`)}>

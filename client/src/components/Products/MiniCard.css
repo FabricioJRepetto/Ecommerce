@@ -1,3 +1,10 @@
+.minicard-container {
+    position: relative;
+    background: white;
+    height: 290px;
+    width: 230px;
+}
+
 .loading-mini-card {
     padding: 25px;
     position: relative;
@@ -85,3 +92,26 @@
     opacity: 0;
     transition: opacity .4s ease;
 }
+.special-frame-right {
+    right: 0;
+    border-left: 2px solid #00f2ff;
+    border-right: 3px solid #0000bc;
+    position: absolute;
+    height: 290px;
+    pointer-events: none;
+    z-index: 10;
+    transition: height .3s ease;
+}
+.special-frame-left {
+    left: 0;
+    border-right: 2px solid #ffea00;
+    border-left: 3px solid #ff0000;
+    position: absolute;
+    height: 290px;
+    pointer-events: none;
+    z-index: 10;
+    transition: height .3s ease;
+}
+.mimic {
+    height: 330px;
+} 

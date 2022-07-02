@@ -17,30 +17,37 @@ const NavBar = () => {
 
     const querySearch = async (e) => { 
         if (e.key === 'Enter' && e.target.value) {
-            //: logear busqueda en el historial
+            if (session) {
+                //: logear busqueda en el historial
+                axios.post(`/history/search/${e.target.value}`);
+            }
             
-            dispatch(loadProductsOwn([]));
-            dispatch(loadProductsFound([]));
+            dispatch(loadProductsOwn('loading'));
+            dispatch(loadProductsFound('loading'));
             navigate('/results');
             const { data } = await axios(`/product/search/?q=${e.target.value}`);
             console.log(data);
             dispatch(loadProductsOwn(data.db));
             dispatch(loadProductsFound(data.meli));
-            // setTimeout(() => {
-            // }, 2000);
         }
      }
+
+     const logoClick = () => {
+        dispatch(loadProductsOwn([]));
+        dispatch(loadProductsFound([]));
+        document.getElementById('navbar-searchbar').value = '';
+        navigate("/");
+      }
 
     return (
         <div className="navBar">
             <div className="navbar-logo-section">
-                {/*<h1 onClick={()=>navigate("/")}>provider!</h1>*/}
-                <img onClick={()=>navigate("/")} src={require('../../assets/provider-logo2.png')} alt="logo"  className="logo"/>
+                <img onClick={logoClick} src={require('../../assets/provider-logo2.png')} alt="logo"  className="logo"/>
             </div>
                     
                 <div className="navbar-central-section">
                     <input type="text" placeholder="search" 
-                    onKeyUp={querySearch}/>
+                    onKeyUp={querySearch} id='navbar-searchbar'/>
                     
                     <div className="navbar-central-subsection">
 

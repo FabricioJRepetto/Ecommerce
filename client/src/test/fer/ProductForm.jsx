@@ -404,7 +404,7 @@ const ProductForm = () => {
 
         <input
           type="submit"
-          value={productToEdit ? "Editar producto" : "Crear producto"}
+          value={productToEdit ? "Actualizar producto" : "Crear producto"}
         />
       </form>
       <button onClick={clearInputs}>RESETEAR</button>
