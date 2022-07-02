@@ -16,6 +16,8 @@
 }
 .galery-selector img {
     border-radius: 5px;
+    max-width: 50px;
+    max-height: 50px;
 }
 .selected {
     border: 2px solid #FFA500;
@@ -33,6 +35,8 @@
 .galery-img {
     position: absolute;
     visibility: hidden;
+    max-width: 500px;
+    max-height: 500px;
 }
 .visible {
     visibility: visible;

@@ -1,6 +1,6 @@
 const axios = require("axios");
 const Product = require('../models/product');
-const { meliParser } = require("../utils/meliParser");
+const { meliSearchParser, meliProductParser, meliItemParser } = require("../utils/meliParser");
 
 const getRequest = async (req, res, next) => {
     try {
@@ -16,7 +16,7 @@ const getRequest = async (req, res, next) => {
         //? .jpg o .webp?
         //: use_thumbnail_id  cuidado???
 
-        let parsedResults = meliParser(results);
+        let parsedResults = meliSearchParser(results);
 
         return res.json(parsedResults);
     } catch (error) {
@@ -26,12 +26,25 @@ const getRequest = async (req, res, next) => {
 
 const getProduct = async (req, res, next) => {
     try {
-        const meli = 'https://api.mercadolibre.com/products/'
-        const id = req.params.id;
+        const meli = `https://api.mercadolibre.com/products/${req.params.id}`
 
-        const { data } = await axios()
+        const { data } = await axios(meli);
+        const product = meliProductParser(data);
 
-        return res.json(search);
+        return res.json(product);
+    } catch (error) {
+        next(error)
+    }
+}
+
+const getItem = async (req, res, next) => {
+    try {
+        const meli = `https://api.mercadolibre.com/items/${req.params.id}`
+
+        const { data } = await axios(meli);
+        const product = meliItemParser(data);
+
+        return res.json(product);
     } catch (error) {
         next(error)
     }
@@ -39,7 +52,8 @@ const getProduct = async (req, res, next) => {
 
 module.exports = {
     getRequest,
-    getProduct
+    getProduct,
+    getItem
 };
 
 
