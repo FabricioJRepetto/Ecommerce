@@ -10,7 +10,7 @@ import {
   validationProductFormSchema,
 } from "../../helpers/validators";
 import { useNotification } from "../../hooks/useNotification";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const ProductForm = () => {
   const [featuresQuantity, setFeaturesQuantity] = useState(1);
@@ -136,12 +136,14 @@ const ProductForm = () => {
 
   useEffect(() => {
     if (idProductToEdit) {
-      axios(`/product/${idProductToEdit}`).then(({ data }) => {
-        console.log(data);
-        setProductToEdit(idProductToEdit);
-        dispatch(loadIdProductToEdit(null));
-        loadInputs(data);
-      });
+      axios(`/product/${idProductToEdit}`)
+        .then(({ data }) => {
+          console.log(data);
+          setProductToEdit(idProductToEdit);
+          dispatch(loadIdProductToEdit(null));
+          loadInputs(data);
+        })
+        .catch((err) => console.log(err)); //!VOLVER A VER manejo de errores
     } else {
       appendAttribute({ name: "", value_name: "" });
       appendFeature("");
@@ -217,8 +219,9 @@ const ProductForm = () => {
         //!VOLVER A VER agregar modal para preguntar crear otro prod
         navigate("/products");
       }
-      // clearInputs();
+      clearInputs();
     } catch (error) {
+      notification("Hubo un error, vuelve a intentar", "", "error");
       //!VOLVER A VER manejo de errores
       console.log(error);
     }

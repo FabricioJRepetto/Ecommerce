@@ -14,8 +14,7 @@ const Products = () => {
     max: "500",
   });
   const [shippingFilter, setShippingFilter] = useState(false);
-  const [brandsFilter, setBrandsFilter] = useState(); //! Uncaught TypeError: brandsFilter is undefined
-  // const [brandsFilter, setBrandsFilter] = useState({}); //! A component is changing an uncontrolled input to be controlled
+  const [brandsFilter, setBrandsFilter] = useState();
   const [loading, setLoading] = useState(true);
   const brands = useRef();
   const dispatch = useDispatch();
@@ -54,15 +53,11 @@ const Products = () => {
               brands.current.push(brandCamelCase);
             brandsCheckbox[brandCamelCase] = false;
           }
-          /* !brands.current.includes(product.brand) &&
-            product.brand &&
-            brands.current.push(product.brand);
-          brandsCheckbox[product.brand] = false; */
         }
         setBrandsFilter(brandsCheckbox);
         brands.current.sort();
       })
-      .catch((err) => console.log(err))
+      .catch((err) => console.log(err)); //! VOLVER A VER manejo de errores
   };
 
   const filterPrices = (e) => {
@@ -210,7 +205,7 @@ const Products = () => {
             checked={shippingFilter}
             onChange={filterShipping}
           />
-          free shipping
+          Envío gratis
         </label>
       </div>
     </div>
