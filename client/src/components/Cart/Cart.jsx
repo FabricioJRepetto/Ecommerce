@@ -119,8 +119,6 @@ const Cart = () => {
         // abre el modal de mp con la id de la preferencia
         loadMercadoPago(data.id, 
         setLoadingPayment());
-        
-        // : setLoadingPayment(false);
      };
 
     return (

@@ -1,5 +1,6 @@
 const Cart = require("../models/cart");
 const Product = require("../models/product");
+const { rawIdProductGetter } = require('../utils/rawIdProductGetter')
 
 const getUserCart = async (req, res, next) => {
     try {
@@ -25,8 +26,8 @@ const addToCart = async (req, res, next) => {
         const productToAdd = req.params.id;
         const cart = await Cart.findOne({ owner: userId });
 
-        const { name, price, sale_price, on_sale, free_shipping, discount, description, available_quantity: stock, thumbnail } = await Product.findById(productToAdd);
-        console.log(discount);
+        const { name, price, sale_price, on_sale, free_shipping, discount, description, available_quantity, thumbnail } = await rawIdProductGetter(productToAdd);
+        console.log(thumbnail);
         if (cart) {
             let flag = false;
             cart.products.forEach(e => {
@@ -50,7 +51,7 @@ const addToCart = async (req, res, next) => {
                     on_sale,
                     discount,
                     free_shipping,
-                    stock,
+                    stock: available_quantity,
                     quantity: 1
                 });
             };
@@ -103,7 +104,7 @@ const removeFromCart = async (req, res, next) => {
 const emptyCart = async (req, res, next) => {
     try {
         const userId = req.user._id;
-        const cart = await Cart.findOneAndUpdate(
+        await Cart.findOneAndUpdate(
             { owner: userId },
             { products: [] },
             { new: true }

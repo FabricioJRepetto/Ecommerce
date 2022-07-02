@@ -51,3 +51,12 @@
 .profile-history-container > div {
     margin: 0px 15px 60px 0px;
 }
+
+.profile-orders-container {
+    display: flex;
+    flex-direction: column-reverse;
+}
+.profile-img-orders-container img {
+    max-width: 96px;
+    max-height: 96px;;
+}

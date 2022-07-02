@@ -1,3 +1,5 @@
+const { default: axios } = require("axios");
+
 const disc = (original, price) => {
     return (100 - Math.round((price / original) * 100))
 }
@@ -11,6 +13,10 @@ const imagesParser = (pic) => {
         public_id: e.id
     }));
     return aux;
+}
+const thumbnailParser = async (id) => {
+    const { data } = await axios(`https://api.mercadolibre.com/items/${id}`)
+    return `https://http2.mlstatic.com/D_NQ_NP_${data.thumbnail_id}-V.jpg`
 }
 
 const meliSearchParser = (results) => {
@@ -29,13 +35,14 @@ const meliSearchParser = (results) => {
     return aux;
 };
 
-const meliProductParser = (p) => {
+const meliProductParser = async (p) => {
     //?PRODUCT
     if (p.status === 'inactive') throw new Error('PRODUCTO NO DISPONIBLE');
     let aux = {
         _id: p.id,
         name: p.name,
         images: imagesParser(p.pictures),
+        thumbnail: await thumbnailParser(p.buy_box_winner.item_id),
         attributes: p.attributes.map(a => ({
             name: a.name,
             value_name: a.value_name
@@ -60,6 +67,7 @@ const meliItemParser = (p) => {
         _id: 'I' + p.id,
         name: p.title,
         images: imagesParser(p.pictures),
+        thumbnail: `https://http2.mlstatic.com/D_NQ_NP_${p.thumbnail_id}-V.jpg`,
         attributes: p.attributes.map(a => ({
             name: a.name,
             value_name: a.value_name

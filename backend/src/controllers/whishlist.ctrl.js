@@ -1,10 +1,9 @@
 const Whishlist = require('../models/whishlist');
 const Product = require('../models/product');
+const { rawIdProductGetter } = require('../utils/rawIdProductGetter');
 
 const getUserList = async (req, res, next) => {
     try {
-        const meli = 'https://api.mercadolibre.com/products/'
-
         const whishlist = await Whishlist.findOne({ user: req.user._id });
 
         if (whishlist === null) {
@@ -17,27 +16,24 @@ const getUserList = async (req, res, next) => {
 
         let promises = [];
         whishlist.products.map(e => (
-            /^MLA/.test(e)
-                ? promises.push(axios(meli + e))
-                : promises.push(Product.findById(e))
+            promises.push(rawIdProductGetter(e))
         ));
         const rawProds = await Promise.all(promises);
-        let response = rawProds.filter(e => e !== null);
-
-        /*
-        : parsear los resultados de la api de meli
-            
-        */
+        let response = rawProds.filter(e => e); //! null undefined
 
         return res.json({ products: response, id_list: whishlist.products });
-
     } catch (error) {
         next(error);
     }
 };
 
 const addToList = async (req, res, next) => {
+    console.log(req.params.id);
     try {
+        if (!req.params.id) {
+            console.error('NO ID');
+            throw new Error('no id')
+        }
         const list = await Whishlist.findOne({ user: req.user._id });
 
         if (list) {

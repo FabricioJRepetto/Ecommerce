@@ -45,6 +45,13 @@
     height: 180px;
     width: 180px;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.minicard-img-section img {
+    max-height: 180px;
+    max-width: 180px;
 }
 
 .minicard-price-section {

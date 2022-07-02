@@ -11,7 +11,8 @@ const Product = require("../models/product");
 const cloudinary = require("cloudinary").v2;
 const fs = require("fs-extra");
 const axios = require("axios");
-const { meliItemParser, meliProductParser, meliSearchParser } = require("../utils/meliParser");
+const { meliSearchParser } = require("../utils/meliParser");
+const { rawIdProductGetter } = require('../utils/rawIdProductGetter')
 
 cloudinary.config({
     cloud_name: CLOUDINARY_CLOUD,
@@ -90,24 +91,8 @@ const getByQuery = async (req, res, next) => {
 const getById = async (req, res, next) => {
     const id = req.params.id;
     try {
-        if (/^MLA/.test(id)) {
-            const meli = `https://api.mercadolibre.com/products/${id}`;
-            const { data } = await axios(meli);
-            const product = meliProductParser(data);
-            return res.json(product);
-
-        } else if (/^IMLA/.test(id)) {
-            const meli = `https://api.mercadolibre.com/items/${id.slice(1)}`;
-            const { data } = await axios(meli);
-            const item = meliItemParser(data);
-            return res.json(item);
-
-        } else {
-            const product = await Product.findById(id);
-            product
-                ? res.json(product)
-                : res.status(400).json({ code: 400, message: "Wrong product ID" });
-        };
+        const product = await rawIdProductGetter(id);
+        return res.json(product)
         //const idParams = req.params.id;
         //const isMeliProduct = idParams.slice(0, 3);
         // try {

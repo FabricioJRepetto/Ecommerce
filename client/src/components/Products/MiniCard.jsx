@@ -39,8 +39,8 @@ const MiniCard = ({
 
   return (
     <div className={`minicard-container`}>        
-        <div className={` ${special && 'special-frame-right'} ${visible && "mimic"}`}></div>
-            <div className={` ${special && 'special-frame-left'} ${visible && "mimic"}`}></div>
+        <div className={` ${special && 'special-frame-right'} ${special && visible && "mimic"}`}></div>
+            <div className={` ${special && 'special-frame-left'} ${special && visible && "mimic"}`}></div>
       {!loaded ? (
         <div className="loading-mini-card">
           <div className="minicard-img-section">
@@ -81,7 +81,7 @@ const MiniCard = ({
                 {on_sale && (
                   <div className="minicard-sale-section">
                     <Sale className="onsale-svg" />
-                    <p>{discount} off</p>
+                    <p>{discount}% off</p>
                   </div>
                 )}
               </div>

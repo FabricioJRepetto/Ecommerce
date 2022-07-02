@@ -1,11 +1,10 @@
 const History = require('../models/History');
 const Product = require('../models/product');
 const axios = require('axios');
+const { rawIdProductGetter } = require('../utils/rawIdProductGetter');
 
 const getHistory = async (req, res, next) => {
     try {
-        const meli = 'https://api.mercadolibre.com/products/'
-
         const history = await History.findOne({ user: req.user._id });
 
         if (history === null) {
@@ -14,22 +13,16 @@ const getHistory = async (req, res, next) => {
                 last_search: '',
                 user: req.user._id
             })
-            return res.json({ message: 'Hostory created' })
+            return res.json({ message: 'History created' })
         }
 
         let promises = [];
         history.products.map(e => (
-            /^MLA/.test(e)
-                ? promises.push(axios(meli + e))
-                : promises.push(Product.findById(e))
+            promises.push(rawIdProductGetter(e))
         ));
         const rawProds = await Promise.all(promises);
         let response = rawProds.filter(e => e !== null);
 
-        /*
-        : parsear los resultados de la api de meli
-            
-        */
         return res.json({ products: response });
     } catch (error) {
         next(error)
