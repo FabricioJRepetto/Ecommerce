@@ -242,6 +242,8 @@ const ProductForm = () => {
     <div>
       <hr />
       <h2>Product {productToEdit ? "EDIT" : "CREATION"}</h2>
+      <a href="https://api.mercadolibre.com/sites/MLA/categories" target="_blank" rel="noreferrer" style={{ color: '#0051ff'}}><b>Lista de categorias</b></a>
+      <br />
       <form
         encType="multipart/form-data"
         onSubmit={handleSubmit(submitProduct)}
@@ -286,6 +288,14 @@ const ProductForm = () => {
               })}
             />
             <div>{errors.available_quantity?.message}</div>
+
+            <input
+              type="text"
+              placeholder="Category"
+              autoComplete="off"
+              {...register("category")}
+            />
+            <div>{errors.category?.message}</div>
 
             <label>
               <input

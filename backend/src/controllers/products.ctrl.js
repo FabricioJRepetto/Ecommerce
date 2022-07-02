@@ -146,6 +146,9 @@ const createProduct = async (req, res, next) => {
     } = JSON.parse(req.body.data);
     let images = [];
 
+    //!! borrar
+    let category = "";
+
     let aux = [];
     // creamos una promise por cada archivo.
     req.files.forEach((img) => {
@@ -186,9 +189,7 @@ const createProduct = async (req, res, next) => {
 };
 
 const updateProduct = async (req, res, next) => {
-  // console.log("--------------BODY.DATA", req.body.data);
   try {
-    //: imgsToEdit
     let {
       name,
       price,
@@ -201,7 +202,6 @@ const updateProduct = async (req, res, next) => {
       free_shipping,
       imgsToEdit,
     } = JSON.parse(req.body.data);
-    console.log("--------------DESCRIPTION", description);
     let images = [...imgsToEdit];
 
     //: envia files si no agregan imagenes?
@@ -229,7 +229,6 @@ const updateProduct = async (req, res, next) => {
     if (imgsToEdit.length > 0) {
       const data = await Product.findById(req.params.id);
       let deleteList = [];
-      console.log(data);
       data.images.map(
         (img) =>
           !imgsToEdit.includes(img.imgURL) && deleteList.push(img.public_id)

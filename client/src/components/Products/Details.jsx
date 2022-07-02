@@ -15,10 +15,12 @@ const Details = () => {
     const { id } = useParams();
     const { data, loading, error } = useAxios('GET', `/product/${id}`);
     const cart = useSelector((state) => state.cartReducer.onCart);
+    const whishlist = useSelector((state) => state.cartReducer.whishlist);
     const session = useSelector((state) => state.sessionReducer.session);
     const dispatch = useDispatch();
     const [notification] = useNotification();
     
+    !loading && console.log(data);
 
     useEffect(() => {
         if (!loading && session) {
@@ -33,7 +35,7 @@ const Details = () => {
                 product_id: data._id,
                 discount: data.discount,
                 free_shipping: data.free_shipping,
-                category: data.category || null,
+                category: data.category || '',
             };
             axios.post(`/history/visited`, payload);
         }
@@ -57,14 +59,14 @@ const Details = () => {
                 <div className='details-head-container'>
                     <Galery imgs={data.images} />
                     <div className='details-price-section'>
-                        <Fav prodId={data._id} fav={true}/>
+                        <Fav prodId={data._id} visible={true} fav={whishlist.includes(data._id)}/>
                         <p>{data.brand.toUpperCase()}</p>
                         <h2>{data.name}</h2>
                         <del>{data.on_sale && '$'+data.price}</del>
                         <h2>{data.on_sale ? '$'+data.sale_price : '$'+data.price}</h2>
                         { data.on_sale && <div className='details-sale-section'>
                                 <Sale className='onsale-svg'/>
-                                <p>{data.discount} off</p>
+                                <p>{data._discount} off</p>
                             </div>}
                         <p>{data.free_shipping && 'free shipping'}</p>
                         <button onClick={() => addToCart(data._id)}>Add to cart</button>
