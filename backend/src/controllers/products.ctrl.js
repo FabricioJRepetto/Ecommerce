@@ -204,7 +204,6 @@ const updateProduct = async (req, res, next) => {
     } = JSON.parse(req.body.data);
     let images = [...imgsToEdit];
 
-    //: envia files si no agregan imagenes?
     if (req.files) {
       let aux = [];
       // creamos una promise por cada archivo.

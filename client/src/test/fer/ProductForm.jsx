@@ -1,16 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { loadIdProductToEdit } from "../../Redux/reducer/productsSlice";
-import axios from "axios";
 import { useForm, useFieldArray } from "react-hook-form";
+import axios from "axios";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { loadIdProductToEdit } from "../../Redux/reducer/productsSlice";
 import "./ProductForm.css";
 import {
   validateImgs,
   validationProductFormSchema,
 } from "../../helpers/validators";
 import { useNotification } from "../../hooks/useNotification";
-import { useNavigate } from "react-router-dom";
 
 const ProductForm = () => {
   const [featuresQuantity, setFeaturesQuantity] = useState(1);
@@ -195,6 +195,7 @@ const ProductForm = () => {
     // formData.append("images", fileListArrayImg);
 
     try {
+      //! VOLVER A VER poner disabled el boton de submit al hacer la petición
       if (productToEdit) {
         let data = { ...productData, imgsToEdit };
         formData.append("data", JSON.stringify(data));

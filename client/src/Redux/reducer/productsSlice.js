@@ -101,8 +101,9 @@ export const productsSlice = createSlice({
           );
           firstIteration = false;
         }
+        if (state.productsFiltered.length === 0)
+          state.productsFiltered = [null];
       }
-      //   if (!state.productsFiltered) state.productsFiltered = [null];
     },
 
     orderProducts: (state, action) => {

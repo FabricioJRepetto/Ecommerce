@@ -112,22 +112,26 @@ const Products = () => {
   return (
     <div className="products-container">
       <div className="products-results-container">
-        <div className="products-results-inner">
-          {React.Children.toArray(
-            productsToShow?.map((prod) => (
-              <Card
-                img={prod.images[0].imgURL}
-                name={prod.name}
-                price={prod.price}
-                brand={prod.brand}
-                prodId={prod._id}
-                free_shipping={prod.free_shipping}
-                fav={whishlist.includes(prod._id)}
-                on_sale={prod.on_sale}
-              />
-            ))
-          )}
-        </div>
+        {productsToShow[0] === null ? (
+          <h1>NO HUBIERON COINCIDENCIAS</h1>
+        ) : (
+          <div className="products-results-inner">
+            {React.Children.toArray(
+              productsToShow?.map((prod) => (
+                <Card
+                  img={prod.images[0].imgURL}
+                  name={prod.name}
+                  price={prod.price}
+                  brand={prod.brand}
+                  prodId={prod._id}
+                  free_shipping={prod.free_shipping}
+                  fav={whishlist.includes(prod._id)}
+                  on_sale={prod.on_sale}
+                />
+              ))
+            )}
+          </div>
+        )}
       </div>
 
       <div className="products-filters">
