@@ -1,6 +1,5 @@
 const { Router } = require("express");
 const router = Router();
-const { test } = require("../controllers/test");
 const productsRouter = require("./products.router");
 const userRouter = require("./user.router");
 const cartRouter = require("./cart.router");
@@ -23,7 +22,5 @@ router.use("/product", productsRouter);
 router.use("/sales", salesRouter);
 router.use("/checkout", verifyToken, checkoutRouter);
 router.use("/mercadopago", verifyToken, mpRouter);
-
-router.get("/test", test);
 
 module.exports = router;

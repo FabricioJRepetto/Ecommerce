@@ -18,18 +18,19 @@ const Home = () => {
   const [countdown, setCountdown] = useState("");
   const [loading, setLoading] = useState(true);
   const whishlist = useSelector((state) => state.cartReducer.whishlist);
+  const [suggestion, setSuggestion] = useState(false)
 
   const images = [
+    {
+      img: "https://http2.mlstatic.com/D_NQ_917752-MLA50446386694_062022-OO.webp",
+      url: "/products",
+    },
     {
       img: "https://http2.mlstatic.com/D_NQ_794413-MLA50423210111_062022-OO.webp",
       url: "/products",
     },
     {
       img: "https://http2.mlstatic.com/D_NQ_977617-MLA50409269868_062022-OO.webp",
-      url: "/products",
-    },
-    {
-      img: "https://http2.mlstatic.com/D_NQ_745108-MLA50330042982_062022-OO.webp",
       url: "/products",
     },
     {
@@ -57,9 +58,15 @@ const Home = () => {
     }, 100);
 
     (async () => {
+        //: USAR PROMISE ALL
       const { data } = await axios(`/sales/`);
       setProducts(data);
+
       setLoading(false);
+      const { data: suggestion } = await axios(`/history/suggestion`);
+      console.log(suggestion);
+      setSuggestion(suggestion);
+
     })();
 
     return () => clearInterval(countdownInterv);
@@ -112,11 +119,31 @@ const Home = () => {
                 on_sale={products[index]?.on_sale}
                 fav={whishlist.includes(products[index]?._id)}
                 loading={loading}
-                special={true}
             />
           ))}
         </div>
       </div>
+      <br />
+       {suggestion.length > 4 &&<div>
+        <h2>Quizás te interese...</h2>
+        <div className="random-container">
+          {Array.from(Array(5).keys()).map((_, index) => (
+            <MiniCard
+                key={`recom ${index}`}
+                prodId={suggestion[index]?._id}
+                name={suggestion[index]?.name}
+                img={suggestion[index]?.thumbnail}
+                price={suggestion[index]?.price}
+                sale_price={suggestion[index]?.sale_price}
+                discount={suggestion[index]?.discount}
+                free_shipping={suggestion[index]?.free_shipping}
+                on_sale={suggestion[index]?.on_sale}
+                fav={whishlist.includes(suggestion[index]?._id)}
+                loading={loading}
+            />
+          ))}
+        </div>
+      </div>}
       <br />
       <Footer />
     </div>
@@ -124,14 +151,3 @@ const Home = () => {
 };
 
 export default Home;
-
-/*
-<MiniCard 
-    img={products[0]?.images[0]?.imgURL || false} 
-    name={products[0]?.name || false} 
-    price={products[0]?.price || false} 
-    prodId={products[0]?._id || false} 
-    free_shipping={products[0]?.free_shipping || false}
-    on_sale={products[0]?.on_sale || false} 
-    fav={whishlist.includes(products[0]?._id) || false}/>
- */
