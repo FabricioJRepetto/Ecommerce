@@ -58,15 +58,14 @@ const Home = () => {
     }, 100);
 
     (async () => {
-        //: USAR PROMISE ALL
-      const { data } = await axios(`/sales/`);
-      setProducts(data);
+        const data = await Promise.all([
+            axios(`/sales/`), 
+            axios(`/history/suggestion`)
+        ]);
+        setProducts(data[0].data);
+        setSuggestion(data[1].data);
 
-      setLoading(false);
-      const { data: suggestion } = await axios(`/history/suggestion`);
-      console.log(suggestion);
-      setSuggestion(suggestion);
-
+        setLoading(false);
     })();
 
     return () => clearInterval(countdownInterv);
