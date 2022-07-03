@@ -11,12 +11,14 @@ import { loadIdProductToEdit } from "../../Redux/reducer/productsSlice";
 const Card = ({
   img,
   name,
-  price,
   brand,
+  price,
+  on_sale,
+  sale_price,
+  discount,
   prodId,
   free_shipping,
   fav,
-  on_sale,
 }) => {
   const navigate = useNavigate();
   const [visible, setVisible] = useState(false);
@@ -40,16 +42,15 @@ const Card = ({
       <div className="card-main-container">
         <div
           onClick={() => navigate(`/details/${prodId}`)}
-          className="card-img-container pointer"
-        >
-          <img src={resizer(img, 180)} alt="product" />
+          className="card-img-container pointer">
+            <img src={resizer(img, 180)} alt="product" />
         </div>
 
         <div className="card-details-container">
           <div>{brand && brand.toUpperCase()}</div>
 
           <h2
-            className="pointer c-mrgn"
+            className="card-name pointer c-mrgn"
             onClick={() => navigate(`/details/${prodId}`)}
           >
             {name}
@@ -59,12 +60,12 @@ const Card = ({
             <div className="card-original-price">
               {on_sale && <del>${price}</del>}
             </div>
-            <div className="card-price-section">
-              <h2>${price}</h2>
+            <div className="card-price-section">                
+              {on_sale ? <h2>${sale_price}</h2> : <h2>${price}</h2>}
               {on_sale && (
                 <div className="minicard-sale-section">
                   <Sale className="onsale-svg" />
-                  <p>30% off</p>
+                  <p>{`${discount}% off`}</p>
                 </div>
               )}
             </div>

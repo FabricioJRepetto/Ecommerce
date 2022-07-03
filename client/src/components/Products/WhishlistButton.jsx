@@ -9,21 +9,25 @@ import './WhishlistButton.css'
 export const WhishlistButton = ({prodId: id, size = 30, fav, visible}) => {
     const dispatch = useDispatch();
     const whishlist = useSelector((state) => state.cartReducer.whishlist);
+    const session = useSelector((state) => state.sessionReducer.session);
     const [notification] = useNotification();
 
     const addToWhish = async (id) => {
-        console.log(id);
-        if (!whishlist.includes(id)) {
-            const { data } = await axios.post(`/whishlist/${id}`);
-            console.log(data);
-            dispatch(loadWhishlist(data.list?.products));
-            notification(data.message, '/profile/whishlist', 'success');
-            
+        if (session) {
+            if (!whishlist.includes(id)) {
+                const { data } = await axios.post(`/whishlist/${id}`);
+                console.log(data);
+                dispatch(loadWhishlist(data.list?.products));
+                notification(data.message, '/profile/whishlist', 'success');
+                
+            } else {
+                const { data } = await axios.delete(`/whishlist/${id}`);
+                console.log(data);
+                dispatch(loadWhishlist(data.list?.products));
+                notification(data.message, '', 'warning');
+            }
         } else {
-            const { data } = await axios.delete(`/whishlist/${id}`);
-            console.log(data);
-            dispatch(loadWhishlist(data.list?.products));
-            notification(data.message, '', 'warning');
+            notification('Log in to add products to your whishlist.', '/signin', 'warning')
         }
    };
 

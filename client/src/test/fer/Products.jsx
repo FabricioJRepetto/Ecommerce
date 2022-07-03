@@ -119,9 +119,11 @@ const Products = () => {
             {React.Children.toArray(
               productsToShow?.map((prod) => (
                 <Card
-                  img={prod.images[0].imgURL}
+                  img={prod.thumbnail}
                   name={prod.name}
                   price={prod.price}
+                  sale_price={prod.sale_price}
+                  discount={prod.discount}
                   brand={prod.brand}
                   prodId={prod._id}
                   free_shipping={prod.free_shipping}

@@ -41,6 +41,9 @@ export const productsSlice = createSlice({
     idProductToEdit: null,
   },
   reducers: {
+    loadProductsOwn: (state, action) => {
+      state.productsOwn = action.payload;
+    },
     loadProductsFound: (state, action) => {
       state.productsFound = action.payload;
     },
@@ -108,9 +111,9 @@ export const productsSlice = createSlice({
 
     orderProducts: (state, action) => {
       /* action.payload = {
-          source: "productsOwn" || "productsFound" || "productsRandom",
-          order: "asc" || "desc"
-       } */
+                source: "productsOwn" || "productsFound" || "productsRandom",
+                order: "asc" || "desc"
+             } */
       let productsToOrder;
       state.productsFiltered.length === 0
         ? (productsToOrder = state[action.payload.source])
@@ -136,6 +139,7 @@ export const productsSlice = createSlice({
 });
 
 export const {
+  loadProductsOwn,
   loadProductsFound,
   filterProducts,
   orderProducts,

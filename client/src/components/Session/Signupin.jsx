@@ -8,7 +8,7 @@ import {
   loadAvatar,
 } from "../../Redux/reducer/sessionSlice";
 import jwt_decode from "jwt-decode";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { loadCart, loadWhishlist } from "../../Redux/reducer/cartSlice";
 import "./Signupin.css";
@@ -32,6 +32,8 @@ const Signupin = () => {
   } = useForm();
   let timeoutId = useRef();
   const [notification] = useNotification();
+  const location = useLocation();
+  const hasPreviousState = location.key !== "default";
 
   const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i;
 
@@ -62,6 +64,7 @@ const Signupin = () => {
 
         notification(`Bienvenido, ${data.username}`, "", "success");
         navigate("/");
+        //navigate(-1) // ?!
       }
     } catch (error) {
       console.log(error);
@@ -96,10 +99,18 @@ const Signupin = () => {
     window.localStorage.setItem("loggedEmailEcommerce", email);
 
     navigate("/");
+    console.log(userDecoded);
+    //navigate(-1)  // ?!
   };
 
   useEffect(() => {
-    if (session) navigate("/");
+    if (session) {
+      if (hasPreviousState) {
+        navigate(-1);
+      } else {
+        navigate("/");
+      }
+    }
 
     /* global google */
     google.accounts.id.initialize({
@@ -245,6 +256,7 @@ const Signupin = () => {
       <hr />
       <div className="google-signin-container" id="signInDiv"></div>
       <hr />
+      <button onClick={() => navigate(-1)}> go back</button>
     </>
   );
 };

@@ -126,6 +126,7 @@ const ProductForm = () => {
     setValue("name", data.name);
     setValue("price", data.price);
     setValue("brand", data.brand);
+    setValue("category", data.category);
     setValue("available_quantity", data.available_quantity);
     setValue("description", data.description);
     setValue("free_shipping", data.free_shipping);
@@ -421,7 +422,7 @@ const ProductForm = () => {
 
         <input
           type="submit"
-          value={productToEdit ? "Editar producto" : "Crear producto"}
+          value={productToEdit ? "Actualizar producto" : "Crear producto"}
         />
       </form>
       <button onClick={clearInputs}>RESETEAR</button>

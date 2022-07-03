@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { close } from '../../Redux/reducer/notificationSlice';
 import './Notification.css';
 
