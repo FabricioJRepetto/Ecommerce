@@ -1,22 +1,24 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { loadIdProductToEdit } from "../../Redux/reducer/productsSlice";
-import axios from "axios";
 import { useForm, useFieldArray } from "react-hook-form";
+import axios from "axios";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { loadIdProductToEdit } from "../../Redux/reducer/productsSlice";
 import "./ProductForm.css";
 import {
   validateImgs,
   validationProductFormSchema,
 } from "../../helpers/validators";
-import {useNotification} from '../../hooks/useNotification'
+import { useNotification } from "../../hooks/useNotification";
 
 const ProductForm = () => {
-    
-  const [productImg, setProductImg] = useState([]);
-  const [productImgUrls, setProductImgUrls] = useState([]);
   const [featuresQuantity, setFeaturesQuantity] = useState(1);
   const [attributesQuantity, setAttributesQuantity] = useState(1);
+  const [productImg, setProductImg] = useState([]);
+  const [productImgUrls, setProductImgUrls] = useState([]);
+  const [imgsToEdit, setImgsToEdit] = useState([]);
+  const [productToEdit, setProductToEdit] = useState(null);
   const { idProductToEdit } = useSelector((state) => state.productsReducer);
   const dispatch = useDispatch();
   const [warn, setWarn] = useState({
@@ -25,10 +27,8 @@ const ProductForm = () => {
     image: "",
   });
   let timeoutId = useRef();
-  const [productToEdit, setProductToEdit] = useState(null);
-  const [imgsToEdit, setImgsToEdit] = useState([]);
+  const navigate = useNavigate();
   const [notification] = useNotification();
-
 
   const warnTimer = (key, message) => {
     clearTimeout(timeoutId.current);
@@ -130,6 +130,7 @@ const ProductForm = () => {
     setValue("available_quantity", data.available_quantity);
     setValue("description", data.description);
     setValue("free_shipping", data.free_shipping);
+    setValue("category", "asd");
     replaceFeature([...data.main_features]);
     replaceAttribute([...data.attributes]);
     setImgsToEdit(data.images);
@@ -137,12 +138,14 @@ const ProductForm = () => {
 
   useEffect(() => {
     if (idProductToEdit) {
-      axios(`/product/${idProductToEdit}`).then(({ data }) => {
-        console.log(data);
-        setProductToEdit(idProductToEdit);
-        dispatch(loadIdProductToEdit(null));
-        loadInputs(data);
-      });
+      axios(`/product/${idProductToEdit}`)
+        .then(({ data }) => {
+          console.log(data);
+          setProductToEdit(idProductToEdit);
+          dispatch(loadIdProductToEdit(null));
+          loadInputs(data);
+        })
+        .catch((err) => console.log(err)); //!VOLVER A VER manejo de errores
     } else {
       appendAttribute({ name: "", value_name: "" });
       appendFeature("");
@@ -192,29 +195,37 @@ const ProductForm = () => {
     });
     // formData.append("images", fileListArrayImg);
 
-    let imgURL;
-    if (productToEdit) {
-      let data = { ...productData, imgsToEdit };
-      formData.append("data", JSON.stringify(data));
-      //  formData.append("imgsToEdit", imgsToEdit);
+    try {
+      //! VOLVER A VER poner disabled el boton de submit al hacer la petición
+      if (productToEdit) {
+        let data = { ...productData, imgsToEdit };
+        formData.append("data", JSON.stringify(data));
+        //  formData.append("imgsToEdit", imgsToEdit);
 
-      imgURL = await axios.put(`/product/${productToEdit}`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-    } else {
-      formData.append("data", JSON.stringify(productData));
-      imgURL = await axios.post(`/product/`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+        await axios.put(`/product/${productToEdit}`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        notification("Producto editado exitosamente", "", "success");
+        navigate("/products");
+      } else {
+        formData.append("data", JSON.stringify(productData));
+        await axios.post(`/product/`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        notification("Producto creado exitosamente", "", "success");
+        //!VOLVER A VER agregar modal para preguntar crear otro prod
+        navigate("/products");
+      }
+      clearInputs();
+    } catch (error) {
+      notification("Hubo un error, vuelve a intentar", "", "error");
+      //!VOLVER A VER manejo de errores
+      console.log(error);
     }
-    let pid = imgURL.data.id 
-    console.log(imgURL);
-     imgURL.statusText === 'OK' && notification('Producto creado', '/details/'+pid, 'success');
-    // clearInputs();
   };
 
   const clearInputs = () => {
@@ -232,7 +243,14 @@ const ProductForm = () => {
     <div>
       <hr />
       <h2>Product {productToEdit ? "EDIT" : "CREATION"}</h2>
-      <a href="https://api.mercadolibre.com/sites/MLA/categories" target="_blank" rel="noreferrer" style={{ color: '#0051ff'}}><b>Lista de categorias</b></a>
+      <a
+        href="https://api.mercadolibre.com/sites/MLA/categories"
+        target="_blank"
+        rel="noreferrer"
+        style={{ color: "#0051ff" }}
+      >
+        <b>Lista de categorias</b>
+      </a>
       <br />
       <form
         encType="multipart/form-data"
