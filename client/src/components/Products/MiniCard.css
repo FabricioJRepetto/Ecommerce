@@ -54,7 +54,10 @@
     max-width: 180px;
 }
 
-.minicard-price-section {
+.minicard-price-section{
+    display: flex;
+}
+.minicard-price-section-inner {
     display: flex;
 }
 .minicard-original-price {

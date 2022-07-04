@@ -32,7 +32,7 @@ const getAll = async (req, res, next) => {
 
 const getByQuery = async (req, res, next) => {
     try {
-        const L = 24;
+        const L = '50';
         const meli = `https://api.mercadolibre.com/sites/MLA/search?&official_store=all&limit=${L}&q=${req.query.q}`;
 
         const { data } = await axios(meli);

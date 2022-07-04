@@ -64,6 +64,7 @@ const Home = () => {
         ]);
         setProducts(data[0].data);
         setSuggestion(data[1].data);
+        console.log(data[1].data);
 
         setLoading(false);
     })();

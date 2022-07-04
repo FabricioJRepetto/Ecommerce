@@ -68,13 +68,13 @@ const getSuggestion = async (req, res, next) => {
                 if (response.length < 5) {
                     response = [...response, ...fillers.filter(e =>
                         !e.on_sale && !e.free_shipping
-                    )];
+                    )].slice(0, 5);
                 }
             } else {
                 //? ...agregamos el resto de resultados
                 response = [...response, ...fillers.filter(e =>
                     !e.free_shipping
-                )];
+                )].slice(0, 5);
             }
         };
 
