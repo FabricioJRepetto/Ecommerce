@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useForm } from "react-hook-form";
+import { useNotification } from "../../hooks/useNotification";
 
 /* const initialPassword = {
   password: "asdasd@asdasd.com",
@@ -12,6 +13,7 @@ const ResetPassword = () => {
   const navigate = useNavigate();
   const { resetToken, userId } = useParams();
   //const [passwordData, setPasswordData] = useState(initialPassword);
+  const [notification] = useNotification();
   const {
     register,
     handleSubmit,
@@ -31,10 +33,16 @@ const ResetPassword = () => {
         }
       )
       .catch((err) => {
-        //! VOLVER A VER agregar mensaje y timeout antes de redirigir
+        //! VOLVER A VER manejo de errores
         console.log(err);
+        notification(
+          "Link de restablecimiento de password enviado a su email",
+          "",
+          "success"
+        );
         navigate("/signin");
       });
+    // eslint-disable-next-line
   }, []);
 
   /*   const handleChange = ({ target }) => {
@@ -57,8 +65,9 @@ const ResetPassword = () => {
         }
       )
       .then(({ data }) => {
-        //! VOLVER A VER agregar mensaje y timeout antes de redirigir
+        //! VOLVER A VER manejo de errores
         console.log(data);
+        notification("Password modificado", "", "success");
         navigate("/signin");
       })
       .catch((err) => {

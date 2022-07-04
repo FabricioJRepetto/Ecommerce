@@ -10,12 +10,11 @@ import Card from "../../components/Products/Card";
 
 const Products = () => {
   const [pricesFilter, setPricesFilter] = useState({
-    min: "300",
-    max: "500",
+    min: "",
+    max: "",
   });
   const [shippingFilter, setShippingFilter] = useState(false);
-  const [brandsFilter, setBrandsFilter] = useState({}); //! Uncaught TypeError: brandsFilter is undefined
-  // const [brandsFilter, setBrandsFilter] = useState({}); //! A component is changing an uncontrolled input to be controlled
+  const [brandsFilter, setBrandsFilter] = useState();
   const [loading, setLoading] = useState(true);
   const brands = useRef();
   const dispatch = useDispatch();
@@ -54,15 +53,11 @@ const Products = () => {
               brands.current.push(brandCamelCase);
             brandsCheckbox[brandCamelCase] = false;
           }
-          /* !brands.current.includes(product.brand) &&
-            product.brand &&
-            brands.current.push(product.brand);
-          brandsCheckbox[product.brand] = false; */
         }
         setBrandsFilter(brandsCheckbox);
         brands.current.sort();
       })
-      .catch((err) => console.log(err))
+      .catch((err) => console.log(err)); //! VOLVER A VER manejo de errores
   };
 
   const filterPrices = (e) => {
@@ -117,24 +112,28 @@ const Products = () => {
   return (
     <div className="products-container">
       <div className="products-results-container">
-        <div className="products-results-inner">
-          {React.Children.toArray(
-            productsToShow?.map((prod) => (
-              <Card
-                img={prod.thumbnail}
-                name={prod.name}
-                price={prod.price}
-                sale_price={prod.sale_price}
-                discount={prod.discount}
-                brand={prod.brand}
-                prodId={prod._id}
-                free_shipping={prod.free_shipping}
-                fav={whishlist.includes(prod._id)}
-                on_sale={prod.on_sale}
-              />
-            ))
-          )}
-        </div>
+        {productsToShow[0] === null ? (
+          <h1>NO HUBIERON COINCIDENCIAS</h1>
+        ) : (
+          <div className="products-results-inner">
+            {React.Children.toArray(
+              productsToShow?.map((prod) => (
+                <Card
+                  img={prod.thumbnail}
+                  name={prod.name}
+                  price={prod.price}
+                  sale_price={prod.sale_price}
+                  discount={prod.discount}
+                  brand={prod.brand}
+                  prodId={prod._id}
+                  free_shipping={prod.free_shipping}
+                  fav={whishlist.includes(prod._id)}
+                  on_sale={prod.on_sale}
+                />
+              ))
+            )}
+          </div>
+        )}
       </div>
 
       <div className="products-filters">
@@ -212,7 +211,7 @@ const Products = () => {
             checked={shippingFilter}
             onChange={filterShipping}
           />
-          free shipping
+          Envío gratis
         </label>
       </div>
     </div>

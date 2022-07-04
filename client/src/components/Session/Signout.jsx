@@ -16,8 +16,6 @@ const Signout = () => {
   const navigate = useNavigate();
 
   const signOut = () => {
-    console.log("SIGNOUT.JSX");
-
     window.localStorage.removeItem("loggedTokenEcommerce");
     window.localStorage.removeItem("loggedAvatarEcommerce");
     window.localStorage.removeItem("loggedEmailEcommerce");
