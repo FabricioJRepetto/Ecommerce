@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import axios from "axios";
 import { resizer } from "../../helpers/resizer";
 import { priceFormat } from "../../helpers/priceFormat";
 import { loadIdProductToEdit } from "../../Redux/reducer/productsSlice";
@@ -22,14 +23,28 @@ const Card = ({
   fav,
 }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [visible, setVisible] = useState(false);
   const session = useSelector((state) => state.sessionReducer.session);
   const dispatch = useDispatch();
 
   const editProduct = (prodId) => {
+    console.log(location.pathname);
     dispatch(loadIdProductToEdit(prodId));
     navigate("/productForm");
   };
+
+  const deleteProduct = (prodId) => {
+    console.log(location.pathname === "/admin/products");
+    axios
+      .delete(`/product/${prodId}`)
+      .then((res) => console.log("eliminado")) //! VOLVER A VER agregar notif
+      .catch((err) => console.log(err)); //! VOLVER A VER manejo de errores
+    //! VOLVER A VER preguntar para eliminar
+    //navigate("/productForm");
+  };
+
+  const saleProduct = (prodId) => {};
 
   return (
     <div
@@ -43,8 +58,9 @@ const Card = ({
       <div className="card-main-container">
         <div
           onClick={() => navigate(`/details/${prodId}`)}
-          className="card-img-container pointer">
-            <img src={resizer(img, 180)} alt="product" />
+          className="card-img-container pointer"
+        >
+          <img src={resizer(img, 180)} alt="product" />
         </div>
 
         <div className="card-details-container">
@@ -59,14 +75,13 @@ const Card = ({
 
           <div className="card-price-container c-mrgn">
             <div className="card-original-price">
-              {on_sale && <del>{'$'+priceFormat(price).int}</del>}
+              {on_sale && <del>{"$" + priceFormat(price).int}</del>}
             </div>
             <div className="card-price-section">
-
               <div className="minicard-price-section-inner">
-                  <h2>{'$'+priceFormat(on_sale ? sale_price : price).int}</h2>
-                  <p>{priceFormat(on_sale ? sale_price : price)?.cents}</p>
-                </div>
+                <h2>{"$" + priceFormat(on_sale ? sale_price : price).int}</h2>
+                <p>{priceFormat(on_sale ? sale_price : price)?.cents}</p>
+              </div>
 
               {on_sale && (
                 <div className="minicard-sale-section">
@@ -80,9 +95,19 @@ const Card = ({
           <div className="free-shipping c-mrgn">
             {free_shipping && "envío gratis"}
           </div>
-          <button type="button" onClick={() => editProduct(prodId)}>
-            EDITAR
-          </button>
+          {location.pathname === "/admin/products" && (
+            <>
+              <button type="button" onClick={() => editProduct(prodId)}>
+                EDITAR
+              </button>
+              <button type="button" onClick={() => deleteProduct(prodId)}>
+                ELIMINAR
+              </button>
+              <button type="button" onClick={() => saleProduct(prodId)}>
+                DESCUENTO
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>
