@@ -49,7 +49,7 @@ const meliProductParser = async (p) => {
         })),
         main_features: p.main_features?.map(e => e.text),
         brand: p.attributes.find(e => e.id === 'BRAND')?.value_name || '',
-        category: p.buy_box_winner?.category_id,
+        category: p.buy_box_winner.category_id,
         description: p.short_description?.content,
         price: p.buy_box_winner.original_price ? p.buy_box_winner.original_price : p.buy_box_winner.price,
         sale_price: p.buy_box_winner.original_price ? p.buy_box_winner.price : 0,

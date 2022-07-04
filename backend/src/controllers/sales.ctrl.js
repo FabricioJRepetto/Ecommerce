@@ -22,7 +22,7 @@ const getSales = async (req, res, next) => {
             price: e.price,
             on_sale: e.on_sale,
             sale_price: e.sale_price,
-            discount: e._discount,
+            discount: e.discount,
             free_shipping: e.free_shipping,
             thumbnail: e.thumbnail
         }));
