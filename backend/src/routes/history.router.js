@@ -2,15 +2,13 @@ const { Router } = require("express");
 const router = Router();
 const {
     getHistory,
-    getVisited,
-    getLastSearch,
+    getSuggestion,
     postVisited,
     postSearch,
 } = require("../controllers/history.ctrl.js");
 
 router.get("/", getHistory);
-router.get("/last_visited", getVisited);
-router.get("/last_search", getLastSearch);
+router.get("/suggestion", getSuggestion);
 router.post("/search/:search", postSearch);
 router.post("/visited", postVisited);
 

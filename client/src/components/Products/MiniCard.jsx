@@ -7,6 +7,7 @@ import { ReactComponent as Sale } from "../../assets/svg/sale.svg";
 import { WhishlistButton as Fav } from "./WhishlistButton";
 import LoadingPlaceHolder from "../common/LoadingPlaceHolder";
 import { useEffect } from "react";
+import { priceFormat } from "../../helpers/priceFormat";
 
 const MiniCard = ({
   img,
@@ -72,16 +73,17 @@ const MiniCard = ({
 
             <div className="minicard-details-section">
               <div className={`minicard-original-price ${visible && visible}`}>
-                {visible && on_sale && <del>${price}</del>}
+                {visible && on_sale && <del>{'$'+priceFormat(price).int}</del>}
               </div>
               <div className="minicard-price-section">
-                <div>
-                  <h2>{on_sale ? "$" + sale_price : "$" + price}</h2>
+                <div className="minicard-price-section-inner">
+                  <h2>${priceFormat(on_sale ? sale_price : price).int}</h2>
+                  <p>{priceFormat(on_sale ? sale_price : price)?.cents}</p>
                 </div>
                 {on_sale && (
                   <div className="minicard-sale-section">
                     <Sale className="onsale-svg" />
-                    <p>{discount}% off</p>
+                    <b>-{discount}%</b>
                   </div>
                 )}
               </div>

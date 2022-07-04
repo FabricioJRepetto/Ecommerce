@@ -32,11 +32,11 @@ const getAll = async (req, res, next) => {
 
 const getByQuery = async (req, res, next) => {
     try {
-        const L = 24;
+        const L = '50';
         const meli = `https://api.mercadolibre.com/sites/MLA/search?&official_store=all&limit=${L}&q=${req.query.q}`;
 
         const { data } = await axios(meli);
-        const filters = data.available_filters;
+        const filters = data.available_filters; // ??
 
         const resultsMeli = meliSearchParser(data.results);
 
@@ -45,44 +45,6 @@ const getByQuery = async (req, res, next) => {
         });
 
         return res.json({ db: resultsDB, meli: resultsMeli, filters });
-        // const q = req.query.q;
-        // if (!q) return res.status(400).json({ message: "No query to search" });
-
-        // try {
-        //     const resultsDB = await Product.find({
-        //         name: { $regex: q, $options: "i" },
-        //     });
-        //     const { data } = await axios.get(
-        //         `${MELI_SEARCH_URL}${q}${MELI_SEARCH_URL_ADDONS}`
-        //     );
-        //     let resultsMeli = [];
-
-        //     for (const product of data.results) {
-        //         let newProduct = { name: "" };
-        //         newProduct.name = product.title;
-        //         newProduct.price = product.price;
-        //         if (product.original_price)
-        //             //!VOLVER A VER ojo con esto, capaz tira error
-        //             newProduct.original_price = product.original_price;
-        //         newProduct.free_shipping = product.shipping.free_shipping;
-        //         newProduct.images = [];
-        //         newProduct.images.push({
-        //             imgURL: product.thumbnail,
-        //             public_id: product.thumbnail_id,
-        //         });
-        //         for (const attribute of product.attributes) {
-        //             if (attribute.id === "BRAND") {
-        //                 newProduct.brand = attribute.value_name;
-        //                 break;
-        //             }
-        //         }
-        //         newProduct.catalog_product_id = product.catalog_product_id;
-
-        //         resultsMeli.push(newProduct);
-        //     }
-        //     let results = [...resultsDB, ...resultsMeli];
-
-        //return res.json(results);
     } catch (error) {
         next(error);
     }
@@ -93,59 +55,6 @@ const getById = async (req, res, next) => {
     try {
         const product = await rawIdProductGetter(id);
         return res.json(product)
-        //const idParams = req.params.id;
-        //const isMeliProduct = idParams.slice(0, 3);
-        // try {
-        //     if (isMeliProduct === "MLA") {
-        //         const { data: product } = await axios.get(
-        //             `${MELI_PRODUCT_ID}${idParams}`
-        //         );
-        //         if (!product)
-        //             return res.status(400).json({ message: "Wrong product ID" });
-
-        //         let newProduct = {};
-        //         newProduct.id = product.id;
-        //         newProduct.name = product.name;
-        //         newProduct.price = product.buy_box_winner.price;
-        //         if (product.buy_box_winner.original_price) {
-        //             //!VOLVER A VER ojo con esto, capaz tira error
-        //             newProduct.original_price = product.buy_box_winner.original_price;
-        //         }
-        //         newProduct.available_quantity = product.buy_box_winner.available_quantity;
-        //         newProduct.free_shipping = product.buy_box_winner.shipping.free_shipping;
-        //         newProduct.main_features = [];
-        //         for (const feature of product.main_features) {
-        //             newProduct.main_features.push(feature.text);
-        //         }
-        //         newProduct.attributes = [];
-        //         for (const attribute of product.attributes) {
-        //             if (attribute.id === "BRAND") {
-        //                 newProduct.brand = attribute.value_name;
-        //                 continue;
-        //             }
-        //             let newObject = {};
-        //             let newAttribute = {};
-        //             // newAttribute.id = attribute.id;
-        //             newAttribute.name = attribute.name;
-        //             newAttribute.value_name = attribute.value_name;
-        //             Object.assign(newAttribute, newObject);
-        //             newProduct.attributes.push(newAttribute);
-        //         }
-        //         newProduct.images = [];
-        //         for (const image of product.pictures) {
-        //             let newImage = {};
-        //             newImage.imgURL = image.url;
-        //             newImage.public_id = image.id;
-        //             newProduct.images.push(newImage);
-        //         }
-        //         newProduct.description = product.short_description;
-        //         return res.json(newProduct);
-        //     } else {
-        //         const product = await Product.findById(idParams);
-        //         product
-        //             ? res.json(product)
-        //             : res.status(400).json({ code: 400, message: "Wrong product ID" });
-        //     }
     } catch (error) {
         next(error);
     }

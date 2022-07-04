@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { resizer } from "../../helpers/resizer";
+import { priceFormat } from "../../helpers/priceFormat";
+import { loadIdProductToEdit } from "../../Redux/reducer/productsSlice";
 import "./Card.css";
 
 import { ReactComponent as Sale } from "../../assets/svg/sale.svg";
 import { WhishlistButton as Fav } from "./WhishlistButton";
-import { loadIdProductToEdit } from "../../Redux/reducer/productsSlice";
 
 const Card = ({
   img,
@@ -58,10 +59,15 @@ const Card = ({
 
           <div className="card-price-container c-mrgn">
             <div className="card-original-price">
-              {on_sale && <del>${price}</del>}
+              {on_sale && <del>{'$'+priceFormat(price).int}</del>}
             </div>
-            <div className="card-price-section">                
-              {on_sale ? <h2>${sale_price}</h2> : <h2>${price}</h2>}
+            <div className="card-price-section">
+
+              <div className="minicard-price-section-inner">
+                  <h2>{'$'+priceFormat(on_sale ? sale_price : price).int}</h2>
+                  <p>{priceFormat(on_sale ? sale_price : price)?.cents}</p>
+                </div>
+
               {on_sale && (
                 <div className="minicard-sale-section">
                   <Sale className="onsale-svg" />

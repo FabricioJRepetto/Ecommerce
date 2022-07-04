@@ -41,11 +41,9 @@ const Profile = () => {
                 data.address ? setAddress(data.address) : setAddress([]);
 
                 const { data: list } = await axios(`/whishlist/`);
-                console.log(list);
                 list.products ? setWhishlist(list.products) : setWhishlist([]);
                 
                 const { data: history } = await axios(`/history/`);
-                console.log(history);
                 history.products ? setHistory(history.products) : setHistory([]);
 
                 setLoading(false);

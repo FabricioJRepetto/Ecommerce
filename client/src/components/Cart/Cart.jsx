@@ -8,6 +8,7 @@ import { useModal } from "../../hooks/useModal";
 import { useNotification } from "../../hooks/useNotification";
 import { cartTotal, loadCart } from "../../Redux/reducer/cartSlice";
 import { loadMercadoPago } from "../../helpers/loadMP";
+import { priceFormat } from "../../helpers/priceFormat";
 import './Cart.css'
 
 import { ReactComponent as Arrow } from '../../assets/svg/arrow-right.svg'
@@ -167,19 +168,22 @@ const Cart = () => {
                                     </div>}
 
                                     <div className="cart-total">
-                                    {cart.free_ship_cart && <del className="grey">${cart.products.length * SHIP_COST}</del>}
+                                    {cart.free_ship_cart && <del className="grey">${priceFormat(cart.products.length * SHIP_COST).int}</del>}
                                     {cart.shipping_cost === 0
                                     ? <div className="cart-ship-total green">
                                         <Ship className='ship-svg' />
                                         <h3>Envío gratis!</h3>
                                     </div>
-                                    : <h3>${cart.shipping_cost}</h3> }
+                                    : <div>
+                                        <h3>${priceFormat(cart.shipping_cost).int}</h3><p>{priceFormat(cart.shipping_cost).cents}</p>
+                                        </div> }
                                 </div>
                             </div>
 
                         <div className="total-section-inner">
                             <h2>Total:</h2>
-                            <h2 className="cart-total">${total}</h2>
+                            <h2 className="cart-total">${priceFormat(total).int}</h2>
+                            <p>{priceFormat(total).cents}</p>
                         </div>
                     </div>
                     
