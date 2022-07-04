@@ -18,7 +18,6 @@ const mpCho = async (req, res, next) => {
     //? order
     let items = [];
     const order = await Order.findById(id);
-    console.log(order.id);
 
     /* 
     : por si no sirven las notificaciones de meli usar esto ?
