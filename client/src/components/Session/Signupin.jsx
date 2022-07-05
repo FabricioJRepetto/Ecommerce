@@ -253,7 +253,6 @@ const Signupin = () => {
       <hr />
       <div className="google-signin-container" id="signInDiv"></div>
       <hr />
-      <button onClick={() => navigate(-1)}> go back</button>
     </>
   );
 };

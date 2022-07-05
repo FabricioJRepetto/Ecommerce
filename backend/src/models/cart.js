@@ -7,17 +7,6 @@ const cartSchema = new Schema(
             {
                 quantity: Number,
                 product_id: String,
-
-                product_name: String,
-                description: String,
-                img: String,
-                price: Number,
-                sale_price: Number,
-                brand: String,
-                stock: Number,
-                discount: String,
-                free_shipping: Boolean,
-                on_sale: Boolean
             }
         ],
         buyNow: String,
@@ -33,33 +22,33 @@ const cartSchema = new Schema(
     }
 );
 
-// tiene que ser 'function', no funciona con una '() =>'
-cartSchema.virtual('id_list').get(function () {
-    return this.products?.map(p => p.product_id);
-});
+// // tiene que ser 'function', no funciona con una '() =>'
+// cartSchema.virtual('id_list').get(function () {
+//     return this.products?.map(p => p.product_id);
+// });
 
-cartSchema.virtual('total').get(function () {
-    let total = 0;
-    this.products.forEach(p => {
-        total += ((p.on_sale ? p.sale_price : p.price) * p.quantity) + (p.free_shipping ? 0 : SHIP_COST);
-    });
-    return total;
-});
+// cartSchema.virtual('total').get(function () {
+//     let total = 0;
+//     this.products.forEach(p => {
+//         total += ((p.on_sale ? p.sale_price : p.price) * p.quantity) + (p.free_shipping ? 0 : SHIP_COST);
+//     });
+//     return total;
+// });
 
-cartSchema.virtual('shipping_cost').get(function () {
-    let total = 0;
-    this.products.map(e => (
-        e.free_shipping || (total += SHIP_COST)
-    ));
-    return total;
-});
+// cartSchema.virtual('shipping_cost').get(function () {
+//     let total = 0;
+//     this.products.map(e => (
+//         e.free_shipping || (total += SHIP_COST)
+//     ));
+//     return total;
+// });
 
-cartSchema.virtual('free_ship_cart').get(function () {
-    let aux = false;
-    this.products.forEach(p => {
-        p.free_shipping && (aux = true);
-    });
-    return aux;
-});
+// cartSchema.virtual('free_ship_cart').get(function () {
+//     let aux = false;
+//     this.products.forEach(p => {
+//         p.free_shipping && (aux = true);
+//     });
+//     return aux;
+// });
 
 module.exports = model("Cart", cartSchema);

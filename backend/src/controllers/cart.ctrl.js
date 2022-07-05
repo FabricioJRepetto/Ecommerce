@@ -5,8 +5,6 @@ const { rawIdProductGetter } = require('../utils/rawIdProductGetter')
 
 const getUserCart = async (req, res, next) => {
     try {
-        if (!req.user._id) return res.status(400).json({ message: 'User ID not given.' });
-
         const cart = await Cart.findOne({ owner: req.user._id });
 
         if (!cart) {
@@ -15,7 +13,7 @@ const getUserCart = async (req, res, next) => {
                 buyNow: '',
                 owner: req.user._id
             })
-            return res.json(newCart)
+            return res.json({ ...newCart, id_list: [] })
         }
         let promises = [];
         for (const id of cart.products) {
@@ -30,13 +28,29 @@ const getUserCart = async (req, res, next) => {
         let shipping_cost = 0;
         let message = false;
 
+        const quantityGetter = (id) => {
+            let { quantity } = cart.products.find(e => e.product_id === id)
+            return quantity
+        }
+
         data.forEach(p => {
             if (p.status === 'fulfilled') {
-                products.push({ ...p.value._doc, sale_price: p.value.sale_price, stock: p.value.available_quantity, thumbnail: p.value.thumbnail, quantity: cart.products.find(e => e.product_id === p.value.id).quantity });
+                products.push({
+                    _id: p.value._id.toString(),
+                    name: p.value.name,
+                    free_shipping: p.value.free_shipping,
+                    discuount: p.value.discuount,
+                    brand: p.value.brand,
+                    price: p.value.price,
+                    sale_price: p.value.sale_price,
+                    on_sale: p.on_sale,
+                    stock: p.value.available_quantity,
+                    thumbnail: p.value.thumbnail,
+                    quantity: quantityGetter(p.value._id.toString())
+                });
+                id_list.push(p.value._id.toString());
 
-                id_list.push(p.value.id);
-
-                total += (p.value.on_sale ? p.value.sale_price : p.value.price) * cart.products.find(e => e.product_id).quantity;
+                total += (p.value.on_sale ? p.value.sale_price : p.value.price) * quantityGetter(p.value._id.toString());
 
                 p.value.free_shipping ? (free_ship_cart = true) : shipping_cost += SHIP_COST;
             }
@@ -45,7 +59,7 @@ const getUserCart = async (req, res, next) => {
         if (cart.products.length !== id_list.length) {
             cart.products = cart.products.filter(e => id_list.includes(e.product_id));
             await cart.save();
-            message = 'Some products are not available and were removed from your cart';
+            message = 'Some products are not available. Cart updated.';
         }
 
         return res.json({
@@ -83,11 +97,12 @@ const addToCart = async (req, res, next) => {
         const productToAdd = req.params.id;
         const cart = await Cart.findOne({ owner: userId });
 
-        const { name, price, sale_price, on_sale, free_shipping, discount, description, available_quantity, thumbnail } = await rawIdProductGetter(productToAdd);
         if (cart) {
             let flag = false;
             cart.products.forEach(e => {
-                e.product_id === productToAdd && (flag = true)
+                if (e.product_id === productToAdd) {
+                    flag = true
+                }
             });
 
             if (flag) { // si el prod ya existe
@@ -99,15 +114,6 @@ const addToCart = async (req, res, next) => {
             } else { // si todavia no existe
                 cart.products.push({
                     product_id: productToAdd,
-                    product_name: name,
-                    description,
-                    img: thumbnail,
-                    price,
-                    sale_price,
-                    on_sale,
-                    discount,
-                    free_shipping,
-                    stock: available_quantity,
                     quantity: 1
                 });
             };
@@ -117,15 +123,6 @@ const addToCart = async (req, res, next) => {
             const newCart = new Cart({
                 products: [{
                     product_id: productToAdd,
-                    product_name: name,
-                    description,
-                    img: thumbnail,
-                    price,
-                    sale_price,
-                    on_sale,
-                    discount,
-                    free_shipping,
-                    stock,
                     quantity: 1
                 }],
                 buyNow: '',
