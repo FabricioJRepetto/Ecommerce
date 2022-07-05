@@ -53,6 +53,7 @@ const PostSale = () => {
     
                 //? restar unidades de cada stock
                 //: crear un virtual para ids de order ?
+                
                 let list = order.products.map(e => ({id: e.product_id, amount: e.quantity}));
                 const { data: stockUpdt } = await axios.put(`/product/stock/`, list);
                 console.log(stockUpdt);

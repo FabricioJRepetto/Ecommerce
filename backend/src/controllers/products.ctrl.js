@@ -225,20 +225,22 @@ const deleteAll = async (req, res, next) => {
 };
 
 const stock = async (req, res, next) => {
-    let list = req.body;
-
     try {
+        let list = req.body;
+
         for (const prod of list) {
             let { id, amount } = prod;
 
-            await Product.findOneAndUpdate(
-                { _id: id },
-                {
-                    $inc: {
-                        available_quantity: -amount,
-                    },
-                }
-            );
+            if (!/MLA/g.test(id)) {
+                await Product.findOneAndUpdate(
+                    { _id: id },
+                    {
+                        '$inc': {
+                            'available_quantity': -amount,
+                        },
+                    }
+                );
+            }
         }
         return res.json("stock updated");
     } catch (error) {
