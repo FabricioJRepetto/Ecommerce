@@ -1,3 +1,4 @@
+const { SHIP_COST } = require("../../constants");
 const Cart = require("../models/cart");
 const Product = require("../models/product");
 const { rawIdProductGetter } = require('../utils/rawIdProductGetter')
@@ -7,6 +8,7 @@ const getUserCart = async (req, res, next) => {
         if (!req.user._id) return res.status(400).json({ message: 'User ID not given.' });
 
         const cart = await Cart.findOne({ owner: req.user._id });
+
         if (!cart) {
             const newCart = await Cart.create({
                 products: [],
@@ -15,7 +17,45 @@ const getUserCart = async (req, res, next) => {
             })
             return res.json(newCart)
         }
-        return res.json(cart);
+        let promises = [];
+        for (const id of cart.products) {
+            promises.push(rawIdProductGetter(id.product_id))
+        }
+        const data = await Promise.allSettled(promises);
+
+        let products = [];
+        let id_list = [];
+        let total = 0;
+        let free_ship_cart = false;
+        let shipping_cost = 0;
+        let message = false;
+
+        data.forEach(p => {
+            if (p.status === 'fulfilled') {
+                products.push({ ...p.value._doc, sale_price: p.value.sale_price, stock: p.value.available_quantity, thumbnail: p.value.thumbnail, quantity: cart.products.find(e => e.product_id === p.value.id).quantity });
+
+                id_list.push(p.value.id);
+
+                total += (p.value.on_sale ? p.value.sale_price : p.value.price) * cart.products.find(e => e.product_id).quantity;
+
+                p.value.free_shipping ? (free_ship_cart = true) : shipping_cost += SHIP_COST;
+            }
+        })
+
+        if (cart.products.length !== id_list.length) {
+            cart.products = cart.products.filter(e => id_list.includes(e.product_id));
+            await cart.save();
+            message = 'Some products are not available and were removed from your cart';
+        }
+
+        return res.json({
+            message,
+            products,
+            id_list,
+            total,
+            free_ship_cart,
+            shipping_cost,
+        });
     } catch (error) {
         next(error);
     }
@@ -44,7 +84,6 @@ const addToCart = async (req, res, next) => {
         const cart = await Cart.findOne({ owner: userId });
 
         const { name, price, sale_price, on_sale, free_shipping, discount, description, available_quantity, thumbnail } = await rawIdProductGetter(productToAdd);
-        console.log(thumbnail);
         if (cart) {
             let flag = false;
             cart.products.forEach(e => {

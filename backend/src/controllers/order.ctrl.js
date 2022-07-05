@@ -90,7 +90,6 @@ const buyNowOrder = async (req, res, next) => {
             street_number
         } = req.body;
 
-        //: buscar producto
         const p = await rawIdProductGetter(product_id)
         const total = quantity * (p.on_sale ? p.sale_price : p.price);
 
@@ -140,13 +139,52 @@ const deleteOrder = async (req, res, next) => {
 };
 
 const updateOrder = async (req, res, next) => {
-    //: añadir mas opciones de status ?
-    console.log(req.headers);
     try {
+        let p = false;
+        let cart = false;
+
+        const {
+            product_id,
+            quantity,
+            state,
+            city,
+            zip_code,
+            street_name,
+            street_number
+        } = req.body;
+
+        if (product_id) {
+            p = await rawIdProductGetter(product_id)
+        } else {
+            cart = await Cart.findOne({ owner: req.user._id })
+        }
+        const pro = p ? {
+            product_name: p.name,
+            product_id: p._id,
+            description: p.description,
+            img: p.thumbnail,
+            price: p.price,
+            sale_price: p.sale_price,
+            quantity,
+            on_sale: p.on_sale,
+        } : false
+        const total = p ? quantity * (p.on_sale ? p.sale_price : p.price) : 0;
+
         const order = await Order.findByIdAndUpdate(req.params.id,
             {
                 "$set": {
-                    status: req.body.status
+                    'status': req.body.status || 'pending',
+                    'shipping_address': {
+                        'state': state && state,
+                        'city': city && city,
+                        'zip_code': zip_code && zip_code,
+                        'street_name': street_name && street_name,
+                        'street_number': street_number && street_number
+                    },
+                    'products': p ? [pro] : [...cart.products],
+                    'total': p ? total : cart.total,
+                    'free_shipping': p ? p.free_shipping : cart.free_ship_cart,
+                    'shipping_cost': p ? p.free_shipping ? 0 : SHIP_COST : cart.shipping_cost,
                 }
             },
             { new: true });

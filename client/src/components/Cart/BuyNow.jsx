@@ -120,18 +120,29 @@ const BuyNow = () => {
 
     const goCheckout = async () => {
        //: WIP
+        setLoadingPayment('S');
     };
     const openMP = async () => { 
         setLoadingPayment('MP');
-        // crea la order       
-        const { data: orderid } = await axios.post(`/order/buyNow`, {
-            ...selectedAdd,
-            quantity,
-            product_id: id,
+        let fastId = false;
+        // actualiza o crea la order
+        if (orderId) {
+            await axios.put(`/order/${orderId}`, {
+                ...selectedAdd,
+                quantity,
+                product_id: id,
             });
-        setOrderId(orderid);
+        } else {
+            const { data: firstOrder } = await axios.post(`/order/buyNow`, {
+                ...selectedAdd,
+                quantity,
+                product_id: id,
+            });
+            fastId = firstOrder;
+            setOrderId(firstOrder);
+        }
         // crea la preferencia para mp con la order
-        const { data }  = await axios.get(`/mercadopago/${orderid}`);
+        const { data }  = await axios.get(`/mercadopago/${orderId || fastId}`);
         // abre el modal de mp con la id de la preferencia
         loadMercadoPago(data.id, 
         setLoadingPayment);

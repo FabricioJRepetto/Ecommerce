@@ -43,9 +43,10 @@ const Cart = () => {
     const getCart = async () => {
         const { data } = await axios('/cart/');
         if (data) {
+            console.log(data);
             setCart(data);
+            data.message && notification(data.message, '', 'warning')
         };
-        //console.log(data);
         dispatch(cartTotal(data.total));
         dispatch(loadCart(data.id_list));
         setLoading(false);
@@ -104,19 +105,23 @@ const Cart = () => {
     };
 
     const goCheckout = async () => {
-        // crea la order       
-        const { data: id } = await axios.post(`/order/`, selectedAdd);
-        // con la id inicia el checkout
-        navigate(`/checkout/${id}`);
+        //: WIP
+        setLoadingPayment('S');
     };
-
     const openMP = async () => { 
         setLoadingPayment('MP');
-        // crea la order       
-        const { data: id } = await axios.post(`/order/`, selectedAdd);
-        setOrderId(id);
+        let fastId = false;
+        console.log(orderId);
+        // actualiza o crea la order
+        if (orderId) {
+            await axios.put(`/order/${orderId}`, selectedAdd);
+        } else {
+            const { data: id } = await axios.post(`/order/`, selectedAdd);
+            fastId = id;
+            setOrderId(id);
+        }
         // crea la preferencia para mp con la order
-        const { data }  = await axios.get(`/mercadopago/${id}`);
+        const { data }  = await axios.get(`/mercadopago/${orderId || fastId}`);
         // abre el modal de mp con la id de la preferencia
         loadMercadoPago(data.id, 
         setLoadingPayment());
@@ -132,12 +137,12 @@ const Cart = () => {
                     
                     {cart.products.map((p) => (
                         <CartCard
-                            key={p.product_id}
+                            key={p._id}
                             on_cart={true}
                             on_sale={p.on_sale}
-                            img={p.img}
-                            name={p.product_name}
-                            prodId={p.product_id}
+                            img={p.thumbnail}
+                            name={p.name}
+                            prodId={p._id}
                             price={p.price}
                             sale_price={p.sale_price}
                             free_shipping={p.free_shipping}

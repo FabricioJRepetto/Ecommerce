@@ -5,8 +5,10 @@ const cartSchema = new Schema(
     {
         products: [
             {
-                product_name: String,
+                quantity: Number,
                 product_id: String,
+
+                product_name: String,
                 description: String,
                 img: String,
                 price: Number,
@@ -14,7 +16,6 @@ const cartSchema = new Schema(
                 brand: String,
                 stock: Number,
                 discount: String,
-                quantity: Number,
                 free_shipping: Boolean,
                 on_sale: Boolean
             }
