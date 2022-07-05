@@ -263,6 +263,8 @@ const Profile = () => {
                             img={e.thumbnail}
                             name={e.name}
                             price={e.price}
+                            sale_price={e.sale_price}
+                            discount={e.discount}
                             brand={e.brand}
                             prodId={e._id}
                             free_shipping={e.free_shipping}
