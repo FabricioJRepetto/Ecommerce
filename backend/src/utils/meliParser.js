@@ -29,7 +29,8 @@ const meliSearchParser = (results) => {
         discount: e.original_price ? disc(e.original_price, e.price) : 0,
         sale_price: e.original_price ? discPrice(e.original_price, e.price) : 0,
         free_shipping: e.shipping.free_shipping,
-        brand: e.attributes.find(e => e.id === 'BRAND')?.value_name || ''
+        brand: e.attributes.find(e => e.id === 'BRAND')?.value_name || '',
+        available_quantity: e.available_quantity,
     }))
 
     return aux;
@@ -56,6 +57,7 @@ const meliProductParser = async (p) => {
         on_sale: p.buy_box_winner.original_price ? true : false,
         discount: p.buy_box_winner.original_price ? disc(p.buy_box_winner.original_price, p.buy_box_winner.price) : 0,
         free_shipping: p.buy_box_winner.shipping.free_shipping,
+        available_quantity: p.buy_box_winner.available_quantity,
     }
     return aux;
 }
@@ -80,6 +82,7 @@ const meliItemParser = (p) => {
         on_sale: p.original_price ? true : false,
         discount: p.original_price ? disc(p.original_price, p.price) : 0,
         free_shipping: p.shipping.free_shipping,
+        available_quantity: p.available_quantity,
     }
     return aux;
 }
