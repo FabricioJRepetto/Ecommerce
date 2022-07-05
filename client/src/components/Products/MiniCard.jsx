@@ -20,13 +20,13 @@ const MiniCard = ({
   fav,
   on_sale,
   loading,
-  special = (!/MLA/g.test(prodId)),
+  special = !/MLA/g.test(prodId),
   fadeIn = true,
 }) => {
   const navigate = useNavigate();
   const [visible, setVisible] = useState(false);
   const [ready, setReady] = useState(!fadeIn);
-  const session = useSelector((state) => state.sessionReducer.session);
+  const { session } = useSelector((state) => state.sessionReducer);
 
   const [loaded, setLoaded] = useState(false);
   useEffect(() => {
@@ -39,9 +39,17 @@ const MiniCard = ({
   };
 
   return (
-    <div className={`minicard-container`}>        
-        <div className={` ${special && 'special-frame-right'} ${special && visible && "mimic"}`}></div>
-            <div className={` ${special && 'special-frame-left'} ${special && visible && "mimic"}`}></div>
+    <div className={`minicard-container`}>
+      <div
+        className={` ${special && "special-frame-right"} ${
+          special && visible && "mimic"
+        }`}
+      ></div>
+      <div
+        className={` ${special && "special-frame-left"} ${
+          special && visible && "mimic"
+        }`}
+      ></div>
       {!loaded ? (
         <div className="loading-mini-card">
           <div className="minicard-img-section">
@@ -60,10 +68,10 @@ const MiniCard = ({
         <div
           onMouseEnter={() => setVisible(true)}
           onMouseLeave={() => setVisible(false)}
-          className={`product-mini-card ${visible && "minicard-height"} ${ready && "fade-in"} ${special && "special-frame"}`}
+          className={`product-mini-card ${visible && "minicard-height"} ${
+            ready && "fade-in"
+          } ${special && "special-frame"}`}
         >
-            
-        
           {session && <Fav visible={visible} fav={fav} prodId={prodId} />}
 
           <div onClick={() => navigate(`/details/${prodId}`)}>
@@ -73,7 +81,9 @@ const MiniCard = ({
 
             <div className="minicard-details-section">
               <div className={`minicard-original-price ${visible && visible}`}>
-                {visible && on_sale && <del>{'$'+priceFormat(price).int}</del>}
+                {visible && on_sale && (
+                  <del>{"$" + priceFormat(price).int}</del>
+                )}
               </div>
               <div className="minicard-price-section">
                 <div className="minicard-price-section-inner">

@@ -39,17 +39,17 @@ const signin = async (req, res, next) => {
 
       req.login(user, { session: false }, async (err) => {
         if (err) return next(err);
-        const body = { _id: user._id, email: user.email };
+        const body = { _id: user._id, email: user.email, role: user.role }; //!VOLVER A VER si se rompe algo de auth quitar role
 
         const token = jwt.sign({ user: body }, JWT_SECRET_CODE, {
           expiresIn: 864000,
         });
 
         return res.json({
-          message: info.message,
+          //   message: info.message,
           avatar: avatar,
           token,
-          user: { _id: user._id, email: user.email },
+          user: body,
         });
       });
     } catch (e) {
@@ -60,11 +60,9 @@ const signin = async (req, res, next) => {
 
 const profile = async (req, res, next) => {
   try {
-    console.log(req.user);
-    if (req.params.token.slice(0, 6) === "google")
-      return res.json({ name: req.user.email });
-    const { email, name, avatar } = await User.findById(req.user._id);
-    return res.json({ email, name, avatar });
+    if (req.params.token.slice(0, 6) === "google") return res.json(req.user);
+    const { email, name, avatar, role } = await User.findById(req.user._id);
+    return res.json({ email, name, avatar, role });
   } catch (error) {
     next(error);
   }
@@ -188,6 +186,10 @@ const editProfile = async (req, res, next) => {
   }
 };
 
+const verifyAdminRoute = (req, res, next) => {
+  return res.send("ok");
+};
+
 module.exports = {
   signin,
   signup,
@@ -198,4 +200,5 @@ module.exports = {
   resetPassword,
   changePassword,
   editProfile,
+  verifyAdminRoute,
 };

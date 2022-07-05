@@ -15,7 +15,7 @@ const Details = () => {
     let { id } = useParams();
     const cart = useSelector((state) => state.cartReducer.onCart);
     const whishlist = useSelector((state) => state.cartReducer.whishlist);
-    const session = useSelector((state) => state.sessionReducer.session);
+    const {session} = useSelector((state) => state.sessionReducer);
     const dispatch = useDispatch();
     const [notification] = useNotification();
 

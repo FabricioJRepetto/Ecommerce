@@ -6,6 +6,7 @@ import {
   loadUsername,
   loadEmail,
   loadAvatar,
+  loadRole,
 } from "../../Redux/reducer/sessionSlice";
 import jwt_decode from "jwt-decode";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -22,7 +23,7 @@ const Signupin = () => {
   const [warn, setWarn] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const session = useSelector((state) => state.sessionReducer.session);
+  const { session } = useSelector((state) => state.sessionReducer);
   const {
     register,
     handleSubmit,
@@ -45,13 +46,14 @@ const Signupin = () => {
   const signin = async (signinData) => {
     try {
       const { data } = await axios.post(`/user/signin`, signinData);
+      console.log(data);
 
       if (data.user) {
         window.localStorage.setItem("loggedTokenEcommerce", data.token);
         dispatch(sessionActive(true));
 
         const username = data.user.name || data.user.email.split("@")[0];
-        const email = data.user.email;
+        const { email, role } = data.user;
         const avatar = data.avatar || null;
         const whish = await axios(`/whishlist`);
         const cart = await axios(`/cart`);
@@ -59,6 +61,7 @@ const Signupin = () => {
         dispatch(loadUsername(username));
         dispatch(loadEmail(email));
         dispatch(loadAvatar(avatar));
+        dispatch(loadRole(role));
         dispatch(loadCart(cart.data.id_list));
         dispatch(loadWhishlist(whish.data.id_list));
 
@@ -92,6 +95,7 @@ const Signupin = () => {
     dispatch(loadUsername(username));
     dispatch(loadAvatar(avatar));
     dispatch(loadEmail(email));
+    dispatch(loadRole("client"));
     dispatch(loadCart(cart.data.id_list));
     dispatch(loadWhishlist(whish.data.id_list));
 

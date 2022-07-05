@@ -9,6 +9,7 @@ import "./Card.css";
 
 import { ReactComponent as Sale } from "../../assets/svg/sale.svg";
 import { WhishlistButton as Fav } from "./WhishlistButton";
+import { useNotification } from "../../hooks/useNotification";
 
 const Card = ({
   img,
@@ -25,8 +26,9 @@ const Card = ({
   const navigate = useNavigate();
   const location = useLocation();
   const [visible, setVisible] = useState(false);
-  const session = useSelector((state) => state.sessionReducer.session);
+  const { session } = useSelector((state) => state.sessionReducer);
   const dispatch = useDispatch();
+  const [notification] = useNotification();
 
   const editProduct = (prodId) => {
     console.log(location.pathname);
@@ -35,13 +37,14 @@ const Card = ({
   };
 
   const deleteProduct = (prodId) => {
+    //! VOLVER A VER preguntar para eliminar
     console.log(location.pathname === "/admin/products");
     axios
       .delete(`/product/${prodId}`)
-      .then((res) => console.log("eliminado")) //! VOLVER A VER agregar notif
+      .then((res) =>
+        notification("Producto eliminado exitosamente", "", "success")
+      )
       .catch((err) => console.log(err)); //! VOLVER A VER manejo de errores
-    //! VOLVER A VER preguntar para eliminar
-    //navigate("/productForm");
   };
 
   const saleProduct = (prodId) => {};

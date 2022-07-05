@@ -17,6 +17,7 @@ const {
   resetPassword,
   changePassword,
   editProfile,
+  verifyAdminRoute,
 } = require("../controllers/user.ctrl");
 const addressRouter = require("./address.router");
 const { body } = require("express-validator");
@@ -57,21 +58,14 @@ router.post(
   ],
   signup
 );
-
 router.post("/signin", [emailValidation, passwordValidationSignin], signin);
-
 router.get("/profile/:token", verifyToken, profile);
-
 router.put("/role", [verifyToken, verifySuperAdmin], role); //! VOLVER A VER mover a ruta de superadmin
-
 router.put("/verifyEmail", verifyToken, verifyEmail);
-
 router.put("/forgotPassword", forgotPassword);
-
 router.put("/resetPassword", resetPassword);
-
 router.put("/changePassword", passwordValidation, changePassword);
-
 router.put("/editProfile", verifyToken, editProfile);
+router.get("/verifyAdmin", [verifyToken, verifyAdmin], verifyAdminRoute);
 
 module.exports = router;

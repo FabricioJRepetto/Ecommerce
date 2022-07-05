@@ -6,6 +6,7 @@ import {
   loadEmail,
   loadUsername,
   sessionActive,
+  loadRole,
 } from "./Redux/reducer/sessionSlice";
 import { loadCart, loadWhishlist } from "./Redux/reducer/cartSlice";
 import axios from "axios";
@@ -27,8 +28,10 @@ import ProductForm from "./test/fer/ProductForm";
 import Details from "./components/Products/Details";
 import Results from "./components/Products/Results";
 import AdminLayout from "./test/fer/AdminLayout";
+import Orders from "./test/fer/Orders";
 
 import BackToTop from "./helpers/backToTop/BackToTop";
+import RequireRole from "./test/fer/RequireRole";
 
 function App() {
   const dispatch = useDispatch();
@@ -41,12 +44,14 @@ function App() {
     (async () => {
       try {
         if (loggedUserToken) {
+          console.log("ENTRA");
           const { data } = await axios(`/user/profile/${loggedUserToken}`);
           console.log(data);
           dispatch(sessionActive(true));
           dispatch(loadUsername(data.name));
           dispatch(loadAvatar(data.avatar ? data.avatar : loggedAvatar));
           dispatch(loadEmail(data.email ? data.email : loggedEmail));
+          dispatch(loadRole(data.role));
 
           const { data: cart } = await axios(`/cart`);
           dispatch(loadCart(cart.id_list));
@@ -55,8 +60,7 @@ function App() {
           dispatch(loadWhishlist(whish.id_list));
         }
       } catch (error) {
-        console.log("APP.JS");
-
+        console.log(error);
         window.localStorage.removeItem("loggedTokenEcommerce");
         window.localStorage.removeItem("loggedAvatarEcommerce");
         window.localStorage.removeItem("loggedEmailEcommerce");
@@ -85,10 +89,13 @@ function App() {
         <Route path="/orders/post-sale/:id" element={<PostSale />} />
         <Route path="/verify/:verifyToken" element={<VerifyEmail />} />
         <Route path="/details/:id" element={<Details />} />
-        <Route path="admin" element={<AdminLayout />}>
-          <Route index element={<Products />} />
-          <Route path="products" element={<Products />} />
-          <Route path="*" element={<h1>404</h1>} />
+        <Route element={<RequireRole allowedRoles={["admin", "superadmin"]} />}>
+          <Route path="admin" element={<AdminLayout />}>
+            {/* <Route index element={<Products />} /> */}
+            <Route path="products" element={<Products />} />
+            <Route path="orders" element={<Orders />} />
+            <Route path="*" element={<h1>404 ADMIN</h1>} />
+          </Route>
         </Route>
       </Routes>
     </div>
