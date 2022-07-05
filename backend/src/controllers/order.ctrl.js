@@ -1,6 +1,8 @@
 const Order = require('../models/order');
 const Cart = require('../models/cart');
-const Product = require('../models/product')
+const Product = require('../models/product');
+const { rawIdProductGetter } = require('../utils/rawIdProductGetter');
+const { SHIP_COST } = require('../../constants');
 
 const getOrder = async (req, res, next) => {
     try {
@@ -52,8 +54,6 @@ const createOrder = async (req, res, next) => {
         const cart = await Cart.findOne({ owner: req.user._id });
         let products = cart.products;
 
-        let free = cart.free_ship_cart;
-
         const newOrder = new Order({
             products,
             user: req.user._id,
@@ -66,8 +66,9 @@ const createOrder = async (req, res, next) => {
             },
             status: 'pending',
             total: cart.total,
-            free_shipping: free,
+            free_shipping: cart.free_ship_cart,
             shipping_cost: cart.shipping_cost,
+            order_type: 'cart'
         });
         await newOrder.save();
 
@@ -77,11 +78,11 @@ const createOrder = async (req, res, next) => {
     }
 };
 
-const createExpressOrder = async (req, res, next) => {
+const buyNowOrder = async (req, res, next) => {
     try {
-        //: recibir la id de la address en vez de los datos?
         const {
             product_id,
+            quantity,
             state,
             city,
             zip_code,
@@ -90,12 +91,20 @@ const createExpressOrder = async (req, res, next) => {
         } = req.body;
 
         //: buscar producto
-        const { } = await Product.findById(product_id)
+        const p = await rawIdProductGetter(product_id)
+        const total = quantity * (p.on_sale ? p.sale_price : p.price);
 
         const newOrder = new Order({
-            //: cambiar
-            products,
-
+            products: {
+                product_name: p.name,
+                product_id,
+                description: p.description,
+                img: p.thumbnail,
+                price: p.price,
+                sale_price: p.sale_price,
+                quantity,
+                on_sale: p.on_sale,
+            },
             user: req.user._id,
             shipping_address: {
                 state,
@@ -105,9 +114,10 @@ const createExpressOrder = async (req, res, next) => {
                 street_number
             },
             status: 'pending',
-            total: cart.total,
-            free_shipping: free,
-            shipping_cost: cart.shipping_cost,
+            total,
+            free_shipping: p.free_shipping,
+            shipping_cost: p.free_shipping ? 0 : SHIP_COST,
+            order_type: 'buynow'
         });
         await newOrder.save();
 
@@ -150,6 +160,7 @@ const updateOrder = async (req, res, next) => {
 module.exports = {
     getOrder,
     createOrder,
+    buyNowOrder,
     deleteOrder,
     getOrdersUser,
     getOrdersAdmin,

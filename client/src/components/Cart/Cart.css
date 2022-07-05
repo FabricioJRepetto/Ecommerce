@@ -28,6 +28,7 @@
     margin-top: 25px;
 }
 .cart-address-selector {
+    color: #3483fa;
     height: 1.5rem;
     width: fit-content;
     margin-right: 30px;
@@ -41,7 +42,7 @@
     right: -2.5rem;
 }
 .arrow-address-selector path {
-    fill: black;
+    fill: #3483fa;
 }
 
 .cart-total {

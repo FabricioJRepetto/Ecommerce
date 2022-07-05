@@ -18,6 +18,7 @@ const Home = () => {
   const [countdown, setCountdown] = useState("");
   const [loading, setLoading] = useState(true);
   const whishlist = useSelector((state) => state.cartReducer.whishlist);
+  const session = useSelector((state) => state.sessionReducer.session);
   const [suggestion, setSuggestion] = useState(false)
 
   const images = [
@@ -59,12 +60,11 @@ const Home = () => {
 
     (async () => {
         const data = await Promise.all([
-            axios(`/sales/`), 
-            axios(`/history/suggestion`)
+            axios(`/sales/`),
+            (session && axios(`/history/suggestion`))
         ]);
         setProducts(data[0].data);
-        setSuggestion(data[1].data);
-        console.log(data[1].data);
+        setSuggestion(data[1].data || false);
 
         setLoading(false);
     })();

@@ -19,7 +19,7 @@ const PostSale = () => {
         //! CAMBIAR PARA EL DEPLOY
         //! solo pedir la order al back para mostrar detalles
 
-        //: peticion a mp para saber status del pago
+        //! peticion a mp para saber status del pago
         firstLoad && (async () => {
             const { data } = await axios.get(`https://api.mercadopago.com/v1/payments/search?sort=date_created&criteria=desc&external_reference=${id}`, {
                 headers: {
@@ -32,28 +32,32 @@ const PostSale = () => {
             const { data: order } = await axios(`/order/${id}`);
 
             if (data.results[0].status === 'approved' && order.status !== 'approved') {
+
+                if (order.order_type === 'cart') {
+                    //? vaciar carrito
+                    const { data: cartEmpty } = await axios.delete(`/cart/empty`);
+                    console.log(cartEmpty.message);
+                    //? Vaciar el estado de redux onCart
+                    dispatch(loadCart([]));
+                } else {
+                    //? vaciar el buynow
+                    axios.post(`/cart/`, {product_id: ''});
+                    console.log('buynow reseted');
+                }
+
                 //? cambiar orden a pagada
                 const orderUpdt = await axios.put(`/order/${id}`,{
                     status: 'approved'
                 });
-                console.log(orderUpdt.data.message);
-    
-                //? vaciar carrito
-                const { data: cartEmpty } = await axios.delete(`/cart/empty`);
-                console.log(cartEmpty.message);
+                console.log(orderUpdt.data.message);    
     
                 //? restar unidades de cada stock
                 //: crear un virtual para ids de order ?
-                const { data: order } = await axios(`/order/${id}`);
                 let list = order.products.map(e => ({id: e.product_id, amount: e.quantity}));
-
                 const { data: stockUpdt } = await axios.put(`/product/stock/`, list);
                 console.log(stockUpdt);
 
-                //? Vaciar el estado de redux onCart
-                dispatch(loadCart([]));
-
-                //: first load solo sirve pre deploy
+                //! first load solo sirve pre deploy
                 setFirstLoad(false);                
             };
         })();

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import { loadAvatar, loadEmail, loadUsername, sessionActive } from "./Redux/reducer/sessionSlice";
 import { loadCart, loadWhishlist } from "./Redux/reducer/cartSlice";
 import axios from "axios";
@@ -15,6 +15,7 @@ import ResetPassword from "./components/Session/ResetPassword";
 import VerifyEmail from "./components/Session/VerifyEmail";
 import Profile from "./components/Profile/Profile";
 import Cart from "./components/Cart/Cart";
+import BuyNow from "./components/Cart/BuyNow";
 import Checkout from "./components/Cart/Checkout";
 import PostSale from "./components/Cart/PostSale";
 import Products from "./test/fer/Products";
@@ -26,6 +27,7 @@ import BackToTop from "./helpers/backToTop/BackToTop";
 
 function App() {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const loggedUserToken = window.localStorage.getItem("loggedTokenEcommerce");
@@ -50,7 +52,7 @@ function App() {
                 }
             } catch (error) {
                 console.log("APP.JS");
-
+                navigate('/')
                 window.localStorage.removeItem("loggedTokenEcommerce");
                 window.localStorage.removeItem("loggedAvatarEcommerce");
                 window.localStorage.removeItem("loggedEmailEcommerce");
@@ -74,6 +76,7 @@ function App() {
                 <Route path="/products" element={<Products />} />
                 <Route path="/productForm" element={<ProductForm />} />
                 <Route path="/cart" element={<Cart />} />
+                <Route path="/buynow" element={<BuyNow />} />
                 <Route path="/checkout/:id" element={<Checkout />} />
                 <Route path="/reset/:userId/:resetToken" element={<ResetPassword />} />
                 <Route path="/orders/post-sale/:id" element={<PostSale />} />

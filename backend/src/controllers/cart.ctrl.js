@@ -10,6 +10,7 @@ const getUserCart = async (req, res, next) => {
         if (!cart) {
             const newCart = await Cart.create({
                 products: [],
+                buyNow: '',
                 owner: req.user._id
             })
             return res.json(newCart)
@@ -19,6 +20,22 @@ const getUserCart = async (req, res, next) => {
         next(error);
     }
 };
+
+const setBuyNow = async (req, res, next) => {
+    try {
+        await Cart.findOneAndUpdate({ owner: req.user._id },
+            {
+                '$set': {
+                    'buyNow': req.body.product_id
+                }
+            },
+            { new: true });
+        return res.json({ message: 'Buy Now setted' });
+
+    } catch (error) {
+        next(error)
+    }
+}
 
 const addToCart = async (req, res, next) => {
     try {
@@ -72,6 +89,7 @@ const addToCart = async (req, res, next) => {
                     stock,
                     quantity: 1
                 }],
+                buyNow: '',
                 owner: userId,
             });
             await newCart.save();
@@ -172,6 +190,7 @@ const quantityEx = async (req, res, next) => {
 module.exports = {
     getUserCart,
     addToCart,
+    setBuyNow,
     removeFromCart,
     emptyCart,
     deleteCart,
