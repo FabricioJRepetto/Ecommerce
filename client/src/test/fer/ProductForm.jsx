@@ -40,7 +40,7 @@ const ProductForm = () => {
       ...warn,
       [key]: message,
     });
-    let timeout = () => setTimeout(() => setWarn({}), 5000);
+    let timeout = () => setTimeout(() => setWarn({}), 7000);
     timeoutId.current = timeout();
   };
 
@@ -159,8 +159,8 @@ const ProductForm = () => {
 
   const handleAddImg = (e) => {
     const fileListArrayImg = Array.from(e.target.files);
+    validateImgs(fileListArrayImg, warnTimer, productImg);
     console.log(fileListArrayImg);
-    validateImgs(fileListArrayImg, warnTimer);
     setProductImg([...productImg, ...fileListArrayImg]);
   };
 

@@ -118,7 +118,7 @@ const Card = ({
                 ELIMINAR
               </button>
               <button type="button" onClick={() => saleProduct(prodId)}>
-                DESCUENTO
+                DESCUENTO {/* //! VOLVER A VER agregar funcion para dto */}
               </button>
             </>
           )}
