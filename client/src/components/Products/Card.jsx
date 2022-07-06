@@ -4,12 +4,18 @@ import { useNavigate, useLocation } from "react-router-dom";
 import axios from "axios";
 import { resizer } from "../../helpers/resizer";
 import { priceFormat } from "../../helpers/priceFormat";
-import { loadIdProductToEdit } from "../../Redux/reducer/productsSlice";
+import {
+  loadIdProductToEdit,
+  deleteProductFromState,
+} from "../../Redux/reducer/productsSlice";
 import "./Card.css";
 
 import { ReactComponent as Sale } from "../../assets/svg/sale.svg";
 import { WhishlistButton as Fav } from "./WhishlistButton";
 import { useNotification } from "../../hooks/useNotification";
+import { useModal } from "../../hooks/useModal";
+
+import Modal from "../common/Modal";
 
 const Card = ({
   img,
@@ -29,21 +35,26 @@ const Card = ({
   const { session } = useSelector((state) => state.sessionReducer);
   const dispatch = useDispatch();
   const [notification] = useNotification();
+  const [isOpenDeleteProduct, openDeleteProduct, closeDeleteProduct] =
+    useModal();
 
   const editProduct = (prodId) => {
-    console.log(location.pathname);
     dispatch(loadIdProductToEdit(prodId));
     navigate("/productForm");
   };
 
+  const handleDeleteProduct = () => {
+    deleteProduct(prodId);
+    closeDeleteProduct();
+  };
+
   const deleteProduct = (prodId) => {
-    //! VOLVER A VER preguntar para eliminar
-    console.log(location.pathname === "/admin/products");
     axios
       .delete(`/product/${prodId}`)
-      .then((res) =>
-        notification("Producto eliminado exitosamente", "", "success")
-      )
+      .then((_) => {
+        dispatch(deleteProductFromState(prodId));
+        notification("Producto eliminado exitosamente", "", "success");
+      })
       .catch((err) => console.log(err)); //! VOLVER A VER manejo de errores
   };
 
@@ -103,7 +114,7 @@ const Card = ({
               <button type="button" onClick={() => editProduct(prodId)}>
                 EDITAR
               </button>
-              <button type="button" onClick={() => deleteProduct(prodId)}>
+              <button type="button" onClick={() => openDeleteProduct(prodId)}>
                 ELIMINAR
               </button>
               <button type="button" onClick={() => saleProduct(prodId)}>
@@ -113,6 +124,19 @@ const Card = ({
           )}
         </div>
       </div>
+      <Modal
+        isOpen={isOpenDeleteProduct}
+        closeModal={closeDeleteProduct}
+        type="warn"
+      >
+        <p>{`¿Eliminar ${name}?`}</p>
+        <button type="button" onClick={() => handleDeleteProduct()}>
+          Aceptar
+        </button>
+        <button type="button" onClick={closeDeleteProduct}>
+          Cancelar
+        </button>
+      </Modal>
     </div>
   );
 };

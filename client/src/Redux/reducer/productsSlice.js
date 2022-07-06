@@ -44,8 +44,15 @@ export const productsSlice = createSlice({
     loadProductsOwn: (state, action) => {
       state.productsOwn = action.payload;
     },
+
     loadProductsFound: (state, action) => {
       state.productsFound = action.payload;
+    },
+
+    deleteProductFromState: (state, action) => {
+      state.productsFound = state.productsFound.filter(
+        (prod) => prod._id !== action.payload
+      );
     },
 
     filterProducts: (state, action) => {
@@ -141,6 +148,7 @@ export const productsSlice = createSlice({
 export const {
   loadProductsOwn,
   loadProductsFound,
+  deleteProductFromState,
   filterProducts,
   orderProducts,
   loadProductDetails,

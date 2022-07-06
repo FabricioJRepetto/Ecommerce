@@ -1,6 +1,8 @@
 import React, { useState, useRef } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
+
 import {
   filterProducts,
   loadProductsFound,
@@ -22,6 +24,7 @@ const Products = () => {
     (state) => state.productsReducer
   );
   const whishlist = useSelector((state) => state.cartReducer.whishlist);
+  const location = useLocation();
 
   useEffect(() => {
     getProducts();
@@ -33,6 +36,13 @@ const Products = () => {
   productsFiltered.length === 0
     ? (productsToShow = productsFound)
     : (productsToShow = productsFiltered);
+
+  /* let productsToShow;
+      productsFiltered.length === 0
+        ? location.pathname === "/admin/products"
+          ? (productsToShow = productsOwn)
+          : (productsToShow = productsFound)
+        : (productsToShow = productsFiltered); */
 
   const getProducts = () => {
     axios
