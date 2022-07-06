@@ -44,9 +44,7 @@ function App() {
     (async () => {
       try {
         if (loggedUserToken) {
-          console.log("ENTRA");
           const { data } = await axios(`/user/profile/${loggedUserToken}`);
-          console.log(data);
           dispatch(sessionActive(true));
           dispatch(loadUsername(data.name));
           dispatch(loadAvatar(data.avatar ? data.avatar : loggedAvatar));
@@ -60,7 +58,6 @@ function App() {
           dispatch(loadWhishlist(whish.id_list));
         }
       } catch (error) {
-        console.log(error);
         window.localStorage.removeItem("loggedTokenEcommerce");
         window.localStorage.removeItem("loggedAvatarEcommerce");
         window.localStorage.removeItem("loggedEmailEcommerce");
@@ -97,6 +94,7 @@ function App() {
             <Route path="*" element={<h1>404 ADMIN</h1>} />
           </Route>
         </Route>
+        <Route path="/unauthorized" element={<h1>UNAUTHORIZED</h1>} />
       </Routes>
     </div>
   );

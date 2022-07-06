@@ -8,13 +8,9 @@ const RequireRole = ({ allowedRoles }) => {
   return allowedRoles.includes(role) ? (
     <Outlet />
   ) : session ? (
-    <Navigate
-      /*  to="/unauthorized" */ to="/"
-      state={{ from: location }}
-      replace
-    />
+    <Navigate to="/unauthorized" state={{ from: location }} replace />
   ) : (
-    <Navigate to="/" state={{ from: location }} replace />
+    <Navigate to="/signin" state={{ from: location }} replace />
   );
 };
 

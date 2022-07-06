@@ -39,7 +39,7 @@ const signin = async (req, res, next) => {
 
       req.login(user, { session: false }, async (err) => {
         if (err) return next(err);
-        const body = { _id: user._id, email: user.email, role: user.role }; //!VOLVER A VER si se rompe algo de auth quitar role
+        const body = { _id: user._id, email: user.email };
 
         const token = jwt.sign({ user: body }, JWT_SECRET_CODE, {
           expiresIn: 864000,

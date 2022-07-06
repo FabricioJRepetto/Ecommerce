@@ -2,7 +2,8 @@ const { Schema, model } = require("mongoose");
 
 const orderSchema = new Schema(
   {
-    products: [{
+    products: [
+      {
         product_name: String,
         product_id: String,
         description: String,
@@ -11,17 +12,18 @@ const orderSchema = new Schema(
         sale_price: Number,
         quantity: Number,
         on_sale: Boolean,
-    }],
+      },
+    ],
     user: {
-        type: String,
-        required: true,
+      type: Schema.Types.ObjectId,
+      ref: "User",
     },
     shipping_address: {
-        state: String,
-        city: String,
-        zip_code: String,
-        street_name: String,
-        street_number: Number,
+      state: String,
+      city: String,
+      zip_code: String,
+      street_name: String,
+      street_number: Number,
     },
     total: Number,
     status: String,
@@ -32,17 +34,17 @@ const orderSchema = new Schema(
     timestamps: true,
     versionKey: false,
     toJSON: { getters: true, virtuals: true },
-    toObject: { getters: true, virtuals: true }
+    toObject: { getters: true, virtuals: true },
   }
 );
 
 // Order.description
-orderSchema.virtual('description').get(function() {
-    let desc = 'Order summary: ';    
-    this.products.forEach(product => {
-        desc += `${product.product_name} x${product.quantity}. `;
-    });
-    return desc;
+orderSchema.virtual("description").get(function () {
+  let desc = "Order summary: ";
+  this.products.forEach((product) => {
+    desc += `${product.product_name} x${product.quantity}. `;
+  });
+  return desc;
 });
 
 module.exports = model("Order", orderSchema);

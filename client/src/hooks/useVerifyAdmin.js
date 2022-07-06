@@ -6,9 +6,8 @@ export const useVerifyAdmin = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios("/user/verifyAdmin").catch((err) => {
-      console.log("Sin autorización"); //! VOLVER A VER renderizar mensaje
-      navigate("/");
+    axios("/user/verifyAdmin").catch((_) => {
+      navigate("/unauthorized");
     });
     // eslint-disable-next-line
   }, []);

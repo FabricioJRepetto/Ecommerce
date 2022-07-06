@@ -23,7 +23,6 @@ async function verifyToken(req, res, next) {
           audience: OAUTH_CLIENT_ID,
         });
         const payload = ticket.getPayload();
-        console.log(payload);
         const { sub, name, email, picture } = payload;
         req.user = {
           /* _id: payload["sub"], */
