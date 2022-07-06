@@ -11,6 +11,8 @@ import {
   validationProductFormSchema,
 } from "../../helpers/validators";
 import { useNotification } from "../../hooks/useNotification";
+import { useModal } from "../../hooks/useModal";
+import Modal from "../../components/common/Modal";
 
 const ProductForm = () => {
   const [featuresQuantity, setFeaturesQuantity] = useState(1);
@@ -29,6 +31,8 @@ const ProductForm = () => {
   let timeoutId = useRef();
   const navigate = useNavigate();
   const [notification] = useNotification();
+  const [isOpenCreateProduct, openCreateProduct, closeCreateProduct] =
+    useModal();
 
   const warnTimer = (key, message) => {
     clearTimeout(timeoutId.current);
@@ -208,7 +212,7 @@ const ProductForm = () => {
           },
         });
         notification("Producto editado exitosamente", "", "success");
-        navigate("/products");
+        navigate("/admin/products");
       } else {
         formData.append("data", JSON.stringify(productData));
         await axios.post(`/product/`, formData, {
@@ -217,8 +221,7 @@ const ProductForm = () => {
           },
         });
         notification("Producto creado exitosamente", "", "success");
-        //!VOLVER A VER agregar modal para preguntar crear otro prod
-        navigate("/products");
+        openCreateProduct();
       }
       clearInputs();
     } catch (error) {
@@ -237,6 +240,16 @@ const ProductForm = () => {
     appendAttribute({ name: "", value_name: "" });
     setFeaturesQuantity(1);
     appendFeature("");
+  };
+
+  const handleModalCreateProduct = (value) => {
+    //! VOLVER A VER poner notif por encima de modal
+    if (value) {
+      clearInputs();
+      closeCreateProduct();
+    } else {
+      navigate("/admin/products");
+    }
   };
 
   return (
@@ -426,6 +439,19 @@ const ProductForm = () => {
         />
       </form>
       <button onClick={clearInputs}>RESETEAR</button>
+      <Modal
+        isOpen={isOpenCreateProduct}
+        closeModal={closeCreateProduct}
+        type="warn"
+      >
+        <p>¿Crear otro producto?</p>
+        <button type="button" onClick={() => handleModalCreateProduct(true)}>
+          Aceptar
+        </button>
+        <button type="button" onClick={() => handleModalCreateProduct(false)}>
+          Cancelar
+        </button>
+      </Modal>
     </div>
   );
 };
