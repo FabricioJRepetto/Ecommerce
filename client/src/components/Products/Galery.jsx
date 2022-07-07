@@ -51,7 +51,7 @@ const Galery = ({ imgs }) => {
                     onClick={() => {(index > 6) && open()}}>
                         {loading && <LoadingPlaceHolder extraStyles={{ height: "100%" }}/>}
                         <img className={`selector-img ${!loading && 'visible'}`} src={resizer(e.imgURL, 50)} alt="controller" />
-                        
+                        {index > 6 && !loading && <p className='galery-text'>+{imgs.length - index - 1}</p>}
                     </div>
                 )}
             </div>
@@ -80,18 +80,16 @@ const Galery = ({ imgs }) => {
                         alt="img" />
                     )}
                 </div>
-                    <div>
-                        <button 
-                            onClick={prev}
-                            className='carousel-control left' >
-                                <Arrow className='arrow left-arrow'/>
-                            </button>
-                        <button 
-                            onClick={next}
-                            className='carousel-control right' >
-                                <Arrow className='arrow'/>
+                    <button 
+                        onClick={prev}
+                        className='carousel-control left' >
+                            <Arrow className='arrow left-arrow'/>
                         </button>
-                </div>
+                    <button 
+                        onClick={next}
+                        className='carousel-control right' >
+                            <Arrow className='arrow'/>
+                    </button>
             </div>
         </div>
     )
