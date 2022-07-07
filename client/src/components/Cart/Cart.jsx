@@ -22,7 +22,7 @@ const Cart = () => {
     const { section } = useParams();
 
     const [render, setRender] = useState(section)
-    const [cart, setCart] = useState(null);
+    const [cart, setCart] = useState(false);
     const [orderId, setOrderId] = useState('');
     const [address, setAddress] = useState(null);
     const [newAdd, setNewAdd] = useState({});
@@ -139,12 +139,18 @@ const Cart = () => {
         setLoadingPayment());
      };
 
+    const buyNow = async (id) => { 
+        await axios.post(`/cart/`, {product_id: id});
+        //: delete
+        navigate('/buyNow');
+   }
+
     return (
         <div className="cart-container">
                 
             <div className="cart-menu-container">
                 <NavLink to={"/cart/"}>Cart</NavLink>
-                <NavLink to={"/cart/saved"}>{`Saved ${cart.buyLater?.length ? '('+cart.buyLater?.length+')' : ''}`}</NavLink>
+                <NavLink to={"/cart/saved"}>{`Saved ${cart.buyLater?.length ? '('+cart?.buyLater?.length+')' : ''}`}</NavLink>
             </div>
 
             {(render === 'cart')
@@ -169,6 +175,7 @@ const Cart = () => {
                             stock={p.stock}
                             buyLater={buyLater}
                             deleteP={deleteProduct}
+                            buyNow={buyNow}
                             source={'products'}
                             />
                     ))}
@@ -224,7 +231,10 @@ const Cart = () => {
                         </div>
                     
                 </div>
-                : <h1 style={{ color: 'black'}}>Your cart is empty.</h1>}
+                : <div>
+                    {loading && <Spinner />}
+                    {!loading && cart?.products?.length < 1 && <h1 style={{ color: 'black'}}>Your cart is empty.</h1>}
+                </div>}
             </div>
 
             :<div className="cart-buylater-inner">
@@ -245,6 +255,7 @@ const Cart = () => {
                                 prodQuantity={p.quantity}
                                 stock={p.stock}
                                 buyLater={buyLater}
+                                buyNow={buyNow}
                                 deleteP={deleteProduct}
                                 source={'buyLater'}
                                 />

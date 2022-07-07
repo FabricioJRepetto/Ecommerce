@@ -5,7 +5,7 @@ import { resizer } from '../../helpers/resizer';
 import QuantityInput from '../Cart/QuantityInput';
 import './CartCard.css'
 
-const CartCard = ({ img, name, price, sale_price, on_sale, discount, brand, prodId, free_shipping, on_cart, stock, prodQuantity, deleteP, buyLater, source}) => {
+const CartCard = ({ img, name, price, sale_price, on_sale, discount, brand, prodId, free_shipping, on_cart, stock, prodQuantity, deleteP, buyLater, buyNow, source}) => {
     const navigate = useNavigate();
 
   return (
@@ -28,7 +28,8 @@ const CartCard = ({ img, name, price, sale_price, on_sale, discount, brand, prod
                         onClick={() => deleteP(prodId, source)}>Delete</p>
                     <p className='pointer'
                         onClick={() => buyLater(prodId)}>{source === 'buyLater' ? 'Add to cart' : 'Buy later'}</p>
-                    <p className='pointer'>Buy Now</p>
+                    <p className='pointer'
+                        onClick={() => buyNow(prodId, source)}>Buy Now</p>
                 </div>
             </div>
         </div>

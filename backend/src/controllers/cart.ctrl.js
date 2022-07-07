@@ -90,6 +90,7 @@ const getUserCart = async (req, res, next) => {
             message,
             products,
             buyLater,
+            buyNow: cart.buyNow,
             id_list,
             total,
             free_ship_cart,
