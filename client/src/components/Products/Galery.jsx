@@ -8,28 +8,19 @@ import './Galery.css'
 const Galery = ({ imgs }) => {
     const [current, setCurrent] = useState(0);
     const [loading, setLoading] = useState(true);
-    const [loaded, setLoaded] = useState(1);
 
     const [isOpen, setIsOpen] = useState(false)
 
     useEffect(() => {
       let timer = null;
         timer = setTimeout(() => {
-            setLoading(true)
+            setLoading(false)
         }, 5000);
     
       return () => {
         clearTimeout(timer)
       }
     }, []);
-    
-
-    const loadedHandler = () => { 
-        setLoaded(loaded+1)
-        if (loaded >= imgs.length) {
-            setLoading(false)
-        }
-     }
 
      const open = () => { 
         setIsOpen(true)
@@ -53,13 +44,15 @@ const Galery = ({ imgs }) => {
     return (
         <div className='galery'>
             <div>
-                {imgs?.map((e, index) => 
+                {imgs.slice(0,8)?.map((e, index) => 
                     <div 
                     key={e.imgURL}
                     className={`galery-selector ${(current === index) && 'selected'}`}
-                    onPointerEnter={() => handleHover(index)}>
+                    onPointerEnter={() => handleHover(index)}
+                    onClick={() => {(index > 6) && open()}}>
                         {loading && <LoadingPlaceHolder extraStyles={{ height: "100%" }}/>}
                         <img className={`selector-img ${!loading && 'visible'}`} src={resizer(e.imgURL, 50)} alt="controller" />
+                        
                     </div>
                 )}
             </div>
@@ -68,8 +61,8 @@ const Galery = ({ imgs }) => {
                 {imgs?.map((e, index) => 
                     <img 
                     key={e.imgURL}
-                    onLoad={loadedHandler}
                     onClick={open}
+                    onLoad={()=>{(index === imgs.length -1) && setLoading(false)}}
                     className={`galery-img ${(current === index) && !loading && 'visible'}`}
                     src={e.imgURL} 
                     alt="img" />
@@ -82,8 +75,7 @@ const Galery = ({ imgs }) => {
                     {imgs?.map((e, index) => 
                         <img 
                         key={e.imgURL}
-                        onLoad={loadedHandler}
-                        onClick={open}
+                        onClick={open}                        
                         className={`fs-img ${(current === index) && 'fs-visible'}`}
                         src={e.imgURL} 
                         alt="img" />
