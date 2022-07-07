@@ -21,10 +21,9 @@ const Details = () => {
     const [notification] = useNotification();
 
     const { data, loading, error } = useAxios('GET', `/product/${id}`);
-    !loading && console.log(data);
 
     useEffect(() => {
-        if (!loading && session) {
+        if (!loading && session && data) {
             // setear historial
             const payload = {
                 product_id: data._id,
