@@ -22,8 +22,8 @@ export const validateImgs = (imagesList, warnTimer, productImg) => {
       i--;
     }
   }
-  if (productImg.length + imagesList.length > 8) {
-    let excess = productImg.length + imagesList.length - 8;
+  if (productImg?.length + imagesList?.length > 8) {
+    let excess = productImg?.length + imagesList?.length - 8;
     warnFlagExcess = true;
     imagesList.splice(-excess, excess);
   }
@@ -52,7 +52,7 @@ export const validationProductFormSchema = yup.object().shape({
       (value) => validatePrice(value)
     ),
   brand: yup.string().required("Marca es requerida"),
-  category: yup.string().required("Categoria es requerida"),
+  category: yup.string().required("Categoría es requerida"),
   available_quantity: yup
     .string()
     .required("Stock es requerido")
