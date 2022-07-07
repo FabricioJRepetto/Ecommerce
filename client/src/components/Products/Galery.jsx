@@ -8,34 +8,33 @@ import './Galery.css'
 const Galery = ({ imgs }) => {
     const [current, setCurrent] = useState(0);
     const [loading, setLoading] = useState(true);
-
     const [isOpen, setIsOpen] = useState(false)
 
+    //? failsafe
     useEffect(() => {
       let timer = null;
         timer = setTimeout(() => {
             setLoading(false)
         }, 5000);
-    
       return () => {
         clearTimeout(timer)
       }
     }, []);
 
-     const open = () => { 
-        setIsOpen(true)
-      }
+    const open = () => { 
+    setIsOpen(true)
+    }
 
-      const next = (e) => { 
-            e.stopPropagation()
-            const index = current < imgs.length - 1 ? current + 1 : 0;
-            setCurrent(index)
-       }
-      const prev = (e) => { 
-            e.stopPropagation()
-            const index = current > 0 ? current -1 : imgs.length - 1;
-            setCurrent(index)
-        }
+    const next = (e) => { 
+        e.stopPropagation()
+        const index = current < imgs.length - 1 ? current + 1 : 0;
+        setCurrent(index)
+    }
+    const prev = (e) => { 
+        e.stopPropagation()
+        const index = current > 0 ? current -1 : imgs.length - 1;
+        setCurrent(index)
+    }
 
     const handleHover = (index) => { 
         setCurrent(index)
