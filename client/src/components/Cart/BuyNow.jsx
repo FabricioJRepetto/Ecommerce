@@ -1,54 +1,76 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
-import CartCard from "../Products/CartCard";
 import Modal from "../common/Modal";
 import { useModal } from "../../hooks/useModal";
-import { useNotification } from "../../hooks/useNotification";
-import { cartTotal, loadCart } from "../../Redux/reducer/cartSlice";
 import { loadMercadoPago } from "../../helpers/loadMP";
-import { priceFormat } from "../../helpers/priceFormat";
-import './Cart.css'
+import { priceFormat } from "../../helpers/priceFormat"
+import { useNotification } from "../../hooks/useNotification";
+import './BuyNow.css'
 
 import { ReactComponent as Arrow } from '../../assets/svg/arrow-right.svg'
+import { ReactComponent as Location } from '../../assets/svg/location.svg'
 import { ReactComponent as Ship } from '../../assets/svg/ship.svg'
 import { ReactComponent as Spinner } from '../../assets/svg/spinner.svg'
+import QuantityInput from "./QuantityInput";
+import { useSelector } from "react-redux";
 
-const Cart = () => {
+const BuyNow = () => {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
+    const location = useLocation();
+    const hasPreviousState = location.key !== "default";
+    const session = useSelector((state) => state.sessionReducer.session);    
     const [notification] = useNotification();
 
-    const [cart, setCart] = useState(null);
+    const [id, setId] = useState();
+    const [product, setProduct] = useState();
     const [orderId, setOrderId] = useState('');
     const [address, setAddress] = useState(null);
     const [newAdd, setNewAdd] = useState({});
     const [selectedAdd, setSelectedAdd] = useState(null);
     const [loadingPayment, setLoadingPayment] = useState(false);
+    const [quantity, setQuantity] = useState(1);
     const [loading, setLoading] = useState(true);
-    const total = useSelector((state) => state.cartReducer.total);
-
     const [isOpenAddForm, openAddForm, closeAddForm] = useModal();
     const [isOpenAddList, openAddList, closeAddList] = useModal();
 
     const SHIP_COST = 500;
 
     useEffect(() => {
-        getCart();
-        getAddress();
-    // eslint-disable-next-line    
-    }, [])
+        if (session) {
+            getProd();
+            getAddress();
+        } else {
+             if (hasPreviousState) {
+                navigate(-1);
+            } else {
+                navigate("/");
+            }
+        }
 
-    const getCart = async () => {
-        const { data } = await axios('/cart/');
-        if (data) {
-            console.log(data);
-            setCart(data);
-            data.message && notification(data.message, '', 'warning')
-        };
-        dispatch(cartTotal(data.total));
-        dispatch(loadCart(data.id_list));
+        return () => {
+            axios.post(`/cart/`, {product_id: ''});
+            console.log('buynow reseted');
+        }
+    // eslint-disable-next-line    
+    }, []);
+
+    const getProd = async () => {        
+        const { data } = await axios(`/cart/`);
+        setId(data.buyNow);
+        if (data.buyNow === '') {
+            if (hasPreviousState) {
+                navigate(-1);
+            } else {
+                navigate("/");
+            }
+        } else {
+            const { data: p } = await axios(`/product/${data.buyNow}`);
+            console.log(p);
+            if (p) {
+                setProduct(p);
+            }
+        }        
         setLoading(false);
     };
 
@@ -65,7 +87,6 @@ const Cart = () => {
         }
         setLoading(false);
     };
-
     const handleChange = ({ target }) => {
         const { name, value, validity } = target;
         let validatedValue;
@@ -80,133 +101,131 @@ const Cart = () => {
         [name]: validatedValue,
         })
     };
-
     const handleSubmit = async (e) => { 
         e.preventDefault();
         if (newAdd.state && newAdd.city && newAdd.zip_code && newAdd.street_name && newAdd.street_number) {
             closeAddForm();
             const { data } = await axios.post(`/address`, newAdd);
+            console.log(data);
             notification(data.message, '', 'success')
             setSelectedAdd(data.address.pop());
             getAddress();
         }
-     };
-     
+     };     
      const handleSelect = (id) => { 
         let aux = address.filter(e => e._id.toString() === id.toString());
         setSelectedAdd(aux[0]);
         closeAddList();
      };
 
-    const deleteProduct = async (id) => {
-        const { data } = await axios.delete(`/cart/${id}`);
-        getCart();
-        notification(data.message, '', 'warning');
-    };
-
     const goCheckout = async () => {
-        //: WIP
+       //: WIP
         setLoadingPayment('S');
     };
     const openMP = async () => { 
         setLoadingPayment('MP');
         let fastId = false;
-        console.log(orderId);
         // actualiza o crea la order
         if (orderId) {
-            await axios.put(`/order/${orderId}`, selectedAdd);
+            await axios.put(`/order/${orderId}`, {
+                ...selectedAdd,
+                quantity,
+                product_id: id,
+            });
         } else {
-            const { data: id } = await axios.post(`/order/`, selectedAdd);
-            fastId = id;
-            setOrderId(id);
+            const { data: firstOrder } = await axios.post(`/order/buyNow`, {
+                ...selectedAdd,
+                quantity,
+                product_id: id,
+            });
+            fastId = firstOrder;
+            setOrderId(firstOrder);
         }
         // crea la preferencia para mp con la order
         const { data }  = await axios.get(`/mercadopago/${orderId || fastId}`);
         // abre el modal de mp con la id de la preferencia
         loadMercadoPago(data.id, 
-        setLoadingPayment());
+        setLoadingPayment);
      };
 
     return (
-        <div className="cart-container">
+        <div className="buynow-container">
 
-            <div className="cart-inner">
-                <h2 style={{ color: 'black' }}>Cart</h2>
-                {(cart && cart.products.length > 0)
-                ? <div className="">
-                    
-                    {cart.products.map((p) => (
-                        <CartCard
-                            key={p._id}
-                            on_cart={true}
-                            on_sale={p.on_sale}
-                            img={p.thumbnail}
-                            name={p.name}
-                            prodId={p._id}
-                            price={p.price}
-                            sale_price={p.sale_price}
-                            free_shipping={p.free_shipping}
-                            discount={p.discount}
-                            brand={p.brand}
-                            deleteP={deleteProduct}
-                            prodQuantity={p.quantity}
-                            stock={p.stock}
-                            />
-                    ))}
+            {product
+            ?<div className="buynow-inner">
+                <div className="buynow-product-details">
+                    <div className="buynow-product-inner">
+                        {<img src={product && product.images[0].imgURL} alt="prod" style={{ height: '360px'}} />}
+                        <p>{product.name}</p>
+                    </div>
+                    <QuantityInput stock={product.available_quantity} 
+                    prodQuantity={1} bnMode setQ={setQuantity}/>
+                </div>
 
-                    <div className="total-section-container">
-                        <div className="total-section-inner">
-                                    {selectedAdd
-                                    ?<div 
-                                        onClick={openAddList}
-                                        className='cart-address-selector'
-                                        name={'address-container'}>
-                                            {selectedAdd.street_name+' '+selectedAdd.street_number+', '+selectedAdd.city}
-                                        <Arrow className='arrow-address-selector'/>
-                                    </div>
-                                    :<div 
-                                        onClick={openAddForm}
-                                        className="cart-address-selector">
-                                        <b>You have no address asociated,</b> 
-                                        please create one to proceed. 
-                                        <Arrow className='arrow-address-selector'/>
+                <div className="buynow-inner-lateral">
+                    <div>
+                        <div className="buynow-address-container">
+                            {selectedAdd
+                                ?<div 
+                                    onClick={openAddList}
+                                    className='buynow-address-selector'
+                                    name={'address-container'}>
+                                        <Location className='address-icon' />
+                                        <p>{selectedAdd.street_name+' '+selectedAdd.street_number}</p>
+                                    <Arrow className='buynow-arrow-address-selector'/>
+                                </div>
+                                :<div 
+                                    onClick={openAddForm}
+                                    className="buynow-address-selector">
+                                    <b>You have no address asociated,</b> 
+                                    please create one to proceed. 
+                                    <Arrow className='arrow-address-selector'/>
+                                </div>}
+                        </div>
+
+                        <div className="buynow-total-container">
+                            <div className="cart-total">
+                                {product.free_shipping && <del className="grey">${priceFormat(SHIP_COST).int}</del>}
+                                {product.free_shipping
+                                ? <div className="cart-ship-total green">
+                                    <Ship className='ship-svg' />
+                                    <h3>Envío gratis!</h3>
+                                </div>
+                                : <div>
+                                    <h3>${priceFormat(SHIP_COST).int}</h3><p>{priceFormat(SHIP_COST).cents}</p>
+                                    </div> }
+                            </div>
+
+                            <div className="buynow-total-inner">
+                                <h3>total</h3>
+                                <div className="buynow-total-inner-inner">
+                                    {product.on_sale &&<div>
+                                        <p>-{product.discount}% <del> ${priceFormat(quantity * product.price).int}</del></p>
+                                        
                                     </div>}
-
-                                    <div className="cart-total">
-                                    {cart.free_ship_cart && <del className="grey">${priceFormat(cart.products.length * SHIP_COST).int}</del>}
-                                    {cart.shipping_cost === 0
-                                    ? <div className="cart-ship-total green">
-                                        <Ship className='ship-svg' />
-                                        <h3>Envío gratis!</h3>
-                                    </div>
-                                    : <div>
-                                        <h3>${priceFormat(cart.shipping_cost).int}</h3><p>{priceFormat(cart.shipping_cost).cents}</p>
-                                        </div> }
+                                    <h1>${priceFormat(quantity * (product.on_sale ? product.sale_price : product.price)).int}</h1><p>{priceFormat(quantity * (product.on_sale ? product.sale_price : product.price)).cents}</p>
                                 </div>
                             </div>
 
-                        <div className="total-section-inner">
-                            <h2>Total:</h2>
-                            <h2 className="cart-total">${priceFormat(total).int}</h2>
-                            <p>{priceFormat(total).cents}</p>
                         </div>
                     </div>
-                    
-                        <div className="cart-button-section">
-                            <button disabled={(true || loadingPayment === 'S')} 
-                            onClick={goCheckout}>{ null 
-                            ? <Spinner className='cho-svg'/> 
-                            : 'Stripe checkout' }</button>
 
-                            <button disabled={(!cart || cart.length < 1 || !selectedAdd || loadingPayment === 'MP')} 
-                            onClick={openMP}>{ loadingPayment 
-                            ? <Spinner className='cho-svg'/> 
-                            : 'MercadoPago checkout' }</button>
-                        </div>
-                    
+
+                    <div className="cart-button-section">
+                        <button disabled={(true || loadingPayment === 'S')} 
+                        onClick={goCheckout}>{ null 
+                        ? <Spinner className='cho-svg'/> 
+                        : 'Stripe checkout' }</button>
+
+                        <button disabled={(!product || !selectedAdd || loadingPayment === 'MP')} 
+                        onClick={openMP}>{ loadingPayment 
+                        ? <Spinner className='cho-svg'/> 
+                        : 'MercadoPago checkout' }</button>
+                    </div>
                 </div>
-                : <h1 style={{ color: 'black'}}>Your cart is empty.</h1>}
             </div>
+
+            : <div>No deberías estar acá</div>}
 
             <form 
             id='checkout-container'
@@ -216,7 +235,7 @@ const Cart = () => {
             <br />
             <br />
             <br />
-            <hr />
+            <br />
             <ul>
                 <br/>
                 <p><b>Mercadopago</b></p>
@@ -314,4 +333,4 @@ const Cart = () => {
     );
 };
 
-export default Cart;
+export default BuyNow;

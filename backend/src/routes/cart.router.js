@@ -2,6 +2,7 @@ const { Router } = require("express");
 const router = Router();
 const {
     getUserCart,
+    setBuyNow,
     addToCart,
     removeFromCart,
     emptyCart,
@@ -11,6 +12,7 @@ const {
 } = require("../controllers/cart.ctrl.js");
 
 router.get("/", getUserCart);
+router.post("/", setBuyNow);
 router.post("/:id", addToCart);
 router.put("/quantity", quantity);
 router.put("/quantityEx", quantityEx);

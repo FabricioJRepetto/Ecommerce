@@ -1,24 +1,95 @@
+const { SHIP_COST } = require("../../constants");
 const Cart = require("../models/cart");
 const Product = require("../models/product");
 const { rawIdProductGetter } = require('../utils/rawIdProductGetter')
 
 const getUserCart = async (req, res, next) => {
     try {
-        if (!req.user._id) return res.status(400).json({ message: 'User ID not given.' });
-
         const cart = await Cart.findOne({ owner: req.user._id });
+
         if (!cart) {
             const newCart = await Cart.create({
                 products: [],
+                buyNow: '',
                 owner: req.user._id
             })
-            return res.json(newCart)
+            return res.json({ ...newCart, id_list: [] })
         }
-        return res.json(cart);
+        let promises = [];
+        for (const id of cart.products) {
+            promises.push(rawIdProductGetter(id.product_id))
+        }
+        const data = await Promise.allSettled(promises);
+
+        let products = [];
+        let id_list = [];
+        let total = 0;
+        let free_ship_cart = false;
+        let shipping_cost = 0;
+        let message = false;
+
+        const quantityGetter = (id) => {
+            let { quantity } = cart.products.find(e => e.product_id === id)
+            return quantity
+        }
+
+        data.forEach(p => {
+            if (p.status === 'fulfilled') {
+                products.push({
+                    _id: p.value._id.toString(),
+                    name: p.value.name,
+                    free_shipping: p.value.free_shipping,
+                    discuount: p.value.discuount,
+                    brand: p.value.brand,
+                    price: p.value.price,
+                    sale_price: p.value.sale_price,
+                    on_sale: p.on_sale,
+                    stock: p.value.available_quantity,
+                    thumbnail: p.value.thumbnail,
+                    quantity: quantityGetter(p.value._id.toString())
+                });
+                id_list.push(p.value._id.toString());
+
+                total += (p.value.on_sale ? p.value.sale_price : p.value.price) * quantityGetter(p.value._id.toString());
+
+                p.value.free_shipping ? (free_ship_cart = true) : shipping_cost += SHIP_COST;
+            }
+        })
+
+        if (cart.products.length !== id_list.length) {
+            cart.products = cart.products.filter(e => id_list.includes(e.product_id));
+            await cart.save();
+            message = 'Some products are not available. Cart updated.';
+        }
+
+        return res.json({
+            message,
+            products,
+            id_list,
+            total,
+            free_ship_cart,
+            shipping_cost,
+        });
     } catch (error) {
         next(error);
     }
 };
+
+const setBuyNow = async (req, res, next) => {
+    try {
+        await Cart.findOneAndUpdate({ owner: req.user._id },
+            {
+                '$set': {
+                    'buyNow': req.body.product_id
+                }
+            },
+            { new: true });
+        return res.json({ message: 'Buy Now setted' });
+
+    } catch (error) {
+        next(error)
+    }
+}
 
 const addToCart = async (req, res, next) => {
     try {
@@ -26,12 +97,12 @@ const addToCart = async (req, res, next) => {
         const productToAdd = req.params.id;
         const cart = await Cart.findOne({ owner: userId });
 
-        const { name, price, sale_price, on_sale, free_shipping, discount, description, available_quantity, thumbnail } = await rawIdProductGetter(productToAdd);
-        console.log(thumbnail);
         if (cart) {
             let flag = false;
             cart.products.forEach(e => {
-                e.product_id === productToAdd && (flag = true)
+                if (e.product_id === productToAdd) {
+                    flag = true
+                }
             });
 
             if (flag) { // si el prod ya existe
@@ -43,15 +114,6 @@ const addToCart = async (req, res, next) => {
             } else { // si todavia no existe
                 cart.products.push({
                     product_id: productToAdd,
-                    product_name: name,
-                    description,
-                    img: thumbnail,
-                    price,
-                    sale_price,
-                    on_sale,
-                    discount,
-                    free_shipping,
-                    stock: available_quantity,
                     quantity: 1
                 });
             };
@@ -61,17 +123,9 @@ const addToCart = async (req, res, next) => {
             const newCart = new Cart({
                 products: [{
                     product_id: productToAdd,
-                    product_name: name,
-                    description,
-                    img: thumbnail,
-                    price,
-                    sale_price,
-                    on_sale,
-                    discount,
-                    free_shipping,
-                    stock,
                     quantity: 1
                 }],
+                buyNow: '',
                 owner: userId,
             });
             await newCart.save();
@@ -172,6 +226,7 @@ const quantityEx = async (req, res, next) => {
 module.exports = {
     getUserCart,
     addToCart,
+    setBuyNow,
     removeFromCart,
     emptyCart,
     deleteCart,

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import MiniCard from "../Products/MiniCard";
 import Carousel from "./Carousel/Carousel";
+import { IMAGES } from "../../constants";
 import Footer from "../common/Footer";
 import "./Home.css";
 
@@ -18,30 +19,8 @@ const Home = () => {
   const [countdown, setCountdown] = useState("");
   const [loading, setLoading] = useState(true);
   const whishlist = useSelector((state) => state.cartReducer.whishlist);
+  const session = useSelector((state) => state.sessionReducer.session);
   const [suggestion, setSuggestion] = useState(false)
-
-  const images = [
-    {
-      img: "https://http2.mlstatic.com/D_NQ_917752-MLA50446386694_062022-OO.webp",
-      url: "/products",
-    },
-    {
-      img: "https://http2.mlstatic.com/D_NQ_794413-MLA50423210111_062022-OO.webp",
-      url: "/products",
-    },
-    {
-      img: "https://http2.mlstatic.com/D_NQ_977617-MLA50409269868_062022-OO.webp",
-      url: "/products",
-    },
-    {
-      img: "https://http2.mlstatic.com/D_NQ_751727-MLA50292961776_062022-OO.webp",
-      url: "/products",
-    },
-    {
-      img: "https://http2.mlstatic.com/D_NQ_627971-MLA50423148467_062022-OO.webp",
-      url: "/products",
-    },
-  ];
 
   useEffect(() => {
     let countdownInterv = null;
@@ -59,23 +38,22 @@ const Home = () => {
 
     (async () => {
         const data = await Promise.all([
-            axios(`/sales/`), 
-            axios(`/history/suggestion`)
-        ]);
-        setProducts(data[0].data);
-        setSuggestion(data[1].data);
-        console.log(data[1].data);
-
+            axios(`/sales/`),
+            (session && axios(`/history/suggestion`))
+        ])
+        setProducts(data[0]?.data)
+        setSuggestion(data[1]?.data || false)
         setLoading(false);
     })();
 
     return () => clearInterval(countdownInterv);
+    // eslint-disable-next-line
   }, []);
 
   return (
     <div className="home-container">
       <div>
-        <Carousel images={images} controls indicators pointer width="100%" />
+        <Carousel images={IMAGES} controls indicators pointer width="100%" />
       </div>
       <div className="categories">
         <div>

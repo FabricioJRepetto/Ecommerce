@@ -261,16 +261,18 @@ const Profile = () => {
                 {whishlist.length ? (
                   React.Children.toArray(
                     whishlist?.map((e) => (
-                      <Card
-                        img={e.thumbnail}
-                        name={e.name}
-                        price={e.price}
-                        brand={e.brand}
-                        prodId={e._id}
-                        free_shipping={e.free_shipping}
-                        fav={wl_id.includes(e._id)}
-                        on_sale={e.on_sale}
-                      />
+                        <Card 
+                            img={e.thumbnail}
+                            name={e.name}
+                            price={e.price}
+                            sale_price={e.sale_price}
+                            discount={e.discount}
+                            brand={e.brand}
+                            prodId={e._id}
+                            free_shipping={e.free_shipping}
+                            fav={wl_id.includes(e._id)}
+                            on_sale={e.on_sale}
+                        />
                     ))
                   )
                 ) : (

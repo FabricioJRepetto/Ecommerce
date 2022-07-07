@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useAxios } from '../../hooks/useAxios';
 import { useNotification } from '../../hooks/useNotification';
 import { addCart } from '../../Redux/reducer/cartSlice';
@@ -17,13 +17,13 @@ const Details = () => {
     const whishlist = useSelector((state) => state.cartReducer.whishlist);
     const session = useSelector((state) => state.sessionReducer.session);
     const dispatch = useDispatch();
+    const navigate =useNavigate();
     const [notification] = useNotification();
 
     const { data, loading, error } = useAxios('GET', `/product/${id}`);
-    !loading && console.log(data);
 
     useEffect(() => {
-        if (!loading && session) {
+        if (!loading && session && data) {
             // setear historial
             const payload = {
                 product_id: data._id,
@@ -41,11 +41,18 @@ const Details = () => {
             statusText === 'OK' && !cart.includes(id) && dispatch(addCart(id));
             notification(data.message, '/cart', `${statusText === 'OK' ? 'success' : 'warning'}`);
         } else {
-            // redirigir al login
-            // cuando loguea, redirigir a esta pagina otra vez
             notification('Log in to proceed.', '/signin', 'warning')
         }
   };
+
+  const buyNow = async (id) => { 
+        if (session) {
+            await axios.post(`/cart/`, {product_id: id});
+            navigate('/buyNow');
+        } else {
+            notification('Log in to proceed.', '/signin', 'warning')
+        }
+   }
 
   return (
     <div>
@@ -71,7 +78,7 @@ const Details = () => {
                             <p>{data.free_shipping && 'free shipping'}</p>
                             <button onClick={() => addToCart(data._id)}>Add to cart</button>
                             <br />
-                            <button disabled>Buy now</button>
+                            <button onClick={() => buyNow(data._id)}>Buy now</button>
                         </div>
 
                         {data.main_features &&
