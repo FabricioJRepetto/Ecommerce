@@ -2,6 +2,7 @@ import React from "react";
 import { resizer } from "../../helpers/resizer";
 
 const OrderCard = ({ order }) => {
+  //! VOLVER A VER agregar ordenamiento y filtros
   const {
     id,
     products,

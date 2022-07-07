@@ -190,6 +190,50 @@ const verifyAdminRoute = (req, res, next) => {
   return res.send("ok");
 };
 
+const getAllUsers = async (req, res, next) => {
+  const allUsersFound = await User.find();
+  const usefulData = [
+    "_id",
+    "email",
+    "name",
+    "role",
+    "emailVerified",
+    "avatar",
+  ];
+  let allUsers = [];
+  for (const user of allUsersFound) {
+    let newUser = {
+      _id: "",
+      email: "",
+      name: "",
+      role: "",
+      emailVerified: "",
+      avatar: "",
+    };
+    for (const key in user) {
+      if (usefulData.includes(key)) {
+        console.log(key + " " + user[key]);
+        newUser[key] = user[key];
+      }
+    }
+    allUsers.push(newUser);
+  }
+  console.log(allUsers);
+  return res.json(allUsers);
+};
+
+const deleteUser = async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const { avatar: imgToDelete } = await User.findById(id);
+    //! VOLVER A VER agregar estraegia para eliminar avatar de cloudinary
+    await User.findByIdAndDelete(id);
+    return res.status(204).json({ message: "Deleted successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   signin,
   signup,
@@ -201,4 +245,6 @@ module.exports = {
   changePassword,
   editProfile,
   verifyAdminRoute,
+  getAllUsers,
+  deleteUser,
 };

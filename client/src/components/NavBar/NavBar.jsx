@@ -65,10 +65,6 @@ const NavBar = () => {
             <p>Products</p>
           </NavLink>
 
-          <NavLink to={"productForm"}>
-            <p>Create Products</p>
-          </NavLink>
-
           <NavLink to={"admin"}>
             <p>ADMIN</p>
           </NavLink>

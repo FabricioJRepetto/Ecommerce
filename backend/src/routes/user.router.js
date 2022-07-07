@@ -18,6 +18,8 @@ const {
   changePassword,
   editProfile,
   verifyAdminRoute,
+  getAllUsers,
+  deleteUser,
 } = require("../controllers/user.ctrl");
 const addressRouter = require("./address.router");
 const { body } = require("express-validator");
@@ -60,12 +62,15 @@ router.post(
 );
 router.post("/signin", [emailValidation, passwordValidationSignin], signin);
 router.get("/profile/:token", verifyToken, profile);
-router.put("/role", [verifyToken, verifySuperAdmin], role); //! VOLVER A VER mover a ruta de superadmin
 router.put("/verifyEmail", verifyToken, verifyEmail);
 router.put("/forgotPassword", forgotPassword);
 router.put("/resetPassword", resetPassword);
 router.put("/changePassword", passwordValidation, changePassword);
 router.put("/editProfile", verifyToken, editProfile);
+
+router.put("/role", [verifyToken, verifySuperAdmin], role); //! VOLVER A VER mover a ruta de superadmin
 router.get("/verifyAdmin", [verifyToken, verifyAdmin], verifyAdminRoute);
+router.get("/getAll", [verifyToken, verifyAdmin], getAllUsers);
+router.delete("/:id", [verifyToken, verifyAdmin], deleteUser);
 
 module.exports = router;

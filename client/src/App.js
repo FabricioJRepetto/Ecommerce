@@ -32,6 +32,7 @@ import Orders from "./test/fer/Orders";
 
 import BackToTop from "./helpers/backToTop/BackToTop";
 import RequireRole from "./test/fer/RequireRole";
+import Users from "./test/fer/Users";
 
 function App() {
   const dispatch = useDispatch();
@@ -79,7 +80,6 @@ function App() {
         <Route path="/profile/:section" element={<Profile />} />
         <Route path="/results" element={<Results />} />
         <Route path="/products" element={<Products />} />
-        <Route path="/productForm" element={<ProductForm />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout/:id" element={<Checkout />} />
         <Route path="/reset/:userId/:resetToken" element={<ResetPassword />} />
@@ -90,6 +90,8 @@ function App() {
           <Route path="admin" element={<AdminLayout />}>
             {/* <Route index element={<Products />} /> */}
             <Route path="products" element={<Products />} />
+            <Route path="productForm" element={<ProductForm />} />
+            <Route path="users" element={<Users />} />
             <Route path="orders" element={<Orders />} />
             <Route path="*" element={<h1>404 ADMIN</h1>} />
           </Route>
