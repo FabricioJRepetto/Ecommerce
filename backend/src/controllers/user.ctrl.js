@@ -39,7 +39,8 @@ const signin = async (req, res, next) => {
 
       req.login(user, { session: false }, async (err) => {
         if (err) return next(err);
-        const body = { _id: user._id, email: user.email };
+        const { _id, email, role, avatar } = user;
+        const body = { _id, email, role, avatar };
 
         const token = jwt.sign({ user: body }, JWT_SECRET_CODE, {
           expiresIn: 864000,
