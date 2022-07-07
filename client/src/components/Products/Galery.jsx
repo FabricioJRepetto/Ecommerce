@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { resizer } from '../../helpers/resizer';
 import LoadingPlaceHolder from '../common/LoadingPlaceHolder';
@@ -11,6 +11,18 @@ const Galery = ({ imgs }) => {
     const [loaded, setLoaded] = useState(1);
 
     const [isOpen, setIsOpen] = useState(false)
+
+    useEffect(() => {
+      let timer = null;
+        timer = setTimeout(() => {
+            setLoading(true)
+        }, 5000);
+    
+      return () => {
+        clearTimeout(timer)
+      }
+    }, []);
+    
 
     const loadedHandler = () => { 
         setLoaded(loaded+1)
