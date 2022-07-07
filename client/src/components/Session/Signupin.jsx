@@ -63,7 +63,7 @@ const Signupin = () => {
         dispatch(loadCart(cart.data.id_list));
         dispatch(loadWhishlist(whish.data.id_list));
 
-        notification(`Bienvenido, ${data.username}`, "", "success");
+        notification(`Bienvenido, ${username}`, "", "success");
       }
     } catch (error) {
         notification(error.response.data, '', 'error');
@@ -99,6 +99,8 @@ const Signupin = () => {
     window.localStorage.setItem("loggedEmailEcommerce", email);
    
     console.log(userDecoded);
+    notification(`Bienvenido, ${username}`, "", "success");
+
   };
 
   useEffect(() => {
