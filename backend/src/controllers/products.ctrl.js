@@ -12,7 +12,7 @@ const cloudinary = require("cloudinary").v2;
 const fs = require("fs-extra");
 const axios = require("axios");
 const { meliSearchParser } = require("../utils/meliParser");
-const { rawIdProductGetter } = require('../utils/rawIdProductGetter')
+const { rawIdProductGetter } = require("../utils/rawIdProductGetter");
 
 cloudinary.config({
     cloud_name: CLOUDINARY_CLOUD,
@@ -32,7 +32,7 @@ const getAll = async (req, res, next) => {
 
 const getByQuery = async (req, res, next) => {
     try {
-        const L = '50';
+        const L = "50";
         const meli = `https://api.mercadolibre.com/sites/MLA/search?&official_store=all&limit=${L}&q=${req.query.q}`;
 
         const { data } = await axios(meli);
@@ -41,7 +41,7 @@ const getByQuery = async (req, res, next) => {
         const resultsMeli = meliSearchParser(data.results);
 
         const resultsDB = await Product.find({
-            name: { '$regex': req.query.q, '$options': "i" },
+            name: { $regex: req.query.q, $options: "i" },
         });
 
         return res.json({ db: resultsDB, meli: resultsMeli, filters });
@@ -54,7 +54,7 @@ const getById = async (req, res, next) => {
     const id = req.params.id;
     try {
         const product = await rawIdProductGetter(id);
-        return res.json(product)
+        return res.json(product);
     } catch (error) {
         next(error);
     }

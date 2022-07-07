@@ -62,6 +62,8 @@ const Signupin = () => {
         dispatch(loadAvatar(avatar));
         dispatch(loadCart(cart.data.id_list));
         dispatch(loadWhishlist(whish.data.id_list));
+
+        notification(`Bienvenido, ${data.username}`, "", "success");
       }
     } catch (error) {
         notification(error.response.data, '', 'error');
@@ -95,19 +97,18 @@ const Signupin = () => {
 
     window.localStorage.setItem("loggedAvatarEcommerce", avatar);
     window.localStorage.setItem("loggedEmailEcommerce", email);
-
+   
     console.log(userDecoded);
-    //navigate(-1)  // ?!
   };
 
   useEffect(() => {
     if (session) {
-         if (hasPreviousState) {
-            navigate(-1);
-        } else {
-            navigate("/");
-        }
-    };
+      if (hasPreviousState) {
+        navigate(-1);
+      } else {
+        navigate("/");
+      }
+    }
 
     /* global google */
     google.accounts.id.initialize({
