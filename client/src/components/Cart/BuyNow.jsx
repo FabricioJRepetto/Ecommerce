@@ -14,6 +14,7 @@ import { ReactComponent as Ship } from '../../assets/svg/ship.svg'
 import { ReactComponent as Spinner } from '../../assets/svg/spinner.svg'
 import QuantityInput from "./QuantityInput";
 import { useSelector } from "react-redux";
+import LoadingPlaceHolder from "../common/LoadingPlaceHolder";
 
 const BuyNow = () => {
     const navigate = useNavigate();
@@ -31,6 +32,7 @@ const BuyNow = () => {
     const [loadingPayment, setLoadingPayment] = useState(false);
     const [quantity, setQuantity] = useState(1);
     const [loading, setLoading] = useState(true);
+    const [loaded, setLoaded] = useState(false);
     const [isOpenAddForm, openAddForm, closeAddForm] = useModal();
     const [isOpenAddList, openAddList, closeAddList] = useModal();
 
@@ -57,6 +59,7 @@ const BuyNow = () => {
 
     const getProd = async () => {        
         const { data } = await axios(`/cart/`);
+        console.log(data);
         setId(data.buyNow);
         if (data.buyNow === '') {
             if (hasPreviousState) {
@@ -151,11 +154,15 @@ const BuyNow = () => {
     return (
         <div className="buynow-container">
 
-            {product
+            {product && !loading
             ?<div className="buynow-inner">
                 <div className="buynow-product-details">
                     <div className="buynow-product-inner">
-                        {<img src={product && product.images[0].imgURL} alt="prod" style={{ height: '360px'}} />}
+                        <div className="buynow-img-container">
+                            {!loaded && <LoadingPlaceHolder extraStyles={{ height: "100%" }}/>}
+                            {<img src={product && product.images[0].imgURL} 
+                                alt="prod" onLoad={() => setLoaded(true)} className={`buynow-img ${loaded && 'visible'}`}/>}
+                        </div>
                         <p>{product.name}</p>
                     </div>
                     <QuantityInput stock={product.available_quantity} 
@@ -225,7 +232,9 @@ const BuyNow = () => {
                 </div>
             </div>
 
-            : <div>No deberías estar acá</div>}
+            : <div className="buynow-loading">
+                <Spinner />
+            </div>}
 
             <form 
             id='checkout-container'

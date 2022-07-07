@@ -75,7 +75,8 @@ function App() {
                 <Route path="/results" element={<Results />} />
                 <Route path="/products" element={<Products />} />
                 <Route path="/productForm" element={<ProductForm />} />
-                <Route path="/cart" element={<Cart />} />
+                <Route path="/cart/" element={<Cart />} />
+                <Route path="/cart/:section" element={<Cart />} />
                 <Route path="/buynow" element={<BuyNow />} />
                 <Route path="/checkout/:id" element={<Checkout />} />
                 <Route path="/reset/:userId/:resetToken" element={<ResetPassword />} />

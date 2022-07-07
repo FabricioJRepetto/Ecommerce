@@ -20,7 +20,6 @@ const rawIdProductGetter = async (id) => {
             const product = await Product.findById(id);
             if (product) {
                 return product
-
             } else {
                 console.log('ERROR id getter');
                 return { code: 400, message: "Wrong product ID" }

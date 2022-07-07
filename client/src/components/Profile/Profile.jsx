@@ -84,7 +84,7 @@ const Profile = () => {
     );
   };
 
-  // set default address ⭐
+  // set default address
   const setDefault = async (id) => {
     const { data, statusText } = await axios.put(`/address/default/${id}`);
     setAddress(data.address);

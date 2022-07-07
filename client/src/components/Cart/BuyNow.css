@@ -16,6 +16,34 @@
     color: black;
     background: white;
 }
+.buynow-loading {
+    display: flex;
+    flex-direction: row;    
+    justify-content: center;
+    align-items: center;
+    min-width: 75vw;
+    min-height: 54vh;
+    width: fit-content;
+    border-radius: 4px;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, .8);
+    color: black;
+    background: white;
+}
+
+.buynow-img-container {
+    height: 360px;
+    overflow: hidden;
+}
+
+.buynow-img {
+    max-height: 100%;
+    max-width: 100%;
+    visibility: hidden;
+}
+.visible {
+    visibility: visible;
+    transition: visibility .3s ease;
+}
 
 .buynow-inner-lateral {
     display: flex;
