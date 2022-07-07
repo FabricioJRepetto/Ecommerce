@@ -3,15 +3,14 @@ const Cart = require('../models/cart');
 const Product = require('../models/product');
 const { rawIdProductGetter } = require('../utils/rawIdProductGetter');
 const { SHIP_COST } = require('../../constants');
+const { cartFormater } = require('../utils/cartFormater');
 
 const getOrder = async (req, res, next) => {
     try {
-        const userId = req.user._id;
-
-        if (!userId || !req.params.id) return res.status(400).json({ message: 'User ID or Order ID not given.' });
+        if (!req.user._id || !req.params.id) return res.status(400).json({ message: 'User ID or Order ID not given.' });
 
         let order = await Order.findOne({
-            user: userId,
+            user: req.user._id,
             _id: req.params.id
         });
         if (!order) return res.json({ message: 'No orders.' });
@@ -42,7 +41,6 @@ const getOrdersAdmin = async (req, res, next) => { //! SOLO ADMIN
 
 const createOrder = async (req, res, next) => {
     try {
-        //: recibir la id de la address en vez de los datos?
         const {
             state,
             city,
@@ -52,7 +50,18 @@ const createOrder = async (req, res, next) => {
         } = req.body;
 
         const cart = await Cart.findOne({ owner: req.user._id });
-        let products = cart.products;
+
+        const data = await cartFormater(cart);
+        const products = data.products.map(e => ({
+            product_name: e.name,
+            product_id: e._id,
+            description: e.description,
+            img: e.thumbnail,
+            price: e.price,
+            sale_price: e.sale_price,
+            quantity: e.quantity,
+            on_sale: e.on_sale,
+        }));
 
         const newOrder = new Order({
             products,
@@ -65,9 +74,9 @@ const createOrder = async (req, res, next) => {
                 street_number
             },
             status: 'pending',
-            total: cart.total,
-            free_shipping: cart.free_ship_cart,
-            shipping_cost: cart.shipping_cost,
+            total: data.total,
+            free_shipping: data.free_ship_cart,
+            shipping_cost: data.shipping_cost,
             order_type: 'cart'
         });
         await newOrder.save();
@@ -156,7 +165,18 @@ const updateOrder = async (req, res, next) => {
         if (product_id) {
             p = await rawIdProductGetter(product_id)
         } else {
-            cart = await Cart.findOne({ owner: req.user._id })
+            const data = await Cart.findOne({ owner: req.user._id });
+            cart = await cartFormater(data);
+            cart.products = cart.products.map(e => ({
+                product_name: e.name,
+                product_id: e._id,
+                description: e.description,
+                img: e.thumbnail,
+                price: e.price,
+                sale_price: e.sale_price,
+                quantity: e.quantity,
+                on_sale: e.on_sale,
+            }));
         }
         const pro = p ? {
             product_name: p.name,
