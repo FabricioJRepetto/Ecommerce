@@ -9,6 +9,12 @@ const cartSchema = new Schema(
                 product_id: String,
             }
         ],
+        buyLater: [
+            {
+                quantity: Number,
+                product_id: String,
+            }
+        ],
         buyNow: String,
         owner: {
             type: String,

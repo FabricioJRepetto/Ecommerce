@@ -3,6 +3,14 @@
     flex-direction: column;
     align-items: center;
 }
+.cart-menu-container a {
+    color: rgb(255, 255, 255);
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    margin: 0 1vw;
+}
+
 .cart-inner {
     min-width: 75vw;
     min-height: 54vh;
@@ -100,4 +108,15 @@
 .cho-svg {
     transform:scale(.8) ;
     color: white;
+}
+
+.cart-buylater-inner {
+    min-width: 75vw;
+    min-height: 54vh;
+    width: fit-content;
+    border-radius: 4px;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, .8);
+    padding: 50px;
+    color: black;
+    background: white;
 }
