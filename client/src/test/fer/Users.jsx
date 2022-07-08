@@ -43,8 +43,18 @@ const Users = () => {
     axios
       .put(`/user/promote/${userToPromote._id}`)
       .then((_) => {
-        //setUsersData(usersData.find((user) => user._id === userToPromote._id));
-        notification("Usuario promovido a administrador", "", "success");
+        setUsersData(
+          usersData.map((user) => {
+            if (user._id === userToPromote._id)
+              return { ...user, role: "admin" };
+            return user;
+          })
+        );
+        notification(
+          `Usuario ${userToPromote.name} promovido a administrador`,
+          "",
+          "success"
+        );
       })
       .catch((err) => console.log(err));
   };
