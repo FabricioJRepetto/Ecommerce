@@ -31,7 +31,7 @@ const cartFormater = async (cart) => {
                 _id: p.value._id.toString(),
                 name: p.value.name,
                 free_shipping: p.value.free_shipping,
-                discuount: p.value.discuount,
+                discount: p.value.discount,
                 brand: p.value.brand,
                 price: p.value.price,
                 sale_price: p.value.sale_price,
@@ -44,6 +44,7 @@ const cartFormater = async (cart) => {
             id_list.push(p.value._id.toString());
 
             total += (p.value.on_sale ? p.value.sale_price : p.value.price) * quantityGetter(p.value._id.toString(), 'products');
+            console.log(total);
 
             p.value.free_shipping ? (free_ship_cart = true) : shipping_cost += SHIP_COST;
         }

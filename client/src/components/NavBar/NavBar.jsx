@@ -42,7 +42,7 @@ const NavBar = () => {
     return (
         <div className="navBar">
             <div className="navbar-logo-section">
-                <img onClick={logoClick} src={require('../../assets/provider-logo2.png')} alt="logo"  className="logo"/>
+                <img onClick={logoClick} src={require('../../assets/provider-logo.png')} alt="logo"  className="logo"/>
             </div>
                     
                 <div className="navbar-central-section">
