@@ -24,8 +24,6 @@ const signup = async (req, res, next) => {
 const signin = async (req, res, next) => {
   const errors = validationResult(req);
 
-  const { avatar } = await User.findOne({ email: req.body.email });
-
   if (!errors.isEmpty()) {
     const message = errors.errors.map((err) => err.msg);
     return res.json({ message });
@@ -39,18 +37,16 @@ const signin = async (req, res, next) => {
 
       req.login(user, { session: false }, async (err) => {
         if (err) return next(err);
-        const { _id, email, role, avatar } = user;
-        const body = { _id, email, role, avatar };
+        const { _id, email, name, role, avatar } = user;
+        const body = { _id, email, role };
 
         const token = jwt.sign({ user: body }, JWT_SECRET_CODE, {
           expiresIn: 864000,
         });
 
         return res.json({
-          //   message: info.message,
-          avatar: avatar,
           token,
-          user: body,
+          user: { email, name, role, avatar },
         });
       });
     } catch (e) {
@@ -69,15 +65,16 @@ const profile = async (req, res, next) => {
   }
 };
 
-const role = async (req, res, next) => {
-  const { email, role } = req.body;
-  if (!email) return res.status(403).json({ message: "No email provided" });
+const promoteUser = async (req, res, next) => {
+  console.log("----------entra");
+  const { id } = req.params;
+  if (!id) return res.status(403).json({ message: "No id provided" });
   try {
-    const userFound = await User.findOne({ email });
+    const userFound = await User.findById(id);
     if (!userFound) return res.status(404).json({ message: "User not found" });
-    userFound.role = role;
+    userFound.role === "client" && (userFound.role = "admin");
     await userFound.save();
-    return res.json({ message: "Role changed successfully" });
+    return res.json({ message: "User promoted successfully" });
   } catch (error) {
     next(error);
   }
@@ -225,8 +222,12 @@ const getAllUsers = async (req, res, next) => {
 
 const deleteUser = async (req, res, next) => {
   const { id } = req.params;
+
   try {
-    const { avatar: imgToDelete } = await User.findById(id);
+    const userFound = await User.findById(id);
+    if (userFound.role === "admin")
+      return res.status(401).json({ message: "Unauthorized" });
+    //const { avatar: imgToDelete } = await User.findById(id);
     //! VOLVER A VER agregar estraegia para eliminar avatar de cloudinary
     await User.findByIdAndDelete(id);
     return res.status(204).json({ message: "Deleted successfully" });
@@ -239,7 +240,7 @@ module.exports = {
   signin,
   signup,
   profile,
-  role,
+  promoteUser,
   verifyEmail,
   forgotPassword,
   resetPassword,

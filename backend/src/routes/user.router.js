@@ -11,7 +11,7 @@ const {
   signin,
   signup,
   profile,
-  role,
+  promoteUser,
   verifyEmail,
   forgotPassword,
   resetPassword,
@@ -68,7 +68,7 @@ router.put("/resetPassword", resetPassword);
 router.put("/changePassword", passwordValidation, changePassword);
 router.put("/editProfile", verifyToken, editProfile);
 
-router.put("/role", [verifyToken, verifySuperAdmin], role); //! VOLVER A VER mover a ruta de superadmin
+router.put("/promote/:id", [verifyToken, verifyAdmin], promoteUser); //! VOLVER A VER mover a ruta de superadmin
 router.get("/verifyAdmin", [verifyToken, verifyAdmin], verifyAdminRoute);
 router.get("/getAll", [verifyToken, verifyAdmin], getAllUsers);
 router.delete("/:id", [verifyToken, verifyAdmin], deleteUser);

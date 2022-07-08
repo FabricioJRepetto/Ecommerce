@@ -44,11 +44,12 @@ function App() {
 
     (async () => {
       try {
+        console.log("ENTRA");
         if (loggedUserToken) {
           const { data } = await axios(`/user/profile/${loggedUserToken}`);
           dispatch(sessionActive(true));
           dispatch(loadUsername(data.name));
-          dispatch(loadAvatar(data.avatar ? data.avatar : loggedAvatar));
+          dispatch(loadAvatar(data.avatar ? data.avatar : loggedAvatar)); //! VOLVER A VER ojo con esto, puede ser que quede guardado el avatar de otro user
           dispatch(loadEmail(data.email ? data.email : loggedEmail));
           dispatch(loadRole(data.role));
 

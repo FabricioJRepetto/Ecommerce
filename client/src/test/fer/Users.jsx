@@ -9,6 +9,8 @@ const Users = () => {
   const [usersData, setUsersData] = useState([]);
   const [isOpenDeleteUser, openDeleteUser, closeDeleteUser, userToDelete] =
     useModal();
+  const [isOpenUserRole, openUserRole, closeUserRole, userToPromote] =
+    useModal();
   const [notification] = useNotification();
 
   useEffect(() => {
@@ -32,6 +34,21 @@ const Users = () => {
       .catch((err) => console.log(err));
   };
 
+  const handleUserRole = () => {
+    promoteToAdmin();
+    closeUserRole();
+  };
+
+  const promoteToAdmin = () => {
+    axios
+      .put(`/user/promote/${userToPromote._id}`)
+      .then((_) => {
+        //setUsersData(usersData.find((user) => user._id === userToPromote._id));
+        notification("Usuario promovido a administrador", "", "success");
+      })
+      .catch((err) => console.log(err));
+  };
+
   return (
     <div>
       <div>
@@ -42,6 +59,7 @@ const Users = () => {
               setAllUsersData={setUsersData}
               allUsersData={usersData}
               openDeleteUser={openDeleteUser}
+              openUserRole={openUserRole}
             />
           ))
         )}
@@ -54,6 +72,18 @@ const Users = () => {
           Aceptar
         </button>
         <button type="button" onClick={closeDeleteUser}>
+          Cancelar
+        </button>
+      </Modal>
+      <Modal isOpen={isOpenUserRole} closeModal={closeUserRole} type="warn">
+        <p>{`¿Promover al usuario ${
+          userToPromote ? userToPromote.name : null
+        } a Administrador?`}</p>
+        <p>Este cambio no puede ser revertido</p>
+        <button type="button" onClick={() => handleUserRole()}>
+          Aceptar
+        </button>
+        <button type="button" onClick={closeUserRole}>
           Cancelar
         </button>
       </Modal>

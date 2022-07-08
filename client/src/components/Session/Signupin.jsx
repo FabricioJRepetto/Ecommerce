@@ -41,6 +41,7 @@ const Signupin = () => {
   const signup = (signupData) => {
     console.log(signupData);
     axios.post(`/user/signup`, signupData).then((res) => console.log(res.data));
+    //! VOLVER A VER agregar notif de email
   };
 
   const signin = async (signinData) => {
@@ -53,19 +54,19 @@ const Signupin = () => {
         dispatch(sessionActive(true));
 
         const username = data.user.name || data.user.email.split("@")[0];
-        const { email, role } = data.user;
-        const avatar = data.avatar || null;
+        const { email, role, avatar } = data.user;
+        // const avatar = data.avatar || null;
         const whish = await axios(`/whishlist`);
         const cart = await axios(`/cart`);
 
         dispatch(loadUsername(username));
         dispatch(loadEmail(email));
-        dispatch(loadAvatar(avatar));
+        if (avatar) dispatch(loadAvatar(avatar));
         dispatch(loadRole(role));
         dispatch(loadCart(cart.data.id_list));
         dispatch(loadWhishlist(whish.data.id_list));
 
-        notification(`Bienvenido, ${data.username}`, "", "success");
+        notification(`Bienvenido, ${username}`, "", "success");
         navigate("/");
         //navigate(-1) // ?!
       }
