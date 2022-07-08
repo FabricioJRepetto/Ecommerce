@@ -62,12 +62,11 @@
     align-items: center;
     margin: 0;
 }
-
 .navbar-profile-button {
     display: flex;
     flex-direction: row;
     align-items: center;
-
+    margin-right: 25px;
 }
 .navbar-avatar {
     height: 1.5rem;
@@ -112,4 +111,51 @@
     position: absolute;
     top: 5px;
     right: -20px;
+}
+
+.navBar-modal-container {
+    position: absolute;
+    height: 50px;
+    width: 90px;
+    text-align: left;
+    overflow: visible;
+}
+.navbar-modal-menu-container {
+    display: flex;
+    flex-direction: column;
+    padding-top: 20px;
+}
+.profile-modal-option {
+    padding-left: 20px;
+    width: 100%;
+}
+.profile-modal-option:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+.navbar-modal {
+    visibility: hidden;
+    position:relative;
+    left: -30px;
+    bottom: -50px;
+    height: 200px;
+    width: 150px;
+    border: 1px solid rgb(115, 115, 115);
+    background: rgb(33, 33, 33);
+    z-index: 1000;
+}
+.profile-modal-option-button {
+    margin-top: 40px;
+}
+.profile-modal-option-button:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+.profile-modal-option-button button {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding-left: 20px;
+}
+.navbar-modal-separator {
+    height: 5px;
 }
