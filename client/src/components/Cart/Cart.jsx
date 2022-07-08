@@ -213,7 +213,7 @@ const Cart = () => {
 
                         <div className="total-section-inner">
                             <h2>Total:</h2>
-                            <h2 className="cart-total">${priceFormat(total).int}</h2>
+                            <h2 className="cart-total">${priceFormat(total+cart.shipping_cost).int}</h2>
                             <p>{priceFormat(total).cents}</p>
                         </div>
                     </div>

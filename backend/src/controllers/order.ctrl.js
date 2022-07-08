@@ -162,6 +162,18 @@ const updateOrder = async (req, res, next) => {
             street_number
         } = req.body;
 
+        if (req.body.status) {
+            const order = await Order.findByIdAndUpdate(req.params.id,
+                {
+                    "$set": {
+                        'status': req.body.status || 'pending',
+                    }
+                },
+                { new: true });
+
+            return res.json({ message: `Order status: ${order.status}` })
+        }
+
         if (product_id) {
             p = await rawIdProductGetter(product_id)
         } else {
@@ -193,7 +205,7 @@ const updateOrder = async (req, res, next) => {
         const order = await Order.findByIdAndUpdate(req.params.id,
             {
                 "$set": {
-                    'status': req.body.status || 'pending',
+                    'status': 'pending',
                     'shipping_address': {
                         'state': state && state,
                         'city': city && city,
@@ -209,7 +221,7 @@ const updateOrder = async (req, res, next) => {
             },
             { new: true });
 
-        return res.json({ message: `Order status: ${order.status}` })
+        return res.json({ message: `Order updated.` })
     } catch (error) {
         next(error)
     }
