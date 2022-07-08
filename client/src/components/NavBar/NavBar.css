@@ -123,39 +123,42 @@
 .navbar-modal-menu-container {
     display: flex;
     flex-direction: column;
-    padding-top: 20px;
+    padding: 20px 0;
 }
 .profile-modal-option {
     padding-left: 20px;
     width: 100%;
+    height: 2rem;
+    color: white;
 }
 .profile-modal-option:hover {
-    background: rgba(255, 255, 255, 0.1);
+    /* background: rgba(255, 255, 255, 0.1); */
+        color: orange;
 }
 .navbar-modal {
     visibility: hidden;
     position:relative;
     left: -30px;
     bottom: -50px;
-    height: 200px;
+    height: fit-content;
     width: 150px;
     border: 1px solid rgb(115, 115, 115);
     background: rgb(33, 33, 33);
     z-index: 1000;
 }
 .profile-modal-option-button {
-    margin-top: 40px;
+    margin-top: 20px;
 }
-.profile-modal-option-button:hover {
-    background: rgba(255, 255, 255, 0.1);
-}
+
 .profile-modal-option-button button {
     background: none;
     border: none;
     color: white;
     cursor: pointer;
     padding-left: 20px;
+    text-align: left;
+    width: 100%;
 }
-.navbar-modal-separator {
-    height: 5px;
+.profile-modal-option-button button:hover {
+    color: orange;
 }

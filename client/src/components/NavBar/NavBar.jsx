@@ -96,19 +96,19 @@ const NavBar = () => {
                                                     <div className="navbar-modal-menu-container"
                                                         onClick={() => setProfileModal(false)}>
                                                         <NavLink to={"/profile/details"} className='profile-modal-option'>Profile</NavLink>
-                                                        <div className="navbar-modal-separator"></div>
+                                                        
                                                         <NavLink to={"/profile/orders"} className='profile-modal-option'>Orders</NavLink>
-                                                        <div className="navbar-modal-separator"></div>
+                                                        
                                                         <NavLink to={"/profile/history"} className='profile-modal-option'>History</NavLink>
-                                                        <div className="navbar-modal-separator"></div>
+                                                        
                                                         <NavLink to={"/profile/address"} className='profile-modal-option'>Address</NavLink>
-                                                        <div className="navbar-modal-separator"></div>
-                                                    </div>
+                                                        
 
-                                                    <div className='profile-modal-option-button'>
-                                                        <Signout />
-                                                    </div>
+                                                        <div className='profile-modal-option-button'>
+                                                            <Signout />
+                                                        </div>
 
+                                                    </div>
                                                 </div>
                                             </div>
                                         
