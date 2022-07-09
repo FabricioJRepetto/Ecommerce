@@ -18,6 +18,10 @@ const orderSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
+    /* user: {
+      type: String,
+      required: true,
+    }, */
     shipping_address: {
       state: String,
       city: String,
@@ -29,6 +33,7 @@ const orderSchema = new Schema(
     status: String,
     free_shipping: Boolean,
     shipping_cost: Number,
+    order_type: String,
   },
   {
     timestamps: true,

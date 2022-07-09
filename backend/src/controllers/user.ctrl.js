@@ -45,28 +45,30 @@ const signin = async (req, res, next) => {
         });
 
         return res.json({
+          //message: info.message,
           token,
-          user: { email, name, role, avatar },
+          user: { email, name, role, avatar: avatar || null },
         });
       });
     } catch (e) {
       return next(e);
     }
-  })(req, res, next);
+  });
 };
 
 const profile = async (req, res, next) => {
   try {
-    if (req.params.token.slice(0, 6) === "google") return res.json(req.user);
-    const { email, name, avatar, role } = await User.findById(req.user._id);
-    return res.json({ email, name, avatar, role });
+    if (req.params.token.slice(0, 6) === "google")
+      return res.json({ name: req.user.email });
+    //if (req.params.token.slice(0, 6) === "google") return res.json(req.user);
+    const { email, name, role, avatar } = await User.findById(req.user._id);
+    return res.json({ email, name, role, avatar: avatar || null });
   } catch (error) {
     next(error);
   }
 };
 
 const promoteUser = async (req, res, next) => {
-  console.log("----------entra");
   const { id } = req.params;
   if (!id) return res.status(403).json({ message: "No id provided" });
   try {

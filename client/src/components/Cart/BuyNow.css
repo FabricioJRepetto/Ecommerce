@@ -1,0 +1,100 @@
+.buynow-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.buynow-inner {
+    display: flex;
+    flex-direction: row;    
+    justify-content: space-between;
+    min-width: 75vw;
+    min-height: 54vh;
+    width: fit-content;
+    border-radius: 4px;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, .8);
+    padding: 50px;
+    color: black;
+    background: white;
+}
+.buynow-loading {
+    display: flex;
+    flex-direction: row;    
+    justify-content: center;
+    align-items: center;
+    min-width: 75vw;
+    min-height: 54vh;
+    width: fit-content;
+    border-radius: 4px;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, .8);
+    color: black;
+    background: white;
+}
+
+.buynow-img-container {
+    height: 360px;
+    overflow: hidden;
+}
+
+.buynow-img {
+    max-height: 100%;
+    max-width: 100%;
+    visibility: hidden;
+}
+.visible {
+    visibility: visible;
+    transition: visibility .3s ease;
+}
+
+.buynow-inner-lateral {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.buynow-total-container {
+    display: flex;
+    margin-top: 2rem;    
+    flex-direction: column;
+    align-items: flex-end;
+}
+.buynow-total-inner {
+    width: 100%;
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+}
+.buynow-total-inner-inner {
+    text-align: right;
+}
+
+.buynow-address-selector {
+    color: #3483fa;
+    height: 1.5rem;
+    width: fit-content;    
+    position: relative;
+    cursor: pointer;
+}
+.buynow-address-container {
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+    margin-right: 1.5rem;
+    min-width: 250px;
+}
+.address-icon {
+    position: absolute;
+    color: #3483fa;
+    transform: scale(.55);
+    top: -6px;
+    left: -30px;
+}
+.buynow-arrow-address-selector {
+    position: absolute;
+    transform: rotate(90deg) scale(.5);
+    top: -0.9rem;
+    right: -2.5rem;
+}
+.buynow-arrow-address-selector path {
+    fill: #3483fa;
+}

@@ -46,7 +46,7 @@ const NavBar = () => {
       <div className="navbar-logo-section">
         <img
           onClick={logoClick}
-          src={require("../../assets/provider-logo2.png")}
+          src={require("../../assets/provider-logo.png")}
           alt="logo"
           className="logo"
         />

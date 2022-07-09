@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import CartCard from "../Products/CartCard";
 import Modal from "../common/Modal";
@@ -19,8 +19,10 @@ const Cart = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const [notification] = useNotification();
+    const { section } = useParams();
 
-    const [cart, setCart] = useState(null);
+    const [render, setRender] = useState(section)
+    const [cart, setCart] = useState(false);
     const [orderId, setOrderId] = useState('');
     const [address, setAddress] = useState(null);
     const [newAdd, setNewAdd] = useState({});
@@ -39,13 +41,18 @@ const Cart = () => {
         getAddress();
     // eslint-disable-next-line    
     }, [])
+    useEffect(() => {
+        setRender(section || "cart");
+    }, [section])
+    
 
     const getCart = async () => {
         const { data } = await axios('/cart/');
         if (data) {
+            console.log(data);
             setCart(data);
+            data.message && notification(data.message, '', 'warning')
         };
-        //console.log(data);
         dispatch(cartTotal(data.total));
         dispatch(loadCart(data.id_list));
         setLoading(false);
@@ -85,8 +92,8 @@ const Cart = () => {
         if (newAdd.state && newAdd.city && newAdd.zip_code && newAdd.street_name && newAdd.street_number) {
             closeAddForm();
             const { data } = await axios.post(`/address`, newAdd);
-            console.log(data);
-            setSelectedAdd(data.pop());
+            notification(data.message, '', 'success')
+            setSelectedAdd(data.address.pop());
             getAddress();
         }
      };
@@ -97,55 +104,79 @@ const Cart = () => {
         closeAddList();
      };
 
-    const deleteProduct = async (id) => {
-        const { data } = await axios.delete(`/cart/${id}`);
+    const deleteProduct = async (id, source) => {
+        const { data } = await axios.delete(`/cart?id=${id}&source=${source}`);
         getCart();
         notification(data.message, '', 'warning');
     };
 
-    const goCheckout = async () => {
-        // crea la order       
-        const { data: id } = await axios.post(`/order/`, selectedAdd);
-        // con la id inicia el checkout
-        navigate(`/checkout/${id}`);
-    };
+    const buyLater = async (id) => { 
+        const { data } = await axios.post(`/cart/buylater/${id}`);
+        getCart();
+        notification(data.message, '', 'success');
+    }
 
+    const goCheckout = async () => {
+        //: WIP
+        setLoadingPayment('S');
+    };
     const openMP = async () => { 
         setLoadingPayment('MP');
-        // crea la order       
-        const { data: id } = await axios.post(`/order/`, selectedAdd);
-        setOrderId(id);
+        let fastId = false;
+        console.log(orderId);
+        // actualiza o crea la order
+        if (orderId) {
+            await axios.put(`/order/${orderId}`, selectedAdd);
+        } else {
+            const { data: id } = await axios.post(`/order/`, selectedAdd);
+            fastId = id;
+            setOrderId(id);
+        }
         // crea la preferencia para mp con la order
-        const { data }  = await axios.get(`/mercadopago/${id}`);
+        const { data }  = await axios.get(`/mercadopago/${orderId || fastId}`);
         // abre el modal de mp con la id de la preferencia
         loadMercadoPago(data.id, 
         setLoadingPayment());
      };
 
+    const buyNow = async (id) => { 
+        await axios.post(`/cart/`, {product_id: id});
+        //: delete
+        navigate('/buyNow');
+   }
+
     return (
         <div className="cart-container">
+                
+            <div className="cart-menu-container">
+                <NavLink to={"/cart/"}>Cart</NavLink>
+                <NavLink to={"/cart/saved"}>{`Saved ${cart.buyLater?.length ? '('+cart?.buyLater?.length+')' : ''}`}</NavLink>
+            </div>
 
-            <div className="cart-inner">
-                <h2 style={{ color: 'black' }}>Cart</h2>
+            {(render === 'cart')
+            ?<div className="cart-inner">
                 {(cart && cart.products.length > 0)
                 ? <div className="">
                     
                     {cart.products.map((p) => (
                         <CartCard
-                            key={p.product_id}
+                            key={p._id}
                             on_cart={true}
                             on_sale={p.on_sale}
-                            img={p.img}
-                            name={p.product_name}
-                            prodId={p.product_id}
+                            img={p.thumbnail}
+                            name={p.name}
+                            prodId={p._id}
                             price={p.price}
                             sale_price={p.sale_price}
                             free_shipping={p.free_shipping}
                             discount={p.discount}
                             brand={p.brand}
-                            deleteP={deleteProduct}
                             prodQuantity={p.quantity}
                             stock={p.stock}
+                            buyLater={buyLater}
+                            deleteP={deleteProduct}
+                            buyNow={buyNow}
+                            source={'products'}
                             />
                     ))}
 
@@ -182,7 +213,7 @@ const Cart = () => {
 
                         <div className="total-section-inner">
                             <h2>Total:</h2>
-                            <h2 className="cart-total">${priceFormat(total).int}</h2>
+                            <h2 className="cart-total">${priceFormat(total+cart.shipping_cost).int}</h2>
                             <p>{priceFormat(total).cents}</p>
                         </div>
                     </div>
@@ -200,8 +231,39 @@ const Cart = () => {
                         </div>
                     
                 </div>
-                : <h1 style={{ color: 'black'}}>Your cart is empty.</h1>}
+                : <div>
+                    {loading && <Spinner />}
+                    {!loading && cart?.products?.length < 1 && <h1 style={{ color: 'black'}}>Your cart is empty.</h1>}
+                </div>}
             </div>
+
+            :<div className="cart-buylater-inner">
+                {(cart && cart.buyLater?.length > 0)
+                    ? <div>{cart.buyLater.map((p) => (
+                            <CartCard
+                                key={p._id}
+                                on_cart={true}
+                                on_sale={p.on_sale}
+                                img={p.thumbnail}
+                                name={p.name}
+                                prodId={p._id}
+                                price={p.price}
+                                sale_price={p.sale_price}
+                                free_shipping={p.free_shipping}
+                                discount={p.discount}
+                                brand={p.brand}
+                                prodQuantity={p.quantity}
+                                stock={p.stock}
+                                buyLater={buyLater}
+                                buyNow={buyNow}
+                                deleteP={deleteProduct}
+                                source={'buyLater'}
+                                />
+                        ))}</div>
+
+                    : <h1>No tienes productos guradados</h1>
+                }
+            </div>}
 
             <form 
             id='checkout-container'

@@ -14,8 +14,7 @@ import { useForm } from "react-hook-form";
 import { loadCart, loadWhishlist } from "../../Redux/reducer/cartSlice";
 import "./Signupin.css";
 import { useRef } from "react";
-import { useNotification } from "../../hooks/useNotification";
-
+import { useNotification } from '../../hooks/useNotification'
 const { REACT_APP_OAUTH_CLIENT_ID } = process.env;
 
 const Signupin = () => {
@@ -32,9 +31,9 @@ const Signupin = () => {
     getValues,
   } = useForm();
   let timeoutId = useRef();
-  const [notification] = useNotification();
   const location = useLocation();
   const hasPreviousState = location.key !== "default";
+  const [ notification ] = useNotification();
 
   const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i;
 
@@ -51,6 +50,8 @@ const Signupin = () => {
 
       if (data.user) {
         window.localStorage.setItem("loggedTokenEcommerce", data.token);
+        console.log(data);
+        
         dispatch(sessionActive(true));
 
         const username = data.user.name || data.user.email.split("@")[0];
@@ -67,11 +68,10 @@ const Signupin = () => {
         dispatch(loadWhishlist(whish.data.id_list));
 
         notification(`Bienvenido, ${username}`, "", "success");
-        navigate("/");
-        //navigate(-1) // ?!
       }
     } catch (error) {
-      console.log(error);
+        notification(error.response.data, '', 'error');
+        console.log(error);
     }
   };
 
@@ -102,10 +102,10 @@ const Signupin = () => {
 
     window.localStorage.setItem("loggedAvatarEcommerce", avatar);
     window.localStorage.setItem("loggedEmailEcommerce", email);
-
-    navigate("/");
+   
     console.log(userDecoded);
-    //navigate(-1)  // ?!
+    notification(`Bienvenido, ${username}`, "", "success");
+
   };
 
   useEffect(() => {
@@ -261,7 +261,6 @@ const Signupin = () => {
       <hr />
       <div className="google-signin-container" id="signInDiv"></div>
       <hr />
-      <button onClick={() => navigate(-1)}> go back</button>
     </>
   );
 };

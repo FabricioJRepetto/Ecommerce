@@ -6,8 +6,12 @@ input[type=number] {
     appearance: textfield;
     margin: 0; 
 }
-
+.q-input-container {
+    width: 130px;
+    height: 100px;
+}
 .q-input-inner {
+    background: white;
     height: 3.1rem;
     margin-bottom: 1rem;
     border: 1px solid grey;

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import {
   loadAvatar,
   loadEmail,
@@ -21,6 +21,7 @@ import ResetPassword from "./components/Session/ResetPassword";
 import VerifyEmail from "./components/Session/VerifyEmail";
 import Profile from "./components/Profile/Profile";
 import Cart from "./components/Cart/Cart";
+import BuyNow from "./components/Cart/BuyNow";
 import Checkout from "./components/Cart/Checkout";
 import PostSale from "./components/Cart/PostSale";
 import Products from "./test/fer/Products";
@@ -36,6 +37,7 @@ import Users from "./test/fer/Users";
 
 function App() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loggedUserToken = window.localStorage.getItem("loggedTokenEcommerce");
@@ -44,7 +46,6 @@ function App() {
 
     (async () => {
       try {
-        console.log("ENTRA");
         if (loggedUserToken) {
           const { data } = await axios(`/user/profile/${loggedUserToken}`);
           dispatch(sessionActive(true));
@@ -60,6 +61,8 @@ function App() {
           dispatch(loadWhishlist(whish.id_list));
         }
       } catch (error) {
+        console.log("APP.JS");
+        navigate("/");
         window.localStorage.removeItem("loggedTokenEcommerce");
         window.localStorage.removeItem("loggedAvatarEcommerce");
         window.localStorage.removeItem("loggedEmailEcommerce");
@@ -81,7 +84,10 @@ function App() {
         <Route path="/profile/:section" element={<Profile />} />
         <Route path="/results" element={<Results />} />
         <Route path="/products" element={<Products />} />
-        <Route path="/cart" element={<Cart />} />
+        <Route path="/productForm" element={<ProductForm />} />
+        <Route path="/cart/" element={<Cart />} />
+        <Route path="/cart/:section" element={<Cart />} />
+        <Route path="/buynow" element={<BuyNow />} />
         <Route path="/checkout/:id" element={<Checkout />} />
         <Route path="/reset/:userId/:resetToken" element={<ResetPassword />} />
         <Route path="/orders/post-sale/:id" element={<PostSale />} />

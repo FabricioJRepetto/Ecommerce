@@ -14,8 +14,8 @@ const Card = ({
   name,
   brand,
   price,
-  on_sale,
   sale_price,
+  on_sale,
   discount,
   prodId,
   free_shipping,
@@ -64,12 +64,12 @@ const Card = ({
 
           <div className="card-price-container c-mrgn">
             <div className="card-original-price">
-              {on_sale && <del>{"$" + priceFormat(price).int}</del>}
+              {on_sale && <del>${priceFormat(price).int}</del>}
             </div>
             <div className="card-price-section">
               <div className="minicard-price-section-inner">
-                <h2>{"$" + priceFormat(on_sale ? sale_price : price).int}</h2>
-                <p>{priceFormat(on_sale ? sale_price : price)?.cents}</p>
+                <h2>${priceFormat(on_sale ? sale_price : price).int}</h2>
+                <p>{priceFormat(on_sale ? sale_price : price).cents}</p>
               </div>
 
               {on_sale && (
