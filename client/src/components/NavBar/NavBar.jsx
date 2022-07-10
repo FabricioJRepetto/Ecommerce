@@ -88,7 +88,7 @@ const NavBar = () => {
                                                 </div>
                                             : <Avatar className="navbar-avatar-svg"/>}
 
-                                            <p>Profile</p>
+                                            <b>Profile</b>
 
                                             <div className="navBar-modal-container">
                                                 <div className={`navbar-modal ${profileModal && 'visible'}`}>
@@ -97,11 +97,15 @@ const NavBar = () => {
                                                         onClick={() => setProfileModal(false)}>
                                                         <NavLink to={"/profile/details"} className='profile-modal-option'>Profile</NavLink>
                                                         
+                                                        <NavLink to={"/profile/address"} className='profile-modal-option'>Address</NavLink>
+
+                                                        <NavLink to={"/profile/whishlist"} className='profile-modal-option'>Whishlist</NavLink>
+
                                                         <NavLink to={"/profile/orders"} className='profile-modal-option'>Orders</NavLink>
+                                                        
                                                         
                                                         <NavLink to={"/profile/history"} className='profile-modal-option'>History</NavLink>
                                                         
-                                                        <NavLink to={"/profile/address"} className='profile-modal-option'>Address</NavLink>
                                                         
 
                                                         <div className='profile-modal-option-button'>
