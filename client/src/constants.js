@@ -15,7 +15,7 @@ const IMAGES = [
         url: "/products",
     },
     {
-        img: "https://http2.mlstatic.com/D_NQ_751727-MLA50292961776_062022-OO.webp",
+        img: "https://http2.mlstatic.com/D_NQ_688045-MLA50608833957_072022-OO.webp",
         url: "/products",
     },
     {

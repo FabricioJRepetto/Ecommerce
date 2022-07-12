@@ -1,21 +1,23 @@
+import { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import "./NavBar.css";
-
 import { ReactComponent as Cart } from "../../assets/svg/cart.svg";
 import { ReactComponent as Fav } from "../../assets/svg/fav.svg";
 import { ReactComponent as Avatar } from "../../assets/svg/avatar.svg";
-import {
-  loadProductsFound,
-  loadProductsOwn,
-} from "../../Redux/reducer/productsSlice";
+import { loadProductsFound, loadProductsOwn } from "../../Redux/reducer/productsSlice";
+import Signout from "../Session/Signout";
 
 const NavBar = () => {
   const { session, avatar } = useSelector((state) => state.sessionReducer);
   const cart = useSelector((state) => state.cartReducer.onCart);
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const { session, avatar } = useSelector((state) => state.sessionReducer);
+    const cart = useSelector((state) => state.cartReducer.onCart);
+    const navigate =useNavigate();
+    const dispatch = useDispatch();    
+
+    const [profileModal, setProfileModal] = useState(false);
 
   const querySearch = async (e) => {
     if (e.key === "Enter" && e.target.value) {
@@ -23,7 +25,6 @@ const NavBar = () => {
         //: logear busqueda en el historial
         axios.post(`/history/search/${e.target.value}`);
       }
-
       dispatch(loadProductsOwn("loading"));
       dispatch(loadProductsFound("loading"));
       navigate("/results");
@@ -71,31 +72,57 @@ const NavBar = () => {
         </div>
       </div>
 
-      <div className="navbar-profile-container">
-        <div className="navbar-profile-section">
-          {!session ? (
-            <NavLink to={"signin"}>
-              <p>Log In / Sign in</p>
-            </NavLink>
-          ) : (
-            <>
-              <NavLink
-                to={"/profile/details"}
-                className="navbar-profile-button"
-              >
-                {avatar ? (
-                  <div className="navbar-avatar">
-                    <img
-                      src={avatar}
-                      referrerPolicy="no-referrer"
-                      alt="navbar-avatar"
-                    />
-                  </div>
-                ) : (
-                  <Avatar className="navbar-avatar-svg" />
-                )}
-                <p>Profile</p>
-              </NavLink>
+
+                <div className="navbar-profile-container">
+                        <div className="navbar-profile-section">
+                            {!session ? (
+                            <NavLink to={"signin"}>
+                                <p>Log In / Sign in</p>
+                            </NavLink>
+                            ) : (
+                                <>
+                                    <div 
+                                        className='navbar-profile-button'
+                                        onMouseEnter={() => setProfileModal(true)}
+                                        onMouseLeave={() => setProfileModal(false)}>
+                                        
+                                            { avatar
+                                            ? <div className="navbar-avatar">
+                                                <img src={avatar} 
+                                                referrerPolicy="no-referrer"
+                                                alt="navbar-avatar" />
+                                                </div>
+                                            : <Avatar className="navbar-avatar-svg"/>}
+
+                                            <b>Profile</b>
+
+                                            <div className="navBar-modal-container">
+                                                <div className={`navbar-modal ${profileModal && 'visible'}`}>
+
+                                                    <div className="navbar-modal-menu-container"
+                                                        onClick={() => setProfileModal(false)}>
+                                                        <NavLink to={"/profile/details"} className='profile-modal-option'>Profile</NavLink>
+                                                        
+                                                        <NavLink to={"/profile/address"} className='profile-modal-option'>Address</NavLink>
+
+                                                        <NavLink to={"/profile/whishlist"} className='profile-modal-option'>Whishlist</NavLink>
+
+                                                        <NavLink to={"/profile/orders"} className='profile-modal-option'>Orders</NavLink>
+                                                        
+                                                        
+                                                        <NavLink to={"/profile/history"} className='profile-modal-option'>History</NavLink>
+                                                        
+                                                        
+
+                                                        <div className='profile-modal-option-button'>
+                                                            <Signout />
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        
+                                    </div>
 
               <NavLink to={"/profile/whishlist"}>
                 <Fav className="whishlist-icon" />
