@@ -5,13 +5,13 @@ import {
   loadUsername,
   loadAvatar,
   loadEmail,
+  loadRole,
 } from "../../Redux/reducer/sessionSlice";
 import { useNavigate } from "react-router-dom";
 import { resetCartSlice } from "../../Redux/reducer/cartSlice";
 
 const Signout = () => {
-  const sessionState = useSelector((state) => state.sessionReducer);
-  const { session } = sessionState;
+  const { session } = useSelector((state) => state.sessionReducer);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -23,6 +23,7 @@ const Signout = () => {
     dispatch(loadUsername(null));
     dispatch(loadAvatar(null));
     dispatch(loadEmail(null));
+    dispatch(loadRole(null));
     dispatch(resetCartSlice());
     navigate("/signin");
   };

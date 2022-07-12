@@ -1,12 +1,18 @@
 import React, { useState, useRef } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
+
 import {
   filterProducts,
   loadProductsFound,
+  deleteProductFromState,
 } from "../../Redux/reducer/productsSlice";
 import { useEffect } from "react";
 import Card from "../../components/Products/Card";
+import { useModal } from "../../hooks/useModal";
+import Modal from "../../components/common/Modal";
+import { useNotification } from "../../hooks/useNotification";
 
 const Products = () => {
   const [pricesFilter, setPricesFilter] = useState({
@@ -22,6 +28,14 @@ const Products = () => {
     (state) => state.productsReducer
   );
   const whishlist = useSelector((state) => state.cartReducer.whishlist);
+  const location = useLocation();
+  const [
+    isOpenDeleteProduct,
+    openDeleteProduct,
+    closeDeleteProduct,
+    productToDelete,
+  ] = useModal();
+  const [notification] = useNotification();
 
   useEffect(() => {
     getProducts();
@@ -33,6 +47,13 @@ const Products = () => {
   productsFiltered.length === 0
     ? (productsToShow = productsFound)
     : (productsToShow = productsFiltered);
+
+  /* let productsToShow;
+      productsFiltered.length === 0
+        ? location.pathname === "/admin/products"
+          ? (productsToShow = productsOwn)
+          : (productsToShow = productsFound)
+        : (productsToShow = productsFiltered); */
 
   const getProducts = () => {
     axios
@@ -109,6 +130,21 @@ const Products = () => {
     );
   };
 
+  const handleDeleteProduct = () => {
+    deleteProduct();
+    closeDeleteProduct();
+  };
+
+  const deleteProduct = () => {
+    axios
+      .delete(`/product/${productToDelete.prodId}`)
+      .then((_) => {
+        dispatch(deleteProductFromState(productToDelete.prodId));
+        notification("Producto eliminado exitosamente", "", "success");
+      })
+      .catch((err) => console.log(err)); //! VOLVER A VER manejo de errores
+  };
+
   return (
     <div className="products-container">
       <div className="products-results-container">
@@ -129,6 +165,7 @@ const Products = () => {
                   free_shipping={prod.free_shipping}
                   fav={whishlist.includes(prod._id)}
                   on_sale={prod.on_sale}
+                  openDeleteProduct={openDeleteProduct}
                 />
               ))
             )}
@@ -214,6 +251,22 @@ const Products = () => {
           Envío gratis
         </label>
       </div>
+
+      <Modal
+        isOpen={isOpenDeleteProduct}
+        closeModal={closeDeleteProduct}
+        type="warn"
+      >
+        <p>{`¿Eliminar el producto ${
+          productToDelete ? productToDelete.name : null
+        }?`}</p>
+        <button type="button" onClick={() => handleDeleteProduct()}>
+          Aceptar
+        </button>
+        <button type="button" onClick={closeDeleteProduct}>
+          Cancelar
+        </button>
+      </Modal>
     </div>
   );
 };

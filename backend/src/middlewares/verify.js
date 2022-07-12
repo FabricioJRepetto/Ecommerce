@@ -23,21 +23,24 @@ async function verifyToken(req, res, next) {
           audience: OAUTH_CLIENT_ID,
         });
         const payload = ticket.getPayload();
-        const { sub, name, email } = payload;
+        const { sub, name, email, picture } = payload;
         req.user = {
           /* _id: payload["sub"], */
           _id: sub,
-          email: name || email || `Guest ${userDecoded.sub}`,
+          name: name || email || `Guest ${userDecoded.sub}`,
+          isGoogleUser: true,
+          email,
+          avatar: picture,
+          role: "client",
         };
       } catch (error) {
         return res.status(403).send("Invalid credentials");
       }
     } else {
-      /* token = req.body.resetToken || req.body.verifyToken || token; */
-
       try {
         const userDecoded = await jwt.verify(token, JWT_SECRET_CODE);
         req.user = userDecoded.user;
+        req.user.isGoogleUser = false;
 
         const userFound = await User.findById(req.user._id);
 
@@ -56,6 +59,8 @@ async function verifyToken(req, res, next) {
 }
 
 async function verifyEmailVerified(req, res, next) {
+  if (req.user.isGoogleUser) next();
+
   const user = await User.findById(req.user._id);
   if (user.emailVerified === true) {
     next();
@@ -65,6 +70,9 @@ async function verifyEmailVerified(req, res, next) {
 }
 
 async function verifyAdmin(req, res, next) {
+  if (req.user.isGoogleUser)
+    return res.status(401).json({ message: "Unauthorized" });
+
   const user = await User.findById(req.user._id);
   if (user.role === "admin") {
     next();
@@ -74,6 +82,8 @@ async function verifyAdmin(req, res, next) {
 }
 
 async function verifySuperAdmin(req, res, next) {
+  if (req.user.isGoogleUser) res.status(401).json({ message: "Unauthorized" });
+
   const user = await User.findById(req.user._id);
   if (user.role === "superadmin") {
     next();

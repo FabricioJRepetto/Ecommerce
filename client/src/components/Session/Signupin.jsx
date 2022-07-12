@@ -6,6 +6,7 @@ import {
   loadUsername,
   loadEmail,
   loadAvatar,
+  loadRole,
 } from "../../Redux/reducer/sessionSlice";
 import jwt_decode from "jwt-decode";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -13,7 +14,7 @@ import { useForm } from "react-hook-form";
 import { loadCart, loadWhishlist } from "../../Redux/reducer/cartSlice";
 import "./Signupin.css";
 import { useRef } from "react";
-import { useNotification } from '../../hooks/useNotification'
+import { useNotification } from "../../hooks/useNotification";
 const { REACT_APP_OAUTH_CLIENT_ID } = process.env;
 
 const Signupin = () => {
@@ -21,7 +22,7 @@ const Signupin = () => {
   const [warn, setWarn] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const session = useSelector((state) => state.sessionReducer.session);
+  const { session } = useSelector((state) => state.sessionReducer);
   const {
     register,
     handleSubmit,
@@ -32,42 +33,47 @@ const Signupin = () => {
   let timeoutId = useRef();
   const location = useLocation();
   const hasPreviousState = location.key !== "default";
-  const [ notification ] = useNotification();
+  const [notification] = useNotification();
 
   const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i;
 
   const signup = (signupData) => {
     console.log(signupData);
     axios.post(`/user/signup`, signupData).then((res) => console.log(res.data));
+    //! VOLVER A VER agregar notif de email
   };
 
   const signin = async (signinData) => {
     try {
       const { data } = await axios.post(`/user/signin`, signinData);
+      console.log(data);
 
       if (data.user) {
         window.localStorage.setItem("loggedTokenEcommerce", data.token);
         console.log(data);
-        
+
         dispatch(sessionActive(true));
 
         const username = data.user.name || data.user.email.split("@")[0];
-        const email = data.user.email;
-        const avatar = data.avatar;
+        const { email, role, avatar } = data.user;
+        // const avatar = data.avatar || null;
         const whish = await axios(`/whishlist`);
         const cart = await axios(`/cart`);
 
         dispatch(loadUsername(username));
         dispatch(loadEmail(email));
-        dispatch(loadAvatar(avatar));
+        if (avatar) dispatch(loadAvatar(avatar));
+        dispatch(loadRole(role));
         dispatch(loadCart(cart.data.id_list));
         dispatch(loadWhishlist(whish.data.id_list));
 
         notification(`Bienvenido, ${username}`, "", "success");
+        navigate("/");
+        //navigate(-1) // ?!
       }
     } catch (error) {
-        notification(error.response.data, '', 'error');
-        console.log(error);
+      notification(error.response.data, "", "error");
+      console.log(error);
     }
   };
 
@@ -92,15 +98,15 @@ const Signupin = () => {
     dispatch(loadUsername(username));
     dispatch(loadAvatar(avatar));
     dispatch(loadEmail(email));
+    dispatch(loadRole("client"));
     dispatch(loadCart(cart.data.id_list));
     dispatch(loadWhishlist(whish.data.id_list));
 
     window.localStorage.setItem("loggedAvatarEcommerce", avatar);
     window.localStorage.setItem("loggedEmailEcommerce", email);
-   
+
     console.log(userDecoded);
     notification(`Bienvenido, ${username}`, "", "success");
-
   };
 
   useEffect(() => {

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { resizer } from "../../helpers/resizer";
 import { priceFormat } from "../../helpers/priceFormat";
 import { loadIdProductToEdit } from "../../Redux/reducer/productsSlice";
@@ -20,16 +20,20 @@ const Card = ({
   prodId,
   free_shipping,
   fav,
+  openDeleteProduct,
 }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [visible, setVisible] = useState(false);
-  const session = useSelector((state) => state.sessionReducer.session);
+  const { session } = useSelector((state) => state.sessionReducer);
   const dispatch = useDispatch();
 
   const editProduct = (prodId) => {
     dispatch(loadIdProductToEdit(prodId));
-    navigate("/productForm");
+    navigate("/admin/productForm");
   };
+
+  const saleProduct = (prodId) => {};
 
   return (
     <div
@@ -43,8 +47,9 @@ const Card = ({
       <div className="card-main-container">
         <div
           onClick={() => navigate(`/details/${prodId}`)}
-          className="card-img-container pointer">
-            <img src={resizer(img, 180)} alt="product" />
+          className="card-img-container pointer"
+        >
+          <img src={resizer(img, 180)} alt="product" />
         </div>
 
         <div className="card-details-container">
@@ -62,11 +67,10 @@ const Card = ({
               {on_sale && <del>${priceFormat(price).int}</del>}
             </div>
             <div className="card-price-section">
-
               <div className="minicard-price-section-inner">
-                  <h2>${priceFormat(on_sale ? sale_price : price).int}</h2>
-                  <p>{priceFormat(on_sale ? sale_price : price).cents}</p>
-                </div>
+                <h2>${priceFormat(on_sale ? sale_price : price).int}</h2>
+                <p>{priceFormat(on_sale ? sale_price : price).cents}</p>
+              </div>
 
               {on_sale && (
                 <div className="minicard-sale-section">
@@ -80,9 +84,22 @@ const Card = ({
           <div className="free-shipping c-mrgn">
             {free_shipping && "envío gratis"}
           </div>
-          <button type="button" onClick={() => editProduct(prodId)}>
-            EDITAR
-          </button>
+          {location.pathname === "/admin/products" && (
+            <>
+              <button type="button" onClick={() => editProduct(prodId)}>
+                EDITAR
+              </button>
+              <button
+                type="button"
+                onClick={() => openDeleteProduct({ prodId, name })}
+              >
+                ELIMINAR
+              </button>
+              <button type="button" onClick={() => saleProduct(prodId)}>
+                DESCUENTO {/* //! VOLVER A VER agregar funcion para dto */}
+              </button>
+            </>
+          )}
         </div>
       </div>
     </div>
