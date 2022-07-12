@@ -14,7 +14,7 @@ import { useForm } from "react-hook-form";
 import { loadCart, loadWhishlist } from "../../Redux/reducer/cartSlice";
 import "./Signupin.css";
 import { useRef } from "react";
-import { useNotification } from '../../hooks/useNotification'
+import { useNotification } from "../../hooks/useNotification";
 const { REACT_APP_OAUTH_CLIENT_ID } = process.env;
 
 const Signupin = () => {
@@ -33,7 +33,7 @@ const Signupin = () => {
   let timeoutId = useRef();
   const location = useLocation();
   const hasPreviousState = location.key !== "default";
-  const [ notification ] = useNotification();
+  const [notification] = useNotification();
 
   const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i;
 
@@ -51,7 +51,7 @@ const Signupin = () => {
       if (data.user) {
         window.localStorage.setItem("loggedTokenEcommerce", data.token);
         console.log(data);
-        
+
         dispatch(sessionActive(true));
 
         const username = data.user.name || data.user.email.split("@")[0];
@@ -68,10 +68,12 @@ const Signupin = () => {
         dispatch(loadWhishlist(whish.data.id_list));
 
         notification(`Bienvenido, ${username}`, "", "success");
+        navigate("/");
+        //navigate(-1) // ?!
       }
     } catch (error) {
-        notification(error.response.data, '', 'error');
-        console.log(error);
+      notification(error.response.data, "", "error");
+      console.log(error);
     }
   };
 
@@ -102,10 +104,9 @@ const Signupin = () => {
 
     window.localStorage.setItem("loggedAvatarEcommerce", avatar);
     window.localStorage.setItem("loggedEmailEcommerce", email);
-   
+
     console.log(userDecoded);
     notification(`Bienvenido, ${username}`, "", "success");
-
   };
 
   useEffect(() => {

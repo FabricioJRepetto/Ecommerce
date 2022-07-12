@@ -9,7 +9,6 @@ const Orders = () => {
     axios("/order/adminall")
       .then(({ data }) => {
         setOrders(data);
-        console.log(data);
       })
       .catch((err) => console.log(err)); //! VOLVER A VER manejo de errores
   }, []);

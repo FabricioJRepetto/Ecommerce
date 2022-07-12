@@ -1,6 +1,7 @@
 const Order = require("../models/order");
 const Cart = require("../models/cart");
 const Product = require("../models/product");
+const User = require("../models/user");
 const { rawIdProductGetter } = require("../utils/rawIdProductGetter");
 const { SHIP_COST } = require("../../constants");
 const { cartFormater } = require("../utils/cartFormater");
@@ -78,6 +79,11 @@ const createOrder = async (req, res, next) => {
       order_type: "cart",
     });
     await newOrder.save();
+
+    /* const userFound = await User.findById(req.user._id);
+    userFound.orders.push(newOrder._id);
+
+    await userFound.save(); */
 
     return res.json(newOrder._id);
   } catch (error) {

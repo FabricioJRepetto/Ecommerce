@@ -9,7 +9,7 @@ const Users = () => {
   const [usersData, setUsersData] = useState([]);
   const [isOpenDeleteUser, openDeleteUser, closeDeleteUser, userToDelete] =
     useModal();
-  const [isOpenUserRole, openUserRole, closeUserRole, userToPromote] =
+  const [isOpenPromoteUser, openPromoteUser, closePromoteUser, userToPromote] =
     useModal();
   const [notification] = useNotification();
 
@@ -34,9 +34,9 @@ const Users = () => {
       .catch((err) => console.log(err));
   };
 
-  const handleUserRole = () => {
+  const handlePromoteUser = () => {
     promoteToAdmin();
-    closeUserRole();
+    closePromoteUser();
   };
 
   const promoteToAdmin = () => {
@@ -69,7 +69,7 @@ const Users = () => {
               setAllUsersData={setUsersData}
               allUsersData={usersData}
               openDeleteUser={openDeleteUser}
-              openUserRole={openUserRole}
+              openPromoteUser={openPromoteUser}
             />
           ))
         )}
@@ -85,15 +85,19 @@ const Users = () => {
           Cancelar
         </button>
       </Modal>
-      <Modal isOpen={isOpenUserRole} closeModal={closeUserRole} type="warn">
+      <Modal
+        isOpen={isOpenPromoteUser}
+        closeModal={closePromoteUser}
+        type="warn"
+      >
         <p>{`¿Promover al usuario ${
           userToPromote ? userToPromote.name : null
         } a Administrador?`}</p>
         <p>Este cambio no puede ser revertido</p>
-        <button type="button" onClick={() => handleUserRole()}>
+        <button type="button" onClick={() => handlePromoteUser()}>
           Aceptar
         </button>
-        <button type="button" onClick={closeUserRole}>
+        <button type="button" onClick={closePromoteUser}>
           Cancelar
         </button>
       </Modal>

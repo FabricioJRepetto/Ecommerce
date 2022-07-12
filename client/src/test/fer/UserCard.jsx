@@ -1,4 +1,4 @@
-const UserCard = ({ user, openDeleteUser, openUserRole }) => {
+const UserCard = ({ user, openDeleteUser, openPromoteUser }) => {
   const { name, email, role, emailVerified, avatar, _id } = user;
 
   return (
@@ -8,7 +8,7 @@ const UserCard = ({ user, openDeleteUser, openUserRole }) => {
         <h4>Email: {email}</h4>
         <h4>Rol: {role}</h4>
         {role === "client" && (
-          <button onClick={() => openUserRole({ _id, name })}>
+          <button onClick={() => openPromoteUser({ _id, name })}>
             Promover a Administrador
           </button>
         )}

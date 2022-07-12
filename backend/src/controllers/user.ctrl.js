@@ -45,15 +45,45 @@ const signin = async (req, res, next) => {
         });
 
         return res.json({
-          //message: info.message,
           token,
-          user: { email, name, role, avatar: avatar || null },
+          user: { email, name, role, avatar },
         });
       });
     } catch (e) {
       return next(e);
+      /* if (!errors.isEmpty()) {
+        const message = errors.errors.map((err) => err.msg);
+        return res.json({ message });
     }
-  });
+
+    passport.authenticate("signin", async (err, user, info) => {
+        try {
+            if (err || !user) throw new Error(info.message);
+            //const error = new Error(info);
+            //return next(info);
+
+            req.login(user, { session: false }, async (err) => {
+                if (err) return next(err);
+
+                const theUser = await User.findOne({ email: user.email });
+
+                const body = { _id: user._id, email: user.email };
+
+                const token = jwt.sign({ user: body }, JWT_SECRET_CODE, {
+                    expiresIn: 864000,
+                });
+
+                return res.json({
+                    message: info.message,
+                    avatar: theUser.avatar || null,
+                    token,
+                    user: { _id: user._id, email: user.email },
+                });
+            });
+        } catch (e) {
+            return next(e); */
+    }
+  })(req, res, next);
 };
 
 const profile = async (req, res, next) => {
@@ -191,7 +221,20 @@ const verifyAdminRoute = (req, res, next) => {
 };
 
 const getAllUsers = async (req, res, next) => {
-  const allUsersFound = await User.find();
+  console.log("----------entra");
+  const allUsersFound = await User.find({
+    email: "admin@admin.com",
+  })
+    //.populate("addresses", { address: 1, _id: 1 })
+    .populate("orders", "status")
+    .exec();
+  /* .exec((err, address) => {
+      console.log("------error", err);
+      console.log("------address", address);
+      return;
+    }); */
+  console.log("--------userFound", allUsersFound);
+
   const usefulData = [
     "_id",
     "email",
@@ -212,13 +255,13 @@ const getAllUsers = async (req, res, next) => {
     };
     for (const key in user) {
       if (usefulData.includes(key)) {
-        console.log(key + " " + user[key]);
+        //console.log(key + " " + user[key]);
         newUser[key] = user[key];
       }
     }
     allUsers.push(newUser);
   }
-  console.log(allUsers);
+  //console.log(allUsers);
   return res.json(allUsers);
 };
 
