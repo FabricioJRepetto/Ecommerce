@@ -4,6 +4,6 @@ const {
     create
 } = require("../controllers/stripe.ctrl.js");
 
-router.post("/", create);
+router.post("/:id", create);
 
 module.exports = router;

@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 import { resizer } from '../../helpers/resizer';
 import { useAxios } from '../../hooks/useAxios';
 import { loadCart } from '../../Redux/reducer/cartSlice';
@@ -12,7 +12,11 @@ const PostSale = () => {
     const [orderStatus, setOrderStatus] = useState();
     const [firstLoad, setFirstLoad] = useState(true)
     const dispatch = useDispatch();
-    const { id } = useParams();
+    
+    const [params] = useSearchParams();
+    const id = params.get('id');
+    const success = params.get('success');
+
     const { data, loading, error } = useAxios('GET', `/order/${id}`);
     
     useEffect(() => {
@@ -20,7 +24,8 @@ const PostSale = () => {
         //! solo pedir la order al back para mostrar detalles
 
         //! peticion a mp para saber status del pago
-        firstLoad && (async () => {
+        firstLoad && (success == null) 
+        ? (async () => {
             const { data } = await axios.get(`https://api.mercadopago.com/v1/payments/search?sort=date_created&criteria=desc&external_reference=${id}`, {
                 headers: {
                     Authorization: `Bearer ${REACT_APP_MP_SKEY}`,
@@ -61,7 +66,10 @@ const PostSale = () => {
                 //! first load solo sirve pre deploy
                 setFirstLoad(false);                
             };
-        })();
+        })()
+        : (async () => {
+            console.log(`STRIPE: ${success}`);
+        })()
       // eslint-disable-next-line
     }, [])
     
