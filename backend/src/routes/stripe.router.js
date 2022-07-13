@@ -2,7 +2,7 @@ const { Router } = require("express");
 const router = Router();
 const {
     create
-} = require("../controllers/checkout.ctrl.js");
+} = require("../controllers/stripe.ctrl.js");
 
 router.post("/", create);
 
