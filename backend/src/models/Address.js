@@ -2,18 +2,24 @@ const { Schema, model } = require("mongoose");
 
 const addressSchema = new Schema(
   {
-    address: [{
+    address: [
+      {
         state: String,
         city: String,
         zip_code: String,
         street_name: String,
         street_number: Number,
-        isDefault: Boolean
-    }],
+        isDefault: Boolean,
+      },
+    ],
     user: {
-      type: String,
+      type: Schema.Types.ObjectId,
       require: true,
     },
+    /* user: {
+      type: String,
+      require: true,
+    }, */
   },
   {
     versionKey: false,
