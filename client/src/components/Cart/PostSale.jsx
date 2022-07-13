@@ -23,20 +23,24 @@ const PostSale = () => {
         //! CAMBIAR PARA EL DEPLOY
         //! solo pedir la order al back para mostrar detalles
 
-        //! peticion a mp para saber status del pago
-        firstLoad && (success == null) 
-        ? (async () => {
-            const { data } = await axios.get(`https://api.mercadopago.com/v1/payments/search?sort=date_created&criteria=desc&external_reference=${id}`, {
-                headers: {
-                    Authorization: `Bearer ${REACT_APP_MP_SKEY}`,
-                }
-            });
-            console.log(data.results[0].status);
-            setOrderStatus(data.results[0].status);
-            
+        firstLoad && (async () => {
+            // si no hay respuesta de stripe
+            //! peticion a mp para saber status del pago
+            if (success === null) {
+                const { data: MP } = await axios.get(`https://api.mercadopago.com/v1/payments/search?sort=date_created&criteria=desc&external_reference=${id}`, {
+                    headers: {
+                        Authorization: `Bearer ${REACT_APP_MP_SKEY}`,
+                    }
+                });
+                console.log(MP.results[0].status);
+                setOrderStatus(MP.results[0].status);
+            } else {
+                setOrderStatus(success ? 'approved' : 'cenceled');
+            }
+
             const { data: order } = await axios(`/order/${id}`);
 
-            if (data.results[0].status === 'approved' && order.status !== 'approved') {
+            if (orderStatus === 'approved' && order.status !== 'approved') {
 
                 if (order.order_type === 'cart') {
                     //? vaciar carrito
@@ -66,9 +70,6 @@ const PostSale = () => {
                 //! first load solo sirve pre deploy
                 setFirstLoad(false);                
             };
-        })()
-        : (async () => {
-            console.log(`STRIPE: ${success}`);
         })()
       // eslint-disable-next-line
     }, [])
