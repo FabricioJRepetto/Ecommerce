@@ -7,8 +7,10 @@ import { ReactComponent as Cart } from "../../assets/svg/cart.svg";
 import { ReactComponent as Fav } from "../../assets/svg/fav.svg";
 import { ReactComponent as Avatar } from "../../assets/svg/avatar.svg";
 import {
+    loadFilters,
   loadProductsFound,
   loadProductsOwn,
+  loadQuerys,
 } from "../../Redux/reducer/productsSlice";
 import Signout from "../Session/Signout";
 
@@ -28,19 +30,22 @@ const NavBar = () => {
       }
       dispatch(loadProductsOwn("loading"));
       dispatch(loadProductsFound("loading"));
+      dispatch(loadFilters("loading"));
       navigate("/results");
       const { data } = await axios(`/product/search/?q=${e.target.value}`);
-      console.log(data);
+      dispatch(loadQuerys(e.target.value));
       dispatch(loadProductsOwn(data.db));
       dispatch(loadProductsFound(data.meli));
+      dispatch(loadFilters(data.filters));
     }
   };
 
   const logoClick = () => {
-    dispatch(loadProductsOwn([]));
-    dispatch(loadProductsFound([]));
-    document.getElementById("navbar-searchbar").value = "";
-    navigate("/");
+        dispatch(loadProductsOwn([]));
+        dispatch(loadProductsFound([]));
+        dispatch(loadFilters([]));
+        document.getElementById("navbar-searchbar").value = "";
+        navigate("/");
   };
 
   return (

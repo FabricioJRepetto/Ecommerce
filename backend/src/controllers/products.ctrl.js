@@ -32,17 +32,31 @@ const getAll = async (req, res, next) => {
 
 const getByQuery = async (req, res, next) => {
     try {
+        let searchQuery = '';
+        Object.entries(req.query).forEach(([key, value]) => {
+            searchQuery += '&' + key + '=' + value
+        })
+        console.log(searchQuery);
+
         const L = "50";
-        const meli = `https://api.mercadolibre.com/sites/MLA/search?&official_store=all&limit=${L}&q=${req.query.q}`;
+        const meli = `https://api.mercadolibre.com/sites/MLA/search?&official_store=all&limit=${L}${searchQuery}`;
 
         const { data } = await axios(meli);
-        const filters = data.available_filters; // ??
 
         const resultsMeli = meliSearchParser(data.results);
 
         const resultsDB = await Product.find({
             name: { $regex: req.query.q, $options: "i" },
         });
+
+        const allowedFilters = [
+            'BRAND',
+            'discount',
+            'shipping_cost',
+            'price',
+            'category',
+        ];
+        const filters = data.available_filters.filter(e => allowedFilters.includes(e.id));
 
         return res.json({ db: resultsDB, meli: resultsMeli, filters });
     } catch (error) {
