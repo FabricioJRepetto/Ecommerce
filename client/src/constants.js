@@ -3,11 +3,15 @@ const STRIPE_PKEY = 'pk_test_51L5zx4CyWZVtXgfrkpwfv0WgFKi326kk8x8U1D7xCKUAQ9pX67
 const MP_PKEY = 'TEST-a6a6f998-d3c4-48ce-a848-1f5b5bac4cec'
 const IMAGES = [
     {
-        img: "https://http2.mlstatic.com/D_NQ_917752-MLA50446386694_062022-OO.webp",
+        img: "https://http2.mlstatic.com/D_NQ_900700-MLA50621579925_072022-OO.webp",
         url: "/products",
     },
     {
         img: "https://http2.mlstatic.com/D_NQ_794413-MLA50423210111_062022-OO.webp",
+        url: "/products",
+    },
+    {
+        img: "https://http2.mlstatic.com/D_NQ_917752-MLA50446386694_062022-OO.webp",
         url: "/products",
     },
     {

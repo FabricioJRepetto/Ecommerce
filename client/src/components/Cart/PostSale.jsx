@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 import { resizer } from '../../helpers/resizer';
 import { useAxios } from '../../hooks/useAxios';
 import { loadCart } from '../../Redux/reducer/cartSlice';
@@ -12,26 +12,35 @@ const PostSale = () => {
     const [orderStatus, setOrderStatus] = useState();
     const [firstLoad, setFirstLoad] = useState(true)
     const dispatch = useDispatch();
-    const { id } = useParams();
+    
+    const [params] = useSearchParams();
+    const id = params.get('id');
+    const success = params.get('success');
+
     const { data, loading, error } = useAxios('GET', `/order/${id}`);
     
     useEffect(() => {
         //! CAMBIAR PARA EL DEPLOY
         //! solo pedir la order al back para mostrar detalles
 
-        //! peticion a mp para saber status del pago
         firstLoad && (async () => {
-            const { data } = await axios.get(`https://api.mercadopago.com/v1/payments/search?sort=date_created&criteria=desc&external_reference=${id}`, {
-                headers: {
-                    Authorization: `Bearer ${REACT_APP_MP_SKEY}`,
-                }
-            });
-            console.log(data.results[0].status);
-            setOrderStatus(data.results[0].status);
-            
+            // si no hay respuesta de stripe
+            //! peticion a mp para saber status del pago
+            if (success === null) {
+                const { data: MP } = await axios.get(`https://api.mercadopago.com/v1/payments/search?sort=date_created&criteria=desc&external_reference=${id}`, {
+                    headers: {
+                        Authorization: `Bearer ${REACT_APP_MP_SKEY}`,
+                    }
+                });
+                console.log(MP.results[0].status);
+                setOrderStatus(MP.results[0].status);
+            } else {
+                setOrderStatus(success ? 'approved' : 'cenceled');
+            }
+
             const { data: order } = await axios(`/order/${id}`);
 
-            if (data.results[0].status === 'approved' && order.status !== 'approved') {
+            if (orderStatus === 'approved' && order.status !== 'approved') {
 
                 if (order.order_type === 'cart') {
                     //? vaciar carrito
@@ -61,7 +70,7 @@ const PostSale = () => {
                 //! first load solo sirve pre deploy
                 setFirstLoad(false);                
             };
-        })();
+        })()
       // eslint-disable-next-line
     }, [])
     
