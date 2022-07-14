@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
+const GoogleUser = require("../models/googleuser");
 require("dotenv").config();
 const { JWT_SECRET_CODE, OAUTH_CLIENT_ID } = process.env;
 const { OAuth2Client } = require("google-auth-library");
@@ -23,17 +24,14 @@ async function verifyToken(req, res, next) {
           audience: OAUTH_CLIENT_ID,
         });
         const payload = ticket.getPayload();
-        const { sub /* name, email, picture: avatar */ } = payload;
-        req.user = {
-          //! VOLVER A VER ¿es necesario mandar toda esta data cada vez que se verifica? ¿o conviene solo mandar el _id en req.user y buscar en GoogleUser cada vez?
-          /* _id: payload["sub"], */
-          _id: sub,
-          /* name: name || email || `Guest ${userDecoded.sub}`,
-          isGoogleUser: true,
-          email,
-          avatar,
-          role: "client", */
-        };
+        const { sub } = payload;
+
+        const userFound = await GoogleUser.findOne({ sub });
+        if (!userFound) {
+          return res.status(404).json({ message: "User not found" });
+        }
+
+        req.user = { _id: userFound._id, isGoogleUser: true };
       } catch (error) {
         return res.status(403).send("Invalid credentials");
       }
@@ -41,9 +39,9 @@ async function verifyToken(req, res, next) {
       try {
         const userDecoded = await jwt.verify(token, JWT_SECRET_CODE);
         req.user = userDecoded.user;
+        req.user.isGoogleUser = false;
 
         const userFound = await User.findById(req.user._id);
-
         if (!userFound) {
           return res.status(404).json({ message: "User not found" });
         }
@@ -92,9 +90,18 @@ async function verifySuperAdmin(req, res, next) {
   }
 }
 
+async function googleUserShallNotPass(req, res, next) {
+  if (req.user.isGoogleUser) {
+    return res.status(401).json({ message: "Google user unauthorized" });
+  } else {
+    next();
+  }
+}
+
 module.exports = {
   verifyToken,
   verifyEmailVerified,
   verifyAdmin,
   verifySuperAdmin,
+  googleUserShallNotPass,
 };

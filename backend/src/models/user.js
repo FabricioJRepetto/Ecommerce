@@ -1,6 +1,5 @@
 const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
-
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema(
@@ -27,11 +26,8 @@ const UserSchema = new Schema(
       default: false,
     },
     avatar: String,
-    isUserGoogle: {
-      type: Boolean,
-      default: false,
-    },
-    /*     orders: [
+
+    orders: [
       {
         type: Schema.Types.ObjectId,
         ref: "Order",
@@ -42,7 +38,7 @@ const UserSchema = new Schema(
         type: Schema.Types.ObjectId,
         ref: "Address",
       },
-    ], */
+    ],
   },
   {
     versionKey: false,

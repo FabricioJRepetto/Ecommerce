@@ -18,6 +18,10 @@ const orderSchema = new Schema(
       type: String,
       required: true,
     },
+    isUserGoogle: {
+      type: Boolean,
+      default: false,
+    },
     shipping_address: {
       state: String,
       city: String,

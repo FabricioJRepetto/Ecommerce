@@ -12,9 +12,17 @@ const addressSchema = new Schema(
         isDefault: Boolean,
       },
     ],
-    user: {
+    /* user: {
       type: String,
       require: true,
+    }, */
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
+    googleUser: {
+      type: Schema.Types.ObjectId,
+      ref: "GoogleUser",
     },
   },
   {

@@ -1,10 +1,8 @@
-const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
-
 const Schema = mongoose.Schema;
 
 const GoogleUserSchema = new Schema({
-  _id: {
+  sub: {
     //! sub
     type: String,
     required: true,
@@ -26,22 +24,18 @@ const GoogleUserSchema = new Schema({
     required: true,
   },
   avatar: String, //! picture,
-  isUserGoogle: {
-    type: Boolean,
-    default: true,
-  },
-  /*     orders: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Order",
-      },
-    ],
-    addresses: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Address",
-      },
-    ], */
+  /* orders: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Order",
+    },
+  ], */
+  addresses: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Address",
+    },
+  ],
 });
 
 module.exports = mongoose.model("GoogleUser", GoogleUserSchema);

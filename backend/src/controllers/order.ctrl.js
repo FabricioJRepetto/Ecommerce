@@ -2,6 +2,7 @@ const Order = require("../models/order");
 const Cart = require("../models/cart");
 const Product = require("../models/product");
 const User = require("../models/user");
+const GoogleUser = require("../models/googleuser");
 const { rawIdProductGetter } = require("../utils/rawIdProductGetter");
 const { SHIP_COST } = require("../../constants");
 const { cartFormater } = require("../utils/cartFormater");
@@ -37,7 +38,23 @@ const getOrdersUser = async (req, res, next) => {
 const getOrdersAdmin = async (req, res, next) => {
   //! SOLO ADMIN
   try {
-    const allOrders = await Order.find().populate("user", "email name"); //! VOLVER A VER orders populate funcionan con user de google?
+    let allOrders = await Order.find(); //! VOLVER A VER orders populate funcionan con user de google?
+    for (const order of allOrders) {
+      if (order.isGoogleUser) {
+        /* const googleUserFound = await GoogleUser.findOne({ id: order.user });
+        const { name, email, avatar, _id } = googleUserFound;
+        allOrders[order].user = { name, email, avatar, _id }; */
+      } else {
+        const userFound = await User.findOne({ id: order.user });
+        // console.log("---------------userFound", userFound);
+        const { name, email, /*  avatar, */ id } = userFound;
+        //console.log("---------------order", order);
+        order.user = { name, email, /*  avatar, */ id };
+        console.log("------------llega", order);
+      }
+    }
+    //const allGoogleUsers = await GoogleUser.find();
+
     return res.json(allOrders);
   } catch (error) {
     next(error);
@@ -65,6 +82,7 @@ const createOrder = async (req, res, next) => {
     const newOrder = new Order({
       products,
       user: req.user._id,
+      //isGoogleUser: req.user.isGoogleUser,
       shipping_address: {
         state,
         city,

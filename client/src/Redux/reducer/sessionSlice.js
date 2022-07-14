@@ -9,6 +9,7 @@ export const sessionSlice = createSlice({
     session: false,
     // id: null,
     role: null,
+    isGoogleUser: null,
   },
   reducers: {
     loadUsername: (state, action) => {
@@ -29,6 +30,9 @@ export const sessionSlice = createSlice({
     loadRole: (state, action) => {
       state.role = action.payload;
     },
+    loadGoogleUser: (state, action) => {
+      state.isGoogleUser = action.payload;
+    },
   },
 });
 
@@ -39,6 +43,7 @@ export const {
   loadAvatar,
   loadEmail,
   loadRole,
+  loadGoogleUser,
 } = sessionSlice.actions;
 
 export default sessionSlice.reducer;

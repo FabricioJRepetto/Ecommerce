@@ -2,8 +2,17 @@ const Address = require("../models/Address");
 
 const getAddress = async (req, res, next) => {
   try {
-    const address = await Address.findOne({ user: req.user._id });
-    if (!address) return res.json({ message: "No address found" });
+    let address;
+    if (req.user.isGoogleUser) {
+      address = await Address.findOne({
+        googleUser: req.user._id,
+      });
+    } else {
+      address = await Address.findOne({
+        user: req.user._id,
+      });
+    }
+    if (!address) return res.json({ message: "Address not found" });
     return res.json(address);
   } catch (error) {
     next(error);
@@ -12,9 +21,16 @@ const getAddress = async (req, res, next) => {
 
 const addAddress = async (req, res, next) => {
   try {
-    const addressFound = await Address.findOne({
-      user: req.user._id,
-    });
+    let addressFound;
+    if (req.user.isGoogleUser) {
+      addressFound = await Address.findOne({
+        googleUser: req.user._id,
+      });
+    } else {
+      addressFound = await Address.findOne({
+        user: req.user._id,
+      });
+    }
 
     if (addressFound) {
       if (addressFound.address.length > 0) {
@@ -29,14 +45,23 @@ const addAddress = async (req, res, next) => {
         address: addressFound.address,
       });
     } else {
-      const newAdd = new Address({
-        address: [{ ...req.body, isDefault: true }],
-        user: req.user._id,
-      });
-      await newAdd.save();
+      let newAddress;
+      if (req.user.isGoogleUser) {
+        newAddress = new Address({
+          address: [{ ...req.body, isDefault: true }],
+          googleUser: req.user._id,
+        });
+      } else {
+        newAddress = new Address({
+          address: [{ ...req.body, isDefault: true }],
+          user: req.user._id,
+        });
+      }
+      await newAddress.save();
       return res.json({
         message: "New address registered.",
-        newAdd: addressFound.address, //! VOLVER A VER tira error al agregar la primer address Cannot read properties of null (reading 'address'). Se soluciona con newAdd: [req.body], pero no renderiza la address agregada
+        address: [newAddress], //! VOLVER A VER tira error al agregar la primer address Cannot read properties of null (reading 'address'). Se soluciona con newAdd: [req.body], pero no renderiza la address agregada
+        //! VOLVER A VER al crear la primer address se renderiza undefined undefined undefined undefined
       });
     }
   } catch (error) {

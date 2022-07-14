@@ -7,6 +7,7 @@ import {
   loadEmail,
   loadAvatar,
   loadRole,
+  loadGoogleUser,
 } from "../../Redux/reducer/sessionSlice";
 import jwt_decode from "jwt-decode";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -49,7 +50,6 @@ const Signupin = () => {
 
       if (data.user) {
         window.localStorage.setItem("loggedTokenEcommerce", data.token);
-        console.log(data);
 
         dispatch(sessionActive(true));
 
@@ -63,6 +63,7 @@ const Signupin = () => {
         dispatch(loadEmail(email));
         if (avatar) dispatch(loadAvatar(avatar));
         dispatch(loadRole(role));
+        dispatch(loadGoogleUser(false));
         dispatch(loadCart(cart.data.id_list));
         dispatch(loadWhishlist(whish.data.id_list));
 
@@ -104,6 +105,7 @@ const Signupin = () => {
       dispatch(loadAvatar(avatar));
       dispatch(loadEmail(email));
       dispatch(loadRole("client"));
+      dispatch(loadGoogleUser(true));
       dispatch(loadCart(cart.data.id_list));
       dispatch(loadWhishlist(whish.data.id_list));
 

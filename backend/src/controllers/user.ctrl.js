@@ -7,6 +7,7 @@ const { JWT_SECRET_CODE } = process.env;
 const { OAuth2Client } = require("google-auth-library");
 const { validationResult } = require("express-validator");
 const sendEmail = require("../utils/sendEmail");
+const mongoose = require("mongoose");
 
 const signup = async (req, res, next) => {
   const { _id, email } = req.user;
@@ -60,15 +61,14 @@ const signinGoogle = async (req, res, next) => {
   const { sub, email, avatar, name } = req.body;
 
   try {
-    const userFound = await GoogleUser.findOne({ _id: sub });
+    const userFound = await GoogleUser.findOne({ sub });
 
     if (!userFound) {
       const newGoogleUser = await GoogleUser.create({
-        _id: sub,
+        sub,
         email,
         avatar,
         name,
-        isGoogleUser: true,
       });
       return res.json(newGoogleUser);
     } else {
@@ -94,6 +94,9 @@ const profile = async (req, res, next) => {
     }
 
     const { email, name, role, avatar } = await User.findById(req.user._id);
+    if (!email) {
+      return res.status(404).json({ message: "User not Found" });
+    }
     return res.json({ email, name, role, avatar: avatar || null });
   } catch (error) {
     next(error);
@@ -226,7 +229,7 @@ const getAllUsers = async (req, res, next) => {
   console.log("----------entra");
   const allUsersFound = await User.find({
     email: "admin@admin.com",
-  });
+  }).populate("addresses.address");
 
   console.log("--------userFound", allUsersFound);
 

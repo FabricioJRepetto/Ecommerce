@@ -5,6 +5,7 @@ const {
   verifyEmailVerified,
   verifyAdmin,
   verifySuperAdmin,
+  googleUserShallNotPass,
 } = require("../middlewares/verify");
 const passport = require("passport");
 const {
@@ -64,15 +65,35 @@ router.post(
 router.post("/signin", [emailValidation, passwordValidationSignin], signin);
 router.post("/signinGoogle", signinGoogle);
 router.get("/profile/:token", verifyToken, profile);
-router.put("/verifyEmail", verifyToken, verifyEmail);
-router.put("/forgotPassword", forgotPassword);
-router.put("/resetPassword", resetPassword);
-router.put("/changePassword", passwordValidation, changePassword);
-router.put("/editProfile", verifyToken, editProfile);
+router.put("/verifyEmail", [verifyToken, googleUserShallNotPass], verifyEmail);
+router.put("/forgotPassword", googleUserShallNotPass, forgotPassword);
+router.put("/resetPassword", googleUserShallNotPass, resetPassword);
+router.put(
+  "/changePassword",
+  [googleUserShallNotPass, passwordValidation],
+  changePassword
+);
+router.put("/editProfile", [verifyToken, googleUserShallNotPass], editProfile);
 
-router.put("/promote/:id", [verifyToken, verifyAdmin], promoteUser); //! VOLVER A VER mover a ruta de superadmin
-router.get("/verifyAdmin", [verifyToken, verifyAdmin], verifyAdminRoute);
-router.get("/getAll", [verifyToken, verifyAdmin], getAllUsers);
-router.delete("/:id", [verifyToken, verifyAdmin], deleteUser);
+router.put(
+  "/promote/:id",
+  [verifyToken, googleUserShallNotPass, verifyAdmin],
+  promoteUser
+); //! VOLVER A VER mover a ruta de superadmin
+router.get(
+  "/verifyAdmin",
+  [verifyToken, googleUserShallNotPass, verifyAdmin],
+  verifyAdminRoute
+);
+router.get(
+  "/getAll",
+  [verifyToken, googleUserShallNotPass, verifyAdmin],
+  getAllUsers
+);
+router.delete(
+  "/:id",
+  [verifyToken, googleUserShallNotPass, verifyAdmin],
+  deleteUser
+);
 
 module.exports = router;
