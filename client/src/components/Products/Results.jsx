@@ -7,6 +7,7 @@ import './Results.css'
 import { loadFilters, loadProductsFound, loadProductsOwn, loadQuerys } from '../../Redux/reducer/productsSlice'
 import { useState } from 'react'
 import axios from 'axios'
+import { useEffect } from 'react'
 
 const Results = () => {
     const whishlist = useSelector((state) => state.cartReducer.whishlist);
@@ -23,22 +24,29 @@ const Results = () => {
     console.log(productsFound);
     console.log(productsFilters);
 
-    const addFilter = async (f) => { 
-        let string = f.split('#!')
-        let name = string[0]
-        let filter = string[1]
+    useEffect(() => {
+        let stringQ = ''
+
+    }, [querys])
+    
+
+    const addFilter = async (obj) => { 
+        //{name: v.name, filter: f.id, value: v.id }
+        
+        let nName = obj.name;
+        let nFilter = obj.filter;
+        let nValue = obj.value;
 
         //: remplazar categorias
-        let newQuery = querys+filter
+        let newQuery = `${querys}&${nFilter}=${nValue}`
 
         dispatch(loadQuerys(newQuery));
         
-        const { data } = await axios(`/product/search/?q=${newQuery}`);
+        const { data } = await axios(`/product/search/?${newQuery}`);
         dispatch(loadProductsOwn(data.db));
         dispatch(loadProductsFound(data.meli));
         dispatch(loadFilters(data.filters));
-
-        console.log(`name: ${name}, filter: ${filter}`);
+        
         console.log(newQuery);
      }
 
@@ -53,7 +61,7 @@ const Results = () => {
                         <div key={f.id}>
                             <b>{f.name}</b>
                             {f.values.map(v => (
-                                <div key={v.id} onClick={() => addFilter(`${v.name}#!&${f.id}=${v.id}`)}>
+                                <div key={v.id} onClick={() => addFilter({name: v.name, filter: f.id, value: v.id })}>
                                     <p>{`${v.name} (${v.results})`}</p>
                                 </div>
                             ))}
