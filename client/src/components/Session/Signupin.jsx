@@ -46,7 +46,6 @@ const Signupin = () => {
   const signin = async (signinData) => {
     try {
       const { data } = await axios.post(`/user/signin`, signinData);
-      console.log(data);
 
       if (data.user) {
         window.localStorage.setItem("loggedTokenEcommerce", data.token);
@@ -85,31 +84,40 @@ const Signupin = () => {
 
     //userDecoded contains Google user data
     const userDecoded = jwt_decode(response.credential);
-    const username =
-      userDecoded.name || userDecoded.email || `Guest ${userDecoded.sub}`;
+    const { sub, email, picture: avatar, name } = userDecoded;
+    const username = name || email || `Guest ${sub}`;
 
-    //: (https://lh3.googleusercontent.com/a-/AOh14GilAqwqC7Na70IrMsk0bJ8XGwz8HLFjlurl830D5g=s96-c).split('=')[0]
-    const avatar = userDecoded.picture;
-    const email = userDecoded.email;
+    try {
+      await axios.post(`/user/signinGoogle`, {
+        sub,
+        email,
+        avatar,
+        name,
+      });
 
-    const whish = await axios(`/whishlist`);
-    const cart = await axios(`/cart`);
+      //: (https://lh3.googleusercontent.com/a-/AOh14GilAqwqC7Na70IrMsk0bJ8XGwz8HLFjlurl830D5g=s96-c).split('=')[0]
 
-    dispatch(loadUsername(username));
-    dispatch(loadAvatar(avatar));
-    dispatch(loadEmail(email));
-    dispatch(loadRole("client"));
-    dispatch(loadCart(cart.data.id_list));
-    dispatch(loadWhishlist(whish.data.id_list));
+      const whish = await axios(`/whishlist`);
+      const cart = await axios(`/cart`);
 
-    window.localStorage.setItem("loggedAvatarEcommerce", avatar);
-    window.localStorage.setItem("loggedEmailEcommerce", email);
+      dispatch(loadUsername(username));
+      dispatch(loadAvatar(avatar));
+      dispatch(loadEmail(email));
+      dispatch(loadRole("client"));
+      dispatch(loadCart(cart.data.id_list));
+      dispatch(loadWhishlist(whish.data.id_list));
 
-    console.log(userDecoded);
-    notification(`Bienvenido, ${username}`, "", "success");
+      window.localStorage.setItem("loggedAvatarEcommerce", avatar);
+      window.localStorage.setItem("loggedEmailEcommerce", email);
+
+      notification(`Bienvenido, ${username}`, "", "success");
+    } catch (error) {
+      console.log(error); //! VOLVER A VER manejo de errores
+    }
   };
 
   useEffect(() => {
+    //! VOLVER A VER al loguear con user de google, entrar a profile, y luego actualizar pagina, ingresa a signin y no redirige
     if (session) {
       if (hasPreviousState) {
         navigate(-1);

@@ -15,13 +15,9 @@ const orderSchema = new Schema(
       },
     ],
     user: {
-      type: Schema.Types.ObjectId,
-      ref: "User",
-    },
-    /* user: {
       type: String,
       required: true,
-    }, */
+    },
     shipping_address: {
       state: String,
       city: String,

@@ -27,13 +27,17 @@ const UserSchema = new Schema(
       default: false,
     },
     avatar: String,
-    orders: [
+    isUserGoogle: {
+      type: Boolean,
+      default: false,
+    },
+    /*     orders: [
       {
         type: Schema.Types.ObjectId,
         ref: "Order",
       },
     ],
-    /* addresses: [
+    addresses: [
       {
         type: Schema.Types.ObjectId,
         ref: "Address",

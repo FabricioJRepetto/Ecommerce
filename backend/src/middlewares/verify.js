@@ -23,15 +23,16 @@ async function verifyToken(req, res, next) {
           audience: OAUTH_CLIENT_ID,
         });
         const payload = ticket.getPayload();
-        const { sub, name, email, picture } = payload;
+        const { sub /* name, email, picture: avatar */ } = payload;
         req.user = {
+          //! VOLVER A VER ¿es necesario mandar toda esta data cada vez que se verifica? ¿o conviene solo mandar el _id en req.user y buscar en GoogleUser cada vez?
           /* _id: payload["sub"], */
           _id: sub,
-          name: name || email || `Guest ${userDecoded.sub}`,
+          /* name: name || email || `Guest ${userDecoded.sub}`,
           isGoogleUser: true,
           email,
-          avatar: picture,
-          role: "client",
+          avatar,
+          role: "client", */
         };
       } catch (error) {
         return res.status(403).send("Invalid credentials");
@@ -40,7 +41,6 @@ async function verifyToken(req, res, next) {
       try {
         const userDecoded = await jwt.verify(token, JWT_SECRET_CODE);
         req.user = userDecoded.user;
-        req.user.isGoogleUser = false;
 
         const userFound = await User.findById(req.user._id);
 

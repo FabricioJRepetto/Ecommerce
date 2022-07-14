@@ -47,7 +47,7 @@ function App() {
     (async () => {
       try {
         if (loggedUserToken) {
-          const { data } = await axios(`/user/profile/${loggedUserToken}`);
+          const { data } = await axios(`/user/profile/${loggedUserToken}`); //! VOLVER A VER fijarse con nuevos usuarios de google
           dispatch(sessionActive(true));
           dispatch(loadUsername(data.name));
           dispatch(loadAvatar(data.avatar ? data.avatar : loggedAvatar)); //! VOLVER A VER ojo con esto, puede ser que quede guardado el avatar de otro user
@@ -61,7 +61,6 @@ function App() {
           dispatch(loadWhishlist(whish.id_list));
         }
       } catch (error) {
-        console.log("APP.JS");
         navigate("/");
         window.localStorage.removeItem("loggedTokenEcommerce");
         window.localStorage.removeItem("loggedAvatarEcommerce");

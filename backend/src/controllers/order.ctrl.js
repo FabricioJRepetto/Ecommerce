@@ -37,7 +37,7 @@ const getOrdersUser = async (req, res, next) => {
 const getOrdersAdmin = async (req, res, next) => {
   //! SOLO ADMIN
   try {
-    const allOrders = await Order.find().populate("user", "email name");
+    const allOrders = await Order.find().populate("user", "email name"); //! VOLVER A VER orders populate funcionan con user de google?
     return res.json(allOrders);
   } catch (error) {
     next(error);

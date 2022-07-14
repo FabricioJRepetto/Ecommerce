@@ -16,19 +16,13 @@ const addAddress = async (req, res, next) => {
       user: req.user._id,
     });
 
-    //console.log("---------1", addressFound);
-
     if (addressFound) {
       if (addressFound.address.length > 0) {
         addressFound.address.push({ ...req.body, isDefault: false });
-        //   console.log("---------2", addressFound);
       } else {
-        //   console.log("---------3", addressFound);
-
         addressFound.address.push({ ...req.body, isDefault: true });
       }
       await addressFound.save();
-      //  console.log("---------4", addressFound);
 
       return res.json({
         message: "New address registered.",
@@ -39,7 +33,6 @@ const addAddress = async (req, res, next) => {
         address: [{ ...req.body, isDefault: true }],
         user: req.user._id,
       });
-      //  console.log(newAdd);
       await newAdd.save();
       return res.json({
         message: "New address registered.",

@@ -13,13 +13,9 @@ const addressSchema = new Schema(
       },
     ],
     user: {
-      type: Schema.Types.ObjectId,
-      require: true,
-    },
-    /* user: {
       type: String,
       require: true,
-    }, */
+    },
   },
   {
     versionKey: false,

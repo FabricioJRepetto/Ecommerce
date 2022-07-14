@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const GoogleUser = require("../models/googleuser");
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
@@ -37,8 +38,8 @@ const signin = async (req, res, next) => {
 
       req.login(user, { session: false }, async (err) => {
         if (err) return next(err);
-        const { _id, email, name, role, avatar } = user;
-        const body = { _id, email, role };
+        const { _id, email, name, role, avatar, isGoogleUser } = user;
+        const body = { _id, email, role, isGoogleUser };
 
         const token = jwt.sign({ user: body }, JWT_SECRET_CODE, {
           expiresIn: 864000,
@@ -51,46 +52,47 @@ const signin = async (req, res, next) => {
       });
     } catch (e) {
       return next(e);
-      /* if (!errors.isEmpty()) {
-        const message = errors.errors.map((err) => err.msg);
-        return res.json({ message });
-    }
-
-    passport.authenticate("signin", async (err, user, info) => {
-        try {
-            if (err || !user) throw new Error(info.message);
-            //const error = new Error(info);
-            //return next(info);
-
-            req.login(user, { session: false }, async (err) => {
-                if (err) return next(err);
-
-                const theUser = await User.findOne({ email: user.email });
-
-                const body = { _id: user._id, email: user.email };
-
-                const token = jwt.sign({ user: body }, JWT_SECRET_CODE, {
-                    expiresIn: 864000,
-                });
-
-                return res.json({
-                    message: info.message,
-                    avatar: theUser.avatar || null,
-                    token,
-                    user: { _id: user._id, email: user.email },
-                });
-            });
-        } catch (e) {
-            return next(e); */
     }
   })(req, res, next);
 };
 
+const signinGoogle = async (req, res, next) => {
+  const { sub, email, avatar, name } = req.body;
+
+  try {
+    const userFound = await GoogleUser.findOne({ _id: sub });
+
+    if (!userFound) {
+      const newGoogleUser = await GoogleUser.create({
+        _id: sub,
+        email,
+        avatar,
+        name,
+        isGoogleUser: true,
+      });
+      return res.json(newGoogleUser);
+    } else {
+      if (avatar !== userFound.avatar) userFound.avatar = avatar;
+      if (name !== userFound.name) userFound.name = name;
+      await userFound.save();
+      return res.send("ok");
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
 const profile = async (req, res, next) => {
   try {
-    if (req.params.token.slice(0, 6) === "google")
-      return res.json({ name: req.user.email });
-    //if (req.params.token.slice(0, 6) === "google") return res.json(req.user);
+    if (req.params.token.slice(0, 6) === "google") {
+      const userFound = await GoogleUser.findById(req.user._id);
+      if (!userFound) {
+        return res.status(404).json({ message: "User not Found" });
+      }
+      const { email, name, role, avatar } = userFound;
+      return res.json({ email, name, role, avatar: avatar || null });
+    }
+
     const { email, name, role, avatar } = await User.findById(req.user._id);
     return res.json({ email, name, role, avatar: avatar || null });
   } catch (error) {
@@ -224,15 +226,8 @@ const getAllUsers = async (req, res, next) => {
   console.log("----------entra");
   const allUsersFound = await User.find({
     email: "admin@admin.com",
-  })
-    //.populate("addresses", { address: 1, _id: 1 })
-    .populate("orders", "status")
-    .exec();
-  /* .exec((err, address) => {
-      console.log("------error", err);
-      console.log("------address", address);
-      return;
-    }); */
+  });
+
   console.log("--------userFound", allUsersFound);
 
   const usefulData = [
@@ -283,6 +278,7 @@ const deleteUser = async (req, res, next) => {
 
 module.exports = {
   signin,
+  signinGoogle,
   signup,
   profile,
   promoteUser,

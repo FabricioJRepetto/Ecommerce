@@ -9,6 +9,7 @@ const {
 const passport = require("passport");
 const {
   signin,
+  signinGoogle,
   signup,
   profile,
   promoteUser,
@@ -61,6 +62,7 @@ router.post(
   signup
 );
 router.post("/signin", [emailValidation, passwordValidationSignin], signin);
+router.post("/signinGoogle", signinGoogle);
 router.get("/profile/:token", verifyToken, profile);
 router.put("/verifyEmail", verifyToken, verifyEmail);
 router.put("/forgotPassword", forgotPassword);
