@@ -36,6 +36,7 @@ export const productsSlice = createSlice({
         productsRandom: [],
         productsFound: [],
         productsFilters: [],
+        productsAppliedFilters: [],
         searchQuerys: {},
         filtersApplied: {},
         productsFiltered: [],
@@ -53,6 +54,10 @@ export const productsSlice = createSlice({
 
         loadFilters: (state, action) => {
             state.productsFilters = action.payload;
+        },
+
+        loadApplied: (state, action) => {
+            state.productsAppliedFilters = action.payload;
         },
 
         loadQuerys: (state, action) => {
@@ -160,6 +165,7 @@ export const {
     loadProductsFound,
     loadFilters,
     loadQuerys,
+    loadApplied,
     deleteProductFromState,
     filterProducts,
     orderProducts,

@@ -58,7 +58,9 @@ const getByQuery = async (req, res, next) => {
         ];
         const filters = data.available_filters.filter(e => allowedFilters.includes(e.id));
 
-        return res.json({ db: resultsDB, meli: resultsMeli, filters });
+        const applied = data.filters.filter(e => e.id !== 'official_store' && e.id !== 'category');
+
+        return res.json({ db: resultsDB, meli: resultsMeli, filters, applied });
     } catch (error) {
         next(error);
     }

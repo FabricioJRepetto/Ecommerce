@@ -31,12 +31,9 @@ const NavBar = () => {
       dispatch(loadProductsOwn("loading"));
       dispatch(loadProductsFound("loading"));
       dispatch(loadFilters("loading"));
+
       navigate("/results");
-      const { data } = await axios(`/product/search/?q=${e.target.value}`);
       dispatch(loadQuerys({q: e.target.value}));
-      dispatch(loadProductsOwn(data.db));
-      dispatch(loadProductsFound(data.meli));
-      dispatch(loadFilters(data.filters));
     }
   };
 
