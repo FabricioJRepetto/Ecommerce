@@ -7,8 +7,9 @@ import {
   loadUsername,
   sessionActive,
   loadRole,
+  loadGoogleUser,
 } from "./Redux/reducer/sessionSlice";
-import { loadCart, loadWhishlist } from "./Redux/reducer/cartSlice";
+import { loadCart, loadWishlist } from "./Redux/reducer/cartSlice";
 import axios from "axios";
 import "./App.css";
 
@@ -47,17 +48,19 @@ function App() {
       try {
         if (loggedUserToken) {
           const { data } = await axios(`/user/profile/${loggedUserToken}`); //! VOLVER A VER fijarse con nuevos usuarios de google
+          const { email, name, role, isGoogleUser, avatar } = data;
           dispatch(sessionActive(true));
-          dispatch(loadUsername(data.name));
-          dispatch(loadAvatar(data.avatar ? data.avatar : loggedAvatar)); //! VOLVER A VER ojo con esto, puede ser que quede guardado el avatar de otro user
-          dispatch(loadEmail(data.email ? data.email : loggedEmail));
-          dispatch(loadRole(data.role));
+          dispatch(loadUsername(name));
+          dispatch(loadAvatar(avatar ? avatar : loggedAvatar)); //! VOLVER A VER ojo con esto, puede ser que quede guardado el avatar de otro user
+          dispatch(loadEmail(email ? email : loggedEmail));
+          dispatch(loadRole(role));
+          dispatch(loadGoogleUser(isGoogleUser));
 
           const { data: cart } = await axios(`/cart`);
           dispatch(loadCart(cart.id_list));
 
-          const { data: whish } = await axios(`/whishlist`);
-          dispatch(loadWhishlist(whish.id_list));
+          const { data: wish } = await axios(`/wishlist`);
+          dispatch(loadWishlist(wish.id_list));
         }
       } catch (error) {
         navigate("/");

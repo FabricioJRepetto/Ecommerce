@@ -1,6 +1,5 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
-const GoogleUser = require("../models/googleuser");
 require("dotenv").config();
 const { JWT_SECRET_CODE, OAUTH_CLIENT_ID } = process.env;
 const { OAuth2Client } = require("google-auth-library");

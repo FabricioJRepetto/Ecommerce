@@ -1,8 +1,10 @@
 import React from "react";
 import { resizer } from "../../helpers/resizer";
+import { useLocation } from "react-router-dom";
 
 const OrderCard = ({ order }) => {
   //! VOLVER A VER agregar ordenamiento y filtros
+  const location = useLocation();
   const {
     id,
     products,
@@ -26,7 +28,7 @@ const OrderCard = ({ order }) => {
         <img key={pic.img} src={resizer(pic.img)} alt={"product"} />
       ))}
       <p>{description}</p>
-      <p>user: {user.name}</p>
+      {location.pathname !== "/admin/users" && <p>user: {user.name}</p>}
       <p>
         shipping address:{" "}
         {`

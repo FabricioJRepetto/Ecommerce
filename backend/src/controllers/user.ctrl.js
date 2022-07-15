@@ -97,8 +97,14 @@ const profile = async (req, res, next) => {
     if (!userFound) {
       return res.status(404).json({ message: "User not Found" });
     }
-    const { email, name, role, avatar } = userFound;
-    return res.json({ email, name, role, avatar: avatar || null });
+    const { email, name, role, avatar, isGoogleUser } = userFound;
+    return res.json({
+      email,
+      name,
+      role,
+      isGoogleUser,
+      avatar: avatar || null,
+    });
   } catch (error) {
     next(error);
   }
@@ -239,6 +245,7 @@ const getAllUsers = async (req, res, next) => {
     "emailVerified",
     "avatar",
     "isGoogleUser",
+    "googleEmail",
   ];
   let allUsers = [];
   for (const user of allUsersFound) {
@@ -250,6 +257,7 @@ const getAllUsers = async (req, res, next) => {
       emailVerified: "",
       avatar: "",
       isGoogleUser: null,
+      googleEmail: "",
     };
     for (const key in user) {
       if (usefulData.includes(key)) {
@@ -272,9 +280,9 @@ const getAddressesAdmin = async (req, res, next) => {
     });
 
     if (!addressFound) {
-      return res.status(404).json({ message: "Address not found" });
+      return res.json([]);
     } else {
-      return res.json(addressFound);
+      return res.json(addressFound.address);
     }
   } catch (error) {
     next(error);
@@ -291,7 +299,7 @@ const getOrdersAdmin = async (req, res, next) => {
     });
 
     if (!ordersFound) {
-      return res.status(404).json({ message: "Order not found" });
+      return res.json([]);
     } else {
       return res.json(ordersFound);
     }

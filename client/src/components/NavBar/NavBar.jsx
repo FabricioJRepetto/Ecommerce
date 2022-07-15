@@ -7,7 +7,7 @@ import { ReactComponent as Cart } from "../../assets/svg/cart.svg";
 import { ReactComponent as Fav } from "../../assets/svg/fav.svg";
 import { ReactComponent as Avatar } from "../../assets/svg/avatar.svg";
 import {
-    loadFilters,
+  loadFilters,
   loadProductsFound,
   loadProductsOwn,
   loadQuerys,
@@ -41,11 +41,11 @@ const NavBar = () => {
   };
 
   const logoClick = () => {
-        dispatch(loadProductsOwn([]));
-        dispatch(loadProductsFound([]));
-        dispatch(loadFilters([]));
-        document.getElementById("navbar-searchbar").value = "";
-        navigate("/");
+    dispatch(loadProductsOwn([]));
+    dispatch(loadProductsFound([]));
+    dispatch(loadFilters([]));
+    document.getElementById("navbar-searchbar").value = "";
+    navigate("/");
   };
 
   return (
@@ -126,10 +126,10 @@ const NavBar = () => {
                       </NavLink>
 
                       <NavLink
-                        to={"/profile/whishlist"}
+                        to={"/profile/wishlist"}
                         className="profile-modal-option"
                       >
-                        Whishlist
+                        Wishlist
                       </NavLink>
 
                       <NavLink
@@ -154,8 +154,8 @@ const NavBar = () => {
                 </div>
               </div>
 
-              <NavLink to={"/profile/whishlist"}>
-                <Fav className="whishlist-icon" />
+              <NavLink to={"/profile/wishlist"}>
+                <Fav className="wishlist-icon" />
               </NavLink>
 
               <NavLink to={"cart"} className="cart-icon-container">

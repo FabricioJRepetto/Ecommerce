@@ -21,12 +21,12 @@ const Profile = () => {
 
   const [render, setRender] = useState(section);
   const [address, setAddress] = useState([]);
-  const [whishlist, setWhishlist] = useState([]);
+  const [wishlist, setWishlist] = useState([]);
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [addressToEditId, setaddressToEditId] = useState(null);
 
-  const { whishlist: wl_id } = useSelector((state) => state.cartReducer);
+  const { wishlist: wl_id } = useSelector((state) => state.cartReducer);
   const { session, username, avatar, email } = useSelector(
     (state) => state.sessionReducer
   );
@@ -51,8 +51,8 @@ const Profile = () => {
         const { data } = await axios(`/address/`);
         data.address ? setAddress(data.address) : setAddress([]);
 
-        const { data: list } = await axios(`/whishlist/`);
-        list.products ? setWhishlist(list.products) : setWhishlist([]);
+        const { data: list } = await axios(`/wishlist/`);
+        list.products ? setWishlist(list.products) : setWishlist([]);
 
         const { data: history } = await axios(`/history/`);
         history.products ? setHistory(history.products) : setHistory([]);
@@ -146,7 +146,7 @@ const Profile = () => {
         <NavLink to={"/profile/details"}>Details</NavLink>
         <NavLink to={"/profile/orders"}>Orders</NavLink>
         <NavLink to={"/profile/address"}>Shipping address</NavLink>
-        <NavLink to={"/profile/whishlist"}>Whishlist</NavLink>
+        <NavLink to={"/profile/wishlist"}>Wishlist</NavLink>
         <NavLink to={"/profile/history"}>History</NavLink>
         <Signout />
       </div>
@@ -254,14 +254,14 @@ const Profile = () => {
           </div>
         )}
 
-        {render === "whishlist" && (
+        {render === "wishlist" && (
           <div>
-            <h1>Whishlist</h1>
+            <h1>Wishlist</h1>
             {!loading ? (
-              <div className="profile-whishlistcard-container">
-                {whishlist.length ? (
+              <div className="profile-wishlistcard-container">
+                {wishlist.length ? (
                   React.Children.toArray(
-                    whishlist?.map((e) => (
+                    wishlist?.map((e) => (
                       <Card
                         img={e.thumbnail}
                         name={e.name}
@@ -277,7 +277,7 @@ const Profile = () => {
                     ))
                   )
                 ) : (
-                  <p>Whishlist empty</p>
+                  <p>Wishlist empty</p>
                 )}
               </div>
             ) : (

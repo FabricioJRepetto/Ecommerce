@@ -92,12 +92,12 @@ router.get(
   [verifyToken, googleUserShallNotPass, verifyAdmin],
   getAllUsers
 );
-router.get(
+router.post(
   "/getAddressesAdmin",
   [verifyToken, googleUserShallNotPass, verifyAdmin],
   getAddressesAdmin
 );
-router.get(
+router.post(
   "/getOrdersAdmin",
   [verifyToken, googleUserShallNotPass, verifyAdmin],
   getOrdersAdmin

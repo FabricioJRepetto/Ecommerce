@@ -18,9 +18,9 @@ const Home = () => {
   const [products, setProducts] = useState(false);
   const [countdown, setCountdown] = useState("");
   const [loading, setLoading] = useState(true);
-  const whishlist = useSelector((state) => state.cartReducer.whishlist);
+  const wishlist = useSelector((state) => state.cartReducer.wishlist);
   const session = useSelector((state) => state.sessionReducer.session);
-  const [suggestion, setSuggestion] = useState(false)
+  const [suggestion, setSuggestion] = useState(false);
 
   useEffect(() => {
     let countdownInterv = null;
@@ -37,13 +37,13 @@ const Home = () => {
     }, 100);
 
     (async () => {
-        const data = await Promise.all([
-            axios(`/sales/`),
-            (session && axios(`/history/suggestion`))
-        ])
-        setProducts(data[0]?.data)
-        setSuggestion(data[1]?.data || false)
-        setLoading(false);
+      const data = await Promise.all([
+        axios(`/sales/`),
+        session && axios(`/history/suggestion`),
+      ]);
+      setProducts(data[0]?.data);
+      setSuggestion(data[1]?.data || false);
+      setLoading(false);
     })();
 
     return () => clearInterval(countdownInterv);
@@ -86,27 +86,28 @@ const Home = () => {
         <div className="random-container">
           {Array.from(Array(5).keys()).map((_, index) => (
             <MiniCard
-                key={`specials ${index}`}
-                img={products[index]?.thumbnail}
-                name={products[index]?.name}
-                price={products[index]?.price}
-                sale_price={products[index]?.sale_price}
-                discount={products[index]?.discount}
-                prodId={products[index]?._id}
-                free_shipping={products[index]?.free_shipping}
-                on_sale={products[index]?.on_sale}
-                fav={whishlist.includes(products[index]?._id)}
-                loading={loading}
+              key={`specials ${index}`}
+              img={products[index]?.thumbnail}
+              name={products[index]?.name}
+              price={products[index]?.price}
+              sale_price={products[index]?.sale_price}
+              discount={products[index]?.discount}
+              prodId={products[index]?._id}
+              free_shipping={products[index]?.free_shipping}
+              on_sale={products[index]?.on_sale}
+              fav={wishlist.includes(products[index]?._id)}
+              loading={loading}
             />
           ))}
         </div>
       </div>
       <br />
-       {suggestion.length > 4 &&<div>
-        <h2>Quizás te interese...</h2>
-        <div className="random-container">
-          {Array.from(Array(5).keys()).map((_, index) => (
-            <MiniCard
+      {suggestion.length > 4 && (
+        <div>
+          <h2>Quizás te interese...</h2>
+          <div className="random-container">
+            {Array.from(Array(5).keys()).map((_, index) => (
+              <MiniCard
                 key={`recom ${index}`}
                 prodId={suggestion[index]?._id}
                 name={suggestion[index]?.name}
@@ -116,12 +117,13 @@ const Home = () => {
                 discount={suggestion[index]?.discount}
                 free_shipping={suggestion[index]?.free_shipping}
                 on_sale={suggestion[index]?.on_sale}
-                fav={whishlist.includes(suggestion[index]?._id)}
+                fav={wishlist.includes(suggestion[index]?._id)}
                 loading={loading}
-            />
-          ))}
+              />
+            ))}
+          </div>
         </div>
-      </div>}
+      )}
       <br />
       <Footer />
     </div>

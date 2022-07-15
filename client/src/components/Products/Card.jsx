@@ -7,7 +7,7 @@ import { loadIdProductToEdit } from "../../Redux/reducer/productsSlice";
 import "./Card.css";
 
 import { ReactComponent as Sale } from "../../assets/svg/sale.svg";
-import { WhishlistButton as Fav } from "./WhishlistButton";
+import { WishlistButton as Fav } from "./WishlistButton";
 
 const Card = ({
   img,

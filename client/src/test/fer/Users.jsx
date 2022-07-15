@@ -15,7 +15,9 @@ const Users = () => {
 
   useEffect(() => {
     axios("/user/getAll")
-      .then(({ data }) => setUsersData(data))
+      .then(({ data }) => {
+        setUsersData(data);
+      })
       .catch((err) => console.log(err)); //! VOLVER A VER manejo de errores
   }, []);
 

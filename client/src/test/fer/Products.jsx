@@ -27,7 +27,7 @@ const Products = () => {
   const { productsFound, productsFiltered } = useSelector(
     (state) => state.productsReducer
   );
-  const whishlist = useSelector((state) => state.cartReducer.whishlist);
+  const wishlist = useSelector((state) => state.cartReducer.wishlist);
   const location = useLocation();
   const [
     isOpenDeleteProduct,
@@ -163,7 +163,7 @@ const Products = () => {
                   brand={prod.brand}
                   prodId={prod._id}
                   free_shipping={prod.free_shipping}
-                  fav={whishlist.includes(prod._id)}
+                  fav={wishlist.includes(prod._id)}
                   on_sale={prod.on_sale}
                   openDeleteProduct={openDeleteProduct}
                 />
