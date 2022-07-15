@@ -37,6 +37,7 @@ export const productsSlice = createSlice({
         productsFound: [],
         productsFilters: [],
         productsAppliedFilters: [],
+        breadCrumbs: [],
         searchQuerys: {},
         filtersApplied: {},
         productsFiltered: [],
@@ -62,6 +63,10 @@ export const productsSlice = createSlice({
 
         loadQuerys: (state, action) => {
             state.searchQuerys = action.payload;
+        },
+
+        loadBreadCrumbs: (state, action) => {
+            state.breadCrumbs = action.payload;
         },
 
         deleteProductFromState: (state, action) => {
@@ -166,6 +171,7 @@ export const {
     loadFilters,
     loadQuerys,
     loadApplied,
+    loadBreadCrumbs,
     deleteProductFromState,
     filterProducts,
     orderProducts,

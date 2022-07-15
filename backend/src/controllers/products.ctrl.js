@@ -60,7 +60,9 @@ const getByQuery = async (req, res, next) => {
 
         const applied = data.filters.filter(e => e.id !== 'official_store' && e.id !== 'category');
 
-        return res.json({ db: resultsDB, meli: resultsMeli, filters, applied });
+        const breadCrumbs = data.filters.find(e => e.id === 'category')?.values[0].path_from_root;
+
+        return res.json({ db: resultsDB, meli: resultsMeli, filters, applied, breadCrumbs });
     } catch (error) {
         next(error);
     }
