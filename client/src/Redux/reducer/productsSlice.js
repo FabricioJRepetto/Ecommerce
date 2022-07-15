@@ -36,7 +36,7 @@ export const productsSlice = createSlice({
         productsRandom: [],
         productsFound: [],
         productsFilters: [],
-        searchQuerys: '',
+        searchQuerys: {},
         filtersApplied: {},
         productsFiltered: [],
         productDetails: {},

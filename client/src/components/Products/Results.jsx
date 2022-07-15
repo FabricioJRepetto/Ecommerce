@@ -16,45 +16,56 @@ const Results = () => {
     const productsFilters = useSelector((state) => state.productsReducer.productsFilters);
 
     const querys = useSelector((state) => state.productsReducer.searchQuerys);
-    const [applied, setApplied] = useState({});
+    const [applied, setApplied] = useState([]);
 
     const dispatch = useDispatch();    
 
-    console.log(productsOwn);
-    console.log(productsFound);
-    console.log(productsFilters);
+    //console.log(productsOwn);
+    //console.log(productsFound);
+    //console.log(productsFilters);
+    console.log(querys);
 
-    useEffect(() => {
-        let stringQ = ''
-
-    }, [querys])
-    
-
-    const addFilter = async (obj) => { 
-        //{name: v.name, filter: f.id, value: v.id }
-        
+    const addFilter = async (obj) => {
         let nName = obj.name;
         let nFilter = obj.filter;
         let nValue = obj.value;
 
-        //: remplazar categorias
-        let newQuery = `${querys}&${nFilter}=${nValue}`
+        if (nFilter !== 'category') {
+            setApplied([...applied, { name: nName, filter: nFilter }])
+        }
 
-        dispatch(loadQuerys(newQuery));
+        //: remplazar categorias
+        // como tarda en actualizar el estado, utilizo un objeto auxiliar
+        let aux = {...querys, [nFilter]: nValue}
+        dispatch(loadQuerys(aux));
+        //: armar nueva query
+        let newQuery = ''
+        Object.entries(aux).forEach(([key, value]) => {
+            newQuery += key + '=' + value + '&'
+        })
         
         const { data } = await axios(`/product/search/?${newQuery}`);
         dispatch(loadProductsOwn(data.db));
         dispatch(loadProductsFound(data.meli));
         dispatch(loadFilters(data.filters));
+     }
+
+     const removeFilter = async (filter) => {
         
-        console.log(newQuery);
      }
 
   return (
     <div className='results-container'>
         <div className="results-filters">
             <h2>Filtros</h2>
-            <b>filtros aplicados</b>
+            <div>
+                <b>filtros aplicados</b>
+                {applied.length > 0 && 
+                    React.Children.toArray(applied.map(f => (
+                        <div>{f.name}</div>
+                    )))
+                }
+            </div>
             <hr />
             {(productsFilters !== 'loading' && productsFilters.length > 0) &&
                     React.Children.toArray(productsFilters?.map(f => (
