@@ -1,17 +1,16 @@
 const { Router } = require("express");
 const router = Router();
 const {
-    getOrder,
-    getOrdersUser,
-    getOrdersAdmin,
-    createOrder,
-    buyNowOrder,
-    deleteOrder,
-    updateOrder
+  getOrder,
+  getOrdersUser,
+  getOrdersAdmin,
+  createOrder,
+  buyNowOrder,
+  deleteOrder,
+  updateOrder,
 } = require("../controllers/order.ctrl.js");
 
 router.get("/userall", getOrdersUser);
-router.get("/adminall", getOrdersAdmin);
 router.get("/:id", getOrder);
 router.post("/", createOrder);
 router.post("/buyNow", buyNowOrder);

@@ -4,7 +4,7 @@ const setUserKey = require("../utils/setUserKey");
 
 const getAddress = async (req, res, next) => {
   const { isGoogleUser, _id } = req.user;
-  let userKey = setUserKey(isGoogleUser);
+  const userKey = setUserKey(isGoogleUser);
 
   try {
     const address = await Address.findOne({
@@ -20,7 +20,7 @@ const getAddress = async (req, res, next) => {
 
 const addAddress = async (req, res, next) => {
   const { isGoogleUser, _id } = req.user;
-  let userKey = setUserKey(isGoogleUser);
+  const userKey = setUserKey(isGoogleUser);
 
   try {
     const addressFound = await Address.findOne({
@@ -64,7 +64,7 @@ const updateAddress = async (req, res, next) => {
   const { state, city, zip_code, street_name, street_number } = req.body;
 
   const { isGoogleUser, _id } = req.user;
-  let userKey = setUserKey(isGoogleUser);
+  const userKey = setUserKey(isGoogleUser);
 
   //! VOLVER A VER el edit address no funca, crea una address nueva
 
@@ -97,7 +97,7 @@ const updateAddress = async (req, res, next) => {
 
 const removeAddress = async (req, res, next) => {
   const { isGoogleUser, _id } = req.user;
-  let userKey = setUserKey(isGoogleUser);
+  const userKey = setUserKey(isGoogleUser);
 
   try {
     const { address } = await Address.findOneAndUpdate(
@@ -120,7 +120,7 @@ const removeAddress = async (req, res, next) => {
 
 const setDefault = async (req, res, next) => {
   const { isGoogleUser, _id } = req.user;
-  let userKey = setUserKey(isGoogleUser);
+  const userKey = setUserKey(isGoogleUser);
 
   try {
     await Address.findOneAndUpdate(

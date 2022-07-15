@@ -26,6 +26,7 @@ passport.use(
           const newUser = await User.create({
             email,
             password,
+            isGoogleUser: false,
           });
           return done(null, newUser, {
             message:

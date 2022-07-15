@@ -15,12 +15,12 @@ const orderSchema = new Schema(
       },
     ],
     user: {
-      type: String,
-      required: true,
+      type: Schema.Types.ObjectId,
+      ref: "User",
     },
-    isUserGoogle: {
-      type: Boolean,
-      default: false,
+    googleUser: {
+      type: Schema.Types.ObjectId,
+      ref: "GoogleUser",
     },
     shipping_address: {
       state: String,

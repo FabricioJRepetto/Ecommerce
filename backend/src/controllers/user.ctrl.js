@@ -1,5 +1,4 @@
 const User = require("../models/user");
-const GoogleUser = require("../models/googleuser");
 const Address = require("../models/Address");
 const Order = require("../models/order");
 const passport = require("passport");
@@ -74,6 +73,7 @@ const signinGoogle = async (req, res, next) => {
         avatar,
         firstName,
         lastName,
+        isGoogleUser: true,
       });
       return res.json(newGoogleUser);
     } else {
@@ -92,19 +92,11 @@ const signinGoogle = async (req, res, next) => {
 
 const profile = async (req, res, next) => {
   try {
-    if (req.params.token.slice(0, 6) === "google") {
-      const userFound = await GoogleUser.findById(req.user._id);
-      if (!userFound) {
-        return res.status(404).json({ message: "User not Found" });
-      }
-      const { email, name, role, avatar } = userFound;
-      return res.json({ email, name, role, avatar: avatar || null });
-    }
-
-    const { email, name, role, avatar } = await User.findById(req.user._id);
-    if (!email) {
+    const userFound = await User.findById(req.user._id);
+    if (!userFound) {
       return res.status(404).json({ message: "User not Found" });
     }
+    const { email, name, role, avatar } = userFound;
     return res.json({ email, name, role, avatar: avatar || null });
   } catch (error) {
     next(error);
@@ -229,14 +221,14 @@ const editProfile = async (req, res, next) => {
   }
 };
 
+//! VOLVER A VER separar addAddress de editProfile, los users de google no pueden editar el perfil, pero SI agregar address
+
 const verifyAdminRoute = (req, res, next) => {
   return res.send("ok");
 };
 
 const getAllUsers = async (req, res, next) => {
-  const usersFound = await User.find();
-  const googleUsersFound = await GoogleUser.find();
-  const allUsersFound = [...usersFound, ...googleUsersFound];
+  const allUsersFound = await User.find();
 
   const usefulData = [
     "_id",
@@ -245,6 +237,7 @@ const getAllUsers = async (req, res, next) => {
     "role",
     "emailVerified",
     "avatar",
+    "isGoogleUser",
   ];
   let allUsers = [];
   for (const user of allUsersFound) {
@@ -255,6 +248,7 @@ const getAllUsers = async (req, res, next) => {
       role: "",
       emailVerified: "",
       avatar: "",
+      isGoogleUser: null,
     };
     for (const key in user) {
       if (usefulData.includes(key)) {
@@ -269,18 +263,12 @@ const getAllUsers = async (req, res, next) => {
 
 const getAddressesAdmin = async (req, res, next) => {
   const { _id, isGoogleUser } = req.body;
-  let addressFound;
+  const userKey = setUserKey(isGoogleUser);
 
   try {
-    if (isGoogleUser) {
-      addressFound = await Address.findOne({
-        googleUser: _id,
-      });
-    } else {
-      addressFound = await Address.findOne({
-        user: _id,
-      });
-    }
+    const addressFound = await Address.findOne({
+      [userKey]: _id,
+    });
 
     if (!addressFound) {
       return res.status(404).json({ message: "Address not found" });
@@ -294,18 +282,12 @@ const getAddressesAdmin = async (req, res, next) => {
 
 const getOrdersAdmin = async (req, res, next) => {
   const { _id, isGoogleUser } = req.body;
-  let ordersFound;
+  const userKey = setUserKey(isGoogleUser);
 
   try {
-    if (isGoogleUser) {
-      ordersFound = await Order.find({
-        googleUser: _id,
-      });
-    } else {
-      ordersFound = await Order.find({
-        user: _id,
-      });
-    }
+    const ordersFound = await Order.find({
+      [userKey]: _id,
+    });
 
     if (!ordersFound) {
       return res.status(404).json({ message: "Order not found" });
