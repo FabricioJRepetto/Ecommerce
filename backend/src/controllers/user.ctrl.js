@@ -1,4 +1,6 @@
 const User = require("../models/user");
+const Address = require("../models/Address");
+const Order = require("../models/order");
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
@@ -6,6 +8,7 @@ const { JWT_SECRET_CODE } = process.env;
 const { OAuth2Client } = require("google-auth-library");
 const { validationResult } = require("express-validator");
 const sendEmail = require("../utils/sendEmail");
+const mongoose = require("mongoose");
 
 const signup = async (req, res, next) => {
   const { _id, email } = req.user;
@@ -37,8 +40,8 @@ const signin = async (req, res, next) => {
 
       req.login(user, { session: false }, async (err) => {
         if (err) return next(err);
-        const { _id, email, name, role, avatar } = user;
-        const body = { _id, email, role };
+        const { _id, email, name, role, avatar, isGoogleUser } = user;
+        const body = { _id, email, role, isGoogleUser };
 
         const token = jwt.sign({ user: body }, JWT_SECRET_CODE, {
           expiresIn: 864000,
@@ -51,47 +54,49 @@ const signin = async (req, res, next) => {
       });
     } catch (e) {
       return next(e);
-      /* if (!errors.isEmpty()) {
-        const message = errors.errors.map((err) => err.msg);
-        return res.json({ message });
-    }
-
-    passport.authenticate("signin", async (err, user, info) => {
-        try {
-            if (err || !user) throw new Error(info.message);
-            //const error = new Error(info);
-            //return next(info);
-
-            req.login(user, { session: false }, async (err) => {
-                if (err) return next(err);
-
-                const theUser = await User.findOne({ email: user.email });
-
-                const body = { _id: user._id, email: user.email };
-
-                const token = jwt.sign({ user: body }, JWT_SECRET_CODE, {
-                    expiresIn: 864000,
-                });
-
-                return res.json({
-                    message: info.message,
-                    avatar: theUser.avatar || null,
-                    token,
-                    user: { _id: user._id, email: user.email },
-                });
-            });
-        } catch (e) {
-            return next(e); */
     }
   })(req, res, next);
 };
 
+const signinGoogle = async (req, res, next) => {
+  const { sub, email, emailVerified, avatar, firstName, lastName } = req.body;
+
+  try {
+    const userFound = await User.findOne({ email: sub });
+
+    if (!userFound) {
+      const newGoogleUser = await User.create({
+        email: sub,
+        password: sub,
+        googleEmail: email,
+        emailVerified,
+        avatar,
+        firstName,
+        lastName,
+        isGoogleUser: true,
+      });
+      return res.json(newGoogleUser);
+    } else {
+      if (emailVerified !== userFound.emailVerified)
+        userFound.emailVerified = emailVerified;
+      if (avatar !== userFound.avatar) userFound.avatar = avatar;
+      if (firstName !== userFound.firstName) userFound.firstName = firstName;
+      if (lastName !== userFound.lastName) userFound.lastName = lastName;
+      await userFound.save();
+      return res.send("ok");
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
 const profile = async (req, res, next) => {
   try {
-    if (req.params.token.slice(0, 6) === "google")
-      return res.json({ name: req.user.email });
-    //if (req.params.token.slice(0, 6) === "google") return res.json(req.user);
-    const { email, name, role, avatar } = await User.findById(req.user._id);
+    const userFound = await User.findById(req.user._id);
+    if (!userFound) {
+      return res.status(404).json({ message: "User not Found" });
+    }
+    const { email, name, role, avatar } = userFound;
     return res.json({ email, name, role, avatar: avatar || null });
   } catch (error) {
     next(error);
@@ -216,24 +221,14 @@ const editProfile = async (req, res, next) => {
   }
 };
 
+//! VOLVER A VER separar addAddress de editProfile, los users de google no pueden editar el perfil, pero SI agregar address
+
 const verifyAdminRoute = (req, res, next) => {
   return res.send("ok");
 };
 
 const getAllUsers = async (req, res, next) => {
-  console.log("----------entra");
-  const allUsersFound = await User.find({
-    email: "admin@admin.com",
-  })
-    //.populate("addresses", { address: 1, _id: 1 })
-    .populate("orders", "status")
-    .exec();
-  /* .exec((err, address) => {
-      console.log("------error", err);
-      console.log("------address", address);
-      return;
-    }); */
-  console.log("--------userFound", allUsersFound);
+  const allUsersFound = await User.find();
 
   const usefulData = [
     "_id",
@@ -242,6 +237,7 @@ const getAllUsers = async (req, res, next) => {
     "role",
     "emailVerified",
     "avatar",
+    "isGoogleUser",
   ];
   let allUsers = [];
   for (const user of allUsersFound) {
@@ -252,6 +248,7 @@ const getAllUsers = async (req, res, next) => {
       role: "",
       emailVerified: "",
       avatar: "",
+      isGoogleUser: null,
     };
     for (const key in user) {
       if (usefulData.includes(key)) {
@@ -261,8 +258,45 @@ const getAllUsers = async (req, res, next) => {
     }
     allUsers.push(newUser);
   }
-  //console.log(allUsers);
   return res.json(allUsers);
+};
+
+const getAddressesAdmin = async (req, res, next) => {
+  const { _id, isGoogleUser } = req.body;
+  const userKey = setUserKey(isGoogleUser);
+
+  try {
+    const addressFound = await Address.findOne({
+      [userKey]: _id,
+    });
+
+    if (!addressFound) {
+      return res.status(404).json({ message: "Address not found" });
+    } else {
+      return res.json(addressFound);
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getOrdersAdmin = async (req, res, next) => {
+  const { _id, isGoogleUser } = req.body;
+  const userKey = setUserKey(isGoogleUser);
+
+  try {
+    const ordersFound = await Order.find({
+      [userKey]: _id,
+    });
+
+    if (!ordersFound) {
+      return res.status(404).json({ message: "Order not found" });
+    } else {
+      return res.json(ordersFound);
+    }
+  } catch (error) {
+    next(error);
+  }
 };
 
 const deleteUser = async (req, res, next) => {
@@ -283,6 +317,7 @@ const deleteUser = async (req, res, next) => {
 
 module.exports = {
   signin,
+  signinGoogle,
   signup,
   profile,
   promoteUser,
@@ -293,5 +328,7 @@ module.exports = {
   editProfile,
   verifyAdminRoute,
   getAllUsers,
+  getAddressesAdmin,
+  getOrdersAdmin,
   deleteUser,
 };

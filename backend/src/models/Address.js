@@ -1,6 +1,6 @@
 const { Schema, model } = require("mongoose");
 
-const addressSchema = new Schema(
+const AddressSchema = new Schema(
   {
     address: [
       {
@@ -14,16 +14,16 @@ const addressSchema = new Schema(
     ],
     user: {
       type: Schema.Types.ObjectId,
-      require: true,
+      ref: "User",
     },
-    /* user: {
-      type: String,
-      require: true,
-    }, */
+    googleUser: {
+      type: Schema.Types.ObjectId,
+      ref: "GoogleUser",
+    },
   },
   {
     versionKey: false,
   }
 );
 
-module.exports = model("Address", addressSchema);
+module.exports = model("Address", AddressSchema);

@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
+const GoogleUser = require("../models/googleuser");
 require("dotenv").config();
 const { JWT_SECRET_CODE, OAUTH_CLIENT_ID } = process.env;
 const { OAuth2Client } = require("google-auth-library");
@@ -23,15 +24,16 @@ async function verifyToken(req, res, next) {
           audience: OAUTH_CLIENT_ID,
         });
         const payload = ticket.getPayload();
-        const { sub, name, email, picture } = payload;
+        const { sub } = payload;
+
+        const userFound = await User.findOne({ email: sub });
+        if (!userFound) {
+          return res.status(404).json({ message: "User not found" });
+        }
+
         req.user = {
-          /* _id: payload["sub"], */
-          _id: sub,
-          name: name || email || `Guest ${userDecoded.sub}`,
+          _id: userFound._id,
           isGoogleUser: true,
-          email,
-          avatar: picture,
-          role: "client",
         };
       } catch (error) {
         return res.status(403).send("Invalid credentials");
@@ -43,7 +45,6 @@ async function verifyToken(req, res, next) {
         req.user.isGoogleUser = false;
 
         const userFound = await User.findById(req.user._id);
-
         if (!userFound) {
           return res.status(404).json({ message: "User not found" });
         }
@@ -92,9 +93,18 @@ async function verifySuperAdmin(req, res, next) {
   }
 }
 
+async function googleUserShallNotPass(req, res, next) {
+  if (req.user.isGoogleUser) {
+    return res.status(401).json({ message: "Google user unauthorized" });
+  } else {
+    next();
+  }
+}
+
 module.exports = {
   verifyToken,
   verifyEmailVerified,
   verifyAdmin,
   verifySuperAdmin,
+  googleUserShallNotPass,
 };
