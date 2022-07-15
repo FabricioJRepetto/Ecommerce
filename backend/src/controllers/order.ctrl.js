@@ -150,14 +150,14 @@ const deleteOrder = async (req, res, next) => {
       [userKey]: _id,
       status: "pending",
     });
-    return res.json("ORDER DELETED");
+    return res.json({ message: "Order deleted" });
   } catch (error) {
     next(error);
   }
 };
 
 const updateOrder = async (req, res, next) => {
-  const { isGoogleUser, _id } = req.user;
+  const { isGoogleUser } = req.user;
   const userKey = setUserKey(isGoogleUser);
 
   try {
@@ -221,9 +221,9 @@ const updateOrder = async (req, res, next) => {
       : false;
     const total = p ? quantity * (p.on_sale ? p.sale_price : p.price) : 0;
 
-    const order = await Order.findOneAndUpdate(
+    await Order.findOneAndUpdate(
       { [userKey]: req.params.id }, //! VOLVER A VER probar si funca asi
-      /* const order = await Order.findByIdAndUpdate(
+      /* await Order.findByIdAndUpdate(
     req.params.id, */
       {
         $set: {
