@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
+import Card from "../../components/Products/Card";
 import AddressCard from "./AddressCard";
 import OrderCard from "./OrderCard";
 
@@ -22,7 +23,6 @@ const UserCard = ({ user, openDeleteUser, openPromoteUser }) => {
   } = user;
 
   const getAddresses = (_id) => {
-    console.log(_id);
     axios
       .post("/user/getAddressesAdmin", { _id, isGoogleUser })
       .then(({ data }) => {
@@ -32,7 +32,6 @@ const UserCard = ({ user, openDeleteUser, openPromoteUser }) => {
   };
 
   const getOrders = (_id) => {
-    console.log(_id);
     axios
       .post("/user/getOrdersAdmin", { _id, isGoogleUser })
       .then(({ data }) => {
@@ -42,10 +41,10 @@ const UserCard = ({ user, openDeleteUser, openPromoteUser }) => {
   };
 
   const getWishlist = (_id) => {
-    console.log(_id);
     axios
       .post("/user/getWishlistAdmin", { _id, isGoogleUser })
       .then(({ data }) => {
+        console.log(data);
         setWishlist(data);
         setShowWishlist(true);
       });
@@ -64,7 +63,7 @@ const UserCard = ({ user, openDeleteUser, openPromoteUser }) => {
             Promover a Administrador
           </button>
         )}
-        <img src={avatar} alt={`${name}`} />
+        {avatar ? <img src={avatar} alt={`${name}`} /> : <h4>Sin avatar</h4>}
         {role === "client" && (
           <button onClick={() => openDeleteUser({ _id, name })}>
             Eliminar
@@ -100,12 +99,12 @@ const UserCard = ({ user, openDeleteUser, openPromoteUser }) => {
         )}
         {showWishlist ? (
           !wishlist.length ? (
-            <h4> No se encontraron órdenes</h4>
+            <h4> No se encontró Lista de Deseados</h4>
           ) : (
             <>
               <h4>Lista de Deseados</h4>
               {React.Children.toArray(
-                orders.map((order) => <OrderCard order={order} />)
+                wishlist.map((product) => <Card productData={product} />)
               )}
             </>
           )

@@ -23,6 +23,7 @@ const {
   getAllUsers,
   getAddressesAdmin,
   getOrdersAdmin,
+  getWishlistAdmin,
   deleteUser,
 } = require("../controllers/user.ctrl");
 const addressRouter = require("./address.router");
@@ -101,6 +102,11 @@ router.post(
   "/getOrdersAdmin",
   [verifyToken, googleUserShallNotPass, verifyAdmin],
   getOrdersAdmin
+);
+router.post(
+  "/getWishlistAdmin",
+  [verifyToken, googleUserShallNotPass, verifyAdmin],
+  getWishlistAdmin
 );
 
 router.delete(

@@ -261,18 +261,10 @@ const Profile = () => {
               <div className="profile-wishlistcard-container">
                 {wishlist.length ? (
                   React.Children.toArray(
-                    wishlist?.map((e) => (
+                    wishlist?.map((product) => (
                       <Card
-                        img={e.thumbnail}
-                        name={e.name}
-                        price={e.price}
-                        sale_price={e.sale_price}
-                        discount={e.discount}
-                        brand={e.brand}
-                        prodId={e._id}
-                        free_shipping={e.free_shipping}
-                        fav={wl_id.includes(e._id)}
-                        on_sale={e.on_sale}
+                        productData={product}
+                        fav={wl_id.includes(product._id)}
                       />
                     ))
                   )

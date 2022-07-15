@@ -153,18 +153,10 @@ const Products = () => {
         ) : (
           <div className="products-results-inner">
             {React.Children.toArray(
-              productsToShow?.map((prod) => (
+              productsToShow?.map((product) => (
                 <Card
-                  img={prod.thumbnail}
-                  name={prod.name}
-                  price={prod.price}
-                  sale_price={prod.sale_price}
-                  discount={prod.discount}
-                  brand={prod.brand}
-                  prodId={prod._id}
-                  free_shipping={prod.free_shipping}
-                  fav={wishlist.includes(prod._id)}
-                  on_sale={prod.on_sale}
+                  productData={product}
+                  fav={wishlist.includes(product._id)}
                   openDeleteProduct={openDeleteProduct}
                 />
               ))
