@@ -9,6 +9,7 @@ const { OAuth2Client } = require("google-auth-library");
 const { validationResult } = require("express-validator");
 const sendEmail = require("../utils/sendEmail");
 const mongoose = require("mongoose");
+const setUserKey = require("../utils/setUserKey");
 
 const signup = async (req, res, next) => {
   const { _id, email } = req.user;
