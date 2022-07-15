@@ -81,7 +81,7 @@ router.put(
   "/promote/:id",
   [verifyToken, googleUserShallNotPass, verifyAdmin],
   promoteUser
-); //! VOLVER A VER mover a ruta de superadmin
+);
 router.get(
   "/verifyAdmin",
   [verifyToken, googleUserShallNotPass, verifyAdmin],

@@ -66,8 +66,6 @@ const Users = () => {
           usersData?.map((user) => (
             <UserCard
               user={user}
-              setAllUsersData={setUsersData}
-              allUsersData={usersData}
               openDeleteUser={openDeleteUser}
               openPromoteUser={openPromoteUser}
             />
