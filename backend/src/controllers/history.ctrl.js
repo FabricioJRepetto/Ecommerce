@@ -38,7 +38,6 @@ const getSuggestion = async (req, res, next) => {
         //? busco categoria del ultimo visto
         const { category } = await rawIdProductGetter(history.products[0]);
         if (!category) return res.json({ error: 404, message: 'No category found in history' });
-        console.log(category);
 
         //? busco descuento maximo disponible
         const { data: categoryRes } = await axios(`https://api.mercadolibre.com/sites/MLA/search?&official_store=all&category=${category}`);
@@ -120,7 +119,6 @@ const postVisited = async (req, res, next) => {
 };
 
 const postSearch = async (req, res, next) => {
-    console.log(req.params.search);
     try {
         const h = await History.findOne({
             'user': req.user._id

@@ -22,7 +22,6 @@ import VerifyEmail from "./components/Session/VerifyEmail";
 import Profile from "./components/Profile/Profile";
 import Cart from "./components/Cart/Cart";
 import BuyNow from "./components/Cart/BuyNow";
-import Checkout from "./components/Cart/Checkout";
 import PostSale from "./components/Cart/PostSale";
 import Products from "./test/fer/Products";
 import ProductForm from "./test/fer/ProductForm";
@@ -87,9 +86,8 @@ function App() {
         <Route path="/cart/" element={<Cart />} />
         <Route path="/cart/:section" element={<Cart />} />
         <Route path="/buynow" element={<BuyNow />} />
-        <Route path="/checkout/:id" element={<Checkout />} />
         <Route path="/reset/:userId/:resetToken" element={<ResetPassword />} />
-        <Route path="/orders/post-sale/:id" element={<PostSale />} />
+        <Route path="/orders/post-sale" element={<PostSale />} />
         <Route path="/verify/:verifyToken" element={<VerifyEmail />} />
         <Route path="/details/:id" element={<Details />} />
         <Route element={<RequireRole allowedRoles={["admin", "superadmin"]} />}>
