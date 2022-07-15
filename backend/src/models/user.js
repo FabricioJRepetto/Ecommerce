@@ -1,6 +1,5 @@
 const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
-
 const Schema = mongoose.Schema;
 
 const UserSchema = new Schema(
@@ -15,6 +14,15 @@ const UserSchema = new Schema(
       type: String,
       required: true,
     },
+    googleEmail: {
+      type: String,
+      lowercase: true,
+      unique: true,
+    },
+    isGoogleUser: {
+      type: Boolean,
+      required: true,
+    },
     role: {
       type: String,
       enum: ["client", "admin"],
@@ -27,18 +35,15 @@ const UserSchema = new Schema(
       default: false,
     },
     avatar: String,
-    orders: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Order",
-      },
-    ],
-    /* addresses: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Address",
-      },
-    ], */
+
+    orders: {
+      type: Schema.Types.ObjectId,
+      ref: "Order",
+    },
+    addresses: {
+      type: Schema.Types.ObjectId,
+      ref: "Address",
+    },
   },
   {
     versionKey: false,
