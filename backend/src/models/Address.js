@@ -1,6 +1,6 @@
 const { Schema, model } = require("mongoose");
 
-const addressSchema = new Schema(
+const AddressSchema = new Schema(
   {
     address: [
       {
@@ -12,10 +12,6 @@ const addressSchema = new Schema(
         isDefault: Boolean,
       },
     ],
-    /* user: {
-      type: String,
-      require: true,
-    }, */
     user: {
       type: Schema.Types.ObjectId,
       ref: "User",
@@ -30,4 +26,4 @@ const addressSchema = new Schema(
   }
 );
 
-module.exports = model("Address", addressSchema);
+module.exports = model("Address", AddressSchema);

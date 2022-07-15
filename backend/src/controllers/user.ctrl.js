@@ -1,5 +1,7 @@
 const User = require("../models/user");
 const GoogleUser = require("../models/googleuser");
+const Address = require("../models/Address");
+const Order = require("../models/order");
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
@@ -58,22 +60,28 @@ const signin = async (req, res, next) => {
 };
 
 const signinGoogle = async (req, res, next) => {
-  const { sub, email, avatar, name } = req.body;
+  const { sub, email, emailVerified, avatar, firstName, lastName } = req.body;
 
   try {
-    const userFound = await GoogleUser.findOne({ sub });
+    const userFound = await User.findOne({ email: sub });
 
     if (!userFound) {
-      const newGoogleUser = await GoogleUser.create({
-        sub,
-        email,
+      const newGoogleUser = await User.create({
+        email: sub,
+        password: sub,
+        googleEmail: email,
+        emailVerified,
         avatar,
-        name,
+        firstName,
+        lastName,
       });
       return res.json(newGoogleUser);
     } else {
+      if (emailVerified !== userFound.emailVerified)
+        userFound.emailVerified = emailVerified;
       if (avatar !== userFound.avatar) userFound.avatar = avatar;
-      if (name !== userFound.name) userFound.name = name;
+      if (firstName !== userFound.firstName) userFound.firstName = firstName;
+      if (lastName !== userFound.lastName) userFound.lastName = lastName;
       await userFound.save();
       return res.send("ok");
     }
@@ -226,12 +234,9 @@ const verifyAdminRoute = (req, res, next) => {
 };
 
 const getAllUsers = async (req, res, next) => {
-  console.log("----------entra");
-  const allUsersFound = await User.find({
-    email: "admin@admin.com",
-  }).populate("addresses.address");
-
-  console.log("--------userFound", allUsersFound);
+  const usersFound = await User.find();
+  const googleUsersFound = await GoogleUser.find();
+  const allUsersFound = [...usersFound, ...googleUsersFound];
 
   const usefulData = [
     "_id",
@@ -259,8 +264,57 @@ const getAllUsers = async (req, res, next) => {
     }
     allUsers.push(newUser);
   }
-  //console.log(allUsers);
   return res.json(allUsers);
+};
+
+const getAddressesAdmin = async (req, res, next) => {
+  const { _id, isGoogleUser } = req.body;
+  let addressFound;
+
+  try {
+    if (isGoogleUser) {
+      addressFound = await Address.findOne({
+        googleUser: _id,
+      });
+    } else {
+      addressFound = await Address.findOne({
+        user: _id,
+      });
+    }
+
+    if (!addressFound) {
+      return res.status(404).json({ message: "Address not found" });
+    } else {
+      return res.json(addressFound);
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getOrdersAdmin = async (req, res, next) => {
+  const { _id, isGoogleUser } = req.body;
+  let ordersFound;
+
+  try {
+    if (isGoogleUser) {
+      ordersFound = await Order.find({
+        googleUser: _id,
+      });
+    } else {
+      ordersFound = await Order.find({
+        user: _id,
+      });
+    }
+
+    if (!ordersFound) {
+      return res.status(404).json({ message: "Order not found" });
+    } else {
+      return res.json(ordersFound);
+    }
+  } catch (error) {
+    next(error);
+  }
 };
 
 const deleteUser = async (req, res, next) => {
@@ -292,5 +346,7 @@ module.exports = {
   editProfile,
   verifyAdminRoute,
   getAllUsers,
+  getAddressesAdmin,
+  getOrdersAdmin,
   deleteUser,
 };

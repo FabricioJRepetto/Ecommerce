@@ -21,6 +21,8 @@ const {
   editProfile,
   verifyAdminRoute,
   getAllUsers,
+  getAddressesAdmin,
+  getOrdersAdmin,
   deleteUser,
 } = require("../controllers/user.ctrl");
 const addressRouter = require("./address.router");
@@ -90,6 +92,17 @@ router.get(
   [verifyToken, googleUserShallNotPass, verifyAdmin],
   getAllUsers
 );
+router.get(
+  "/getAddressesAdmin",
+  [verifyToken, googleUserShallNotPass, verifyAdmin],
+  getAddressesAdmin
+);
+router.get(
+  "/getOrdersAdmin",
+  [verifyToken, googleUserShallNotPass, verifyAdmin],
+  getOrdersAdmin
+);
+
 router.delete(
   "/:id",
   [verifyToken, googleUserShallNotPass, verifyAdmin],

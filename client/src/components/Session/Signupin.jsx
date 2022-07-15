@@ -85,15 +85,25 @@ const Signupin = () => {
 
     //userDecoded contains Google user data
     const userDecoded = jwt_decode(response.credential);
-    const { sub, email, picture: avatar, name } = userDecoded;
+    const {
+      sub,
+      email,
+      email_verified: emailVerified,
+      picture: avatar,
+      name,
+      given_name: firstName,
+      family_name: lastName,
+    } = userDecoded;
     const username = name || email || `Guest ${sub}`;
 
     try {
       await axios.post(`/user/signinGoogle`, {
         sub,
         email,
+        emailVerified,
         avatar,
-        name,
+        firstName,
+        lastName,
       });
 
       //: (https://lh3.googleusercontent.com/a-/AOh14GilAqwqC7Na70IrMsk0bJ8XGwz8HLFjlurl830D5g=s96-c).split('=')[0]

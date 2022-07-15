@@ -14,6 +14,11 @@ const UserSchema = new Schema(
       type: String,
       required: true,
     },
+    googleEmail: {
+      type: String,
+      lowercase: true,
+      unique: true,
+    },
     role: {
       type: String,
       enum: ["client", "admin"],
@@ -27,18 +32,14 @@ const UserSchema = new Schema(
     },
     avatar: String,
 
-    orders: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Order",
-      },
-    ],
-    addresses: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Address",
-      },
-    ],
+    orders: {
+      type: Schema.Types.ObjectId,
+      ref: "Order",
+    },
+    addresses: {
+      type: Schema.Types.ObjectId,
+      ref: "Address",
+    },
   },
   {
     versionKey: false,

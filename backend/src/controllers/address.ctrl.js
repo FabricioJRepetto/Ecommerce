@@ -1,17 +1,16 @@
 const Address = require("../models/Address");
+const User = require("../models/user");
+const setUserKey = require("../utils/setUserKey");
 
 const getAddress = async (req, res, next) => {
+  const { isGoogleUser, _id } = req.user;
+  let userKey = setUserKey(isGoogleUser);
+
   try {
-    let address;
-    if (req.user.isGoogleUser) {
-      address = await Address.findOne({
-        googleUser: req.user._id,
-      });
-    } else {
-      address = await Address.findOne({
-        user: req.user._id,
-      });
-    }
+    const address = await Address.findOne({
+      [userKey]: _id,
+    });
+
     if (!address) return res.json({ message: "Address not found" });
     return res.json(address);
   } catch (error) {
@@ -20,17 +19,13 @@ const getAddress = async (req, res, next) => {
 };
 
 const addAddress = async (req, res, next) => {
+  const { isGoogleUser, _id } = req.user;
+  let userKey = setUserKey(isGoogleUser);
+
   try {
-    let addressFound;
-    if (req.user.isGoogleUser) {
-      addressFound = await Address.findOne({
-        googleUser: req.user._id,
-      });
-    } else {
-      addressFound = await Address.findOne({
-        user: req.user._id,
-      });
-    }
+    const addressFound = await Address.findOne({
+      [userKey]: _id,
+    });
 
     if (addressFound) {
       if (addressFound.address.length > 0) {
@@ -45,22 +40,18 @@ const addAddress = async (req, res, next) => {
         address: addressFound.address,
       });
     } else {
-      let newAddress;
-      if (req.user.isGoogleUser) {
-        newAddress = new Address({
-          address: [{ ...req.body, isDefault: true }],
-          googleUser: req.user._id,
-        });
-      } else {
-        newAddress = new Address({
-          address: [{ ...req.body, isDefault: true }],
-          user: req.user._id,
-        });
-      }
+      const userFound = await User.findById(_id);
+      const newAddress = new Address({
+        address: [{ ...req.body, isDefault: true }],
+        [userKey]: _id,
+      });
+
+      userFound.addresses = newAddress._id;
+      await userFound.save();
       await newAddress.save();
       return res.json({
         message: "New address registered.",
-        address: [newAddress], //! VOLVER A VER tira error al agregar la primer address Cannot read properties of null (reading 'address'). Se soluciona con newAdd: [req.body], pero no renderiza la address agregada
+        address: [newAddress], // VOLVER A VER tira error al agregar la primer address Cannot read properties of null (reading 'address'). Se soluciona con newAdd: [req.body], pero no renderiza la address agregada
         //! VOLVER A VER al crear la primer address se renderiza undefined undefined undefined undefined
       });
     }
@@ -70,12 +61,17 @@ const addAddress = async (req, res, next) => {
 };
 
 const updateAddress = async (req, res, next) => {
-  try {
-    const { state, city, zip_code, street_name, street_number } = req.body;
+  const { state, city, zip_code, street_name, street_number } = req.body;
 
-    const updated = await Address.findOneAndUpdate(
+  const { isGoogleUser, _id } = req.user;
+  let userKey = setUserKey(isGoogleUser);
+
+  //! VOLVER A VER el edit address no funca, crea una address nueva
+
+  try {
+    const addressUpdated = await Address.findOneAndUpdate(
       {
-        user: req.user._id,
+        [userKey]: _id,
         "address._id": req.params.id,
       },
       {
@@ -89,17 +85,24 @@ const updateAddress = async (req, res, next) => {
       },
       { new: true }
     );
-    return res.json({ message: "Address updated.", address: updated.address });
+
+    return res.json({
+      message: "Address updated.",
+      address: addressUpdated.address,
+    });
   } catch (error) {
     next(error);
   }
 };
 
 const removeAddress = async (req, res, next) => {
+  const { isGoogleUser, _id } = req.user;
+  let userKey = setUserKey(isGoogleUser);
+
   try {
     const { address } = await Address.findOneAndUpdate(
       {
-        user: req.user._id,
+        [userKey]: _id,
       },
       {
         $pull: {
@@ -116,10 +119,13 @@ const removeAddress = async (req, res, next) => {
 };
 
 const setDefault = async (req, res, next) => {
+  const { isGoogleUser, _id } = req.user;
+  let userKey = setUserKey(isGoogleUser);
+
   try {
     await Address.findOneAndUpdate(
       {
-        user: req.user._id,
+        [userKey]: _id,
         "address.isDefault": true,
       },
       {
@@ -128,10 +134,10 @@ const setDefault = async (req, res, next) => {
         },
       }
     );
-
+    //! VOLVER A VER ¿por qué se hacen dos findOneAndUpdate?
     const { address } = await Address.findOneAndUpdate(
       {
-        user: req.user._id,
+        [userKey]: _id,
         "address._id": req.params.id,
       },
       {
