@@ -64,7 +64,6 @@ const Profile = () => {
   }, [wl_id]);
   //? ORDERS
   const { data: orders, oLoading } = useAxios("GET", `/order/userall/`);
-  !oLoading && console.log(orders);
 
   // Date formater
   const formatDate = (date) => {
