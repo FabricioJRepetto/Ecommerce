@@ -42,6 +42,8 @@ const Results = () => {
         // eslint-disable-next-line
     }, [querys]);
 
+    console.log(productsOwn);
+
     const addFilter = async (obj) => {
         let filter = obj.filter;
         let value = obj.value;
@@ -94,7 +96,7 @@ const Results = () => {
                 }
             </div>
 
-            {(productsFound !== 'loading' && productsFound.length > 0)
+            {(productsFound !== 'loading' && (productsFound.length > 0 || productsOwn.length > 0))
             ? <div>
                 <div className='own-products-container'>
                     {productsOwn.length > 0 && React.Children.toArray(

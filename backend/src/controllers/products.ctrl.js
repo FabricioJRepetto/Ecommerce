@@ -36,7 +36,7 @@ const getByQuery = async (req, res, next) => {
         Object.entries(req.query).forEach(([key, value]) => {
             searchQuery += '&' + key + '=' + value
         })
-        console.log(searchQuery);
+        console.log(req.query);
 
         const L = "50";
         const meli = `https://api.mercadolibre.com/sites/MLA/search?&official_store=all&limit=${L}${searchQuery}`;
@@ -45,9 +45,42 @@ const getByQuery = async (req, res, next) => {
 
         const resultsMeli = meliSearchParser(data.results);
 
-        const resultsDB = await Product.find({
-            name: { $regex: req.query.q, $options: "i" },
+        let aux = new RegExp(req.query.q.replace(' ', '|'), 'gi');
+        let resultsDB = await Product.find({
+            $or: [
+                { name: { $in: [aux] } },
+                { brand: { $in: [aux] } }
+            ]
         });
+
+        const filterDBResults = async (filters, products) => {
+            let response = [...products];
+            if (filters.BRAND) {
+                const { data } = await axios(`https://api.mercadolibre.com/sites/MLA/brands/${filters.BRAND}`);
+                const brandName = data.name;
+
+                response = response.filter(e => e.brand.toLowerCase() === brandName.toLowerCase());
+            }
+            if (filters.price) {
+                let [min, max] = filters.price.split('-');
+                min === '*' ? (min === 0) : (min = parseInt(min));
+                max = parseInt(max);
+
+                response = response.filter(e => (e.price >= min && e.price <= max));
+            }
+            if (filters.category) {
+                response = response.filter(e => e?.path_from_root.includes(filters.category));
+            }
+            if (filters.free_shipping) {
+                response = response.filter(e => e.free_shipping);
+            }
+            if (filters.discount) {
+                let [filterDisc] = filters.discount.split('-')
+                response = response.filter(e => e.discount >= parseInt(filterDisc))
+            }
+            return response;
+        };
+        resultsDB = await filterDBResults(req.query, resultsDB);
 
         const allowedFilters = [
             'BRAND',
@@ -112,6 +145,11 @@ const createProduct = async (req, res, next) => {
             fs.unlink(img.path);
         });
 
+        //? path_from_root
+        const { data } = await axios(`https://api.mercadolibre.com/categories/${category}`);
+        const path_from_root = data.path_from_root.map(e => e.id);
+        console.log(path_from_root);
+
         const newProduct = new Product({
             name,
             price,
@@ -120,6 +158,7 @@ const createProduct = async (req, res, next) => {
             attributes,
             description,
             category,
+            path_from_root,
             available_quantity,
             free_shipping,
             images,
@@ -170,6 +209,7 @@ const updateProduct = async (req, res, next) => {
             });
         }
 
+        //? actualizar lista de imagenes
         const productFound = await Product.findById(req.params.id);
         if (imgsToEdit.length === 0) {
             let deleteList = [];
@@ -191,6 +231,9 @@ const updateProduct = async (req, res, next) => {
             cloudinary.api.delete_resources(deleteList);
         }
 
+        //? path_from_root
+        const path_from_root = await axios(`https://api.mercadolibre.com/categories/${category}`).data.path_from_root.map(e => e.id);
+
         const updatedProduct = await Product.findByIdAndUpdate(
             req.params.id,
             {
@@ -202,6 +245,7 @@ const updateProduct = async (req, res, next) => {
                     attributes,
                     description,
                     category,
+                    path_from_root,
                     available_quantity,
                     free_shipping,
                     images,

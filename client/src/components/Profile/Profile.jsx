@@ -57,6 +57,9 @@ const Profile = () => {
         const { data: history } = await axios(`/history/`);
         history.products ? setHistory(history.products) : setHistory([]);
 
+        const { data: pfr } = await axios(`https://api.mercadolibre.com/categories/MLA418448`)
+        console.log(pfr);
+
         setLoading(false);
       })();
     }
