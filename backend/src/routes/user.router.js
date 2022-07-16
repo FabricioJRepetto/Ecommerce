@@ -3,8 +3,6 @@ const router = Router();
 const {
   verifyToken,
   verifyEmailVerified,
-  verifyAdmin,
-  verifySuperAdmin,
   googleUserShallNotPass,
 } = require("../middlewares/verify");
 const passport = require("passport");
@@ -13,20 +11,12 @@ const {
   signinGoogle,
   signup,
   profile,
-  promoteUser,
   verifyEmail,
   forgotPassword,
   resetPassword,
   changePassword,
   editProfile,
-  verifyAdminRoute,
-  getAllUsers,
-  getAddressesAdmin,
-  getOrdersAdmin,
-  getWishlistAdmin,
-  deleteUser,
 } = require("../controllers/user.ctrl");
-const addressRouter = require("./address.router");
 const { body } = require("express-validator");
 
 const emailValidation = body("email", "Enter a valid e-mail")
@@ -76,43 +66,10 @@ router.put(
   [googleUserShallNotPass, passwordValidation],
   changePassword
 );
-router.put("/editProfile", [verifyToken, googleUserShallNotPass], editProfile);
-
 router.put(
-  "/promote/:id",
-  [verifyToken, googleUserShallNotPass, verifyAdmin],
-  promoteUser
-);
-router.get(
-  "/verifyAdmin",
-  [verifyToken, googleUserShallNotPass, verifyAdmin],
-  verifyAdminRoute
-);
-router.get(
-  "/getAll",
-  [verifyToken, googleUserShallNotPass, verifyAdmin],
-  getAllUsers
-);
-router.post(
-  "/getAddressesAdmin",
-  [verifyToken, googleUserShallNotPass, verifyAdmin],
-  getAddressesAdmin
-);
-router.post(
-  "/getOrdersAdmin",
-  [verifyToken, googleUserShallNotPass, verifyAdmin],
-  getOrdersAdmin
-);
-router.post(
-  "/getWishlistAdmin",
-  [verifyToken, googleUserShallNotPass, verifyAdmin],
-  getWishlistAdmin
-);
-
-router.delete(
-  "/:id",
-  [verifyToken, googleUserShallNotPass, verifyAdmin],
-  deleteUser
+  "/editProfile",
+  [verifyToken, googleUserShallNotPass, verifyEmailVerified],
+  editProfile
 );
 
 module.exports = router;

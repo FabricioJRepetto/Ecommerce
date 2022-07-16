@@ -29,11 +29,12 @@ import ProductForm from "./test/fer/ProductForm";
 import Details from "./components/Products/Details";
 import Results from "./components/Products/Results";
 import AdminLayout from "./test/fer/AdminLayout";
-import Orders from "./test/fer/Orders";
+import OrdersAdmin from "./test/fer/OrdersAdmin";
+import Metrics from "./test/fer/Metrics";
 
 import BackToTop from "./helpers/backToTop/BackToTop";
 import RequireRole from "./test/fer/RequireRole";
-import Users from "./test/fer/Users";
+import UsersAdmin from "./test/fer/UsersAdmin";
 
 function App() {
   const dispatch = useDispatch();
@@ -95,11 +96,12 @@ function App() {
         <Route path="/details/:id" element={<Details />} />
         <Route element={<RequireRole allowedRoles={["admin", "superadmin"]} />}>
           <Route path="admin" element={<AdminLayout />}>
-            {/* <Route index element={<Products />} /> */}
+            <Route index element={<Metrics />} />
+            <Route path="metrics" element={<Metrics />} />
             <Route path="products" element={<Products />} />
             <Route path="productForm" element={<ProductForm />} />
-            <Route path="users" element={<Users />} />
-            <Route path="orders" element={<Orders />} />
+            <Route path="users" element={<UsersAdmin />} />
+            <Route path="orders" element={<OrdersAdmin />} />
             <Route path="*" element={<h1>404 ADMIN</h1>} />
           </Route>
         </Route>

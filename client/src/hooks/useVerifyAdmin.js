@@ -7,6 +7,7 @@ export const useVerifyAdmin = () => {
 
   useEffect(() => {
     axios("/user/verifyAdmin").catch((_) => {
+      //! VOLVER A VER agregar manejo de errores
       navigate("/unauthorized");
     });
     // eslint-disable-next-line

@@ -11,7 +11,7 @@ import {
   adminPromoteUser,
 } from "../../Redux/reducer/sessionSlice";
 
-const Users = () => {
+const UsersAdmin = () => {
   const { allUsersData } = useSelector((state) => state.sessionReducer);
   const [isOpenDeleteUser, openDeleteUser, closeDeleteUser, userToDelete] =
     useModal();
@@ -21,7 +21,7 @@ const Users = () => {
   const [notification] = useNotification();
 
   useEffect(() => {
-    axios("/user/getAll")
+    axios("/admin/getAllUsers")
       .then(({ data }) => {
         dispatch(adminLoadUsers(data));
       })
@@ -35,7 +35,7 @@ const Users = () => {
 
   const deleteUser = () => {
     axios
-      .delete(`/user/${userToDelete._id}`)
+      .delete(`/admin/${userToDelete._id}`)
       .then((_) => {
         dispatch(adminDeleteUser(userToDelete._id));
         notification("Usuario eliminado exitosamente", "", "success");
@@ -50,7 +50,7 @@ const Users = () => {
 
   const promoteToAdmin = () => {
     axios
-      .put(`/user/promote/${userToPromote._id}`)
+      .put(`/admin/promote/${userToPromote._id}`)
       .then((_) => {
         dispatch(adminPromoteUser(userToPromote._id));
         notification(
@@ -106,4 +106,4 @@ const Users = () => {
   );
 };
 
-export default Users;
+export default UsersAdmin;

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import OrderCard from "./OrderCard";
 
-const Orders = () => {
+const OrdersAdmin = () => {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
@@ -28,4 +28,4 @@ const Orders = () => {
   );
 };
 
-export default Orders;
+export default OrdersAdmin;
