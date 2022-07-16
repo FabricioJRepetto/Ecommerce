@@ -47,9 +47,9 @@ const create = async (req, res, next) => {
             success_url: `${YOUR_DOMAIN}&status=approved`,
             cancel_url: `${YOUR_DOMAIN}&status=canceled`,
         });
-        return res.json(session);
 
-        //res.redirect(303, session.url);
+        return res.json(session.url);
+        //return res.redirect(303, session.url);
     } catch (error) {
         //return res.json(error.raw.message);
         next(error)

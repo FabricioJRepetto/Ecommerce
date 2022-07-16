@@ -131,6 +131,11 @@ const Cart = () => {
         // crea session de stripe y redirige
         const { data } = await axios.post(`/stripe/${orderId || fastId}`);
         console.log(data);
+        notification('Serás redirigido a la plataforma de pago.', '', 'warning');
+        setTimeout(() => {
+            window.location.replace(data);
+        }, 4000);
+        return null
     };
     const openMP = async () => { 
         setLoadingPayment('MP');
