@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
@@ -31,12 +31,9 @@ const NavBar = () => {
       dispatch(loadProductsOwn("loading"));
       dispatch(loadProductsFound("loading"));
       dispatch(loadFilters("loading"));
+
       navigate("/results");
-      const { data } = await axios(`/product/search/?q=${e.target.value}`);
-      dispatch(loadQuerys(e.target.value));
-      dispatch(loadProductsOwn(data.db));
-      dispatch(loadProductsFound(data.meli));
-      dispatch(loadFilters(data.filters));
+      dispatch(loadQuerys({q: e.target.value}));
     }
   };
 

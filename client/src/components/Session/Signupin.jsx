@@ -55,7 +55,6 @@ const Signupin = () => {
 
         const username = data.user.name || data.user.email.split("@")[0];
         const { email, role, avatar } = data.user;
-        // const avatar = data.avatar || null;
         const wish = await axios(`/wishlist`);
         const cart = await axios(`/cart`);
 
@@ -68,8 +67,7 @@ const Signupin = () => {
         dispatch(loadWishlist(wish.data.id_list));
 
         notification(`Bienvenido, ${username}`, "", "success");
-        navigate("/");
-        //navigate(-1) // ?!
+        //! NO PONER NAVIGATE ACA
       }
     } catch (error) {
       notification(error.response.data, "", "error");

@@ -36,7 +36,9 @@ export const productsSlice = createSlice({
         productsRandom: [],
         productsFound: [],
         productsFilters: [],
-        searchQuerys: '',
+        productsAppliedFilters: [],
+        breadCrumbs: [],
+        searchQuerys: {},
         filtersApplied: {},
         productsFiltered: [],
         productDetails: {},
@@ -55,8 +57,16 @@ export const productsSlice = createSlice({
             state.productsFilters = action.payload;
         },
 
+        loadApplied: (state, action) => {
+            state.productsAppliedFilters = action.payload;
+        },
+
         loadQuerys: (state, action) => {
             state.searchQuerys = action.payload;
+        },
+
+        loadBreadCrumbs: (state, action) => {
+            state.breadCrumbs = action.payload;
         },
 
         deleteProductFromState: (state, action) => {
@@ -160,6 +170,8 @@ export const {
     loadProductsFound,
     loadFilters,
     loadQuerys,
+    loadApplied,
+    loadBreadCrumbs,
     deleteProductFromState,
     filterProducts,
     orderProducts,
