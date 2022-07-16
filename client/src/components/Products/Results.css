@@ -1,4 +1,64 @@
 .results-container {
     display: flex;
-    
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+.results-container-inner {
+    display: flex;
+}
+.bread-crumbs {
+    width: 65vw;
+    height: 2rem;
+    display: flex;
+}
+.bread-crumbs span {
+    cursor: pointer;
+    margin-left: 5px;
+}
+.results-filters {
+    width: 15vw;
+}
+
+.results-inner {
+    width: 50vw;
+}
+
+.results-filter-container {
+    height: 1.2rem;
+    overflow: hidden;
+    transition: all .3s ease;
+}
+.open-filter {
+    height: fit-content;
+}
+.results-filter-container * {
+    cursor: pointer;
+    text-align: left;
+}
+
+.results-filter-option {
+    margin: .2rem 0 .2rem 1rem;
+}
+
+.filter-title {
+    display: flex;
+    position: relative;
+}
+.filters-arrow-svg {
+    position: absolute;
+    top: -14px;
+    right: 0px;
+    transition: all .2s ease;
+    transform: scale(.4) rotate(90deg);
+}
+.filters-arrow-svg path {
+    fill: white;
+}
+.open-arrow {
+    transform: scale(.4) rotate(-90deg);
+}
+
+.own-products-container {
+    margin-bottom: 1rem;
 }
