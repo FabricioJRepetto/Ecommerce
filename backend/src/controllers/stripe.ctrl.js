@@ -39,7 +39,7 @@ const create = async (req, res, next) => {
                     type: 'fixed_amount',
                     fixed_amount: {
                         currency: 'ars',
-                        amount: order.free_shipping ? 0 : order.shipping_cost
+                        amount: order.free_shipping ? 0 : order.shipping_cost * 100
                     }
                 }
             }],

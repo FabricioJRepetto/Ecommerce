@@ -54,6 +54,17 @@ const PostSale = () => {
                 setFirstLoad(false);
                 setLoading(false);
             };
+            if (status !== 'approved' && data.status !== 'approved') {
+                //? cambiar stado de la orden
+                const orderUpdt = await axios.put(`/order/${id}`,{
+                    status
+                });
+                console.log(orderUpdt.data.message);
+
+                //! first load solo sirve pre deploy
+                setFirstLoad(false);
+                setLoading(false);
+            }
         })()
       // eslint-disable-next-line
     }, [])
