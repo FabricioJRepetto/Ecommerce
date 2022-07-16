@@ -17,23 +17,16 @@ const PostSale = () => {
     
     useEffect(() => {
         //! CAMBIAR PARA EL DEPLOY
-        //! solo pedir la order al back para mostrar detalles
+        // solo pedir la order al back para mostrar detalles
+        // mp y stripe avisan el status del pago por query
+        // pero tienen que hacerlo notificando al back
 
         firstLoad && (async () => {
-            // si no hay respuesta de stripe
-            //! mp avisa el status del pago por query
-            // if (stripe_success === null) {
-            //     setOrderStatus(status);
-            // } else {
-            //     setOrderStatus(stripe_success ? 'approved' : 'cenceled');
-            // }
-
             const { data } = await axios(`/order/${id}`);
             console.log(data);
             setOrder(data);
             
             if (status === 'approved' && data.status !== 'approved') {
-
                 if (data.order_type === 'cart') {
                     //? vaciar carrito
                     const { data: cartEmpty } = await axios.delete(`/cart/empty`);
@@ -53,8 +46,6 @@ const PostSale = () => {
                 console.log(orderUpdt.data.message);    
     
                 //? restar unidades de cada stock
-                //: crear un virtual para ids de order ?
-                
                 let list = data.products.map(e => ({id: e.product_id, amount: e.quantity}));
                 const { data: stockUpdt } = await axios.put(`/product/stock/`, list);
                 console.log(stockUpdt);
@@ -63,6 +54,17 @@ const PostSale = () => {
                 setFirstLoad(false);
                 setLoading(false);
             };
+            if (status !== 'approved' && data.status !== 'approved') {
+                //? cambiar stado de la orden
+                const orderUpdt = await axios.put(`/order/${id}`,{
+                    status
+                });
+                console.log(orderUpdt.data.message);
+
+                //! first load solo sirve pre deploy
+                setFirstLoad(false);
+                setLoading(false);
+            }
         })()
       // eslint-disable-next-line
     }, [])

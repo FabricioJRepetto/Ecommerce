@@ -122,9 +122,22 @@ const BuyNow = () => {
      };
 
     const goCheckout = async () => {
-       //: WIP
         setLoadingPayment('S');
+        // crea la order
+        const { data: orderId } = await axios.post(`/order/buyNow`, {
+            ...selectedAdd,
+            quantity,
+            product_id: id,
+        });
+        // crea session de stripe y redirige
+        const { data } = await axios.post(`/stripe/${orderId}`);
+        notification('Serás redirigido a la plataforma de pago.', '', 'warning');
+        setTimeout(() => {
+            window.location.replace(data);
+        }, 4000);
+        return null
     };
+    
     const openMP = async () => { 
         setLoadingPayment('MP');
         let fastId = false;
@@ -219,13 +232,13 @@ const BuyNow = () => {
 
 
                     <div className="cart-button-section">
-                        <button disabled={(true || loadingPayment === 'S')} 
-                        onClick={goCheckout}>{ null 
+                        <button disabled={(!product || !selectedAdd || loadingPayment)} 
+                        onClick={goCheckout}>{ loadingPayment === 'S'
                         ? <Spinner className='cho-svg'/> 
                         : 'Stripe checkout' }</button>
 
-                        <button disabled={(!product || !selectedAdd || loadingPayment === 'MP')} 
-                        onClick={openMP}>{ loadingPayment 
+                        <button disabled={(!product || !selectedAdd || loadingPayment)} 
+                        onClick={openMP}>{ loadingPayment === 'MP'
                         ? <Spinner className='cho-svg'/> 
                         : 'MercadoPago checkout' }</button>
                     </div>
