@@ -1,18 +1,20 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
-import {
-  loadFilters,
-  loadProductsFound,
-  loadProductsOwn,
-  loadQuerys,
-  loadApplied,
-  loadBreadCrumbs,
-} from "../../Redux/reducer/productsSlice";
-import Card from "./Card";
-import { ReactComponent as Spinner } from "../../assets/svg/spinner.svg";
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import axios from 'axios'
+import { 
+    loadFilters, 
+    loadProductsFound, 
+    loadProductsOwn, 
+    loadQuerys, 
+    loadApplied,
+    loadBreadCrumbs
+ } from '../../Redux/reducer/productsSlice'
+import Card from './Card'
+import {ReactComponent as Spinner } from '../../assets/svg/spinner.svg'
+import {ReactComponent as Arrow } from '../../assets/svg/arrow-right.svg'
 
-import "./Results.css";
+import './Results.css'
+import { useState } from 'react'
 
 const Results = () => {
   const wishlist = useSelector((state) => state.cartReducer.wishlist);
@@ -29,7 +31,9 @@ const Results = () => {
   );
   const breadCrumbs = useSelector((state) => state.productsReducer.breadCrumbs);
 
-  const dispatch = useDispatch();
+    const [open, setOpen] = useState('')
+
+    const dispatch = useDispatch();
 
   useEffect(() => {
     (async () => {
@@ -48,13 +52,11 @@ const Results = () => {
     // eslint-disable-next-line
   }, [querys]);
 
-  console.log(productsOwn);
-
-  const addFilter = async (obj) => {
-    let filter = obj.filter;
-    let value = obj.value;
-    dispatch(loadQuerys({ ...querys, [filter]: value }));
-  };
+    const addFilter = async (obj) => {
+        let filter = obj.filter;
+        let value = obj.value;
+        dispatch(loadQuerys({...querys, [filter]: value}));
+     }
 
   const removeFilter = async (filter) => {
     let aux = { ...querys };
@@ -63,89 +65,75 @@ const Results = () => {
   };
 
   return (
-    <div className="results-container">
-      <div className="results-filters">
-        <h2>Filtros</h2>
-        <div>
-          <b>filtros aplicados</b>
-          {applied.length > 0 &&
-            React.Children.toArray(
-              applied.map((f) => (
-                <div onClick={() => removeFilter(f.id)}>{f.values[0].name}</div>
-              ))
-            )}
-        </div>
-        <hr />
-        {productsFilters !== "loading" &&
-          productsFilters.length > 0 &&
-          React.Children.toArray(
-            productsFilters?.map((f) => (
-              <div key={f.id}>
-                <b>{f.name}</b>
-                {f.values.map((v) => (
-                  <div
-                    key={v.id}
-                    onClick={() => addFilter({ filter: f.id, value: v.id })}
-                  >
-                    <p>{`${v.name} (${v.results})`}</p>
-                  </div>
-                ))}
-              </div>
-            ))
-          )}
-      </div>
-
-      <div className="results-inner">
-        <h2>Results</h2>
+    <div className='results-container'>
         {/* BREAD CRUMBS */}
-        <div>
-          {breadCrumbs?.length > 0 &&
-            React.Children.toArray(
-              breadCrumbs.map((c) => (
-                <span
-                  key={c.id}
-                  onClick={() => addFilter({ filter: "category", value: c.id })}
-                >
-                  {c.name + " > "}
-                </span>
-              ))
-            )}
+        <div className='bread-crumbs'>
+            {breadCrumbs?.length > 0 &&
+                React.Children.toArray(
+                    breadCrumbs.map((c, index) => (
+                        <span key={c.id} onClick={ () => addFilter({filter: 'category', value: c.id})}>{ (index > 0 ? ' > ' : '') + c.name }</span>
+                    ))
+                )
+            }
         </div>
 
-        {productsFound !== "loading" &&
-        (productsFound.length > 0 || productsOwn.length > 0) ? (
-          <div>
-            <div className="own-products-container">
-              {productsOwn.length > 0 &&
-                React.Children.toArray(
-                  productsOwn?.map((product) => (
-                    <Card
-                      productData={product}
-                      fav={wishlist.includes(product._id)}
-                    />
-                  ))
-                )}
+        <div className='results-container-inner'>
+
+            <div className="results-filters">
+                <div>
+                    {applied.length > 0 && 
+                        React.Children.toArray(applied.map(f => (
+                            <div onClick={()=>removeFilter(f.id)}>{f.values[0].name}</div>
+                        )))
+                    }
+                </div>
+                {(productsFilters !== 'loading' && productsFilters.length > 0) &&
+                        React.Children.toArray(productsFilters?.map(f => (
+                            <div key={f.id} className={`results-filter-container ${open === f.id && 'open-filter'}`}>
+                                <div onClick={() => setOpen(open === f.id ? '' : f.id)} className='filter-title'>
+                                    <b>{f.name}</b>
+                                    <Arrow className={`filters-arrow-svg ${open === f.id && 'open-arrow'}`}/>
+                                </div>
+                                {f.values.map(v => (
+                                    <div key={v.id} onClick={() => addFilter({filter: f.id, value: v.id })} className='results-filter-option'>
+                                        <p>{`${v.name} (${v.results})`}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        )))
+                }
             </div>
-            <br />
-            {React.Children.toArray(
-              productsFound?.map((product) => (
-                <Card
-                  productData={product}
-                  fav={wishlist.includes(product._id)}
-                />
-              ))
-            )}
-          </div>
-        ) : (
-          <div>
-            {productsFound === "loading" ? (
-              <Spinner className="cho-svg" />
-            ) : (
-              <h1>No results</h1>
-            )}
-          </div>
-        )}
-      </div>
+
+            <div className='results-inner'>
+                {(productsFound !== 'loading' && (productsFound.length > 0 || productsOwn.length > 0))
+                ? <div>
+                    {productsOwn.length > 0 && <div className='own-products-container'>
+                        {React.Children.toArray(
+                            productsOwn?.map(prod => (
+                                <Card
+                                    productData={prod}
+                                    fav={wishlist.includes(prod._id)}
+                                />
+                            ))
+                        )}
+                    </div>}
+                    {React.Children.toArray(
+                        productsFound?.map(prod => (
+                            <Card
+                                productData={prod}
+                                fav={wishlist.includes(prod._id)}
+                            />
+                        ))
+                    )}
+                </div>
+
+                : <div>
+                    {productsFound === 'loading' ? <Spinner className='cho-svg'/> : <h1>No results</h1>}
+                </div>}
+            </div>
+
+        </div>
+
     </div>
   );
 };
