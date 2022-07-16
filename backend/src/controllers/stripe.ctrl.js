@@ -44,8 +44,8 @@ const create = async (req, res, next) => {
                 }
             }],
             mode: 'payment',
-            success_url: `${YOUR_DOMAIN}&stripe_success=true`,
-            cancel_url: `${YOUR_DOMAIN}&stripe_success=false`,
+            success_url: `${YOUR_DOMAIN}&status=approved`,
+            cancel_url: `${YOUR_DOMAIN}&status=canceled`,
         });
         return res.json(session);
 
