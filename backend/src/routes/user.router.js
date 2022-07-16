@@ -23,6 +23,7 @@ const {
   getAllUsers,
   getAddressesAdmin,
   getOrdersAdmin,
+  getWishlistAdmin,
   deleteUser,
 } = require("../controllers/user.ctrl");
 const addressRouter = require("./address.router");
@@ -81,7 +82,7 @@ router.put(
   "/promote/:id",
   [verifyToken, googleUserShallNotPass, verifyAdmin],
   promoteUser
-); //! VOLVER A VER mover a ruta de superadmin
+);
 router.get(
   "/verifyAdmin",
   [verifyToken, googleUserShallNotPass, verifyAdmin],
@@ -92,15 +93,20 @@ router.get(
   [verifyToken, googleUserShallNotPass, verifyAdmin],
   getAllUsers
 );
-router.get(
+router.post(
   "/getAddressesAdmin",
   [verifyToken, googleUserShallNotPass, verifyAdmin],
   getAddressesAdmin
 );
-router.get(
+router.post(
   "/getOrdersAdmin",
   [verifyToken, googleUserShallNotPass, verifyAdmin],
   getOrdersAdmin
+);
+router.post(
+  "/getWishlistAdmin",
+  [verifyToken, googleUserShallNotPass, verifyAdmin],
+  getWishlistAdmin
 );
 
 router.delete(

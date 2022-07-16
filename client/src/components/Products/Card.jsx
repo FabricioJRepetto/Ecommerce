@@ -7,26 +7,26 @@ import { loadIdProductToEdit } from "../../Redux/reducer/productsSlice";
 import "./Card.css";
 
 import { ReactComponent as Sale } from "../../assets/svg/sale.svg";
-import { WhishlistButton as Fav } from "./WhishlistButton";
+import { WishlistButton as Fav } from "./WishlistButton";
 
-const Card = ({
-  img,
-  name,
-  brand,
-  price,
-  sale_price,
-  on_sale,
-  discount,
-  prodId,
-  free_shipping,
-  fav,
-  openDeleteProduct,
-}) => {
+const Card = ({ openDeleteProduct, productData, fav }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [visible, setVisible] = useState(false);
   const { session } = useSelector((state) => state.sessionReducer);
   const dispatch = useDispatch();
+
+  const {
+    thumbnail: img,
+    name,
+    price,
+    sale_price,
+    discount,
+    brand,
+    _id: prodId,
+    free_shipping,
+    on_sale,
+  } = productData;
 
   const editProduct = (prodId) => {
     dispatch(loadIdProductToEdit(prodId));

@@ -87,7 +87,7 @@ const updateAddress = async (req, res, next) => {
     );
 
     return res.json({
-      message: "Address updated.",
+      message: "Address updated",
       address: addressUpdated.address,
     });
   } catch (error) {

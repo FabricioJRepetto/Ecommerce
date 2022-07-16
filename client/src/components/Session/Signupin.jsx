@@ -12,7 +12,7 @@ import {
 import jwt_decode from "jwt-decode";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { loadCart, loadWhishlist } from "../../Redux/reducer/cartSlice";
+import { loadCart, loadWishlist } from "../../Redux/reducer/cartSlice";
 import "./Signupin.css";
 import { useRef } from "react";
 import { useNotification } from "../../hooks/useNotification";
@@ -55,7 +55,7 @@ const Signupin = () => {
 
         const username = data.user.name || data.user.email.split("@")[0];
         const { email, role, avatar } = data.user;
-        const whish = await axios(`/whishlist`);
+        const wish = await axios(`/wishlist`);
         const cart = await axios(`/cart`);
 
         dispatch(loadUsername(username));
@@ -64,7 +64,7 @@ const Signupin = () => {
         dispatch(loadRole(role));
         dispatch(loadGoogleUser(false));
         dispatch(loadCart(cart.data.id_list));
-        dispatch(loadWhishlist(whish.data.id_list));
+        dispatch(loadWishlist(wish.data.id_list));
 
         notification(`Bienvenido, ${username}`, "", "success");
         //! NO PONER NAVIGATE ACA
@@ -106,7 +106,7 @@ const Signupin = () => {
 
       //: (https://lh3.googleusercontent.com/a-/AOh14GilAqwqC7Na70IrMsk0bJ8XGwz8HLFjlurl830D5g=s96-c).split('=')[0]
 
-      const whish = await axios(`/whishlist`);
+      const wish = await axios(`/wishlist`);
       const cart = await axios(`/cart`);
 
       dispatch(loadUsername(username));
@@ -115,7 +115,7 @@ const Signupin = () => {
       dispatch(loadRole("client"));
       dispatch(loadGoogleUser(true));
       dispatch(loadCart(cart.data.id_list));
-      dispatch(loadWhishlist(whish.data.id_list));
+      dispatch(loadWishlist(wish.data.id_list));
 
       window.localStorage.setItem("loggedAvatarEcommerce", avatar);
       window.localStorage.setItem("loggedEmailEcommerce", email);

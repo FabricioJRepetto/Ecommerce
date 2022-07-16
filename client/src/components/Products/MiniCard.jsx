@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { resizer } from "../../helpers/resizer";
 import "./MiniCard.css";
 import { ReactComponent as Sale } from "../../assets/svg/sale.svg";
-import { WhishlistButton as Fav } from "./WhishlistButton";
+import { WishlistButton as Fav } from "./WishlistButton";
 import LoadingPlaceHolder from "../common/LoadingPlaceHolder";
 import { useEffect } from "react";
 import { priceFormat } from "../../helpers/priceFormat";

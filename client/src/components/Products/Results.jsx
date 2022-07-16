@@ -17,34 +17,40 @@ import './Results.css'
 import { useState } from 'react'
 
 const Results = () => {
-    const whishlist = useSelector((state) => state.cartReducer.whishlist);
-    const querys = useSelector((state) => state.productsReducer.searchQuerys);
-    const productsOwn = useSelector((state) => state.productsReducer.productsOwn);
-    const productsFound = useSelector((state) => state.productsReducer.productsFound);
-    const applied = useSelector((state) => state.productsReducer.productsAppliedFilters);
-    const productsFilters = useSelector((state) => state.productsReducer.productsFilters);
-    const breadCrumbs = useSelector((state) => state.productsReducer.breadCrumbs);
+  const wishlist = useSelector((state) => state.cartReducer.wishlist);
+  const querys = useSelector((state) => state.productsReducer.searchQuerys);
+  const productsOwn = useSelector((state) => state.productsReducer.productsOwn);
+  const productsFound = useSelector(
+    (state) => state.productsReducer.productsFound
+  );
+  const applied = useSelector(
+    (state) => state.productsReducer.productsAppliedFilters
+  );
+  const productsFilters = useSelector(
+    (state) => state.productsReducer.productsFilters
+  );
+  const breadCrumbs = useSelector((state) => state.productsReducer.breadCrumbs);
 
     const [open, setOpen] = useState('')
 
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        (async ()=> {
-            let newQuery = ''
-            Object.entries(querys).forEach(([key, value]) => {
-                newQuery += key + '=' + value + '&'
-            });
+  useEffect(() => {
+    (async () => {
+      let newQuery = "";
+      Object.entries(querys).forEach(([key, value]) => {
+        newQuery += key + "=" + value + "&";
+      });
 
-            const { data } = await axios(`/product/search/?${newQuery}`);
-            dispatch(loadProductsOwn(data.db));
-            dispatch(loadProductsFound(data.meli));
-            dispatch(loadFilters(data.filters));
-            dispatch(loadApplied(data.applied));
-            dispatch(loadBreadCrumbs(data.breadCrumbs))
-        })();
-        // eslint-disable-next-line
-    }, [querys]);
+      const { data } = await axios(`/product/search/?${newQuery}`);
+      dispatch(loadProductsOwn(data.db));
+      dispatch(loadProductsFound(data.meli));
+      dispatch(loadFilters(data.filters));
+      dispatch(loadApplied(data.applied));
+      dispatch(loadBreadCrumbs(data.breadCrumbs));
+    })();
+    // eslint-disable-next-line
+  }, [querys]);
 
     const addFilter = async (obj) => {
         let filter = obj.filter;
@@ -52,11 +58,11 @@ const Results = () => {
         dispatch(loadQuerys({...querys, [filter]: value}));
      }
 
-     const removeFilter = async (filter) => {
-        let aux = {...querys}
-        delete aux[filter]
-        dispatch(loadQuerys(aux));
-     }
+  const removeFilter = async (filter) => {
+    let aux = { ...querys };
+    delete aux[filter];
+    dispatch(loadQuerys(aux));
+  };
 
   return (
     <div className='results-container'>
@@ -113,7 +119,7 @@ const Results = () => {
                                     brand={prod.brand}
                                     prodId={prod._id}
                                     free_shipping={prod.free_shipping}
-                                    fav={whishlist.includes(prod._id)}
+                                    fav={wishlist.includes(prod._id)}
                                     on_sale={prod.on_sale}
                                 />
                             ))
@@ -130,7 +136,7 @@ const Results = () => {
                                 brand={prod.brand}
                                 prodId={prod._id}
                                 free_shipping={prod.free_shipping}
-                                fav={whishlist.includes(prod._id)}
+                                fav={wishlist.includes(prod._id)}
                                 on_sale={prod.on_sale}
                             />
                         ))
@@ -145,7 +151,7 @@ const Results = () => {
         </div>
 
     </div>
-  )
-}
+  );
+};
 
-export default Results
+export default Results;
