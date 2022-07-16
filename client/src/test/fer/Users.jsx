@@ -1,22 +1,29 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import UserCard from "./UserCard";
 import { useModal } from "../../hooks/useModal";
 import Modal from "../../components/common/Modal";
 import { useNotification } from "../../hooks/useNotification";
+import {
+  adminLoadUsers,
+  adminDeleteUser,
+  adminPromoteUser,
+} from "../../Redux/reducer/sessionSlice";
 
 const Users = () => {
-  const [usersData, setUsersData] = useState([]);
+  const { allUsersData } = useSelector((state) => state.sessionReducer);
   const [isOpenDeleteUser, openDeleteUser, closeDeleteUser, userToDelete] =
     useModal();
   const [isOpenPromoteUser, openPromoteUser, closePromoteUser, userToPromote] =
     useModal();
+  const dispatch = useDispatch();
   const [notification] = useNotification();
 
   useEffect(() => {
     axios("/user/getAll")
       .then(({ data }) => {
-        setUsersData(data);
+        dispatch(adminLoadUsers(data));
       })
       .catch((err) => console.log(err)); //! VOLVER A VER manejo de errores
   }, []);
@@ -30,7 +37,7 @@ const Users = () => {
     axios
       .delete(`/user/${userToDelete._id}`)
       .then((_) => {
-        setUsersData(usersData.filter((user) => user._id !== userToDelete._id));
+        dispatch(adminDeleteUser(userToDelete._id));
         notification("Usuario eliminado exitosamente", "", "success");
       })
       .catch((err) => console.log(err));
@@ -45,13 +52,7 @@ const Users = () => {
     axios
       .put(`/user/promote/${userToPromote._id}`)
       .then((_) => {
-        setUsersData(
-          usersData.map((user) => {
-            if (user._id === userToPromote._id)
-              return { ...user, role: "admin" };
-            return user;
-          })
-        );
+        dispatch(adminPromoteUser(userToPromote._id));
         notification(
           `Usuario ${userToPromote.name} promovido a administrador`,
           "",
@@ -65,7 +66,7 @@ const Users = () => {
     <div>
       <div>
         {React.Children.toArray(
-          usersData?.map((user) => (
+          allUsersData?.map((user) => (
             <UserCard
               user={user}
               openDeleteUser={openDeleteUser}

@@ -10,6 +10,9 @@ export const sessionSlice = createSlice({
     // id: null,
     role: null,
     isGoogleUser: null,
+    allUsersData: [],
+    filtersApplied: {},
+    usersFiltered: [],
   },
   reducers: {
     loadUsername: (state, action) => {
@@ -33,6 +36,30 @@ export const sessionSlice = createSlice({
     loadGoogleUser: (state, action) => {
       state.isGoogleUser = action.payload;
     },
+    adminLoadUsers: (state, action) => {
+      state.allUsersData = action.payload;
+    },
+    adminDeleteUser: (state, action) => {
+      state.allUsersData = state.allUsersData.filter(
+        (user) => user._id !== action.payload
+      );
+    },
+    adminPromoteUser: (state, action) => {
+      state.allUsersData = state.allUsersData.map((user) => {
+        if (user._id === action.payload) return { ...user, role: "admin" };
+        return user;
+      });
+    },
+    adminFilterUsers: (state, action) => {
+      state.allUsersData = state.allUsersData.filter(
+        (user) => user._id !== action.payload
+      );
+      /* filtersApplied = {
+        googleAccount: BOOLEAN,
+        verifiedEmail: BOOLEAN,
+        role: STRING,
+      }; */
+    },
   },
 });
 
@@ -44,6 +71,9 @@ export const {
   loadEmail,
   loadRole,
   loadGoogleUser,
+  adminLoadUsers,
+  adminDeleteUser,
+  adminPromoteUser,
 } = sessionSlice.actions;
 
 export default sessionSlice.reducer;

@@ -28,7 +28,8 @@ const UserCard = ({ user, openDeleteUser, openPromoteUser }) => {
       .then(({ data }) => {
         setAddresses(data);
         setShowAddresses(true);
-      });
+      })
+      .catch((err) => console.log(err)); //! VOLVER A VER manejo de errores;
   };
 
   const getOrders = (_id) => {
@@ -37,7 +38,8 @@ const UserCard = ({ user, openDeleteUser, openPromoteUser }) => {
       .then(({ data }) => {
         setOrders(data);
         setShowOrders(true);
-      });
+      })
+      .catch((err) => console.log(err)); //! VOLVER A VER manejo de errores;
   };
 
   const getWishlist = (_id) => {
@@ -47,7 +49,8 @@ const UserCard = ({ user, openDeleteUser, openPromoteUser }) => {
         console.log(data);
         setWishlist(data);
         setShowWishlist(true);
-      });
+      })
+      .catch((err) => console.log(err)); //! VOLVER A VER manejo de errores;
   };
 
   return (
