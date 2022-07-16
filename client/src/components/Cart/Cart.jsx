@@ -117,21 +117,18 @@ const Cart = () => {
     }
 
     const goCheckout = async () => {
-        //: WIP
         setLoadingPayment('S');
-        let fastId = false;
-        // actualiza o crea la order
-        if (orderId) {
-            await axios.put(`/order/${orderId}`, selectedAdd);
-        } else {
-            const { data: id } = await axios.post(`/order/`, selectedAdd);
-            fastId = id;
-            setOrderId(id);
-        }
+        // crea la order
+        const { data: id } = await axios.post(`/order/`, selectedAdd);
         // crea session de stripe y redirige
-        const { data } = await axios.post(`/stripe/${orderId || fastId}`);
-        console.log(data);
+        const { data } = await axios.post(`/stripe/${id}`);
+        notification('Serás redirigido a la plataforma de pago.', '', 'warning');
+        setTimeout(() => {
+            window.location.replace(data);
+        }, 4000);
+        return null
     };
+    
     const openMP = async () => { 
         setLoadingPayment('MP');
         let fastId = false;

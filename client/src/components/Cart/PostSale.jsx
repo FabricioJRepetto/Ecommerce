@@ -3,65 +3,67 @@ import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSearchParams } from 'react-router-dom'
 import { resizer } from '../../helpers/resizer';
-import { useAxios } from '../../hooks/useAxios';
 import { loadCart } from '../../Redux/reducer/cartSlice';
 
 const PostSale = () => {
-    const [orderStatus, setOrderStatus] = useState();
+    const [order, setOrder] = useState(false)
     const [firstLoad, setFirstLoad] = useState(true)
+    const [loading, setLoading] = useState(true)
     const dispatch = useDispatch();
     
     const [params] = useSearchParams(),
     status = params.get('status'),
-    id = params.get('external_reference'),
-    stripe_success = params.get('stripe_success');
-
-    const { data, loading, error } = useAxios('GET', `/order/${id}`);
+    id = params.get('external_reference');
     
     useEffect(() => {
         //! CAMBIAR PARA EL DEPLOY
-        //! solo pedir la order al back para mostrar detalles
+        // solo pedir la order al back para mostrar detalles
+        // mp y stripe avisan el status del pago por query
+        // pero tienen que hacerlo notificando al back
 
         firstLoad && (async () => {
-            // si no hay respuesta de stripe
-            //! mp avisa el status del pago por query
-            if (stripe_success === null) {
-                setOrderStatus(status);
-            } else {
-                setOrderStatus(stripe_success ? 'approved' : 'cenceled');
-            }
+            const { data } = await axios(`/order/${id}`);
+            console.log(data);
+            setOrder(data);
+            
+            if (status === 'approved' && data.status !== 'approved') {
+                if (data.order_type === 'cart') {
+                    //? vaciar carrito
+                    const { data: cartEmpty } = await axios.delete(`/cart/empty`);
+                    console.log(cartEmpty.message);
+                    //? Vaciar el estado de redux onCart
+                    dispatch(loadCart([]));
+                } else {
+                    //? vaciar el buynow
+                    axios.post(`/cart/`, {product_id: ''});
+                    console.log('buynow reseted');
+                }
 
-            if (!loading) {
-                if (orderStatus === 'approved' && data.status !== 'approved') {
+                //? cambiar orden a pagada
+                const orderUpdt = await axios.put(`/order/${id}`,{
+                    status: 'approved'
+                });
+                console.log(orderUpdt.data.message);    
     
-                    if (data.order_type === 'cart') {
-                        //? vaciar carrito
-                        const { data: cartEmpty } = await axios.delete(`/cart/empty`);
-                        console.log(cartEmpty.message);
-                        //? Vaciar el estado de redux onCart
-                        dispatch(loadCart([]));
-                    } else {
-                        //? vaciar el buynow
-                        axios.post(`/cart/`, {product_id: ''});
-                        console.log('buynow reseted');
-                    }
-    
-                    //? cambiar orden a pagada
-                    const orderUpdt = await axios.put(`/order/${id}`,{
-                        status: 'approved'
-                    });
-                    console.log(orderUpdt.data.message);    
-        
-                    //? restar unidades de cada stock
-                    //: crear un virtual para ids de order ?
-                    
-                    let list = data.products.map(e => ({id: e.product_id, amount: e.quantity}));
-                    const { data: stockUpdt } = await axios.put(`/product/stock/`, list);
-                    console.log(stockUpdt);
-    
-                    //! first load solo sirve pre deploy
-                    setFirstLoad(false);                
-                };
+                //? restar unidades de cada stock
+                let list = data.products.map(e => ({id: e.product_id, amount: e.quantity}));
+                const { data: stockUpdt } = await axios.put(`/product/stock/`, list);
+                console.log(stockUpdt);
+
+                //! first load solo sirve pre deploy
+                setFirstLoad(false);
+                setLoading(false);
+            };
+            if (status !== 'approved' && data.status !== 'approved') {
+                //? cambiar stado de la orden
+                const orderUpdt = await axios.put(`/order/${id}`,{
+                    status
+                });
+                console.log(orderUpdt.data.message);
+
+                //! first load solo sirve pre deploy
+                setFirstLoad(false);
+                setLoading(false);
             }
         })()
       // eslint-disable-next-line
@@ -70,23 +72,22 @@ const PostSale = () => {
     return (
         <div>
             <h1>Post Venta</h1>
-            {error && <h1>{error}</h1>}
-            { (loading && !orderStatus )
+            { (loading && !order )
                 ? <p>LOADING · · ·</p>
                 : <>
                     <div >
-                        {data?.products.map(e =>(
+                        {order?.products.map(e =>(
                             <img src={resizer(e.img)} 
                             alt="product"
                             key={e.product_id}
                             style={{ height: '96px'}}/>
                         ))}
                     </div>
-                    <p>{`Estado de la orden: ${orderStatus}`}</p>
-                    <p><i>{data?.id}</i></p>
-                    <p>{data?.description}</p>
+                    <p>{`Estado de la orden: ${status}`}</p>
+                    <p><i>{order?.id}</i></p>
+                    <p>{order?.description}</p>
                     <p><i>shipping info</i></p>
-                    <p>{`${data?.shipping_address.street_name} ${data?.shipping_address.street_number}, ${data?.shipping_address.city}, ${data?.shipping_address.state}.`}</p>
+                    <p>{`${order?.shipping_address.street_name} ${order?.shipping_address.street_number}, ${order?.shipping_address.city}, ${order?.shipping_address.state}.`}</p>
             </>}
         </div>
     )
