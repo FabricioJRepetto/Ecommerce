@@ -57,9 +57,6 @@ const Profile = () => {
         const { data: history } = await axios(`/history/`);
         history.products ? setHistory(history.products) : setHistory([]);
 
-        const { data: pfr } = await axios(`https://api.mercadolibre.com/categories/MLA418448`)
-        console.log(pfr);
-
         setLoading(false);
       })();
     }
@@ -67,7 +64,7 @@ const Profile = () => {
   }, [wl_id]);
   //? ORDERS
   const { data: orders, oLoading } = useAxios("GET", `/order/userall/`);
-
+  
   // Date formater
   const formatDate = (date) => {
     let fecha = new Date(date.slice(0, -1));
