@@ -58,9 +58,9 @@ const mpCho = async (req, res, next) => {
             //notification_url: `${BACK_URL}/mercadopago/ipn`
             // //! esto no hacefalta cuando tenga el endpoint & deploy
             back_urls: {
-                success: `http://localhost:3000/orders/post-sale/${id}`,
-                failure: `http://localhost:3000/orders/post-sale/${id}`,
-                pending: `http://localhost:3000/orders/post-sale/${id}`
+                success: `http://localhost:3000/orders/post-sale/`,
+                failure: `http://localhost:3000/orders/post-sale/`,
+                pending: `http://localhost:3000/orders/post-sale/`
             },
         };
 

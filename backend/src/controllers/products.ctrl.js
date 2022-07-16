@@ -43,6 +43,19 @@ const getByQuery = async (req, res, next) => {
 
         const { data } = await axios(meli);
 
+        const allowedFilters = [
+            'BRAND',
+            'discount',
+            'shipping_cost',
+            'price',
+            'category',
+        ];
+        const filters = data.available_filters.filter(e => allowedFilters.includes(e.id));
+
+        const applied = data.filters.filter(e => e.id !== 'official_store' && e.id !== 'category');
+
+        const breadCrumbs = data.filters.find(e => e.id === 'category')?.values[0].path_from_root;
+
         const resultsMeli = meliSearchParser(data.results);
 
         let aux = new RegExp(req.query.q.replace(' ', '|'), 'gi');
@@ -56,10 +69,7 @@ const getByQuery = async (req, res, next) => {
         const filterDBResults = async (filters, products) => {
             let response = [...products];
             if (filters.BRAND) {
-                const { data } = await axios(`https://api.mercadolibre.com/sites/MLA/brands/${filters.BRAND}`);
-                const brandName = data.name;
-
-                response = response.filter(e => e.brand.toLowerCase() === brandName.toLowerCase());
+                response = response.filter(e => e.brand.toLowerCase() === filters.BRAND.toLowerCase());
             }
             if (filters.price) {
                 let [min, max] = filters.price.split('-');
@@ -80,20 +90,8 @@ const getByQuery = async (req, res, next) => {
             }
             return response;
         };
-        resultsDB = await filterDBResults(req.query, resultsDB);
-
-        const allowedFilters = [
-            'BRAND',
-            'discount',
-            'shipping_cost',
-            'price',
-            'category',
-        ];
-        const filters = data.available_filters.filter(e => allowedFilters.includes(e.id));
-
-        const applied = data.filters.filter(e => e.id !== 'official_store' && e.id !== 'category');
-
-        const breadCrumbs = data.filters.find(e => e.id === 'category')?.values[0].path_from_root;
+        let auxFilters = applied.brand ? { ...req.query, BRAND: applied.brand.values[0].name } : req.query;
+        resultsDB = await filterDBResults(auxFilters, resultsDB);
 
         return res.json({ db: resultsDB, meli: resultsMeli, filters, applied, breadCrumbs });
     } catch (error) {

@@ -239,7 +239,7 @@ const BuyNow = () => {
             <form 
             id='checkout-container'
             method="GET"
-            action={`/orders/post-sale/${orderId}`}></form>
+            action={`/orders/post-sale/`}></form>
             <br />
             <br />
             <br />

@@ -10,7 +10,7 @@ const create = async (req, res, next) => {
     try {
         const orderId = req.params.id;
 
-        const YOUR_DOMAIN = `http://localhost:3000/orders/post-sale?id=${orderId}`
+        const YOUR_DOMAIN = `http://localhost:3000/orders/post-sale?external_reference=${orderId}`
 
         //? order
         let items = [];
@@ -44,8 +44,8 @@ const create = async (req, res, next) => {
                 }
             }],
             mode: 'payment',
-            success_url: `${YOUR_DOMAIN}&success=true`,
-            cancel_url: `${YOUR_DOMAIN}&success=false`,
+            success_url: `${YOUR_DOMAIN}&stripe_success=true`,
+            cancel_url: `${YOUR_DOMAIN}&stripe_success=false`,
         });
         return res.json(session);
 
