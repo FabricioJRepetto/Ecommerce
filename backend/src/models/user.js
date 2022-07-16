@@ -70,6 +70,9 @@ UserSchema.methods.comparePassword = async function (candidatePassword) {
 UserSchema.virtual("name").get(function () {
   if (this.firstName && this.lastName)
     return `${this.firstName} ${this.lastName}`;
+  if (this.firstName) return this.firstName;
+  if (this.lastName) return this.lastName;
+
   return this.email.split("@")[0];
 });
 

@@ -1,6 +1,5 @@
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
-const GoogleUser = require("../models/googleuser");
 require("dotenv").config();
 const { JWT_SECRET_CODE, OAUTH_CLIENT_ID } = process.env;
 const { OAuth2Client } = require("google-auth-library");
@@ -75,7 +74,7 @@ async function verifyAdmin(req, res, next) {
     return res.status(401).json({ message: "Unauthorized" });
 
   const user = await User.findById(req.user._id);
-  if (user.role === "admin") {
+  if (user.role === "admin" || user.role === "superadmin") {
     next();
   } else {
     return res.status(401).json({ message: "Unauthorized" });

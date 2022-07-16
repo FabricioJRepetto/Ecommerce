@@ -1,6 +1,7 @@
 const User = require("../models/user");
 const Address = require("../models/Address");
 const Order = require("../models/order");
+const Wishlist = require("../models/wishlist");
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
@@ -10,6 +11,7 @@ const { validationResult } = require("express-validator");
 const sendEmail = require("../utils/sendEmail");
 const mongoose = require("mongoose");
 const setUserKey = require("../utils/setUserKey");
+const { rawIdProductGetter } = require("../utils/rawIdProductGetter");
 
 const signup = async (req, res, next) => {
   const { _id, email } = req.user;
@@ -97,8 +99,14 @@ const profile = async (req, res, next) => {
     if (!userFound) {
       return res.status(404).json({ message: "User not Found" });
     }
-    const { email, name, role, avatar } = userFound;
-    return res.json({ email, name, role, avatar: avatar || null });
+    const { email, name, role, avatar, isGoogleUser } = userFound;
+    return res.json({
+      email,
+      name,
+      role,
+      isGoogleUser,
+      avatar: avatar || null,
+    });
   } catch (error) {
     next(error);
   }
@@ -239,6 +247,7 @@ const getAllUsers = async (req, res, next) => {
     "emailVerified",
     "avatar",
     "isGoogleUser",
+    "googleEmail",
   ];
   let allUsers = [];
   for (const user of allUsersFound) {
@@ -250,6 +259,7 @@ const getAllUsers = async (req, res, next) => {
       emailVerified: "",
       avatar: "",
       isGoogleUser: null,
+      googleEmail: "",
     };
     for (const key in user) {
       if (usefulData.includes(key)) {
@@ -272,9 +282,9 @@ const getAddressesAdmin = async (req, res, next) => {
     });
 
     if (!addressFound) {
-      return res.status(404).json({ message: "Address not found" });
+      return res.json([]);
     } else {
-      return res.json(addressFound);
+      return res.json(addressFound.address);
     }
   } catch (error) {
     next(error);
@@ -291,9 +301,35 @@ const getOrdersAdmin = async (req, res, next) => {
     });
 
     if (!ordersFound) {
-      return res.status(404).json({ message: "Order not found" });
+      return res.json([]);
     } else {
       return res.json(ordersFound);
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getWishlistAdmin = async (req, res, next) => {
+  const { _id, isGoogleUser } = req.body;
+  const userKey = setUserKey(isGoogleUser);
+
+  try {
+    const wishlistFound = await Wishlist.findOne({
+      [userKey]: _id,
+    });
+
+    if (!wishlistFound) {
+      return res.json([]);
+    } else {
+      let promises = [];
+      wishlistFound.products.map((product) =>
+        promises.push(rawIdProductGetter(product))
+      );
+      const rawProds = await Promise.all(promises);
+      let products = rawProds.filter((product) => product); //! null undefined
+
+      return res.json(products);
     }
   } catch (error) {
     next(error);
@@ -331,5 +367,6 @@ module.exports = {
   getAllUsers,
   getAddressesAdmin,
   getOrdersAdmin,
+  getWishlistAdmin,
   deleteUser,
 };

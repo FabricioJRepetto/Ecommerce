@@ -3,7 +3,7 @@ const router = Router();
 const productsRouter = require("./products.router");
 const userRouter = require("./user.router");
 const cartRouter = require("./cart.router");
-const whishlistRouter = require("./whishlist.router");
+const wishlistRouter = require("./wishlist.router");
 const addressRouter = require("./address.router");
 const orderRouter = require("./order.router");
 const historyRouter = require("./history.router");
@@ -14,7 +14,7 @@ const { verifyToken } = require("../middlewares/verify");
 
 router.use("/user", userRouter);
 router.use("/cart", verifyToken, cartRouter);
-router.use("/whishlist", verifyToken, whishlistRouter);
+router.use("/wishlist", verifyToken, wishlistRouter);
 router.use("/order", verifyToken, orderRouter);
 router.use("/address", verifyToken, addressRouter);
 router.use("/history", verifyToken, historyRouter);
