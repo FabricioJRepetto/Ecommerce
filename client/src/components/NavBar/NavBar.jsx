@@ -7,6 +7,7 @@ import { ReactComponent as Cart } from "../../assets/svg/cart.svg";
 import { ReactComponent as Fav } from "../../assets/svg/fav.svg";
 import { ReactComponent as Avatar } from "../../assets/svg/avatar.svg";
 import {
+    loadApplied,
   loadFilters,
   loadProductsFound,
   loadProductsOwn,
@@ -28,12 +29,13 @@ const NavBar = () => {
         //: logear busqueda en el historial
         axios.post(`/history/search/${e.target.value}`);
       }
-      dispatch(loadProductsOwn("loading"));
-      dispatch(loadProductsFound("loading"));
-      dispatch(loadFilters("loading"));
+        dispatch(loadProductsOwn("loading"));
+        dispatch(loadProductsFound("loading"));
+        dispatch(loadFilters("loading"));
+        dispatch(loadApplied('loading'));
 
-      navigate("/results");
-      dispatch(loadQuerys({q: e.target.value}));
+        navigate("/results");
+        dispatch(loadQuerys({q: e.target.value}));
     }
   };
 

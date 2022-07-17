@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { loadFilters, loadProductsFound, loadProductsOwn, loadQuerys } from "../../Redux/reducer/productsSlice";
+import { loadApplied, loadFilters, loadProductsFound, loadProductsOwn, loadQuerys } from "../../Redux/reducer/productsSlice";
 import axios from "axios";
 import MiniCard from "../Products/MiniCard";
 import Carousel from "./Carousel/Carousel";
@@ -59,9 +59,10 @@ const Home = () => {
         dispatch(loadProductsOwn("loading"));
         dispatch(loadProductsFound("loading"));
         dispatch(loadFilters("loading"));
+        dispatch(loadApplied('loading'));
 
         navigate("/results");
-        dispatch(loadQuerys({category}));
+        dispatch(loadQuerys({category}))
    }
 
   return (
@@ -90,7 +91,7 @@ const Home = () => {
           <Five className={"svg"} />
           <p>Videogames</p>
         </div>
-        <div onClick={()=> console.log('ofertas...')}>
+        <div onClick={()=> console.log('mostrar ofertas y que lo filtre su vieja')}>
           <Six className={"svg"} />
           <p>Ofertas</p>
         </div>

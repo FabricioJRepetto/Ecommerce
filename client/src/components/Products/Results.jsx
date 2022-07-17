@@ -30,26 +30,28 @@ const Results = () => {
 
     useEffect(() => {
         (async () => {
-        let newQuery = "";
-        Object.entries(querys).forEach(([key, value]) => {
-            newQuery += key + "=" + value + "&";
-        });
+            let newQuery = "";
+            Object.entries(querys).forEach(([key, value]) => {
+                newQuery += key + "=" + value + "&";
+            });
 
-        const { data } = await axios(`/product/search/?${newQuery}`);
-        dispatch(loadProductsOwn(data.db));
-        dispatch(loadProductsFound(data.meli));
-        dispatch(loadFilters(data.filters));
-        dispatch(loadApplied(data.applied));
-        dispatch(loadBreadCrumbs(data.breadCrumbs));
+            const { data } = await axios(`/product/search/?${newQuery}`)
+            // const { data } = await axios(`/product/promos`)
+            dispatch(loadProductsOwn(data.db));
+            dispatch(loadProductsFound(data.meli));
+            dispatch(loadFilters(data.filters));
+            dispatch(loadApplied(data.applied));
+            dispatch(loadBreadCrumbs(data.breadCrumbs));
         })();
+
         // eslint-disable-next-line
     }, [querys]);
 
-        const addFilter = async (obj) => {
-            let filter = obj.filter;
-            let value = obj.value;
-            dispatch(loadQuerys({...querys, [filter]: value}));
-        }
+    const addFilter = async (obj) => {
+        let filter = obj.filter;
+        let value = obj.value;
+        dispatch(loadQuerys({...querys, [filter]: value}));
+    }
 
     const removeFilter = async (filter) => {
         let aux = { ...querys };
@@ -74,13 +76,13 @@ const Results = () => {
 
                 <div className="results-filters">
                     <div>
-                        {applied.length > 0 && 
+                        {applied !== 'loading' && applied?.length > 0 && 
                             React.Children.toArray(applied.map(f => (
                                 <div onClick={()=>removeFilter(f.id)}>{f.values[0].name}</div>
                             )))
                         }
                     </div>
-                    {(productsFilters !== 'loading' && productsFilters.length > 0) &&
+                    {(productsFilters !== 'loading' && productsFilters?.length > 0) &&
                             React.Children.toArray(productsFilters?.map(f => (
                                 <div key={f.id} className={`results-filter-container ${open === f.id && 'open-filter'}`}>
                                     <div onClick={() => setOpen(open === f.id ? '' : f.id)} className='filter-title'>
@@ -98,9 +100,9 @@ const Results = () => {
                 </div>
 
                 <div className='results-inner'>
-                    {(productsFound !== 'loading' && (productsFound.length > 0 || productsOwn.length > 0))
+                    {(productsFound !== 'loading' && (productsFound?.length > 0 || productsOwn?.length > 0))
                     ? <div>
-                        {productsOwn.length > 0 && <div className='own-products-container'>
+                        {productsOwn?.length > 0 && <div className='own-products-container'>
                             {React.Children.toArray(
                                 productsOwn?.map(prod => (
                                     <Card
