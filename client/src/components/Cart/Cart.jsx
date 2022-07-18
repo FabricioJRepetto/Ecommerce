@@ -18,7 +18,7 @@ import { ReactComponent as Spinner } from '../../assets/svg/spinner.svg'
 const Cart = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const [notification] = useNotification();
+    const [ notification ] = useNotification();
     const { section } = useParams();
 
     const [render, setRender] = useState(section)
@@ -140,11 +140,16 @@ const Cart = () => {
             fastId = id;
             setOrderId(id);
         }
-        // crea la preferencia para mp con la order
+        // crea la preferencia para mp con la order y redirige
         const { data }  = await axios.get(`/mercadopago/${orderId || fastId}`);
+        notification('Serás redirigido a la plataforma de pago.', '', 'warning');
+        setTimeout(() => {
+            window.location.replace(data);
+        }, 4000);
+        return null
         // abre el modal de mp con la id de la preferencia
-        loadMercadoPago(data.id, 
-        setLoadingPayment());
+        // loadMercadoPago(data.id, 
+        // setLoadingPayment());
      };
 
     const buyNow = async (id) => { 

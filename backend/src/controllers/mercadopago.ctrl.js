@@ -65,9 +65,13 @@ const mpCho = async (req, res, next) => {
         };
 
         const { response } = await mercadopago.preferences.create(preference);
-        res.json(response);
+
+        //: redirect_urls: { failure: '', pending: '', success: '' }
+        return res.json(response.init_point);
+
+        // return res.json(response);
     } catch (error) {
-        console.log(error);
+        next(error);
     };
 };
 
