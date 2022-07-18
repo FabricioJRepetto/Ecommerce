@@ -55,7 +55,7 @@
   width: 400px;
 }
 .navbar-profile-section {
-  width: 200px;
+  /* width: 200px; */
   height: 4rem;
   display: flex;
   flex-direction: row;
@@ -137,8 +137,9 @@
 }
 .navbar-modal {
   visibility: hidden;
-  position: relative;
-  left: -30px;
+  position: relative;  
+  left: calc(50% - 50px);
+  /* left: -30px; */
   bottom: -50px;
   height: fit-content;
   width: 150px;

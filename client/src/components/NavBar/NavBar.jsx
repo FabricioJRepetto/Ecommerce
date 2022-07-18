@@ -16,7 +16,9 @@ import {
 import Signout from "../Session/Signout";
 
 const NavBar = () => {
-  const { session, avatar } = useSelector((state) => state.sessionReducer);
+  const session = useSelector((state) => state.sessionReducer.session);
+  const username = useSelector((state) => state.sessionReducer.username);
+  const avatar = useSelector((state) => state.sessionReducer.avatar);
   const cart = useSelector((state) => state.cartReducer.onCart);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -101,8 +103,7 @@ const NavBar = () => {
                 ) : (
                   <Avatar className="navbar-avatar-svg" />
                 )}
-
-                <b>Profile</b>
+                <p>{ username || 'Profile' }</p>
 
                 <div className="navBar-modal-container">
                   <div className={`navbar-modal ${profileModal && "visible"}`}>
