@@ -3,7 +3,6 @@ const router = Router();
 const {
   getOrder,
   getOrdersUser,
-  getOrdersAdmin,
   createOrder,
   buyNowOrder,
   deleteOrder,

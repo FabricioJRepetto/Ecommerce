@@ -6,8 +6,9 @@ const OrdersAdmin = () => {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    axios("/order/adminall")
+    axios("/admin/getAllOrders")
       .then(({ data }) => {
+        console.log(data);
         setOrders(data);
       })
       .catch((err) => console.log(err)); //! VOLVER A VER manejo de errores

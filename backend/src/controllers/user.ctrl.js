@@ -87,17 +87,29 @@ const signinGoogle = async (req, res, next) => {
 };
 
 const profile = async (req, res, next) => {
+  const userId = req.body._id || req.user._id;
   try {
-    const userFound = await User.findById(req.user._id);
+    const userFound = await User.findById(userId);
     if (!userFound) {
       return res.status(404).json({ message: "User not Found" });
     }
-    const { email, name, role, avatar, isGoogleUser } = userFound;
-    return res.json({
+    const {
       email,
       name,
       role,
+      avatar,
+      emailVerified,
       isGoogleUser,
+      googleEmail,
+    } = userFound;
+    return res.json({
+      email,
+      name,
+      //! VOLVER A VER agregar emailVerified y googleEmail
+      role,
+      emailVerified,
+      isGoogleUser,
+      googleEmail,
       avatar: avatar || null,
     });
   } catch (error) {

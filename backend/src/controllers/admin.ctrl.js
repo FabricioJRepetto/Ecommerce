@@ -60,7 +60,49 @@ const getAllUsers = async (req, res, next) => {
   return res.json(allUsers);
 };
 
-const getAddressesAdmin = async (req, res, next) => {
+const getUser = async (req, res, next) => {
+  try {
+    const userFound = await User.findById(req.params.id);
+    if (!userFound) {
+      return res.status(404).json({ message: "User not Found" });
+    }
+    const {
+      name,
+      email,
+      role,
+      emailVerified,
+      _id,
+      isGoogleUser,
+      googleEmail,
+      avatar,
+    } = userFound;
+    return res.json([
+      {
+        name,
+        email,
+        role,
+        emailVerified,
+        _id,
+        isGoogleUser,
+        googleEmail,
+        avatar: avatar || null,
+      },
+    ]);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getAllOrders = async (req, res, next) => {
+  try {
+    const allOrdersFound = await Order.find();
+    return res.json(allOrdersFound);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const getUserAddresses = async (req, res, next) => {
   const { _id, isGoogleUser } = req.body;
   const userKey = setUserKey(isGoogleUser);
 
@@ -79,7 +121,7 @@ const getAddressesAdmin = async (req, res, next) => {
   }
 };
 
-const getOrdersAdmin = async (req, res, next) => {
+const getUserOrders = async (req, res, next) => {
   const { _id, isGoogleUser } = req.body;
   const userKey = setUserKey(isGoogleUser);
 
@@ -98,7 +140,7 @@ const getOrdersAdmin = async (req, res, next) => {
   }
 };
 
-const getWishlistAdmin = async (req, res, next) => {
+const getUserWishlist = async (req, res, next) => {
   const { _id, isGoogleUser } = req.body;
   const userKey = setUserKey(isGoogleUser);
 
@@ -140,12 +182,197 @@ const deleteUser = async (req, res, next) => {
   }
 };
 
+const createProduct = async (req, res, next) => {
+  try {
+    const {
+      name,
+      price,
+      brand,
+      category,
+      description,
+      attributes,
+      main_features,
+      available_quantity,
+      free_shipping,
+    } = JSON.parse(req.body.data);
+    let images = [];
+
+    let aux = [];
+    // creamos una promise por cada archivo.
+    req.files.forEach((img) => {
+      aux.push(cloudinary.uploader.upload(img.path));
+    });
+    // esperamos que se suban.
+    const promiseAll = await Promise.all(aux);
+    // guardamos los datos de cada imagen.
+    promiseAll.forEach((e) => {
+      images.push({
+        imgURL: e.url,
+        public_id: e.public_id,
+      });
+    });
+    // borramos los archivos de este directorio.
+    req.files.forEach((img) => {
+      fs.unlink(img.path);
+    });
+
+    //? path_from_root
+    const { data } = await axios(
+      `https://api.mercadolibre.com/categories/${category}`
+    );
+    const path_from_root = data.path_from_root.map((e) => e.id);
+    console.log(path_from_root);
+
+    const newProduct = new Product({
+      name,
+      price,
+      brand,
+      main_features,
+      attributes,
+      description,
+      category,
+      path_from_root,
+      available_quantity,
+      free_shipping,
+      images,
+    });
+    const productSaved = await newProduct.save();
+
+    res.json(productSaved);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const updateProduct = async (req, res, next) => {
+  try {
+    let {
+      name,
+      price,
+      brand,
+      main_features,
+      attributes,
+      description,
+      category,
+      available_quantity,
+      free_shipping,
+      imgsToEdit,
+    } = JSON.parse(req.body.data);
+    let images = [...imgsToEdit];
+
+    //: validar data antes de subir imagenes
+    if (req.files) {
+      let aux = [];
+      // creamos una promise por cada archivo.
+      req.files.forEach((img) => {
+        aux.push(cloudinary.uploader.upload(img.path));
+      });
+      // esperamos que se suban.
+      const promiseAll = await Promise.all(aux);
+      // guardamos los datos de cada imagen.
+      promiseAll.forEach((img) => {
+        images.push({
+          imgURL: img.url,
+          public_id: img.public_id,
+        });
+      });
+      // borramos los archivos de este directorio.
+      req.files.forEach((img) => {
+        fs.unlink(img.path);
+      });
+    }
+
+    //? actualizar lista de imagenes
+    const productFound = await Product.findById(req.params.id);
+    if (imgsToEdit.length === 0) {
+      let deleteList = [];
+      for (const img of productFound.images) {
+        deleteList.push(img.public_id);
+      }
+      cloudinary.api.delete_resources(deleteList);
+    } else if (imgsToEdit.length > 0) {
+      let deleteList = [];
+      let imgToKeepId = [];
+      for (const img of imgsToEdit) {
+        imgToKeepId.push(img.public_id);
+      }
+      for (const img of productFound.images) {
+        if (!imgToKeepId.includes(img.public_id)) {
+          deleteList.push(img.public_id);
+        }
+      }
+      cloudinary.api.delete_resources(deleteList);
+    }
+
+    //? path_from_root
+    const path_from_root = await axios(
+      `https://api.mercadolibre.com/categories/${category}`
+    ).data.path_from_root.map((e) => e.id);
+
+    const updatedProduct = await Product.findByIdAndUpdate(
+      req.params.id,
+      {
+        $set: {
+          name,
+          price,
+          brand,
+          main_features,
+          attributes,
+          description,
+          category,
+          path_from_root,
+          available_quantity,
+          free_shipping,
+          images,
+        },
+      },
+      { new: true }
+    );
+
+    res.json(updatedProduct);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const deleteProduct = async (req, res, next) => {
+  try {
+    const prod = await Product.findById(req.params.id);
+    let deleteList = [];
+    prod.images.forEach((img) => deleteList.push(img.public_id));
+    cloudinary.api.delete_resources(deleteList);
+
+    await Product.findByIdAndDelete(req.params.id);
+    res.status(204).json("deleted");
+  } catch (error) {
+    next(error);
+  }
+};
+
+const deleteAllProducts = async (req, res, next) => {
+  try {
+    //? no borra nada
+    cloudinary.api.delete_resources(true);
+    //cloudinary.api.delete_folder("products", (error, result) => { console.log(result); });
+    const deleted = await Product.deleteMany();
+    res.status(200).json(deleted);
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   verifyAdminRoute,
-  promoteUser,
   getAllUsers,
-  getAddressesAdmin,
-  getOrdersAdmin,
-  getWishlistAdmin,
+  getUser,
+  getAllOrders,
+  promoteUser,
+  getUserAddresses,
+  getUserOrders,
+  getUserWishlist,
   deleteUser,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+  deleteAllProducts,
 };

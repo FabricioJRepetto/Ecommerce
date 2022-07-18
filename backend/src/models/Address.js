@@ -18,7 +18,7 @@ const AddressSchema = new Schema(
     },
     googleUser: {
       type: Schema.Types.ObjectId,
-      ref: "GoogleUser",
+      ref: "User",
     },
   },
   {

@@ -10,7 +10,7 @@ const VerifyEmail = () => {
 
   useEffect(() => {
     axios
-      .put("/user/verifyEmail", null, {
+      .put("/admin/verifyEmail", null, {
         headers: {
           Authorization: `Bearer ${verifyToken}`,
         },

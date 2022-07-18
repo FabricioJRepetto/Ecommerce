@@ -101,6 +101,7 @@ function App() {
             <Route path="products" element={<Products />} />
             <Route path="productForm" element={<ProductForm />} />
             <Route path="users" element={<UsersAdmin />} />
+            <Route path="users/:id" element={<UsersAdmin />} />
             <Route path="orders" element={<OrdersAdmin />} />
             <Route path="*" element={<h1>404 ADMIN</h1>} />
           </Route>

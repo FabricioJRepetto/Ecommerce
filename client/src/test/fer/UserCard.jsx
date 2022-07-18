@@ -24,7 +24,7 @@ const UserCard = ({ user, openDeleteUser, openPromoteUser }) => {
 
   const getAddresses = (_id) => {
     axios
-      .post("/admin/getAddresses", { _id, isGoogleUser })
+      .post("/admin/getUserAddresses", { _id, isGoogleUser })
       .then(({ data }) => {
         setAddresses(data);
         setShowAddresses(true);
@@ -34,7 +34,7 @@ const UserCard = ({ user, openDeleteUser, openPromoteUser }) => {
 
   const getOrders = (_id) => {
     axios
-      .post("/admin/getOrders", { _id, isGoogleUser })
+      .post("/admin/getUserOrders", { _id, isGoogleUser })
       .then(({ data }) => {
         setOrders(data);
         setShowOrders(true);
@@ -44,7 +44,7 @@ const UserCard = ({ user, openDeleteUser, openPromoteUser }) => {
 
   const getWishlist = (_id) => {
     axios
-      .post("/admin/getWishlist", { _id, isGoogleUser })
+      .post("/admin/getUserWishlist", { _id, isGoogleUser })
       .then(({ data }) => {
         console.log(data);
         setWishlist(data);
