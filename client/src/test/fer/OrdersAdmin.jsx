@@ -6,7 +6,7 @@ const OrdersAdmin = () => {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    axios("/admin/getAllOrders")
+    axios("/admin/order/getAll")
       .then(({ data }) => {
         console.log(data);
         setOrders(data);

@@ -137,7 +137,7 @@ const Products = () => {
 
   const deleteProduct = () => {
     axios
-      .delete(`/product/${productToDelete.prodId}`)
+      .delete(`/admin/product/${productToDelete.prodId}`)
       .then((_) => {
         dispatch(deleteProductFromState(productToDelete.prodId));
         notification("Producto eliminado exitosamente", "", "success");

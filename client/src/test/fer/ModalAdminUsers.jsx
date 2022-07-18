@@ -27,7 +27,7 @@ const ModalAdminUsers = ({
 
   const deleteUser = () => {
     axios
-      .delete(`/admin/${userToDelete._id}`)
+      .delete(`/admin/user/${userToDelete._id}`)
       .then((_) => {
         dispatch(adminDeleteUser(userToDelete._id));
         notification("Usuario eliminado exitosamente", "", "success");
@@ -42,7 +42,7 @@ const ModalAdminUsers = ({
 
   const promoteToAdmin = () => {
     axios
-      .put(`/admin/promote/${userToPromote._id}`)
+      .put(`/admin/user/promote/${userToPromote._id}`)
       .then((_) => {
         dispatch(adminPromoteUser(userToPromote._id));
         notification(

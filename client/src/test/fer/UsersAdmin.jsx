@@ -20,13 +20,13 @@ const UsersAdmin = () => {
   useEffect(() => {
     dispatch(adminLoadUsers(null));
     if (location.pathname === "/admin/users") {
-      axios("/admin/getAllUsers")
+      axios("/admin/user/getAll")
         .then(({ data }) => {
           dispatch(adminLoadUsers(data));
         })
         .catch((err) => console.log(err)); //! VOLVER A VER manejo de errores
     } else {
-      axios(`/admin/getUser/${id}`)
+      axios(`/admin/user/${id}`)
         .then(({ data }) => {
           dispatch(adminLoadUsers(data));
         })
