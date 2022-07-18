@@ -7,6 +7,7 @@ import { ReactComponent as Cart } from "../../assets/svg/cart.svg";
 import { ReactComponent as Fav } from "../../assets/svg/fav.svg";
 import { ReactComponent as Avatar } from "../../assets/svg/avatar.svg";
 import {
+    loadApplied,
   loadFilters,
   loadProductsFound,
   loadProductsOwn,
@@ -15,7 +16,9 @@ import {
 import Signout from "../Session/Signout";
 
 const NavBar = () => {
-  const { session, avatar } = useSelector((state) => state.sessionReducer);
+  const session = useSelector((state) => state.sessionReducer.session);
+  const username = useSelector((state) => state.sessionReducer.username);
+  const avatar = useSelector((state) => state.sessionReducer.avatar);
   const cart = useSelector((state) => state.cartReducer.onCart);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -28,12 +31,13 @@ const NavBar = () => {
         //: logear busqueda en el historial
         axios.post(`/history/search/${e.target.value}`);
       }
-      dispatch(loadProductsOwn("loading"));
-      dispatch(loadProductsFound("loading"));
-      dispatch(loadFilters("loading"));
+        dispatch(loadProductsOwn("loading"));
+        dispatch(loadProductsFound("loading"));
+        dispatch(loadFilters("loading"));
+        dispatch(loadApplied('loading'));
 
-      navigate("/results");
-      dispatch(loadQuerys({q: e.target.value}));
+        navigate("/results");
+        dispatch(loadQuerys({q: e.target.value}));
     }
   };
 
@@ -99,8 +103,7 @@ const NavBar = () => {
                 ) : (
                   <Avatar className="navbar-avatar-svg" />
                 )}
-
-                <b>Profile</b>
+                <p>{ username || 'Profile' }</p>
 
                 <div className="navBar-modal-container">
                   <div className={`navbar-modal ${profileModal && "visible"}`}>

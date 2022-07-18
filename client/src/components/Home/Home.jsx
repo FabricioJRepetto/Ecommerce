@@ -1,6 +1,8 @@
-import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { loadApplied, loadFilters, loadProductsFound, loadProductsOwn, loadQuerys } from "../../Redux/reducer/productsSlice";
+import axios from "axios";
 import MiniCard from "../Products/MiniCard";
 import Carousel from "./Carousel/Carousel";
 import { IMAGES } from "../../constants";
@@ -15,12 +17,15 @@ import { ReactComponent as Five } from "../../assets/svg/explode-svgrepo-com.svg
 import { ReactComponent as Six } from "../../assets/svg/perform-svgrepo-com.svg";
 
 const Home = () => {
-  const [products, setProducts] = useState(false);
-  const [countdown, setCountdown] = useState("");
-  const [loading, setLoading] = useState(true);
-  const wishlist = useSelector((state) => state.cartReducer.wishlist);
-  const session = useSelector((state) => state.sessionReducer.session);
-  const [suggestion, setSuggestion] = useState(false);
+    const [products, setProducts] = useState(false);
+    const [countdown, setCountdown] = useState("");
+    const [loading, setLoading] = useState(true);
+    const [suggestion, setSuggestion] = useState(false);
+    const wishlist = useSelector((state) => state.cartReducer.wishlist);
+    const session = useSelector((state) => state.sessionReducer.session);
+
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
   useEffect(() => {
     let countdownInterv = null;
@@ -50,35 +55,45 @@ const Home = () => {
     // eslint-disable-next-line
   }, []);
 
+  const categorySearch = (category) => { 
+        dispatch(loadProductsOwn("loading"));
+        dispatch(loadProductsFound("loading"));
+        dispatch(loadFilters("loading"));
+        dispatch(loadApplied('loading'));
+
+        navigate("/results");
+        dispatch(loadQuerys({category}))
+   }
+
   return (
     <div className="home-container">
       <div>
         <Carousel images={IMAGES} controls indicators pointer width="100%" />
       </div>
       <div className="categories">
-        <div>
+        <div onClick={() => categorySearch("MLA1051")}>
           <One className={"svg"} />
           <p>Smartphones</p>
         </div>
-        <div>
+        <div onClick={() => categorySearch("MLA1648")}>
           <Two className={"svg"} />
           <p>Computers</p>
         </div>
-        <div>
+        <div onClick={() => categorySearch("MLA1039")}>
           <Three className={"svg"} />
           <p>Cameras</p>
         </div>
-        <div>
+        <div onClick={() => categorySearch("MLA1000")}>
           <Four className={"svg"} />
           <p>Audio & Video</p>
         </div>
-        <div>
+        <div onClick={() => categorySearch("MLA1144")}>
           <Five className={"svg"} />
           <p>Videogames</p>
         </div>
-        <div>
+        <div onClick={()=> console.log('mostrar ofertas y que lo filtre su vieja')}>
           <Six className={"svg"} />
-          <p>TVs</p>
+          <p>Ofertas</p>
         </div>
       </div>
       <div>

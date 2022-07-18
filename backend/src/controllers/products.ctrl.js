@@ -58,13 +58,17 @@ const getByQuery = async (req, res, next) => {
 
         const resultsMeli = meliSearchParser(data.results);
 
-        let aux = new RegExp(req.query.q.replace(' ', '|'), 'gi');
-        let resultsDB = await Product.find({
-            $or: [
-                { name: { $in: [aux] } },
-                { brand: { $in: [aux] } }
-            ]
-        });
+        let resultsDB = await Product.find();
+
+        if (req.query.q) {
+            let aux = new RegExp(req.query.q.replace(' ', '|'), 'gi')
+            resultsDB = await Product.find({
+                $or: [
+                    { name: { $in: [aux] } },
+                    { brand: { $in: [aux] } }
+                ]
+            });
+        }
 
         const filterDBResults = async (filters, products) => {
             let response = [...products];
@@ -146,7 +150,6 @@ const createProduct = async (req, res, next) => {
         //? path_from_root
         const { data } = await axios(`https://api.mercadolibre.com/categories/${category}`);
         const path_from_root = data.path_from_root.map(e => e.id);
-        console.log(path_from_root);
 
         const newProduct = new Product({
             name,
@@ -230,7 +233,8 @@ const updateProduct = async (req, res, next) => {
         }
 
         //? path_from_root
-        const path_from_root = await axios(`https://api.mercadolibre.com/categories/${category}`).data.path_from_root.map(e => e.id);
+        const { data } = await axios(`https://api.mercadolibre.com/categories/${category}`);
+        const path_from_root = data.path_from_root.map(e => e.id);
 
         const updatedProduct = await Product.findByIdAndUpdate(
             req.params.id,
@@ -308,6 +312,37 @@ const stock = async (req, res, next) => {
     }
 };
 
+const getPromos = async (req, res, next) => {
+    try {
+        const categories = [
+            'MLA1039',
+            "MLA1051",
+            "MLA1648",
+            "MLA1144",
+            "MLA1000",
+            "MLA3025",
+            "MLA1168",
+            "MLA1182",
+        ];
+        let promises = [];
+        let results = [];
+
+        categories.forEach(c => {
+            promises.push(axios(`http://api.mercadolibre.com/sites/MLA/search?&official_store=all&promotion_type=deal_of_the_day&category=${c}`))
+        });
+
+        const promiseAll = await Promise.all(promises);
+        promiseAll.forEach(r => {
+            results = results.concat(r.data.results);
+        });
+        results = meliSearchParser(results);
+
+        return res.json(results);
+    } catch (error) {
+        next(error)
+    }
+}
+
 module.exports = {
     getAll,
     getByQuery,
@@ -317,4 +352,5 @@ module.exports = {
     deleteProduct,
     deleteAll,
     stock,
+    getPromos,
 };

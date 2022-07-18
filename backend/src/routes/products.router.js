@@ -9,9 +9,11 @@ const {
     deleteProduct,
     deleteAll,
     stock,
+    getPromos,
 } = require("../controllers/products.ctrl.js");
 
 router.get("/", getAll);
+router.get("/promos", getPromos);
 router.get("/search", getByQuery);
 router.get("/:id", getById);
 router.post("/", createProduct);
