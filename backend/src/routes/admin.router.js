@@ -29,7 +29,7 @@ router.get("/verify", verifyAdminRoute);
 //router.delete("/:id", deleteUser);
 
 router.get("/user/getAll", getAllUsers);
-router.post("/user/:id", getUser);
+router.get("/user/:id", getUser);
 router.get("/order/getAll", getAllOrders);
 router.put("/user/promote/:id", promoteUser);
 router.post("/user/getAddresses", getUserAddresses);
