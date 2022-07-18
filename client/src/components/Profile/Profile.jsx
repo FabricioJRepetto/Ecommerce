@@ -62,9 +62,10 @@ const Profile = () => {
     }
     // eslint-disable-next-line
   }, [wl_id]);
+
   //? ORDERS
   const { data: orders, oLoading } = useAxios("GET", `/order/userall/`);
-  
+  !oLoading && console.log(orders);
   // Date formater
   const formatDate = (date) => {
     let fecha = new Date(date.slice(0, -1));

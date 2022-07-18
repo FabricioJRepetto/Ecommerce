@@ -62,14 +62,13 @@ const mpCho = async (req, res, next) => {
                 failure: `http://localhost:3000/orders/post-sale/`,
                 pending: `http://localhost:3000/orders/post-sale/`
             },
+            expires: true,
+            expiration_date_from: "2016-02-01T12:00:00.000-04:00",
+            expiration_date_to: "2016-02-28T12:00:00.000-04:00"
         };
 
         const { response } = await mercadopago.preferences.create(preference);
-
-        //: redirect_urls: { failure: '', pending: '', success: '' }
-        return res.json(response.init_point);
-
-        // return res.json(response);
+        return res.json(response);
     } catch (error) {
         next(error);
     };
