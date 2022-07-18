@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, Outlet, Routes, Route } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import { useVerifyAdmin } from "../../hooks/useVerifyAdmin";
 
 const AdminLayout = () => {
@@ -7,6 +7,9 @@ const AdminLayout = () => {
   return (
     <div>
       <nav>
+        <Link to="/admin/metrics">
+          <h3>Métricas</h3>
+        </Link>
         <Link to="/admin/products">
           <h3>Productos</h3>
         </Link>
