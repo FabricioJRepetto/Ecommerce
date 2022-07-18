@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const fs = require("fs-extra");
 const User = require("../models/user");
 const Address = require("../models/Address");
 const Order = require("../models/order");
@@ -221,7 +222,6 @@ const createProduct = async (req, res, next) => {
       `https://api.mercadolibre.com/categories/${category}`
     );
     const path_from_root = data.path_from_root.map((e) => e.id);
-    console.log(path_from_root);
 
     const newProduct = new Product({
       name,
@@ -305,9 +305,10 @@ const updateProduct = async (req, res, next) => {
     }
 
     //? path_from_root
-    const path_from_root = await axios(
+    const { data } = await axios(
       `https://api.mercadolibre.com/categories/${category}`
-    ).data.path_from_root.map((e) => e.id);
+    );
+    const path_from_root = data.path_from_root.map((e) => e.id);
 
     const updatedProduct = await Product.findByIdAndUpdate(
       req.params.id,

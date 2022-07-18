@@ -130,10 +130,10 @@ const ProductForm = () => {
     setValue("name", data.name);
     setValue("price", data.price);
     setValue("brand", data.brand);
-    setValue("category", data.category);
     setValue("available_quantity", data.available_quantity);
     setValue("description", data.description);
     setValue("free_shipping", data.free_shipping);
+    setValue("category", data.category);
     replaceFeature([...data.main_features]);
     replaceAttribute([...data.attributes]);
     setImgsToEdit(data.images);

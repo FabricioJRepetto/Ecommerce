@@ -9,7 +9,6 @@ const {
 } = process.env;
 const Product = require("../models/product");
 const cloudinary = require("cloudinary").v2;
-const fs = require("fs-extra");
 const axios = require("axios");
 const { meliSearchParser } = require("../utils/meliParser");
 const { rawIdProductGetter } = require("../utils/rawIdProductGetter");
@@ -63,10 +62,14 @@ const getByQuery = async (req, res, next) => {
 
     const resultsMeli = meliSearchParser(data.results);
 
-    let aux = new RegExp(req.query.q.replace(" ", "|"), "gi");
-    let resultsDB = await Product.find({
-      $or: [{ name: { $in: [aux] } }, { brand: { $in: [aux] } }],
-    });
+    let resultsDB = await Product.find();
+
+    if (req.query.q) {
+      let aux = new RegExp(req.query.q.replace(" ", "|"), "gi");
+      resultsDB = await Product.find({
+        $or: [{ name: { $in: [aux] } }, { brand: { $in: [aux] } }],
+      });
+    }
 
     const filterDBResults = async (filters, products) => {
       let response = [...products];
@@ -147,11 +150,45 @@ const stock = async (req, res, next) => {
   }
 };
 
-//! VOLVER A VER ¿mover a ruta admin?
+const getPromos = async (req, res, next) => {
+  try {
+    const categories = [
+      "MLA1039",
+      "MLA1051",
+      "MLA1648",
+      "MLA1144",
+      "MLA1000",
+      "MLA3025",
+      "MLA1168",
+      "MLA1182",
+    ];
+    let promises = [];
+    let results = [];
+
+    categories.forEach((c) => {
+      promises.push(
+        axios(
+          `http://api.mercadolibre.com/sites/MLA/search?&official_store=all&promotion_type=deal_of_the_day&category=${c}`
+        )
+      );
+    });
+
+    const promiseAll = await Promise.all(promises);
+    promiseAll.forEach((r) => {
+      results = results.concat(r.data.results);
+    });
+    results = meliSearchParser(results);
+
+    return res.json(results);
+  } catch (error) {
+    next(error);
+  }
+};
 
 module.exports = {
   getAll,
   getByQuery,
   getById,
   stock,
+  getPromos,
 };
