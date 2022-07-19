@@ -8,10 +8,10 @@ import { ReactComponent as Fav } from "../../assets/svg/fav.svg";
 import { ReactComponent as Avatar } from "../../assets/svg/avatar.svg";
 import {
     loadApplied,
-  loadFilters,
-  loadProductsFound,
-  loadProductsOwn,
-  loadQuerys,
+    loadFilters,
+    loadProductsFound,
+    loadProductsOwn,
+    loadQuerys,
 } from "../../Redux/reducer/productsSlice";
 import Signout from "../Session/Signout";
 
