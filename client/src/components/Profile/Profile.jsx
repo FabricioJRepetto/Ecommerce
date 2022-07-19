@@ -198,9 +198,9 @@ const Profile = () => {
                             `}
                         </p>
                         <p>payment status: {e.status}</p>
-                        {/* <p>date: {formatDate(e.expiration_date.from)}</p> */}
-                        <p>date: {e.expiration_date?.from || 'date'}</p>
-                        {e.status === 'pending' && `expiration: ${e.expiration_date?.to || 'expiration placeholder'}`}
+                        <p>creation date: {formatDate(e.expiration_date.from)}</p>
+                        {e.status === 'pending' && `expiration: ${formatDate(e.expiration_date.to)}`}
+                        {e.status === 'pending' && e.payment_link && <a href={e.payment_link}>Continue payment.</a>}
                         <p>free shipping: {e.free_shipping ? "Yes" : "No"}</p>
                         <p>shipping cost: {e.shipping_cost}</p>
                         <p>total payment: ${e.total}</p>

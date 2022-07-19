@@ -68,6 +68,13 @@ const mpCho = async (req, res, next) => {
         };
 
         const { response } = await mercadopago.preferences.create(preference);
+        await Order.findByIdAndUpdate(id,
+            {
+                "$set": {
+                    payment_link: response.init_point
+                }
+            });
+
         return res.json(response);
     } catch (error) {
         next(error);
