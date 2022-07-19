@@ -48,8 +48,7 @@ const UsersAdmin = () => {
   };
 
   useEffect(() => {
-    /* nameSearch &&  */ dispatch(adminFilterUsers(nameSearch));
-    // : dispatch(adminFilterUsers([]));
+    dispatch(adminFilterUsers(nameSearch));
     // eslint-disable-next-line
   }, [nameSearch]);
 

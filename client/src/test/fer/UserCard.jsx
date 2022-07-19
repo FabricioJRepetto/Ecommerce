@@ -61,7 +61,7 @@ const UserCard = ({ user, openDeleteUser, openPromoteUser }) => {
         <h4>Cuenta de Google: {isGoogleUser ? "si" : "no"}</h4>
         <h4>Verificado: {emailVerified ? "si" : "no"}</h4>
         <h4>Rol: {role}</h4>
-        {role === "client" && (
+        {role === "client" && !isGoogleUser && (
           <button onClick={() => openPromoteUser({ _id, name })}>
             Promover a Administrador
           </button>

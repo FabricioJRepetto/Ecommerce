@@ -18,6 +18,8 @@ const promoteUser = async (req, res, next) => {
   try {
     const userFound = await User.findById(id);
     if (!userFound) return res.status(404).json({ message: "User not found" });
+    if (userFound.isGoogleUser)
+      return res.status(401).json({ message: "A google User can't be admin" });
     userFound.role === "client" && (userFound.role = "admin");
     await userFound.save();
     return res.json({ message: "User promoted successfully" });
