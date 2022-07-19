@@ -67,9 +67,8 @@ const Profile = () => {
   const { data: orders, oLoading } = useAxios("GET", `/order/userall/`);
   !oLoading && console.log(orders);
   // Date formater
-  const formatDate = (date) => {
-    let fecha = new Date(date.slice(0, -1));
-    return fecha.toString().slice(0, 21);
+  const formatDate = (d) => {
+    return d.toString().slice(0, -13).replace('T', ' ');
   };
 
   //? ADDRESS
@@ -198,8 +197,10 @@ const Profile = () => {
                                 ${e.shipping_address?.city} 
                             `}
                         </p>
-                        <p>date: {formatDate(e.createdAt)}</p>
                         <p>payment status: {e.status}</p>
+                        {/* <p>date: {formatDate(e.expiration_date.from)}</p> */}
+                        <p>date: {e.expiration_date?.from || 'date'}</p>
+                        {e.status === 'pending' && `expiration: ${e.expiration_date?.to || 'expiration placeholder'}`}
                         <p>free shipping: {e.free_shipping ? "Yes" : "No"}</p>
                         <p>shipping cost: {e.shipping_cost}</p>
                         <p>total payment: ${e.total}</p>

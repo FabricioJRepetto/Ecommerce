@@ -29,14 +29,19 @@ const orderSchema = new Schema(
             street_name: String,
             street_number: Number,
         },
+        expiration_date: {
+            from: String,
+            to: String
+        },
         total: Number,
         status: String,
         free_shipping: Boolean,
         shipping_cost: Number,
         order_type: String,
+        payment_link: String,
     },
     {
-        timestamps: true,
+        timestamps: false,
         versionKey: false,
         toJSON: { getters: true, virtuals: true },
         toObject: { getters: true, virtuals: true },
@@ -52,10 +57,13 @@ orderSchema.virtual("description").get(function () {
     return desc;
 });
 
-orderSchema.virtual('expiration_date').get(function () {
-    let expiration = new Date(Date.now() + 259200000).toISOString().slice(0, -1)
+orderSchema.pre('save', async function (next) {
+    // convierte la zonahoraria a -3
+    this.expiration_date.from = new Date(Date.now() - 10800000).toISOString().slice(0, -1) + '-03:00';
+    this.expiration_date.to = new Date(Date.now() + 248400000).toISOString().slice(0, -1) + '-03:00';
 
-    return expiration;
+    next();
 })
 
+// 2022-07-19T13:55:11.111-03:00 10800000
 module.exports = model("Order", orderSchema);
