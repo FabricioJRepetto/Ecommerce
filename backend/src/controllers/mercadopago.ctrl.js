@@ -72,7 +72,8 @@ const mpCho = async (req, res, next) => {
         await Order.findByIdAndUpdate(id,
             {
                 "$set": {
-                    payment_link: response.init_point
+                    payment_link: response.init_point,
+                    payment_source: 'Mercadopago'
                 }
             });
 

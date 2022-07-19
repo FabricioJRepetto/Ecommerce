@@ -54,7 +54,8 @@ const create = async (req, res, next) => {
             {
                 "$set": {
                     payment_link: session.url,
-                    expiration_date_to: expiration
+                    expiration_date_to: expiration,
+                    payment_source: 'Stripe'
                 }
             });
 

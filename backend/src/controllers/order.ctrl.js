@@ -175,15 +175,28 @@ const updateOrder = async (req, res, next) => {
         } = req.body;
 
         if (req.body.status) {
-            const order = await Order.findByIdAndUpdate(req.params.id,
-                {
-                    $set: {
-                        status: req.body.status,
+            if (req.body.status === 'approved') {
+                const order = await Order.findByIdAndUpdate(req.params.id,
+                    {
+                        $set: {
+                            status: req.body.status,
+                            payment_date: Date.now()
+                        },
                     },
-                },
-                { new: true }
-            );
-            return res.json({ message: `Order status: ${order.status}` });
+                    { new: true }
+                );
+                return res.json({ message: `Order status: ${order.status}` });
+            } else {
+                const order = await Order.findByIdAndUpdate(req.params.id,
+                    {
+                        $set: {
+                            status: req.body.status,
+                        },
+                    },
+                    { new: true }
+                );
+                return res.json({ message: `Order status: ${order.status}` });
+            }
         }
 
         if (product_id) {
