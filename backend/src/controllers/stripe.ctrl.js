@@ -48,6 +48,16 @@ const create = async (req, res, next) => {
             cancel_url: `${YOUR_DOMAIN}&status=canceled`,
         });
 
+        //? setea el link de pago y la expiración de 24hrs (max de stripe)
+        const expiration = new Date(Date.now() + 75600000).toISOString().slice(0, -1) + '-03:00';
+        await Order.findByIdAndUpdate(orderId,
+            {
+                "$set": {
+                    payment_link: session.url,
+                    expiration_date_to: expiration
+                }
+            });
+
         return res.json(session.url);
         //return res.redirect(303, session.url);
     } catch (error) {

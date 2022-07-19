@@ -29,10 +29,8 @@ const orderSchema = new Schema(
             street_name: String,
             street_number: Number,
         },
-        expiration_date: {
-            from: String,
-            to: String
-        },
+        expiration_date_from: String,
+        expiration_date_to: String,
         total: Number,
         status: String,
         free_shipping: Boolean,
@@ -58,12 +56,12 @@ orderSchema.virtual("description").get(function () {
 });
 
 orderSchema.pre('save', async function (next) {
-    // convierte la zonahoraria a -3
-    this.expiration_date.from = new Date(Date.now() - 10800000).toISOString().slice(0, -1) + '-03:00';
-    this.expiration_date.to = new Date(Date.now() + 248400000).toISOString().slice(0, -1) + '-03:00';
+    // convierte la zonahoraria a -3 (-10800000)
+    // 36hrs de expiración (stripe no acepta mas de 24hr)
+    this.expiration_date_from = new Date(Date.now() - 10800000).toISOString().slice(0, -1) + '-03:00';
+    this.expiration_date_to = new Date(Date.now() + 248400000).toISOString().slice(0, -1) + '-03:00';
 
     next();
 })
 
-// 2022-07-19T13:55:11.111-03:00 10800000
 module.exports = model("Order", orderSchema);

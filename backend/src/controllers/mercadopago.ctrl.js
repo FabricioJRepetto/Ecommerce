@@ -63,10 +63,11 @@ const mpCho = async (req, res, next) => {
                 pending: `http://localhost:3000/orders/post-sale/`
             },
             expires: true,
-            expiration_date_from: order.expiration_date.from,
-            expiration_date_to: order.expiration_date.to
+            expiration_date_from: order.expiration_date_from,
+            expiration_date_to: order.expiration_date_to
         };
 
+        //? setea el link de pago
         const { response } = await mercadopago.preferences.create(preference);
         await Order.findByIdAndUpdate(id,
             {
