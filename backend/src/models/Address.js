@@ -16,10 +16,10 @@ const AddressSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
-    googleUser: {
+    /* googleUser: {
       type: Schema.Types.ObjectId,
       ref: "User",
-    },
+    }, */
   },
   {
     versionKey: false,

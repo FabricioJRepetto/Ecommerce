@@ -1,10 +1,12 @@
 const mongoose = require("mongoose");
 const fs = require("fs-extra");
 const User = require("../models/user");
+const Product = require("../models/product");
 const Address = require("../models/Address");
 const Order = require("../models/order");
 const Wishlist = require("../models/wishlist");
-const setUserKey = require("../utils/setUserKey");
+const Sale = require("../models/Sales");
+//const setUserKey = require("../utils/setUserKey");
 const { rawIdProductGetter } = require("../utils/rawIdProductGetter");
 
 const verifyAdminRoute = (req, res, next) => {
@@ -104,12 +106,12 @@ const getAllOrders = async (req, res, next) => {
 };
 
 const getUserAddresses = async (req, res, next) => {
-  const { _id, isGoogleUser } = req.body;
-  const userKey = setUserKey(isGoogleUser);
+  const { _id /* isGoogleUser */ } = req.body;
+  //const userKey = setUserKey(isGoogleUser);
 
   try {
     const addressFound = await Address.findOne({
-      [userKey]: _id,
+      user: _id,
     });
 
     if (!addressFound) {
@@ -123,12 +125,12 @@ const getUserAddresses = async (req, res, next) => {
 };
 
 const getUserOrders = async (req, res, next) => {
-  const { _id, isGoogleUser } = req.body;
-  const userKey = setUserKey(isGoogleUser);
+  const { _id /* , isGoogleUser */ } = req.body;
+  //const userKey = setUserKey(isGoogleUser);
 
   try {
     const ordersFound = await Order.find({
-      [userKey]: _id,
+      user: _id,
     });
 
     if (!ordersFound) {
@@ -142,12 +144,12 @@ const getUserOrders = async (req, res, next) => {
 };
 
 const getUserWishlist = async (req, res, next) => {
-  const { _id, isGoogleUser } = req.body;
-  const userKey = setUserKey(isGoogleUser);
+  const { _id /* , isGoogleUser */ } = req.body;
+  //const userKey = setUserKey(isGoogleUser);
 
   try {
     const wishlistFound = await Wishlist.findOne({
-      [userKey]: _id,
+      user: _id,
     });
 
     if (!wishlistFound) {
@@ -362,6 +364,60 @@ const deleteAllProducts = async (req, res, next) => {
   }
 };
 
+const getMetrics = async (req, res, next) => {
+  try {
+    const totalUsers = await User.countDocuments({});
+    const googleUsers = await User.countDocuments({ isGoogleUser: true });
+
+    const publishedProducts = await Product.countDocuments({});
+    const productsOnSale = await Product.countDocuments({ on_sale: true });
+
+    //! PRODUCTOS POR CATEGORIA
+
+    const sales = await Sale.find();
+    //! VOLVER A VER modelo sales que indica?
+    let activeSales = 0;
+    sales.forEach((sale) => {
+      activeSales += sale.products.length;
+    });
+
+    const orders = await Order.find();
+    let productsSold = 0;
+    let totalProfits = 0;
+    orders.forEach((order) => {
+      productsSold += order.products.length;
+      totalProfits += order.total;
+    });
+    const ordersApproved = await Order.countDocuments({ status: "approved" });
+    const ordersCanceled = await Order.countDocuments({ status: "canceled" });
+    const ordersRejected = await Order.countDocuments({ status: "rejected" });
+    const ordersPending = await Order.countDocuments({ status: "pending" });
+
+    const wishlists = await Wishlist.find();
+    let productsWished = 0;
+    wishlists.forEach((wishlist) => {
+      productsWished += wishlist.products.length;
+    });
+
+    return res.json({
+      totalUsers,
+      googleUsers,
+      publishedProducts,
+      productsOnSale,
+      activeSales,
+      productsSold,
+      totalProfits,
+      productsWished,
+      ordersApproved,
+      ordersCanceled,
+      ordersRejected,
+      ordersPending,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   verifyAdminRoute,
   getAllUsers,
@@ -376,4 +432,5 @@ module.exports = {
   updateProduct,
   deleteProduct,
   deleteAllProducts,
+  getMetrics,
 };
