@@ -157,11 +157,18 @@ const BuyNow = () => {
             fastId = firstOrder;
             setOrderId(firstOrder);
         }
-        // crea la preferencia para mp con la order
+
+        //? crea la preferencia para mp con la order y ridirige
         const { data }  = await axios.get(`/mercadopago/${orderId || fastId}`);
-        // abre el modal de mp con la id de la preferencia
-        loadMercadoPago(data.id, 
-        setLoadingPayment);
+        notification('Serás redirigido a la plataforma de pago.', '', 'warning');
+        setTimeout(() => {
+            window.location.replace(data.init_point);
+        }, 3000);
+        return null
+
+        //* abre el modal de mp con la id de la preferencia
+        // loadMercadoPago(data.id, 
+        // setLoadingPayment);
      };
 
     return (
