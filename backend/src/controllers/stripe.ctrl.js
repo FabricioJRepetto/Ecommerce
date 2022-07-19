@@ -35,11 +35,11 @@ const create = async (req, res, next) => {
             line_items: items,
             shipping_options: [{
                 shipping_rate_data: {
-                    display_name: order.free_shipping ? 'gratis' : 'standar',
+                    display_name: order.free_shipping ? 'con descuento' : 'normal',
                     type: 'fixed_amount',
                     fixed_amount: {
                         currency: 'ars',
-                        amount: order.free_shipping ? 0 : order.shipping_cost * 100
+                        amount: order.shipping_cost === 0 ? 0 : order.shipping_cost * 100
                     }
                 }
             }],
