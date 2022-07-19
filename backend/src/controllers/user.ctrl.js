@@ -140,6 +140,9 @@ const forgotPassword = async (req, res, next) => {
   try {
     let userFound = await User.findOne({ email });
     if (!userFound) return res.status(404).send({ message: "User not found" });
+    if (userFound.isGoogleUser) {
+      return res.status(401).json({ message: "Google user unauthorized" });
+    }
 
     const body = { _id: userFound._id, email: userFound.email };
     const resetToken = jwt.sign(
@@ -169,6 +172,8 @@ const resetPassword = async (req, res, next) => {
   try {
     const userFound = await User.findById(_id);
     if (!userFound) return res.status(404).json({ message: "User not found" });
+    if (userFound.isGoogleUser)
+      return res.status(401).json({ message: "Google user unauthorized" });
 
     await jwt.verify(resetToken, JWT_SECRET_CODE + userFound.password);
   } catch (error) {
@@ -193,6 +198,8 @@ const changePassword = async (req, res, next) => {
   try {
     const userFound = await User.findById(_id);
     if (!userFound) return res.status(404).json({ message: "User not found" });
+    if (userFound.isGoogleUser)
+      return res.status(401).json({ message: "Google user unauthorized" });
 
     await jwt.verify(resetToken, JWT_SECRET_CODE + userFound.password);
 

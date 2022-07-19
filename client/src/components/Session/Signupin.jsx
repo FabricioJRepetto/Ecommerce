@@ -55,14 +55,12 @@ const Signupin = () => {
   const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i;
 
   const signup = (signupData) => {
-    console.log(signupData);
     axios.post(`/user/signup`, signupData).then((res) => console.log(res.data));
     //! VOLVER A VER agregar notif de email
     //! VOLVER A VER manejo de errores
   };
 
   const signin = async (signinData) => {
-    console.log(signinData);
     try {
       const { data } = await axios.post(`/user/signin`, signinData);
 
@@ -167,23 +165,8 @@ const Signupin = () => {
     // eslint-disable-next-line
   }, [session]);
 
-  const warnTimer = (message) => {
-    clearTimeout(timeoutId.current);
-    setWarn(message);
-    let timeout = () => setTimeout(() => setWarn(), 5000);
-    timeoutId.current = timeout();
-  };
-
   const forgotPassword = (email) => {
     console.log(email);
-    /*     if (!email)
-      return warnTimer("Por favor ingresa tu email para recuperar tu password"); //! VOLVER A VER agregar color a input de email al haber warn
-    if (!email.match(emailRegex)) {
-      //if (!emailRegex.test(email))
-      return warnTimer(
-        "Por favor ingresa un email válido para recuperar tu password"
-      );
-    } */
     axios
       .put("/user/forgotPassword", email)
       .then(({ data }) => {
@@ -313,7 +296,7 @@ const Signupin = () => {
             type="text"
             placeholder="email"
             autoComplete="off"
-            {...registerForgot("emailForgot", {
+            {...registerForgot("email", {
               required: true,
               pattern: emailRegex,
             })}
