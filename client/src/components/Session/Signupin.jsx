@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import {
@@ -14,7 +14,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { loadCart, loadWishlist } from "../../Redux/reducer/cartSlice";
 import "./Signupin.css";
-import { useRef } from "react";
 import { useNotification } from "../../hooks/useNotification";
 const { REACT_APP_OAUTH_CLIENT_ID } = process.env;
 
@@ -30,6 +29,7 @@ const Signupin = () => {
     formState: { errors },
     watch,
     getValues,
+    setValue,
   } = useForm();
   let timeoutId = useRef();
   const location = useLocation();
@@ -174,6 +174,9 @@ const Signupin = () => {
   };
 
   const handleSign = (sign) => {
+    setValue("email", "");
+    setValue("password", "");
+    setValue("repPassword", "");
     setSignSelect(sign);
   };
 
