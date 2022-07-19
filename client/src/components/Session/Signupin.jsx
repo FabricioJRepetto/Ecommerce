@@ -15,6 +15,8 @@ import { useForm } from "react-hook-form";
 import { loadCart, loadWishlist } from "../../Redux/reducer/cartSlice";
 import "./Signupin.css";
 import { useNotification } from "../../hooks/useNotification";
+import { useModal } from "../../hooks/useModal";
+import Modal from "../common/Modal";
 const { REACT_APP_OAUTH_CLIENT_ID } = process.env;
 
 const Signupin = () => {
@@ -23,18 +25,32 @@ const Signupin = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { session } = useSelector((state) => state.sessionReducer);
+
   const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    watch,
-    getValues,
-    setValue,
+    register: registerSignin,
+    handleSubmit: handleSubmitSignin,
+    formState: { errors: errorsSignin },
   } = useForm();
+
+  const {
+    register: registerSignup,
+    handleSubmit: handleSubmitSignup,
+    formState: { errors: errorsSignup },
+    watch: watchSignup,
+  } = useForm();
+
+  const {
+    register: registerForgot,
+    handleSubmit: handleSubmitForgot,
+    formState: { errors: errorsForgot },
+  } = useForm();
+
   let timeoutId = useRef();
   const location = useLocation();
   const hasPreviousState = location.key !== "default";
   const [notification] = useNotification();
+  const [isOpenForgotPassword, openForgotPassword, closeForgotPassword] =
+    useModal();
 
   const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i;
 
@@ -42,9 +58,11 @@ const Signupin = () => {
     console.log(signupData);
     axios.post(`/user/signup`, signupData).then((res) => console.log(res.data));
     //! VOLVER A VER agregar notif de email
+    //! VOLVER A VER manejo de errores
   };
 
   const signin = async (signinData) => {
+    console.log(signinData);
     try {
       const { data } = await axios.post(`/user/signin`, signinData);
 
@@ -71,7 +89,7 @@ const Signupin = () => {
       }
     } catch (error) {
       notification(error.response.data, "", "error");
-      console.log(error);
+      console.log(error); //! VOLVER A VER manejo de errores
     }
   };
 
@@ -157,26 +175,24 @@ const Signupin = () => {
   };
 
   const forgotPassword = (email) => {
-    if (!email)
+    console.log(email);
+    /*     if (!email)
       return warnTimer("Por favor ingresa tu email para recuperar tu password"); //! VOLVER A VER agregar color a input de email al haber warn
     if (!email.match(emailRegex)) {
       //if (!emailRegex.test(email))
       return warnTimer(
         "Por favor ingresa un email válido para recuperar tu password"
       );
-    }
+    } */
     axios
       .put("/user/forgotPassword", email)
       .then(({ data }) => {
         console.log(data);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err)); //! VOLVER A VER manejo de errores
   };
 
   const handleSign = (sign) => {
-    setValue("email", "");
-    setValue("password", "");
-    setValue("repPassword", "");
     setSignSelect(sign);
   };
 
@@ -191,48 +207,53 @@ const Signupin = () => {
       </div>
 
       {signSelect === "signup" && (
-        <form onSubmit={handleSubmit(signup)}>
+        <form onSubmit={handleSubmitSignup(signup)}>
           <h2>Sign Up</h2>
           <input
             type="text"
             placeholder="email"
-            {...register("email", {
+            autoComplete="off"
+            {...registerSignup("email", {
               required: true,
               pattern: emailRegex,
             })}
           />
-          {errors.email?.type === "required" && <p>Enter your email</p>}
-          {errors.email?.type === "pattern" && <p>Enter a valid email</p>}
+          {errorsSignup.email?.type === "required" && <p>Enter your email</p>}
+          {errorsSignup.email?.type === "pattern" && <p>Enter a valid email</p>}
 
           <input
             type="text"
             placeholder="Password"
-            {...register("password", {
+            autoComplete="off"
+            {...registerSignup("password", {
               required: true,
               minLength: 6,
             })}
           />
-          {errors.password?.type === "required" && <p>Enter a password</p>}
-          {errors.password?.type === "minLength" && (
+          {errorsSignup.password?.type === "required" && (
+            <p>Enter a password</p>
+          )}
+          {errorsSignup.password?.type === "minLength" && (
             <p>Password must be 6 characters long at least</p>
           )}
 
           <input
             type="text"
             placeholder="Repeat Password"
-            {...register("repPassword", {
+            autoComplete="off"
+            {...registerSignup("repPassword", {
               required: true,
               validate: (repPassword) => {
-                if (watch("password") !== repPassword) {
+                if (watchSignup("password") !== repPassword) {
                   return "Passwords don't match";
                 }
               },
             })}
           />
-          {errors.repPassword?.type === "required" && (
+          {errorsSignup.repPassword?.type === "required" && (
             <p>Repeat your password</p>
           )}
-          {errors.repPassword?.type === "validate" && (
+          {errorsSignup.repPassword?.type === "validate" && (
             <p>Passwords don't match</p>
           )}
 
@@ -246,33 +267,35 @@ const Signupin = () => {
       )}
 
       {signSelect === "signin" && (
-        <form onSubmit={handleSubmit(signin)}>
+        <form onSubmit={handleSubmitSignin(signin)}>
           <h2>Sign In</h2>
           <input
             type="text"
             placeholder="email"
-            {...register("email", {
+            autoComplete="off"
+            {...registerSignin("email", {
               required: true,
               pattern: emailRegex,
             })}
           />
-          {errors.email?.type === "required" && <p>Enter your email</p>}
-          {errors.email?.type === "pattern" && <p>Enter a valid email</p>}
+          {errorsSignin.email?.type === "required" && <p>Enter your email</p>}
+          {errorsSignin.email?.type === "pattern" && <p>Enter a valid email</p>}
           {warn && <p>{warn}</p>}
 
           <input
             type="text"
             placeholder="Password"
-            {...register("password", {
+            autoComplete="off"
+            {...registerSignin("password", {
               required: true,
             })}
           />
-          {errors.password?.type === "required" && <p>Enter your password</p>}
+          {errorsSignin.password?.type === "required" && (
+            <p>Enter your password</p>
+          )}
           <input type="submit" value="Sign In" />
           <br />
-          <span onClick={() => forgotPassword(getValues("email"))}>
-            Forgot password?
-          </span>
+          <span onClick={openForgotPassword}>Forgot password?</span>
           <div>
             <span onClick={() => handleSign("signup")}>
               You don't have an account? SIGN UP
@@ -283,6 +306,27 @@ const Signupin = () => {
       <hr />
       <div className="google-signin-container" id="signInDiv"></div>
       <hr />
+      <Modal isOpen={isOpenForgotPassword} closeModal={closeForgotPassword}>
+        <form onSubmit={handleSubmitForgot(forgotPassword)}>
+          <h2>Ingrese su email para reestablecer la contraseña</h2>
+          <input
+            type="text"
+            placeholder="email"
+            autoComplete="off"
+            {...registerForgot("emailForgot", {
+              required: true,
+              pattern: emailRegex,
+            })}
+          />
+          {errorsForgot.emailForgot?.type === "required" && (
+            <p>Ingresa tu email</p>
+          )}
+          {errorsForgot.emailForgot?.type === "pattern" && (
+            <p>Ingresa un email válido</p>
+          )}
+          <input type="submit" value="Enviar email" />
+        </form>
+      </Modal>
     </>
   );
 };
