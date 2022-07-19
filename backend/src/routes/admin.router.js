@@ -14,6 +14,7 @@ const {
   updateProduct,
   deleteProduct,
   deleteAllProducts,
+  getMetrics,
 } = require("../controllers/admin.ctrl");
 
 //router.get("/verifyAdmin", verifyAdminRoute);
@@ -45,5 +46,7 @@ router.delete("/product/:id", deleteProduct);
 router.put("/:id", updateProduct);
 router.delete("/deleteall", deleteAllProducts);
 router.delete("/:id", deleteProduct); */
+
+router.get("/metrics", getMetrics);
 
 module.exports = router;
