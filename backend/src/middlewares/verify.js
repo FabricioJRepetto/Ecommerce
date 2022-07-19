@@ -59,7 +59,7 @@ async function verifyToken(req, res, next) {
 }
 
 async function verifyEmailVerified(req, res, next) {
-  if (req.user.isGoogleUser) next();
+  if (req.user.isGoogleUser) next(); //! VOLVER A VER ¿pedir email_verified de google?
 
   const user = await User.findById(req.user._id);
   if (user.emailVerified === true) {

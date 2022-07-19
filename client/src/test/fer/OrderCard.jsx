@@ -9,7 +9,7 @@ const OrderCard = ({ order }) => {
     products,
     description,
     user,
-    googleUser,
+    //googleUser,
     shipping_address,
     status,
     createdAt,
@@ -18,7 +18,7 @@ const OrderCard = ({ order }) => {
     total,
   } = order;
 
-  const userId = user || googleUser;
+  //const userId = user; || googleUser;
 
   const formatDate = (date) => {
     let fecha = new Date(date.slice(0, -1));
@@ -33,8 +33,8 @@ const OrderCard = ({ order }) => {
       <p>{description}</p>
       {location.pathname === "/admin/orders" && (
         <>
-          <Link to={`/admin/users/${userId}`}>
-            <p>user: {userId}</p>
+          <Link to={`/admin/users/${user}`}>
+            <p>user: {user}</p>
           </Link>
         </>
       )}

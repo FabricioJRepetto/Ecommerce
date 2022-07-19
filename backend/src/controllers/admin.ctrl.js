@@ -6,7 +6,7 @@ const Address = require("../models/Address");
 const Order = require("../models/order");
 const Wishlist = require("../models/wishlist");
 const Sale = require("../models/Sales");
-const setUserKey = require("../utils/setUserKey");
+//const setUserKey = require("../utils/setUserKey");
 const { rawIdProductGetter } = require("../utils/rawIdProductGetter");
 
 const verifyAdminRoute = (req, res, next) => {
@@ -106,12 +106,12 @@ const getAllOrders = async (req, res, next) => {
 };
 
 const getUserAddresses = async (req, res, next) => {
-  const { _id, isGoogleUser } = req.body;
-  const userKey = setUserKey(isGoogleUser);
+  const { _id /* isGoogleUser */ } = req.body;
+  //const userKey = setUserKey(isGoogleUser);
 
   try {
     const addressFound = await Address.findOne({
-      [userKey]: _id,
+      user: _id,
     });
 
     if (!addressFound) {
@@ -125,12 +125,12 @@ const getUserAddresses = async (req, res, next) => {
 };
 
 const getUserOrders = async (req, res, next) => {
-  const { _id, isGoogleUser } = req.body;
-  const userKey = setUserKey(isGoogleUser);
+  const { _id /* , isGoogleUser */ } = req.body;
+  //const userKey = setUserKey(isGoogleUser);
 
   try {
     const ordersFound = await Order.find({
-      [userKey]: _id,
+      user: _id,
     });
 
     if (!ordersFound) {
@@ -144,12 +144,12 @@ const getUserOrders = async (req, res, next) => {
 };
 
 const getUserWishlist = async (req, res, next) => {
-  const { _id, isGoogleUser } = req.body;
-  const userKey = setUserKey(isGoogleUser);
+  const { _id /* , isGoogleUser */ } = req.body;
+  //const userKey = setUserKey(isGoogleUser);
 
   try {
     const wishlistFound = await Wishlist.findOne({
-      [userKey]: _id,
+      user: _id,
     });
 
     if (!wishlistFound) {

@@ -18,10 +18,10 @@ const orderSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
-    googleUser: {
+    /* googleUser: {
       type: Schema.Types.ObjectId,
       ref: "User",
-    },
+    }, */
     shipping_address: {
       state: String,
       city: String,

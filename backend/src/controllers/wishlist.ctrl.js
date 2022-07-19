@@ -1,18 +1,18 @@
 const Wishlist = require("../models/wishlist");
 const { rawIdProductGetter } = require("../utils/rawIdProductGetter");
-const setUserKey = require("../utils/setUserKey");
+//const setUserKey = require("../utils/setUserKey");
 
 const getUserList = async (req, res, next) => {
-  const { isGoogleUser, _id } = req.user;
-  const userKey = setUserKey(isGoogleUser);
+  const { /* isGoogleUser, */ _id } = req.user;
+  //const userKey = setUserKey(isGoogleUser);
 
   try {
-    const wishlist = await Wishlist.findOne({ [userKey]: _id });
+    const wishlist = await Wishlist.findOne({ user: _id });
 
     if (wishlist === null) {
       const newList = await Wishlist.create({
         products: [],
-        [userKey]: _id,
+        user: _id,
       });
       return res.json({
         message: "Wishlist created",
@@ -33,14 +33,14 @@ const getUserList = async (req, res, next) => {
 };
 
 const addToList = async (req, res, next) => {
-  const { isGoogleUser } = req.user;
-  const userKey = setUserKey(isGoogleUser);
+  /* const { isGoogleUser } = req.user;
+  const userKey = setUserKey(isGoogleUser); */
 
   try {
     if (!req.params.id) {
       throw new Error("no id");
     }
-    const list = await Wishlist.findOne({ [userKey]: req.user._id });
+    const list = await Wishlist.findOne({ user: req.user._id });
 
     if (list) {
       let aux = list.products.includes(req.params.id);
@@ -53,7 +53,7 @@ const addToList = async (req, res, next) => {
     } else {
       const newList = new Wishlist({
         products: [req.params.id],
-        [userKey]: req.user._id,
+        user: req.user._id,
       });
       await newList.save();
       return res.json({ message: "Wishlist created and product added." });
@@ -64,14 +64,14 @@ const addToList = async (req, res, next) => {
 };
 
 const removeFromList = async (req, res, next) => {
-  const { isGoogleUser } = req.user;
-  const userKey = setUserKey(isGoogleUser);
+  /*  const { isGoogleUser } = req.user;
+  const userKey = setUserKey(isGoogleUser); */
 
   try {
     const target = req.params.id;
     const list = await Wishlist.findOneAndUpdate(
       {
-        [userKey]: req.user._id,
+        user: req.user._id,
       },
       {
         $pull: {
