@@ -12,7 +12,7 @@ export const sessionSlice = createSlice({
     isGoogleUser: null,
     allUsersData: [],
     filtersApplied: {},
-    usersFiltered: [],
+    usersFilteredData: [],
   },
   reducers: {
     loadUsername: (state, action) => {
@@ -51,8 +51,8 @@ export const sessionSlice = createSlice({
       });
     },
     adminFilterUsers: (state, action) => {
-      state.allUsersData = state.allUsersData.filter(
-        (user) => user._id !== action.payload
+      state.usersFilteredData = state.allUsersData.filter((user) =>
+        user.name.toUpperCase().includes(action.payload.toUpperCase())
       );
       /* filtersApplied = {
         googleAccount: BOOLEAN,
@@ -74,6 +74,7 @@ export const {
   adminLoadUsers,
   adminDeleteUser,
   adminPromoteUser,
+  adminFilterUsers,
 } = sessionSlice.actions;
 
 export default sessionSlice.reducer;

@@ -1,14 +1,20 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
 import axios from "axios";
 import UserCard from "./UserCard";
 import { useModal } from "../../hooks/useModal";
-import { adminLoadUsers } from "../../Redux/reducer/sessionSlice";
+import {
+  adminLoadUsers,
+  adminFilterUsers,
+} from "../../Redux/reducer/sessionSlice";
 import ModalAdminUsers from "./ModalAdminUsers";
 
 const UsersAdmin = () => {
-  const { allUsersData } = useSelector((state) => state.sessionReducer);
+  const { allUsersData, usersFilteredData } = useSelector(
+    (state) => state.sessionReducer
+  );
+  const [nameSearch, setNameSearch] = useState("");
   const location = useLocation();
   const { id } = useParams();
   const [isOpenDeleteUser, openDeleteUser, closeDeleteUser, userToDelete] =
@@ -16,6 +22,9 @@ const UsersAdmin = () => {
   const [isOpenPromoteUser, openPromoteUser, closePromoteUser, userToPromote] =
     useModal();
   const dispatch = useDispatch();
+
+  let usersToShow =
+    usersFilteredData.length > 0 ? usersFilteredData : allUsersData;
 
   useEffect(() => {
     dispatch(adminLoadUsers(null));
@@ -31,14 +40,28 @@ const UsersAdmin = () => {
           dispatch(adminLoadUsers(data));
         })
         .catch((err) => console.log(err)); //! VOLVER A VER manejo de errores
-    }
+    } // eslint-disable-next-line
   }, [location.pathname]);
+
+  const handleNameSearch = (e) => {
+    setNameSearch(e.target.value);
+  };
+
+  useEffect(() => {
+    nameSearch && dispatch(adminFilterUsers(nameSearch));
+  }, [nameSearch]);
 
   return (
     <div>
       <div>
+        <input
+          type="text"
+          placeholder="Buscar por nombre"
+          value={nameSearch}
+          onChange={handleNameSearch}
+        />
         {React.Children.toArray(
-          allUsersData?.map((user) => (
+          usersToShow?.map((user) => (
             <UserCard
               user={user}
               openDeleteUser={openDeleteUser}

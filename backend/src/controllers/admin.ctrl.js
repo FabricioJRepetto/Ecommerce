@@ -1,4 +1,3 @@
-const mongoose = require("mongoose");
 const fs = require("fs-extra");
 const User = require("../models/user");
 const Product = require("../models/product");

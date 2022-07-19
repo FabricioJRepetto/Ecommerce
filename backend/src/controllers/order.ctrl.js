@@ -7,7 +7,7 @@ const { cartFormater } = require("../utils/cartFormater");
 //const setUserKey = require("../utils/setUserKey");
 
 const getOrder = async (req, res, next) => {
-  const { isGoogleUser, _id } = req.user;
+  const { /* isGoogleUser, */ _id } = req.user;
 
   try {
     if (!_id || !req.params.id)
