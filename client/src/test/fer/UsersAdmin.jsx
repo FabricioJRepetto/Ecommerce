@@ -48,7 +48,9 @@ const UsersAdmin = () => {
   };
 
   useEffect(() => {
-    nameSearch && dispatch(adminFilterUsers(nameSearch));
+    /* nameSearch &&  */ dispatch(adminFilterUsers(nameSearch));
+    // : dispatch(adminFilterUsers([]));
+    // eslint-disable-next-line
   }, [nameSearch]);
 
   return (
@@ -60,14 +62,18 @@ const UsersAdmin = () => {
           value={nameSearch}
           onChange={handleNameSearch}
         />
-        {React.Children.toArray(
-          usersToShow?.map((user) => (
-            <UserCard
-              user={user}
-              openDeleteUser={openDeleteUser}
-              openPromoteUser={openPromoteUser}
-            />
-          ))
+        {usersToShow && usersToShow[0] === null ? (
+          <h4>No hubieron coincidencias</h4>
+        ) : (
+          React.Children.toArray(
+            usersToShow?.map((user) => (
+              <UserCard
+                user={user}
+                openDeleteUser={openDeleteUser}
+                openPromoteUser={openPromoteUser}
+              />
+            ))
+          )
         )}
       </div>
       <ModalAdminUsers

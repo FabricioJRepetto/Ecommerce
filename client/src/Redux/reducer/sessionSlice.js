@@ -51,9 +51,15 @@ export const sessionSlice = createSlice({
       });
     },
     adminFilterUsers: (state, action) => {
-      state.usersFilteredData = state.allUsersData.filter((user) =>
-        user.name.toUpperCase().includes(action.payload.toUpperCase())
-      );
+      if (action.payload) {
+        state.usersFilteredData = state.allUsersData.filter((user) =>
+          user.name.toUpperCase().includes(action.payload.toUpperCase())
+        );
+        if (state.usersFilteredData.length === 0)
+          state.usersFilteredData = [null];
+      } else {
+        state.usersFilteredData = [];
+      }
       /* filtersApplied = {
         googleAccount: BOOLEAN,
         verifiedEmail: BOOLEAN,
