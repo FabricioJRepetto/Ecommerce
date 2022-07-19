@@ -192,6 +192,7 @@ const Cart = () => {
                             deleteP={deleteProduct}
                             buyNow={buyNow}
                             source={'products'}
+                            loading={loadingPayment}
                             />
                     ))}
 

@@ -186,7 +186,7 @@ const BuyNow = () => {
                         <p>{product.name}</p>
                     </div>
                     <QuantityInput stock={product.available_quantity} 
-                    prodQuantity={1} bnMode setQ={setQuantity}/>
+                    prodQuantity={1} bnMode setQ={setQuantity} loading={loadingPayment}/>
                 </div>
 
                 <div className="buynow-inner-lateral">
@@ -233,7 +233,6 @@ const BuyNow = () => {
                                     <h1>${priceFormat(quantity * (product.on_sale ? product.sale_price : product.price)).int}</h1><p>{priceFormat(quantity * (product.on_sale ? product.sale_price : product.price)).cents}</p>
                                 </div>
                             </div>
-
                         </div>
                     </div>
 

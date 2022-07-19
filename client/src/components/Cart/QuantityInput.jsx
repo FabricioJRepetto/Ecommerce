@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { cartTotal } from '../../Redux/reducer/cartSlice';
 import './QuantityInput.css';
 
-const QuantityInput = ({prodId: id, prodQuantity, stock, price, bnMode = false, setQ}) => {
+const QuantityInput = ({prodId: id, prodQuantity, stock, price, bnMode = false, setQ, loading}) => {
     const [quantity, setQuantity] = useState(prodQuantity);
     const total = useSelector((state) => state.cartReducer.total);
     const dispatch = useDispatch();
@@ -50,9 +50,10 @@ const QuantityInput = ({prodId: id, prodQuantity, stock, price, bnMode = false, 
     return (
         <div className='q-input-container'>
             <div className='q-input-inner'>
-                <button disabled={quantity < 2} 
+                <button disabled={quantity < 2 || loading}
                     onClick={() => handleQuantity(id, 'sub')}> - </button>
                 <input type="number" 
+                    disabled={loading}
                     min={1}
                     pattern="[1-9]"
                     id={id}
@@ -60,7 +61,7 @@ const QuantityInput = ({prodId: id, prodQuantity, stock, price, bnMode = false, 
                     value={quantity}
                     onChange={handleQuantityEx}
                 />
-                <button disabled={quantity >= stock} 
+                <button disabled={quantity >= stock  || loading} 
                     onClick={() => handleQuantity(id, 'add')}> + </button>
             </div>
             <div>
