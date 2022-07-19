@@ -40,9 +40,11 @@ export const sessionSlice = createSlice({
       state.allUsersData = action.payload;
     },
     adminDeleteUser: (state, action) => {
-      state.allUsersData = state.allUsersData.filter(
-        (user) => user._id !== action.payload
-      );
+      console.log("entra", action.payload);
+      state.allUsersData = state.allUsersData.map((user) => {
+        if (user._id === action.payload) return { ...user, role: "deleted" };
+        return user;
+      });
     },
     adminPromoteUser: (state, action) => {
       state.allUsersData = state.allUsersData.map((user) => {

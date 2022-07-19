@@ -171,6 +171,7 @@ const getUserWishlist = async (req, res, next) => {
 };
 
 const deleteUser = async (req, res, next) => {
+  console.log("-----------llega");
   const { id } = req.params;
 
   try {
@@ -179,7 +180,7 @@ const deleteUser = async (req, res, next) => {
       return res.status(401).json({ message: "Unauthorized" });
     //const { avatar: imgToDelete } = await User.findById(id);
     //! VOLVER A VER agregar estraegia para eliminar avatar de cloudinary
-    await User.findByIdAndDelete(id);
+    await User.findByIdAndUpdate(id, { role: "deleted" });
     return res.status(204).json({ message: "Deleted successfully" });
   } catch (error) {
     next(error);

@@ -86,8 +86,8 @@ const Signupin = () => {
         //! NO PONER NAVIGATE ACA
       }
     } catch (error) {
-      notification(error.response.data, "", "error");
-      console.log(error); //! VOLVER A VER manejo de errores
+      notification(error.response.data.message, "", "error");
+      //! VOLVER A VER manejo de errores
     }
   };
 

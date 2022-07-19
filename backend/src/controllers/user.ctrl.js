@@ -37,6 +37,10 @@ const signin = async (req, res, next) => {
       req.login(user, { session: false }, async (err) => {
         if (err) return next(err);
         const { _id, email, name, role, avatar, isGoogleUser } = user;
+
+        if (role === "deleted")
+          return res.status(401).json({ message: "User deleted" });
+
         const body = { _id, email, role, isGoogleUser };
 
         const token = jwt.sign({ user: body }, JWT_SECRET_CODE, {
