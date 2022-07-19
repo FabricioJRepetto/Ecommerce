@@ -1,10 +1,10 @@
 const Order = require("../models/order");
 const Cart = require("../models/cart");
-const Product = require("../models/product");
 const { rawIdProductGetter } = require("../utils/rawIdProductGetter");
 const { SHIP_COST } = require("../../constants");
 const { cartFormater } = require("../utils/cartFormater");
 const setUserKey = require("../utils/setUserKey");
+const expirationChecker = require("../utils/expirationChecker");
 
 const getOrder = async (req, res, next) => {
     const { isGoogleUser, _id } = req.user;
@@ -21,7 +21,22 @@ const getOrder = async (req, res, next) => {
             [userKey]: _id,
             _id: req.params.id,
         });
+
         if (!order) return res.json({ message: "No orders." });
+
+        if (order.status === 'pending' && expirationChecker(order.expiration_date_to)) {
+            order = await Order.findOneAndUpdate({
+                _id: req.params.id,
+            },
+                {
+                    $set: {
+                        status: 'expired'
+                    }
+                },
+                { new: true }
+            );
+        };
+
         return res.json(order);
     } catch (error) {
         next(error);
@@ -34,6 +49,25 @@ const getOrdersUser = async (req, res, next) => {
 
     try {
         let userOrders = await Order.find({ [userKey]: _id });
+
+        for (const order of userOrders) {
+            if (order.status === 'pending') {
+                if (expirationChecker(order.expiration_date_to)) {
+                    order.status = 'expired';
+                    await Order.findOneAndUpdate({
+                        _id: req.params.id,
+                    },
+                        {
+                            $set: {
+                                status: 'expired'
+                            }
+                        },
+                        { new: true }
+                    );
+                }
+            }
+        };
+
         return res.json(userOrders);
     } catch (error) {
         next(error);
