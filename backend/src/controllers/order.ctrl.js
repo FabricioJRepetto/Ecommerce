@@ -7,7 +7,7 @@ const { cartFormater } = require("../utils/cartFormater");
 const expirationChecker = require("../utils/expirationChecker");
 
 const getOrder = async (req, res, next) => {
-    const { isGoogleUser, _id } = req.user;
+    const { /* isGoogleUser, */ _id } = req.user;
 
     try {
         if (!_id || !req.params.id)
@@ -16,7 +16,6 @@ const getOrder = async (req, res, next) => {
                 .json({ message: "User ID or Order ID not given." });
 
         //const userKey = setUserKey(isGoogleUser);
-
         let order = await Order.findOne({
             user: _id,
             _id: req.params.id,
@@ -103,9 +102,9 @@ const createOrder = async (req, res, next) => {
         await newOrder.save();
 
         /* const userFound = await User.findById(req.user._id);
-            userFound.orders.push(newOrder._id);
-        
-            await userFound.save(); */
+                userFound.orders.push(newOrder._id);
+            
+                await userFound.save(); */
 
         return res.json(newOrder._id);
     } catch (error) {
@@ -195,19 +194,21 @@ const updateOrder = async (req, res, next) => {
         } = req.body;
 
         if (req.body.status) {
-            if (req.body.status === 'approved') {
-                const order = await Order.findByIdAndUpdate(req.params.id,
+            if (req.body.status === "approved") {
+                const order = await Order.findByIdAndUpdate(
+                    req.params.id,
                     {
                         $set: {
                             status: req.body.status,
-                            payment_date: Date.now()
+                            payment_date: Date.now(),
                         },
                     },
                     { new: true }
                 );
                 return res.json({ message: `Order status: ${order.status}` });
             } else {
-                const order = await Order.findByIdAndUpdate(req.params.id,
+                const order = await Order.findByIdAndUpdate(
+                    req.params.id,
                     {
                         $set: {
                             status: req.body.status,
@@ -220,11 +221,11 @@ const updateOrder = async (req, res, next) => {
         }
 
         if (product_id) {
-            p = await rawIdProductGetter(product_id)
+            p = await rawIdProductGetter(product_id);
         } else {
             const data = await Cart.findOne({ owner: req.user._id });
             cart = await cartFormater(data);
-            cart.products = cart.products.map(e => ({
+            cart.products = cart.products.map((e) => ({
                 product_name: e.name,
                 product_id: e._id,
                 description: e.description,
@@ -235,16 +236,18 @@ const updateOrder = async (req, res, next) => {
                 on_sale: e.on_sale,
             }));
         }
-        const pro = p ? {
-            product_name: p.name,
-            product_id: p._id,
-            description: p.description,
-            img: p.thumbnail,
-            price: p.price,
-            sale_price: p.sale_price,
-            quantity,
-            on_sale: p.on_sale,
-        } : false
+        const pro = p
+            ? {
+                product_name: p.name,
+                product_id: p._id,
+                description: p.description,
+                img: p.thumbnail,
+                price: p.price,
+                sale_price: p.sale_price,
+                quantity,
+                on_sale: p.on_sale,
+            }
+            : false;
         const total = p ? quantity * (p.on_sale ? p.sale_price : p.price) : 0;
 
         await Order.findByIdAndUpdate(

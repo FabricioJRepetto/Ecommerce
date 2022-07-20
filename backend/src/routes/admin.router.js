@@ -36,7 +36,7 @@ router.put("/user/promote/:id", promoteUser);
 router.post("/user/getAddresses", getUserAddresses);
 router.post("/user/getOrders", getUserOrders);
 router.post("/user/getWishlist", getUserWishlist);
-router.delete("user/:id", deleteUser);
+router.delete("/user/:id", deleteUser);
 
 router.post("/product/", createProduct);
 router.put("/product/:id", updateProduct);
