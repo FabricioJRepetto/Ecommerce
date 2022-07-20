@@ -58,16 +58,16 @@ const Signupin = () => {
 
         notification(`Bienvenido, ${username}`, "", "success");
 
-        const wish = await axios(`/wishlist`);
-        const cart = await axios(`/cart`);
+        // const wish = await axios(`/wishlist`);
+        // const cart = await axios(`/cart`);
 
         dispatch(loadUsername(username));
         dispatch(loadEmail(email));
         if (avatar) dispatch(loadAvatar(avatar));
         dispatch(loadRole(role));
         dispatch(loadGoogleUser(false));
-        dispatch(loadCart(cart.data.id_list));
-        dispatch(loadWishlist(wish.data.id_list));
+        // dispatch(loadCart(cart.data.id_list));
+        // dispatch(loadWishlist(wish.data.id_list));
 
         //! NO PONER NAVIGATE ACA
       }

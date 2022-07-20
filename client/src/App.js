@@ -2,12 +2,12 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import {
-  loadAvatar,
-  loadEmail,
-  loadUsername,
-  sessionActive,
-  loadRole,
-  loadGoogleUser,
+    loadAvatar,
+    loadEmail,
+    loadUsername,
+    sessionActive,
+    loadRole,
+    loadGoogleUser,
 } from "./Redux/reducer/sessionSlice";
 import { loadCart, loadWishlist } from "./Redux/reducer/cartSlice";
 import axios from "axios";
@@ -37,79 +37,79 @@ import RequireRole from "./test/fer/RequireRole";
 import UsersAdmin from "./test/fer/UsersAdmin";
 
 function App() {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
-  useEffect(() => {
-    const loggedUserToken = window.localStorage.getItem("loggedTokenEcommerce");
-    const loggedAvatar = window.localStorage.getItem("loggedAvatarEcommerce");
-    const loggedEmail = window.localStorage.getItem("loggedEmailEcommerce");
+    useEffect(() => {
+        const loggedUserToken = window.localStorage.getItem("loggedTokenEcommerce");
+        const loggedAvatar = window.localStorage.getItem("loggedAvatarEcommerce");
+        const loggedEmail = window.localStorage.getItem("loggedEmailEcommerce");
 
-    (async () => {
-      try {
-        if (loggedUserToken) {
-          const { data } = await axios(`/user/profile/${loggedUserToken}`); //! VOLVER A VER fijarse con nuevos usuarios de google
-          const { email, name, role, isGoogleUser, avatar } = data;
-          dispatch(sessionActive(true));
-          dispatch(loadUsername(name));
-          dispatch(loadAvatar(avatar ? avatar : loggedAvatar)); //! VOLVER A VER ojo con esto, puede ser que quede guardado el avatar de otro user
-          dispatch(loadEmail(email ? email : loggedEmail));
-          dispatch(loadRole(role));
-          dispatch(loadGoogleUser(isGoogleUser));
+        (async () => {
+            try {
+                if (loggedUserToken) {
+                    const { data } = await axios(`/user/profile/${loggedUserToken}`); //! VOLVER A VER fijarse con nuevos usuarios de google
+                    const { email, name, role, isGoogleUser, avatar } = data;
+                    dispatch(sessionActive(true));
+                    dispatch(loadUsername(name));
+                    dispatch(loadAvatar(avatar ? avatar : loggedAvatar)); //! VOLVER A VER ojo con esto, puede ser que quede guardado el avatar de otro user
+                    dispatch(loadEmail(email ? email : loggedEmail));
+                    dispatch(loadRole(role));
+                    dispatch(loadGoogleUser(isGoogleUser));
 
-          const { data: cart } = await axios(`/cart`);
-          dispatch(loadCart(cart.id_list));
+                    const { data: cart } = await axios(`/cart`);
+                    dispatch(loadCart(cart.id_list || []));
 
-          const { data: wish } = await axios(`/wishlist`);
-          dispatch(loadWishlist(wish.id_list));
-        }
-      } catch (error) {
-        navigate("/");
-        window.localStorage.removeItem("loggedTokenEcommerce");
-        window.localStorage.removeItem("loggedAvatarEcommerce");
-        window.localStorage.removeItem("loggedEmailEcommerce");
-      }
-    })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+                    const { data: wish } = await axios(`/wishlist`);
+                    dispatch(loadWishlist(wish.id_list));
+                }
+            } catch (error) {
+                navigate("/");
+                window.localStorage.removeItem("loggedTokenEcommerce");
+                window.localStorage.removeItem("loggedAvatarEcommerce");
+                window.localStorage.removeItem("loggedEmailEcommerce");
+            }
+        })();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
-  return (
-    <div className="App" id="scroller">
-      <NavBar />
-      <Notification />
-      <BackToTop />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/signin" element={<Signupin />} />
-        <Route path="/signout" element={<Signout />} />
-        <Route path="/profile/" element={<Profile />} />
-        <Route path="/profile/:section" element={<Profile />} />
-        <Route path="/results" element={<Results />} />
-        <Route path="/products" element={<Products />} />
-        <Route path="/productForm" element={<ProductForm />} />
-        <Route path="/cart/" element={<Cart />} />
-        <Route path="/cart/:section" element={<Cart />} />
-        <Route path="/buynow" element={<BuyNow />} />
-        <Route path="/reset/:userId/:resetToken" element={<ResetPassword />} />
-        <Route path="/orders/post-sale" element={<PostSale />} />
-        <Route path="/verify/:verifyToken" element={<VerifyEmail />} />
-        <Route path="/details/:id" element={<Details />} />
-        <Route element={<RequireRole allowedRoles={["admin", "superadmin"]} />}>
-          <Route path="admin" element={<AdminLayout />}>
-            <Route index element={<Metrics />} />
-            <Route path="metrics" element={<Metrics />} />
-            <Route path="products" element={<Products />} />
-            <Route path="productForm" element={<ProductForm />} />
-            <Route path="users" element={<UsersAdmin />} />
-            <Route path="users/:id" element={<UsersAdmin />} />
-            <Route path="orders" element={<OrdersAdmin />} />
-            <Route path="*" element={<h1>404 ADMIN</h1>} />
-          </Route>
-        </Route>
-        <Route path="/unauthorized" element={<h1>UNAUTHORIZED</h1>} />
-      </Routes>
-    </div>
-  );
+    return (
+        <div className="App" id="scroller">
+            <NavBar />
+            <Notification />
+            <BackToTop />
+            <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/signin" element={<Signupin />} />
+                <Route path="/signout" element={<Signout />} />
+                <Route path="/profile/" element={<Profile />} />
+                <Route path="/profile/:section" element={<Profile />} />
+                <Route path="/results" element={<Results />} />
+                <Route path="/products" element={<Products />} />
+                <Route path="/productForm" element={<ProductForm />} />
+                <Route path="/cart/" element={<Cart />} />
+                <Route path="/cart/:section" element={<Cart />} />
+                <Route path="/buynow" element={<BuyNow />} />
+                <Route path="/reset/:userId/:resetToken" element={<ResetPassword />} />
+                <Route path="/orders/post-sale" element={<PostSale />} />
+                <Route path="/verify/:verifyToken" element={<VerifyEmail />} />
+                <Route path="/details/:id" element={<Details />} />
+                <Route element={<RequireRole allowedRoles={["admin", "superadmin"]} />}>
+                    <Route path="admin" element={<AdminLayout />}>
+                        <Route index element={<Metrics />} />
+                        <Route path="metrics" element={<Metrics />} />
+                        <Route path="products" element={<Products />} />
+                        <Route path="productForm" element={<ProductForm />} />
+                        <Route path="users" element={<UsersAdmin />} />
+                        <Route path="users/:id" element={<UsersAdmin />} />
+                        <Route path="orders" element={<OrdersAdmin />} />
+                        <Route path="*" element={<h1>404 ADMIN</h1>} />
+                    </Route>
+                </Route>
+                <Route path="/unauthorized" element={<h1>UNAUTHORIZED</h1>} />
+            </Routes>
+        </div>
+    );
 }
 
 export default App;

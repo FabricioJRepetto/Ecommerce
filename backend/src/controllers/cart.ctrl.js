@@ -1,7 +1,5 @@
-const { SHIP_COST } = require("../../constants");
 const Cart = require("../models/cart");
 const { cartFormater } = require("../utils/cartFormater");
-const { rawIdProductGetter } = require('../utils/rawIdProductGetter')
 
 const getUserCart = async (req, res, next) => {
     try {
@@ -12,9 +10,10 @@ const getUserCart = async (req, res, next) => {
                 products: [],
                 buyLater: [],
                 buyNow: '',
+                last_order: '',
                 owner: req.user._id
-            })
-            return res.json({ ...newCart, id_list: [] })
+            }, { new: true })
+            return res.json(newCart)
         }
 
         const response = await cartFormater(cart);
@@ -236,6 +235,22 @@ const quantityEx = async (req, res, next) => {
     }
 };
 
+const saveOrder = async (req, res, next) => {
+    try {
+        await Cart.findOneAndUpdate({ owner: req.user._id },
+            {
+                '$set': {
+                    'last_order': req.query.id || ''
+                }
+            },
+            { new: true }
+        );
+        return res.json({ message: 'Last order id updated on database.' })
+    } catch (error) {
+        next(error)
+    }
+}
+
 module.exports = {
     getUserCart,
     addToCart,
@@ -245,5 +260,6 @@ module.exports = {
     emptyCart,
     deleteCart,
     quantity,
-    quantityEx
+    quantityEx,
+    saveOrder
 };

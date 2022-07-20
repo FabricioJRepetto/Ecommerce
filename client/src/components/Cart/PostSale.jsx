@@ -36,6 +36,10 @@ const PostSale = () => {
                     console.log(cartEmpty.message);
                     //? Vaciar el estado de redux onCart
                     dispatch(loadCart([]));
+                    console.log('Estado actualizado');
+                    //? Quitar last_order en el carrito de la db
+                    const { data: cartOrder } = await axios.put(`/cart/order/`);
+                    console.log(cartOrder.message);
                 } else {
                     //? vaciar el buynow
                     axios.post(`/cart/`, {product_id: ''});

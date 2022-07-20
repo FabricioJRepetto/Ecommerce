@@ -25,14 +25,9 @@ const getOrder = async (req, res, next) => {
         if (!order) return res.json({ message: "No orders." });
 
         if (order.status === 'pending' && expirationChecker(order.expiration_date_to)) {
-            order = await Order.findOneAndUpdate({
-                _id: req.params.id,
-            },
-                {
-                    $set: {
-                        status: 'expired'
-                    }
-                },
+            order = await Order.findByIdAndUpdate(
+                req.params.id,
+                { status: 'expired' },
                 { new: true }
             );
         };
@@ -54,15 +49,9 @@ const getOrdersUser = async (req, res, next) => {
             if (order.status === 'pending') {
                 if (expirationChecker(order.expiration_date_to)) {
                     order.status = 'expired';
-                    await Order.findOneAndUpdate({
-                        _id: req.params.id,
-                    },
-                        {
-                            $set: {
-                                status: 'expired'
-                            }
-                        },
-                        { new: true }
+                    await Order.findByIdAndUpdate(
+                        order.id,
+                        { status: 'expired' }
                     );
                 }
             }

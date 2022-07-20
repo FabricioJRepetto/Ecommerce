@@ -188,13 +188,14 @@ const Profile = () => {
                             alt={"product"}
                           />
                         ))}
-                        <p>- - -</p>
                         <p>{e.description}</p>
-                        <p>payment status: {e.status}</p>
                         <p>creation date: {formatDate(e.expiration_date_from)}</p>
                         {e.status === 'pending' && `expiration: ${formatDate(e.expiration_date_to)}`}
+                        <p>- - -</p>
+                        <p>payment status: {e.status}</p>
                         {e.status === 'pending' && e.payment_link && <div><a style={{ color: '#3483fa'}} href={e.payment_link}>Continue payment.</a></div>} 
                         <p>{e.payment_source}</p>
+                        <p>order id: <i>{e.id}</i></p>
                         <p>- - -</p>
                         <p>
                           shipping address:{" "}
