@@ -59,13 +59,9 @@ router.post("/signin", [emailValidation, passwordValidationSignin], signin);
 router.post("/signinGoogle", signinGoogle);
 router.get("/profile/:token", verifyToken, profile);
 router.put("/verifyEmail", [verifyToken, googleUserShallNotPass], verifyEmail);
-router.put("/forgotPassword", googleUserShallNotPass, forgotPassword);
-router.put("/resetPassword", googleUserShallNotPass, resetPassword);
-router.put(
-  "/changePassword",
-  [googleUserShallNotPass, passwordValidation],
-  changePassword
-);
+router.put("/forgotPassword", forgotPassword);
+router.put("/resetPassword", resetPassword);
+router.put("/changePassword", passwordValidation, changePassword);
 router.put(
   "/editProfile",
   [verifyToken, googleUserShallNotPass, verifyEmailVerified],
