@@ -23,7 +23,7 @@ const Cart = () => {
 
     const [render, setRender] = useState(section)
     const [cart, setCart] = useState(false);
-    const [orderId, setOrderId] = useState('');
+    const [orderId, setOrderId] = useState(false);
     const [address, setAddress] = useState(null);
     const [newAdd, setNewAdd] = useState({});
     const [selectedAdd, setSelectedAdd] = useState(null);
@@ -51,7 +51,8 @@ const Cart = () => {
         if (data) {
             console.log(data);
             setCart(data);
-            data.message && notification(data.message, '', 'warning')
+            data.last_order?.length && setOrderId(data.last_order);
+            data.message && notification(data.message, '', 'warning');
         };
         dispatch(cartTotal(data.total));
         dispatch(loadCart(data.id_list));
@@ -118,10 +119,19 @@ const Cart = () => {
 
     const goCheckout = async () => {
         setLoadingPayment('S');
-        // crea la order
-        const { data: id } = await axios.post(`/order/`, selectedAdd);
-        // crea session de stripe y redirige
-        const { data } = await axios.post(`/stripe/${id}`);
+        let fastId = false;
+        // actualiza o crea la order
+        if (orderId) {
+            await axios.put(`/order/${orderId}`, selectedAdd);
+        } else {
+            const { data: id } = await axios.post(`/order/`, selectedAdd);
+            fastId = id;
+            setOrderId(id);
+            await axios.put(`/cart/order?id=${id}`);
+        }
+
+        //? crea session de stripe y redirige
+        const { data } = await axios.post(`/stripe/${orderId || fastId}`);
         notification('Serás redirigido a la plataforma de pago.', '', 'warning');
         setTimeout(() => {
             window.location.replace(data);
@@ -139,6 +149,7 @@ const Cart = () => {
             const { data: id } = await axios.post(`/order/`, selectedAdd);
             fastId = id;
             setOrderId(id);
+            await axios.put(`/cart/order?id=${id}`);
         }
 
         //? crea la preferencia para mp con la order y redirige
@@ -170,7 +181,7 @@ const Cart = () => {
 
             {(render === 'cart')
             ?<div className="cart-inner">
-                {(cart && cart.products.length > 0)
+                {(cart && cart?.products?.length > 0)
                 ? <div className="">
                     
                     {cart.products.map((p) => (

@@ -20,6 +20,7 @@ const Profile = () => {
   const { section } = useParams();
 
   const [render, setRender] = useState(section);
+  const [details, setDetails] = useState([])
   const [address, setAddress] = useState([]);
   const [wishlist, setWishlist] = useState([]);
   const [history, setHistory] = useState([]);
@@ -48,6 +49,7 @@ const Profile = () => {
       navigate("/signin");
     } else {
       (async () => {
+        //: usar un promiseAll
         const { data } = await axios(`/address/`);
         data.address ? setAddress(data.address) : setAddress([]);
 
@@ -65,7 +67,6 @@ const Profile = () => {
 
   //? ORDERS
   const { data: orders, oLoading } = useAxios("GET", `/order/userall/`);
-  !oLoading && console.log(orders);
   // Date formater
   const formatDate = (d) => {
     return d.toString().slice(0, -13).replace('T', ' ');
@@ -188,13 +189,14 @@ const Profile = () => {
                             alt={"product"}
                           />
                         ))}
-                        <p>- - -</p>
                         <p>{e.description}</p>
-                        <p>payment status: {e.status}</p>
                         <p>creation date: {formatDate(e.expiration_date_from)}</p>
                         {e.status === 'pending' && `expiration: ${formatDate(e.expiration_date_to)}`}
+                        <p>- - -</p>
+                        <p>payment status: {e.status}</p>
                         {e.status === 'pending' && e.payment_link && <div><a style={{ color: '#3483fa'}} href={e.payment_link}>Continue payment.</a></div>} 
                         <p>{e.payment_source}</p>
+                        <p>order id: <i>{e.id}</i></p>
                         <p>- - -</p>
                         <p>
                           shipping address:{" "}

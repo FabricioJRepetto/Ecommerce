@@ -16,6 +16,10 @@
     padding-bottom: 60px;
     overflow-y: auto;
 }
+.wishlist-modal-card-container {
+    display: flex;
+    flex-direction: column-reverse;
+}
 
 .modal-card-header {
     position: absolute;
