@@ -35,11 +35,11 @@ const create = async (req, res, next) => {
             line_items: items,
             shipping_options: [{
                 shipping_rate_data: {
-                    display_name: order.free_shipping ? 'gratis' : 'standar',
+                    display_name: order.free_shipping ? 'con descuento' : 'normal',
                     type: 'fixed_amount',
                     fixed_amount: {
                         currency: 'ars',
-                        amount: order.free_shipping ? 0 : order.shipping_cost * 100
+                        amount: order.shipping_cost === 0 ? 0 : order.shipping_cost * 100
                     }
                 }
             }],
@@ -47,6 +47,17 @@ const create = async (req, res, next) => {
             success_url: `${YOUR_DOMAIN}&status=approved`,
             cancel_url: `${YOUR_DOMAIN}&status=canceled`,
         });
+
+        //? setea el link de pago y la expiración de 24hrs (max de stripe)
+        const expiration = new Date(Date.now() + 75600000).toISOString().slice(0, -1) + '-03:00';
+        await Order.findByIdAndUpdate(orderId,
+            {
+                "$set": {
+                    payment_link: session.url,
+                    expiration_date_to: expiration,
+                    payment_source: 'Stripe'
+                }
+            });
 
         return res.json(session.url);
         //return res.redirect(303, session.url);

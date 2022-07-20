@@ -7,7 +7,7 @@ import Modal from "../common/Modal";
 import { useModal } from "../../hooks/useModal";
 import { useNotification } from "../../hooks/useNotification";
 import { cartTotal, loadCart } from "../../Redux/reducer/cartSlice";
-import { loadMercadoPago } from "../../helpers/loadMP";
+// import { loadMercadoPago } from "../../helpers/loadMP";
 import { priceFormat } from "../../helpers/priceFormat";
 import './Cart.css'
 
@@ -18,7 +18,7 @@ import { ReactComponent as Spinner } from '../../assets/svg/spinner.svg'
 const Cart = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const [notification] = useNotification();
+    const [ notification ] = useNotification();
     const { section } = useParams();
 
     const [render, setRender] = useState(section)
@@ -125,7 +125,7 @@ const Cart = () => {
         notification('Serás redirigido a la plataforma de pago.', '', 'warning');
         setTimeout(() => {
             window.location.replace(data);
-        }, 4000);
+        }, 3000);
         return null
     };
     
@@ -140,11 +140,18 @@ const Cart = () => {
             fastId = id;
             setOrderId(id);
         }
-        // crea la preferencia para mp con la order
+
+        //? crea la preferencia para mp con la order y redirige
         const { data }  = await axios.get(`/mercadopago/${orderId || fastId}`);
-        // abre el modal de mp con la id de la preferencia
-        loadMercadoPago(data.id, 
-        setLoadingPayment());
+        notification('Serás redirigido a la plataforma de pago.', '', 'warning');
+        setTimeout(() => {
+            window.location.replace(data.init_point);
+        }, 3000);
+        return null
+
+        //* abre el modal de mp con la id de la preferencia
+        // loadMercadoPago(data.id, 
+        // setLoadingPayment());
      };
 
     const buyNow = async (id) => { 
@@ -185,6 +192,7 @@ const Cart = () => {
                             deleteP={deleteProduct}
                             buyNow={buyNow}
                             source={'products'}
+                            loading={loadingPayment}
                             />
                     ))}
 

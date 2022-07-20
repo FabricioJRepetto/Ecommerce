@@ -2,18 +2,21 @@ import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
+import {
+    loadApplied,
+    loadFilters,
+    loadProductsFound,
+    loadProductsOwn,
+    loadQuerys,
+} from "../../Redux/reducer/productsSlice";
+
 import "./NavBar.css";
 import { ReactComponent as Cart } from "../../assets/svg/cart.svg";
 import { ReactComponent as Fav } from "../../assets/svg/fav.svg";
 import { ReactComponent as Avatar } from "../../assets/svg/avatar.svg";
-import {
-    loadApplied,
-  loadFilters,
-  loadProductsFound,
-  loadProductsOwn,
-  loadQuerys,
-} from "../../Redux/reducer/productsSlice";
 import Signout from "../Session/Signout";
+import WishlistModal from "../common/WishlistModal";
+
 
 const NavBar = () => {
   const session = useSelector((state) => state.sessionReducer.session);
@@ -24,6 +27,7 @@ const NavBar = () => {
   const dispatch = useDispatch();
 
   const [profileModal, setProfileModal] = useState(false);
+  const [wishModal, setWishModal] = useState(false);
 
   const querySearch = async (e) => {
     if (e.key === "Enter" && e.target.value) {
@@ -154,9 +158,17 @@ const NavBar = () => {
                 </div>
               </div>
 
-              <NavLink to={"/profile/wishlist"}>
+              <div 
+                className="navbar-wishlist-button"
+                onMouseEnter={() => setWishModal(true)}
+                onMouseLeave={() => setWishModal(false)}>
                 <Fav className="wishlist-icon" />
-              </NavLink>
+                <div className="navBar-modal-container-w">
+                    <div className={`navbar-modal-w ${wishModal && "visible"}`} >
+                        {wishModal && <WishlistModal close={setWishModal} />}
+                    </div>
+                </div>
+              </div>
 
               <NavLink to={"cart"} className="cart-icon-container">
                 <Cart className="cart-icon" />

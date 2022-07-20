@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Modal from "../common/Modal";
 import { useModal } from "../../hooks/useModal";
-import { loadMercadoPago } from "../../helpers/loadMP";
+// import { loadMercadoPago } from "../../helpers/loadMP";
 import { priceFormat } from "../../helpers/priceFormat"
 import { useNotification } from "../../hooks/useNotification";
 import './BuyNow.css'
@@ -157,11 +157,18 @@ const BuyNow = () => {
             fastId = firstOrder;
             setOrderId(firstOrder);
         }
-        // crea la preferencia para mp con la order
+
+        //? crea la preferencia para mp con la order y ridirige
         const { data }  = await axios.get(`/mercadopago/${orderId || fastId}`);
-        // abre el modal de mp con la id de la preferencia
-        loadMercadoPago(data.id, 
-        setLoadingPayment);
+        notification('Serás redirigido a la plataforma de pago.', '', 'warning');
+        setTimeout(() => {
+            window.location.replace(data.init_point);
+        }, 3000);
+        return null
+
+        //* abre el modal de mp con la id de la preferencia
+        // loadMercadoPago(data.id, 
+        // setLoadingPayment);
      };
 
     return (
@@ -179,7 +186,7 @@ const BuyNow = () => {
                         <p>{product.name}</p>
                     </div>
                     <QuantityInput stock={product.available_quantity} 
-                    prodQuantity={1} bnMode setQ={setQuantity}/>
+                    prodQuantity={1} bnMode setQ={setQuantity} loading={loadingPayment}/>
                 </div>
 
                 <div className="buynow-inner-lateral">
@@ -226,7 +233,6 @@ const BuyNow = () => {
                                     <h1>${priceFormat(quantity * (product.on_sale ? product.sale_price : product.price)).int}</h1><p>{priceFormat(quantity * (product.on_sale ? product.sale_price : product.price)).cents}</p>
                                 </div>
                             </div>
-
                         </div>
                     </div>
 
