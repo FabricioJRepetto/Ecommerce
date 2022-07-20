@@ -18,7 +18,7 @@ const getOrder = async (req, res, next) => {
         //const userKey = setUserKey(isGoogleUser);
 
         let order = await Order.findOne({
-            [userKey]: _id,
+            user: _id,
             _id: req.params.id,
         });
 
