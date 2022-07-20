@@ -212,6 +212,30 @@ code {
   }
 }
 
+@keyframes gradientTextAnim{
+    0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+@keyframes gradientBorderAnim{
+    0% {
+		background-position: 50% 0%;
+	}
+	50% {
+		background-position: 50% 100%;
+	}
+	100% {
+		background-position: 50% 0%;
+	}
+}
+
 ::-webkit-scrollbar {
   width: 10px;
 }
@@ -220,7 +244,6 @@ code {
 }
 ::-webkit-scrollbar-thumb {
   background: #7a7a7a;
-  /* background: linear-gradient(0deg, rgba(244,2,89,1) 0%, rgba(254,163,13,1) 100%); */
   width: 8px;
 }
 ::-webkit-scrollbar-thumb:hover {
