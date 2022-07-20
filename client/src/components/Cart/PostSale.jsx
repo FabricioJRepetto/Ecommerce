@@ -14,7 +14,7 @@ const PostSale = () => {
     
     const [params] = useSearchParams(),
     id = params.get('external_reference');
-    let status = params.get('status') ?? 'canceled'
+    let status = params.get('status') ?? 'cancelled'
     
     useEffect(() => {
         //! CAMBIAR PARA EL DEPLOY
@@ -23,7 +23,7 @@ const PostSale = () => {
         // pero tienen que hacerlo notificando al back
 
         firstLoad && (async () => {
-            if (status === 'null' || status === 'canceled') return navigate('/');
+            if (status === 'null' || status === 'cancelled') return navigate('/');
 
             const { data } = await axios(`/order/${id}`);
             console.log(data);

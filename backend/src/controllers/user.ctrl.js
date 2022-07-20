@@ -107,7 +107,7 @@ const profile = async (req, res, next) => {
             googleEmail,
         } = userFound;
 
-        return res.json(userFound);
+        //return res.json(userFound);
         return res.json({
             email,
             name,
