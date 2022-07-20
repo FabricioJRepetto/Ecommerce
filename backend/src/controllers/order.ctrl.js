@@ -48,7 +48,7 @@ const getOrdersUser = async (req, res, next) => {
     //const userKey = setUserKey(isGoogleUser);
 
     try {
-        let userOrders = await Order.find({ [userKey]: _id });
+        let userOrders = await Order.find({ user: _id });
 
         for (const order of userOrders) {
             if (order.status === 'pending') {
