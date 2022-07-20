@@ -1,84 +1,96 @@
 import axios from 'axios'
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { useParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { resizer } from '../../helpers/resizer';
-import { useAxios } from '../../hooks/useAxios';
 import { loadCart } from '../../Redux/reducer/cartSlice';
 
-const { REACT_APP_MP_SKEY } = process.env;
-
 const PostSale = () => {
-    const [orderStatus, setOrderStatus] = useState();
+    const [order, setOrder] = useState(false)
     const [firstLoad, setFirstLoad] = useState(true)
+    const [loading, setLoading] = useState(true)
     const dispatch = useDispatch();
-    const { id } = useParams();
-    const { data, loading, error } = useAxios('GET', `/order/${id}`);
+    const navigate = useNavigate();
+    
+    const [params] = useSearchParams(),
+    id = params.get('external_reference');
+    let status = params.get('status') ?? 'canceled'
     
     useEffect(() => {
         //! CAMBIAR PARA EL DEPLOY
-        //! solo pedir la order al back para mostrar detalles
+        // solo pedir la order al back para mostrar detalles
+        // mp y stripe avisan el status del pago por query
+        // pero tienen que hacerlo notificando al back
 
-        //: peticion a mp para saber status del pago
         firstLoad && (async () => {
-            const { data } = await axios.get(`https://api.mercadopago.com/v1/payments/search?sort=date_created&criteria=desc&external_reference=${id}`, {
-                headers: {
-                    Authorization: `Bearer ${REACT_APP_MP_SKEY}`,
-                }
-            });
-            console.log(data.results[0].status);
-            setOrderStatus(data.results[0].status);
-            
-            const { data: order } = await axios(`/order/${id}`);
+            if (status === 'null' || status === 'canceled') return navigate('/');
 
-            if (data.results[0].status === 'approved' && order.status !== 'approved') {
+            const { data } = await axios(`/order/${id}`);
+            console.log(data);
+            setOrder(data);
+            
+            if (status === 'approved' && data.status !== 'approved') {
+                if (data.order_type === 'cart') {
+                    //? vaciar carrito
+                    const { data: cartEmpty } = await axios.delete(`/cart/empty`);
+                    console.log(cartEmpty.message);
+                    //? Vaciar el estado de redux onCart
+                    dispatch(loadCart([]));
+                } else {
+                    //? vaciar el buynow
+                    axios.post(`/cart/`, {product_id: ''});
+                    console.log('buynow reseted');
+                }
+
                 //? cambiar orden a pagada
                 const orderUpdt = await axios.put(`/order/${id}`,{
                     status: 'approved'
                 });
-                console.log(orderUpdt.data.message);
-    
-                //? vaciar carrito
-                const { data: cartEmpty } = await axios.delete(`/cart/empty`);
-                console.log(cartEmpty.message);
+                console.log(orderUpdt.data.message);    
     
                 //? restar unidades de cada stock
-                //: crear un virtual para ids de order ?
-                const { data: order } = await axios(`/order/${id}`);
-                let list = order.products.map(e => ({id: e.product_id, amount: e.quantity}));
-
+                let list = data.products.map(e => ({id: e.product_id, amount: e.quantity}));
                 const { data: stockUpdt } = await axios.put(`/product/stock/`, list);
                 console.log(stockUpdt);
 
-                //? Vaciar el estado de redux onCart
-                dispatch(loadCart([]));
-
-                //: first load solo sirve pre deploy
-                setFirstLoad(false);                
+                //! first load solo sirve pre deploy
+                setFirstLoad(false);
+                setLoading(false);
             };
-        })();
+            if (status !== 'approved' && data.status !== 'approved') {
+                //? cambiar stado de la orden
+                const orderUpdt = await axios.put(`/order/${id}`,{
+                    status
+                });
+                console.log(orderUpdt.data.message);
+
+                //! first load solo sirve pre deploy
+                setFirstLoad(false);
+                setLoading(false);
+            }
+        })()
       // eslint-disable-next-line
     }, [])
     
     return (
         <div>
             <h1>Post Venta</h1>
-            {error && <h1>{error}</h1>}
-            { (loading && !orderStatus )
+            { (loading && !order )
                 ? <p>LOADING · · ·</p>
                 : <>
                     <div >
-                        {data?.products.map(e =>(
+                        {order?.products.map(e =>(
                             <img src={resizer(e.img)} 
                             alt="product"
-                            key={e.product_id}/>
+                            key={e.product_id}
+                            style={{ height: '96px'}}/>
                         ))}
                     </div>
-                    <p>{`Estado de la orden: ${orderStatus}`}</p>
-                    <p><i>{data?.id}</i></p>
-                    <p>{data?.description}</p>
+                    <p>{`Estado de la orden: ${status}`}</p>
+                    <p><i>{order?.id}</i></p>
+                    <p>{order?.description}</p>
                     <p><i>shipping info</i></p>
-                    <p>{`${data.shipping_address.street_name} ${data.shipping_address.street_number}, ${data.shipping_address.city}, ${data.shipping_address.state}.`}</p>
+                    <p>{`${order?.shipping_address.street_name} ${order?.shipping_address.street_number}, ${order?.shipping_address.city}, ${order?.shipping_address.state}.`}</p>
             </>}
         </div>
     )

@@ -1,18 +1,48 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { useForm, useFieldArray } from "react-hook-form";
+import axios from "axios";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { loadIdProductToEdit } from "../../Redux/reducer/productsSlice";
 import "./ProductForm.css";
 import {
   validateImgs,
   validationProductFormSchema,
 } from "../../helpers/validators";
+import { useNotification } from "../../hooks/useNotification";
+import { useModal } from "../../hooks/useModal";
+import Modal from "../../components/common/Modal";
 
 const ProductForm = () => {
-  const [productImg, setProductImg] = useState([]);
-  const [productImgUrls, setProductImgUrls] = useState([]);
   const [featuresQuantity, setFeaturesQuantity] = useState(1);
   const [attributesQuantity, setAttributesQuantity] = useState(1);
+  const [productImg, setProductImg] = useState([]);
+  const [productImgUrls, setProductImgUrls] = useState([]);
+  const [imgsToEdit, setImgsToEdit] = useState([]);
+  const [productToEdit, setProductToEdit] = useState(null);
+  const { idProductToEdit } = useSelector((state) => state.productsReducer);
+  const dispatch = useDispatch();
+  const [warn, setWarn] = useState({
+    main_features: "",
+    attributes: "",
+    image: "",
+  });
+  let timeoutId = useRef();
+  const navigate = useNavigate();
+  const [notification] = useNotification();
+  const [isOpenCreateProduct, openCreateProduct, closeCreateProduct] =
+    useModal();
+
+  const warnTimer = (key, message) => {
+    clearTimeout(timeoutId.current);
+    setWarn({
+      ...warn,
+      [key]: message,
+    });
+    let timeout = () => setTimeout(() => setWarn({}), 7000);
+    timeoutId.current = timeout();
+  };
 
   const formOptions = { resolver: yupResolver(validationProductFormSchema) };
   const {
@@ -20,6 +50,7 @@ const ProductForm = () => {
     control,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm(formOptions);
 
@@ -27,6 +58,7 @@ const ProductForm = () => {
     fields: fieldsFeatures,
     append: appendFeature,
     remove: removeFeature,
+    replace: replaceFeature,
   } = useFieldArray({
     name: "main_features",
     control,
@@ -40,7 +72,10 @@ const ProductForm = () => {
       appendFeature("");
       setFeaturesQuantity(featuresQuantity + 1);
     } else {
-      console.log("completa campo antes de agregar uno nuevo"); //!VOLVER A VER renderizar mensaje warn
+      warnTimer(
+        "main_features",
+        "Completa este campo antes de agregar uno nuevo"
+      );
     }
   };
 
@@ -49,7 +84,7 @@ const ProductForm = () => {
       removeFeature(i);
       setFeaturesQuantity(featuresQuantity - 1);
     } else {
-      console.log("debes agregar al menos una caracteristica"); //!VOLVER A VER renderizar mensaje warn
+      warnTimer("main_features", "Debes agregar al menos una característica");
     }
   };
 
@@ -57,6 +92,7 @@ const ProductForm = () => {
     fields: fieldsAttributes,
     append: appendAttribute,
     remove: removeAttribute,
+    replace: replaceAttribute,
   } = useFieldArray({
     name: "attributes",
     control,
@@ -74,7 +110,10 @@ const ProductForm = () => {
       appendAttribute({ name: "", value_name: "" });
       setAttributesQuantity(attributesQuantity + 1);
     } else {
-      console.log("completa campos antes de agregar uno nuevo"); //!VOLVER A VER renderizar mensaje warn
+      warnTimer(
+        "attributes",
+        "Completa estos campos antes de agregar uno nuevo"
+      );
     }
   };
 
@@ -83,107 +122,147 @@ const ProductForm = () => {
       removeAttribute(i);
       setAttributesQuantity(attributesQuantity - 1);
     } else {
-      console.log("debes agregar al menos un atributo"); //!VOLVER A VER renderizar mensaje warn
+      warnTimer("attributes", "Debes agregar al menos un atributo");
     }
   };
 
+  const loadInputs = (data) => {
+    setValue("name", data.name);
+    setValue("price", data.price);
+    setValue("brand", data.brand);
+    setValue("available_quantity", data.available_quantity);
+    setValue("description", data.description);
+    setValue("free_shipping", data.free_shipping);
+    setValue("category", data.category);
+    replaceFeature([...data.main_features]);
+    replaceAttribute([...data.attributes]);
+    setImgsToEdit(data.images);
+  };
+
   useEffect(() => {
-    appendAttribute({ name: "", value_name: "" });
-    appendFeature("");
+    if (idProductToEdit) {
+      axios(`/product/${idProductToEdit}`)
+        .then(({ data }) => {
+          console.log(data);
+          setProductToEdit(idProductToEdit);
+          dispatch(loadIdProductToEdit(null));
+          loadInputs(data);
+        })
+        .catch((err) => console.log(err)); //!VOLVER A VER manejo de errores
+    } else {
+      appendAttribute({ name: "", value_name: "" });
+      appendFeature("");
+    }
     // eslint-disable-next-line
   }, []);
 
   const handleAddImg = (e) => {
-    const fileListArray = Array.from(e.target.files);
-    validateImgs(fileListArray);
-    setProductImg([...productImg, ...fileListArray]);
+    const fileListArrayImg = Array.from(e.target.files);
+    validateImgs(fileListArrayImg, warnTimer, productImg);
+    console.log(fileListArrayImg);
+    setProductImg([...productImg, ...fileListArrayImg]);
   };
 
   const handleRemoveImg = (i) => {
     setProductImg(productImg.filter((_, index) => index !== i));
   };
+  const handleRemoveImgToEdit = (_id) => {
+    setImgsToEdit(imgsToEdit.filter((img) => img._id !== _id));
+  };
 
   useEffect(() => {
-    //  if (productImg.length > 0) {
     const newImageUrls = [];
     for (const image of productImg) {
       newImageUrls.push(URL.createObjectURL(image));
     }
     setProductImgUrls(newImageUrls);
-    // }
   }, [productImg]);
 
   const submitProduct = async (productData) => {
-    console.log("registered:", productData.free_shipping);
-    if (productImg.length === 0) return console.log("subir img"); //!VOLVER A VER renderizar mensaje warn
+    if (!productToEdit && productImg.length === 0) {
+      return warnTimer("image", "Debes subir al menos una imágen");
+    }
+    if (productToEdit && productImg.length === 0 && imgsToEdit.length === 0) {
+      return warnTimer("image", "Debes subir al menos una imágen");
+    }
+
     let formData = new FormData();
-    formData.append("data", JSON.stringify(productData));
 
     // agarra las images
-    const fileListArray = Array.from(productImg);
-    validateImgs(fileListArray);
+    const fileListArrayImg = Array.from(productImg);
+    validateImgs(fileListArrayImg);
 
-    fileListArray.forEach((pic) => {
+    fileListArrayImg.forEach((pic) => {
       formData.append("images", pic);
     });
-    formData.append("images", fileListArray);
-    formData.append("data", JSON.stringify(productData));
+    // formData.append("images", fileListArrayImg);
 
-    const imgURL = await axios.post(`/product/`, formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-    console.log(imgURL);
+    try {
+      //! VOLVER A VER poner disabled el boton de submit al hacer la petición
+      if (productToEdit) {
+        let data = { ...productData, imgsToEdit };
+        formData.append("data", JSON.stringify(data));
+        //  formData.append("imgsToEdit", imgsToEdit);
 
-    clearInputs();
+        await axios.put(`/admin/product/${productToEdit}`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        notification("Producto editado exitosamente", "", "success");
+        navigate("/admin/products");
+      } else {
+        formData.append("data", JSON.stringify(productData));
+        await axios.post(`/admin/product/`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        notification("Producto creado exitosamente", "", "success");
+        openCreateProduct();
+      }
+      clearInputs();
+    } catch (error) {
+      notification("Hubo un error, vuelve a intentar", "", "error");
+      //!VOLVER A VER manejo de errores
+      console.log(error);
+    }
   };
-
-  /*   const clearInputs = () => {
-    const idsToClear = [
-      "name_id",
-      "price_id",
-      "brand_id",
-      "stock_id",
-      "description_id",
-    ];
-    for (const id of idsToClear) {
-      let input = document.getElementById(id);
-      input.value = "";
-    }
-    if (featuresQuantity > 1) {
-      removeFeature();
-      setFeaturesQuantity(1);
-      appendFeature("");
-    } else {
-      let mainFeature = document.getElementById("main_feature_0");
-      mainFeature.value = "";
-    }
-    if (attributesQuantity > 1) {
-      removeAttribute();
-      setAttributesQuantity(1);
-      appendAttribute({ name: "", value_name: "" });
-    } else {
-      let attributeName = document.getElementById("attribute_name_0");
-      let attributeValue = document.getElementById("attribute_value_0");
-      attributeName.value = "";
-      attributeValue.value = "";
-    }
-    setProductImg([]);
-  }; */
 
   const clearInputs = () => {
     reset();
+    setWarn({});
+    setProductImg([]);
+    setImgsToEdit([]);
     setAttributesQuantity(1);
     appendAttribute({ name: "", value_name: "" });
     setFeaturesQuantity(1);
     appendFeature("");
   };
 
+  const handleModalCreateProduct = (value) => {
+    //! VOLVER A VER poner notif por encima de modal
+    if (value) {
+      clearInputs();
+      closeCreateProduct();
+    } else {
+      navigate("/admin/products");
+    }
+  };
+
   return (
     <div>
       <hr />
-      <h2>Product CREATION</h2>
+      <h2>Product {productToEdit ? "EDIT" : "CREATION"}</h2>
+      <a
+        href="https://api.mercadolibre.com/sites/MLA/categories"
+        target="_blank"
+        rel="noreferrer"
+        style={{ color: "#0051ff" }}
+      >
+        <b>Lista de categorias</b>
+      </a>
+      <br />
       <form
         encType="multipart/form-data"
         onSubmit={handleSubmit(submitProduct)}
@@ -229,6 +308,14 @@ const ProductForm = () => {
             />
             <div>{errors.available_quantity?.message}</div>
 
+            <input
+              type="text"
+              placeholder="Category"
+              autoComplete="off"
+              {...register("category")}
+            />
+            <div>{errors.category?.message}</div>
+
             <label>
               <input
                 type="checkbox"
@@ -259,6 +346,7 @@ const ProductForm = () => {
                 </>
               ))
             )}
+            {warn.main_features && <p>{warn.main_features}</p>}
             <h3 onClick={() => handleAddFeature()}>
               Agregar campo de característica
             </h3>
@@ -290,6 +378,7 @@ const ProductForm = () => {
                 </>
               ))
             )}
+            {warn.attributes && <p>{warn.attributes}</p>}
             <h3 onClick={() => handleAddAttribute()}>
               Agregar campos de atributo
             </h3>
@@ -322,19 +411,45 @@ const ProductForm = () => {
             id="filesButton"
           />
         </div>
+        {warn.image && <p>{warn.image}</p>}
 
+        {imgsToEdit &&
+          React.Children.toArray(
+            imgsToEdit.map(({ imgURL, _id }) => (
+              <>
+                <img src={imgURL} alt={`img_${_id}`} className="imgs-product" />
+                <span onClick={() => handleRemoveImgToEdit(_id)}> X</span>
+              </>
+            ))
+          )}
         {React.Children.toArray(
-          productImgUrls.map((imageUrl, i) => (
+          productImgUrls.map((imageURL, i) => (
             <>
-              <img src={imageUrl} alt={`img_${i}`} className="imgs-product" />
+              <img src={imageURL} alt={`img_${i}`} className="imgs-product" />
               <span onClick={() => handleRemoveImg(i)}> X</span>
             </>
           ))
         )}
 
-        <input type="submit" value="Crear producto" />
+        <input
+          type="submit"
+          value={productToEdit ? "Actualizar producto" : "Crear producto"}
+        />
       </form>
       <button onClick={clearInputs}>RESETEAR</button>
+      <Modal
+        isOpen={isOpenCreateProduct}
+        closeModal={closeCreateProduct}
+        type="warn"
+      >
+        <p>¿Crear otro producto?</p>
+        <button type="button" onClick={() => handleModalCreateProduct(true)}>
+          Aceptar
+        </button>
+        <button type="button" onClick={() => handleModalCreateProduct(false)}>
+          Cancelar
+        </button>
+      </Modal>
     </div>
   );
 };

@@ -3,7 +3,6 @@ const passport = require("passport");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const { JWT_SECRET_CODE } = process.env;
-const { OAuth2Client } = require("google-auth-library");
 const { validationResult } = require("express-validator");
 const sendEmail = require("../utils/sendEmail");
 
@@ -24,8 +23,6 @@ const signup = async (req, res, next) => {
 const signin = async (req, res, next) => {
   const errors = validationResult(req);
 
-  const { avatar } = await User.findOne({ email: req.body.email });
-
   if (!errors.isEmpty()) {
     const message = errors.errors.map((err) => err.msg);
     return res.json({ message });
@@ -39,17 +36,16 @@ const signin = async (req, res, next) => {
 
       req.login(user, { session: false }, async (err) => {
         if (err) return next(err);
-        const body = { _id: user._id, email: user.email };
+        const { _id, email, name, role, avatar, isGoogleUser } = user;
+        const body = { _id, email, role, isGoogleUser };
 
         const token = jwt.sign({ user: body }, JWT_SECRET_CODE, {
           expiresIn: 864000,
         });
 
         return res.json({
-          message: info.message,
-          avatar: avatar,
           token,
-          user: { _id: user._id, email: user.email },
+          user: { email, name, role, avatar },
         });
       });
     } catch (e) {
@@ -58,27 +54,64 @@ const signin = async (req, res, next) => {
   })(req, res, next);
 };
 
-const profile = async (req, res, next) => {
+const signinGoogle = async (req, res, next) => {
+  const { sub, email, emailVerified, avatar, firstName, lastName } = req.body;
+
   try {
-    console.log(req.user);
-    if (req.params.token.slice(0, 6) === "google")
-      return res.json({ name: req.user.email });
-    const { email, name, avatar } = await User.findById(req.user._id);
-    return res.json({ email, name, avatar });
+    const userFound = await User.findOne({ email: sub });
+
+    if (!userFound) {
+      const newGoogleUser = await User.create({
+        email: sub,
+        password: sub,
+        googleEmail: email,
+        emailVerified,
+        avatar,
+        firstName,
+        lastName,
+        isGoogleUser: true,
+      });
+      return res.json(newGoogleUser);
+    } else {
+      if (emailVerified !== userFound.emailVerified)
+        userFound.emailVerified = emailVerified;
+      if (avatar !== userFound.avatar) userFound.avatar = avatar;
+      if (firstName !== userFound.firstName) userFound.firstName = firstName;
+      if (lastName !== userFound.lastName) userFound.lastName = lastName;
+      await userFound.save();
+      return res.send("ok");
+    }
   } catch (error) {
     next(error);
   }
 };
 
-const role = async (req, res, next) => {
-  const { email, role } = req.body;
-  if (!email) return res.status(403).json({ message: "No email provided" });
+const profile = async (req, res, next) => {
+  const userId = req.body._id || req.user._id;
   try {
-    const userFound = await User.findOne({ email });
-    if (!userFound) return res.status(404).json({ message: "User not found" });
-    userFound.role = role;
-    await userFound.save();
-    return res.json({ message: "Role changed successfully" });
+    const userFound = await User.findById(userId);
+    if (!userFound) {
+      return res.status(404).json({ message: "User not Found" });
+    }
+    const {
+      email,
+      name,
+      role,
+      avatar,
+      emailVerified,
+      isGoogleUser,
+      googleEmail,
+    } = userFound;
+    return res.json({
+      email,
+      name,
+      //! VOLVER A VER agregar emailVerified y googleEmail
+      role,
+      emailVerified,
+      isGoogleUser,
+      googleEmail,
+      avatar: avatar || null,
+    });
   } catch (error) {
     next(error);
   }
@@ -187,12 +220,13 @@ const editProfile = async (req, res, next) => {
     next(error);
   }
 };
+//! VOLVER A VER separar addAddress de editProfile, los users de google no pueden editar el perfil, pero SI agregar address
 
 module.exports = {
   signin,
+  signinGoogle,
   signup,
   profile,
-  role,
   verifyEmail,
   forgotPassword,
   resetPassword,

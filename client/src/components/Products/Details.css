@@ -1,5 +1,7 @@
 .details-head-container {
     display: flex;
+    overflow: hidden;
+    overflow: -moz-hidden-unscrollable;
 }
 .details-price-section {
     position: relative;

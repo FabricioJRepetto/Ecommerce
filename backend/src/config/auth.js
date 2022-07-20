@@ -1,11 +1,8 @@
 const passport = require("passport");
 const User = require("../models/user");
 const localStrategy = require("passport-local").Strategy;
-/* const JWTStrategy = require("passport-jwt").Strategy;
-const ExtractJWT = require("passport-jwt").ExtractJwt; */
 const { validationResult } = require("express-validator");
 require("dotenv").config();
-const { JWT_SECRET_CODE } = process.env;
 
 passport.use(
   "signup",
@@ -29,6 +26,7 @@ passport.use(
           const newUser = await User.create({
             email,
             password,
+            isGoogleUser: false,
           });
           return done(null, newUser, {
             message:

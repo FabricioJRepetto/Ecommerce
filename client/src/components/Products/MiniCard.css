@@ -1,3 +1,10 @@
+.minicard-container {
+    position: relative;
+    background: white;
+    height: 290px;
+    width: 230px;
+}
+
 .loading-mini-card {
     padding: 25px;
     position: relative;
@@ -38,11 +45,20 @@
     height: 180px;
     width: 180px;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.minicard-img-section img {
+    max-height: 180px;
+    max-width: 180px;
 }
 
-.minicard-price-section {
+.minicard-price-section{
     display: flex;
-
+}
+.minicard-price-section-inner {
+    display: flex;
 }
 .minicard-original-price {
     height: 15px;
@@ -75,7 +91,7 @@
     height: 38px;
 }
 .minicard-prod-name {
-    font-size: 1.2rem;
+    font-size: 1rem;
     font-weight: 600;
     max-width: 180px;
     max-height: 40px;
@@ -86,3 +102,38 @@
     opacity: 0;
     transition: opacity .4s ease;
 }
+.special-frame-right {
+    /* border-left: 2px solid #139EF1;
+    border-right: 2px solid #8251DE; */
+    right: 0;
+    position: absolute;
+    height: 290px;
+    width: 3px;
+
+    background: linear-gradient(45deg, #35a7ff 0%, #7e54de 20%, #f40259 60%, #fea30d 100%);
+    background-size: 400% 400%;
+    animation: gradientBorderAnim 10s infinite;
+
+    pointer-events: none;
+    z-index: 10;
+    transition: height .3s ease;
+}
+.special-frame-left {
+    /* border-right: 2px solid #FFA310;
+    border-left: 2px solid #F20057; */
+    left: 0;
+    position: absolute;
+    height: 290px;
+    width: 3px;
+
+    background: linear-gradient(-45deg, #fea30d 0%, #f40259 30%, #7e54de 70%, #35a7ff 100%);
+    background-size: 400% 400%;
+    animation: gradientBorderAnim 10s infinite;
+
+    pointer-events: none;
+    z-index: 10;
+    transition: height .3s ease;
+}
+.mimic {
+    height: 330px;
+} 

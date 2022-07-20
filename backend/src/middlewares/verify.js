@@ -23,24 +23,27 @@ async function verifyToken(req, res, next) {
           audience: OAUTH_CLIENT_ID,
         });
         const payload = ticket.getPayload();
-        const { sub, name, email } = payload;
+        const { sub } = payload;
+
+        const userFound = await User.findOne({ email: sub });
+        if (!userFound) {
+          return res.status(404).json({ message: "User not found" });
+        }
+
         req.user = {
-          /* _id: payload["sub"], */
-          _id: sub,
-          email: name || email || `Guest ${userDecoded.sub}`,
+          _id: userFound._id,
+          isGoogleUser: true,
         };
       } catch (error) {
         return res.status(403).send("Invalid credentials");
       }
     } else {
-      /* token = req.body.resetToken || req.body.verifyToken || token; */
-
       try {
         const userDecoded = await jwt.verify(token, JWT_SECRET_CODE);
         req.user = userDecoded.user;
+        req.user.isGoogleUser = false;
 
         const userFound = await User.findById(req.user._id);
-
         if (!userFound) {
           return res.status(404).json({ message: "User not found" });
         }
@@ -56,6 +59,8 @@ async function verifyToken(req, res, next) {
 }
 
 async function verifyEmailVerified(req, res, next) {
+  if (req.user.isGoogleUser) next(); //! VOLVER A VER ¿pedir email_verified de google?
+
   const user = await User.findById(req.user._id);
   if (user.emailVerified === true) {
     next();
@@ -65,8 +70,11 @@ async function verifyEmailVerified(req, res, next) {
 }
 
 async function verifyAdmin(req, res, next) {
+  if (req.user.isGoogleUser)
+    return res.status(401).json({ message: "Unauthorized" });
+
   const user = await User.findById(req.user._id);
-  if (user.role === "admin") {
+  if (user.role === "admin" || user.role === "superadmin") {
     next();
   } else {
     return res.status(401).json({ message: "Unauthorized" });
@@ -74,6 +82,8 @@ async function verifyAdmin(req, res, next) {
 }
 
 async function verifySuperAdmin(req, res, next) {
+  if (req.user.isGoogleUser) res.status(401).json({ message: "Unauthorized" });
+
   const user = await User.findById(req.user._id);
   if (user.role === "superadmin") {
     next();
@@ -82,9 +92,18 @@ async function verifySuperAdmin(req, res, next) {
   }
 }
 
+async function googleUserShallNotPass(req, res, next) {
+  if (req.user.isGoogleUser) {
+    return res.status(401).json({ message: "Google user unauthorized" });
+  } else {
+    next();
+  }
+}
+
 module.exports = {
   verifyToken,
   verifyEmailVerified,
   verifyAdmin,
   verifySuperAdmin,
+  googleUserShallNotPass,
 };

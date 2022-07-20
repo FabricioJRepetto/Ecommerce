@@ -3,22 +3,20 @@ const router = Router();
 const {
   verifyToken,
   verifyEmailVerified,
-  verifyAdmin,
-  verifySuperAdmin,
+  googleUserShallNotPass,
 } = require("../middlewares/verify");
 const passport = require("passport");
 const {
   signin,
+  signinGoogle,
   signup,
   profile,
-  role,
   verifyEmail,
   forgotPassword,
   resetPassword,
   changePassword,
   editProfile,
 } = require("../controllers/user.ctrl");
-const addressRouter = require("./address.router");
 const { body } = require("express-validator");
 
 const emailValidation = body("email", "Enter a valid e-mail")
@@ -57,21 +55,21 @@ router.post(
   ],
   signup
 );
-
 router.post("/signin", [emailValidation, passwordValidationSignin], signin);
-
+router.post("/signinGoogle", signinGoogle);
 router.get("/profile/:token", verifyToken, profile);
-
-router.put("/role", [verifyToken, verifySuperAdmin], role); //! VOLVER A VER mover a ruta de superadmin
-
-router.put("/verifyEmail", verifyToken, verifyEmail);
-
-router.put("/forgotPassword", forgotPassword);
-
-router.put("/resetPassword", resetPassword);
-
-router.put("/changePassword", passwordValidation, changePassword);
-
-router.put("/editProfile", verifyToken, editProfile);
+router.put("/verifyEmail", [verifyToken, googleUserShallNotPass], verifyEmail);
+router.put("/forgotPassword", googleUserShallNotPass, forgotPassword);
+router.put("/resetPassword", googleUserShallNotPass, resetPassword);
+router.put(
+  "/changePassword",
+  [googleUserShallNotPass, passwordValidation],
+  changePassword
+);
+router.put(
+  "/editProfile",
+  [verifyToken, googleUserShallNotPass, verifyEmailVerified],
+  editProfile
+);
 
 module.exports = router;

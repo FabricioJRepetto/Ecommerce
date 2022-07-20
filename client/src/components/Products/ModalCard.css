@@ -1,0 +1,26 @@
+.product-modal-card {
+    width: 100%;
+    background-color: white;
+    position: relative;
+    padding: 0px 5px;
+    border-top: 1px solid rgba(45, 45, 45, 0.1);
+}
+
+.modal-card-img-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 96px;
+    min-width: 96px;
+}
+.modal-card-img-container img {
+    max-height: 100%;
+    max-width: 100%;
+}
+.modal-card-price-section {
+    display: flex;
+    align-items: center;
+}
+.modalcard-price-section-inner p {
+    font-weight: 600;
+}

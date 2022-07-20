@@ -1,139 +1,182 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const filterFunction = (state, source, type, value, firstIteration) => {
-  let productsToFilter;
+    let productsToFilter;
 
-  if (firstIteration) {
-    productsToFilter = state[source];
-  } else {
-    state.productsFiltered.length === 0
-      ? (productsToFilter = state[source])
-      : (productsToFilter = state.productsFiltered);
-  }
+    if (firstIteration) {
+        productsToFilter = state[source];
+    } else {
+        state.productsFiltered.length === 0
+            ? (productsToFilter = state[source])
+            : (productsToFilter = state.productsFiltered);
+    }
 
-  if (type === "price") {
-    let minPrice = value.split("-")[0];
-    let maxPrice = value.split("-")[1];
+    if (type === "price") {
+        let minPrice = value.split("-")[0];
+        let maxPrice = value.split("-")[1];
 
-    state.productsFiltered = productsToFilter.filter(
-      (product) => product[type] >= minPrice && product[type] <= maxPrice
-    );
-  } else if (type === "brand") {
-    state.productsFiltered = productsToFilter.filter((product) =>
-      state.filtersApplied.brand.includes(product.brand.toUpperCase())
-    );
-  } else {
-    state.productsFiltered = productsToFilter.filter(
-      (product) => product[type] === value
-    );
-  }
+        state.productsFiltered = productsToFilter.filter(
+            (product) => product[type] >= minPrice && product[type] <= maxPrice
+        );
+    } else if (type === "brand") {
+        state.productsFiltered = productsToFilter.filter((product) =>
+            state.filtersApplied.brand.includes(product.brand.toUpperCase())
+        );
+    } else {
+        state.productsFiltered = productsToFilter.filter(
+            (product) => product[type] === value
+        );
+    }
 };
 
 export const productsSlice = createSlice({
-  name: "products",
-  initialState: {
-    productsOwn: [],
-    productsRandom: [],
-    productsFound: [],
-    filtersApplied: {},
-    productsFiltered: [],
-    productDetails: {},
-  },
-  reducers: {
-    loadProductsFound: (state, action) => {
-      state.productsFound = action.payload;
+    name: "products",
+    initialState: {
+        productsOwn: [],
+        productsRandom: [],
+        productsFound: [],
+        productsFilters: [],
+        productsAppliedFilters: [],
+        breadCrumbs: [],
+        searchQuerys: {},
+        filtersApplied: {},
+        productsFiltered: [],
+        productDetails: {},
+        idProductToEdit: null,
     },
+    reducers: {
+        loadProductsOwn: (state, action) => {
+            state.productsOwn = action.payload;
+        },
 
-    filterProducts: (state, action) => {
-      /* action.payload = {
-          source: "productsOwn" || "productsFound" || "productsRandom",
-          type:      'brand'      || 'free_shipping' ||     'price',
-          value [STRING, BOOLEAN] ||     BOOLEAN     || STRING => min-max || null
-       } */
-      const { source, type, value } = action.payload;
-      /* filtersApplied = {
-          brand: [STRING],
-          free_shipping: BOOLEAN,
-          price: STRING => min-max
-       } */
+        loadProductsFound: (state, action) => {
+            state.productsFound = action.payload;
+        },
 
-      if (value === null || value === false) {
-        delete state.filtersApplied[type];
-      } else {
-        if (type === "brand") {
-          if (value[1]) {
-            state.filtersApplied = {
-              ...state.filtersApplied,
-              brand: state.filtersApplied.brand
-                ? [...state.filtersApplied.brand, value[0].toUpperCase()]
-                : [value[0].toUpperCase()],
-            };
-          } else {
-            state.filtersApplied = {
-              ...state.filtersApplied,
-              brand: state.filtersApplied.brand.filter(
-                (brand) => brand.toUpperCase() !== value[0].toUpperCase()
-              ),
-            };
-            if (state.filtersApplied.brand.length === 0)
-              delete state.filtersApplied.brand;
-          }
-        } else {
-          state.filtersApplied = {
-            ...state.filtersApplied,
-            [type]: value,
-          };
-        }
-      }
+        loadFilters: (state, action) => {
+            state.productsFilters = action.payload;
+        },
 
-      if (Object.keys(state.filtersApplied).length === 0) {
-        state.productsFiltered = [];
-      } else {
-        let firstIteration = true;
-        for (const filterApplied in state.filtersApplied) {
-          filterFunction(
-            state,
-            source,
-            filterApplied,
-            state.filtersApplied[filterApplied],
-            firstIteration
-          );
-          firstIteration = false;
-        }
-      }
-      //   if (!state.productsFiltered) state.productsFiltered = [null];
+        loadApplied: (state, action) => {
+            state.productsAppliedFilters = action.payload;
+        },
+
+        loadQuerys: (state, action) => {
+            state.searchQuerys = action.payload;
+        },
+
+        loadBreadCrumbs: (state, action) => {
+            state.breadCrumbs = action.payload;
+        },
+
+        deleteProductFromState: (state, action) => {
+            state.productsFound = state.productsFound.filter(
+                (prod) => prod._id !== action.payload
+            );
+        },
+
+        filterProducts: (state, action) => {
+            /* action.payload = {
+                source: "productsOwn" || "productsFound" || "productsRandom",
+                type:      'brand'      || 'free_shipping' ||     'price',
+                value [STRING, BOOLEAN] ||     BOOLEAN     || STRING => min-max || null
+             } */
+            const { source, type, value } = action.payload;
+            /* filtersApplied = {
+                brand: [STRING],
+                free_shipping: BOOLEAN,
+                price: STRING => min-max
+             } */
+
+            if (value === null || value === false) {
+                delete state.filtersApplied[type];
+            } else {
+                if (type === "brand") {
+                    if (value[1]) {
+                        state.filtersApplied = {
+                            ...state.filtersApplied,
+                            brand: state.filtersApplied.brand
+                                ? [...state.filtersApplied.brand, value[0].toUpperCase()]
+                                : [value[0].toUpperCase()],
+                        };
+                    } else {
+                        state.filtersApplied = {
+                            ...state.filtersApplied,
+                            brand: state.filtersApplied.brand.filter(
+                                (brand) => brand.toUpperCase() !== value[0].toUpperCase()
+                            ),
+                        };
+                        if (state.filtersApplied.brand.length === 0)
+                            delete state.filtersApplied.brand;
+                    }
+                } else {
+                    state.filtersApplied = {
+                        ...state.filtersApplied,
+                        [type]: value,
+                    };
+                }
+            }
+
+            if (Object.keys(state.filtersApplied).length === 0) {
+                state.productsFiltered = [];
+            } else {
+                let firstIteration = true;
+                for (const filterApplied in state.filtersApplied) {
+                    filterFunction(
+                        state,
+                        source,
+                        filterApplied,
+                        state.filtersApplied[filterApplied],
+                        firstIteration
+                    );
+                    firstIteration = false;
+                }
+                if (state.productsFiltered.length === 0)
+                    state.productsFiltered = [null];
+            }
+        },
+
+        orderProducts: (state, action) => {
+            /* action.payload = {
+                      source: "productsOwn" || "productsFound" || "productsRandom",
+                      order: "asc" || "desc"
+                   } */
+            let productsToOrder;
+            state.productsFiltered.length === 0
+                ? (productsToOrder = state[action.payload.source])
+                : (productsToOrder = state.productsFiltered);
+
+            state[productsToOrder] = state[productsToOrder].sort((a, b) => {
+                if (action.payload.order === "asc") {
+                    return a.price - b.price;
+                } else {
+                    return b.price - a.price;
+                }
+            });
+        },
+
+        loadProductDetails: (state, action) => {
+            state.productDetails = action.payload;
+        },
+
+        loadIdProductToEdit: (state, action) => {
+            state.idProductToEdit = action.payload;
+        },
     },
-
-    orderProducts: (state, action) => {
-      /* action.payload = {
-          source: "productsOwn" || "productsFound" || "productsRandom",
-          order: "asc" || "desc"
-       } */
-      let productsToOrder;
-      state.productsFiltered.length === 0
-        ? (productsToOrder = state[action.payload.source])
-        : (productsToOrder = state.productsFiltered);
-
-      state[productsToOrder] = state[productsToOrder].sort((a, b) => {
-        if (action.payload.order === "asc") {
-          return a.price - b.price;
-        } else {
-          return b.price - a.price;
-        }
-      });
-    },
-
-    loadProductDetails: (state, action) => {
-      state.productDetails = action.payload;
-    },
-  },
 });
 
 export const {
-  loadProductsFound,
-  filterProducts,
-  orderProducts,
-  loadProductDetails,
+    loadProductsOwn,
+    loadProductsFound,
+    loadFilters,
+    loadQuerys,
+    loadApplied,
+    loadBreadCrumbs,
+    deleteProductFromState,
+    filterProducts,
+    orderProducts,
+    loadProductDetails,
+    loadIdProductToEdit,
 } = productsSlice.actions;
 
 export default productsSlice.reducer;
@@ -149,6 +192,27 @@ https://api.mercadolibre.com/sites/MLA/
          &discount=[5,10...30]-100
          &shipping_cost=free
          &promotion_type=deal_of_the_day
+
+  {
+    "id": "MLA1039",
+    "name": "Cámaras y Accesorios"
+  },
+  {
+    "id": "MLA1051",
+    "name": "Celulares y Teléfonos"
+  },
+  {
+    "id": "MLA1648",
+    "name": "Computación"
+  },
+  {
+    "id": "MLA1144",
+    "name": "Consolas y Videojuegos"
+  },
+  {
+    "id": "MLA1000",
+    "name": "Electrónica, Audio y Video"
+  },
 
 {
    results: [

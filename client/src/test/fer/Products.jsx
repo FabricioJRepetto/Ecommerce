@@ -1,32 +1,44 @@
 import React, { useState, useRef } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
+
 import {
   filterProducts,
   loadProductsFound,
+  deleteProductFromState,
 } from "../../Redux/reducer/productsSlice";
 import { useEffect } from "react";
 import Card from "../../components/Products/Card";
+import { useModal } from "../../hooks/useModal";
+import Modal from "../../components/common/Modal";
+import { useNotification } from "../../hooks/useNotification";
 
 const Products = () => {
   const [pricesFilter, setPricesFilter] = useState({
-    min: "300",
-    max: "500",
+    min: "",
+    max: "",
   });
   const [shippingFilter, setShippingFilter] = useState(false);
-  const [brandsFilter, setBrandsFilter] = useState(); //! Uncaught TypeError: brandsFilter is undefined
-  // const [brandsFilter, setBrandsFilter] = useState({}); //! A component is changing an uncontrolled input to be controlled
+  const [brandsFilter, setBrandsFilter] = useState();
   const [loading, setLoading] = useState(true);
   const brands = useRef();
   const dispatch = useDispatch();
   const { productsFound, productsFiltered } = useSelector(
     (state) => state.productsReducer
   );
-  const whishlist = useSelector((state) => state.cartReducer.whishlist);
+  const wishlist = useSelector((state) => state.cartReducer.wishlist);
+  const location = useLocation();
+  const [
+    isOpenDeleteProduct,
+    openDeleteProduct,
+    closeDeleteProduct,
+    productToDelete,
+  ] = useModal();
+  const [notification] = useNotification();
 
   useEffect(() => {
     getProducts();
-    console.log("2");
     setLoading(false);
     // eslint-disable-next-line
   }, []);
@@ -35,6 +47,13 @@ const Products = () => {
   productsFiltered.length === 0
     ? (productsToShow = productsFound)
     : (productsToShow = productsFiltered);
+
+  /* let productsToShow;
+      productsFiltered.length === 0
+        ? location.pathname === "/admin/products"
+          ? (productsToShow = productsOwn)
+          : (productsToShow = productsFound)
+        : (productsToShow = productsFiltered); */
 
   const getProducts = () => {
     axios
@@ -55,16 +74,11 @@ const Products = () => {
               brands.current.push(brandCamelCase);
             brandsCheckbox[brandCamelCase] = false;
           }
-          /* !brands.current.includes(product.brand) &&
-            product.brand &&
-            brands.current.push(product.brand);
-          brandsCheckbox[product.brand] = false; */
         }
         setBrandsFilter(brandsCheckbox);
         brands.current.sort();
       })
-      .catch((err) => console.log(err))
-      .finally(console.log("1"));
+      .catch((err) => console.log(err)); //! VOLVER A VER manejo de errores
   };
 
   const filterPrices = (e) => {
@@ -116,25 +130,39 @@ const Products = () => {
     );
   };
 
+  const handleDeleteProduct = () => {
+    deleteProduct();
+    closeDeleteProduct();
+  };
+
+  const deleteProduct = () => {
+    axios
+      .delete(`/admin/product/${productToDelete.prodId}`)
+      .then((_) => {
+        dispatch(deleteProductFromState(productToDelete.prodId));
+        notification("Producto eliminado exitosamente", "", "success");
+      })
+      .catch((err) => console.log(err)); //! VOLVER A VER manejo de errores
+  };
+
   return (
     <div className="products-container">
       <div className="products-results-container">
-        <div className="products-results-inner">
-          {React.Children.toArray(
-            productsToShow?.map((prod) => (
-              <Card
-                img={prod.images[0].imgURL}
-                name={prod.name}
-                price={prod.price}
-                brand={prod.brand}
-                prodId={prod._id}
-                free_shipping={prod.free_shipping}
-                fav={whishlist.includes(prod._id)}
-                on_sale={prod.on_sale}
-              />
-            ))
-          )}
-        </div>
+        {productsToShow[0] === null ? (
+          <h1>NO HUBIERON COINCIDENCIAS</h1>
+        ) : (
+          <div className="products-results-inner">
+            {React.Children.toArray(
+              productsToShow?.map((product) => (
+                <Card
+                  productData={product}
+                  fav={wishlist.includes(product._id)}
+                  openDeleteProduct={openDeleteProduct}
+                />
+              ))
+            )}
+          </div>
+        )}
       </div>
 
       <div className="products-filters">
@@ -212,9 +240,25 @@ const Products = () => {
             checked={shippingFilter}
             onChange={filterShipping}
           />
-          free shipping
+          Envío gratis
         </label>
       </div>
+
+      <Modal
+        isOpen={isOpenDeleteProduct}
+        closeModal={closeDeleteProduct}
+        type="warn"
+      >
+        <p>{`¿Eliminar el producto ${
+          productToDelete ? productToDelete.name : null
+        }?`}</p>
+        <button type="button" onClick={() => handleDeleteProduct()}>
+          Aceptar
+        </button>
+        <button type="button" onClick={closeDeleteProduct}>
+          Cancelar
+        </button>
+      </Modal>
     </div>
   );
 };

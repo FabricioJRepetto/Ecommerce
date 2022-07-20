@@ -1,36 +1,54 @@
 const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
-
 const Schema = mongoose.Schema;
 
-const UserSchema = new Schema({
-  email: {
-    type: String,
-    lowercase: true,
-    required: true,
-    unique: true,
+const UserSchema = new Schema(
+  {
+    email: {
+      type: String,
+      lowercase: true,
+      required: true,
+      unique: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
+    googleEmail: {
+      type: String,
+      lowercase: true,
+      unique: true,
+    },
+    isGoogleUser: {
+      type: Boolean,
+      required: true,
+    },
+    role: {
+      type: String,
+      enum: ["client", "admin"],
+      default: "client",
+    },
+    firstName: String,
+    lastName: String,
+    emailVerified: {
+      type: Boolean,
+      default: false,
+    },
+    avatar: String,
+
+    orders: {
+      type: Schema.Types.ObjectId,
+      ref: "Order",
+    },
+    addresses: {
+      type: Schema.Types.ObjectId,
+      ref: "Address",
+    },
   },
-  password: {
-    type: String,
-    required: true,
-  },
-  role: {
-    type: String,
-    enum: ["client", "admin"],
-    default: "client",
-  },
-  firstName: String,
-  lastName: String,
-  emailVerified: {
-    type: Boolean,
-    default: false,
-  },
-  avatar: String
-},
   {
     versionKey: false,
     toJSON: { getters: true, virtuals: true },
-    toObject: { getters: true, virtuals: true }
+    toObject: { getters: true, virtuals: true },
   }
 );
 
@@ -49,9 +67,13 @@ UserSchema.methods.comparePassword = async function (candidatePassword) {
   return compare;
 };
 
-UserSchema.virtual('name').get(function() {
-    if (this.firstName && this.lastName) return `${this.firstName} ${this.lastName}`    
-    return this.email.split('@')[0];
+UserSchema.virtual("name").get(function () {
+  if (this.firstName && this.lastName)
+    return `${this.firstName} ${this.lastName}`;
+  if (this.firstName) return this.firstName;
+  if (this.lastName) return this.lastName;
+
+  return this.email.split("@")[0];
 });
 
 module.exports = mongoose.model("User", UserSchema);

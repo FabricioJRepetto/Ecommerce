@@ -1,7 +1,7 @@
 /* Normalize 8.0.1 */
 html {
-  line-height: 1.15; /* 1 */
-  -webkit-text-size-adjust: 100%; /* 2 */
+  line-height: 1.15; 
+  -webkit-text-size-adjust: 100%; 
 }
 
 
@@ -210,4 +210,42 @@ code {
   100%{
       left: 100%;
   }
+}
+
+@keyframes gradientTextAnim{
+    0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+@keyframes gradientBorderAnim{
+    0% {
+		background-position: 50% 0%;
+	}
+	50% {
+		background-position: 50% 100%;
+	}
+	100% {
+		background-position: 50% 0%;
+	}
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+    background: rgb(255, 255, 255);
+}
+::-webkit-scrollbar-thumb {
+  background: #7a7a7a;
+  width: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #404040; 
 }

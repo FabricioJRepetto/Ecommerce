@@ -10,16 +10,34 @@ export const validateNumbers = (value) => {
   return /^[0-9]*$/.test(value);
 };
 
-export const validateImgs = (imagesList) => {
+export const validateImgs = (imagesList, warnTimer, productImg) => {
   const fileTypesAllowed = ["image/jpeg", "image/png"];
+  let warnFlagFormat = false;
+  let warnFlagExcess = false;
 
   for (let i = 0; i < imagesList.length; i++) {
-    console.log(`${i}`, imagesList[i].name);
     if (!fileTypesAllowed.includes(imagesList[i].type)) {
-      console.log("archivo no soportado"); //!VOLVER A VER renderizar mensaje warn
+      warnFlagFormat = true;
       imagesList.splice(i, 1);
       i--;
     }
+  }
+  if (productImg?.length + imagesList?.length > 8) {
+    let excess = productImg?.length + imagesList?.length - 8;
+    warnFlagExcess = true;
+    imagesList.splice(-excess, excess);
+  }
+  if (warnFlagExcess || warnFlagFormat) {
+    warnTimer(
+      "image",
+      `${
+        warnFlagFormat &&
+        "Formato no soportado. Seleccione imagenes .jpg .jpeg o .png"
+      }${
+        warnFlagFormat && warnFlagExcess && `\n`
+      } //! VOLVER A VER meter salto de linea
+      ${warnFlagExcess && "Se permiten 8 imágenes como máximo"}`
+    );
   }
 };
 
@@ -34,6 +52,7 @@ export const validationProductFormSchema = yup.object().shape({
       (value) => validatePrice(value)
     ),
   brand: yup.string().required("Marca es requerida"),
+  category: yup.string().required("Categoría es requerida"),
   available_quantity: yup
     .string()
     .required("Stock es requerido")

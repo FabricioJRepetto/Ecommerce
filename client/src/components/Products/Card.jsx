@@ -1,63 +1,109 @@
-import React from 'react'
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom'
-import { resizer } from '../../helpers/resizer';
-import './Card.css'
+import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate, useLocation } from "react-router-dom";
+import { resizer } from "../../helpers/resizer";
+import { priceFormat } from "../../helpers/priceFormat";
+import { loadIdProductToEdit } from "../../Redux/reducer/productsSlice";
+import "./Card.css";
 
-import { ReactComponent as Sale } from '../../assets/svg/sale.svg'
-import { WhishlistButton as Fav } from './WhishlistButton';
+import { ReactComponent as Sale } from "../../assets/svg/sale.svg";
+import { WishlistButton as Fav } from "./WishlistButton";
 
-const Card = ({ img, name, price, brand, prodId, free_shipping, fav, on_sale }) => {
-    const navigate = useNavigate();
-    const [visible, setVisible] = useState(false)
-    const session = useSelector((state) => state.sessionReducer.session);
+const Card = ({ openDeleteProduct, productData, fav }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [visible, setVisible] = useState(false);
+  const { session } = useSelector((state) => state.sessionReducer);
+  const dispatch = useDispatch();
+
+  const {
+    thumbnail: img,
+    name,
+    price,
+    sale_price,
+    discount,
+    brand,
+    _id: prodId,
+    free_shipping,
+    on_sale,
+  } = productData;
+
+  const editProduct = (prodId) => {
+    dispatch(loadIdProductToEdit(prodId));
+    navigate("/admin/productForm");
+  };
+
+  const saleProduct = (prodId) => {};
 
   return (
-    <div 
-        key={prodId}
-        onMouseEnter={() => setVisible(true)}
-        onMouseLeave={() => setVisible(false)}
-        className='product-card'>
+    <div
+      key={prodId}
+      onMouseEnter={() => setVisible(true)}
+      onMouseLeave={() => setVisible(false)}
+      className="product-card"
+    >
+      {session && <Fav visible={visible} fav={fav} prodId={prodId} />}
 
-        {session && <Fav 
-                visible={visible}
-                fav={fav} prodId={prodId}/>}
-
-        <div className='card-main-container'>
-            <div 
-                onClick={() => navigate(`/details/${prodId}`)}
-                className='card-img-container pointer'>
-                <img src={resizer(img, 180)} alt="product" />
-            </div>
-
-            <div className='card-details-container'>
-
-                <div>{ brand && brand.toUpperCase()}</div>
-
-                <h2 
-                    className='pointer c-mrgn'
-                    onClick={() => navigate(`/details/${prodId}`)}>{name}</h2>
-
-                <div className='card-price-container c-mrgn'>
-                    <div className='card-original-price'>{ on_sale && <del>${price}</del>}</div>
-                    <div className='card-price-section'>
-                        <h2>${price}</h2>
-                        { on_sale && <div className='minicard-sale-section'>
-                            <Sale className='onsale-svg'/>
-                            <p>30% off</p>
-                        </div>}
-                    </div>
-                </div>
-
-                 <div className='free-shipping c-mrgn'>{free_shipping && 'envío gratis'}</div>
-
-            </div>
-
+      <div className="card-main-container">
+        <div
+          onClick={() => navigate(`/details/${prodId}`)}
+          className="card-img-container pointer"
+        >
+          <img src={resizer(img, 180)} alt="product" />
         </div>
 
-    </div>
-  )
-}
+        <div className="card-details-container">
+          <div>{brand && brand.toUpperCase()}</div>
 
-export default Card
+          <h2
+            className="card-name pointer c-mrgn"
+            onClick={() => navigate(`/details/${prodId}`)}
+          >
+            {name}
+          </h2>
+
+          <div className="card-price-container c-mrgn">
+            <div className="card-original-price">
+              {on_sale && <del>${priceFormat(price).int}</del>}
+            </div>
+            <div className="card-price-section">
+              <div className="minicard-price-section-inner">
+                <h2>${priceFormat(on_sale ? sale_price : price).int}</h2>
+                <p>{priceFormat(on_sale ? sale_price : price).cents}</p>
+              </div>
+
+              {on_sale && (
+                <div className="minicard-sale-section">
+                  <Sale className="onsale-svg" />
+                  <p>{`${discount}% off`}</p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="free-shipping c-mrgn">
+            {free_shipping && "envío gratis"}
+          </div>
+          {location.pathname === "/admin/products" && (
+            <>
+              <button type="button" onClick={() => editProduct(prodId)}>
+                EDITAR
+              </button>
+              <button
+                type="button"
+                onClick={() => openDeleteProduct({ prodId, name })}
+              >
+                ELIMINAR
+              </button>
+              <button type="button" onClick={() => saleProduct(prodId)}>
+                DESCUENTO {/* //! VOLVER A VER agregar funcion para dto */}
+              </button>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Card;

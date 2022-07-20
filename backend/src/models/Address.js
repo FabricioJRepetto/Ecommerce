@@ -1,23 +1,29 @@
 const { Schema, model } = require("mongoose");
 
-const addressSchema = new Schema(
+const AddressSchema = new Schema(
   {
-    address: [{
+    address: [
+      {
         state: String,
         city: String,
         zip_code: String,
         street_name: String,
         street_number: Number,
-        isDefault: Boolean
-    }],
+        isDefault: Boolean,
+      },
+    ],
     user: {
-      type: String,
-      require: true,
+      type: Schema.Types.ObjectId,
+      ref: "User",
     },
+    /* googleUser: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    }, */
   },
   {
     versionKey: false,
   }
 );
 
-module.exports = model("Address", addressSchema);
+module.exports = model("Address", AddressSchema);
