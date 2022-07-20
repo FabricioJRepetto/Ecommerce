@@ -7,7 +7,7 @@ import Modal from "../common/Modal";
 import { useModal } from "../../hooks/useModal";
 import { useNotification } from "../../hooks/useNotification";
 import { cartTotal, loadCart } from "../../Redux/reducer/cartSlice";
-import { loadMercadoPago } from "../../helpers/loadMP";
+// import { loadMercadoPago } from "../../helpers/loadMP";
 import { priceFormat } from "../../helpers/priceFormat";
 import './Cart.css'
 

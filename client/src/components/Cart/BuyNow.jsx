@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Modal from "../common/Modal";
 import { useModal } from "../../hooks/useModal";
-import { loadMercadoPago } from "../../helpers/loadMP";
+// import { loadMercadoPago } from "../../helpers/loadMP";
 import { priceFormat } from "../../helpers/priceFormat"
 import { useNotification } from "../../hooks/useNotification";
 import './BuyNow.css'
