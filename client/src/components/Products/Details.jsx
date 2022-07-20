@@ -12,7 +12,7 @@ import { ReactComponent as Sale } from "../../assets/svg/sale.svg";
 
 const Details = () => {
   let { id } = useParams();
-  const { cart } = useSelector((state) => state.cartReducer);
+  const cart = useSelector((state) => state.cartReducer.onCart);
   const { wishlist } = useSelector((state) => state.cartReducer);
   const { session } = useSelector((state) => state.sessionReducer);
   const dispatch = useDispatch();
