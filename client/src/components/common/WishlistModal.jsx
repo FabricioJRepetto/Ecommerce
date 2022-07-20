@@ -30,7 +30,7 @@ const WishlistModal = ({ close }) => {
             : <div className='wishlist-modal-container'>
                 <div className='modal-card-header'>Favoritos</div>
                 {data.products.length > 0  
-                   ? <div>{React.Children.toArray(
+                   ? <div className='wishlist-modal-card-container'>{React.Children.toArray(
                         data?.products.map(e => (
                             <ModalCard 
                                 productData={e}

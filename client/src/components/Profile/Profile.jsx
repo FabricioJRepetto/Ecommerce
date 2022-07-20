@@ -65,7 +65,6 @@ const Profile = () => {
 
   //? ORDERS
   const { data: orders, oLoading } = useAxios("GET", `/order/userall/`);
-  !oLoading && console.log(orders);
   // Date formater
   const formatDate = (d) => {
     return d.toString().slice(0, -13).replace('T', ' ');
