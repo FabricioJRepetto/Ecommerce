@@ -1,8 +1,7 @@
 import axios from "axios";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { useAxios } from "../../hooks/useAxios";
 import { useNotification } from "../../hooks/useNotification";
 import { addCart } from "../../Redux/reducer/cartSlice";
 import Galery from "./Galery";
@@ -14,13 +13,14 @@ import { ReactComponent as Sale } from "../../assets/svg/sale.svg";
 const Details = () => {
   let { id } = useParams();
   const cart = useSelector((state) => state.cartReducer.onCart);
-  const wishlist = useSelector((state) => state.cartReducer.wishlist);
+  const { wishlist } = useSelector((state) => state.cartReducer);
   const { session } = useSelector((state) => state.sessionReducer);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [notification] = useNotification();
 
-  const { data, loading, error } = useAxios("GET", `/product/${id}`);
+  const [data, setData] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!loading && session && data) {
@@ -31,8 +31,14 @@ const Details = () => {
       };
       axios.post(`/history/visited`, payload);
     }
+    (async () => {
+        setLoading(true);
+        const { data } = await axios(`/product/${id}`);
+        setData(data);
+        setLoading(false);
+    })();
     // eslint-disable-next-line
-  }, [loading]);
+  }, [id]);
 
   const addToCart = async (id) => {
     if (session) {
@@ -61,7 +67,6 @@ const Details = () => {
     <div>
       <h1>Details</h1>
       {loading && <p>LOADING</p>}
-      {error && <p>{error}</p>}
       {data && (
         <div>
           <div className="details-head-container">

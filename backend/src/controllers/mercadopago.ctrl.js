@@ -62,12 +62,24 @@ const mpCho = async (req, res, next) => {
                 failure: `http://localhost:3000/orders/post-sale/`,
                 pending: `http://localhost:3000/orders/post-sale/`
             },
+            expires: true,
+            expiration_date_from: order.expiration_date_from,
+            expiration_date_to: order.expiration_date_to
         };
 
+        //? setea el link de pago
         const { response } = await mercadopago.preferences.create(preference);
-        res.json(response);
+        await Order.findByIdAndUpdate(id,
+            {
+                "$set": {
+                    payment_link: response.init_point,
+                    payment_source: 'Mercadopago'
+                }
+            });
+
+        return res.json(response);
     } catch (error) {
-        console.log(error);
+        next(error);
     };
 };
 

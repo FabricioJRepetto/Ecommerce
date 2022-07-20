@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { resizer } from '../../helpers/resizer';
 import { loadCart } from '../../Redux/reducer/cartSlice';
 
@@ -10,10 +10,11 @@ const PostSale = () => {
     const [firstLoad, setFirstLoad] = useState(true)
     const [loading, setLoading] = useState(true)
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     
     const [params] = useSearchParams(),
-    status = params.get('status'),
     id = params.get('external_reference');
+    let status = params.get('status') ?? 'canceled'
     
     useEffect(() => {
         //! CAMBIAR PARA EL DEPLOY
@@ -22,6 +23,8 @@ const PostSale = () => {
         // pero tienen que hacerlo notificando al back
 
         firstLoad && (async () => {
+            if (status === 'null' || status === 'canceled') return navigate('/');
+
             const { data } = await axios(`/order/${id}`);
             console.log(data);
             setOrder(data);

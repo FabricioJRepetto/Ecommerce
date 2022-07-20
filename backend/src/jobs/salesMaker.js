@@ -74,7 +74,7 @@ const salesChecker = async () => {
 
 const flashSales = new CronJob('0 0 0 * * *', function () {
     salesMaker();
-    console.log('New Flash Sales published.');
+    console.log('// New Flash Sales published.');
 },
     null,
     false,

@@ -8,7 +8,7 @@ import "./WishlistButton.css";
 
 export const WishlistButton = ({ prodId: id, size = 30, fav, visible }) => {
   const dispatch = useDispatch();
-  const wishlist = useSelector((state) => state.cartReducer.wishlist);
+  const { wishlist } = useSelector((state) => state.cartReducer);
   const { session } = useSelector((state) => state.sessionReducer);
   const [notification] = useNotification();
 

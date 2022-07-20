@@ -69,6 +69,9 @@ const Signupin = () => {
 
         const username = data.user.name || data.user.email.split("@")[0];
         const { email, role, avatar } = data.user;
+
+        notification(`Bienvenido, ${username}`, "", "success");
+
         const wish = await axios(`/wishlist`);
         const cart = await axios(`/cart`);
 
@@ -80,7 +83,6 @@ const Signupin = () => {
         dispatch(loadCart(cart.data.id_list));
         dispatch(loadWishlist(wish.data.id_list));
 
-        notification(`Bienvenido, ${username}`, "", "success");
         //! NO PONER NAVIGATE ACA
       }
     } catch (error) {
@@ -120,6 +122,8 @@ const Signupin = () => {
 
       //: (https://lh3.googleusercontent.com/a-/AOh14GilAqwqC7Na70IrMsk0bJ8XGwz8HLFjlurl830D5g=s96-c).split('=')[0]
 
+      notification(`Bienvenido, ${username}`, "", "success");
+
       const wish = await axios(`/wishlist`);
       const cart = await axios(`/cart`);
 
@@ -133,8 +137,6 @@ const Signupin = () => {
 
       window.localStorage.setItem("loggedAvatarEcommerce", avatar);
       window.localStorage.setItem("loggedEmailEcommerce", email);
-
-      notification(`Bienvenido, ${username}`, "", "success");
     } catch (error) {
       console.log(error); //! VOLVER A VER manejo de errores
     }

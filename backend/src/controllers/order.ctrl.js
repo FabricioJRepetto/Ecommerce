@@ -1,10 +1,10 @@
 const Order = require("../models/order");
 const Cart = require("../models/cart");
-const Product = require("../models/product");
 const { rawIdProductGetter } = require("../utils/rawIdProductGetter");
 const { SHIP_COST } = require("../../constants");
 const { cartFormater } = require("../utils/cartFormater");
 //const setUserKey = require("../utils/setUserKey");
+const expirationChecker = require("../utils/expirationChecker");
 
 const getOrder = async (req, res, next) => {
   const { /* isGoogleUser, */ _id } = req.user;
@@ -21,7 +21,26 @@ const getOrder = async (req, res, next) => {
       user: _id,
       _id: req.params.id,
     });
+
     if (!order) return res.json({ message: "No orders." });
+
+    if (
+      order.status === "pending" &&
+      expirationChecker(order.expiration_date_to)
+    ) {
+      order = await Order.findOneAndUpdate(
+        {
+          _id: req.params.id,
+        },
+        {
+          $set: {
+            status: "expired",
+          },
+        },
+        { new: true }
+      );
+    }
+
     return res.json(order);
   } catch (error) {
     next(error);
@@ -34,6 +53,26 @@ const getOrdersUser = async (req, res, next) => {
 
   try {
     let userOrders = await Order.find({ user: _id });
+
+    for (const order of userOrders) {
+      if (order.status === "pending") {
+        if (expirationChecker(order.expiration_date_to)) {
+          order.status = "expired";
+          await Order.findOneAndUpdate(
+            {
+              _id: req.params.id,
+            },
+            {
+              $set: {
+                status: "expired",
+              },
+            },
+            { new: true }
+          );
+        }
+      }
+    }
+
     return res.json(userOrders);
   } catch (error) {
     next(error);
@@ -80,9 +119,9 @@ const createOrder = async (req, res, next) => {
     await newOrder.save();
 
     /* const userFound = await User.findById(req.user._id);
-        userFound.orders.push(newOrder._id);
-    
-        await userFound.save(); */
+            userFound.orders.push(newOrder._id);
+        
+            await userFound.save(); */
 
     return res.json(newOrder._id);
   } catch (error) {
@@ -172,16 +211,30 @@ const updateOrder = async (req, res, next) => {
     } = req.body;
 
     if (req.body.status) {
-      const order = await Order.findByIdAndUpdate(
-        req.params.id,
-        {
-          $set: {
-            status: req.body.status,
+      if (req.body.status === "approved") {
+        const order = await Order.findByIdAndUpdate(
+          req.params.id,
+          {
+            $set: {
+              status: req.body.status,
+              payment_date: Date.now(),
+            },
           },
-        },
-        { new: true }
-      );
-      return res.json({ message: `Order status: ${order.status}` });
+          { new: true }
+        );
+        return res.json({ message: `Order status: ${order.status}` });
+      } else {
+        const order = await Order.findByIdAndUpdate(
+          req.params.id,
+          {
+            $set: {
+              status: req.body.status,
+            },
+          },
+          { new: true }
+        );
+        return res.json({ message: `Order status: ${order.status}` });
+      }
     }
 
     if (product_id) {

@@ -62,13 +62,13 @@ const Profile = () => {
     }
     // eslint-disable-next-line
   }, [wl_id]);
+
   //? ORDERS
   const { data: orders, oLoading } = useAxios("GET", `/order/userall/`);
-
+  !oLoading && console.log(orders);
   // Date formater
-  const formatDate = (date) => {
-    let fecha = new Date(date.slice(0, -1));
-    return fecha.toString().slice(0, 21);
+  const formatDate = (d) => {
+    return d.toString().slice(0, -13).replace('T', ' ');
   };
 
   //? ADDRESS
@@ -188,7 +188,14 @@ const Profile = () => {
                             alt={"product"}
                           />
                         ))}
+                        <p>- - -</p>
                         <p>{e.description}</p>
+                        <p>payment status: {e.status}</p>
+                        <p>creation date: {formatDate(e.expiration_date_from)}</p>
+                        {e.status === 'pending' && `expiration: ${formatDate(e.expiration_date_to)}`}
+                        {e.status === 'pending' && e.payment_link && <div><a style={{ color: '#3483fa'}} href={e.payment_link}>Continue payment.</a></div>} 
+                        <p>{e.payment_source}</p>
+                        <p>- - -</p>
                         <p>
                           shipping address:{" "}
                           {`
@@ -197,12 +204,11 @@ const Profile = () => {
                                 ${e.shipping_address?.city} 
                             `}
                         </p>
-                        <p>date: {formatDate(e.createdAt)}</p>
-                        <p>payment status: {e.status}</p>
                         <p>free shipping: {e.free_shipping ? "Yes" : "No"}</p>
                         <p>shipping cost: {e.shipping_cost}</p>
                         <p>total payment: ${e.total}</p>
-                        <p>- - -</p>
+                        <hr />
+                        <br />
                       </div>
                     ))
                   )
