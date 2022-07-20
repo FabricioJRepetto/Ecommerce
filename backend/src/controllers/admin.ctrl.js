@@ -391,9 +391,8 @@ const getMetrics = async (req, res, next) => {
       totalProfits += order.total;
     });
     const ordersApproved = await Order.countDocuments({ status: "approved" });
-    const ordersCanceled = await Order.countDocuments({ status: "canceled" });
-    const ordersRejected = await Order.countDocuments({ status: "rejected" });
     const ordersPending = await Order.countDocuments({ status: "pending" });
+    const ordersExpired = await Order.countDocuments({ status: "expired" });
 
     const wishlists = await Wishlist.find();
     let productsWished = 0;
@@ -411,9 +410,8 @@ const getMetrics = async (req, res, next) => {
       totalProfits,
       productsWished,
       ordersApproved,
-      ordersCanceled,
-      ordersRejected,
       ordersPending,
+      ordersExpired,
     });
   } catch (error) {
     next(error);

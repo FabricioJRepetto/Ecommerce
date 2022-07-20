@@ -11,9 +11,8 @@ const initialMetrics = {
   productsWished: null,
   activeSales: null,
   ordersApproved: null,
-  ordersCanceled: null,
-  ordersRejected: null,
   ordersPending: null,
+  ordersExpired: null,
 };
 
 const Metrics = () => {
@@ -38,9 +37,8 @@ const Metrics = () => {
       <h4>Ganancias totales: {metrics.totalProfits}</h4>
       <h4>Productos deseados: {metrics.productsWished}</h4>
       <h4>Órdenes completadas: {metrics.ordersApproved}</h4>
-      <h4>Órdenes canceladas: {metrics.ordersCanceled}</h4>
-      <h4>Órdenes rechazadas: {metrics.ordersRejected}</h4>
       <h4>Órdenes pendientes: {metrics.ordersPending}</h4>
+      <h4>Órdenes expiradas: {metrics.ordersExpired}</h4>
     </div>
   );
 };

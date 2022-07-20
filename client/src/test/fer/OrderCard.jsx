@@ -9,20 +9,22 @@ const OrderCard = ({ order }) => {
     products,
     description,
     user,
-    //googleUser,
     shipping_address,
     status,
-    createdAt,
+    expiration_date_from,
+    expiration_date_to,
+    payment_date,
     free_shipping,
     shipping_cost,
     total,
   } = order;
 
-  //const userId = user; || googleUser;
-
-  const formatDate = (date) => {
-    let fecha = new Date(date.slice(0, -1));
-    return fecha.toString().slice(0, 21);
+  const formatDate = (d) => {
+    if (typeof d === "string") {
+      return d.toString().slice(0, -13).replace("T", " ");
+    } else {
+      return new Date(d).toISOString().slice(0, -8).replace("T", " ");
+    }
   };
 
   return (
@@ -46,11 +48,17 @@ const OrderCard = ({ order }) => {
                                 ${shipping_address?.city} 
                             `}
       </p>
-      <p>date: {formatDate(createdAt)}</p>
-      <p>payment status: {status}</p>
-      <p>free shipping: {free_shipping ? "Yes" : "No"}</p>
-      <p>shipping cost: {shipping_cost}</p>
-      <p>total payment: ${total}</p>
+      <p>Creado: {formatDate(expiration_date_from)}</p>
+      <p>Estado: {status}</p>
+      {status === "approved" && <p>Aprobado: {formatDate(payment_date)}</p>}
+      {status === "pending" && (
+        <p>Caducidad: {formatDate(expiration_date_to)}</p>
+      )}
+      {status === "expired" && (
+        <p>Caducado: {formatDate(expiration_date_to)}</p>
+      )}
+      <p>Cost de envío: {free_shipping ? "Gratis" : shipping_cost}</p>
+      <p>Total: ${total}</p>
       <p>- - -</p>
     </div>
   );
