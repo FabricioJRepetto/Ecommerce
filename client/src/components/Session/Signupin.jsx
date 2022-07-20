@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import {
@@ -21,7 +21,6 @@ const { REACT_APP_OAUTH_CLIENT_ID } = process.env;
 
 const Signupin = () => {
   const [signSelect, setSignSelect] = useState("signin");
-  const [warn, setWarn] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { session } = useSelector((state) => state.sessionReducer);
@@ -45,7 +44,6 @@ const Signupin = () => {
     formState: { errors: errorsForgot },
   } = useForm();
 
-  let timeoutId = useRef();
   const location = useLocation();
   const hasPreviousState = location.key !== "default";
   const [notification] = useNotification();
@@ -263,7 +261,6 @@ const Signupin = () => {
           />
           {errorsSignin.email?.type === "required" && <p>Enter your email</p>}
           {errorsSignin.email?.type === "pattern" && <p>Enter a valid email</p>}
-          {warn && <p>{warn}</p>}
 
           <input
             type="text"
