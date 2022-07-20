@@ -74,12 +74,15 @@ const NavBar = () => {
 
         <div className="navbar-central-subsection">
           <NavLink to={"products"}>
-            <p>Products</p>
+            <p className='provider-store'>Provider Store</p>
           </NavLink>
 
           <NavLink to={"admin"}>
             <p>ADMIN</p>
           </NavLink>
+
+            <p>About us</p>
+
         </div>
       </div>
 
