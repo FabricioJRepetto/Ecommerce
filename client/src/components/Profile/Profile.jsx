@@ -20,6 +20,7 @@ const Profile = () => {
   const { section } = useParams();
 
   const [render, setRender] = useState(section);
+  const [details, setDetails] = useState([])
   const [address, setAddress] = useState([]);
   const [wishlist, setWishlist] = useState([]);
   const [history, setHistory] = useState([]);
@@ -48,6 +49,7 @@ const Profile = () => {
       navigate("/signin");
     } else {
       (async () => {
+        //: usar un promiseAll
         const { data } = await axios(`/address/`);
         data.address ? setAddress(data.address) : setAddress([]);
 

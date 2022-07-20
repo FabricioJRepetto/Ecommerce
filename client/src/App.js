@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import {
     loadAvatar,
@@ -33,27 +33,33 @@ import OrdersAdmin from "./test/fer/OrdersAdmin";
 import Metrics from "./test/fer/Metrics";
 
 import BackToTop from "./helpers/backToTop/BackToTop";
+import { useNotification } from "./hooks/useNotification";
 import RequireRole from "./test/fer/RequireRole";
 import UsersAdmin from "./test/fer/UsersAdmin";
 
 function App() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const [notification] = useNotification();
+    const { session } = useSelector(state => state.sessionReducer);
 
     useEffect(() => {
         const loggedUserToken = window.localStorage.getItem("loggedTokenEcommerce");
-        const loggedAvatar = window.localStorage.getItem("loggedAvatarEcommerce");
-        const loggedEmail = window.localStorage.getItem("loggedEmailEcommerce");
+        // const loggedAvatar = window.localStorage.getItem("loggedAvatarEcommerce");
+        // const loggedEmail = window.localStorage.getItem("loggedEmailEcommerce");
 
         (async () => {
             try {
                 if (loggedUserToken) {
                     const { data } = await axios(`/user/profile/${loggedUserToken}`); //! VOLVER A VER fijarse con nuevos usuarios de google
-                    const { email, name, role, isGoogleUser, avatar } = data;
+                    // console.log(data);
+
+                    const { email, googleEmail, name, username, role, isGoogleUser, avatar } = data;
+
                     dispatch(sessionActive(true));
-                    dispatch(loadUsername(name));
-                    dispatch(loadAvatar(avatar ? avatar : loggedAvatar)); //! VOLVER A VER ojo con esto, puede ser que quede guardado el avatar de otro user
-                    dispatch(loadEmail(email ? email : loggedEmail));
+                    dispatch(loadUsername(username || name));
+                    dispatch(loadAvatar(avatar ? avatar : false));
+                    dispatch(loadEmail(isGoogleUser ? googleEmail : email));
                     dispatch(loadRole(role));
                     dispatch(loadGoogleUser(isGoogleUser));
 
@@ -71,7 +77,7 @@ function App() {
             }
         })();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [session]);
 
     return (
         <div className="App" id="scroller">
