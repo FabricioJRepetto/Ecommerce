@@ -1,25 +1,17 @@
 const { Router } = require("express");
 const router = Router();
 const {
-    getAll,
-    getByQuery,
-    getById,
-    createProduct,
-    updateProduct,
-    deleteProduct,
-    deleteAll,
-    stock,
-    getPromos,
+  getAll,
+  getByQuery,
+  getById,
+  stock,
+  getPromos,
 } = require("../controllers/products.ctrl.js");
 
 router.get("/", getAll);
-router.get("/promos", getPromos);
 router.get("/search", getByQuery);
 router.get("/:id", getById);
-router.post("/", createProduct);
 router.put("/stock/", stock);
-router.put("/:id", updateProduct);
-router.delete("/deleteall", deleteAll);
-router.delete("/:id", deleteProduct);
+router.get("/promos", getPromos);
 
 module.exports = router;

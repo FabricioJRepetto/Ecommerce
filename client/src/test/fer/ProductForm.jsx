@@ -179,7 +179,6 @@ const ProductForm = () => {
   }, [productImg]);
 
   const submitProduct = async (productData) => {
-    console.log(productData);
     if (!productToEdit && productImg.length === 0) {
       return warnTimer("image", "Debes subir al menos una imágen");
     }
@@ -205,7 +204,7 @@ const ProductForm = () => {
         formData.append("data", JSON.stringify(data));
         //  formData.append("imgsToEdit", imgsToEdit);
 
-        await axios.put(`/product/${productToEdit}`, formData, {
+        await axios.put(`/admin/product/${productToEdit}`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -214,7 +213,7 @@ const ProductForm = () => {
         navigate("/admin/products");
       } else {
         formData.append("data", JSON.stringify(productData));
-        await axios.post(`/product/`, formData, {
+        await axios.post(`/admin/product/`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },

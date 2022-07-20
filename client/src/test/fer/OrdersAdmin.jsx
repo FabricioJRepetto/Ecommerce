@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import OrderCard from "./OrderCard";
 
-const Orders = () => {
+const OrdersAdmin = () => {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
-    axios("/order/adminall")
+    axios("/admin/order/getAll")
       .then(({ data }) => {
+        console.log(data);
         setOrders(data);
       })
       .catch((err) => console.log(err)); //! VOLVER A VER manejo de errores
@@ -28,4 +29,4 @@ const Orders = () => {
   );
 };
 
-export default Orders;
+export default OrdersAdmin;

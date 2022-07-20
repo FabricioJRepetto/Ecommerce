@@ -3,7 +3,7 @@ const Cart = require("../models/cart");
 const { rawIdProductGetter } = require("../utils/rawIdProductGetter");
 const { SHIP_COST } = require("../../constants");
 const { cartFormater } = require("../utils/cartFormater");
-const setUserKey = require("../utils/setUserKey");
+//const setUserKey = require("../utils/setUserKey");
 const expirationChecker = require("../utils/expirationChecker");
 
 const getOrder = async (req, res, next) => {
@@ -15,7 +15,7 @@ const getOrder = async (req, res, next) => {
                 .status(400)
                 .json({ message: "User ID or Order ID not given." });
 
-        const userKey = setUserKey(isGoogleUser);
+        //const userKey = setUserKey(isGoogleUser);
 
         let order = await Order.findOne({
             [userKey]: _id,
@@ -44,8 +44,8 @@ const getOrder = async (req, res, next) => {
 };
 
 const getOrdersUser = async (req, res, next) => {
-    const { isGoogleUser, _id } = req.user;
-    const userKey = setUserKey(isGoogleUser);
+    const { /* isGoogleUser, */ _id } = req.user;
+    //const userKey = setUserKey(isGoogleUser);
 
     try {
         let userOrders = await Order.find({ [userKey]: _id });
@@ -75,8 +75,8 @@ const getOrdersUser = async (req, res, next) => {
 };
 
 const createOrder = async (req, res, next) => {
-    const { isGoogleUser, _id } = req.user;
-    const userKey = setUserKey(isGoogleUser);
+    const { /* isGoogleUser, */ _id } = req.user;
+    //const userKey = setUserKey(isGoogleUser);
 
     try {
         const { state, city, zip_code, street_name, street_number } = req.body;
@@ -97,7 +97,7 @@ const createOrder = async (req, res, next) => {
 
         const newOrder = new Order({
             products,
-            [userKey]: _id,
+            user: _id,
             shipping_address: {
                 state,
                 city,
@@ -114,9 +114,9 @@ const createOrder = async (req, res, next) => {
         await newOrder.save();
 
         /* const userFound = await User.findById(req.user._id);
-        userFound.orders.push(newOrder._id);
-    
-        await userFound.save(); */
+            userFound.orders.push(newOrder._id);
+        
+            await userFound.save(); */
 
         return res.json(newOrder._id);
     } catch (error) {
@@ -125,8 +125,8 @@ const createOrder = async (req, res, next) => {
 };
 
 const buyNowOrder = async (req, res, next) => {
-    const { isGoogleUser, _id } = req.user;
-    const userKey = setUserKey(isGoogleUser);
+    const { /* isGoogleUser, */ _id } = req.user;
+    //const userKey = setUserKey(isGoogleUser);
 
     try {
         const {
@@ -153,7 +153,7 @@ const buyNowOrder = async (req, res, next) => {
                 quantity,
                 on_sale: p.on_sale,
             },
-            [userKey]: _id,
+            user: _id,
             shipping_address: {
                 state,
                 city,
@@ -176,12 +176,12 @@ const buyNowOrder = async (req, res, next) => {
 };
 
 const deleteOrder = async (req, res, next) => {
-    const { isGoogleUser, _id } = req.user;
-    const userKey = setUserKey(isGoogleUser);
+    const { /* isGoogleUser, */ _id } = req.user;
+    //const userKey = setUserKey(isGoogleUser);
 
     try {
         await Order.deleteMany({
-            [userKey]: _id,
+            user: _id,
             status: "pending",
         });
         return res.json({ message: "Order deleted" });
@@ -191,9 +191,6 @@ const deleteOrder = async (req, res, next) => {
 };
 
 const updateOrder = async (req, res, next) => {
-    const { isGoogleUser } = req.user;
-    const userKey = setUserKey(isGoogleUser);
-
     try {
         let p = false;
         let cart = false;

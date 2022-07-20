@@ -1,6 +1,5 @@
-import React from "react";
 import { resizer } from "../../helpers/resizer";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 
 const OrderCard = ({ order }) => {
   //! VOLVER A VER agregar ordenamiento y filtros
@@ -10,6 +9,7 @@ const OrderCard = ({ order }) => {
     products,
     description,
     user,
+    //googleUser,
     shipping_address,
     status,
     createdAt,
@@ -17,6 +17,9 @@ const OrderCard = ({ order }) => {
     shipping_cost,
     total,
   } = order;
+
+  //const userId = user; || googleUser;
+
   const formatDate = (date) => {
     let fecha = new Date(date.slice(0, -1));
     return fecha.toString().slice(0, 21);
@@ -28,7 +31,13 @@ const OrderCard = ({ order }) => {
         <img key={pic.img} src={resizer(pic.img)} alt={"product"} />
       ))}
       <p>{description}</p>
-      {location.pathname !== "/admin/users" && <p>user: {user.name}</p>}
+      {location.pathname === "/admin/orders" && (
+        <>
+          <Link to={`/admin/users/${user}`}>
+            <p>user: {user}</p>
+          </Link>
+        </>
+      )}
       <p>
         shipping address:{" "}
         {`
