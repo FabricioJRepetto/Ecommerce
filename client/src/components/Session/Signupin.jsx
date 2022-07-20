@@ -64,24 +64,26 @@ const Signupin = () => {
 
       if (data.user) {
         window.localStorage.setItem("loggedTokenEcommerce", data.token);
-
         dispatch(sessionActive(true));
 
         const username = data.user.name || data.user.email.split("@")[0];
-        const { email, role, avatar } = data.user;
-
         notification(`Bienvenido, ${username}`, "", "success");
 
-        const wish = await axios(`/wishlist`);
-        const cart = await axios(`/cart`);
+        // const { email, role, avatar } = data.user;
 
+        // const wish = await axios(`/wishlist`);
+        // const cart = await axios(`/cart`);
+
+        /*
         dispatch(loadUsername(username));
         dispatch(loadEmail(email));
         if (avatar) dispatch(loadAvatar(avatar));
         dispatch(loadRole(role));
         dispatch(loadGoogleUser(false));
-        dispatch(loadCart(cart.data.id_list));
-        dispatch(loadWishlist(wish.data.id_list));
+        */
+
+        // dispatch(loadCart(cart.data.id_list));
+        // dispatch(loadWishlist(wish.data.id_list));
 
         //! NO PONER NAVIGATE ACA
       }
@@ -101,14 +103,17 @@ const Signupin = () => {
     const userDecoded = jwt_decode(response.credential);
     const {
       sub,
-      email,
+      googleEmail: email,
       email_verified: emailVerified,
       picture: avatar,
       name,
+      username,
       given_name: firstName,
       family_name: lastName,
     } = userDecoded;
-    const username = name || email || `Guest ${sub}`;
+    const nickname = username || name || email || `Guest ${sub}`;
+
+    console.log(userDecoded);
 
     try {
       await axios.post(`/user/signinGoogle`, {
@@ -120,23 +125,22 @@ const Signupin = () => {
         lastName,
       });
 
-      //: (https://lh3.googleusercontent.com/a-/AOh14GilAqwqC7Na70IrMsk0bJ8XGwz8HLFjlurl830D5g=s96-c).split('=')[0]
+      notification(`Bienvenido, ${nickname}`, "", "success");
 
-      notification(`Bienvenido, ${username}`, "", "success");
+      // const wish = await axios(`/wishlist`);
+      // const cart = await axios(`/cart`);
 
-      const wish = await axios(`/wishlist`);
-      const cart = await axios(`/cart`);
+      // dispatch(loadUsername(username));
+      // dispatch(loadAvatar(avatar));
+      // dispatch(loadEmail(email));
+      // dispatch(loadRole("client"));
+      // dispatch(loadGoogleUser(true));
 
-      dispatch(loadUsername(username));
-      dispatch(loadAvatar(avatar));
-      dispatch(loadEmail(email));
-      dispatch(loadRole("client"));
-      dispatch(loadGoogleUser(true));
-      dispatch(loadCart(cart.data.id_list));
-      dispatch(loadWishlist(wish.data.id_list));
+      // dispatch(loadCart(cart.data.id_list));
+      // dispatch(loadWishlist(wish.data.id_list));
 
-      window.localStorage.setItem("loggedAvatarEcommerce", avatar);
-      window.localStorage.setItem("loggedEmailEcommerce", email);
+      // window.localStorage.setItem("loggedAvatarEcommerce", avatar);
+      // window.localStorage.setItem("loggedEmailEcommerce",email);
     } catch (error) {
       console.log(error); //! VOLVER A VER manejo de errores
     }
@@ -144,6 +148,7 @@ const Signupin = () => {
 
   useEffect(() => {
     //! VOLVER A VER al loguear con user de google, entrar a profile, y luego actualizar pagina, ingresa a signin y no redirige
+    //? si redirige, hay historial entonces vuelve 1 vez y queda en el sign in otra vez
     if (session) {
       if (hasPreviousState) {
         navigate(-1);

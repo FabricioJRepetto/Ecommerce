@@ -8,13 +8,13 @@ const getHistory = async (req, res, next) => {
     try {
         const history = await History.findOne({ user: req.user._id });
 
-        if (history === null) {
+        if (!history) {
             await History.create({
                 products: [],
                 last_search: '',
                 user: req.user._id
             })
-            return res.json({ message: 'History created' })
+            return res.json({ message: 'History created', products: [] })
         }
 
         let promises = [];
@@ -34,6 +34,8 @@ const getSuggestion = async (req, res, next) => {
     try {
         const history = await History.findOne({ 'user': req.user._id });
         let response = '';
+
+        if (!history) return res.json({ message: 'No category found in history' })
 
         //? busco categoria del ultimo visto
         const { category } = await rawIdProductGetter(history.products[0]);
