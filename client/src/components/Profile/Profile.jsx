@@ -20,7 +20,7 @@ const Profile = () => {
   const { section } = useParams();
 
   const [render, setRender] = useState(section);
-  const [details, setDetails] = useState([])
+  // const [details, setDetails] = useState([])
   const [address, setAddress] = useState([]);
   const [wishlist, setWishlist] = useState([]);
   const [history, setHistory] = useState([]);

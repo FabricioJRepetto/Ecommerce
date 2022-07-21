@@ -33,50 +33,48 @@ const getHistory = async (req, res, next) => {
 const getSuggestion = async (req, res, next) => {
     try {
         const history = await History.findOne({ 'user': req.user._id });
-        let response = '';
 
         if (!history) return res.json({ message: 'No category found in history' })
 
         //? busco categoria del ultimo visto
         const { category } = await rawIdProductGetter(history.products[0]);
         if (!category) return res.json({ error: 404, message: 'No category found in history' });
+        console.log(category);
 
-        //? busco descuento maximo disponible
-        const { data: categoryRes } = await axios(`https://api.mercadolibre.com/sites/MLA/search?&official_store=all&category=${category}`);
-        const desc = categoryRes.available_filters.find(e => e.id === 'discount')?.values.pop().id || false;
-        //? si no hay desc disponibles, filtramos por envio gratis
-        let ship = false
-        if (!desc) {
-            ship = 'free'
-        }
-
-        //? genero busqueda aplicando descuento max
-        const { data } = await axios(`https://api.mercadolibre.com/sites/MLA/search?&official_store=all&category=${category}&discount=${desc}&shipping_cost=${ship}`);
+        //? genero busqueda aplicando descuento
+        const { data } = await axios(`https://api.mercadolibre.com/sites/MLA/search?official_store=all&category=${category}&discount=5-100`);
         //? formateo resultados
-        response = await meliSearchParser(data.results.slice(0, 5));
+        let parsed = await meliSearchParser(data.results);
+
+        let response = [];
+        let idList = [];
+        if (parsed.length > 0) {
+            for (let i = 0; response.length < 5; i++) {
+                console.log(i + 'a');
+                // todas ofertas tarda mucho :( data.discount > 0 &&
+                const product = await rawIdProductGetter(parsed[i]._id);
+                if (product) {
+                    if (product._id) {
+                        response.push(product)
+                        idList.push(product._id)
+                    }
+                } else {
+                    console.log('break');
+                    break
+                }
+            }
+        }
 
         //? si no llega a 5 resultados
         if (response.length < 5) {
-            //? parseamos todos los resultados de la categoria
-            let fillers = await meliSearchParser(categoryRes.results);
+            const { data } = await axios(`https://api.mercadolibre.com/sites/MLA/search?category=${category}&discount=5-100`);
+            let parsed = await meliSearchParser(data.results);
 
-            if (desc) {
-                //? agregamos resultados con envio gratis
-                response = [...response, ...fillers.filter(e =>
-                    !e.on_sale && e.free_shipping
-                )];
-                //? ...agregamos el resto de resultados
-                if (response.length < 5) {
-                    response = [...response, ...fillers.filter(e =>
-                        !e.on_sale && !e.free_shipping
-                    )].slice(0, 5);
-                }
-            } else {
-                //? ...agregamos el resto de resultados
-                response = [...response, ...fillers.filter(e =>
-                    !e.free_shipping
-                )].slice(0, 5);
-            }
+            for (let i = 0; response.length < 5; i++) {
+                console.log(i + 'b');
+                const product = await rawIdProductGetter(parsed[i]._id);
+                !product.message && !idList.includes(product._id) && response.push(product)
+            };
         };
 
         return res.json(response)

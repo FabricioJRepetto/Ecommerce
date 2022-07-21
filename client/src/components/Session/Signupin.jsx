@@ -3,16 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import {
   sessionActive,
-  loadUsername,
-  loadEmail,
-  loadAvatar,
-  loadRole,
-  loadGoogleUser,
 } from "../../Redux/reducer/sessionSlice";
 import jwt_decode from "jwt-decode";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { loadCart, loadWishlist } from "../../Redux/reducer/cartSlice";
 import "./Signupin.css";
 import { useNotification } from "../../hooks/useNotification";
 import { useModal } from "../../hooks/useModal";
@@ -50,7 +44,7 @@ const Signupin = () => {
   const [isOpenForgotPassword, openForgotPassword, closeForgotPassword] =
     useModal();
 
-  const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i;
+  const emailRegex = /^[\w-.]+@([\w-])+[.\w-]*$/i;
 
   const signup = (signupData) => {
     axios.post(`/user/signup`, signupData).then((res) => console.log(res.data));
@@ -68,24 +62,6 @@ const Signupin = () => {
 
         const username = data.user.name || data.user.email.split("@")[0];
         notification(`Bienvenido, ${username}`, "", "success");
-
-        // const { email, role, avatar } = data.user;
-
-        // const wish = await axios(`/wishlist`);
-        // const cart = await axios(`/cart`);
-
-        /*
-        dispatch(loadUsername(username));
-        dispatch(loadEmail(email));
-        if (avatar) dispatch(loadAvatar(avatar));
-        dispatch(loadRole(role));
-        dispatch(loadGoogleUser(false));
-        */
-
-        // dispatch(loadCart(cart.data.id_list));
-        // dispatch(loadWishlist(wish.data.id_list));
-
-        //! NO PONER NAVIGATE ACA
       }
     } catch (error) {
       notification(error.response.data.message, "", "error");
@@ -126,21 +102,6 @@ const Signupin = () => {
       });
 
       notification(`Bienvenido, ${nickname}`, "", "success");
-
-      // const wish = await axios(`/wishlist`);
-      // const cart = await axios(`/cart`);
-
-      // dispatch(loadUsername(username));
-      // dispatch(loadAvatar(avatar));
-      // dispatch(loadEmail(email));
-      // dispatch(loadRole("client"));
-      // dispatch(loadGoogleUser(true));
-
-      // dispatch(loadCart(cart.data.id_list));
-      // dispatch(loadWishlist(wish.data.id_list));
-
-      // window.localStorage.setItem("loggedAvatarEcommerce", avatar);
-      // window.localStorage.setItem("loggedEmailEcommerce",email);
     } catch (error) {
       console.log(error); //! VOLVER A VER manejo de errores
     }

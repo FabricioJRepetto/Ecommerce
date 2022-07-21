@@ -33,20 +33,16 @@ import OrdersAdmin from "./test/fer/OrdersAdmin";
 import Metrics from "./test/fer/Metrics";
 
 import BackToTop from "./helpers/backToTop/BackToTop";
-import { useNotification } from "./hooks/useNotification";
 import RequireRole from "./test/fer/RequireRole";
 import UsersAdmin from "./test/fer/UsersAdmin";
 
 function App() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [notification] = useNotification();
     const { session } = useSelector(state => state.sessionReducer);
 
     useEffect(() => {
         const loggedUserToken = window.localStorage.getItem("loggedTokenEcommerce");
-        // const loggedAvatar = window.localStorage.getItem("loggedAvatarEcommerce");
-        // const loggedEmail = window.localStorage.getItem("loggedEmailEcommerce");
 
         (async () => {
             try {
