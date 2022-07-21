@@ -16,6 +16,7 @@ import { ReactComponent as Fav } from "../../assets/svg/fav.svg";
 import { ReactComponent as Avatar } from "../../assets/svg/avatar.svg";
 import Signout from "../Session/Signout";
 import WishlistModal from "../common/WishlistModal";
+import { avatarResizer } from "../../helpers/resizer";
 
 
 const NavBar = () => {
@@ -102,7 +103,7 @@ const NavBar = () => {
                 {avatar ? (
                   <div className="navbar-avatar">
                     <img
-                      src={avatar}
+                      src={avatarResizer(avatar)}
                       referrerPolicy="no-referrer"
                       alt="navbar-avatar"
                     />

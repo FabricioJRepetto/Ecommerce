@@ -89,8 +89,6 @@ const Signupin = () => {
     } = userDecoded;
     const nickname = username || name || email || `Guest ${sub}`;
 
-    console.log(userDecoded);
-
     try {
       await axios.post(`/user/signinGoogle`, {
         sub,

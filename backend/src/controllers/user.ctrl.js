@@ -94,7 +94,7 @@ const signinGoogle = async (req, res, next) => {
         } else {
             if (emailVerified !== userFound.emailVerified)
                 userFound.emailVerified = emailVerified;
-            if (avatar !== userFound.avatar) userFound.avatar = avatar;
+            if (!userFound.avatar) userFound.avatar = avatar;
             if (firstName !== userFound.firstName) userFound.firstName = firstName;
             if (lastName !== userFound.lastName) userFound.lastName = lastName;
             await userFound.save();
