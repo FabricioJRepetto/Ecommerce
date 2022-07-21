@@ -3,7 +3,6 @@ const { cartFormater } = require("../utils/cartFormater");
 
 const getUserCart = async (req, res, next) => {
     try {
-        console.log(req.user._id);
         const cart = await Cart.findOne({ owner: req.user._id });
 
         if (!cart) {

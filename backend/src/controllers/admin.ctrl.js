@@ -70,7 +70,6 @@ const getAllUsers = async (req, res, next) => {
         };
         for (const key in user) {
             if (usefulData.includes(key)) {
-                //console.log(key + " " + user[key]);
                 newUser[key] = user[key];
             }
         }
@@ -186,7 +185,6 @@ const getUserWishlist = async (req, res, next) => {
 };
 
 const deleteUser = async (req, res, next) => {
-    console.log("-----------llega");
     const { id } = req.params;
 
     try {

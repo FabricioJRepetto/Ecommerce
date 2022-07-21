@@ -122,7 +122,6 @@ const profile = async (req, res, next) => {
             isGoogleUser,
             googleEmail,
         } = userFound;
-        console.log(userFound);
 
         let aux = userFound
         delete aux.password

@@ -50,8 +50,8 @@ const getSuggestion = async (req, res, next) => {
         if (parsed.length > 0) {
             for (let i = 0; response.length < 5; i++) {
                 // todas ofertas tarda mucho :( data.discount > 0 &&
-                const product = await rawIdProductGetter(parsed[i]._id);
-                if (product) {
+                if (parsed[i]) {
+                    const product = await rawIdProductGetter(parsed[i]._id);
                     if (product._id) {
                         response.push(product)
                         idList.push(product._id)
@@ -64,12 +64,18 @@ const getSuggestion = async (req, res, next) => {
 
         //? si no llega a 5 resultados
         if (response.length < 5) {
-            const { data } = await axios(`https://api.mercadolibre.com/sites/MLA/search?category=${category}&discount=5-100`);
+            const { data } = await axios(`https://api.mercadolibre.com/sites/MLA/search?category=${category}&shipping=free`);
             let parsed = await meliSearchParser(data.results);
 
             for (let i = 0; response.length < 5; i++) {
-                const product = await rawIdProductGetter(parsed[i]._id);
-                !product.message && !idList.includes(product._id) && response.push(product)
+                if (parsed[i]) {
+                    const product = await rawIdProductGetter(parsed[i]._id);
+                    if (product._id) {
+                        !product.message && !idList.includes(product._id) && response.push(product)
+                    }
+                } else {
+                    break
+                }
             };
         };
 

@@ -7,7 +7,7 @@ import { useAxios } from "../../hooks/useAxios";
 import { useModal } from "../../hooks/useModal";
 import Modal from "../common/Modal";
 import Signout from "../Session/Signout";
-import { resizer } from "../../helpers/resizer";
+import { resizer, avatarResizer } from "../../helpers/resizer";
 import { useNotification } from "../../hooks/useNotification";
 import Card from "../Products/Card";
 import MiniCard from "../Products/MiniCard";
@@ -191,7 +191,7 @@ const Profile = () => {
             <div className="profile-avatar-container">
               <img
                 src={
-                  avatar ? avatar : require("../../assets/avatardefault.png")
+                  avatar ? avatarResizer(avatar) : require("../../assets/avatardefault.png")
                 }
                 referrerPolicy="no-referrer"
                 alt="avatar"
