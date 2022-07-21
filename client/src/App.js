@@ -50,8 +50,7 @@ function App() {
             try {
                 if (loggedUserToken) {
                     const { data } = await axios(`/user/profile/${loggedUserToken}`); //! VOLVER A VER fijarse con nuevos usuarios de google
-                    console.log('app.js');
-                    console.log(data);
+                    // console.log(data);
 
                     const { _id, email, googleEmail, name, firstName, lastName, username, role, isGoogleUser, avatar } = data;
 

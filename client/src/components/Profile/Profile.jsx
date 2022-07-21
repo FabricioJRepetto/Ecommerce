@@ -18,6 +18,7 @@ const Profile = () => {
   const navigate = useNavigate();
   const [notification] = useNotification();
   const [isOpenAddForm, openModalAddForm, closeAddForm, prop] = useModal();
+  const [isOpenAvatar, openAvatar, closeAvatar] = useModal();
   const { section } = useParams();
   const dispatch = useDispatch();
 
@@ -145,13 +146,8 @@ const Profile = () => {
 
     const avatarHandler = (e) => {
         setNewAvatar(e.target.files);
+        setAvatarPreview(URL.createObjectURL(e.target.files[0]));
     }
-
-    // useEffect(() => {
-    //     const newImageUrls = [];
-    //     newImageUrls.push(URL.createObjectURL(newAvatar));    
-    //     setAvatarPreview(newImageUrls);
-    // }, [newAvatar]);
 
     const uploadAvatar = async () => { 
         let formData = new FormData();
@@ -195,6 +191,8 @@ const Profile = () => {
                 }
                 referrerPolicy="no-referrer"
                 alt="avatar"
+                onClick={openAvatar}
+                style={{ cursor: 'pointer'}}
               />
             </div>
             <h2>{username}</h2>
@@ -204,26 +202,9 @@ const Profile = () => {
             <p>{id}</p>
             <p>{role}</p>
             <br />
-            <button disabled>Edit details</button>
+            <button onClick={()=>console.log('detalles')}>Edit details</button>
             <br />
             <button disabled>Change password</button>
-            <br />
-            <input 
-                type="file"
-                name="image"
-                accept="image/png, image/jpeg, image/gif"
-                onChange={avatarHandler}
-                id="filesButton"
-                />
-            <br />
-            {avatarPreview && React.Children.toArray(
-                avatarPreview.map((imageURL, i) => (
-                    <>
-                        <img src={imageURL} alt={`img_${i}`} className="imgs-product" />
-                    </>
-                ))
-            )}
-            <button onClick={uploadAvatar}>cambiar avatar</button>
           </div>
         )}
 
@@ -338,9 +319,7 @@ const Profile = () => {
             )}
           </div>
         )}
-      </div>
 
-      <div>
         {render === "history" && (
           <div>
             <h1>History</h1>
@@ -438,6 +417,24 @@ const Profile = () => {
 
           <button>Done</button>
         </form>
+      </Modal>
+
+      <Modal isOpen={isOpenAvatar} closeModal={closeAvatar}>
+        <h1>editar avatar</h1>
+        <div className='avatar-preview' >
+            <img src={avatarPreview ? avatarPreview : avatarResizer(avatar)}  alt="avatar-preview" />
+        </div>
+        <input 
+            type="file"
+            name="image"
+            accept="image/png, image/jpeg, image/gif"
+            onChange={avatarHandler}
+            id="filesButton"
+        />
+        <button onClick={uploadAvatar}>actualizar avatar</button>
+        <div>
+
+        </div>
       </Modal>
     </div>
   );

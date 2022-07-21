@@ -5,5 +5,5 @@ export const resizer = (url, size = 96) => {
 
 export const avatarResizer = (url) => {
 
-    return url.replace('dsyjj0sch/image/upload/', 'dsyjj0sch/image/upload/w_100,c_fill,ar_1:1,g_auto,r_max,b_rgb:000000/')
+    return url.replace('dsyjj0sch/image/upload/', 'dsyjj0sch/image/upload/w_100,c_fill,ar_1:1,g_auto,b_rgb:000000/')
 }
