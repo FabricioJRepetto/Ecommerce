@@ -39,7 +39,6 @@ const getSuggestion = async (req, res, next) => {
         //? busco categoria del ultimo visto
         const { category } = await rawIdProductGetter(history.products[0]);
         if (!category) return res.json({ error: 404, message: 'No category found in history' });
-        console.log(category);
 
         //? genero busqueda aplicando descuento
         const { data } = await axios(`https://api.mercadolibre.com/sites/MLA/search?official_store=all&category=${category}&discount=5-100`);
@@ -50,7 +49,6 @@ const getSuggestion = async (req, res, next) => {
         let idList = [];
         if (parsed.length > 0) {
             for (let i = 0; response.length < 5; i++) {
-                console.log(i + 'a');
                 // todas ofertas tarda mucho :( data.discount > 0 &&
                 const product = await rawIdProductGetter(parsed[i]._id);
                 if (product) {
@@ -59,7 +57,6 @@ const getSuggestion = async (req, res, next) => {
                         idList.push(product._id)
                     }
                 } else {
-                    console.log('break');
                     break
                 }
             }
@@ -71,7 +68,6 @@ const getSuggestion = async (req, res, next) => {
             let parsed = await meliSearchParser(data.results);
 
             for (let i = 0; response.length < 5; i++) {
-                console.log(i + 'b');
                 const product = await rawIdProductGetter(parsed[i]._id);
                 !product.message && !idList.includes(product._id) && response.push(product)
             };

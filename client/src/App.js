@@ -8,6 +8,8 @@ import {
     sessionActive,
     loadRole,
     loadGoogleUser,
+    loadId,
+    loadFullName,
 } from "./Redux/reducer/sessionSlice";
 import { loadCart, loadWishlist } from "./Redux/reducer/cartSlice";
 import axios from "axios";
@@ -48,14 +50,19 @@ function App() {
             try {
                 if (loggedUserToken) {
                     const { data } = await axios(`/user/profile/${loggedUserToken}`); //! VOLVER A VER fijarse con nuevos usuarios de google
-                    // console.log(data);
+                    console.log(data);
 
-                    const { email, googleEmail, name, username, role, isGoogleUser, avatar } = data;
+                    const { _id, email, googleEmail, name, firstName, lastName, username, role, isGoogleUser, avatar } = data;
 
                     dispatch(sessionActive(true));
                     dispatch(loadUsername(username || name));
+                    dispatch(loadFullName({
+                        first: firstName || false,
+                        last: lastName || false,
+                    }))
                     dispatch(loadAvatar(avatar ? avatar : false));
-                    dispatch(loadEmail(isGoogleUser ? googleEmail : email));
+                    dispatch(loadEmail(googleEmail || email));
+                    dispatch(loadId(_id))
                     dispatch(loadRole(role));
                     dispatch(loadGoogleUser(isGoogleUser));
 

@@ -1,10 +1,25 @@
+require("dotenv").config();
+const {
+    CLOUDINARY_CLOUD,
+    CLOUDINARY_API_KEY,
+    CLOUDINARY_API_SECRET,
+} = process.env;
+const cloudinary = require("cloudinary").v2;
 const User = require("../models/user");
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
-require("dotenv").config();
+const axios = require("axios");
+const fs = require("fs-extra");
 const { JWT_SECRET_CODE } = process.env;
 const { validationResult } = require("express-validator");
 const sendEmail = require("../utils/sendEmail");
+
+cloudinary.config({
+    cloud_name: CLOUDINARY_CLOUD,
+    api_key: CLOUDINARY_API_KEY,
+    api_secret: CLOUDINARY_API_SECRET,
+    secure: true,
+});
 
 const signup = async (req, res, next) => {
     const { _id, email } = req.user;
@@ -98,6 +113,7 @@ const profile = async (req, res, next) => {
             return res.status(404).json({ message: "User not Found" });
         }
         const {
+            _id,
             email,
             name,
             role,
@@ -106,9 +122,14 @@ const profile = async (req, res, next) => {
             isGoogleUser,
             googleEmail,
         } = userFound;
+        console.log(userFound);
 
-        //return res.json(userFound);
+        let aux = userFound
+        delete aux.password
+
+        return res.json(aux);
         return res.json({
+            _id,
             email,
             name,
             //! VOLVER A VER agregar emailVerified y googleEmail
@@ -235,6 +256,27 @@ const editProfile = async (req, res, next) => {
 };
 //! VOLVER A VER separar addAddress de editProfile, los users de google no pueden editar el perfil, pero SI agregar address
 
+const setAvatar = async (req, res, next) => {
+    try {
+        const { avatar } = await User.findById(req.user._id)
+        avatar && cloudinary.api.delete_resources([avatar.split('/').pop().split('.')[0]]);
+
+        const data = await cloudinary.uploader.upload(req.files[0].path);
+
+        await fs.unlink(req.files[0].path);
+
+        //: actualizar y enviar link de nueva imagen
+        await User.findByIdAndUpdate(
+            req.user._id,
+            { avatar: data.url }
+        );
+
+        return res.json({ message: 'Avatar actualizado', avatar: data.url });
+    } catch (error) {
+        next(error)
+    }
+};
+
 module.exports = {
     signin,
     signinGoogle,
@@ -245,4 +287,5 @@ module.exports = {
     resetPassword,
     changePassword,
     editProfile,
+    setAvatar,
 };

@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useAxios } from "../../hooks/useAxios";
@@ -12,12 +12,14 @@ import { useNotification } from "../../hooks/useNotification";
 import Card from "../Products/Card";
 import MiniCard from "../Products/MiniCard";
 import "./Profile.css";
+import { loadAvatar } from "../../Redux/reducer/sessionSlice";
 
 const Profile = () => {
   const navigate = useNavigate();
   const [notification] = useNotification();
   const [isOpenAddForm, openModalAddForm, closeAddForm, prop] = useModal();
   const { section } = useParams();
+  const dispatch = useDispatch();
 
   const [render, setRender] = useState(section);
   // const [details, setDetails] = useState([])
@@ -28,9 +30,12 @@ const Profile = () => {
   const [addressToEditId, setaddressToEditId] = useState(null);
 
   const { wishlist: wl_id } = useSelector((state) => state.cartReducer);
-  const { session, username, avatar, email } = useSelector(
+  const { session, username, avatar, email, role, id, full_name } = useSelector(
     (state) => state.sessionReducer
   );
+
+  const [newAvatar, setNewAvatar] = useState();
+  const [avatarPreview, setAvatarPreview] = useState();
 
   const {
     register,
@@ -138,6 +143,34 @@ const Profile = () => {
     closeAddForm();
   };
 
+    const avatarHandler = (e) => {
+        setNewAvatar(e.target.files);
+    }
+
+    // useEffect(() => {
+    //     const newImageUrls = [];
+    //     newImageUrls.push(URL.createObjectURL(newAvatar));    
+    //     setAvatarPreview(newImageUrls);
+    // }, [newAvatar]);
+
+    const uploadAvatar = async () => { 
+        let formData = new FormData();
+
+        const fileListArrayImg = Array.from(newAvatar);
+
+        fileListArrayImg.forEach((pic) => {
+            formData.append("images", pic);
+        });
+
+        const { data, statusText } = await axios.post('/user/avatar', formData, {
+            headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        notification(data.message, '', `${statusText === 'OK' ? 'success' : 'warning'}`);
+        dispatch(loadAvatar(data.avatar))
+     }
+
   return (
     <div className="profile-container">
       <h1>Profile</h1>
@@ -166,10 +199,31 @@ const Profile = () => {
             </div>
             <h2>{username}</h2>
             <p>{email}</p>
+            <p>{full_name.first}</p>
+            <p>{full_name.last}</p>
+            <p>{id}</p>
+            <p>{role}</p>
             <br />
             <button disabled>Edit details</button>
             <br />
             <button disabled>Change password</button>
+            <br />
+            <input 
+                type="file"
+                name="image"
+                accept="image/png, image/jpeg, image/gif"
+                onChange={avatarHandler}
+                id="filesButton"
+                />
+            <br />
+            {avatarPreview && React.Children.toArray(
+                avatarPreview.map((imageURL, i) => (
+                    <>
+                        <img src={imageURL} alt={`img_${i}`} className="imgs-product" />
+                    </>
+                ))
+            )}
+            <button onClick={uploadAvatar}>cambiar avatar</button>
           </div>
         )}
 
