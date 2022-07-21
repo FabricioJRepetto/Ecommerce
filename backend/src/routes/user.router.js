@@ -64,10 +64,7 @@ router.put("/verifyEmail", [verifyToken, googleUserShallNotPass], verifyEmail);
 router.put("/forgotPassword", forgotPassword);
 router.put("/resetPassword", resetPassword);
 router.put("/changePassword", passwordValidation, changePassword);
-router.put(
-    "/editProfile",
-    [verifyToken, googleUserShallNotPass, verifyEmailVerified],
-    editProfile
-);
+router.put("/editProfile", [verifyToken, verifyEmailVerified], editProfile);
+/*googleUserShallNotPass, */
 
 module.exports = router;

@@ -112,32 +112,11 @@ const profile = async (req, res, next) => {
         if (!userFound) {
             return res.status(404).json({ message: "User not Found" });
         }
-        const {
-            _id,
-            email,
-            name,
-            role,
-            avatar,
-            emailVerified,
-            isGoogleUser,
-            googleEmail,
-        } = userFound;
 
         let aux = userFound
         delete aux.password
 
         return res.json(aux);
-        return res.json({
-            _id,
-            email,
-            name,
-            //! VOLVER A VER agregar emailVerified y googleEmail
-            role,
-            emailVerified,
-            isGoogleUser,
-            googleEmail,
-            avatar: avatar || null,
-        });
     } catch (error) {
         next(error);
     }
@@ -238,22 +217,24 @@ const changePassword = async (req, res, next) => {
 };
 
 const editProfile = async (req, res, next) => {
-    const dataAllowedToEdit = ["firstName", "lastName", "address"];
-    const dataToEdit = Object.keys(req.body);
     try {
-        const userToEdit = await User.findById(req.user._id);
-        if (!userToEdit) return res.status(404).json({ message: "User not found" });
-        for (const property of dataToEdit) {
-            if (dataAllowedToEdit.includes(property))
-                userToEdit[property] = req.body[property];
-        }
-        await userToEdit.save();
-        return res.json({ userToEdit, message: "Edited successfully" });
+        console.log(req.body);
+        const { username, first, last } = req.body;
+
+        const user = await User.findByIdAndUpdate(req.user._id,
+            {
+                username: username || '',
+                firstName: first || '',
+                lastName: last || ''
+            },
+            { new: true }
+        );
+
+        return res.json({ message: "Edited successfully", user });
     } catch (error) {
         next(error);
     }
 };
-//! VOLVER A VER separar addAddress de editProfile, los users de google no pueden editar el perfil, pero SI agregar address
 
 const setAvatar = async (req, res, next) => {
     try {
