@@ -3,7 +3,6 @@ import { createSlice } from "@reduxjs/toolkit";
 export const sessionSlice = createSlice({
     name: "session",
     initialState: {
-        loading: true,
         username: null,
         full_name: {
             first: '',
@@ -20,9 +19,6 @@ export const sessionSlice = createSlice({
         usersFilteredData: [],
     },
     reducers: {
-        setGlobalLoading: (state, action) => {
-            state.loading = action.payload;
-        },
         loadUsername: (state, action) => {
             state.username = action.payload;
         },
@@ -83,7 +79,6 @@ export const sessionSlice = createSlice({
 });
 
 export const {
-    setGlobalLoading,
     loadUsername,
     loadFullName,
     sessionActive,

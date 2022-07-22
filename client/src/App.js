@@ -1,8 +1,7 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import {
-    setGlobalLoading,
     loadAvatar,
     loadEmail,
     loadUsername,
@@ -45,10 +44,10 @@ function App() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { session } = useSelector(state => state.sessionReducer);
-    const { loading } = useSelector(state => state.sessionReducer);
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
-        dispatch(setGlobalLoading(true));
+        setLoading(true)
         const loggedUserToken = window.localStorage.getItem("loggedTokenEcommerce");
 
         (async () => {
@@ -77,16 +76,16 @@ function App() {
                     const { data: wish } = await axios(`/wishlist`);
                     dispatch(loadWishlist(wish.id_list));
                 }
-                dispatch(setGlobalLoading(false));
+                setLoading(false);
             } catch (error) {
                 navigate("/");
                 window.localStorage.removeItem("loggedTokenEcommerce");
                 window.localStorage.removeItem("loggedAvatarEcommerce");
                 window.localStorage.removeItem("loggedEmailEcommerce");
-                dispatch(setGlobalLoading(false));
+                setLoading(false);
             }
         })();
-        // dispatch(setGlobalLoading(false));
+        // setLoading(false);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [session]);
 

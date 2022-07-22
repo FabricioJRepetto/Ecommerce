@@ -87,19 +87,20 @@ const Signupin = () => {
       given_name: firstName,
       family_name: lastName,
     } = userDecoded;
-    const nickname = username || name || email || `Guest ${sub}`;
 
     try {
       await axios.post(`/user/signinGoogle`, {
         sub,
         email,
+        username,
+        name,
         emailVerified,
         avatar,
         firstName,
         lastName,
       });
 
-      notification(`Bienvenido, ${nickname}`, "", "success");
+      notification(`Bienvenido, ${name}`, "", "success");
     } catch (error) {
       console.log(error); //! VOLVER A VER manejo de errores
     }
@@ -140,7 +141,7 @@ const Signupin = () => {
   };
 
   const handleSign = (sign) => {
-    setSignSelect(sign);
+        setSignSelect(sign);
   };
 
   return (
