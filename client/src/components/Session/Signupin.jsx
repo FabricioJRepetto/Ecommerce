@@ -13,6 +13,7 @@ const { REACT_APP_OAUTH_CLIENT_ID } = process.env;
 
 const Signupin = () => {
   const [signSelect, setSignSelect] = useState("signin");
+  const [flag, setFlag] = useState(false)
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { session } = useSelector((state) => state.sessionReducer);
@@ -116,6 +117,8 @@ const Signupin = () => {
       }
     }
 
+    setFlag(true)
+
     /* global google */
     google.accounts.id.initialize({
       client_id: REACT_APP_OAUTH_CLIENT_ID,
@@ -145,113 +148,117 @@ const Signupin = () => {
 
   return (
     <div className="signin-container">
-        <NavLink to={'/'}>{'< volver'}</NavLink>
-        <img src={require('../../assets/provider-logo.png')} alt="logo" onClick={() => navigate('/')} />
-      <div>
-        <span onClick={() => handleSign("signup")}>SIGN UP</span>
+        <div className={`signin-inner ${flag && 'signin-visible'}`}>
+            <img src={require('../../assets/provider-logo.png')} alt="logo" 
+                onClick={() => navigate('/')} style={{ cursor: 'pointer'}}/>
+            <div>
+                <span onClick={() => handleSign("signup")}>SIGN UP</span>
+            </div>
+            <div>
+                <span onClick={() => handleSign("signin")}>SIGN IN</span>
+            </div>
+
+            {signSelect === "signup" && (
+                <form onSubmit={handleSubmitSignup(signup)}>
+                <h2>Sign Up</h2>
+                <input
+                    type="text"
+                    placeholder="email"
+                    autoComplete="off"
+                    {...registerSignup("email", {
+                    required: true,
+                    pattern: emailRegex,
+                    })}
+                />
+                {errorsSignup.email?.type === "required" && <p>Enter your email</p>}
+                {errorsSignup.email?.type === "pattern" && <p>Enter a valid email</p>}
+
+                <input
+                    type="text"
+                    placeholder="Password"
+                    autoComplete="off"
+                    {...registerSignup("password", {
+                    required: true,
+                    minLength: 6,
+                    })}
+                />
+                {errorsSignup.password?.type === "required" && (
+                    <p>Enter a password</p>
+                )}
+                {errorsSignup.password?.type === "minLength" && (
+                    <p>Password must be 6 characters long at least</p>
+                )}
+
+                <input
+                    type="text"
+                    placeholder="Repeat Password"
+                    autoComplete="off"
+                    {...registerSignup("repPassword", {
+                    required: true,
+                    validate: (repPassword) => {
+                        if (watchSignup("password") !== repPassword) {
+                        return "Passwords don't match";
+                        }
+                    },
+                    })}
+                />
+                {errorsSignup.repPassword?.type === "required" && (
+                    <p>Repeat your password</p>
+                )}
+                {errorsSignup.repPassword?.type === "validate" && (
+                    <p>Passwords don't match</p>
+                )}
+
+                <input type="submit" value="Sign Up" />
+                <div>
+                    <span onClick={() => handleSign("signin")}>
+                    You already have an account? SIGN IN
+                    </span>
+                </div>
+                </form>
+            )}
+
+            {signSelect === "signin" && (
+                <form onSubmit={handleSubmitSignin(signin)}>
+                <h2>Sign In</h2>
+                <input
+                    type="text"
+                    placeholder="email"
+                    autoComplete="off"
+                    {...registerSignin("email", {
+                    required: true,
+                    pattern: emailRegex,
+                    })}
+                />
+                {errorsSignin.email?.type === "required" && <p>Enter your email</p>}
+                {errorsSignin.email?.type === "pattern" && <p>Enter a valid email</p>}
+
+                <input
+                    type="text"
+                    placeholder="Password"
+                    autoComplete="off"
+                    {...registerSignin("password", {
+                    required: true,
+                    })}
+                />
+                {errorsSignin.password?.type === "required" && (
+                    <p>Enter your password</p>
+                )}
+                <input type="submit" value="Sign In" />
+                <br />
+                <span onClick={openForgotPassword}>Forgot password?</span>
+                <div>
+                    <span onClick={() => handleSign("signup")}>
+                    You don't have an account? SIGN UP
+                    </span>
+                </div>
+                </form>
+            )}
+        
+            <div className="google-signin-container" id="signInDiv"></div>
+
+            <NavLink to={'/'}>{'< volver'}</NavLink>
       </div>
-      <div>
-        <span onClick={() => handleSign("signin")}>SIGN IN</span>
-      </div>
-
-      {signSelect === "signup" && (
-        <form onSubmit={handleSubmitSignup(signup)}>
-          <h2>Sign Up</h2>
-          <input
-            type="text"
-            placeholder="email"
-            autoComplete="off"
-            {...registerSignup("email", {
-              required: true,
-              pattern: emailRegex,
-            })}
-          />
-          {errorsSignup.email?.type === "required" && <p>Enter your email</p>}
-          {errorsSignup.email?.type === "pattern" && <p>Enter a valid email</p>}
-
-          <input
-            type="text"
-            placeholder="Password"
-            autoComplete="off"
-            {...registerSignup("password", {
-              required: true,
-              minLength: 6,
-            })}
-          />
-          {errorsSignup.password?.type === "required" && (
-            <p>Enter a password</p>
-          )}
-          {errorsSignup.password?.type === "minLength" && (
-            <p>Password must be 6 characters long at least</p>
-          )}
-
-          <input
-            type="text"
-            placeholder="Repeat Password"
-            autoComplete="off"
-            {...registerSignup("repPassword", {
-              required: true,
-              validate: (repPassword) => {
-                if (watchSignup("password") !== repPassword) {
-                  return "Passwords don't match";
-                }
-              },
-            })}
-          />
-          {errorsSignup.repPassword?.type === "required" && (
-            <p>Repeat your password</p>
-          )}
-          {errorsSignup.repPassword?.type === "validate" && (
-            <p>Passwords don't match</p>
-          )}
-
-          <input type="submit" value="Sign Up" />
-          <div>
-            <span onClick={() => handleSign("signin")}>
-              You already have an account? SIGN IN
-            </span>
-          </div>
-        </form>
-      )}
-
-      {signSelect === "signin" && (
-        <form onSubmit={handleSubmitSignin(signin)}>
-          <h2>Sign In</h2>
-          <input
-            type="text"
-            placeholder="email"
-            autoComplete="off"
-            {...registerSignin("email", {
-              required: true,
-              pattern: emailRegex,
-            })}
-          />
-          {errorsSignin.email?.type === "required" && <p>Enter your email</p>}
-          {errorsSignin.email?.type === "pattern" && <p>Enter a valid email</p>}
-
-          <input
-            type="text"
-            placeholder="Password"
-            autoComplete="off"
-            {...registerSignin("password", {
-              required: true,
-            })}
-          />
-          {errorsSignin.password?.type === "required" && (
-            <p>Enter your password</p>
-          )}
-          <input type="submit" value="Sign In" />
-          <br />
-          <span onClick={openForgotPassword}>Forgot password?</span>
-          <div>
-            <span onClick={() => handleSign("signup")}>
-              You don't have an account? SIGN UP
-            </span>
-          </div>
-        </form>
-      )}
-      
-      <div className="google-signin-container" id="signInDiv"></div>
       
       <Modal isOpen={isOpenForgotPassword} closeModal={closeForgotPassword}>
         <form onSubmit={handleSubmitForgot(forgotPassword)}>
