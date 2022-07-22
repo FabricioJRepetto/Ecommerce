@@ -15,6 +15,7 @@ import {ReactComponent as Arrow } from '../../assets/svg/arrow-right.svg'
 
 import './Results.css'
 import { useState } from 'react'
+import { useLocation } from 'react-router-dom'
 
 const Results = () => {
     const wishlist = useSelector((state) => state.cartReducer.wishlist);    
@@ -24,7 +25,8 @@ const Results = () => {
     const applied = useSelector((state) => state.productsReducer.productsAppliedFilters);
     const productsFilters = useSelector((state) => state.productsReducer.productsFilters);
     const breadCrumbs = useSelector((state) => state.productsReducer.breadCrumbs);
-
+    const location = useLocation()
+    
     const [open, setOpen] = useState('')
     const dispatch = useDispatch();
 
@@ -37,6 +39,7 @@ const Results = () => {
 
             const { data } = await axios(`/product/search/?${newQuery}`)
             // const { data } = await axios(`/product/promos`)
+            console.log(data.db);
             dispatch(loadProductsOwn(data.db));
             dispatch(loadProductsFound(data.meli));
             dispatch(loadFilters(data.filters));
@@ -61,7 +64,7 @@ const Results = () => {
 
     return (
         <div className='results-container'>
-            {/* BREAD CRUMBS */}
+
             <div className='bread-crumbs'>
                 {breadCrumbs?.length > 0 &&
                     React.Children.toArray(
@@ -105,7 +108,7 @@ const Results = () => {
                         {productsOwn?.length > 0 && <div className='own-products-container'>
                             {React.Children.toArray(
                                 productsOwn?.map(prod => (
-                                    <Card
+                                    prod.available_quantity > 0 && <Card
                                         productData={prod}
                                         fav={wishlist.includes(prod._id)}
                                     />
@@ -114,7 +117,7 @@ const Results = () => {
                         </div>}
                         {React.Children.toArray(
                             productsFound?.map(prod => (
-                                <Card
+                                prod.available_quantity > 0 && <Card
                                     productData={prod}
                                     fav={wishlist.includes(prod._id)}
                                 />

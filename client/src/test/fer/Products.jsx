@@ -154,10 +154,11 @@ const Products = () => {
           <div className="products-results-inner">
             {React.Children.toArray(
               productsToShow?.map((product) => (
-                <Card
+                (product.available_quantity > 0 || location.pathname === "/admin/products") &&<Card
                   productData={product}
                   fav={wishlist.includes(product._id)}
                   openDeleteProduct={openDeleteProduct}
+                  outOfStock={product.available_quantity <= 0}
                 />
               ))
             )}

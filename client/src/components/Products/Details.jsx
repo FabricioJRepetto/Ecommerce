@@ -24,6 +24,7 @@ const Details = () => {
 
     useEffect(() => {
         if (session && data) {
+            console.log(data);
         // setear historial
         const payload = {
             product_id: data._id,
@@ -95,9 +96,10 @@ const Details = () => {
                     </div>
                     )}
                     <p>{data.free_shipping && "free shipping"}</p>
-                    <button onClick={() => addToCart(data._id)}>Add to cart</button>
+                    <p>{data.available_quantity > 0 ? 'stock: '+data.available_quantity : 'out of stock'}</p>
+                    <button disabled={data.available_quantity < 1} onClick={() => addToCart(data._id)}>Add to cart</button>
                     <br />
-                    <button onClick={() => buyNow(data._id)}>Buy now</button>
+                    <button disabled={data.available_quantity < 1} onClick={() => buyNow(data._id)}>Buy now</button>
                 </div>
 
                 {data.main_features && (

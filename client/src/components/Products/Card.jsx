@@ -9,7 +9,7 @@ import "./Card.css";
 import { ReactComponent as Sale } from "../../assets/svg/sale.svg";
 import { WishlistButton as Fav } from "./WishlistButton";
 
-const Card = ({ openDeleteProduct, productData, fav }) => {
+const Card = ({ openDeleteProduct, productData, fav, outOfStock }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [visible, setVisible] = useState(false);
@@ -25,7 +25,7 @@ const Card = ({ openDeleteProduct, productData, fav }) => {
     brand,
     _id: prodId,
     free_shipping,
-    on_sale,
+    on_sale,    
   } = productData;
 
   const editProduct = (prodId) => {
@@ -86,6 +86,7 @@ const Card = ({ openDeleteProduct, productData, fav }) => {
           </div>
           {location.pathname === "/admin/products" && (
             <>
+                {outOfStock && <b style={{ background: 'red', color: 'white' }}> SIN STOCK </b>}
               <button type="button" onClick={() => editProduct(prodId)}>
                 EDITAR
               </button>
