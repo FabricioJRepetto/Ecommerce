@@ -8,9 +8,9 @@ const GlobalCover = () => {
     const timer = useRef(null);
 
     useEffect(() => {
-        timer.current = setTimeout(() => {
             setAux(true)
-        }, 2000);
+        // timer.current = setTimeout(() => {
+        // }, 200);
     }, []);
 
     return (

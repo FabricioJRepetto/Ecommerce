@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { sessionActive } from "../../Redux/reducer/sessionSlice";
 import jwt_decode from "jwt-decode";
-import { useLocation, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useNotification } from "../../hooks/useNotification";
 import { useModal } from "../../hooks/useModal";
@@ -106,7 +106,8 @@ const Signupin = () => {
 
   useEffect(() => {
     //! VOLVER A VER al loguear con user de google, entrar a profile, y luego actualizar pagina, ingresa a signin y no redirige
-    //? si redirige, hay historial entonces vuelve 1 vez y queda en el sign in otra vez
+    //? si redirige, hay historial entonces vuelve 1 vez y queda en el sign in otra vez 
+    //* si sigue sin funcionar bien: utilizar location.pathname
     if (session) {
       if (hasPreviousState) {
         navigate(-1);
@@ -144,7 +145,8 @@ const Signupin = () => {
 
   return (
     <div className="signin-container">
-      
+        <NavLink to={'/'}>{'< volver'}</NavLink>
+        <img src={require('../../assets/provider-logo.png')} alt="logo" onClick={() => navigate('/')} />
       <div>
         <span onClick={() => handleSign("signup")}>SIGN UP</span>
       </div>

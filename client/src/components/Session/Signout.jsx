@@ -29,7 +29,7 @@ const Signout = () => {
   };
 
   useEffect(() => {
-    if (!session) navigate("/signin");
+    if (!session) navigate("/");
     // eslint-disable-next-line
   }, []);
 
