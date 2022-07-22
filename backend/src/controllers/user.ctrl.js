@@ -92,13 +92,10 @@ const signinGoogle = async (req, res, next) => {
             });
             return res.json(newGoogleUser);
         } else {
-            if (emailVerified !== userFound.emailVerified)
+            if (emailVerified !== userFound.emailVerified) {
                 userFound.emailVerified = emailVerified;
-            //! VOLVER A VER si cambiamos email
-            if (!userFound.avatar) userFound.avatar = avatar;
-            if (!userFound.firstName) userFound.firstName = firstName;
-            if (!userFound.lastName) userFound.lastName = lastName;
-            await userFound.save();
+                await userFound.save();
+            }
             return res.json({ name: userFound.name })
         }
     } catch (error) {
