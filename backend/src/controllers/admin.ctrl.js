@@ -404,7 +404,6 @@ const getMetrics = async (req, res, next) => {
       totalUsers,
       googleUsers,
       publishedProducts,
-      productsOnSale,
       activeSales,
       productsSold,
       totalProfits,

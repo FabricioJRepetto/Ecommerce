@@ -5,7 +5,6 @@ const initialMetrics = {
   totalUsers: null,
   googleUsers: null,
   publishedProducts: null,
-  productsOnSale: null,
   productsSold: null,
   totalProfits: null,
   productsWished: null,
@@ -31,7 +30,6 @@ const Metrics = () => {
       <h4>Usuarios registrados: {metrics.totalUsers}</h4>
       <h4>Usuarios de Google: {metrics.googleUsers}</h4>
       <h4>Productos publicados: {metrics.publishedProducts}</h4>
-      <h4>Productos en oferta PROPIOS: {metrics.productsOnSale}</h4>
       <h4>Ofertas activas PROPIAS: {metrics.activeSales}</h4>
       <h4>Productos vendidos: {metrics.productsSold}</h4>
       <h4>Ganancias totales: {metrics.totalProfits}</h4>

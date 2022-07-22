@@ -13,6 +13,7 @@ import {
 import { useNotification } from "../../hooks/useNotification";
 import { useModal } from "../../hooks/useModal";
 import Modal from "../../components/common/Modal";
+import SelectsNested from "./SelectsNested";
 
 const ProductForm = () => {
   const [featuresQuantity, setFeaturesQuantity] = useState(1);
@@ -262,6 +263,7 @@ const ProductForm = () => {
       >
         <b>Lista de categorias</b>
       </a>
+      <SelectsNested />
       <br />
       <form
         encType="multipart/form-data"

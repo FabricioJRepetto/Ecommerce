@@ -17,6 +17,7 @@ const OrderCard = ({ order }) => {
     free_shipping,
     shipping_cost,
     total,
+    created_at,
   } = order;
 
   const formatDate = (d) => {
