@@ -10,7 +10,7 @@
     background: black;
     min-height: 100vh;
     min-width: 100vw;
-    z-index: 9999;
+    z-index: 10;
     transition: opacity .5s ease;
 }
 

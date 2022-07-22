@@ -115,7 +115,7 @@
     animation: gradientBorderAnim 10s infinite;
 
     pointer-events: none;
-    z-index: 10;
+    z-index: 2;
     transition: height .3s ease;
 }
 .special-frame-left {
@@ -131,7 +131,7 @@
     animation: gradientBorderAnim 10s infinite;
 
     pointer-events: none;
-    z-index: 10;
+    z-index: 2;
     transition: height .3s ease;
 }
 .mimic {

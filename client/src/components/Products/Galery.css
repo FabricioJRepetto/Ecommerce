@@ -23,7 +23,7 @@
     background: rgba(0, 0, 0, 0.75);
     font-size: 1.5rem;
     color: rgb(255, 255, 255);
-    z-index: 20;
+    z-index: 2;
 }
 .selector-img {
     position: absolute;
@@ -61,7 +61,7 @@
 .galery-fullscreen {
     color: black;
     position: fixed;
-    z-index: 999;
+    z-index: 3;
     top: 0;
     left: 0;
     width: 100%;
