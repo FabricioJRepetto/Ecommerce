@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import {
+    setGlobalLoading,
     loadAvatar,
     loadEmail,
     loadUsername,
@@ -14,6 +15,8 @@ import {
 import { loadCart, loadWishlist } from "./Redux/reducer/cartSlice";
 import axios from "axios";
 import "./App.css";
+
+import GlobalCover from "../src/components/common/GlobalCover";
 
 import Home from "./components/Home/Home";
 import Notification from "./components/common/Notification";
@@ -42,8 +45,10 @@ function App() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { session } = useSelector(state => state.sessionReducer);
+    const { loading } = useSelector(state => state.sessionReducer);
 
     useEffect(() => {
+        dispatch(setGlobalLoading(true));
         const loggedUserToken = window.localStorage.getItem("loggedTokenEcommerce");
 
         (async () => {
@@ -72,51 +77,59 @@ function App() {
                     const { data: wish } = await axios(`/wishlist`);
                     dispatch(loadWishlist(wish.id_list));
                 }
+                dispatch(setGlobalLoading(false));
             } catch (error) {
                 navigate("/");
                 window.localStorage.removeItem("loggedTokenEcommerce");
                 window.localStorage.removeItem("loggedAvatarEcommerce");
                 window.localStorage.removeItem("loggedEmailEcommerce");
+                dispatch(setGlobalLoading(false));
             }
         })();
+        // dispatch(setGlobalLoading(false));
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [session]);
 
     return (
         <div className="App" id="scroller">
-            <NavBar />
-            <Notification />
-            <BackToTop />
-            <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/signin" element={<Signupin />} />
-                <Route path="/signout" element={<Signout />} />
-                <Route path="/profile/" element={<Profile />} />
-                <Route path="/profile/:section" element={<Profile />} />
-                <Route path="/results" element={<Results />} />
-                <Route path="/products" element={<Products />} />
-                <Route path="/productForm" element={<ProductForm />} />
-                <Route path="/cart/" element={<Cart />} />
-                <Route path="/cart/:section" element={<Cart />} />
-                <Route path="/buynow" element={<BuyNow />} />
-                <Route path="/reset/:userId/:resetToken" element={<ResetPassword />} />
-                <Route path="/orders/post-sale" element={<PostSale />} />
-                <Route path="/verify/:verifyToken" element={<VerifyEmail />} />
-                <Route path="/details/:id" element={<Details />} />
-                <Route element={<RequireRole allowedRoles={["admin", "superadmin"]} />}>
-                    <Route path="admin" element={<AdminLayout />}>
-                        <Route index element={<Metrics />} />
-                        <Route path="metrics" element={<Metrics />} />
-                        <Route path="products" element={<Products />} />
-                        <Route path="productForm" element={<ProductForm />} />
-                        <Route path="users" element={<UsersAdmin />} />
-                        <Route path="users/:id" element={<UsersAdmin />} />
-                        <Route path="orders" element={<OrdersAdmin />} />
-                        <Route path="*" element={<h1>404 ADMIN</h1>} />
-                    </Route>
-                </Route>
-                <Route path="/unauthorized" element={<h1>UNAUTHORIZED</h1>} />
-            </Routes>
+            {loading
+                ? <div className="globalLoader"></div>
+                : <div>
+                    <GlobalCover />
+                    <NavBar />
+                    <Notification />
+                    <BackToTop />
+                    <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/signin" element={<Signupin />} />
+                        <Route path="/signout" element={<Signout />} />
+                        <Route path="/profile/" element={<Profile />} />
+                        <Route path="/profile/:section" element={<Profile />} />
+                        <Route path="/results" element={<Results />} />
+                        <Route path="/products" element={<Products />} />
+                        <Route path="/productForm" element={<ProductForm />} />
+                        <Route path="/cart/" element={<Cart />} />
+                        <Route path="/cart/:section" element={<Cart />} />
+                        <Route path="/buynow" element={<BuyNow />} />
+                        <Route path="/reset/:userId/:resetToken" element={<ResetPassword />} />
+                        <Route path="/orders/post-sale" element={<PostSale />} />
+                        <Route path="/verify/:verifyToken" element={<VerifyEmail />} />
+                        <Route path="/details/:id" element={<Details />} />
+                        <Route element={<RequireRole allowedRoles={["admin", "superadmin"]} />}>
+                            <Route path="admin" element={<AdminLayout />}>
+                                <Route index element={<Metrics />} />
+                                <Route path="metrics" element={<Metrics />} />
+                                <Route path="products" element={<Products />} />
+                                <Route path="productForm" element={<ProductForm />} />
+                                <Route path="users" element={<UsersAdmin />} />
+                                <Route path="users/:id" element={<UsersAdmin />} />
+                                <Route path="orders" element={<OrdersAdmin />} />
+                                <Route path="*" element={<h1>404 ADMIN</h1>} />
+                            </Route>
+                        </Route>
+                        <Route path="/unauthorized" element={<h1>UNAUTHORIZED</h1>} />
+                    </Routes>
+                </div>}
         </div>
     );
 }

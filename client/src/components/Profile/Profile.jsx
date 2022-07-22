@@ -171,7 +171,7 @@ const Profile = () => {
      const detailsHandler = async (e) => {
         e.preventDefault();
         const { data, statusText } = await axios.put('/user/editProfile', details);
-        console.log(data);
+        
         dispatch(loadFullName({first: data.user.firstName, last: data.user.lastName}));
         dispatch(loadUsername(data.user.username));
         notification(data.message, '', `${statusText === 'OK' ? 'success' : 'warning'}`);
