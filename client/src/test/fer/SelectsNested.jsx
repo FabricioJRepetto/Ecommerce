@@ -1,8 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import SelectList from "./SelectList";
 
-const SelectsNested = () => {
-  const [categoryPath, setCategoryPath] = useState([]);
+const SelectsNested = ({
+  setCategory,
+  category,
+  setCategoryPath,
+  categoryPath,
+}) => {
   const [notRender, setNotRender] = useState(false);
 
   const handleChange = (e, index = false) => {
@@ -14,36 +18,48 @@ const SelectsNested = () => {
         return true;
       });
       setCategoryPath(newCategoryPath);
-      setNotRender(false);
     } else {
       let categoryObj = JSON.parse(e.target.value);
       setCategoryPath([...categoryPath, categoryObj]);
     }
+    setCategory(null);
   };
 
   const handleRoot = () => {
+    setCategory(null);
     setCategoryPath([]);
-    setNotRender(false);
   };
+
+  useEffect(() => {
+    category === null && setNotRender(false);
+  }, [category]);
+
+  useEffect(() => {
+    categoryPath.length && setNotRender(false);
+  }, [categoryPath]);
 
   return (
     <div>
-      <h3>Seleccione categoría</h3>
       <span onClick={handleRoot}>Categoría{" > "}</span>
       {categoryPath &&
         React.Children.toArray(
-          categoryPath.map((category, index) => (
-            <span onClick={(e) => handleChange(e, index)}>
-              {category.name}
-              {notRender && index === categoryPath.length - 1 ? null : " > "}
-            </span>
-          ))
+          categoryPath.map((category, index) =>
+            notRender && index === categoryPath.length - 1 ? (
+              <span>{category.name} </span>
+            ) : (
+              <span onClick={(e) => handleChange(e, index)}>
+                {category.name}
+                {" > "}
+              </span>
+            )
+          )
         )}
       {!notRender && (
         <SelectList
           categoryPath={categoryPath}
           handleChange={handleChange}
           setNotRender={setNotRender}
+          setCategory={setCategory}
         />
       )}
     </div>

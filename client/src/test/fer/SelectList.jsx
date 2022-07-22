@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const SelectList = ({ categoryPath, handleChange, setNotRender }) => {
+const SelectList = ({
+  categoryPath,
+  handleChange,
+  setNotRender,
+  setCategory,
+}) => {
   const [data, setData] = useState([]);
 
   let url = "";
@@ -14,9 +19,10 @@ const SelectList = ({ categoryPath, handleChange, setNotRender }) => {
   useEffect(() => {
     axios(url)
       .then(({ data }) => {
-        data.children_categories &&
-          !data.children_categories.length &&
+        if (data.children_categories && !data.children_categories.length) {
           setNotRender(true);
+          setCategory({ id: data.id, name: data.name });
+        }
         categoryPath.length ? setData(data.children_categories) : setData(data);
       })
       .catch((err) => console.log(err)); //! VOLVER A VER manejo de errores

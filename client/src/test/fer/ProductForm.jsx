@@ -18,6 +18,8 @@ import SelectsNested from "./SelectsNested";
 const ProductForm = () => {
   const [featuresQuantity, setFeaturesQuantity] = useState(1);
   const [attributesQuantity, setAttributesQuantity] = useState(1);
+  const [category, setCategory] = useState(null);
+  const [categoryPath, setCategoryPath] = useState([]);
   const [productImg, setProductImg] = useState([]);
   const [productImgUrls, setProductImgUrls] = useState([]);
   const [imgsToEdit, setImgsToEdit] = useState([]);
@@ -28,7 +30,10 @@ const ProductForm = () => {
     main_features: "",
     attributes: "",
     image: "",
+    category: "",
   });
+  let image_reference = useRef();
+  let category_reference = useRef();
   let timeoutId = useRef();
   const navigate = useNavigate();
   const [notification] = useNotification();
@@ -134,7 +139,7 @@ const ProductForm = () => {
     setValue("available_quantity", data.available_quantity);
     setValue("description", data.description);
     setValue("free_shipping", data.free_shipping);
-    setValue("category", data.category);
+    //setValue("category", data.category);
     replaceFeature([...data.main_features]);
     replaceAttribute([...data.attributes]);
     setImgsToEdit(data.images);
@@ -180,16 +185,8 @@ const ProductForm = () => {
   }, [productImg]);
 
   const submitProduct = async (productData) => {
-    if (!productToEdit && productImg.length === 0) {
-      return warnTimer("image", "Debes subir al menos una imágen");
-    }
-    if (productToEdit && productImg.length === 0 && imgsToEdit.length === 0) {
-      return warnTimer("image", "Debes subir al menos una imágen");
-    }
-
     let formData = new FormData();
 
-    // agarra las images
     const fileListArrayImg = Array.from(productImg);
     validateImgs(fileListArrayImg);
 
@@ -235,6 +232,8 @@ const ProductForm = () => {
     setWarn({});
     setProductImg([]);
     setImgsToEdit([]);
+    setCategoryPath([]);
+    setCategory(null);
     setAttributesQuantity(1);
     appendAttribute({ name: "", value_name: "" });
     setFeaturesQuantity(1);
@@ -251,6 +250,24 @@ const ProductForm = () => {
     }
   };
 
+  const customSubmit = (e) => {
+    e.preventDefault();
+    if (!category) {
+      category_reference.current = "Debes eleccionar la categoría";
+    }
+    if (!productToEdit && productImg.length === 0) {
+      image_reference.current = "Debes subir al menos una imágen";
+    }
+    if (productToEdit && productImg.length === 0 && imgsToEdit.length === 0) {
+      image_reference.current = "Debes subir al menos una imágen";
+    }
+    return handleSubmit(submitProduct)(e);
+  };
+
+  useEffect(() => {
+    console.log(warn);
+  }, [warn]);
+
   return (
     <div>
       <hr />
@@ -263,19 +280,21 @@ const ProductForm = () => {
       >
         <b>Lista de categorias</b>
       </a>
-      <SelectsNested />
       <br />
-      <form
-        encType="multipart/form-data"
-        onSubmit={handleSubmit(submitProduct)}
-      >
+      <form encType="multipart/form-data" onSubmit={customSubmit}>
+        <SelectsNested
+          setCategory={setCategory}
+          category={category}
+          setCategoryPath={setCategoryPath}
+          categoryPath={categoryPath}
+        />
+        {category_reference.current && <p>{category_reference.current}</p>}
         <>
           <div>
             <input
               type="text"
               placeholder="Título/Nombre"
               autoComplete="off"
-              //  id="name_id"
               {...register("name")}
             />
             <div>{errors.name?.message}</div>
@@ -284,7 +303,6 @@ const ProductForm = () => {
               type="text"
               placeholder="Precio"
               autoComplete="off"
-              //   id="price_id"
               {...register("price")}
             />
             <div>{errors.price?.message}</div>
@@ -293,7 +311,6 @@ const ProductForm = () => {
               type="text"
               placeholder="Marca"
               autoComplete="off"
-              //  id="brand_id"
               {...register("brand")}
             />
             <div>{errors.brand?.message}</div>
@@ -302,7 +319,6 @@ const ProductForm = () => {
               type="text"
               placeholder="Stock"
               autoComplete="off"
-              //  id="stock_id"
               {...register("available_quantity", {
                 required: true,
                 pattern: /^[0-9]*$/,
@@ -319,11 +335,7 @@ const ProductForm = () => {
             <div>{errors.category?.message}</div>
 
             <label>
-              <input
-                type="checkbox"
-                //  id="free_shipping_id"
-                {...register("free_shipping")}
-              />
+              <input type="checkbox" {...register("free_shipping")} />
               Envío gratis
             </label>
             <div>{errors.free_shipping?.message}</div>
@@ -389,11 +401,7 @@ const ProductForm = () => {
           <hr />
           <br />
           <div>
-            <textarea
-              placeholder="Descripción"
-              //   id="description_id"
-              {...register("description")}
-            />
+            <textarea placeholder="Descripción" {...register("description")} />
             <div>{errors.description?.message}</div>
           </div>
           <br />
@@ -413,7 +421,7 @@ const ProductForm = () => {
             id="filesButton"
           />
         </div>
-        {warn.image && <p>{warn.image}</p>}
+        {image_reference.current && <p>{image_reference.current}</p>}
 
         {imgsToEdit &&
           React.Children.toArray(
