@@ -1,16 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import {
-  sessionActive,
-} from "../../Redux/reducer/sessionSlice";
+import { sessionActive } from "../../Redux/reducer/sessionSlice";
 import jwt_decode from "jwt-decode";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import "./Signupin.css";
 import { useNotification } from "../../hooks/useNotification";
 import { useModal } from "../../hooks/useModal";
 import Modal from "../common/Modal";
+import "./Signupin.css";
 const { REACT_APP_OAUTH_CLIENT_ID } = process.env;
 
 const Signupin = () => {
@@ -145,8 +143,8 @@ const Signupin = () => {
   };
 
   return (
-    <>
-      <hr />
+    <div className="signin-container">
+      
       <div>
         <span onClick={() => handleSign("signup")}>SIGN UP</span>
       </div>
@@ -250,9 +248,9 @@ const Signupin = () => {
           </div>
         </form>
       )}
-      <hr />
+      
       <div className="google-signin-container" id="signInDiv"></div>
-      <hr />
+      
       <Modal isOpen={isOpenForgotPassword} closeModal={closeForgotPassword}>
         <form onSubmit={handleSubmitForgot(forgotPassword)}>
           <h2>Ingrese su email para reestablecer la contraseña</h2>
@@ -274,7 +272,7 @@ const Signupin = () => {
           <input type="submit" value="Enviar email" />
         </form>
       </Modal>
-    </>
+    </div>
   );
 };
 
