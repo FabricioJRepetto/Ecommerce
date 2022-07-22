@@ -94,11 +94,12 @@ const signinGoogle = async (req, res, next) => {
         } else {
             if (emailVerified !== userFound.emailVerified)
                 userFound.emailVerified = emailVerified;
+            //! VOLVER A VER si cambiamos email
             if (!userFound.avatar) userFound.avatar = avatar;
-            if (firstName !== userFound.firstName) userFound.firstName = firstName;
-            if (lastName !== userFound.lastName) userFound.lastName = lastName;
+            if (!userFound.firstName) userFound.firstName = firstName;
+            if (!userFound.lastName) userFound.lastName = lastName;
             await userFound.save();
-            return res.send("ok");
+            return res.json({ name: userFound.name })
         }
     } catch (error) {
         next(error);

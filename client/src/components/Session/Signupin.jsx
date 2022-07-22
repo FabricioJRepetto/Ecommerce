@@ -45,12 +45,14 @@ const Signupin = () => {
 
   const emailRegex = /^[\w-.]+@([\w-])+[.\w-]*$/i;
 
+  //? CREACION DE CUENTA
   const signup = (signupData) => {
     axios.post(`/user/signup`, signupData).then((res) => console.log(res.data));
     //! VOLVER A VER agregar notif de email
     //! VOLVER A VER manejo de errores
   };
 
+//? LOGIN CON MAIL
   const signin = async (signinData) => {
     try {
       const { data } = await axios.post(`/user/signin`, signinData);
@@ -68,6 +70,7 @@ const Signupin = () => {
     }
   };
 
+//? LOGIN CON GOOGLE
   const handleCallbackResponse = async (response) => {
     //response.credential = Google user token
     const googleToken = "google" + response.credential;
@@ -81,34 +84,28 @@ const Signupin = () => {
       googleEmail: email,
       email_verified: emailVerified,
       picture: avatar,
-      name,
-      username,
       given_name: firstName,
       family_name: lastName,
     } = userDecoded;
 
     try {
-      await axios.post(`/user/signinGoogle`, {
+      const { data } = await axios.post(`/user/signinGoogle`, {
         sub,
         email,
-        username,
-        name,
         emailVerified,
         avatar,
         firstName,
         lastName,
       });
 
-      notification(`Bienvenido, ${name}`, "", "success");
+      notification(`Bienvenido, ${data.name}`, "", "success");
     } catch (error) {
       console.log(error); //! VOLVER A VER manejo de errores
     }
   };
 
   useEffect(() => {
-    //! VOLVER A VER al loguear con user de google, entrar a profile, y luego actualizar pagina, ingresa a signin y no redirige
-    //? si redirige, hay historial entonces vuelve 1 vez y queda en el sign in otra vez 
-    //* si sigue sin funcionar bien: utilizar location.pathname
+    //! VOLVER A VER si sigue sin funcionar bien: utilizar location.pathname
     if (session) {
       if (hasPreviousState) {
         navigate(-1);
@@ -116,8 +113,7 @@ const Signupin = () => {
         navigate("/");
       }
     }
-
-    setFlag(true)
+    setFlag(true) // solo se usa para la animacion fade-in
 
     /* global google */
     google.accounts.id.initialize({
