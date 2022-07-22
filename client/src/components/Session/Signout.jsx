@@ -25,7 +25,7 @@ const Signout = () => {
     dispatch(loadEmail(null));
     dispatch(loadRole(null));
     dispatch(resetCartSlice());
-    navigate("/signin");
+    navigate("/");
   };
 
   useEffect(() => {
