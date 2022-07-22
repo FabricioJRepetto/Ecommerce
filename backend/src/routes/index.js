@@ -12,9 +12,9 @@ const mpRouter = require("./mercadopago.router");
 const salesRouter = require("./sales.router");
 const adminRouter = require("./admin.router");
 const {
-  verifyToken,
-  verifyAdmin,
-  googleUserShallNotPass,
+    verifyToken,
+    verifyAdmin,
+    googleUserShallNotPass,
 } = require("../middlewares/verify");
 
 router.use("/user", userRouter);
@@ -28,9 +28,9 @@ router.use("/sales", salesRouter);
 router.use("/stripe", verifyToken, stripeRouter);
 router.use("/mercadopago", verifyToken, mpRouter);
 router.use(
-  "/admin",
-  [verifyToken, googleUserShallNotPass, verifyAdmin],
-  adminRouter
+    "/admin",
+    [verifyToken, googleUserShallNotPass, verifyAdmin],
+    adminRouter
 );
 
 module.exports = router;

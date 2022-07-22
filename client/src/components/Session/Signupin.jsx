@@ -3,16 +3,10 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import {
   sessionActive,
-  loadUsername,
-  loadEmail,
-  loadAvatar,
-  loadRole,
-  loadGoogleUser,
 } from "../../Redux/reducer/sessionSlice";
 import jwt_decode from "jwt-decode";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { loadCart, loadWishlist } from "../../Redux/reducer/cartSlice";
 import "./Signupin.css";
 import { useNotification } from "../../hooks/useNotification";
 import { useModal } from "../../hooks/useModal";
@@ -50,7 +44,7 @@ const Signupin = () => {
   const [isOpenForgotPassword, openForgotPassword, closeForgotPassword] =
     useModal();
 
-  const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/i;
+  const emailRegex = /^[\w-.]+@([\w-])+[.\w-]*$/i;
 
   const signup = (signupData) => {
     axios.post(`/user/signup`, signupData).then((res) => console.log(res.data));
@@ -68,24 +62,6 @@ const Signupin = () => {
 
         const username = data.user.name || data.user.email.split("@")[0];
         notification(`Bienvenido, ${username}`, "", "success");
-
-        // const { email, role, avatar } = data.user;
-
-        // const wish = await axios(`/wishlist`);
-        // const cart = await axios(`/cart`);
-
-        /*
-        dispatch(loadUsername(username));
-        dispatch(loadEmail(email));
-        if (avatar) dispatch(loadAvatar(avatar));
-        dispatch(loadRole(role));
-        dispatch(loadGoogleUser(false));
-        */
-
-        // dispatch(loadCart(cart.data.id_list));
-        // dispatch(loadWishlist(wish.data.id_list));
-
-        //! NO PONER NAVIGATE ACA
       }
     } catch (error) {
       notification(error.response.data.message, "", "error");
@@ -111,36 +87,20 @@ const Signupin = () => {
       given_name: firstName,
       family_name: lastName,
     } = userDecoded;
-    const nickname = username || name || email || `Guest ${sub}`;
-
-    console.log(userDecoded);
 
     try {
       await axios.post(`/user/signinGoogle`, {
         sub,
         email,
+        username,
+        name,
         emailVerified,
         avatar,
         firstName,
         lastName,
       });
 
-      notification(`Bienvenido, ${nickname}`, "", "success");
-
-      // const wish = await axios(`/wishlist`);
-      // const cart = await axios(`/cart`);
-
-      // dispatch(loadUsername(username));
-      // dispatch(loadAvatar(avatar));
-      // dispatch(loadEmail(email));
-      // dispatch(loadRole("client"));
-      // dispatch(loadGoogleUser(true));
-
-      // dispatch(loadCart(cart.data.id_list));
-      // dispatch(loadWishlist(wish.data.id_list));
-
-      // window.localStorage.setItem("loggedAvatarEcommerce", avatar);
-      // window.localStorage.setItem("loggedEmailEcommerce",email);
+      notification(`Bienvenido, ${name}`, "", "success");
     } catch (error) {
       console.log(error); //! VOLVER A VER manejo de errores
     }
@@ -181,7 +141,7 @@ const Signupin = () => {
   };
 
   const handleSign = (sign) => {
-    setSignSelect(sign);
+        setSignSelect(sign);
   };
 
   return (

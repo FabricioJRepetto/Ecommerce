@@ -38,7 +38,7 @@ const meliSearchParser = (results) => {
 
 const meliProductParser = async (p) => {
     //?PRODUCT
-    if (p.status === 'inactive') throw new Error('PRODUCTO NO DISPONIBLE');
+    if (p.status === 'inactive') return { message: 'PRODUCTO NO DISPONIBLE' };
     let aux = {
         _id: p.id,
         name: p.name,
@@ -63,7 +63,6 @@ const meliProductParser = async (p) => {
 }
 
 const meliItemParser = (p) => {
-    p.catalog_product_id && console.log(p.catalog_product_id);
     //:ITEM
     let aux = {
         _id: 'I' + p.id,

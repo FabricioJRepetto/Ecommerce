@@ -180,10 +180,10 @@ const ProductForm = () => {
 
   const submitProduct = async (productData) => {
     if (!productToEdit && productImg.length === 0) {
-      return warnTimer("image", "Debes subir al menos una imágen");
+      return warnTimer("image", "Debes subir al menos una imagen");
     }
     if (productToEdit && productImg.length === 0 && imgsToEdit.length === 0) {
-      return warnTimer("image", "Debes subir al menos una imágen");
+      return warnTimer("image", "Debes subir al menos una imagen");
     }
 
     let formData = new FormData();
@@ -400,7 +400,7 @@ const ProductForm = () => {
         </>
 
         <div>
-          <label htmlFor="filesButton">BOTON PARA SUBIR IMAGENES</label>
+          <label htmlFor="filesButton">BOTON PARA IMAGENES</label>
           <input
             type="file"
             name="image"
@@ -412,7 +412,7 @@ const ProductForm = () => {
           />
         </div>
         {warn.image && <p>{warn.image}</p>}
-
+        
         {imgsToEdit &&
           React.Children.toArray(
             imgsToEdit.map(({ imgURL, _id }) => (

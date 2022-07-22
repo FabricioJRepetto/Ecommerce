@@ -1,26 +1,29 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useAxios } from "../../hooks/useAxios";
 import { useModal } from "../../hooks/useModal";
 import Modal from "../common/Modal";
 import Signout from "../Session/Signout";
-import { resizer } from "../../helpers/resizer";
+import { resizer, avatarResizer } from "../../helpers/resizer";
 import { useNotification } from "../../hooks/useNotification";
 import Card from "../Products/Card";
 import MiniCard from "../Products/MiniCard";
 import "./Profile.css";
+import { loadAvatar, loadFullName, loadUsername } from "../../Redux/reducer/sessionSlice";
 
 const Profile = () => {
   const navigate = useNavigate();
   const [notification] = useNotification();
   const [isOpenAddForm, openModalAddForm, closeAddForm, prop] = useModal();
+  const [isOpenAvatar, openAvatar, closeAvatar] = useModal();
+  const [isOpenDetails, openDetails, closeDetails] = useModal();
   const { section } = useParams();
+  const dispatch = useDispatch();
 
   const [render, setRender] = useState(section);
-  const [details, setDetails] = useState([])
   const [address, setAddress] = useState([]);
   const [wishlist, setWishlist] = useState([]);
   const [history, setHistory] = useState([]);
@@ -28,9 +31,13 @@ const Profile = () => {
   const [addressToEditId, setaddressToEditId] = useState(null);
 
   const { wishlist: wl_id } = useSelector((state) => state.cartReducer);
-  const { session, username, avatar, email } = useSelector(
+  const { session, id, username, avatar, email, role, full_name, isGoogleUser } = useSelector(
     (state) => state.sessionReducer
   );
+  const [details, setDetails] = useState({username, first: full_name.first, last: full_name.last});
+
+  const [newAvatar, setNewAvatar] = useState();
+  const [avatarPreview, setAvatarPreview] = useState();
 
   const {
     register,
@@ -138,16 +145,48 @@ const Profile = () => {
     closeAddForm();
   };
 
+    const avatarHandler = (e) => {
+        setNewAvatar(e.target.files);
+        setAvatarPreview(URL.createObjectURL(e.target.files[0]));
+    }
+
+    const uploadAvatar = async () => { 
+        let formData = new FormData();
+
+        const fileListArrayImg = Array.from(newAvatar);
+
+        fileListArrayImg.forEach((pic) => {
+            formData.append("images", pic);
+        });
+
+        const { data, statusText } = await axios.post('/user/avatar', formData, {
+            headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        notification(data.message, '', `${statusText === 'OK' ? 'success' : 'warning'}`);
+        dispatch(loadAvatar(data.avatar))
+     }
+
+     const detailsHandler = async (e) => {
+        e.preventDefault();
+        const { data, statusText } = await axios.put('/user/editProfile', details);
+        
+        dispatch(loadFullName({first: data.user.firstName, last: data.user.lastName}));
+        dispatch(loadUsername(data.user.username));
+        notification(data.message, '', `${statusText === 'OK' ? 'success' : 'warning'}`);
+        closeDetails();
+      }
+
   return (
     <div className="profile-container">
-      <h1>Profile</h1>
+      <h1>Mi perfil</h1>
 
       <div className="profile-menu-container">
-        <NavLink to={"/profile/details"}>Details</NavLink>
-        <NavLink to={"/profile/orders"}>Orders</NavLink>
-        <NavLink to={"/profile/address"}>Shipping address</NavLink>
-        <NavLink to={"/profile/wishlist"}>Wishlist</NavLink>
-        <NavLink to={"/profile/history"}>History</NavLink>
+        <NavLink to={"/profile/details"}>Detalles</NavLink>
+        <NavLink to={"/profile/orders"}>Mis compras</NavLink>
+        <NavLink to={"/profile/wishlist"}>Favoritos</NavLink>
+        <NavLink to={"/profile/history"}>Historial</NavLink>
         <Signout />
       </div>
 
@@ -158,18 +197,34 @@ const Profile = () => {
             <div className="profile-avatar-container">
               <img
                 src={
-                  avatar ? avatar : require("../../assets/avatardefault.png")
+                  avatar ? avatarResizer(avatar) : require("../../assets/avatardefault.png")
                 }
                 referrerPolicy="no-referrer"
                 alt="avatar"
+                onClick={openAvatar}
+                style={{ cursor: 'pointer'}}
               />
             </div>
             <h2>{username}</h2>
             <p>{email}</p>
+            <p>{`${full_name.first || ''} ${full_name.last || ''}`}</p>
             <br />
-            <button disabled>Edit details</button>
+            <i>{id}</i>
+            <p>{role}</p>
             <br />
-            <button disabled>Change password</button>
+            <button onClick={openDetails}>Editar detalles</button>
+            <br />
+            {!isGoogleUser && <button disabled>Cambiar contraseña</button>}
+            <br />
+            <div>{address 
+                ? React.Children.toArray(address.map((e) => (
+                    e.isDefault && <div key={e.id}>
+                      <p>{`${e.street_name} ${e.street_number}, ${e.zip_code}, ${e.city}, ${e.state}.`}</p>
+                      {e.isDefault && <p>⭐</p>}
+                    </div>
+                  )))
+                : 'Aún no tienes un dirección seleccionada'}</div>
+            <button onClick={()=> navigate("/profile/address")}>Direcciones</button>
           </div>
         )}
 
@@ -284,9 +339,7 @@ const Profile = () => {
             )}
           </div>
         )}
-      </div>
 
-      <div>
         {render === "history" && (
           <div>
             <h1>History</h1>
@@ -323,7 +376,7 @@ const Profile = () => {
 
       <Modal isOpen={isOpenAddForm} closeModal={closeAddForm}>
         <h1>New shipping address</h1>
-        <form onSubmit={handleSubmit((data) => handleAddress(data, prop))}>
+        { isOpenAddForm && <form onSubmit={handleSubmit((data) => handleAddress(data, prop))}>
           <input
             type="text"
             name="state"
@@ -383,8 +436,52 @@ const Profile = () => {
           )}
 
           <button>Done</button>
-        </form>
+        </form>}
       </Modal>
+
+      <Modal isOpen={isOpenAvatar} closeModal={closeAvatar}>
+        {isOpenAvatar &&<div>
+            <h1>editar avatar</h1>
+            <div className='avatar-preview' >
+                <img src={avatarPreview ? avatarPreview : avatarResizer(avatar)}  alt="avatar-preview" />
+            </div>
+            <input 
+                type="file"
+                name="image"
+                accept="image/png, image/jpeg, image/gif"
+                onChange={avatarHandler}
+                id="filesButton"
+            />
+            <button onClick={uploadAvatar}>actualizar avatar</button>
+        </div>}
+      </Modal>
+
+      <Modal isOpen={isOpenDetails} closeModal={closeDetails}>
+        { isOpenDetails &&<form onSubmit={detailsHandler}>
+            <input 
+                type="text" 
+                placeholder="Nombre de usuario" 
+                value={details.username} 
+                maxLength="20"
+                onChange={(e)=> setDetails({...details, [e.target.name]: e.target.value})} name='username'/>
+            <input 
+                type="text" 
+                placeholder="Primer nombre" 
+                value={details.first}
+                maxLength="20"
+                onChange={(e)=> setDetails({...details, [e.target.name]: e.target.value})} 
+                name='first'/>
+            <input 
+                type="text" 
+                placeholder="Apellido" 
+                value={details.last} 
+                maxLength="20"
+                onChange={(e)=> setDetails({...details, [e.target.name]: e.target.value})} 
+                name='last'/>
+            <button>Actualizar</button>
+        </form>}
+      </Modal>
+
     </div>
   );
 };
