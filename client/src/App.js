@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import {
     loadAvatar,
     loadEmail,
@@ -44,7 +44,14 @@ function App() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { session } = useSelector(state => state.sessionReducer);
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(true);
+
+    //: location.pathname
+    // const location = useLocation();
+    // useEffect(() => {
+    //     console.log(location.pathname);
+    //     // eslint-disable-next-line
+    // }, [location]);
 
     useEffect(() => {
         setLoading(true)

@@ -20,6 +20,7 @@ const Profile = () => {
   const [isOpenAddForm, openModalAddForm, closeAddForm, prop] = useModal();
   const [isOpenAvatar, openAvatar, closeAvatar] = useModal();
   const [isOpenDetails, openDetails, closeDetails] = useModal();
+  const [isOpenForgotPassword, openForgotPassword, closeForgotPassword] = useModal();
   const { section } = useParams();
   const dispatch = useDispatch();
 
@@ -45,6 +46,12 @@ const Profile = () => {
     formState: { errors },
     reset,
     setValue,
+  } = useForm();
+
+  const {
+    register: registerForgot,
+    handleSubmit: handleSubmitForgot,
+    formState: { errors: errorsForgot },
   } = useForm();
 
   useEffect(() => {
@@ -178,312 +185,346 @@ const Profile = () => {
         closeDetails();
       }
 
-  return (
-    <div className="profile-container">
-      <h1>Mi perfil</h1>
+    const emailRegex = /^[\w-.]+@([\w-])+[.\w-]*$/i;
 
-      <div className="profile-menu-container">
-        <NavLink to={"/profile/details"}>Detalles</NavLink>
-        <NavLink to={"/profile/orders"}>Mis compras</NavLink>
-        <NavLink to={"/profile/wishlist"}>Favoritos</NavLink>
-        <NavLink to={"/profile/history"}>Historial</NavLink>
-        <Signout />
-      </div>
+    const forgotPassword = (email) => {
+        console.log(email);
+        axios
+        .put("/user/forgotPassword", email)
+        .then(({ data }) => {
+            console.log(data);
+        })
+        .catch((err) => console.log(err)); //! VOLVER A VER manejo de errores
+    };
 
-      <hr />
-      <div>
-        {render === "details" && (
-          <div className="profile-details-container">
-            <div className="profile-avatar-container">
-              <img
-                src={
-                  avatar ? avatarResizer(avatar) : require("../../assets/avatardefault.png")
-                }
-                referrerPolicy="no-referrer"
-                alt="avatar"
-                onClick={openAvatar}
-                style={{ cursor: 'pointer'}}
-              />
+    return (
+        <div className="profile-container">
+            <h1>Mi perfil</h1>
+
+            <div className="profile-menu-container">
+                <NavLink to={"/profile/details"}>Detalles</NavLink>
+                <NavLink to={"/profile/orders"}>Mis compras</NavLink>
+                <NavLink to={"/profile/wishlist"}>Favoritos</NavLink>
+                <NavLink to={"/profile/history"}>Historial</NavLink>
+                <Signout />
             </div>
-            <h2>{username}</h2>
-            <p>{email}</p>
-            <p>{`${full_name.first || ''} ${full_name.last || ''}`}</p>
-            <br />
-            <i>{id}</i>
-            <p>{role}</p>
-            <br />
-            <button onClick={openDetails}>Editar detalles</button>
-            <br />
-            {!isGoogleUser && <button disabled>Cambiar contraseña</button>}
-            <br />
-            <div>{address 
-                ? React.Children.toArray(address.map((e) => (
-                    e.isDefault && <div key={e.id}>
-                      <p>{`${e.street_name} ${e.street_number}, ${e.zip_code}, ${e.city}, ${e.state}.`}</p>
-                      {e.isDefault && <p>⭐</p>}
+
+            <hr />
+            <div>
+                {render === "details" && (
+                <div className="profile-details-container">
+                    <div className="profile-avatar-container">
+                    <img
+                        src={
+                        avatar ? avatarResizer(avatar) : require("../../assets/avatardefault.png")
+                        }
+                        referrerPolicy="no-referrer"
+                        alt="avatar"
+                        onClick={openAvatar}
+                        style={{ cursor: 'pointer'}}
+                    />
                     </div>
-                  )))
-                : 'Aún no tienes un dirección seleccionada'}</div>
-            <button onClick={()=> navigate("/profile/address")}>Direcciones</button>
-          </div>
-        )}
-
-        {render === "orders" && (
-          <div>
-            <h2>Orders</h2>
-            {!oLoading ? (
-              <div className="profile-orders-container">
-                {orders?.length ? (
-                  React.Children.toArray(
-                    orders?.map((e) => (
-                      <div className="profile-img-orders-container" key={e.id}>
-                        {e.products?.map((pic) => (
-                          <img
-                            key={pic.img}
-                            src={resizer(pic.img)}
-                            alt={"product"}
-                          />
-                        ))}
-                        <p>{e.description}</p>
-                        <p>creation date: {formatDate(e.expiration_date_from)}</p>
-                        {e.status === 'pending' && `expiration: ${formatDate(e.expiration_date_to)}`}
-                        <p>- - -</p>
-                        <p>payment status: {e.status}</p>
-                        {e.status === 'pending' && e.payment_link && <div><a style={{ color: '#3483fa'}} href={e.payment_link}>Continue payment.</a></div>} 
-                        <p>{e.payment_source}</p>
-                        <p>order id: <i>{e.id}</i></p>
-                        <p>- - -</p>
-                        <p>
-                          shipping address:{" "}
-                          {`
-                                ${e.shipping_address?.street_name} 
-                                ${e.shipping_address?.street_number}, 
-                                ${e.shipping_address?.city} 
-                            `}
-                        </p>
-                        <p>free shipping: {e.free_shipping ? "Yes" : "No"}</p>
-                        <p>shipping cost: {e.shipping_cost}</p>
-                        <p>total payment: ${e.total}</p>
-                        <hr />
-                        <br />
-                      </div>
-                    ))
-                  )
-                ) : (
-                  <p>No orders yet</p>
+                    <h2>{username}</h2>
+                    <p>{email}</p>
+                    <p>{`${full_name.first || ''} ${full_name.last || ''}`}</p>
+                    <br />
+                    <i>{id}</i>
+                    <p>{role}</p>
+                    <br />
+                    <button onClick={openDetails}>Editar detalles</button>
+                    <br />
+                    {!isGoogleUser && <button onClick={openForgotPassword}>Cambiar contraseña</button>}
+                    <br />
+                    <div>{address 
+                        ? React.Children.toArray(address.map((e) => (
+                            e.isDefault && <div key={e.id}>
+                            <p>{`${e.street_name} ${e.street_number}, ${e.zip_code}, ${e.city}, ${e.state}.`}</p>
+                            {e.isDefault && <p>⭐</p>}
+                            </div>
+                        )))
+                        : 'Aún no tienes un dirección seleccionada'}</div>
+                    <button onClick={()=> navigate("/profile/address")}>Direcciones</button>
+                </div>
                 )}
-              </div>
-            ) : (
-              <p>LOADING</p>
-            )}
-          </div>
-        )}
 
-        {render === "address" && (
-          <div>
-            <h1>Address</h1>
-            {!loading ? (
-              <div>
-                {React.Children.toArray(
-                  address?.map((e) => (
-                    <div key={e.id}>
-                      <p>{`${e.street_name} ${e.street_number}, ${e.zip_code}, ${e.city}, ${e.state}.`}</p>
-                      <button onClick={() => editAddress(e._id)}>edit</button>
-                      <button onClick={() => deleteAddress(e._id)}>
-                        delete
-                      </button>
-                      {e.isDefault ? (
-                        <p>⭐</p>
-                      ) : (
-                        <button onClick={() => setDefault(e._id)}>
-                          set as default
+                {render === "orders" && (
+                <div>
+                    <h2>Orders</h2>
+                    {!oLoading ? (
+                    <div className="profile-orders-container">
+                        {orders?.length ? (
+                        React.Children.toArray(
+                            orders?.map((e) => (
+                            <div className="profile-img-orders-container" key={e.id}>
+                                {e.products?.map((pic) => (
+                                <img
+                                    key={pic.img}
+                                    src={resizer(pic.img)}
+                                    alt={"product"}
+                                />
+                                ))}
+                                <p>{e.description}</p>
+                                <p>creation date: {formatDate(e.expiration_date_from)}</p>
+                                {e.status === 'pending' && `expiration: ${formatDate(e.expiration_date_to)}`}
+                                <p>- - -</p>
+                                <p>payment status: {e.status}</p>
+                                {e.status === 'pending' && e.payment_link && <div><a style={{ color: '#3483fa'}} href={e.payment_link}>Continue payment.</a></div>} 
+                                <p>{e.payment_source}</p>
+                                <p>order id: <i>{e.id}</i></p>
+                                <p>- - -</p>
+                                <p>
+                                shipping address:{" "}
+                                {`
+                                        ${e.shipping_address?.street_name} 
+                                        ${e.shipping_address?.street_number}, 
+                                        ${e.shipping_address?.city} 
+                                    `}
+                                </p>
+                                <p>free shipping: {e.free_shipping ? "Yes" : "No"}</p>
+                                <p>shipping cost: {e.shipping_cost}</p>
+                                <p>total payment: ${e.total}</p>
+                                <hr />
+                                <br />
+                            </div>
+                            ))
+                        )
+                        ) : (
+                        <p>No orders yet</p>
+                        )}
+                    </div>
+                    ) : (
+                    <p>LOADING</p>
+                    )}
+                </div>
+                )}
+
+                {render === "address" && (
+                <div>
+                    <h1>Address</h1>
+                    {!loading ? (
+                    <div>
+                        {React.Children.toArray(
+                        address?.map((e) => (
+                            <div key={e.id}>
+                            <p>{`${e.street_name} ${e.street_number}, ${e.zip_code}, ${e.city}, ${e.state}.`}</p>
+                            <button onClick={() => editAddress(e._id)}>edit</button>
+                            <button onClick={() => deleteAddress(e._id)}>
+                                delete
+                            </button>
+                            {e.isDefault ? (
+                                <p>⭐</p>
+                            ) : (
+                                <button onClick={() => setDefault(e._id)}>
+                                set as default
+                                </button>
+                            )}
+                            <p>- - -</p>
+                            </div>
+                        ))
+                        )}
+                        <button
+                        default={loading || true}
+                        onClick={() => openModalAddForm(true)}
+                        >
+                        Add new address
                         </button>
-                      )}
-                      <p>- - -</p>
                     </div>
-                  ))
+                    ) : (
+                    <p>LOADING</p>
+                    )}
+                </div>
                 )}
-                <button
-                  default={loading || true}
-                  onClick={() => openModalAddForm(true)}
-                >
-                  Add new address
-                </button>
-              </div>
-            ) : (
-              <p>LOADING</p>
-            )}
-          </div>
-        )}
 
-        {render === "wishlist" && (
-          <div>
-            <h1>Wishlist</h1>
-            {!loading ? (
-              <div className="profile-wishlistcard-container">
-                {wishlist.length ? (
-                  React.Children.toArray(
-                    wishlist?.map((product) => (
-                      <Card
-                        productData={product}
-                        fav={wl_id.includes(product._id)}
-                      />
-                    ))
-                  )
-                ) : (
-                  <p>Wishlist empty</p>
+                {render === "wishlist" && (
+                <div>
+                    <h1>Wishlist</h1>
+                    {!loading ? (
+                    <div className="profile-wishlistcard-container">
+                        {wishlist.length ? (
+                        React.Children.toArray(
+                            wishlist?.map((product) => (
+                            <Card
+                                productData={product}
+                                fav={wl_id.includes(product._id)}
+                            />
+                            ))
+                        )
+                        ) : (
+                        <p>Wishlist empty</p>
+                        )}
+                    </div>
+                    ) : (
+                    <div>LOADING</div>
+                    )}
+                </div>
                 )}
-              </div>
-            ) : (
-              <div>LOADING</div>
-            )}
-          </div>
-        )}
 
-        {render === "history" && (
-          <div>
-            <h1>History</h1>
-            {!loading ? (
-              <div className="profile-history-container">
-                {history.length ? (
-                  React.Children.toArray(
-                    history?.map((e) => (
-                      <MiniCard
-                        key={e._id}
-                        img={e.thumbnail}
-                        name={e.name}
-                        price={e.price}
-                        sale_price={e.sale_price}
-                        discount={e.discount}
-                        prodId={e._id}
-                        free_shipping={e.free_shipping ? true : false}
-                        on_sale={e.on_sale}
-                        fav={wl_id.includes(e._id)}
-                        fadeIn={true}
-                      />
-                    ))
-                  )
-                ) : (
-                  <p>History empty</p>
+                {render === "history" && (
+                <div>
+                    <h1>History</h1>
+                    {!loading ? (
+                    <div className="profile-history-container">
+                        {history.length ? (
+                        React.Children.toArray(
+                            history?.map((e) => (
+                            <MiniCard
+                                key={e._id}
+                                img={e.thumbnail}
+                                name={e.name}
+                                price={e.price}
+                                sale_price={e.sale_price}
+                                discount={e.discount}
+                                prodId={e._id}
+                                free_shipping={e.free_shipping ? true : false}
+                                on_sale={e.on_sale}
+                                fav={wl_id.includes(e._id)}
+                                fadeIn={true}
+                            />
+                            ))
+                        )
+                        ) : (
+                        <p>History empty</p>
+                        )}
+                    </div>
+                    ) : (
+                    <div>LOADING</div>
+                    )}
+                </div>
                 )}
-              </div>
-            ) : (
-              <div>LOADING</div>
-            )}
-          </div>
-        )}
-      </div>
-
-      <Modal isOpen={isOpenAddForm} closeModal={closeAddForm}>
-        <h1>New shipping address</h1>
-        { isOpenAddForm && <form onSubmit={handleSubmit((data) => handleAddress(data, prop))}>
-          <input
-            type="text"
-            name="state"
-            placeholder="state"
-            {...register("state", {
-              required: true,
-            })}
-          />
-          {errors.state && <p>Enter your residence state</p>}
-
-          <input
-            type="text"
-            name="city"
-            placeholder="city"
-            {...register("city", {
-              required: true,
-            })}
-          />
-          {errors.city && <p>Enter your residence city</p>}
-
-          <input
-            type="text"
-            name="zip_code"
-            placeholder="zip code"
-            {...register("zip_code", {
-              required: true,
-            })}
-          />
-          {errors.zip_code && <p>Enter your residence zip code</p>}
-
-          <input
-            type="text"
-            name="street_name"
-            placeholder="street name"
-            {...register("street_name", {
-              required: true,
-            })}
-          />
-          {errors.street_name && <p>Enter your residence street</p>}
-
-          <input
-            type="string"
-            name="street_number"
-            placeholder="street number"
-            {...register("street_number", {
-              required: true,
-              pattern: {
-                value: /^(0|[1-9]\d*)(\.\d+)?$/,
-              },
-            })}
-          />
-          {errors.street_number?.type === "required" && (
-            <p>Enter your residence street number</p>
-          )}
-          {errors.street_number?.type === "pattern" && (
-            <p>Enter a valid residence street number</p>
-          )}
-
-          <button>Done</button>
-        </form>}
-      </Modal>
-
-      <Modal isOpen={isOpenAvatar} closeModal={closeAvatar}>
-        {isOpenAvatar &&<div>
-            <h1>editar avatar</h1>
-            <div className='avatar-preview' >
-                <img src={avatarPreview ? avatarPreview : avatarResizer(avatar)}  alt="avatar-preview" />
             </div>
-            <input 
-                type="file"
-                name="image"
-                accept="image/png, image/jpeg, image/gif"
-                onChange={avatarHandler}
-                id="filesButton"
-            />
-            <button onClick={uploadAvatar}>actualizar avatar</button>
-        </div>}
-      </Modal>
 
-      <Modal isOpen={isOpenDetails} closeModal={closeDetails}>
-        { isOpenDetails &&<form onSubmit={detailsHandler}>
-            <input 
-                type="text" 
-                placeholder="Nombre de usuario" 
-                value={details.username} 
-                maxLength="20"
-                onChange={(e)=> setDetails({...details, [e.target.name]: e.target.value})} name='username'/>
-            <input 
-                type="text" 
-                placeholder="Primer nombre" 
-                value={details.first}
-                maxLength="20"
-                onChange={(e)=> setDetails({...details, [e.target.name]: e.target.value})} 
-                name='first'/>
-            <input 
-                type="text" 
-                placeholder="Apellido" 
-                value={details.last} 
-                maxLength="20"
-                onChange={(e)=> setDetails({...details, [e.target.name]: e.target.value})} 
-                name='last'/>
-            <button>Actualizar</button>
-        </form>}
-      </Modal>
+            <Modal isOpen={isOpenAddForm} closeModal={closeAddForm}>
+                <h1>New shipping address</h1>
+                { isOpenAddForm && <form onSubmit={handleSubmit((data) => handleAddress(data, prop))}>
+                <input
+                    type="text"
+                    name="state"
+                    placeholder="state"
+                    {...register("state", {
+                    required: true,
+                    })}
+                />
+                {errors.state && <p>Enter your residence state</p>}
 
-    </div>
-  );
+                <input
+                    type="text"
+                    name="city"
+                    placeholder="city"
+                    {...register("city", {
+                    required: true,
+                    })}
+                />
+                {errors.city && <p>Enter your residence city</p>}
+
+                <input
+                    type="text"
+                    name="zip_code"
+                    placeholder="zip code"
+                    {...register("zip_code", {
+                    required: true,
+                    })}
+                />
+                {errors.zip_code && <p>Enter your residence zip code</p>}
+
+                <input
+                    type="text"
+                    name="street_name"
+                    placeholder="street name"
+                    {...register("street_name", {
+                    required: true,
+                    })}
+                />
+                {errors.street_name && <p>Enter your residence street</p>}
+
+                <input
+                    type="string"
+                    name="street_number"
+                    placeholder="street number"
+                    {...register("street_number", {
+                    required: true,
+                    pattern: {
+                        value: /^(0|[1-9]\d*)(\.\d+)?$/,
+                    },
+                    })}
+                />
+                {errors.street_number?.type === "required" && (
+                    <p>Enter your residence street number</p>
+                )}
+                {errors.street_number?.type === "pattern" && (
+                    <p>Enter a valid residence street number</p>
+                )}
+
+                <button>Done</button>
+                </form>}
+            </Modal>
+
+            <Modal isOpen={isOpenAvatar} closeModal={closeAvatar}>
+                {isOpenAvatar &&<div>
+                    <h1>editar avatar</h1>
+                    <div className='avatar-preview' >
+                        <img src={avatarPreview ? avatarPreview : avatarResizer(avatar)}  alt="avatar-preview" />
+                    </div>
+                    <input 
+                        type="file"
+                        name="image"
+                        accept="image/png, image/jpeg, image/gif"
+                        onChange={avatarHandler}
+                        id="filesButton"
+                    />
+                    <button onClick={uploadAvatar}>actualizar avatar</button>
+                </div>}
+            </Modal>
+
+            <Modal isOpen={isOpenDetails} closeModal={closeDetails}>
+                { isOpenDetails &&<form onSubmit={detailsHandler}>
+                    <input 
+                        type="text" 
+                        placeholder="Nombre de usuario" 
+                        value={details.username} 
+                        maxLength="20"
+                        onChange={(e)=> setDetails({...details, [e.target.name]: e.target.value})} name='username'/>
+                    <input 
+                        type="text" 
+                        placeholder="Primer nombre" 
+                        value={details.first}
+                        maxLength="20"
+                        onChange={(e)=> setDetails({...details, [e.target.name]: e.target.value})} 
+                        name='first'/>
+                    <input 
+                        type="text" 
+                        placeholder="Apellido" 
+                        value={details.last} 
+                        maxLength="20"
+                        onChange={(e)=> setDetails({...details, [e.target.name]: e.target.value})} 
+                        name='last'/>
+                    <button>Actualizar</button>
+                </form>}
+            </Modal>
+
+            <Modal isOpen={isOpenForgotPassword} closeModal={closeForgotPassword}>
+                <form onSubmit={handleSubmitForgot(forgotPassword)}>
+                <h2>Ingrese su email para reestablecer la contraseña</h2>
+                <input
+                    type="text"
+                    placeholder="email"
+                    autoComplete="off"
+                    {...registerForgot("email", {
+                    required: true,
+                    pattern: emailRegex,
+                    })}
+                />
+                {errorsForgot.emailForgot?.type === "required" && (
+                    <p>Ingresa tu email</p>
+                )}
+                {errorsForgot.emailForgot?.type === "pattern" && (
+                    <p>Ingresa un email válido</p>
+                )}
+                <input type="submit" value="Enviar email" />
+                </form>
+            </Modal>
+
+        </div>
+    );
 };
 
 export default Profile;
