@@ -30,10 +30,10 @@ const ProductForm = () => {
     main_features: "",
     attributes: "",
     image: "",
-    category: "",
   });
-  let image_reference = useRef();
-  let category_reference = useRef();
+  const [imagesError, setImagesError] = useState(null);
+  const [categoryError, setCategoryError] = useState(null);
+  const [showCustomErrors, setShowCustomErrors] = useState(false);
   let timeoutId = useRef();
   const navigate = useNavigate();
   const [notification] = useNotification();
@@ -139,7 +139,7 @@ const ProductForm = () => {
     setValue("available_quantity", data.available_quantity);
     setValue("description", data.description);
     setValue("free_shipping", data.free_shipping);
-    //setValue("category", data.category);
+    setValue("category", data.category); //! VOLVER A VER ¿funca asi?
     replaceFeature([...data.main_features]);
     replaceAttribute([...data.attributes]);
     setImgsToEdit(data.images);
@@ -184,7 +184,9 @@ const ProductForm = () => {
     setProductImgUrls(newImageUrls);
   }, [productImg]);
 
-  const submitProduct = async (productData) => {
+  const submitProduct = async (productData, errorFlag) => {
+    if (errorFlag > 0) return console.log("hubo un error");
+
     let formData = new FormData();
 
     const fileListArrayImg = Array.from(productImg);
@@ -200,7 +202,7 @@ const ProductForm = () => {
       if (productToEdit) {
         let data = { ...productData, imgsToEdit };
         formData.append("data", JSON.stringify(data));
-        //  formData.append("imgsToEdit", imgsToEdit);
+        formData.append("category", category);
 
         await axios.put(`/admin/product/${productToEdit}`, formData, {
           headers: {
@@ -211,6 +213,8 @@ const ProductForm = () => {
         navigate("/admin/products");
       } else {
         formData.append("data", JSON.stringify(productData));
+        formData.append("category", category);
+
         await axios.post(`/admin/product/`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -230,6 +234,7 @@ const ProductForm = () => {
   const clearInputs = () => {
     reset();
     setWarn({});
+    setShowCustomErrors(false);
     setProductImg([]);
     setImgsToEdit([]);
     setCategoryPath([]);
@@ -250,36 +255,50 @@ const ProductForm = () => {
     }
   };
 
-  const customSubmit = (e) => {
-    e.preventDefault();
-    if (!category) {
-      category_reference.current = "Debes eleccionar la categoría";
-    }
+  const isImagesEmpty = () => {
+    let errorFlag = 0;
+
     if (!productToEdit && productImg.length === 0) {
-      image_reference.current = "Debes subir al menos una imágen";
+      setImagesError("Debes subir al menos una imágen");
+      errorFlag = 1;
     }
     if (productToEdit && productImg.length === 0 && imgsToEdit.length === 0) {
-      image_reference.current = "Debes subir al menos una imágen";
+      setImagesError("Debes subir al menos una imágen");
+      errorFlag = 1;
     }
-    return handleSubmit(submitProduct)(e);
+    return errorFlag;
   };
 
   useEffect(() => {
-    console.log(warn);
-  }, [warn]);
+    let errorFlag = isImagesEmpty();
+    if (errorFlag === 0) setImagesError(null); // eslint-disable-next-line
+  }, [productImg, imgsToEdit]);
+
+  const isCategoryEmpty = () => {
+    let errorFlag = 0;
+    if (!category) {
+      setCategoryError("Debes seleccionar la categoría");
+      errorFlag = 1;
+    }
+    return errorFlag;
+  };
+
+  const customSubmit = (e) => {
+    e.preventDefault();
+    let errorFlag = isImagesEmpty() + isCategoryEmpty();
+    setShowCustomErrors(true);
+    handleSubmit((productData) => submitProduct(productData, errorFlag))(e);
+  };
+
+  useEffect(() => {
+    let errorFlag = isCategoryEmpty();
+    if (errorFlag === 0) setCategoryError(null); // eslint-disable-next-line
+  }, [category]);
 
   return (
     <div>
       <hr />
       <h2>Product {productToEdit ? "EDIT" : "CREATION"}</h2>
-      <a
-        href="https://api.mercadolibre.com/sites/MLA/categories"
-        target="_blank"
-        rel="noreferrer"
-        style={{ color: "#0051ff" }}
-      >
-        <b>Lista de categorias</b>
-      </a>
       <br />
       <form encType="multipart/form-data" onSubmit={customSubmit}>
         <SelectsNested
@@ -288,7 +307,7 @@ const ProductForm = () => {
           setCategoryPath={setCategoryPath}
           categoryPath={categoryPath}
         />
-        {category_reference.current && <p>{category_reference.current}</p>}
+        {showCustomErrors && categoryError && <h3>ESTADO {categoryError}</h3>}
         <>
           <div>
             <input
@@ -325,14 +344,6 @@ const ProductForm = () => {
               })}
             />
             <div>{errors.available_quantity?.message}</div>
-
-            <input
-              type="text"
-              placeholder="Category"
-              autoComplete="off"
-              {...register("category")}
-            />
-            <div>{errors.category?.message}</div>
 
             <label>
               <input type="checkbox" {...register("free_shipping")} />
@@ -410,7 +421,7 @@ const ProductForm = () => {
         </>
 
         <div>
-          <label htmlFor="filesButton">BOTON PARA SUBIR IMAGENES</label>
+          <label htmlFor="filesButton">BOTON PARA IMAGENES</label>
           <input
             type="file"
             name="image"
@@ -421,7 +432,7 @@ const ProductForm = () => {
             id="filesButton"
           />
         </div>
-        {image_reference.current && <p>{image_reference.current}</p>}
+        {showCustomErrors && imagesError && <h3>{imagesError}</h3>}
 
         {imgsToEdit &&
           React.Children.toArray(

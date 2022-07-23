@@ -1,3 +1,8 @@
+require("dotenv").config();
+const { CLOUDINARY_CLOUD, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } =
+  process.env;
+const cloudinary = require("cloudinary").v2;
+const axios = require("axios");
 const fs = require("fs-extra");
 const User = require("../models/user");
 const Product = require("../models/product");
@@ -7,6 +12,13 @@ const Wishlist = require("../models/wishlist");
 const Sale = require("../models/Sales");
 //const setUserKey = require("../utils/setUserKey");
 const { rawIdProductGetter } = require("../utils/rawIdProductGetter");
+
+cloudinary.config({
+  cloud_name: CLOUDINARY_CLOUD,
+  api_key: CLOUDINARY_API_KEY,
+  api_secret: CLOUDINARY_API_SECRET,
+  secure: true,
+});
 
 const verifyAdminRoute = (req, res, next) => {
   return res.send("ok");
@@ -55,7 +67,6 @@ const getAllUsers = async (req, res, next) => {
     };
     for (const key in user) {
       if (usefulData.includes(key)) {
-        //console.log(key + " " + user[key]);
         newUser[key] = user[key];
       }
     }
@@ -171,7 +182,6 @@ const getUserWishlist = async (req, res, next) => {
 };
 
 const deleteUser = async (req, res, next) => {
-  console.log("-----------llega");
   const { id } = req.params;
 
   try {
@@ -376,13 +386,6 @@ const getMetrics = async (req, res, next) => {
 
     //! PRODUCTOS POR CATEGORIA
 
-    const sales = await Sale.find();
-    //! VOLVER A VER modelo sales que indica?
-    let activeSales = 0;
-    sales.forEach((sale) => {
-      activeSales += sale.products.length;
-    });
-
     const orders = await Order.find();
     let productsSold = 0;
     let totalProfits = 0;
@@ -404,7 +407,7 @@ const getMetrics = async (req, res, next) => {
       totalUsers,
       googleUsers,
       publishedProducts,
-      activeSales,
+      productsOnSale,
       productsSold,
       totalProfits,
       productsWished,

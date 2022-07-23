@@ -24,7 +24,7 @@ const cartFormater = async (cart) => {
 
     if (last_order) {
         const order = await Order.findById(cart.last_order);
-        if (order.status !== 'pending') {
+        if (order && order.status !== 'pending') {
             last_order = false;
             Cart.findByIdAndUpdate(
                 cart.id,

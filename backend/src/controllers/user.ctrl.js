@@ -1,10 +1,25 @@
+require("dotenv").config();
+const {
+    CLOUDINARY_CLOUD,
+    CLOUDINARY_API_KEY,
+    CLOUDINARY_API_SECRET,
+} = process.env;
+const cloudinary = require("cloudinary").v2;
 const User = require("../models/user");
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
-require("dotenv").config();
+const axios = require("axios");
+const fs = require("fs-extra");
 const { JWT_SECRET_CODE } = process.env;
 const { validationResult } = require("express-validator");
 const sendEmail = require("../utils/sendEmail");
+
+cloudinary.config({
+    cloud_name: CLOUDINARY_CLOUD,
+    api_key: CLOUDINARY_API_KEY,
+    api_secret: CLOUDINARY_API_SECRET,
+    secure: true,
+});
 
 const signup = async (req, res, next) => {
     const { _id, email } = req.user;
@@ -79,7 +94,7 @@ const signinGoogle = async (req, res, next) => {
         } else {
             if (emailVerified !== userFound.emailVerified)
                 userFound.emailVerified = emailVerified;
-            if (avatar !== userFound.avatar) userFound.avatar = avatar;
+            if (!userFound.avatar) userFound.avatar = avatar;
             if (firstName !== userFound.firstName) userFound.firstName = firstName;
             if (lastName !== userFound.lastName) userFound.lastName = lastName;
             await userFound.save();
@@ -97,27 +112,11 @@ const profile = async (req, res, next) => {
         if (!userFound) {
             return res.status(404).json({ message: "User not Found" });
         }
-        const {
-            email,
-            name,
-            role,
-            avatar,
-            emailVerified,
-            isGoogleUser,
-            googleEmail,
-        } = userFound;
 
-        //return res.json(userFound);
-        return res.json({
-            email,
-            name,
-            //! VOLVER A VER agregar emailVerified y googleEmail
-            role,
-            emailVerified,
-            isGoogleUser,
-            googleEmail,
-            avatar: avatar || null,
-        });
+        let aux = userFound
+        delete aux.password
+
+        return res.json(aux);
     } catch (error) {
         next(error);
     }
@@ -218,22 +217,45 @@ const changePassword = async (req, res, next) => {
 };
 
 const editProfile = async (req, res, next) => {
-    const dataAllowedToEdit = ["firstName", "lastName", "address"];
-    const dataToEdit = Object.keys(req.body);
     try {
-        const userToEdit = await User.findById(req.user._id);
-        if (!userToEdit) return res.status(404).json({ message: "User not found" });
-        for (const property of dataToEdit) {
-            if (dataAllowedToEdit.includes(property))
-                userToEdit[property] = req.body[property];
-        }
-        await userToEdit.save();
-        return res.json({ userToEdit, message: "Edited successfully" });
+        console.log(req.body);
+        const { username, first, last } = req.body;
+
+        const user = await User.findByIdAndUpdate(req.user._id,
+            {
+                username: username || '',
+                firstName: first || '',
+                lastName: last || ''
+            },
+            { new: true }
+        );
+
+        return res.json({ message: "Edited successfully", user });
     } catch (error) {
         next(error);
     }
 };
-//! VOLVER A VER separar addAddress de editProfile, los users de google no pueden editar el perfil, pero SI agregar address
+
+const setAvatar = async (req, res, next) => {
+    try {
+        const { avatar } = await User.findById(req.user._id)
+        avatar && cloudinary.api.delete_resources([avatar.split('/').pop().split('.')[0]]);
+
+        const data = await cloudinary.uploader.upload(req.files[0].path);
+
+        await fs.unlink(req.files[0].path);
+
+        //: actualizar y enviar link de nueva imagen
+        await User.findByIdAndUpdate(
+            req.user._id,
+            { avatar: data.url }
+        );
+
+        return res.json({ message: 'Avatar actualizado', avatar: data.url });
+    } catch (error) {
+        next(error)
+    }
+};
 
 module.exports = {
     signin,
@@ -245,4 +267,5 @@ module.exports = {
     resetPassword,
     changePassword,
     editProfile,
+    setAvatar,
 };
