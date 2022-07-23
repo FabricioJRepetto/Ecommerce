@@ -78,8 +78,9 @@ const signinGoogle = async (req, res, next) => {
 
     try {
         const userFound = await User.findOne({ email: sub });
-
+        console.log(userFound);
         if (!userFound) {
+            console.log('!! crea nuevo usuario google');
             const newGoogleUser = await User.create({
                 email: sub,
                 password: sub,

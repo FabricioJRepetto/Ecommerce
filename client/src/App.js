@@ -56,11 +56,13 @@ function App() {
     useEffect(() => {
         setLoading(true)
         const loggedUserToken = window.localStorage.getItem("loggedTokenEcommerce");
-
+        //:console.log('APP token');
+        //:console.log(loggedUserToken);
         (async () => {
             try {
                 if (loggedUserToken) {
                     const { data } = await axios(`/user/profile/${loggedUserToken}`); //! VOLVER A VER fijarse con nuevos usuarios de google
+                    console.log(data);
 
                     const { _id, email, googleEmail, name, firstName, lastName, username, role, isGoogleUser, avatar } = data;
 
@@ -84,10 +86,8 @@ function App() {
                 }
                 setLoading(false);
             } catch (error) {
-                navigate("/");
                 window.localStorage.removeItem("loggedTokenEcommerce");
-                window.localStorage.removeItem("loggedAvatarEcommerce");
-                window.localStorage.removeItem("loggedEmailEcommerce");
+                navigate("/");
                 setLoading(false);
             }
         })();

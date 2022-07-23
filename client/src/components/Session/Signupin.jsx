@@ -72,9 +72,11 @@ const Signupin = () => {
 
 //? LOGIN CON GOOGLE
   const handleCallbackResponse = async (response) => {
+    //:console.log('!! sign in');
+    //:console.log(window.localStorage.getItem("loggedTokenEcommerce"));
+
     //response.credential = Google user token
     const googleToken = "google" + response.credential;
-    dispatch(sessionActive(true));
     window.localStorage.setItem("loggedTokenEcommerce", googleToken);
 
     //userDecoded contains Google user data
@@ -87,6 +89,7 @@ const Signupin = () => {
       given_name: firstName,
       family_name: lastName,
     } = userDecoded;
+    console.log(userDecoded);
 
     try {
       const { data } = await axios.post(`/user/signinGoogle`, {
@@ -99,6 +102,7 @@ const Signupin = () => {
       });
 
       notification(`Bienvenido, ${data.name}`, "", "success");
+      dispatch(sessionActive(true));
     } catch (error) {
       console.log(error); //! VOLVER A VER manejo de errores
     }
