@@ -3,14 +3,15 @@
     position:fixed;
     top: 0;
     left: 0;
-    background: black;
+    background: #222;
     min-height: 100vh;
     min-width: 100vw;
     z-index: 10;
     pointer-events: none;
-    transition: opacity .5s ease;
+    transition: all .5s ease;
 }
 
 .globalLoaded {
     opacity: 0;
+    transition: all .5s ease;
 }

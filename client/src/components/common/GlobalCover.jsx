@@ -5,7 +5,9 @@ const GlobalCover = () => {
     const [aux, setAux] = useState(false);
 
     useEffect(() => {
-            setAux(true)
+        setTimeout(() => {
+            setAux(true)            
+        }, 100);
     }, []);
 
     return (

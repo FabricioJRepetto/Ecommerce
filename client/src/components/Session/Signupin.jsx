@@ -60,9 +60,8 @@ const Signupin = () => {
       if (data.user) {
         window.localStorage.setItem("loggedTokenEcommerce", data.token);
         dispatch(sessionActive(true));
-
-        const username = data.user.name || data.user.email.split("@")[0];
-        notification(`Bienvenido, ${username}`, "", "success");
+        
+        notification(`Bienvenido, ${data.user.name}`, "", "success");
       }
     } catch (error) {
       notification(error.response.data.message, "", "error");
@@ -72,9 +71,6 @@ const Signupin = () => {
 
 //? LOGIN CON GOOGLE
   const handleCallbackResponse = async (response) => {
-    //:console.log('!! sign in');
-    //:console.log(window.localStorage.getItem("loggedTokenEcommerce"));
-
     //response.credential = Google user token
     const googleToken = "google" + response.credential;
     window.localStorage.setItem("loggedTokenEcommerce", googleToken);
@@ -89,7 +85,6 @@ const Signupin = () => {
       given_name: firstName,
       family_name: lastName,
     } = userDecoded;
-    console.log(userDecoded);
 
     try {
       const { data } = await axios.post(`/user/signinGoogle`, {
@@ -126,8 +121,10 @@ const Signupin = () => {
     });
 
     google.accounts.id.renderButton(document.getElementById("signInDiv"), {
-      width: 240,
-      theme: "light",
+        type: 'standard',
+        size: 'large',
+        width: 240,
+        text: 'continue_with',
     });
     // eslint-disable-next-line
   }, [session]);
@@ -255,7 +252,7 @@ const Signupin = () => {
                 </form>
             )}
         
-            <div className="google-signin-container" id="signInDiv"></div>
+            <span className="google-signin-container" id="signInDiv"></span>
 
             <NavLink to={'/'}>{'< volver'}</NavLink>
       </div>

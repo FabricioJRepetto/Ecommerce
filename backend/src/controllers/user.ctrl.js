@@ -78,9 +78,7 @@ const signinGoogle = async (req, res, next) => {
 
     try {
         const userFound = await User.findOne({ email: sub });
-        console.log(userFound);
         if (!userFound) {
-            console.log('!! crea nuevo usuario google');
             const newGoogleUser = await User.create({
                 email: sub,
                 password: sub,
@@ -217,7 +215,6 @@ const changePassword = async (req, res, next) => {
 
 const editProfile = async (req, res, next) => {
     try {
-        console.log(req.body);
         const { username, first, last } = req.body;
 
         const user = await User.findByIdAndUpdate(req.user._id,
