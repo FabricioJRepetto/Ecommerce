@@ -3,9 +3,6 @@ const {
     CLOUDINARY_CLOUD,
     CLOUDINARY_API_KEY,
     CLOUDINARY_API_SECRET,
-    MELI_SEARCH_URL,
-    MELI_SEARCH_URL_ADDONS,
-    MELI_PRODUCT_ID,
 } = process.env;
 const cloudinary = require("cloudinary").v2;
 const Product = require("../models/product");
@@ -65,9 +62,17 @@ const getByQuery = async (req, res, next) => {
         let resultsDB = await Product.find();
 
         if (req.query.q) {
-            let aux = new RegExp(req.query.q.replace(" ", "|"), "gi");
+            let aux = req.query.q.split(' ').map(e => {
+                if (e.endsWith('s')) {
+                    return RegExp(e.slice(0, -1), 'gi')
+                } else if (e.endsWith('es')) {
+                    return RegExp(e.slice(0, -2), 'gi')
+                } else {
+                    return RegExp(e, 'gi')
+                }
+            });
             resultsDB = await Product.find({
-                $or: [{ name: { $in: [aux] } }, { brand: { $in: [aux] } }],
+                $or: [{ name: { $in: aux } }, { brand: { $in: aux } }],
             });
         }
 
