@@ -20,23 +20,23 @@ const MiniCard = ({
   fav,
   on_sale,
   loading,
-  special = !/MLA/g.test(prodId),
   fadeIn = true,
 }) => {
-  const navigate = useNavigate();
-  const [visible, setVisible] = useState(false);
-  const [ready, setReady] = useState(!fadeIn);
-  const { session } = useSelector((state) => state.sessionReducer);
+    const special = !/MLA/g.test(prodId);
+    const navigate = useNavigate();
+    const [visible, setVisible] = useState(false);
+    const [ready, setReady] = useState(!fadeIn);
+    const { session } = useSelector((state) => state.sessionReducer);
 
-  const [loaded, setLoaded] = useState(false);
-  useEffect(() => {
-    if (!loading) {
-      setLoaded(true);
-    }
-  }, [loading]);
-  const readySetter = () => {
-    setReady(true);
-  };
+    const [loaded, setLoaded] = useState(false);
+    useEffect(() => {
+        if (!loading) {
+        setLoaded(true);
+        }
+    }, [loading]);
+    const readySetter = () => {
+        setReady(true);
+    };
 
   return (
     <div className={`minicard-container`}>
