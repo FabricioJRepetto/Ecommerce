@@ -21,8 +21,8 @@ const Home = () => {
     const [countdown, setCountdown] = useState("");
     const [loading, setLoading] = useState(true);
     const [suggestion, setSuggestion] = useState(false);
-    const wishlist = useSelector((state) => state.cartReducer.wishlist);
-    const session = useSelector((state) => state.sessionReducer.session);
+    const {wishlist} = useSelector((state) => state.cartReducer);
+    const {session} = useSelector((state) => state.sessionReducer);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();

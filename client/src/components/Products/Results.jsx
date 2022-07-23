@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import axios from 'axios'
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
 import { 
     loadFilters, 
     loadProductsFound, 
@@ -8,24 +8,22 @@ import {
     loadQuerys, 
     loadApplied,
     loadBreadCrumbs
- } from '../../Redux/reducer/productsSlice'
-import Card from './Card'
-import {ReactComponent as Spinner } from '../../assets/svg/spinner.svg'
-import {ReactComponent as Arrow } from '../../assets/svg/arrow-right.svg'
+ } from '../../Redux/reducer/productsSlice';
+import Card from './Card';
+import {ReactComponent as Spinner } from '../../assets/svg/spinner.svg';
+import {ReactComponent as Arrow } from '../../assets/svg/arrow-right.svg';
 
-import './Results.css'
-import { useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import './Results.css';
+import { useState } from 'react';
 
 const Results = () => {
-    const wishlist = useSelector((state) => state.cartReducer.wishlist);    
+    const {wishlist} = useSelector((state) => state.cartReducer);    
     const querys = useSelector((state) => state.productsReducer.searchQuerys);
-    const productsOwn = useSelector((state) => state.productsReducer.productsOwn);
-    const productsFound = useSelector((state) => state.productsReducer.productsFound);
+    const {productsOwn} = useSelector((state) => state.productsReducer);
+    const {productsFound} = useSelector((state) => state.productsReducer);
     const applied = useSelector((state) => state.productsReducer.productsAppliedFilters);
-    const productsFilters = useSelector((state) => state.productsReducer.productsFilters);
-    const breadCrumbs = useSelector((state) => state.productsReducer.breadCrumbs);
-    const location = useLocation()
+    const {productsFilters} = useSelector((state) => state.productsReducer);
+    const {breadCrumbs} = useSelector((state) => state.productsReducer);
     
     const [open, setOpen] = useState('')
     const dispatch = useDispatch();

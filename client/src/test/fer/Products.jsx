@@ -27,7 +27,7 @@ const Products = () => {
   const { productsFound, productsFiltered } = useSelector(
     (state) => state.productsReducer
   );
-  const wishlist = useSelector((state) => state.cartReducer.wishlist);
+  const {wishlist} = useSelector((state) => state.cartReducer);
   const location = useLocation();
   const [
     isOpenDeleteProduct,
