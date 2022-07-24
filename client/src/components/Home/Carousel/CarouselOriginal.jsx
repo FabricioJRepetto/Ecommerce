@@ -8,11 +8,6 @@ const Slider = ({ images, interval = 5000, controls = false, indicators = false,
     const [currentIndex, setCurrentIndex] = useState(0);
     const slideInterval = useRef(null);
     const navigate = useNavigate();
-    
-    const [move, setMove] = useState(false)
-    const slider = document.getElementById('slider');
-
-    
 
     useEffect(() => {
         startSlideTimer();
@@ -22,7 +17,8 @@ const Slider = ({ images, interval = 5000, controls = false, indicators = false,
 
     const startSlideTimer = () => { 
         slideInterval.current = setInterval(() => {
-            next('auto');
+            // si el setCurrent no tiene una CB solo se ejecuta una vez
+            setCurrentIndex(currentIndex => currentIndex < images.length-1 ? currentIndex+1 : 0 );
         }, interval);
      };
 
@@ -32,71 +28,31 @@ const Slider = ({ images, interval = 5000, controls = false, indicators = false,
 
     const prev = () => {
         stopSlideTimer();
-        setMove('prev');
-        !move && setCurrentIndex(currentIndex => currentIndex > 0 ? currentIndex-1 : images.length-1 );
+        const index = currentIndex > 0 ? currentIndex -1 : images.length - 1;
+        setCurrentIndex(index)
      }
 
-    const next = (auto) => {
-        !auto && stopSlideTimer();
-        setMove('next');
-        !move && setCurrentIndex(currentIndex => currentIndex < images.length-1 ? currentIndex+1 : 0 );
+    const next = () => {
+        stopSlideTimer();
+        const index = currentIndex < images.length - 1 ? currentIndex + 1 : 0;
+        setCurrentIndex(index)
      }
 
      const switchIndex = (index) => { 
         stopSlideTimer();
-        let steps = Array.from(slider.children).findIndex(e => e.id === 'img'+index);
-        if (true) {
-            if (steps === 1) {
-                next();
-            }
-            if (steps === 6) {
-                prev();
-            }
-            !move && (slider.style.transform = `translateX(${- steps *100}%)`);
-            !move && setCurrentIndex(index);
-        }
+        setCurrentIndex(index);
       }
-
-      const graber = () => {
-        if (move === 'next') {
-            setMove(false);
-            slider.style.transform = 'none';
-            slider.style.transition = 'none';
-            slider.appendChild(slider.firstElementChild);
-            setTimeout(() => {
-                slider.style.transition = 'all 1s ease';
-            });
-        }
-       }
-
-       useEffect(() => {
-            if (move === 'next') {
-                slider.style.transform = 'translateX(-100%)'
-            } else if (move === 'prev') {
-                setMove(false);
-                slider.prepend(slider.lastElementChild)
-                slider.style.transition = 'none';
-                slider.style.transform = 'translateX(-100%)'
-                setTimeout(() => {
-                    slider.style.transition = 'all 1s ease';
-                    slider.style.transform = 'translateX(0%)';
-                });
-            }
-        // eslint-disable-next-line
-       }, [move]);
 
     return (
             <div className="slide_container">
                 <div className="slide" style={{ maxWidth: width }}>
                     <div 
-                        id='slider'
                         className="slide-inner"
-                        onTransitionEnd={graber}
+                        style={{transform: `translateX(${-currentIndex * 100}%)`}}
                         onMouseEnter={stopSlideTimer}
                         onMouseLeave={startSlideTimer}>
-                            {images?.map((e,index) => (
+                            {images?.map(e => (
                                 <div 
-                                    id={'img'+index}
                                     key={e.img}
                                     style={ pointer ? {cursor: 'pointer'} : ''}
                                     onClick={() => navigate(e.url || '')}
