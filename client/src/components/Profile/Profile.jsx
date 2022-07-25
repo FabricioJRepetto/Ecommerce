@@ -73,7 +73,9 @@ const Profile = () => {
         p[0].value ? setAddress(p[0].value.data.address) : setAddress([]);
         p[1].value ? setWishlist(p[1].value.data.products) : setWishlist([]);
         p[2].value ? setHistory(p[2].value.data.products) : setHistory([]);
-
+        
+        p[1].value.data.message && notification(p[1].value.data.message, '', 'warning');
+        
         setLoading(false);
       })();
     }

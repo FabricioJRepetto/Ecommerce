@@ -8,14 +8,14 @@ import './WishlistModal.css';
 
 const WishlistModal = ({ close }) => {
     const navigate = useNavigate();
-  const { wishlist } = useSelector((state) => state.cartReducer);
+    const { wishlist } = useSelector((state) => state.cartReducer);
     const [data, setData] = useState();
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         (async () => {
             setLoading(true);
-            const { data } = await axios('/wishlist');
+            const { data } = await axios('/wishlist/');
             setData(data);
             setLoading(false);
         })();

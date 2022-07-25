@@ -24,7 +24,6 @@ const Details = () => {
 
     useEffect(() => {
         if (session && data) {
-            console.log(data);
         // setear historial
         const payload = {
             product_id: data._id,

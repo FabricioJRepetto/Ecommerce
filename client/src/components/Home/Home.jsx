@@ -42,12 +42,12 @@ const Home = () => {
     }, 100);
 
     (async () => {
-      const data = await Promise.all([
+      const data = await Promise.allSettled([
         axios(`/sales/`),
         session && axios(`/history/suggestion`),
       ]);
-      setProducts(data[0]?.data);
-      setSuggestion(data[1]?.data || false);
+      setProducts(data[0]?.value.data);
+      setSuggestion(data[1]?.value.data || false);
       setLoading(false);
     })();
 

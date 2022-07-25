@@ -214,6 +214,7 @@ const createProduct = async (req, res, next) => {
             free_shipping,
         } = JSON.parse(req.body.data);
         let images = [];
+        console.log(main_features);
 
         let aux = [];
         // creamos una promise por cada archivo.
