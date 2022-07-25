@@ -214,6 +214,7 @@ const createProduct = async (req, res, next) => {
             free_shipping,
         } = JSON.parse(req.body.data);
         let images = [];
+        console.log(main_features);
 
         let aux = [];
         // creamos una promise por cada archivo.
@@ -238,7 +239,8 @@ const createProduct = async (req, res, next) => {
         const { data } = await axios(
             `https://api.mercadolibre.com/categories/${category}`
         );
-        const path_from_root = data.path_from_root.map((e) => e.id);
+
+        const { path_from_root } = data;
 
         const newProduct = new Product({
             name,

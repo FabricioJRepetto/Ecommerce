@@ -76,3 +76,11 @@
 .card-price-section {
     display: flex;
 }
+
+.special-card {
+    pointer-events: none;
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 2;
+}

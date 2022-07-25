@@ -17,8 +17,6 @@ const Signout = () => {
 
   const signOut = () => {
     window.localStorage.removeItem("loggedTokenEcommerce");
-    window.localStorage.removeItem("loggedAvatarEcommerce");
-    window.localStorage.removeItem("loggedEmailEcommerce");
     dispatch(sessionActive(false));
     dispatch(loadUsername(null));
     dispatch(loadAvatar(null));

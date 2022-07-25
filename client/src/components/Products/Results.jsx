@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import axios from 'axios'
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
 import { 
     loadFilters, 
     loadProductsFound, 
@@ -8,23 +8,23 @@ import {
     loadQuerys, 
     loadApplied,
     loadBreadCrumbs
- } from '../../Redux/reducer/productsSlice'
-import Card from './Card'
-import {ReactComponent as Spinner } from '../../assets/svg/spinner.svg'
-import {ReactComponent as Arrow } from '../../assets/svg/arrow-right.svg'
+ } from '../../Redux/reducer/productsSlice';
+import Card from './Card';
+import {ReactComponent as Spinner } from '../../assets/svg/spinner.svg';
+import {ReactComponent as Arrow } from '../../assets/svg/arrow-right.svg';
 
-import './Results.css'
-import { useState } from 'react'
+import './Results.css';
+import { useState } from 'react';
 
 const Results = () => {
-    const wishlist = useSelector((state) => state.cartReducer.wishlist);    
+    const {wishlist} = useSelector((state) => state.cartReducer);    
     const querys = useSelector((state) => state.productsReducer.searchQuerys);
-    const productsOwn = useSelector((state) => state.productsReducer.productsOwn);
-    const productsFound = useSelector((state) => state.productsReducer.productsFound);
+    const {productsOwn} = useSelector((state) => state.productsReducer);
+    const {productsFound} = useSelector((state) => state.productsReducer);
     const applied = useSelector((state) => state.productsReducer.productsAppliedFilters);
-    const productsFilters = useSelector((state) => state.productsReducer.productsFilters);
-    const breadCrumbs = useSelector((state) => state.productsReducer.breadCrumbs);
-
+    const {productsFilters} = useSelector((state) => state.productsReducer);
+    const {breadCrumbs} = useSelector((state) => state.productsReducer);
+    
     const [open, setOpen] = useState('')
     const dispatch = useDispatch();
 
@@ -37,6 +37,7 @@ const Results = () => {
 
             const { data } = await axios(`/product/search/?${newQuery}`)
             // const { data } = await axios(`/product/promos`)
+            console.log(data.db);
             dispatch(loadProductsOwn(data.db));
             dispatch(loadProductsFound(data.meli));
             dispatch(loadFilters(data.filters));
@@ -61,7 +62,7 @@ const Results = () => {
 
     return (
         <div className='results-container'>
-            {/* BREAD CRUMBS */}
+
             <div className='bread-crumbs'>
                 {breadCrumbs?.length > 0 &&
                     React.Children.toArray(
@@ -105,7 +106,7 @@ const Results = () => {
                         {productsOwn?.length > 0 && <div className='own-products-container'>
                             {React.Children.toArray(
                                 productsOwn?.map(prod => (
-                                    <Card
+                                    prod.available_quantity > 0 && <Card
                                         productData={prod}
                                         fav={wishlist.includes(prod._id)}
                                     />
@@ -114,7 +115,7 @@ const Results = () => {
                         </div>}
                         {React.Children.toArray(
                             productsFound?.map(prod => (
-                                <Card
+                                prod.available_quantity > 0 && <Card
                                     productData={prod}
                                     fav={wishlist.includes(prod._id)}
                                 />

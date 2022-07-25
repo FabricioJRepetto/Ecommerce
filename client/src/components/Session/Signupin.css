@@ -7,15 +7,30 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: black;
+    background: #222;
     min-height: 100vh;
     min-width: 100vw;
-    z-index: 9999;
+    z-index: 10;
     transition: opacity .5s ease;
 }
 
+.signin-inner {
+    margin-top: 30px;
+    opacity: 0;
+    transition: all .4s cubic-bezier(.65,.05,.36,1);
+}
+.signin-visible {
+    margin-top: 0;
+    opacity: 1;
+}
+
 .google-signin-container {
+    height: 88px;
     display: flex;
     justify-content: center;
     align-items: center;
 }
+
+ /* .google-signin-container > div > div:first-child{
+  display: none;
+}  */

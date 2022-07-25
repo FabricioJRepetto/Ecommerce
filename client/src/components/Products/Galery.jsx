@@ -51,7 +51,7 @@ const Galery = ({ imgs }) => {
                     onClick={() => {(index > 6) && open()}}>
                         {loading && <LoadingPlaceHolder extraStyles={{ height: "100%" }}/>}
                         <img className={`selector-img ${!loading && 'visible'}`} src={resizer(e.imgURL, 50)} alt="controller" />
-                        {index > 6 && !loading && <p className='galery-text'>+{imgs.length - index - 1}</p>}
+                        {index > 6 && imgs.length > 8 && !loading && <p className='galery-text'>+{imgs.length - index - 1}</p>}
                     </div>
                 )}
             </div>

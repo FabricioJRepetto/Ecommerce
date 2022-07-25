@@ -78,7 +78,6 @@ const signinGoogle = async (req, res, next) => {
 
     try {
         const userFound = await User.findOne({ email: sub });
-
         if (!userFound) {
             const newGoogleUser = await User.create({
                 email: sub,
@@ -92,13 +91,11 @@ const signinGoogle = async (req, res, next) => {
             });
             return res.json(newGoogleUser);
         } else {
-            if (emailVerified !== userFound.emailVerified)
+            if (emailVerified !== userFound.emailVerified) {
                 userFound.emailVerified = emailVerified;
-            if (!userFound.avatar) userFound.avatar = avatar;
-            if (firstName !== userFound.firstName) userFound.firstName = firstName;
-            if (lastName !== userFound.lastName) userFound.lastName = lastName;
-            await userFound.save();
-            return res.send("ok");
+                await userFound.save();
+            }
+            return res.json({ name: userFound.name })
         }
     } catch (error) {
         next(error);
@@ -218,7 +215,6 @@ const changePassword = async (req, res, next) => {
 
 const editProfile = async (req, res, next) => {
     try {
-        console.log(req.body);
         const { username, first, last } = req.body;
 
         const user = await User.findByIdAndUpdate(req.user._id,
