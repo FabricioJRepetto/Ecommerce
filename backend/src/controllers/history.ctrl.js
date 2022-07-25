@@ -85,7 +85,7 @@ const getSuggestion = async (req, res, next) => {
 
         //? si no llega a 5 resultados
         if (response.length < 5) {
-            const { data } = await axios(`https://api.mercadolibre.com/sites/MLA/search?category=${category}&shipping=free`);
+            const { data } = await axios(`https://api.mercadolibre.com/sites/MLA/search?category=${history.last_category}&shipping=free`);
             let parsed = await meliSearchParser(data.results);
 
             for (let i = 0; response.length < 5; i++) {

@@ -19,8 +19,8 @@ const thumbnailParser = async (id) => {
     return `https://http2.mlstatic.com/D_NQ_NP_${data.thumbnail_id}-V.jpg`
 }
 
-const categoryMaker = async (id) => {
-    const { data } = await axios(`https://api.mercadolibre.com/categories/${id}`);
+const categoryMaker = async (cid) => {
+    const { data } = await axios(`https://api.mercadolibre.com/categories/${cid}`);
     const { id, name, path_from_root } = data;
     return { category: { id, name }, path_from_root };
 }
