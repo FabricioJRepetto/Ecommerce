@@ -27,7 +27,7 @@ const Details = () => {
         // setear historial
         const payload = {
             product_id: data._id,
-            category: data.category || "",
+            category: data.category.id || "",
         };
         axios.post(`/history/visited`, payload);
         }
