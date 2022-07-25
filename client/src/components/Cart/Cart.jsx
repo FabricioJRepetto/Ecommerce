@@ -29,7 +29,7 @@ const Cart = () => {
     const [selectedAdd, setSelectedAdd] = useState(null);
     const [loadingPayment, setLoadingPayment] = useState(false);
     const [loading, setLoading] = useState(true);
-    const total = useSelector((state) => state.cartReducer.total);
+    const {total} = useSelector((state) => state.cartReducer);
 
     const [isOpenAddForm, openAddForm, closeAddForm] = useModal();
     const [isOpenAddList, openAddList, closeAddList] = useModal();

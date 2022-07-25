@@ -1,7 +1,7 @@
-import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useAxios } from "../../hooks/useAxios";
 import { useModal } from "../../hooks/useModal";
@@ -11,8 +11,8 @@ import { resizer, avatarResizer } from "../../helpers/resizer";
 import { useNotification } from "../../hooks/useNotification";
 import Card from "../Products/Card";
 import MiniCard from "../Products/MiniCard";
-import "./Profile.css";
 import { loadAvatar, loadFullName, loadUsername } from "../../Redux/reducer/sessionSlice";
+import "./Profile.css";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -63,16 +63,20 @@ const Profile = () => {
       navigate("/signin");
     } else {
       (async () => {
-        //: usar un promiseAll
-        const { data } = await axios(`/address/`);
-        data.address ? setAddress(data.address) : setAddress([]);
+        const requests = [
+            axios(`/address/`),
+            axios(`/wishlist/`),
+            axios(`/history/`),
+        ];
+        const p = await Promise.allSettled(requests);
 
-        const { data: list } = await axios(`/wishlist/`);
-        list.products ? setWishlist(list.products) : setWishlist([]);
-
-        const { data: history } = await axios(`/history/`);
-        history.products ? setHistory(history.products) : setHistory([]);
-
+        p[0].value ? setAddress(p[0].value.data.address) : setAddress([]);
+        p[1].value ? setWishlist(p[1].value.data.products) : setWishlist([]);
+        p[2].value ? setHistory(p[2].value.data.products) : setHistory([]);
+        
+        p[0].value.data.message && notification(p[0].value.data.message, '', 'warning');
+        p[1].value.data.message && notification(p[1].value.data.message, '', 'warning');
+        
         setLoading(false);
       })();
     }

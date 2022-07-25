@@ -67,12 +67,27 @@ const Details = () => {
         }
     };
 
+    const addFilter = (second) => { 
+        
+     }
+
     return (
         <div>
         <h1>Details</h1>
         {loading && <p>LOADING</p>}
         {data && (
             <div>
+                <div className='bread-crumbs'>
+                    {data.path_from_root?.length > 0 &&
+                        React.Children.toArray(
+                            data.path_from_root.map((c, index) => (
+                                <span key={c.id} onClick={ () => addFilter({filter: 'category', value: c.id})}>
+                                    { (index > 0 ? ' > ' : '') + c.name }
+                                </span>
+                            ))
+                        )
+                    }
+                </div>
             <div className="details-head-container">
                 <Galery imgs={data.images} />
                 <div className="details-price-section">
@@ -95,9 +110,10 @@ const Details = () => {
                     </div>
                     )}
                     <p>{data.free_shipping && "free shipping"}</p>
-                    <button onClick={() => addToCart(data._id)}>Add to cart</button>
+                    <p>{data.available_quantity > 0 ? 'stock: '+data.available_quantity : 'out of stock'}</p>
+                    <button disabled={data.available_quantity < 1} onClick={() => addToCart(data._id)}>Add to cart</button>
                     <br />
-                    <button onClick={() => buyNow(data._id)}>Buy now</button>
+                    <button disabled={data.available_quantity < 1} onClick={() => buyNow(data._id)}>Buy now</button>
                 </div>
 
                 {data.main_features && (

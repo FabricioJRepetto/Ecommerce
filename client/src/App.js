@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import {
     loadAvatar,
     loadEmail,
@@ -46,22 +46,13 @@ function App() {
     const { session } = useSelector(state => state.sessionReducer);
     const [loading, setLoading] = useState(true);
 
-    //: location.pathname
-    // const location = useLocation();
-    // useEffect(() => {
-    //     console.log(location.pathname);
-    //     // eslint-disable-next-line
-    // }, [location]);
-
     useEffect(() => {
         setLoading(true)
         const loggedUserToken = window.localStorage.getItem("loggedTokenEcommerce");
-
         (async () => {
             try {
                 if (loggedUserToken) {
                     const { data } = await axios(`/user/profile/${loggedUserToken}`); //! VOLVER A VER fijarse con nuevos usuarios de google
-                    // console.log(data);
 
                     const { _id, email, googleEmail, name, firstName, lastName, username, role, isGoogleUser, avatar } = data;
 
@@ -85,25 +76,22 @@ function App() {
                 }
                 setLoading(false);
             } catch (error) {
-                navigate("/");
                 window.localStorage.removeItem("loggedTokenEcommerce");
-                window.localStorage.removeItem("loggedAvatarEcommerce");
-                window.localStorage.removeItem("loggedEmailEcommerce");
+                navigate("/");
                 setLoading(false);
             }
         })();
-        // setLoading(false);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [session]);
 
     return (
         <div className="App" id="scroller">
+            <Notification />
             {loading
                 ? <div className="globalLoader"></div>
                 : <div>
                     <GlobalCover />
                     <NavBar />
-                    <Notification />
                     <BackToTop />
                     <Routes>
                         <Route path="/" element={<Home />} />

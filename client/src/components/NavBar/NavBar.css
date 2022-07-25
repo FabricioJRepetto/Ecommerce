@@ -162,7 +162,7 @@
   width: 150px;
   border: 1px solid rgb(115, 115, 115);
   background: rgb(33, 33, 33);
-  z-index: 1000;
+  z-index: 12;
 }
 .navbar-modal-w {
     visibility: hidden;
@@ -173,7 +173,7 @@
     width: 400px;
     border: 1px solid rgb(115, 115, 115);
     background: rgb(33, 33, 33);
-    z-index: 1000;
+    z-index: 12;
 }
 .profile-modal-option-button {
   margin-top: 20px;
