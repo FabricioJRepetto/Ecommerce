@@ -13,10 +13,13 @@ import {
 import { useNotification } from "../../hooks/useNotification";
 import { useModal } from "../../hooks/useModal";
 import Modal from "../../components/common/Modal";
+import SelectsNested from "./SelectsNested";
 
 const ProductForm = () => {
   const [featuresQuantity, setFeaturesQuantity] = useState(1);
   const [attributesQuantity, setAttributesQuantity] = useState(1);
+  const [category, setCategory] = useState(null);
+  const [categoryPath, setCategoryPath] = useState([]);
   const [productImg, setProductImg] = useState([]);
   const [productImgUrls, setProductImgUrls] = useState([]);
   const [imgsToEdit, setImgsToEdit] = useState([]);
@@ -28,6 +31,9 @@ const ProductForm = () => {
     attributes: "",
     image: "",
   });
+  const [imagesError, setImagesError] = useState(null);
+  const [categoryError, setCategoryError] = useState(null);
+  const [showCustomErrors, setShowCustomErrors] = useState(false);
   let timeoutId = useRef();
   const navigate = useNavigate();
   const [notification] = useNotification();
@@ -134,6 +140,7 @@ const ProductForm = () => {
     setValue("description", data.description);
     setValue("free_shipping", data.free_shipping);
     setValue("category", data.category);
+    setCategoryPath(data.path_from_root);
     replaceFeature([...data.main_features]);
     replaceAttribute([...data.attributes]);
     setImgsToEdit(data.images);
@@ -178,17 +185,13 @@ const ProductForm = () => {
     setProductImgUrls(newImageUrls);
   }, [productImg]);
 
-  const submitProduct = async (productData) => {
-    if (!productToEdit && productImg.length === 0) {
-      return warnTimer("image", "Debes subir al menos una imagen");
-    }
-    if (productToEdit && productImg.length === 0 && imgsToEdit.length === 0) {
-      return warnTimer("image", "Debes subir al menos una imagen");
-    }
+  const submitProduct = async (productData, errorFlag) => {
+    if (errorFlag > 0) return;
+    productData = { ...productData, category: category };
+    console.log(productData);
 
     let formData = new FormData();
 
-    // agarra las images
     const fileListArrayImg = Array.from(productImg);
     validateImgs(fileListArrayImg);
 
@@ -197,12 +200,11 @@ const ProductForm = () => {
     });
     // formData.append("images", fileListArrayImg);
 
+    //! VOLVER A VER poner disabled el boton de submit al hacer la petición
     try {
-      //! VOLVER A VER poner disabled el boton de submit al hacer la petición
       if (productToEdit) {
         let data = { ...productData, imgsToEdit };
         formData.append("data", JSON.stringify(data));
-        //  formData.append("imgsToEdit", imgsToEdit);
 
         await axios.put(`/admin/product/${productToEdit}`, formData, {
           headers: {
@@ -213,6 +215,7 @@ const ProductForm = () => {
         navigate("/admin/products");
       } else {
         formData.append("data", JSON.stringify(productData));
+
         await axios.post(`/admin/product/`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -232,8 +235,11 @@ const ProductForm = () => {
   const clearInputs = () => {
     reset();
     setWarn({});
+    setShowCustomErrors(false);
     setProductImg([]);
     setImgsToEdit([]);
+    setCategoryPath([]);
+    setCategory(null);
     setAttributesQuantity(1);
     appendAttribute({ name: "", value_name: "" });
     setFeaturesQuantity(1);
@@ -250,30 +256,65 @@ const ProductForm = () => {
     }
   };
 
+  const isImagesEmpty = () => {
+    let errorFlag = 0;
+
+    if (!productToEdit && productImg.length === 0) {
+      setImagesError("Debes subir al menos una imágen");
+      errorFlag = 1;
+    }
+    if (productToEdit && productImg.length === 0 && imgsToEdit.length === 0) {
+      setImagesError("Debes subir al menos una imágen");
+      errorFlag = 1;
+    }
+    return errorFlag;
+  };
+
+  useEffect(() => {
+    let errorFlag = isImagesEmpty();
+    if (errorFlag === 0) setImagesError(null); // eslint-disable-next-line
+  }, [productImg, imgsToEdit]);
+
+  const isCategoryEmpty = () => {
+    let errorFlag = 0;
+    if (!category) {
+      setCategoryError("Debes seleccionar la categoría");
+      errorFlag = 1;
+    }
+    return errorFlag;
+  };
+
+  const customSubmit = (e) => {
+    e.preventDefault();
+    let errorFlag = isImagesEmpty() + isCategoryEmpty();
+    setShowCustomErrors(true);
+    handleSubmit((productData) => submitProduct(productData, errorFlag))(e);
+  };
+
+  useEffect(() => {
+    let errorFlag = isCategoryEmpty();
+    if (errorFlag === 0) setCategoryError(null); // eslint-disable-next-line
+  }, [category]);
+
   return (
     <div>
       <hr />
       <h2>Product {productToEdit ? "EDIT" : "CREATION"}</h2>
-      <a
-        href="https://api.mercadolibre.com/sites/MLA/categories"
-        target="_blank"
-        rel="noreferrer"
-        style={{ color: "#0051ff" }}
-      >
-        <b>Lista de categorias</b>
-      </a>
       <br />
-      <form
-        encType="multipart/form-data"
-        onSubmit={handleSubmit(submitProduct)}
-      >
+      <form encType="multipart/form-data" onSubmit={customSubmit}>
+        <SelectsNested
+          setCategory={setCategory}
+          category={category}
+          setCategoryPath={setCategoryPath}
+          categoryPath={categoryPath}
+        />
+        {showCustomErrors && categoryError && <h3>ESTADO {categoryError}</h3>}
         <>
           <div>
             <input
               type="text"
               placeholder="Título/Nombre"
               autoComplete="off"
-              //  id="name_id"
               {...register("name")}
             />
             <div>{errors.name?.message}</div>
@@ -282,7 +323,6 @@ const ProductForm = () => {
               type="text"
               placeholder="Precio"
               autoComplete="off"
-              //   id="price_id"
               {...register("price")}
             />
             <div>{errors.price?.message}</div>
@@ -291,7 +331,6 @@ const ProductForm = () => {
               type="text"
               placeholder="Marca"
               autoComplete="off"
-              //  id="brand_id"
               {...register("brand")}
             />
             <div>{errors.brand?.message}</div>
@@ -300,7 +339,6 @@ const ProductForm = () => {
               type="text"
               placeholder="Stock"
               autoComplete="off"
-              //  id="stock_id"
               {...register("available_quantity", {
                 required: true,
                 pattern: /^[0-9]*$/,
@@ -308,20 +346,8 @@ const ProductForm = () => {
             />
             <div>{errors.available_quantity?.message}</div>
 
-            <input
-              type="text"
-              placeholder="Category"
-              autoComplete="off"
-              {...register("category")}
-            />
-            <div>{errors.category?.message}</div>
-
             <label>
-              <input
-                type="checkbox"
-                //  id="free_shipping_id"
-                {...register("free_shipping")}
-              />
+              <input type="checkbox" {...register("free_shipping")} />
               Envío gratis
             </label>
             <div>{errors.free_shipping?.message}</div>
@@ -387,11 +413,7 @@ const ProductForm = () => {
           <hr />
           <br />
           <div>
-            <textarea
-              placeholder="Descripción"
-              //   id="description_id"
-              {...register("description")}
-            />
+            <textarea placeholder="Descripción" {...register("description")} />
             <div>{errors.description?.message}</div>
           </div>
           <br />
@@ -411,8 +433,8 @@ const ProductForm = () => {
             id="filesButton"
           />
         </div>
-        {warn.image && <p>{warn.image}</p>}
-        
+        {showCustomErrors && imagesError && <h3>{imagesError}</h3>}
+
         {imgsToEdit &&
           React.Children.toArray(
             imgsToEdit.map(({ imgURL, _id }) => (

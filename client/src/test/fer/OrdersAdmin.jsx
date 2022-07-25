@@ -8,7 +8,6 @@ const OrdersAdmin = () => {
   useEffect(() => {
     axios("/admin/order/getAll")
       .then(({ data }) => {
-        console.log(data);
         setOrders(data);
       })
       .catch((err) => console.log(err)); //! VOLVER A VER manejo de errores
