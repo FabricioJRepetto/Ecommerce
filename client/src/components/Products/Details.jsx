@@ -67,12 +67,27 @@ const Details = () => {
         }
     };
 
+    const addFilter = (second) => { 
+        
+     }
+
     return (
         <div>
         <h1>Details</h1>
         {loading && <p>LOADING</p>}
         {data && (
             <div>
+                <div className='bread-crumbs'>
+                    {data.path_from_root?.length > 0 &&
+                        React.Children.toArray(
+                            data.path_from_root.map((c, index) => (
+                                <span key={c.id} onClick={ () => addFilter({filter: 'category', value: c.id})}>
+                                    { (index > 0 ? ' > ' : '') + c.name }
+                                </span>
+                            ))
+                        )
+                    }
+                </div>
             <div className="details-head-container">
                 <Galery imgs={data.images} />
                 <div className="details-price-section">

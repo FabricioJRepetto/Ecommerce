@@ -34,10 +34,20 @@ const productSchema = new Schema(
             required: true,
         },
         category: {
-            type: String,
-            default: "categoria",
+            id: {
+                type: String,
+                required: true
+            },
+            name: {
+                type: String,
+                required: true
+            }
         },
-        path_from_root: [String],
+        path_from_root: [{
+            id: String,
+            name: String,
+            required: true
+        }],
         available_quantity: Number,
         free_shipping: Boolean,
         images: [

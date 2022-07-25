@@ -19,7 +19,7 @@ const WishlistModal = ({ close }) => {
             setData(data);
             setLoading(false);
         })();
-    }, [wishlist]);
+    }, [wishlist]);    
 
     return (
         <div className='card-modal-container'>
@@ -42,7 +42,7 @@ const WishlistModal = ({ close }) => {
                   : <p>sin favoritos</p>
                 }
                 <div 
-                    onClick={() => navigate('/profile/wishlist')}
+                    onClick={() => [navigate('/profile/wishlist'), close()]}
                     className='modal-card-all-favs pointer'
                     >Ver todos los fav</div>
             </div>}
