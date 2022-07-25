@@ -19,6 +19,12 @@ const thumbnailParser = async (id) => {
     return `https://http2.mlstatic.com/D_NQ_NP_${data.thumbnail_id}-V.jpg`
 }
 
+const categoryMaker = async (id) => {
+    const { data } = await axios(`https://api.mercadolibre.com/categories/${id}`);
+    const { id, name, path_from_root } = data;
+    return { category: { id, name }, path_from_root };
+}
+
 const meliSearchParser = (results) => {
     let aux = results.map(e => ({
         _id: e.catalog_product_id || 'I' + e.id,
@@ -39,6 +45,7 @@ const meliSearchParser = (results) => {
 const meliProductParser = async (p) => {
     //?PRODUCT
     if (p.status === 'inactive') return { message: 'PRODUCTO NO DISPONIBLE' };
+    const { category, path_from_root } = categoryMaker(p.buy_box_winner.category_id)
     let aux = {
         _id: p.id,
         name: p.name,
@@ -50,7 +57,8 @@ const meliProductParser = async (p) => {
         })),
         main_features: p.main_features?.map(e => e.text),
         brand: p.attributes.find(e => e.id === 'BRAND')?.value_name || '',
-        category: p.buy_box_winner.category_id,
+        category,
+        path_from_root,
         description: p.short_description?.content,
         price: p.buy_box_winner.original_price ? p.buy_box_winner.original_price : p.buy_box_winner.price,
         sale_price: p.buy_box_winner.original_price ? p.buy_box_winner.price : 0,
@@ -64,6 +72,7 @@ const meliProductParser = async (p) => {
 
 const meliItemParser = (p) => {
     //:ITEM
+    const { category, path_from_root } = categoryMaker(p.category_id);
     let aux = {
         _id: 'I' + p.id,
         name: p.title,
@@ -74,7 +83,8 @@ const meliItemParser = (p) => {
             value_name: a.value_name
         })),
         brand: p.attributes.find(e => e.id === 'BRAND')?.value_name || '',
-        category: p.category_id,
+        category,
+        path_from_root,
         description: p.descriptions?.content || '',
         price: p.original_price ? p.original_price : p.price,
         sale_price: p.original_price ? p.price : 0,
