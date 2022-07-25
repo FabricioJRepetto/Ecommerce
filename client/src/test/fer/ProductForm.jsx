@@ -139,7 +139,8 @@ const ProductForm = () => {
     setValue("available_quantity", data.available_quantity);
     setValue("description", data.description);
     setValue("free_shipping", data.free_shipping);
-    setValue("category", data.category); //! VOLVER A VER ¿funca asi?
+    setValue("category", data.category);
+    setCategoryPath(data.path_from_root);
     replaceFeature([...data.main_features]);
     replaceAttribute([...data.attributes]);
     setImgsToEdit(data.images);
@@ -185,7 +186,9 @@ const ProductForm = () => {
   }, [productImg]);
 
   const submitProduct = async (productData, errorFlag) => {
-    if (errorFlag > 0) return console.log("hubo un error");
+    if (errorFlag > 0) return;
+    productData = { ...productData, category: category };
+    console.log(productData);
 
     let formData = new FormData();
 
@@ -197,12 +200,11 @@ const ProductForm = () => {
     });
     // formData.append("images", fileListArrayImg);
 
+    //! VOLVER A VER poner disabled el boton de submit al hacer la petición
     try {
-      //! VOLVER A VER poner disabled el boton de submit al hacer la petición
       if (productToEdit) {
         let data = { ...productData, imgsToEdit };
         formData.append("data", JSON.stringify(data));
-        formData.append("category", category);
 
         await axios.put(`/admin/product/${productToEdit}`, formData, {
           headers: {
@@ -213,7 +215,6 @@ const ProductForm = () => {
         navigate("/admin/products");
       } else {
         formData.append("data", JSON.stringify(productData));
-        formData.append("category", category);
 
         await axios.post(`/admin/product/`, formData, {
           headers: {

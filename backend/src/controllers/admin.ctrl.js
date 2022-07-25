@@ -233,9 +233,10 @@ const createProduct = async (req, res, next) => {
 
     //? path_from_root
     const { data } = await axios(
-      `https://api.mercadolibre.com/categories/${category}`
+      `https://api.mercadolibre.com/categories/${category.id}`
     );
-    const path_from_root = data.path_from_root.map((e) => e.id);
+
+    const { path_from_root } = data;
 
     const newProduct = new Product({
       name,
@@ -322,7 +323,8 @@ const updateProduct = async (req, res, next) => {
     const { data } = await axios(
       `https://api.mercadolibre.com/categories/${category}`
     );
-    const path_from_root = data.path_from_root.map((e) => e.id);
+
+    const { path_from_root } = data;
 
     const updatedProduct = await Product.findByIdAndUpdate(
       req.params.id,
