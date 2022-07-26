@@ -193,14 +193,12 @@ const deleteCart = async (req, res, next) => {
 
 const quantity = async (req, res, next) => {
     try {
-        let userId = req.user._id;
-        let target = req.query.id;
         let amount = 1;
         req.query.mode === 'add' || (amount = -1);
 
         const cart = await Cart.findOneAndUpdate({
-            'owner': userId,
-            'products.product_id': target
+            'owner': req.user._id,
+            'products.product_id': req.query.id
         },
             {
                 "$inc": {

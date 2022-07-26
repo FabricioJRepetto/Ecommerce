@@ -76,7 +76,6 @@ const Profile = () => {
         
         p[0].value.data.message && notification(p[0].value.data.message, '', 'warning');
         p[1].value.data.message && notification(p[1].value.data.message, '', 'warning');
-        
         setLoading(false);
       })();
     }
@@ -126,6 +125,7 @@ const Profile = () => {
     setValue("zip_code", target.zip_code);
     setValue("street_name", target.street_name);
     setValue("street_number", target.street_number);
+    setValue("isDefault", target.isDefault);
   };
   // handle submit
   const handleAddress = async (addressData, n = false) => {
@@ -141,16 +141,17 @@ const Profile = () => {
         `${statusText === "OK" ? "success" : "warning"}`
       );
     } else {
-      const { data: updated, statusText } = await axios.put(
-        `/address/${addressToEditId}`,
-        addressData
-      );
-      setAddress(updated.address);
-      notification(
-        updated.message,
-        "",
-        `${statusText === "OK" ? "success" : "warning"}`
-      );
+        console.log(addressData);
+        const { data: updated, statusText } = await axios.put(
+            `/address/${addressToEditId}`,
+            addressData
+        );
+        setAddress(updated.address);
+        notification(
+            updated.message,
+            "",
+            `${statusText === "OK" ? "success" : "warning"}`
+        );
     }
     reset();
     closeAddForm();
@@ -161,7 +162,8 @@ const Profile = () => {
         setAvatarPreview(URL.createObjectURL(e.target.files[0]));
     }
 
-    const uploadAvatar = async () => { 
+    const uploadAvatar = async (e) => {
+        e.target.disabled = true;
         let formData = new FormData();
 
         const fileListArrayImg = Array.from(newAvatar);
@@ -176,11 +178,14 @@ const Profile = () => {
           },
         })
         notification(data.message, '', `${statusText === 'OK' ? 'success' : 'warning'}`);
-        dispatch(loadAvatar(data.avatar))
+        dispatch(loadAvatar(data.avatar));
+        closeAvatar();
      }
 
      const detailsHandler = async (e) => {
         e.preventDefault();
+        e.target.disabled = true;
+
         const { data, statusText } = await axios.put('/user/editProfile', details);
         
         dispatch(loadFullName({first: data.user.firstName, last: data.user.lastName}));
@@ -308,23 +313,23 @@ const Profile = () => {
                     {!loading ? (
                     <div>
                         {React.Children.toArray(
-                        address?.map((e) => (
-                            <div key={e.id}>
-                            <p>{`${e.street_name} ${e.street_number}, ${e.zip_code}, ${e.city}, ${e.state}.`}</p>
-                            <button onClick={() => editAddress(e._id)}>edit</button>
-                            <button onClick={() => deleteAddress(e._id)}>
-                                delete
-                            </button>
-                            {e.isDefault ? (
-                                <p>⭐</p>
-                            ) : (
-                                <button onClick={() => setDefault(e._id)}>
-                                set as default
+                            address?.map((e) => (
+                                <div key={e.id}>
+                                <p>{`${e.street_name} ${e.street_number}, ${e.zip_code}, ${e.city}, ${e.state}.`}</p>
+                                <button onClick={() => editAddress(e._id)}>edit</button>
+                                <button onClick={() => deleteAddress(e._id)}>
+                                    delete
                                 </button>
-                            )}
-                            <p>- - -</p>
-                            </div>
-                        ))
+                                {e.isDefault ? (
+                                    <p>⭐</p>
+                                ) : (
+                                    <button onClick={() => setDefault(e._id)}>
+                                    set as default
+                                    </button>
+                                )}
+                                <p>- - -</p>
+                                </div>
+                            ))
                         )}
                         <button
                         default={loading || true}
@@ -398,7 +403,7 @@ const Profile = () => {
             </div>
 
             <Modal isOpen={isOpenAddForm} closeModal={closeAddForm}>
-                <h1>New shipping address</h1>
+                <h1>{prop ? 'New address' : 'Edit address'}</h1>
                 { isOpenAddForm && <form onSubmit={handleSubmit((data) => handleAddress(data, prop))}>
                 <input
                     type="text"
