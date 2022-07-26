@@ -25,6 +25,8 @@ const mpCho = async (req, res, next) => {
         //? order
         let items = [];
         const order = await Order.findById(id);
+        console.log('### encontrar order');
+        console.log(order);
 
         for (const prod of order.products) {
             items.push({

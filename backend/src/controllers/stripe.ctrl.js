@@ -45,7 +45,7 @@ const create = async (req, res, next) => {
             }],
             mode: 'payment',
             success_url: `${YOUR_DOMAIN}&status=approved`,
-            cancel_url: `${YOUR_DOMAIN}&status=canceled`,
+            cancel_url: `${YOUR_DOMAIN}&status=cancelled`,
         });
 
         //? setea el link de pago y la expiración de 24hrs (max de stripe)

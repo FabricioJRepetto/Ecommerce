@@ -22,7 +22,7 @@ const thumbnailParser = async (id) => {
 const categoryMaker = async (cid) => {
     const { data } = await axios(`https://api.mercadolibre.com/categories/${cid}`);
     const { id, name, path_from_root } = data;
-    return { category: { id, name }, path_from_root };
+    return ({ category: { id, name }, path_from_root });
 }
 
 const meliSearchParser = (results) => {
@@ -45,7 +45,7 @@ const meliSearchParser = (results) => {
 const meliProductParser = async (p) => {
     //?PRODUCT
     if (p.status === 'inactive') return { message: 'PRODUCTO NO DISPONIBLE' };
-    const { category, path_from_root } = categoryMaker(p.buy_box_winner.category_id)
+    const { category, path_from_root } = await categoryMaker(p.buy_box_winner.category_id);
     let aux = {
         _id: p.id,
         name: p.name,
@@ -70,9 +70,9 @@ const meliProductParser = async (p) => {
     return aux;
 }
 
-const meliItemParser = (p) => {
+const meliItemParser = async (p) => {
     //:ITEM
-    const { category, path_from_root } = categoryMaker(p.category_id);
+    const { category, path_from_root } = await categoryMaker(p.category_id);
     let aux = {
         _id: 'I' + p.id,
         name: p.title,

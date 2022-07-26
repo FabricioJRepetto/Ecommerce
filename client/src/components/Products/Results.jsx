@@ -37,7 +37,7 @@ const Results = () => {
 
             const { data } = await axios(`/product/search/?${newQuery}`)
             // const { data } = await axios(`/product/promos`)
-            console.log(data.db);
+            
             dispatch(loadProductsOwn(data.db));
             dispatch(loadProductsFound(data.meli));
             dispatch(loadFilters(data.filters));
