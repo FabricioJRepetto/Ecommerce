@@ -9,18 +9,20 @@ import { WishlistButton as Fav } from "./WishlistButton";
 import "./Details.css";
 
 import { ReactComponent as Sale } from "../../assets/svg/sale.svg";
+import { loadQuerys } from "../../Redux/reducer/productsSlice";
 
 const Details = () => {
-  let { id } = useParams();
-  const cart = useSelector((state) => state.cartReducer.onCart);
-  const { wishlist } = useSelector((state) => state.cartReducer);
-  const { session } = useSelector((state) => state.sessionReducer);
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const [notification] = useNotification();
+    let { id } = useParams();
+    const cart = useSelector((state) => state.cartReducer.onCart);
+    const { wishlist } = useSelector((state) => state.cartReducer);
+    const { session } = useSelector((state) => state.sessionReducer);
+    const querys = useSelector((state) => state.productsReducer.searchQuerys);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const [notification] = useNotification();
 
-  const [data, setData] = useState(false);
-  const [loading, setLoading] = useState(true);
+    const [data, setData] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         if (session && data) {
@@ -67,9 +69,14 @@ const Details = () => {
         }
     };
 
-    const addFilter = (second) => { 
-        
-     }
+    const addFilter = async (obj) => {
+        let aux = {...querys};
+        delete aux.q;
+        let filter = obj.filter;
+        let value = obj.value;
+        dispatch(loadQuerys({...aux, [filter]: value}));
+        navigate('/results')
+    }
 
     return (
         <div>
@@ -99,6 +106,7 @@ const Details = () => {
                     />
                     <p>{data.brand?.toUpperCase()}</p>
                     <h2>{data.name}</h2>
+                    <div onClick={() => addFilter({filter: 'category', value: data.category.id})}>{data.category.name}</div>
                     <del>{data.on_sale && "$" + data.price}</del>
                     <h2>
                     {data.on_sale ? "$" + data.sale_price : "$" + data.price}
