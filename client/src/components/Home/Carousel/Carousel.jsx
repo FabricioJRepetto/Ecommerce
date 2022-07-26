@@ -34,6 +34,7 @@ const Slider = (prop) => {
 
     useEffect(() => {
         if (document.visibilityState === 'visible') {
+            clearInterval(slideInterval.current);
             startSlideTimer();
         } else {
             stopSlideTimer();
