@@ -27,7 +27,7 @@ const Products = () => {
   const { productsFound, productsFiltered } = useSelector(
     (state) => state.productsReducer
   );
-  const {wishlist} = useSelector((state) => state.cartReducer);
+  const { wishlist } = useSelector((state) => state.cartReducer);
   const location = useLocation();
   const [
     isOpenDeleteProduct,
@@ -145,6 +145,17 @@ const Products = () => {
       .catch((err) => console.log(err)); //! VOLVER A VER manejo de errores
   };
 
+  const handleClearPrices = () => {
+    dispatch(
+      filterProducts({
+        source: "productsFound",
+        type: "price",
+        value: null,
+      })
+    );
+    setPricesFilter({ min: "", max: "" });
+  };
+
   return (
     <div className="products-container">
       <div className="products-results-container">
@@ -153,18 +164,23 @@ const Products = () => {
         ) : (
           <div className="products-results-inner">
             {React.Children.toArray(
-              productsToShow?.map((product) => (
-                (product.available_quantity > 0 || location.pathname === "/admin/products") &&<Card
-                  productData={product}
-                  fav={wishlist.includes(product._id)}
-                  openDeleteProduct={openDeleteProduct}
-                  outOfStock={product.available_quantity <= 0}
-                />
-              ))
+              productsToShow?.map(
+                (product) =>
+                  (product.available_quantity > 0 ||
+                    location.pathname === "/admin/products") && (
+                    <Card
+                      productData={product}
+                      fav={wishlist.includes(product._id)}
+                      openDeleteProduct={openDeleteProduct}
+                      outOfStock={product.available_quantity <= 0}
+                    />
+                  )
+              )
             )}
           </div>
         )}
       </div>
+      {pricesFilter.min && pricesFilter.max && <></>}
 
       <div className="products-filters">
         <h3>BRANDS</h3>
@@ -218,19 +234,7 @@ const Products = () => {
             </div>
             <input type="submit" value="filter" />
           </form>
-          <button
-            onClick={() =>
-              dispatch(
-                filterProducts({
-                  source: "productsFound",
-                  type: "price",
-                  value: null,
-                })
-              )
-            }
-          >
-            clear
-          </button>
+          <button onClick={handleClearPrices}>clear</button>
         </>
 
         <br />
