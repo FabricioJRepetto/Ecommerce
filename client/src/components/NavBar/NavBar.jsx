@@ -78,11 +78,17 @@ const NavBar = () => {
             <p className='provider-store'>Provider Store</p>
           </NavLink>
 
+          <NavLink to={"about"}>
+            <p>About Us</p>
+          </NavLink>
+
+          <NavLink to={'/'}>
+            <p>Contact</p>
+          </NavLink>
+
           <NavLink to={"admin"}>
             <p>ADMIN</p>
           </NavLink>
-
-            <p>About us</p>
 
         </div>
       </div>
