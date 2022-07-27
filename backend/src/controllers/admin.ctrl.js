@@ -272,8 +272,12 @@ const updateProduct = async (req, res, next) => {
       available_quantity,
       free_shipping,
       imgsToEdit,
+      mainImgIndex,
     } = JSON.parse(req.body.data);
     let images = [...imgsToEdit];
+
+    console.log("-----------req.body.data", req.body.data);
+    console.log("-----------mainImgIndex", mainImgIndex);
 
     //: validar data antes de subir imagenes
     if (req.files) {
@@ -297,16 +301,19 @@ const updateProduct = async (req, res, next) => {
       });
     }
 
+    if (mainImgIndex !== 0) {
+      const mainImg = images.splice(mainImgIndex, 1)[0];
+      images.splice(0, 0, mainImg);
+    }
+
     //? actualizar lista de imagenes
     const productFound = await Product.findById(req.params.id);
+    let deleteList = [];
     if (imgsToEdit.length === 0) {
-      let deleteList = [];
       for (const img of productFound.images) {
         deleteList.push(img.public_id);
       }
-      cloudinary.api.delete_resources(deleteList);
     } else if (imgsToEdit.length > 0) {
-      let deleteList = [];
       let imgToKeepId = [];
       for (const img of imgsToEdit) {
         imgToKeepId.push(img.public_id);
@@ -316,12 +323,12 @@ const updateProduct = async (req, res, next) => {
           deleteList.push(img.public_id);
         }
       }
-      cloudinary.api.delete_resources(deleteList);
     }
+    deleteList.length && cloudinary.api.delete_resources(deleteList);
 
     //? path_from_root
     const { data } = await axios(
-      `https://api.mercadolibre.com/categories/${category}`
+      `https://api.mercadolibre.com/categories/${category.id}`
     );
 
     const { path_from_root } = data;

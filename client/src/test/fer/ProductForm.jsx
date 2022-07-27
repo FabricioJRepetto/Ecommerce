@@ -22,6 +22,7 @@ const ProductForm = () => {
   const [categoryPath, setCategoryPath] = useState([]);
   const [productImg, setProductImg] = useState([]);
   const [productImgUrls, setProductImgUrls] = useState([]);
+  const [mainImgIndex, setMainImgIndex] = useState(0);
   const [imgsToEdit, setImgsToEdit] = useState([]);
   const [productToEdit, setProductToEdit] = useState(null);
   const { idProductToEdit } = useSelector((state) => state.productsReducer);
@@ -150,7 +151,6 @@ const ProductForm = () => {
     if (idProductToEdit) {
       axios(`/product/${idProductToEdit}`)
         .then(({ data }) => {
-          console.log(data);
           setProductToEdit(idProductToEdit);
           dispatch(loadIdProductToEdit(null));
           loadInputs(data);
@@ -166,12 +166,12 @@ const ProductForm = () => {
   const handleAddImg = (e) => {
     const fileListArrayImg = Array.from(e.target.files);
     validateImgs(fileListArrayImg, warnTimer, productImg);
-    console.log(fileListArrayImg);
     setProductImg([...productImg, ...fileListArrayImg]);
   };
 
   const handleRemoveImg = (i) => {
     setProductImg(productImg.filter((_, index) => index !== i));
+    mainImgIndex === i && setMainImgIndex(0);
   };
   const handleRemoveImgToEdit = (_id) => {
     setImgsToEdit(imgsToEdit.filter((img) => img._id !== _id));
@@ -194,6 +194,10 @@ const ProductForm = () => {
 
     const fileListArrayImg = Array.from(productImg);
     validateImgs(fileListArrayImg);
+    if (!productToEdit && mainImgIndex !== 0) {
+      const mainImg = fileListArrayImg.splice(mainImgIndex, 1)[0];
+      fileListArrayImg.splice(0, 0, mainImg);
+    }
 
     fileListArrayImg.forEach((pic) => {
       formData.append("images", pic);
@@ -203,7 +207,7 @@ const ProductForm = () => {
     //! VOLVER A VER poner disabled el boton de submit al hacer la petición
     try {
       if (productToEdit) {
-        let data = { ...productData, imgsToEdit };
+        let data = { ...productData, imgsToEdit, mainImgIndex };
         formData.append("data", JSON.stringify(data));
 
         await axios.put(`/admin/product/${productToEdit}`, formData, {
@@ -296,19 +300,20 @@ const ProductForm = () => {
     if (errorFlag === 0) setCategoryError(null); // eslint-disable-next-line
   }, [category]);
 
+  const handleMainImg = (i) => {
+    if (imgsToEdit) {
+      i < productImg.length + imgsToEdit.length && setMainImgIndex(i);
+    } else {
+      i < productImg.length && setMainImgIndex(i);
+    }
+  };
+
   return (
     <div>
       <hr />
-      <h2>Product {productToEdit ? "EDIT" : "CREATION"}</h2>
+      <h2>{productToEdit ? "EDITAR" : "CREAR"} producto</h2>
       <br />
       <form encType="multipart/form-data" onSubmit={customSubmit}>
-        <SelectsNested
-          setCategory={setCategory}
-          category={category}
-          setCategoryPath={setCategoryPath}
-          categoryPath={categoryPath}
-        />
-        {showCustomErrors && categoryError && <h3>ESTADO {categoryError}</h3>}
         <>
           <div>
             <input
@@ -318,6 +323,16 @@ const ProductForm = () => {
               {...register("name")}
             />
             <div>{errors.name?.message}</div>
+
+            <SelectsNested
+              setCategory={setCategory}
+              category={category}
+              setCategoryPath={setCategoryPath}
+              categoryPath={categoryPath}
+            />
+            {showCustomErrors && categoryError && (
+              <h3>ESTADO {categoryError}</h3>
+            )}
 
             <input
               type="text"
@@ -373,9 +388,7 @@ const ProductForm = () => {
               ))
             )}
             {warn.main_features && <p>{warn.main_features}</p>}
-            <h3 onClick={() => handleAddFeature()}>
-              Agregar campo de característica
-            </h3>
+            <h3 onClick={() => handleAddFeature()}>+</h3>
 
             <br />
             <hr />
@@ -405,9 +418,7 @@ const ProductForm = () => {
               ))
             )}
             {warn.attributes && <p>{warn.attributes}</p>}
-            <h3 onClick={() => handleAddAttribute()}>
-              Agregar campos de atributo
-            </h3>
+            <h3 onClick={() => handleAddAttribute()}>+</h3>
           </div>
           <br />
           <hr />
@@ -437,9 +448,15 @@ const ProductForm = () => {
 
         {imgsToEdit &&
           React.Children.toArray(
-            imgsToEdit.map(({ imgURL, _id }) => (
+            imgsToEdit.map(({ imgURL, _id }, i) => (
               <>
-                <img src={imgURL} alt={`img_${_id}`} className="imgs-product" />
+                {mainImgIndex === i && <span>PORTADA</span>}
+                <img
+                  src={imgURL}
+                  alt={`img_${_id}`}
+                  className="imgs-product"
+                  onClick={() => handleMainImg(i)}
+                />
                 <span onClick={() => handleRemoveImgToEdit(_id)}> X</span>
               </>
             ))
@@ -447,8 +464,31 @@ const ProductForm = () => {
         {React.Children.toArray(
           productImgUrls.map((imageURL, i) => (
             <>
-              <img src={imageURL} alt={`img_${i}`} className="imgs-product" />
-              <span onClick={() => handleRemoveImg(i)}> X</span>
+              {imgsToEdit ? (
+                <>
+                  {mainImgIndex - imgsToEdit.length === i && (
+                    <span>PORTADA</span>
+                  )}
+                  <img
+                    src={imageURL}
+                    alt={`img_${i}`}
+                    className="imgs-product"
+                    onClick={() => handleMainImg(imgsToEdit.length + i)}
+                  />
+                  <span onClick={() => handleRemoveImg(i)}> X</span>
+                </>
+              ) : (
+                <>
+                  {mainImgIndex === i && <span>PORTADA</span>}
+                  <img
+                    src={imageURL}
+                    alt={`img_${i}`}
+                    className="imgs-product"
+                    onClick={() => handleMainImg(i)}
+                  />
+                  <span onClick={() => handleRemoveImg(i)}> X</span>
+                </>
+              )}
             </>
           ))
         )}
