@@ -24,7 +24,7 @@ const AboutUs = () => {
                     </li>
                 </ul>
             </div>
-            <br />
+            
             <div>
                 <div className="profile-avatar-container">                    
                     <img src="https://avatars.githubusercontent.com/u/93392994" alt="avatar" />

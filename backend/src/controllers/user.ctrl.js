@@ -75,7 +75,7 @@ const signin = async (req, res, next) => {
 
 const signinGoogle = async (req, res, next) => {
     const { sub, email, emailVerified, avatar, firstName, lastName } = req.body;
-
+    console.log(email);
     try {
         const userFound = await User.findOne({ email: sub });
         if (!userFound) {

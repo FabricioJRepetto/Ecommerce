@@ -79,12 +79,13 @@ const Signupin = () => {
     const userDecoded = jwt_decode(response.credential);
     const {
       sub,
-      googleEmail: email,
+      email,
       email_verified: emailVerified,
       picture: avatar,
       given_name: firstName,
       family_name: lastName,
     } = userDecoded;
+    console.log(userDecoded);
 
     try {
       const { data } = await axios.post(`/user/signinGoogle`, {
