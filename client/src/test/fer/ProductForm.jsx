@@ -170,11 +170,21 @@ const ProductForm = () => {
   };
 
   const handleRemoveImg = (i) => {
+    console.log("entra");
+    console.log("mainImgIndex:", mainImgIndex);
+    console.log("i:", i);
     setProductImg(productImg.filter((_, index) => index !== i));
     mainImgIndex === i && setMainImgIndex(0);
+    mainImgIndex >= productImg.length + imgsToEdit.length - 1 &&
+      setMainImgIndex(mainImgIndex - 1);
   };
-  const handleRemoveImgToEdit = (_id) => {
-    setImgsToEdit(imgsToEdit.filter((img) => img._id !== _id));
+  const handleRemoveImgToEdit = (_id, i) => {
+    /*     console.log("mainImgIndex:", mainImgIndex);
+    console.log("i:", i);
+ */ setImgsToEdit(imgsToEdit.filter((img) => img._id !== _id));
+    mainImgIndex === i && setMainImgIndex(0);
+    mainImgIndex >= productImg.length + imgsToEdit.length - 1 &&
+      setMainImgIndex(mainImgIndex - 1);
   };
 
   useEffect(() => {
@@ -188,7 +198,6 @@ const ProductForm = () => {
   const submitProduct = async (productData, errorFlag) => {
     if (errorFlag > 0) return;
     productData = { ...productData, category: category };
-    console.log(productData);
 
     let formData = new FormData();
 
@@ -457,7 +466,7 @@ const ProductForm = () => {
                   className="imgs-product"
                   onClick={() => handleMainImg(i)}
                 />
-                <span onClick={() => handleRemoveImgToEdit(_id)}> X</span>
+                <span onClick={() => handleRemoveImgToEdit(_id, i)}> X</span>
               </>
             ))
           )}

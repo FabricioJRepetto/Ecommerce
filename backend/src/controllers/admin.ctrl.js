@@ -276,7 +276,6 @@ const updateProduct = async (req, res, next) => {
     } = JSON.parse(req.body.data);
     let images = [...imgsToEdit];
 
-    console.log("-----------req.body.data", req.body.data);
     console.log("-----------mainImgIndex", mainImgIndex);
 
     //: validar data antes de subir imagenes
