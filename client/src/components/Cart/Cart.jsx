@@ -21,7 +21,7 @@ const Cart = () => {
     const [ notification ] = useNotification();
     const { section } = useParams();
 
-    const [render, setRender] = useState(section)
+    const [render, setRender] = useState(section);
     const [cart, setCart] = useState(false);
     const [orderId, setOrderId] = useState(false);
     const [address, setAddress] = useState(null);
@@ -175,8 +175,8 @@ const Cart = () => {
         <div className="cart-container">
                 
             <div className="cart-menu-container">
-                <NavLink to={"/cart/"}>Cart</NavLink>
-                <NavLink to={"/cart/saved"}>{`Saved ${cart.buyLater?.length ? '('+cart?.buyLater?.length+')' : ''}`}</NavLink>
+                <NavLink to={"/cart/"}>{`Cart ${cart.products?.length ? `(${cart?.products?.length})` : ''}`}</NavLink>
+                <NavLink to={"/cart/saved"}>{`Saved ${cart.buyLater?.length ? `(${cart?.buyLater?.length})` : ''}`}</NavLink>
             </div>
 
             {(render === 'cart')
@@ -269,7 +269,7 @@ const Cart = () => {
                     ? <div>{cart.buyLater.map((p) => (
                             <CartCard
                                 key={p._id}
-                                on_cart={true}
+                                on_cart={false}
                                 on_sale={p.on_sale}
                                 img={p.thumbnail}
                                 name={p.name}
@@ -285,7 +285,7 @@ const Cart = () => {
                                 buyNow={buyNow}
                                 deleteP={deleteProduct}
                                 source={'buyLater'}
-                                />
+                            />
                         ))}</div>
 
                     : <h1>No tienes productos guradados</h1>

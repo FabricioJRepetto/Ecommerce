@@ -233,6 +233,24 @@ const quantityEx = async (req, res, next) => {
     }
 };
 
+const shippingMode = async (req, res, next) => {
+    try {
+
+        const cart = await Cart.findOneAndUpdate({
+            'owner': req.user._id
+        },
+            {
+                "$set": {
+                    "products.$.quantity": amount
+                }
+            }, { new: true }
+        );
+
+    } catch (error) {
+        next(error)
+    }
+}
+
 const saveOrder = async (req, res, next) => {
     try {
         await Cart.findOneAndUpdate({ owner: req.user._id },

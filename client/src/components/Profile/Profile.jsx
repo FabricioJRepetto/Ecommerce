@@ -8,6 +8,7 @@ import { useModal } from "../../hooks/useModal";
 import Modal from "../common/Modal";
 import Signout from "../Session/Signout";
 import { resizer, avatarResizer } from "../../helpers/resizer";
+import { formatDate } from "../../helpers/formatDate";
 import { useNotification } from "../../hooks/useNotification";
 import Card from "../Products/Card";
 import MiniCard from "../Products/MiniCard";
@@ -83,10 +84,6 @@ const Profile = () => {
 
   //? ORDERS
   const { data: orders, oLoading } = useAxios("GET", `/order/userall/`);
-  // Date formater
-  const formatDate = (d) => {
-    return d.toString().slice(0, -13).replace('T', ' ');
-  };
 
   //? ADDRESS
   const deleteAddress = async (id) => {
@@ -276,6 +273,7 @@ const Profile = () => {
                                 {e.status === 'pending' && `expiration: ${formatDate(e.expiration_date_to)}`}
                                 <p>- - -</p>
                                 <p>payment status: {e.status}</p>
+                                {e.status === 'approved' && <p>payment date: {formatDate(e.payment_date)}</p>}
                                 {e.status === 'pending' && e.payment_link && <div><a style={{ color: '#3483fa'}} href={e.payment_link}>Continue payment.</a></div>} 
                                 <p>{e.payment_source}</p>
                                 <p>order id: <i>{e.id}</i></p>

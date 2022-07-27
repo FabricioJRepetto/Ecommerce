@@ -25,6 +25,7 @@ const orderSchema = new Schema(
             street_name: String,
             street_number: Number,
         },
+        flash_shipping: Boolean,
         expiration_date_from: String,
         expiration_date_to: String,
         created_at: Number,
