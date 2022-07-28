@@ -20,7 +20,9 @@ const filterFunction = (state, source, type, value, firstIteration) => {
     );
   } else if (type === "brand") {
     state.productsFiltered = productsToFilter.filter((product) =>
-      state.filtersApplied.brand.includes(product.brand.toUpperCase())
+      state.productsOwnFiltersApplied.brand.includes(
+        product.brand.toUpperCase()
+      )
     );
   } else {
     state.productsFiltered = productsToFilter.filter(
@@ -39,7 +41,7 @@ export const productsSlice = createSlice({
     productsAppliedFilters: [],
     breadCrumbs: [],
     searchQuerys: {},
-    filtersApplied: {},
+    productsOwnFiltersApplied: {},
     productsFiltered: [],
     productDetails: {},
     idProductToEdit: null,
@@ -82,51 +84,54 @@ export const productsSlice = createSlice({
                 value [STRING, BOOLEAN] ||     BOOLEAN     || STRING => min-max || null
              } */
       const { source, type, value } = action.payload;
-      /* filtersApplied = {
+      /* productsOwnFiltersApplied = {
                 brand: [STRING],
                 free_shipping: BOOLEAN,
                 price: STRING => min-max
              } */
 
       if (value === null || value === false) {
-        delete state.filtersApplied[type];
+        delete state.productsOwnFiltersApplied[type];
       } else {
         if (type === "brand") {
           if (value[1]) {
-            state.filtersApplied = {
-              ...state.filtersApplied,
-              brand: state.filtersApplied.brand
-                ? [...state.filtersApplied.brand, value[0].toUpperCase()]
+            state.productsOwnFiltersApplied = {
+              ...state.productsOwnFiltersApplied,
+              brand: state.productsOwnFiltersApplied.brand
+                ? [
+                    ...state.productsOwnFiltersApplied.brand,
+                    value[0].toUpperCase(),
+                  ]
                 : [value[0].toUpperCase()],
             };
           } else {
-            state.filtersApplied = {
-              ...state.filtersApplied,
-              brand: state.filtersApplied.brand.filter(
+            state.productsOwnFiltersApplied = {
+              ...state.productsOwnFiltersApplied,
+              brand: state.productsOwnFiltersApplied.brand.filter(
                 (brand) => brand.toUpperCase() !== value[0].toUpperCase()
               ),
             };
-            if (state.filtersApplied.brand.length === 0)
-              delete state.filtersApplied.brand;
+            if (state.productsOwnFiltersApplied.brand.length === 0)
+              delete state.productsOwnFiltersApplied.brand;
           }
         } else {
-          state.filtersApplied = {
-            ...state.filtersApplied,
+          state.productsOwnFiltersApplied = {
+            ...state.productsOwnFiltersApplied,
             [type]: value,
           };
         }
       }
 
-      if (Object.keys(state.filtersApplied).length === 0) {
+      if (Object.keys(state.productsOwnFiltersApplied).length === 0) {
         state.productsFiltered = [];
       } else {
         let firstIteration = true;
-        for (const filterApplied in state.filtersApplied) {
+        for (const filterApplied in state.productsOwnFiltersApplied) {
           filterFunction(
             state,
             source,
             filterApplied,
-            state.filtersApplied[filterApplied],
+            state.productsOwnFiltersApplied[filterApplied],
             firstIteration
           );
           firstIteration = false;
@@ -134,6 +139,13 @@ export const productsSlice = createSlice({
         if (state.productsFiltered.length === 0)
           state.productsFiltered = [null];
       }
+    },
+
+    searchProducts: (state, action) => {
+      state.productsFound = state.productsOwn.filter((prod) =>
+        prod.name.toUpperCase().includes(action.payload.toUpperCase())
+      );
+      if (state.productsFound.length === 0) state.productsFound = [null];
     },
 
     orderProducts: (state, action) => {
@@ -174,6 +186,7 @@ export const {
   loadBreadCrumbs,
   deleteProductFromState,
   filterProducts,
+  searchProducts,
   orderProducts,
   loadProductDetails,
   loadIdProductToEdit,

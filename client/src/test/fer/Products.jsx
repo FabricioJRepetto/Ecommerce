@@ -2,10 +2,10 @@ import React, { useState, useRef } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
-
 import {
+  loadProductsOwn,
   filterProducts,
-  loadProductsFound,
+  searchProducts,
   deleteProductFromState,
 } from "../../Redux/reducer/productsSlice";
 import { useEffect } from "react";
@@ -20,13 +20,17 @@ const Products = () => {
     max: "",
   });
   const [shippingFilter, setShippingFilter] = useState(false);
-  const [brandsFilter, setBrandsFilter] = useState();
+  const [productToSearch, setProductToSearch] = useState("");
   const [loading, setLoading] = useState(true);
+  const [brandsFilter, setBrandsFilter] = useState();
   const brands = useRef();
   const dispatch = useDispatch();
-  const { productsFound, productsFiltered } = useSelector(
-    (state) => state.productsReducer
-  );
+  const {
+    productsOwn,
+    productsFound,
+    productsFiltered,
+    productsOwnFiltersApplied,
+  } = useSelector((state) => state.productsReducer);
   const { wishlist } = useSelector((state) => state.cartReducer);
   const location = useLocation();
   const [
@@ -44,22 +48,51 @@ const Products = () => {
   }, []);
 
   let productsToShow;
-  productsFiltered.length === 0
+  productsFound.length === 0 && productsFiltered.length === 0
+    ? (productsToShow = productsOwn)
+    : productsFiltered.length === 0
     ? (productsToShow = productsFound)
     : (productsToShow = productsFiltered);
 
-  /* let productsToShow;
-      productsFiltered.length === 0
-        ? location.pathname === "/admin/products"
-          ? (productsToShow = productsOwn)
-          : (productsToShow = productsFound)
-        : (productsToShow = productsFiltered); */
+  let source;
+  productsFound.length === 0
+    ? (source = "productsOwn")
+    : (source = "productsFound");
+
+  /*   let productsToShow;
+  productsFiltered.length === 0
+    ? (productsToShow = productsFound)
+    : (productsToShow = productsFiltered); */
+
+  useEffect(() => {
+    if (productsFound[0] === null) {
+      brands.current = [];
+    } else if (productsFound.length) {
+      brands.current = [];
+      let brandsCheckbox = {};
+      for (const product of productsFound) {
+        // brands.current => renderiza checkboxes
+        // brandsCheckbox => {BRAND: boolean}
+        //      => para cargar BrandsFilter
+        // brandsFilter => estado que maneja checkboxes
+        if (product.brand) {
+          const brandCamelCase =
+            product.brand.charAt(0).toUpperCase() + product.brand.slice(1);
+          !Object.keys(brandsCheckbox).includes(brandCamelCase) &&
+            brands.current.push(brandCamelCase);
+          brandsCheckbox[brandCamelCase] = false;
+        }
+      }
+      setBrandsFilter(brandsCheckbox);
+      brands.current.sort();
+    }
+  }, [productsFound]);
 
   const getProducts = () => {
     axios
       .get("/product")
       .then((res) => {
-        dispatch(loadProductsFound(res.data));
+        dispatch(loadProductsOwn(res.data));
         brands.current = [];
         let brandsCheckbox = {};
         for (const product of res.data) {
@@ -83,14 +116,16 @@ const Products = () => {
 
   const filterPrices = (e) => {
     e.preventDefault();
-
-    dispatch(
-      filterProducts({
-        source: "productsFound",
-        type: "price",
-        value: `${pricesFilter.min}-${pricesFilter.max}`,
-      })
-    );
+    pricesFilter.min !== "" &&
+      pricesFilter.max !== "" &&
+      parseInt(pricesFilter.min) < parseInt(pricesFilter.max) &&
+      dispatch(
+        filterProducts({
+          source,
+          type: "price",
+          value: `${pricesFilter.min}-${pricesFilter.max}`,
+        })
+      );
   };
 
   const handlePrices = ({ target }) => {
@@ -108,7 +143,7 @@ const Products = () => {
     setShippingFilter(!shippingFilter);
     dispatch(
       filterProducts({
-        source: "productsFound",
+        source,
         type: "free_shipping",
         value: !shippingFilter,
       })
@@ -123,7 +158,7 @@ const Products = () => {
 
     dispatch(
       filterProducts({
-        source: "productsFound",
+        source,
         type: "brand",
         value: [target.name, !brandsFilter[target.name]],
       })
@@ -148,7 +183,7 @@ const Products = () => {
   const handleClearPrices = () => {
     dispatch(
       filterProducts({
-        source: "productsFound",
+        source,
         type: "price",
         value: null,
       })
@@ -156,9 +191,29 @@ const Products = () => {
     setPricesFilter({ min: "", max: "" });
   };
 
+  const handleSearch = (e) => {
+    handleClearPrices();
+    setShippingFilter(false);
+    dispatch(
+      filterProducts({
+        source,
+        type: "free_shipping",
+        value: null,
+      })
+    );
+    setProductToSearch(e.target.value);
+    dispatch(searchProducts(e.target.value));
+  };
+
   return (
     <div className="products-container">
       <div className="products-results-container">
+        <input
+          type="text"
+          placeholder="Buscar por nombre"
+          onChange={handleSearch}
+          value={productToSearch}
+        />
         {productsToShow[0] === null ? (
           <h1>NO HUBIERON COINCIDENCIAS</h1>
         ) : (
@@ -183,7 +238,7 @@ const Products = () => {
       {pricesFilter.min && pricesFilter.max && <></>}
 
       <div className="products-filters">
-        <h3>BRANDS</h3>
+        <h3>MARCAS</h3>
         <div className="filter-brand-checkbox-container">
           {loading ? (
             <h1>CARGANDO</h1>
@@ -209,32 +264,38 @@ const Products = () => {
           <br />
         </div>
 
-        <h3>PRICES</h3>
+        <h3>RANGO DE PRECIOS</h3>
         <>
-          <form onSubmit={filterPrices}>
-            <div>
-              <input
-                type="text"
-                pattern="[0-9]*"
-                placeholder="min"
-                name="min"
-                onChange={handlePrices}
-                value={pricesFilter.min}
-              />
-            </div>
-            <div>
-              <input
-                type="text"
-                pattern="[0-9]*"
-                placeholder="max"
-                name="max"
-                onChange={handlePrices}
-                value={pricesFilter.max}
-              />
-            </div>
-            <input type="submit" value="filter" />
-          </form>
-          <button onClick={handleClearPrices}>clear</button>
+          {productsOwnFiltersApplied.price ? (
+            <>
+              <h4>{productsOwnFiltersApplied.price}</h4>
+              <button onClick={handleClearPrices}>limpiar</button>
+            </>
+          ) : (
+            <form onSubmit={filterPrices}>
+              <div>
+                <input
+                  type="text"
+                  pattern="[0-9]*"
+                  placeholder="min"
+                  name="min"
+                  onChange={handlePrices}
+                  value={pricesFilter.min}
+                />
+              </div>
+              <div>
+                <input
+                  type="text"
+                  pattern="[0-9]*"
+                  placeholder="max"
+                  name="max"
+                  onChange={handlePrices}
+                  value={pricesFilter.max}
+                />
+              </div>
+              <input type="submit" value="filter" />
+            </form>
+          )}
         </>
 
         <br />
