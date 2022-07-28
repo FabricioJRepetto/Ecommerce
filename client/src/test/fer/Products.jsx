@@ -223,76 +223,82 @@ const Products = () => {
       {pricesFilter.min && pricesFilter.max && <></>}
 
       <div className="products-filters">
-        <h3>MARCAS</h3>
-        <div className="filter-brand-checkbox-container">
-          {loading ? (
-            <h1>CARGANDO</h1>
-          ) : (
-            brandsFilter &&
-            Object.keys(brandsFilter).length > 0 &&
-            React.Children.toArray(
-              brandsCheckboxes?.map((brand) => (
-                <label>
-                  <input
-                    type="checkbox"
-                    name={brand}
-                    checked={brandsFilter[brand]}
-                    onChange={handleBrands}
-                  />
-                  {brand}
-                </label>
-              ))
-            )
-          )}
-          <br />
-          <hr />
-          <br />
-        </div>
+        {productsFound[0] === null ? (
+          <></>
+        ) : (
+          <>
+            <h3>MARCAS</h3>
+            <div className="filter-brand-checkbox-container">
+              {loading ? (
+                <h1>CARGANDO</h1>
+              ) : (
+                brandsFilter &&
+                Object.keys(brandsFilter).length > 0 &&
+                React.Children.toArray(
+                  brandsCheckboxes?.map((brand) => (
+                    <label>
+                      <input
+                        type="checkbox"
+                        name={brand}
+                        checked={brandsFilter[brand]}
+                        onChange={handleBrands}
+                      />
+                      {brand}
+                    </label>
+                  ))
+                )
+              )}
+              <br />
+              <hr />
+              <br />
+            </div>
 
-        <h3>RANGO DE PRECIOS</h3>
-        <>
-          {productsOwnFiltersApplied.price ? (
+            <h3>RANGO DE PRECIOS</h3>
             <>
-              <h4>{productsOwnFiltersApplied.price}</h4>
-              <button onClick={handleClearPrices}>limpiar</button>
+              {productsOwnFiltersApplied.price ? (
+                <>
+                  <h4>{productsOwnFiltersApplied.price}</h4>
+                  <button onClick={handleClearPrices}>limpiar</button>
+                </>
+              ) : (
+                <form onSubmit={filterPrices}>
+                  <div>
+                    <input
+                      type="text"
+                      pattern="[0-9]*"
+                      placeholder="min"
+                      name="min"
+                      onChange={handlePrices}
+                      value={pricesFilter.min}
+                    />
+                  </div>
+                  <div>
+                    <input
+                      type="text"
+                      pattern="[0-9]*"
+                      placeholder="max"
+                      name="max"
+                      onChange={handlePrices}
+                      value={pricesFilter.max}
+                    />
+                  </div>
+                  <input type="submit" value="filter" />
+                </form>
+              )}
             </>
-          ) : (
-            <form onSubmit={filterPrices}>
-              <div>
-                <input
-                  type="text"
-                  pattern="[0-9]*"
-                  placeholder="min"
-                  name="min"
-                  onChange={handlePrices}
-                  value={pricesFilter.min}
-                />
-              </div>
-              <div>
-                <input
-                  type="text"
-                  pattern="[0-9]*"
-                  placeholder="max"
-                  name="max"
-                  onChange={handlePrices}
-                  value={pricesFilter.max}
-                />
-              </div>
-              <input type="submit" value="filter" />
-            </form>
-          )}
-        </>
 
-        <br />
-        <label>
-          <input
-            type="checkbox"
-            name="free_shipping"
-            checked={shippingFilter}
-            onChange={filterShipping}
-          />
-          Envío gratis
-        </label>
+            <br />
+            <label>
+              <input
+                type="checkbox"
+                name="free_shipping"
+                checked={shippingFilter}
+                onChange={filterShipping}
+              />
+              Envío gratis
+            </label>
+          </>
+        )}
       </div>
 
       <Modal
