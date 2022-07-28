@@ -23,6 +23,7 @@ const Products = () => {
   const [productToSearch, setProductToSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [brandsFilter, setBrandsFilter] = useState();
+  const [brandsCheckboxes, setBrandsCheckboxes] = useState([]);
   const brands = useRef();
   const dispatch = useDispatch();
   const {
@@ -59,59 +60,43 @@ const Products = () => {
     ? (source = "productsOwn")
     : (source = "productsFound");
 
-  /*   let productsToShow;
-  productsFiltered.length === 0
-    ? (productsToShow = productsFound)
-    : (productsToShow = productsFiltered); */
-
   useEffect(() => {
     if (productsFound[0] === null) {
-      brands.current = [];
+      setBrandsCheckboxes([]);
     } else if (productsFound.length) {
-      brands.current = [];
-      let brandsCheckbox = {};
-      for (const product of productsFound) {
-        // brands.current => renderiza checkboxes
-        // brandsCheckbox => {BRAND: boolean}
-        //      => para cargar BrandsFilter
-        // brandsFilter => estado que maneja checkboxes
-        if (product.brand) {
-          const brandCamelCase =
-            product.brand.charAt(0).toUpperCase() + product.brand.slice(1);
-          !Object.keys(brandsCheckbox).includes(brandCamelCase) &&
-            brands.current.push(brandCamelCase);
-          brandsCheckbox[brandCamelCase] = false;
-        }
-      }
-      setBrandsFilter(brandsCheckbox);
-      brands.current.sort();
+      setBrands(productsFound);
     }
   }, [productsFound]);
 
   const getProducts = () => {
     axios
       .get("/product")
-      .then((res) => {
-        dispatch(loadProductsOwn(res.data));
-        brands.current = [];
-        let brandsCheckbox = {};
-        for (const product of res.data) {
-          // brands.current => renderiza checkboxes
-          // brandsCheckbox => {BRAND: boolean}
-          //      => para cargar BrandsFilter
-          // brandsFilter => estado que maneja checkboxes
-          if (product.brand) {
-            const brandCamelCase =
-              product.brand.charAt(0).toUpperCase() + product.brand.slice(1);
-            !Object.keys(brandsCheckbox).includes(brandCamelCase) &&
-              brands.current.push(brandCamelCase);
-            brandsCheckbox[brandCamelCase] = false;
-          }
-        }
-        setBrandsFilter(brandsCheckbox);
-        brands.current.sort();
+      .then(({ data }) => {
+        dispatch(loadProductsOwn(data));
+        setBrands(data);
       })
       .catch((err) => console.log(err)); //! VOLVER A VER manejo de errores
+  };
+
+  const setBrands = (products) => {
+    let brands = [];
+    let brandsCheckbox = {};
+    for (const product of products) {
+      // brands => renderiza checkboxes
+      // brandsCheckbox => {BRAND: boolean}
+      //      => para cargar BrandsFilter
+      // brandsFilter => estado que maneja checkboxes
+      if (product.brand) {
+        const brandCamelCase =
+          product.brand.charAt(0).toUpperCase() + product.brand.slice(1);
+        !Object.keys(brandsCheckbox).includes(brandCamelCase) &&
+          brands.push(brandCamelCase);
+        brandsCheckbox[brandCamelCase] = false;
+      }
+    }
+    setBrandsFilter(brandsCheckbox);
+    brands.sort();
+    setBrandsCheckboxes(brands);
   };
 
   const filterPrices = (e) => {
@@ -246,7 +231,7 @@ const Products = () => {
             brandsFilter &&
             Object.keys(brandsFilter).length > 0 &&
             React.Children.toArray(
-              brands.current?.map((brand) => (
+              brandsCheckboxes?.map((brand) => (
                 <label>
                   <input
                     type="checkbox"
