@@ -1,3 +1,4 @@
+const cart = require("../models/cart");
 const Cart = require("../models/cart");
 const { cartFormater } = require("../utils/cartFormater");
 
@@ -267,6 +268,21 @@ const saveOrder = async (req, res, next) => {
     }
 }
 
+const flashShippingMode = async (req, res, next) => {
+    try {
+        const rawCart = await Cart.findOneAndUpdate({ owner: req.user._id },
+            {
+                '$set': {
+                    'flash_shipping': req.body.flash_shipping
+                }
+            }, { new: true });
+        const cart = await cartFormater(rawCart);
+        res.json({ cart })
+    } catch (error) {
+        next(error)
+    }
+}
+
 module.exports = {
     getUserCart,
     addToCart,
@@ -277,5 +293,6 @@ module.exports = {
     deleteCart,
     quantity,
     quantityEx,
-    saveOrder
+    saveOrder,
+    flashShippingMode,
 };

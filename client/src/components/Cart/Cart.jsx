@@ -23,6 +23,7 @@ const Cart = () => {
 
     const [render, setRender] = useState(section);
     const [cart, setCart] = useState(false);
+    const [flash_shipping, setflash_shipping] = useState(false)
     const [orderId, setOrderId] = useState(false);
     const [address, setAddress] = useState(null);
     const [newAdd, setNewAdd] = useState({});
@@ -51,6 +52,7 @@ const Cart = () => {
         if (data) {
             console.log(data);
             setCart(data);
+            setflash_shipping(data.flash_shipping || false);
             data.last_order?.length && setOrderId(data.last_order);
             data.message && notification(data.message, '', 'warning');
         };
@@ -171,6 +173,13 @@ const Cart = () => {
         navigate('/buyNow');
    }
 
+   const shippingMode = async (boolean) => { 
+        setflash_shipping(boolean);
+        const { data } = await axios.put('/cart/flash', {flash_shipping: boolean});
+        setCart(data.cart);
+        console.log(data.cart);
+    }
+
     return (
         <div className="cart-container">
                 
@@ -209,21 +218,35 @@ const Cart = () => {
 
                     <div className="total-section-container">
                         <div className="total-section-inner">
-                                    {selectedAdd
-                                    ?<div 
-                                        onClick={openAddList}
-                                        className='cart-address-selector'
-                                        name={'address-container'}>
-                                            {selectedAdd.street_name+' '+selectedAdd.street_number+', '+selectedAdd.city}
-                                        <Arrow className='arrow-address-selector'/>
-                                    </div>
-                                    :<div 
-                                        onClick={openAddForm}
-                                        className="cart-address-selector">
-                                        <b>You have no address asociated,</b> 
-                                        please create one to proceed. 
-                                        <Arrow className='arrow-address-selector'/>
-                                    </div>}
+                            <div>
+                                {selectedAdd
+                                ?<div 
+                                    onClick={openAddList}
+                                    className='cart-address-selector'
+                                    name={'address-container'}>
+                                        {selectedAdd.street_name+' '+selectedAdd.street_number+', '+selectedAdd.city}
+                                    <Arrow className='arrow-address-selector'/>
+                                </div>
+                                :<div 
+                                    onClick={openAddForm}
+                                    className="cart-address-selector">
+                                    <b>You have no address asociated,</b> 
+                                    please add one to proceed. 
+                                    <Arrow className='arrow-address-selector'/>
+                                </div>}
+
+                                <div onClick={()=> shippingMode(true)} className={flash_shipping ? 'selected-shipping-mode' : ''}>
+                                    <h3>flash shipping</h3>
+                                    <p>llega mañana</p>
+                                    <input type="checkbox" readOnly checked={flash_shipping}/>
+                                </div>
+
+                                <div onClick={()=> shippingMode(false)} className={!flash_shipping ? 'selected-shipping-mode' : ''}>
+                                    <h3>Envío standard</h3>
+                                    <p>llega INSERTAR DÍA</p>
+                                    <input type="checkbox" readOnly checked={!flash_shipping} />
+                                </div>
+                            </div>
 
                                     <div className="cart-total">
                                     {cart.free_ship_cart && <del className="grey">${priceFormat(cart.products.length * SHIP_COST).int}</del>}
@@ -231,10 +254,10 @@ const Cart = () => {
                                     ? <div className="cart-ship-total green">
                                         <Ship className='ship-svg' />
                                         <h3>Envío gratis!</h3>
-                                    </div>
+                                      </div>
                                     : <div>
                                         <h3>${priceFormat(cart.shipping_cost).int}</h3><p>{priceFormat(cart.shipping_cost).cents}</p>
-                                        </div> }
+                                      </div> }
                                 </div>
                             </div>
 

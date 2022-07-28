@@ -89,6 +89,7 @@ const createOrder = async (req, res, next) => {
                 street_name,
                 street_number,
             },
+            flash_shipping: cart.flash_shipping,
             status: "pending",
             total: data.total,
             free_shipping: data.free_ship_cart,
@@ -109,6 +110,7 @@ const buyNowOrder = async (req, res, next) => {
     try {
         const {
             product_id,
+            flash_shipping,
             quantity,
             state,
             city,
@@ -139,6 +141,7 @@ const buyNowOrder = async (req, res, next) => {
                 street_name,
                 street_number,
             },
+            flash_shipping,
             status: "pending",
             total,
             free_shipping: p.free_shipping,
@@ -253,6 +256,7 @@ const updateOrder = async (req, res, next) => {
                     },
                     products: p ? [pro] : [...cart.products],
                     total: p ? total : cart.total,
+                    flashflash_shipping: cart.flash_shipping,
                     free_shipping: p ? p.free_shipping : cart.free_ship_cart,
                     shipping_cost: p
                         ? p.free_shipping
