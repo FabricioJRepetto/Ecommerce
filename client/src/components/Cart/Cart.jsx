@@ -257,8 +257,8 @@ const Cart = () => {
                                     <input type="checkbox" readOnly checked={!flash_shipping} />
                                 </div>
                             </div>
-
-                                    <div className="cart-total">
+                            
+                                <div className="cart-total">
                                     {cart.free_ship_cart && <del className="grey">${priceFormat(cart.products.length * SHIP_COST).int}</del>}
                                     {cart.shipping_cost === 0
                                     ? <div className="cart-ship-total green">

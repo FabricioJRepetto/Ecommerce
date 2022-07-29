@@ -185,6 +185,16 @@ const BuyNow = () => {
         return cost
       }
 
+      const deliverDate = (flash = false) => {        
+        if (flash) {
+            return 'mañana.';
+        }
+        // 259200000 (3 dias)
+        const today = new Date(Date.now()+259200000).getDay();
+        let days = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'];
+        return ` el ${days[today]}.`;
+    }
+
     return (
         <div className="buynow-container">
 
@@ -226,13 +236,13 @@ const BuyNow = () => {
 
                                 <div onClick={()=> shippingMode(true)} className={flash_shipping ? 'selected-shipping-mode' : ''}>
                                     <h3>flash shipping</h3>
-                                    <p>llega mañana</p>
+                                    <p>llega {deliverDate(true)}</p>
                                     <input type="checkbox" readOnly checked={flash_shipping}/>
                                 </div>
 
                                 <div onClick={()=> shippingMode(false)} className={!flash_shipping ? 'selected-shipping-mode' : ''}>
                                     <h3>Envío standard</h3>
-                                    <p>llega INSERTAR DÍA</p>
+                                    <p>llega {deliverDate()}</p>
                                     <input type="checkbox" readOnly checked={!flash_shipping} />
                                 </div>
                             
