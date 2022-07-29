@@ -1,9 +1,14 @@
-import React from 'react'
-import { formatDate } from '../../helpers/formatDate'
-import { resizer } from '../../helpers/resizer'
-import { useAxios } from '../../hooks/useAxios'
+import React from 'react';
+import { formatDate } from '../../helpers/formatDate';
+import { resizer } from '../../helpers/resizer';
+import { useAxios } from '../../hooks/useAxios';
+import axios from 'axios';
+import { useNotification } from '../../hooks/useNotification';
+import { notificationSlice } from '../../Redux/reducer/notificationSlice';
+
 
 const Orders = () => {
+    const [notification] = useNotification();
     const { data: orders, loading } = useAxios("GET", `/order/userall/`);
 
     const percent = (date, start) => { 
@@ -14,24 +19,28 @@ const Orders = () => {
         let state = '';
         switch (percent) {
             case percent > 10 && percent <= 30:
-                state = 'dispatching'
+                state = 'dispatching';
                 break;
             case percent > 30 && percent <= 70:
-                state = 'Ready to deliver'
+                state = 'Ready to deliver';
                 break;
             case percent > 70 && percent < 100:
-                state = 'Ready to deliver'
+                state = 'Ready to deliver';
                 break;
             case percent === 100:
-                state = 'Ready to deliver'
+                state = 'Ready to deliver';
                 break;
-            default: state = 'geting your package ready'
+            default: state = 'geting your package ready';
                 break;
         }
 
         return {percent, state};
     }
 
+    const cancelOrder = async (id) => { 
+        const { data } = await axios.put(`/order/${id}`, {status: 'cancelled'});
+        notification(data.message, '', 'warning')
+    }
 
   return (
     <div>
@@ -55,7 +64,8 @@ const Orders = () => {
                     <p>- - -</p>
                     <p>payment status: {e.status}</p>
                     {e.status === 'approved' && <p>payment date: {formatDate(e.payment_date)}</p>}
-                    {e.status === 'pending' && e.payment_link && <div><a style={{ color: '#3483fa'}} href={e.payment_link}>Continue payment.</a></div>} 
+                    {e.status === 'pending' && e.payment_link && <div><a style={{ color: '#3483fa'}} href={e.payment_link}>Continue payment.</a></div>}
+                    {e.status === 'pending' && <button onClick={()=> cancelOrder(e._id)}>Cancel order</button>}
                     <p>{e.payment_source}</p>
                     <p>order id: <i>{e.id}</i></p>
                     {e.delivery_date && <div>
@@ -65,6 +75,10 @@ const Orders = () => {
                             <div className='delivery-inner'>
                                 <div style={{width: percent(e.delivery_date, e.created_at).percent+'%'}}></div>
                             </div>
+                            {
+                            //! volver aver BORRAR ESTE PORCENTAJE 
+                            }
+                            <p>{percent(e.delivery_date, e.created_at).percent+'%'}</p>
                         </div>
                         <p>delivery ETA: {formatDate(e.delivery_date)}</p>
                     </div>}

@@ -208,7 +208,7 @@ const updateOrder = async (req, res, next) => {
                     // horas restantes hasta las 15hrs de mañana (flash_shipping true)
                     let now = new Date(Date.now() - 10800000);
                     let hours = (24 - now.getHours()) + 15
-                    return now + (hours * 3600000)
+                    return Date.now() + (hours * 3600000)
                 };
 
                 const order = await Order.findByIdAndUpdate(
