@@ -1,4 +1,5 @@
 import { resizer } from "../../helpers/resizer";
+import { formatDate } from "../../helpers/formatDate";
 import { useLocation, Link } from "react-router-dom";
 
 const OrderCard = ({ order }) => {
@@ -19,14 +20,6 @@ const OrderCard = ({ order }) => {
     total,
     created_at,
   } = order;
-
-  const formatDate = (d) => {
-    if (typeof d === "string") {
-      return d.toString().slice(0, -13).replace("T", " ");
-    } else {
-      return new Date(d).toISOString().slice(0, -8).replace("T", " ");
-    }
-  };
 
   return (
     <div className="profile-img-orders-container" key={id}>

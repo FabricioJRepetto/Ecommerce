@@ -39,6 +39,7 @@ import Metrics from "./test/fer/Metrics";
 import BackToTop from "./helpers/backToTop/BackToTop";
 import RequireRole from "./test/fer/RequireRole";
 import UsersAdmin from "./test/fer/UsersAdmin";
+import AboutUs from "./components/common/AboutUs";
 
 function App() {
     const dispatch = useDispatch();
@@ -95,20 +96,21 @@ function App() {
                     <BackToTop />
                     <Routes>
                         <Route path="/" element={<Home />} />
-                        <Route path="/signin" element={<Signupin />} />
-                        <Route path="/signout" element={<Signout />} />
-                        <Route path="/profile/" element={<Profile />} />
-                        <Route path="/profile/:section" element={<Profile />} />
-                        <Route path="/results" element={<Results />} />
-                        <Route path="/products" element={<Products />} />
-                        <Route path="/productForm" element={<ProductForm />} />
+                        <Route path="/about" element={<AboutUs />} />
+                        <Route path="/buynow" element={<BuyNow />} />
                         <Route path="/cart/" element={<Cart />} />
                         <Route path="/cart/:section" element={<Cart />} />
-                        <Route path="/buynow" element={<BuyNow />} />
-                        <Route path="/reset/:userId/:resetToken" element={<ResetPassword />} />
-                        <Route path="/orders/post-sale" element={<PostSale />} />
-                        <Route path="/verify/:verifyToken" element={<VerifyEmail />} />
                         <Route path="/details/:id" element={<Details />} />
+                        <Route path="/orders/post-sale" element={<PostSale />} />
+                        <Route path="/productForm" element={<ProductForm />} />
+                        <Route path="/products" element={<Products />} />
+                        <Route path="/profile/" element={<Profile />} />
+                        <Route path="/profile/:section" element={<Profile />} />
+                        <Route path="/reset/:userId/:resetToken" element={<ResetPassword />} />
+                        <Route path="/results" element={<Results />} />
+                        <Route path="/signin" element={<Signupin />} />
+                        <Route path="/signout" element={<Signout />} />
+                        <Route path="/verify/:verifyToken" element={<VerifyEmail />} />
                         <Route element={<RequireRole allowedRoles={["admin", "superadmin"]} />}>
                             <Route path="admin" element={<AdminLayout />}>
                                 <Route index element={<Metrics />} />

@@ -14,6 +14,7 @@ const cartSchema = new Schema(
                 product_id: String,
             }
         ],
+        flash_shipping: Boolean,
         buyNow: String,
         last_order: String,
         owner: {

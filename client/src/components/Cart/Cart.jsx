@@ -21,8 +21,9 @@ const Cart = () => {
     const [ notification ] = useNotification();
     const { section } = useParams();
 
-    const [render, setRender] = useState(section)
+    const [render, setRender] = useState(section);
     const [cart, setCart] = useState(false);
+    const [flash_shipping, setflash_shipping] = useState(false)
     const [orderId, setOrderId] = useState(false);
     const [address, setAddress] = useState(null);
     const [newAdd, setNewAdd] = useState({});
@@ -51,6 +52,7 @@ const Cart = () => {
         if (data) {
             console.log(data);
             setCart(data);
+            setflash_shipping(data.flash_shipping || false);
             data.last_order?.length && setOrderId(data.last_order);
             data.message && notification(data.message, '', 'warning');
         };
@@ -117,12 +119,19 @@ const Cart = () => {
         notification(data.message, '', 'success');
     }
 
+    const shippingMode = async (boolean) => { 
+        setflash_shipping(boolean);
+        const { data } = await axios.put('/cart/flash', {flash_shipping: boolean});
+        setCart(data.cart);
+        console.log(data.cart);
+    }
+
     const goCheckout = async () => {
         setLoadingPayment('S');
         let fastId = false;
         // actualiza o crea la order
         if (orderId) {
-            await axios.put(`/order/${orderId}`, selectedAdd);
+            await axios.put(`/order/${orderId}`, {...selectedAdd, flash_shipping});
         } else {
             const { data: id } = await axios.post(`/order/`, selectedAdd);
             fastId = id;
@@ -144,7 +153,7 @@ const Cart = () => {
         let fastId = false;
         // actualiza o crea la order
         if (orderId) {
-            await axios.put(`/order/${orderId}`, selectedAdd);
+            await axios.put(`/order/${orderId}`, {...selectedAdd, flash_shipping});
         } else {
             const { data: id } = await axios.post(`/order/`, selectedAdd);
             fastId = id;
@@ -169,14 +178,24 @@ const Cart = () => {
         await axios.post(`/cart/`, {product_id: id});
         //: delete
         navigate('/buyNow');
-   }
+   };
+
+    const deliverDate = (flash = false) => {        
+        if (flash) {
+            return 'mañana.';
+        }
+        // 259200000 (3 dias)
+        const today = new Date(Date.now()+259200000).getDay();
+        let days = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'];
+        return ` el ${days[today]}.`;
+    }
 
     return (
         <div className="cart-container">
                 
             <div className="cart-menu-container">
-                <NavLink to={"/cart/"}>Cart</NavLink>
-                <NavLink to={"/cart/saved"}>{`Saved ${cart.buyLater?.length ? '('+cart?.buyLater?.length+')' : ''}`}</NavLink>
+                <NavLink to={"/cart/"}>{`Cart ${cart.products?.length ? `(${cart?.products?.length})` : ''}`}</NavLink>
+                <NavLink to={"/cart/saved"}>{`Saved ${cart.buyLater?.length ? `(${cart?.buyLater?.length})` : ''}`}</NavLink>
             </div>
 
             {(render === 'cart')
@@ -209,32 +228,46 @@ const Cart = () => {
 
                     <div className="total-section-container">
                         <div className="total-section-inner">
-                                    {selectedAdd
-                                    ?<div 
-                                        onClick={openAddList}
-                                        className='cart-address-selector'
-                                        name={'address-container'}>
-                                            {selectedAdd.street_name+' '+selectedAdd.street_number+', '+selectedAdd.city}
-                                        <Arrow className='arrow-address-selector'/>
-                                    </div>
-                                    :<div 
-                                        onClick={openAddForm}
-                                        className="cart-address-selector">
-                                        <b>You have no address asociated,</b> 
-                                        please create one to proceed. 
-                                        <Arrow className='arrow-address-selector'/>
-                                    </div>}
+                            <div>
+                                {selectedAdd
+                                ?<div 
+                                    onClick={openAddList}
+                                    className='cart-address-selector'
+                                    name={'address-container'}>
+                                        {selectedAdd.street_name+' '+selectedAdd.street_number+', '+selectedAdd.city}
+                                    <Arrow className='arrow-address-selector'/>
+                                </div>
+                                :<div 
+                                    onClick={openAddForm}
+                                    className="cart-address-selector">
+                                    <b>You have no address asociated,</b> 
+                                    please add one to proceed. 
+                                    <Arrow className='arrow-address-selector'/>
+                                </div>}
 
-                                    <div className="cart-total">
+                                <div onClick={()=> shippingMode(true)} className={flash_shipping ? 'selected-shipping-mode' : ''}>
+                                    <h3>flash shipping</h3>
+                                    <p>{`llega ${deliverDate(true)}`}</p>
+                                    <input type="checkbox" readOnly checked={flash_shipping}/>
+                                </div>
+
+                                <div onClick={()=> shippingMode(false)} className={!flash_shipping ? 'selected-shipping-mode' : ''}>
+                                    <h3>Envío standard</h3>
+                                    <p>{`llega ${deliverDate()}`}</p>
+                                    <input type="checkbox" readOnly checked={!flash_shipping} />
+                                </div>
+                            </div>
+                            
+                                <div className="cart-total">
                                     {cart.free_ship_cart && <del className="grey">${priceFormat(cart.products.length * SHIP_COST).int}</del>}
                                     {cart.shipping_cost === 0
                                     ? <div className="cart-ship-total green">
                                         <Ship className='ship-svg' />
                                         <h3>Envío gratis!</h3>
-                                    </div>
+                                      </div>
                                     : <div>
                                         <h3>${priceFormat(cart.shipping_cost).int}</h3><p>{priceFormat(cart.shipping_cost).cents}</p>
-                                        </div> }
+                                      </div> }
                                 </div>
                             </div>
 
@@ -269,7 +302,7 @@ const Cart = () => {
                     ? <div>{cart.buyLater.map((p) => (
                             <CartCard
                                 key={p._id}
-                                on_cart={true}
+                                on_cart={false}
                                 on_sale={p.on_sale}
                                 img={p.thumbnail}
                                 name={p.name}
@@ -285,7 +318,7 @@ const Cart = () => {
                                 buyNow={buyNow}
                                 deleteP={deleteProduct}
                                 source={'buyLater'}
-                                />
+                            />
                         ))}</div>
 
                     : <h1>No tienes productos guradados</h1>
