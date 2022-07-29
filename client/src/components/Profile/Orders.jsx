@@ -21,12 +21,13 @@ const Orders = () => {
             state = 'Ready to deliver';
         } else if (percent > 70 && percent < 100) {
             state = 'Delivering...';
-        } else if (percent === 100) {
+        } else if (percent >= 100) {
             state = 'Delivered!';
         } else {
             state = 'Geting your package ready';
         }
-
+        percent > 100 && (percent = 100);
+        
         return {percent, state};
     }
 
