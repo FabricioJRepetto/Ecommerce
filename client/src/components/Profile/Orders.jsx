@@ -4,8 +4,6 @@ import { resizer } from '../../helpers/resizer';
 import { useAxios } from '../../hooks/useAxios';
 import axios from 'axios';
 import { useNotification } from '../../hooks/useNotification';
-import { notificationSlice } from '../../Redux/reducer/notificationSlice';
-
 
 const Orders = () => {
     const [notification] = useNotification();
@@ -17,21 +15,16 @@ const Orders = () => {
         let percent = Math.floor(100 - ((progress * 100) / total));
 
         let state = '';
-        switch (percent) {
-            case percent > 10 && percent <= 30:
-                state = 'dispatching';
-                break;
-            case percent > 30 && percent <= 70:
-                state = 'Ready to deliver';
-                break;
-            case percent > 70 && percent < 100:
-                state = 'Ready to deliver';
-                break;
-            case percent === 100:
-                state = 'Ready to deliver';
-                break;
-            default: state = 'geting your package ready';
-                break;
+        if (percent > 10 && percent <= 30){
+            state = 'Dispatching';
+        } else if (percent > 30 && percent <= 70) {
+            state = 'Ready to deliver';
+        } else if (percent > 70 && percent < 100) {
+            state = 'Delivering...';
+        } else if (percent === 100) {
+            state = 'Delivered!';
+        } else {
+            state = 'Geting your package ready';
         }
 
         return {percent, state};
