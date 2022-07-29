@@ -25,8 +25,8 @@ const BuyNow = () => {
 
     const [id, setId] = useState();
     const [product, setProduct] = useState();
-    const [orderId, setOrderId] = useState('');
     const [address, setAddress] = useState(null);
+    const [flash_shipping, setflash_shipping] = useState(false)
     const [newAdd, setNewAdd] = useState({});
     const [selectedAdd, setSelectedAdd] = useState(null);
     const [loadingPayment, setLoadingPayment] = useState(false);
@@ -121,11 +121,18 @@ const BuyNow = () => {
         closeAddList();
      };
 
+     const shippingMode = async (boolean) => { 
+        setflash_shipping(boolean);
+        const { data } = await axios.put('/cart/flash', {flash_shipping: boolean});
+        console.log(data.cart);
+    }
+
     const goCheckout = async () => {
         setLoadingPayment('S');
         // crea la order
         const { data: orderId } = await axios.post(`/order/buyNow`, {
             ...selectedAdd,
+            flash_shipping,
             quantity,
             product_id: id,
         });
@@ -140,36 +147,43 @@ const BuyNow = () => {
     
     const openMP = async () => { 
         setLoadingPayment('MP');
-        let fastId = false;
-        // actualiza o crea la order
-        if (orderId) {
-            await axios.put(`/order/${orderId}`, {
-                ...selectedAdd,
-                quantity,
-                product_id: id,
-            });
-        } else {
-            const { data: firstOrder } = await axios.post(`/order/buyNow`, {
-                ...selectedAdd,
-                quantity,
-                product_id: id,
-            });
-            fastId = firstOrder;
-            setOrderId(firstOrder);
-        }
-
-        //? crea la preferencia para mp con la order y ridirige
-        const { data }  = await axios.get(`/mercadopago/${orderId || fastId}`);
+        // crea la order
+        const { data: orderId } = await axios.post(`/order/buyNow`, {
+            ...selectedAdd,
+            flash_shipping,
+            quantity,
+            product_id: id,
+        });
+        // crea la preferencia para mp con la order y ridirige
+        const { data }  = await axios.get(`/mercadopago/${orderId}`);
         notification('Serás redirigido a la plataforma de pago.', '', 'warning');
         setTimeout(() => {
             window.location.replace(data.init_point);
         }, 3000);
         return null
 
-        //* abre el modal de mp con la id de la preferencia
+        //* abre el MODAL de MP con la id de la preferencia
         // loadMercadoPago(data.id, 
         // setLoadingPayment);
      };
+
+     const shippingCost = () => { 
+        let cost = 0;
+        if (flash_shipping) {
+            if (product.free_shipping) {
+                cost = SHIP_COST / 2;
+            } else {
+                cost = SHIP_COST * 1.5;
+            }
+        } else {
+            if (product.free_shipping) {
+                cost = 0;
+            } else {
+                cost = SHIP_COST;
+            }
+        }
+        return cost
+      }
 
     return (
         <div className="buynow-container">
@@ -192,34 +206,49 @@ const BuyNow = () => {
                 <div className="buynow-inner-lateral">
                     <div>
                         <div className="buynow-address-container">
-                            {selectedAdd
-                                ?<div 
-                                    onClick={openAddList}
-                                    className='buynow-address-selector'
-                                    name={'address-container'}>
-                                        <Location className='address-icon' />
-                                        <p>{selectedAdd.street_name+' '+selectedAdd.street_number}</p>
-                                    <Arrow className='buynow-arrow-address-selector'/>
+                            <div>
+                                {selectedAdd
+                                    ?<div 
+                                        onClick={openAddList}
+                                        className='buynow-address-selector'
+                                        name={'address-container'}>
+                                            <Location className='address-icon' />
+                                            <p>{selectedAdd.street_name+' '+selectedAdd.street_number}</p>
+                                        <Arrow className='buynow-arrow-address-selector'/>
+                                    </div>
+                                    :<div 
+                                        onClick={openAddForm}
+                                        className="buynow-address-selector">
+                                        <b>You have no address asociated,</b> 
+                                        please create one to proceed. 
+                                        <Arrow className='arrow-address-selector'/>
+                                    </div>}
+
+                                <div onClick={()=> shippingMode(true)} className={flash_shipping ? 'selected-shipping-mode' : ''}>
+                                    <h3>flash shipping</h3>
+                                    <p>llega mañana</p>
+                                    <input type="checkbox" readOnly checked={flash_shipping}/>
                                 </div>
-                                :<div 
-                                    onClick={openAddForm}
-                                    className="buynow-address-selector">
-                                    <b>You have no address asociated,</b> 
-                                    please create one to proceed. 
-                                    <Arrow className='arrow-address-selector'/>
-                                </div>}
+
+                                <div onClick={()=> shippingMode(false)} className={!flash_shipping ? 'selected-shipping-mode' : ''}>
+                                    <h3>Envío standard</h3>
+                                    <p>llega INSERTAR DÍA</p>
+                                    <input type="checkbox" readOnly checked={!flash_shipping} />
+                                </div>
+                            
+                            </div>
                         </div>
 
                         <div className="buynow-total-container">
                             <div className="cart-total">
                                 {product.free_shipping && <del className="grey">${priceFormat(SHIP_COST).int}</del>}
-                                {product.free_shipping
+                                {product.free_shipping && !flash_shipping
                                 ? <div className="cart-ship-total green">
                                     <Ship className='ship-svg' />
                                     <h3>Envío gratis!</h3>
                                 </div>
                                 : <div>
-                                    <h3>${priceFormat(SHIP_COST).int}</h3><p>{priceFormat(SHIP_COST).cents}</p>
+                                    <h3>${priceFormat(shippingCost()).int}</h3><p>{priceFormat(shippingCost()).cents}</p>
                                     </div> }
                             </div>
 

@@ -30,6 +30,7 @@ const orderSchema = new Schema(
         expiration_date_to: String,
         created_at: Number,
         payment_date: Number,
+        delivery_date: Number,
         total: Number,
         status: String,
         free_shipping: Boolean,

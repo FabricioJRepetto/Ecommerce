@@ -35,7 +35,8 @@ const create = async (req, res, next) => {
             line_items: items,
             shipping_options: [{
                 shipping_rate_data: {
-                    display_name: order.free_shipping ? 'con descuento' : 'normal',
+                    // order.free_shipping ? 'con descuento' : 'normal'
+                    display_name: order.flash_shipping ? `Flash${order.free_shipping ? ' & free shipping applied.' : ' shipping.'}` : order.free_shipping ? 'Free shipping.' : 'Standard shipping.',
                     type: 'fixed_amount',
                     fixed_amount: {
                         currency: 'ars',

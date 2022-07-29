@@ -122,6 +122,21 @@ const buyNowOrder = async (req, res, next) => {
         const p = await rawIdProductGetter(product_id);
         const total = quantity * (p.on_sale ? p.sale_price : p.price);
 
+        let shipping_cost = 0;
+        if (flash_shipping) {
+            if (p.free_shipping) {
+                shipping_cost = SHIP_COST / 2;
+            } else {
+                shipping_cost = SHIP_COST * 1.5;
+            }
+        } else {
+            if (p.free_shipping) {
+                shipping_cost = 0;
+            } else {
+                shipping_cost = SHIP_COST;
+            }
+        }
+
         const newOrder = new Order({
             products: {
                 product_name: p.name,
@@ -141,11 +156,11 @@ const buyNowOrder = async (req, res, next) => {
                 street_name,
                 street_number,
             },
-            flash_shipping,
             status: "pending",
             total,
+            flash_shipping,
             free_shipping: p.free_shipping,
-            shipping_cost: p.free_shipping ? 0 : SHIP_COST,
+            shipping_cost,
             order_type: "buynow",
         });
         await newOrder.save();
@@ -178,6 +193,7 @@ const updateOrder = async (req, res, next) => {
         const {
             product_id,
             quantity,
+            flash_shipping,
             state,
             city,
             zip_code,
@@ -186,13 +202,22 @@ const updateOrder = async (req, res, next) => {
         } = req.body;
 
         if (req.body.status) {
+            // cambiar estado a pagado y agregar fecha de pago y de entrega
             if (req.body.status === "approved") {
+                const flash = () => {
+                    // horas restantes hasta las 15hrs de mañana (flash_shipping true)
+                    let now = new Date(Date.now() - 10800000);
+                    let hours = (24 - now.getHours()) + 15
+                    return now + (hours * 3600000)
+                };
+
                 const order = await Order.findByIdAndUpdate(
                     req.params.id,
                     {
                         $set: {
                             status: req.body.status,
                             payment_date: Date.now() - 10800000,
+                            delivery_date: flash_shipping ? flash() : Date.now() + 248400000
                         },
                     },
                     { new: true }
@@ -254,6 +279,7 @@ const updateOrder = async (req, res, next) => {
                         street_name: street_name && street_name,
                         street_number: street_number && street_number,
                     },
+                    flash_shipping: flash_shipping || false,
                     products: p ? [pro] : [...cart.products],
                     total: p ? total : cart.total,
                     flashflash_shipping: cart.flash_shipping,

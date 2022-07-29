@@ -48,7 +48,8 @@ const PostSale = () => {
 
                 //? cambiar orden a pagada
                 const orderUpdt = await axios.put(`/order/${id}`,{
-                    status: 'approved'
+                    status: 'approved',
+                    flash_shipping: data.flash_shipping
                 });
                 console.log(orderUpdt.data.message);    
     

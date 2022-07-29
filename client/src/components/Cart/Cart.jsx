@@ -119,12 +119,19 @@ const Cart = () => {
         notification(data.message, '', 'success');
     }
 
+    const shippingMode = async (boolean) => { 
+        setflash_shipping(boolean);
+        const { data } = await axios.put('/cart/flash', {flash_shipping: boolean});
+        setCart(data.cart);
+        console.log(data.cart);
+    }
+
     const goCheckout = async () => {
         setLoadingPayment('S');
         let fastId = false;
         // actualiza o crea la order
         if (orderId) {
-            await axios.put(`/order/${orderId}`, selectedAdd);
+            await axios.put(`/order/${orderId}`, {...selectedAdd, flash_shipping});
         } else {
             const { data: id } = await axios.post(`/order/`, selectedAdd);
             fastId = id;
@@ -146,7 +153,7 @@ const Cart = () => {
         let fastId = false;
         // actualiza o crea la order
         if (orderId) {
-            await axios.put(`/order/${orderId}`, selectedAdd);
+            await axios.put(`/order/${orderId}`, {...selectedAdd, flash_shipping});
         } else {
             const { data: id } = await axios.post(`/order/`, selectedAdd);
             fastId = id;
@@ -171,13 +178,16 @@ const Cart = () => {
         await axios.post(`/cart/`, {product_id: id});
         //: delete
         navigate('/buyNow');
-   }
+   };
 
-   const shippingMode = async (boolean) => { 
-        setflash_shipping(boolean);
-        const { data } = await axios.put('/cart/flash', {flash_shipping: boolean});
-        setCart(data.cart);
-        console.log(data.cart);
+    const deliverDate = (flash = false) => {        
+        if (flash) {
+            return 'mañana.';
+        }
+        // 259200000 (3 dias)
+        const today = new Date(Date.now()+259200000).getDay();
+        let days = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'];
+        return ` el ${days[today]}.`;
     }
 
     return (
@@ -237,13 +247,13 @@ const Cart = () => {
 
                                 <div onClick={()=> shippingMode(true)} className={flash_shipping ? 'selected-shipping-mode' : ''}>
                                     <h3>flash shipping</h3>
-                                    <p>llega mañana</p>
+                                    <p>{`llega ${deliverDate(true)}`}</p>
                                     <input type="checkbox" readOnly checked={flash_shipping}/>
                                 </div>
 
                                 <div onClick={()=> shippingMode(false)} className={!flash_shipping ? 'selected-shipping-mode' : ''}>
                                     <h3>Envío standard</h3>
-                                    <p>llega INSERTAR DÍA</p>
+                                    <p>{`llega ${deliverDate()}`}</p>
                                     <input type="checkbox" readOnly checked={!flash_shipping} />
                                 </div>
                             </div>

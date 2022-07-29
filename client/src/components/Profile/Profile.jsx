@@ -3,17 +3,18 @@ import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useForm } from "react-hook-form";
-import { useAxios } from "../../hooks/useAxios";
 import { useModal } from "../../hooks/useModal";
 import Modal from "../common/Modal";
 import Signout from "../Session/Signout";
 import { resizer, avatarResizer } from "../../helpers/resizer";
-import { formatDate } from "../../helpers/formatDate";
 import { useNotification } from "../../hooks/useNotification";
 import Card from "../Products/Card";
 import MiniCard from "../Products/MiniCard";
 import { loadAvatar, loadFullName, loadUsername } from "../../Redux/reducer/sessionSlice";
 import "./Profile.css";
+import Orders from "./Orders";
+
+
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -81,9 +82,6 @@ const Profile = () => {
     }
     // eslint-disable-next-line
   }, [wl_id]);
-
-  //? ORDERS
-  const { data: orders, oLoading } = useAxios("GET", `/order/userall/`);
 
   //? ADDRESS
   const deleteAddress = async (id) => {
@@ -200,7 +198,7 @@ const Profile = () => {
             console.log(data);
         })
         .catch((err) => console.log(err)); //! VOLVER A VER manejo de errores
-    };
+    };    
 
     return (
         <div className="profile-container">
@@ -253,55 +251,7 @@ const Profile = () => {
                 )}
 
                 {render === "orders" && (
-                <div>
-                    <h2>Orders</h2>
-                    {!oLoading ? (
-                    <div className="profile-orders-container">
-                        {orders?.length ? (
-                        React.Children.toArray(
-                            orders?.map((e) => (
-                            <div className="profile-img-orders-container" key={e.id}>
-                                {e.products?.map((pic) => (
-                                <img
-                                    key={pic.img}
-                                    src={resizer(pic.img)}
-                                    alt={"product"}
-                                />
-                                ))}
-                                <p>{e.description}</p>
-                                <p>creation date: {formatDate(e.expiration_date_from)}</p>
-                                {e.status === 'pending' && `expiration: ${formatDate(e.expiration_date_to)}`}
-                                <p>- - -</p>
-                                <p>payment status: {e.status}</p>
-                                {e.status === 'approved' && <p>payment date: {formatDate(e.payment_date)}</p>}
-                                {e.status === 'pending' && e.payment_link && <div><a style={{ color: '#3483fa'}} href={e.payment_link}>Continue payment.</a></div>} 
-                                <p>{e.payment_source}</p>
-                                <p>order id: <i>{e.id}</i></p>
-                                <p>- - -</p>
-                                <p>
-                                shipping address:{" "}
-                                {`
-                                        ${e.shipping_address?.street_name} 
-                                        ${e.shipping_address?.street_number}, 
-                                        ${e.shipping_address?.city} 
-                                    `}
-                                </p>
-                                <p>free shipping: {e.free_shipping ? "Yes" : "No"}</p>
-                                <p>shipping cost: {e.shipping_cost}</p>
-                                <p>total payment: ${e.total}</p>
-                                <hr />
-                                <br />
-                            </div>
-                            ))
-                        )
-                        ) : (
-                        <p>No orders yet</p>
-                        )}
-                    </div>
-                    ) : (
-                    <p>LOADING</p>
-                    )}
-                </div>
+                    <Orders />
                 )}
 
                 {render === "address" && (
