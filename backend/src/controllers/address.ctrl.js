@@ -1,10 +1,8 @@
 const Address = require("../models/Address");
 const User = require("../models/user");
-//const setUserKey = require("../utils/setUserKey");
 
 const getAddress = async (req, res, next) => {
-    const { /* isGoogleUser,  */ _id } = req.user;
-    //const userKey = setUserKey(isGoogleUser);
+    const { _id } = req.user;
 
     try {
         const address = await Address.findOne({
@@ -19,12 +17,11 @@ const getAddress = async (req, res, next) => {
 };
 
 const addAddress = async (req, res, next) => {
-    const { /* isGoogleUser,  */ _id } = req.user;
-    //const userKey = setUserKey(isGoogleUser);
+    const { _id } = req.user;
 
     try {
         const addressFound = await Address.findOne({
-            user: _id,
+            'user': _id,
         });
 
         if (addressFound) {
@@ -61,26 +58,15 @@ const addAddress = async (req, res, next) => {
 };
 
 const updateAddress = async (req, res, next) => {
-    const { state, city, zip_code, street_name, street_number } = req.body;
-
-    const { /* isGoogleUser,  */ _id } = req.user;
-    //const userKey = setUserKey(isGoogleUser);
-
-    //! VOLVER A VER el edit address no funca, crea una address nueva
-
     try {
         const addressUpdated = await Address.findOneAndUpdate(
             {
-                user: _id,
+                'user': req.user._id,
                 "address._id": req.params.id,
             },
             {
                 $set: {
-                    "address.$.state": state,
-                    "address.$.city": city,
-                    "address.$.zip_code": zip_code,
-                    "address.$.street_name": street_name,
-                    "address.$.street_number": street_number,
+                    "address.$": req.body,
                 },
             },
             { new: true }
@@ -96,17 +82,16 @@ const updateAddress = async (req, res, next) => {
 };
 
 const removeAddress = async (req, res, next) => {
-    const { /* isGoogleUser,  */ _id } = req.user;
-    //const userKey = setUserKey(isGoogleUser);
+    const { _id } = req.user;
 
     try {
         const { address } = await Address.findOneAndUpdate(
             {
-                user: _id,
+                'user': _id,
             },
             {
                 $pull: {
-                    address: { _id: req.params.id },
+                    'address': { _id: req.params.id },
                 },
             },
             { new: true }
@@ -119,13 +104,12 @@ const removeAddress = async (req, res, next) => {
 };
 
 const setDefault = async (req, res, next) => {
-    const { /* isGoogleUser,  */ _id } = req.user;
-    //const userKey = setUserKey(isGoogleUser);
+    const { _id } = req.user;
 
     try {
         await Address.findOneAndUpdate(
             {
-                user: _id,
+                'user': _id,
                 "address.isDefault": true,
             },
             {
@@ -137,7 +121,7 @@ const setDefault = async (req, res, next) => {
         //! VOLVER A VER ¿por qué se hacen dos findOneAndUpdate?
         const { address } = await Address.findOneAndUpdate(
             {
-                user: _id,
+                'user': _id,
                 "address._id": req.params.id,
             },
             {
