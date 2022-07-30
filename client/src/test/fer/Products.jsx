@@ -242,6 +242,25 @@ const Products = () => {
     });
   };
 
+  useEffect(() => {
+    let discountApplied = "";
+    if (discount.number) {
+      if (discount.type === "percent") {
+        discountApplied =
+          productToDiscount.price -
+          (parseInt(discount.number) * productToDiscount.price) / 100;
+      } else {
+        discountApplied = productToDiscount.price - parseInt(discount.number);
+      }
+    }
+    setPriceOff(discountApplied); // eslint-disable-next-line
+  }, [discount]);
+
+  useEffect(() => {
+    discount && discount.type && setDiscount({ ...discount, number: "" });
+    // eslint-disable-next-line
+  }, [discount.type]);
+
   const addDiscount = () => {
     axios
       .put(`/admin/product/discount/${productToDiscount.prodId}`, discount)
@@ -426,27 +445,34 @@ const Products = () => {
           Fijo
         </label>
         {discount.type && (
-          <div>
-            <span>${`${productToDiscount && productToDiscount.price}`} - </span>
-            {discount.type === "percent" ? <span> % </span> : <span> $ </span>}
-            <input
-              type="text"
-              pattern="[0-9]*"
-              placeholder="Descuento"
-              value={discount.number}
-              onChange={handleAddDiscount}
-            />
-          </div>
+          <>
+            <div>
+              <span>
+                ${`${productToDiscount && productToDiscount.price}`} -{" "}
+              </span>
+              {discount.type === "percent" ? (
+                <span> % </span>
+              ) : (
+                <span> $ </span>
+              )}
+              <input
+                type="text"
+                pattern="[0-9]*"
+                placeholder="Descuento"
+                value={discount.number}
+                onChange={handleAddDiscount}
+              />
+            </div>
+            {priceOff && (
+              <>
+                <p>Precio final: ${`${priceOff}`}</p>
+                <button type="button" onClick={addDiscount}>
+                  Aceptar
+                </button>
+              </>
+            )}
+          </>
         )}
-        <p>
-          Precio con descuento: $
-          {`${
-            priceOff ? priceOff : productToDiscount && productToDiscount.price
-          }`}
-        </p>
-        <button type="button" onClick={addDiscount}>
-          Aceptar
-        </button>
         <button type="button" onClick={closeDiscountProduct}>
           Cancelar
         </button>

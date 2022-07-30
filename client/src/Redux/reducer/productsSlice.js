@@ -84,24 +84,23 @@ export const productsSlice = createSlice({
       state.productsOwn = state.productsOwn.map((prod) => {
         if (prod._id === prodId) {
           if (add) {
-            let discount;
+            let discount, sale_price;
 
             if (type === "percent") {
               discount = parseInt(number);
+              sale_price = prod.price - (parseInt(number) * prod.price) / 100;
             } else {
               discount = (parseInt(number) * 100) / prod.price;
+              sale_price = prod.price - parseInt(number);
             }
-
-            console.log("discount", discount);
 
             return {
               ...prod,
-              sale_price: prod.price - discount,
+              sale_price: Math.round(sale_price),
               on_sale: true,
-              discount,
+              discount: Math.round(discount),
             };
           } else {
-            console.log("entra");
             return {
               ...prod,
               on_sale: false,

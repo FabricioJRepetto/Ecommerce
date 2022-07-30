@@ -375,8 +375,6 @@ const setDiscount = async (req, res, next) => {
     const autoSales = await Sales.find();
     if (!autoSales) return res.status(404).json({ message: "Sales not found" });
 
-    console.log("----------autoSales", autoSales); //! VOLVER A VER ¿por qué sales e sun objeto dentro de un array?
-
     if (autoSales[0].products.includes(req.params.id))
       return res.status(401).json({
         message: "No puedes modificar el descuento de este producto",
