@@ -237,10 +237,12 @@ const createProduct = async (req, res, next) => {
 
     const { path_from_root } = data;
 
+    let brandLowerCase = brand.toLowerCase();
+
     const newProduct = new Product({
       name,
       price,
-      brand,
+      brand: brandLowerCase,
       main_features,
       attributes,
       description,
@@ -330,6 +332,7 @@ const updateProduct = async (req, res, next) => {
     );
 
     const { path_from_root } = data;
+    let brandLowerCase = brand.toLowerCase();
 
     const updatedProduct = await Product.findByIdAndUpdate(
       req.params.id,
@@ -337,7 +340,7 @@ const updateProduct = async (req, res, next) => {
         $set: {
           name,
           price,
-          brand,
+          brand: brandLowerCase,
           main_features,
           attributes,
           description,

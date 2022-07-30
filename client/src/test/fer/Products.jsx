@@ -68,10 +68,13 @@ const Products = () => {
     : (source = "productsFound");
 
   useEffect(() => {
+    productToSearch && productsFound.length === 0 && setProductToSearch("");
     if (productsFound[0] === null) {
       setBrandsCheckboxes([]);
     } else if (productsFound.length) {
       setBrands(productsFound);
+    } else {
+      setBrands(productsOwn);
     } // eslint-disable-next-line
   }, [productsFound.length]);
 
@@ -86,25 +89,54 @@ const Products = () => {
   };
 
   const setBrands = (products) => {
-    let brands = [];
     let brandsCheckbox = {};
+    let newBrands = [];
     for (const product of products) {
-      // brands => renderiza checkboxes
+      const brandCamelCase =
+        product.brand.charAt(0).toUpperCase() + product.brand.slice(1);
+      !newBrands.includes(brandCamelCase) && newBrands.push(brandCamelCase);
+    }
+    newBrands.sort();
+
+    if (
+      newBrands.length === brandsCheckboxes.length &&
+      newBrands.every((b, i) => b === brandsCheckboxes[i])
+    ) {
+      return;
+    }
+    for (const brand of newBrands) {
+      // brands => para cargar brandsCheckboxes
+      //      => renderiza checkboxes
       // brandsCheckbox => {BRAND: boolean}
       //      => para cargar BrandsFilter
       // brandsFilter => estado que maneja checkboxes
-      if (product.brand) {
-        const brandCamelCase =
-          product.brand.charAt(0).toUpperCase() + product.brand.slice(1);
-        !Object.keys(brandsCheckbox).includes(brandCamelCase) &&
-          brands.push(brandCamelCase);
-        brandsCheckbox[brandCamelCase] = false;
-      }
+      brandsCheckbox[brand] = false;
     }
     setBrandsFilter(brandsCheckbox);
-    brands.sort();
-    setBrandsCheckboxes(brands);
+    setBrandsCheckboxes(newBrands);
   };
+
+  /* const setBrands = (products) => {
+      let brands = [];
+      let brandsCheckbox = {};
+      for (const product of products) {
+        // brands => para cargar brandsCheckboxes
+      //      => renderiza checkboxes
+      // brandsCheckbox => {BRAND: boolean}
+      //      => para cargar BrandsFilter
+      // brandsFilter => estado que maneja checkboxes
+        if (product.brand) {
+          const brandCamelCase =
+            product.brand.charAt(0).toUpperCase() + product.brand.slice(1);
+          !Object.keys(brandsCheckbox).includes(brandCamelCase) &&
+            brands.push(brandCamelCase);
+          brandsCheckbox[brandCamelCase] = false;
+        }
+      }
+      setBrandsFilter(brandsCheckbox);
+      brands.sort();
+      setBrandsCheckboxes(brands);
+    }; */
 
   const filterPrices = (e) => {
     e.preventDefault();
