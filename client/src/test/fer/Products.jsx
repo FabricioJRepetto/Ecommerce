@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
@@ -7,6 +7,7 @@ import {
   filterProducts,
   searchProducts,
   deleteProductFromState,
+  applyDiscount,
 } from "../../Redux/reducer/productsSlice";
 import { useEffect } from "react";
 import Card from "../../components/Products/Card";
@@ -24,7 +25,6 @@ const Products = () => {
   const [loading, setLoading] = useState(true);
   const [brandsFilter, setBrandsFilter] = useState();
   const [brandsCheckboxes, setBrandsCheckboxes] = useState([]);
-  const brands = useRef();
   const dispatch = useDispatch();
   const {
     productsOwn,
@@ -39,6 +39,18 @@ const Products = () => {
     openDeleteProduct,
     closeDeleteProduct,
     productToDelete,
+  ] = useModal();
+  const [
+    isOpenDiscountProduct,
+    openDiscountProduct,
+    closeDiscountProduct,
+    productToDiscount,
+  ] = useModal();
+  const [
+    isOpenRemoveDiscount,
+    openRemoveDiscount,
+    closeRemoveDiscount,
+    productToRemoveDiscount,
   ] = useModal();
   const [notification] = useNotification();
 
@@ -190,6 +202,70 @@ const Products = () => {
     dispatch(searchProducts(e.target.value));
   };
 
+  const [discount, setDiscount] = useState({ type: "", number: "" });
+  const [priceOff, setPriceOff] = useState("");
+
+  const handleRadio = (e) => {
+    setDiscount({
+      ...discount,
+      type: e.target.value,
+    });
+  };
+
+  const handleAddDiscount = (e) => {
+    const { value, validity } = e.target;
+
+    let validatedValue;
+
+    if (discount.type === "percent") {
+      if (
+        (validity.valid && value === "") ||
+        (parseInt(value) > 0 && parseInt(value) < 100)
+      ) {
+        validatedValue = value;
+      } else {
+        validatedValue = discount.number;
+      }
+    } else {
+      if (
+        (validity.valid && value === "") ||
+        parseInt(productToDiscount.price) > parseInt(value)
+      ) {
+        validatedValue = value;
+      } else {
+        validatedValue = discount.number;
+      }
+    }
+    setDiscount({
+      ...discount,
+      number: validatedValue,
+    });
+  };
+
+  const addDiscount = () => {
+    axios
+      .put(`/admin/product/discount/${productToDiscount.prodId}`, discount)
+      .then(({ data }) => {
+        closeDiscountProduct();
+        dispatch(
+          applyDiscount({ add: true, ...productToDiscount, ...discount })
+        );
+        notification("Descuento aplicado exitosamente", "", "success");
+      })
+      .catch((error) => console.log(error)); //! VOLVER A VER manejo de errores
+  };
+
+  const removeDiscount = () => {
+    axios
+      .delete(`/admin/product/discount/${productToRemoveDiscount.prodId}`)
+      .then(({ data }) => {
+        closeRemoveDiscount();
+        dispatch(applyDiscount({ add: false, ...productToRemoveDiscount }));
+        notification("Descuento removido exitosamente", "", "success");
+      })
+      .catch((error) => console.log(error)); //! VOLVER A VER manejo de errores
+  };
+
   return (
     <div className="products-container">
       <div className="products-results-container">
@@ -212,6 +288,8 @@ const Products = () => {
                       productData={product}
                       fav={wishlist.includes(product._id)}
                       openDeleteProduct={openDeleteProduct}
+                      openDiscountProduct={openDiscountProduct}
+                      openRemoveDiscount={openRemoveDiscount}
                       outOfStock={product.available_quantity <= 0}
                     />
                   )
@@ -309,10 +387,82 @@ const Products = () => {
         <p>{`¿Eliminar el producto ${
           productToDelete ? productToDelete.name : null
         }?`}</p>
-        <button type="button" onClick={() => handleDeleteProduct()}>
+        <button type="button" onClick={handleDeleteProduct}>
           Aceptar
         </button>
         <button type="button" onClick={closeDeleteProduct}>
+          Cancelar
+        </button>
+      </Modal>
+      <Modal
+        isOpen={isOpenDiscountProduct}
+        closeModal={closeDiscountProduct}
+        type="warn"
+      >
+        <p>{`Aplicar descuento a ${
+          productToDiscount && productToDiscount.name
+        }`}</p>
+        <p>
+          Precio de lista: ${`${productToDiscount && productToDiscount.price}`}
+        </p>
+        <label>
+          <input
+            type="radio"
+            value="percent"
+            name="discount_type"
+            checked={discount.type === "percent"}
+            onChange={handleRadio}
+          />
+          Porcentaje
+        </label>
+        <label>
+          <input
+            type="radio"
+            value="fixed"
+            name="discount_type"
+            checked={discount.type === "fixed"}
+            onChange={handleRadio}
+          />
+          Fijo
+        </label>
+        {discount.type && (
+          <div>
+            <span>${`${productToDiscount && productToDiscount.price}`} - </span>
+            {discount.type === "percent" ? <span> % </span> : <span> $ </span>}
+            <input
+              type="text"
+              pattern="[0-9]*"
+              placeholder="Descuento"
+              value={discount.number}
+              onChange={handleAddDiscount}
+            />
+          </div>
+        )}
+        <p>
+          Precio con descuento: $
+          {`${
+            priceOff ? priceOff : productToDiscount && productToDiscount.price
+          }`}
+        </p>
+        <button type="button" onClick={addDiscount}>
+          Aceptar
+        </button>
+        <button type="button" onClick={closeDiscountProduct}>
+          Cancelar
+        </button>
+      </Modal>
+      <Modal
+        isOpen={isOpenRemoveDiscount}
+        closeModal={closeRemoveDiscount}
+        type="warn"
+      >
+        <p>{`¿Remover descuento de ${
+          productToRemoveDiscount ? productToRemoveDiscount.name : null
+        }?`}</p>
+        <button type="button" onClick={removeDiscount}>
+          Aceptar
+        </button>
+        <button type="button" onClick={closeRemoveDiscount}>
           Cancelar
         </button>
       </Modal>

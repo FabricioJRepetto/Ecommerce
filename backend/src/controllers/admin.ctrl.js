@@ -9,8 +9,7 @@ const Product = require("../models/product");
 const Address = require("../models/Address");
 const Order = require("../models/order");
 const Wishlist = require("../models/wishlist");
-const Sale = require("../models/Sales");
-//const setUserKey = require("../utils/setUserKey");
+const Sales = require("../models/Sales");
 const { rawIdProductGetter } = require("../utils/rawIdProductGetter");
 
 cloudinary.config({
@@ -276,8 +275,6 @@ const updateProduct = async (req, res, next) => {
     } = JSON.parse(req.body.data);
     let images = [...imgsToEdit];
 
-    console.log("-----------mainImgIndex", mainImgIndex);
-
     //: validar data antes de subir imagenes
     if (req.files) {
       let aux = [];
@@ -307,6 +304,8 @@ const updateProduct = async (req, res, next) => {
 
     //? actualizar lista de imagenes
     const productFound = await Product.findById(req.params.id);
+    if (!productFound)
+      return res.status(404).json({ message: "Product not found" });
     let deleteList = [];
     if (imgsToEdit.length === 0) {
       for (const img of productFound.images) {
@@ -353,6 +352,70 @@ const updateProduct = async (req, res, next) => {
     );
 
     res.json(updatedProduct);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const setDiscount = async (req, res, next) => {
+  const { type, number } = req.body;
+
+  if (!type) return res.status(400).json({ message: "Tipo no recibido" });
+  if (!number)
+    return res.status(400).json({ message: "Número de descuento no recibido" });
+  if (type !== "percent" && type !== "fixed") {
+    return res.status(400).json({ message: "Tipo de descuento no soportado" });
+  }
+
+  try {
+    const productFound = await Product.findById(req.params.id);
+    if (!productFound)
+      return res.status(404).json({ message: "Product not found" });
+
+    const autoSales = await Sales.find();
+    if (!autoSales) return res.status(404).json({ message: "Sales not found" });
+
+    console.log("----------autoSales", autoSales); //! VOLVER A VER ¿por qué sales e sun objeto dentro de un array?
+
+    if (autoSales[0].products.includes(req.params.id))
+      return res.status(401).json({
+        message: "No puedes modificar el descuento de este producto",
+      });
+
+    if (type === "percent") {
+      productFound.discount = parseInt(number);
+    } else {
+      const discount = (parseInt(number) * 100) / productFound.price;
+
+      productFound.discount = discount;
+    }
+
+    productFound.on_sale = true;
+    await productFound.save();
+    return res.json({ message: "Descuento aplicado con éxito" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const removeDiscount = async (req, res, next) => {
+  try {
+    const productFound = await Product.findById(req.params.id);
+    if (!productFound)
+      return res.status(404).json({ message: "Product not found" });
+
+    const autoSales = await Sales.find();
+    if (!autoSales) return res.status(404).json({ message: "Sales not found" });
+
+    if (autoSales[0].products.includes(req.params.id))
+      return res.status(401).json({
+        message: "No puedes remover el descuento de este producto",
+      });
+
+    productFound.discount = 0;
+    productFound.on_sale = false;
+    await productFound.save();
+    return res.json({ message: "Discount removed succesfully" });
   } catch (error) {
     next(error);
   }
@@ -440,6 +503,8 @@ module.exports = {
   deleteUser,
   createProduct,
   updateProduct,
+  setDiscount,
+  removeDiscount,
   deleteProduct,
   deleteAllProducts,
   getMetrics,

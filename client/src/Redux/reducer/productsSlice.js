@@ -77,6 +77,43 @@ export const productsSlice = createSlice({
       );
     },
 
+    applyDiscount: (state, action) => {
+      const { add, prodId, type, number } = action.payload;
+      console.log(action.payload);
+
+      state.productsOwn = state.productsOwn.map((prod) => {
+        if (prod._id === prodId) {
+          if (add) {
+            let discount;
+
+            if (type === "percent") {
+              discount = parseInt(number);
+            } else {
+              discount = (parseInt(number) * 100) / prod.price;
+            }
+
+            console.log("discount", discount);
+
+            return {
+              ...prod,
+              sale_price: prod.price - discount,
+              on_sale: true,
+              discount,
+            };
+          } else {
+            console.log("entra");
+            return {
+              ...prod,
+              on_sale: false,
+              discount: 0,
+            };
+          }
+        } else {
+          return prod;
+        }
+      });
+    },
+
     filterProducts: (state, action) => {
       /* action.payload = {
                 source: "productsOwn" || "productsFound" || "productsRandom",
@@ -185,6 +222,7 @@ export const {
   loadApplied,
   loadBreadCrumbs,
   deleteProductFromState,
+  applyDiscount,
   filterProducts,
   searchProducts,
   orderProducts,
