@@ -33,6 +33,7 @@ const filterFunction = (state, source, type, value, firstIteration) => {
 
 const deleteFunction = (state, source, _id) => {
   state[source] = state[source].filter((prod) => prod._id !== _id);
+  if (!state[source].length) state[source] = [null];
 };
 
 const discountFunction = (state, source, add, prodId, type, number) => {
