@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
@@ -6,14 +6,10 @@ import {
   loadProductsOwn,
   filterProducts,
   searchProducts,
-  deleteProductFromState,
-  applyDiscount,
 } from "../../Redux/reducer/productsSlice";
-import { useEffect } from "react";
 import Card from "../../components/Products/Card";
 import { useModal } from "../../hooks/useModal";
-import Modal from "../../components/common/Modal";
-import { useNotification } from "../../hooks/useNotification";
+import ModalAdminProducts from "./ModalAdminProducts";
 
 const Products = () => {
   const [pricesFilter, setPricesFilter] = useState({
@@ -52,7 +48,6 @@ const Products = () => {
     closeRemoveDiscount,
     productToRemoveDiscount,
   ] = useModal();
-  const [notification] = useNotification();
 
   useEffect(() => {
     getProducts();
@@ -162,21 +157,6 @@ const Products = () => {
     );
   };
 
-  const handleDeleteProduct = () => {
-    deleteProduct();
-    closeDeleteProduct();
-  };
-
-  const deleteProduct = () => {
-    axios
-      .delete(`/admin/product/${productToDelete.prodId}`)
-      .then((_) => {
-        dispatch(deleteProductFromState(productToDelete.prodId));
-        notification("Producto eliminado exitosamente", "", "success");
-      })
-      .catch((err) => console.log(err)); //! VOLVER A VER manejo de errores
-  };
-
   const handleClearPrices = () => {
     dispatch(
       filterProducts({
@@ -200,89 +180,6 @@ const Products = () => {
     );
     setProductToSearch(e.target.value);
     dispatch(searchProducts(e.target.value));
-  };
-
-  const [discount, setDiscount] = useState({ type: "", number: "" });
-  const [priceOff, setPriceOff] = useState("");
-
-  const handleRadio = (e) => {
-    setDiscount({
-      ...discount,
-      type: e.target.value,
-    });
-  };
-
-  const handleAddDiscount = (e) => {
-    const { value, validity } = e.target;
-
-    let validatedValue;
-
-    if (discount.type === "percent") {
-      if (
-        (validity.valid && value === "") ||
-        (parseInt(value) > 0 && parseInt(value) < 100)
-      ) {
-        validatedValue = value;
-      } else {
-        validatedValue = discount.number;
-      }
-    } else {
-      if (
-        (validity.valid && value === "") ||
-        parseInt(productToDiscount.price) > parseInt(value)
-      ) {
-        validatedValue = value;
-      } else {
-        validatedValue = discount.number;
-      }
-    }
-    setDiscount({
-      ...discount,
-      number: validatedValue,
-    });
-  };
-
-  useEffect(() => {
-    let discountApplied = "";
-    if (discount.number) {
-      if (discount.type === "percent") {
-        discountApplied =
-          productToDiscount.price -
-          (parseInt(discount.number) * productToDiscount.price) / 100;
-      } else {
-        discountApplied = productToDiscount.price - parseInt(discount.number);
-      }
-    }
-    setPriceOff(discountApplied); // eslint-disable-next-line
-  }, [discount]);
-
-  useEffect(() => {
-    discount && discount.type && setDiscount({ ...discount, number: "" });
-    // eslint-disable-next-line
-  }, [discount.type]);
-
-  const addDiscount = () => {
-    axios
-      .put(`/admin/product/discount/${productToDiscount.prodId}`, discount)
-      .then(({ data }) => {
-        closeDiscountProduct();
-        dispatch(
-          applyDiscount({ add: true, ...productToDiscount, ...discount })
-        );
-        notification("Descuento aplicado exitosamente", "", "success");
-      })
-      .catch((error) => console.log(error)); //! VOLVER A VER manejo de errores
-  };
-
-  const removeDiscount = () => {
-    axios
-      .delete(`/admin/product/discount/${productToRemoveDiscount.prodId}`)
-      .then(({ data }) => {
-        closeRemoveDiscount();
-        dispatch(applyDiscount({ add: false, ...productToRemoveDiscount }));
-        notification("Descuento removido exitosamente", "", "success");
-      })
-      .catch((error) => console.log(error)); //! VOLVER A VER manejo de errores
   };
 
   return (
@@ -397,101 +294,17 @@ const Products = () => {
           </>
         )}
       </div>
-
-      <Modal
-        isOpen={isOpenDeleteProduct}
-        closeModal={closeDeleteProduct}
-        type="warn"
-      >
-        <p>{`¿Eliminar el producto ${
-          productToDelete ? productToDelete.name : null
-        }?`}</p>
-        <button type="button" onClick={handleDeleteProduct}>
-          Aceptar
-        </button>
-        <button type="button" onClick={closeDeleteProduct}>
-          Cancelar
-        </button>
-      </Modal>
-      <Modal
-        isOpen={isOpenDiscountProduct}
-        closeModal={closeDiscountProduct}
-        type="warn"
-      >
-        <p>{`Aplicar descuento a ${
-          productToDiscount && productToDiscount.name
-        }`}</p>
-        <p>
-          Precio de lista: ${`${productToDiscount && productToDiscount.price}`}
-        </p>
-        <label>
-          <input
-            type="radio"
-            value="percent"
-            name="discount_type"
-            checked={discount.type === "percent"}
-            onChange={handleRadio}
-          />
-          Porcentaje
-        </label>
-        <label>
-          <input
-            type="radio"
-            value="fixed"
-            name="discount_type"
-            checked={discount.type === "fixed"}
-            onChange={handleRadio}
-          />
-          Fijo
-        </label>
-        {discount.type && (
-          <>
-            <div>
-              <span>
-                ${`${productToDiscount && productToDiscount.price}`} -{" "}
-              </span>
-              {discount.type === "percent" ? (
-                <span> % </span>
-              ) : (
-                <span> $ </span>
-              )}
-              <input
-                type="text"
-                pattern="[0-9]*"
-                placeholder="Descuento"
-                value={discount.number}
-                onChange={handleAddDiscount}
-              />
-            </div>
-            {priceOff && (
-              <>
-                <p>Precio final: ${`${priceOff}`}</p>
-                <button type="button" onClick={addDiscount}>
-                  Aceptar
-                </button>
-              </>
-            )}
-          </>
-        )}
-        <button type="button" onClick={closeDiscountProduct}>
-          Cancelar
-        </button>
-      </Modal>
-      <Modal
-        isOpen={isOpenRemoveDiscount}
-        closeModal={closeRemoveDiscount}
-        type="warn"
-      >
-        <p>{`¿Remover descuento de ${
-          productToRemoveDiscount ? productToRemoveDiscount.name : null
-        }?`}</p>
-        <button type="button" onClick={removeDiscount}>
-          Aceptar
-        </button>
-        <button type="button" onClick={closeRemoveDiscount}>
-          Cancelar
-        </button>
-      </Modal>
+      <ModalAdminProducts
+        isOpenDeleteProduct={isOpenDeleteProduct}
+        closeDeleteProduct={closeDeleteProduct}
+        isOpenDiscountProduct={isOpenDiscountProduct}
+        closeDiscountProduct={closeDiscountProduct}
+        isOpenRemoveDiscount={isOpenRemoveDiscount}
+        closeRemoveDiscount={closeRemoveDiscount}
+        productToDelete={productToDelete}
+        productToDiscount={productToDiscount}
+        productToRemoveDiscount={productToRemoveDiscount}
+      />
     </div>
   );
 };

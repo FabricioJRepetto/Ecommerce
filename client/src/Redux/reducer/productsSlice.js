@@ -31,6 +31,43 @@ const filterFunction = (state, source, type, value, firstIteration) => {
   }
 };
 
+const deleteFunction = (state, source, _id) => {
+  state[source] = state[source].filter((prod) => prod._id !== _id);
+};
+
+const discountFunction = (state, source, add, prodId, type, number) => {
+  state[source] = state[source].map((prod) => {
+    if (prod._id === prodId) {
+      if (add) {
+        let discount, sale_price;
+
+        if (type === "percent") {
+          discount = parseInt(number);
+          sale_price = prod.price - (parseInt(number) * prod.price) / 100;
+        } else {
+          discount = (parseInt(number) * 100) / prod.price;
+          sale_price = prod.price - parseInt(number);
+        }
+
+        return {
+          ...prod,
+          sale_price: Math.round(sale_price),
+          on_sale: true,
+          discount: Math.round(discount),
+        };
+      } else {
+        return {
+          ...prod,
+          on_sale: false,
+          discount: 0,
+        };
+      }
+    } else {
+      return prod;
+    }
+  });
+};
+
 export const productsSlice = createSlice({
   name: "products",
   initialState: {
@@ -50,67 +87,44 @@ export const productsSlice = createSlice({
     loadProductsOwn: (state, action) => {
       state.productsOwn = action.payload;
     },
-
     loadProductsFound: (state, action) => {
       state.productsFound = action.payload;
     },
-
     loadFilters: (state, action) => {
       state.productsFilters = action.payload;
     },
-
     loadApplied: (state, action) => {
       state.productsAppliedFilters = action.payload;
     },
-
     loadQuerys: (state, action) => {
       state.searchQuerys = action.payload;
     },
-
     loadBreadCrumbs: (state, action) => {
       state.breadCrumbs = action.payload;
     },
 
     deleteProductFromState: (state, action) => {
-      state.productsFound = state.productsFound.filter(
-        (prod) => prod._id !== action.payload
-      );
+      deleteFunction(state, "productsOwn", action.payload);
+
+      if (state.productsFiltered.length && state.productsFiltered[0] !== null) {
+        deleteFunction(state, "productsFiltered", action.payload);
+      }
+      if (state.productsFound.length && state.productsFound[0] !== null) {
+        deleteFunction(state, "productsFound", action.payload);
+      }
     },
 
     applyDiscount: (state, action) => {
       const { add, prodId, type, number } = action.payload;
-      console.log(action.payload);
 
-      state.productsOwn = state.productsOwn.map((prod) => {
-        if (prod._id === prodId) {
-          if (add) {
-            let discount, sale_price;
+      discountFunction(state, "productsOwn", add, prodId, type, number);
 
-            if (type === "percent") {
-              discount = parseInt(number);
-              sale_price = prod.price - (parseInt(number) * prod.price) / 100;
-            } else {
-              discount = (parseInt(number) * 100) / prod.price;
-              sale_price = prod.price - parseInt(number);
-            }
-
-            return {
-              ...prod,
-              sale_price: Math.round(sale_price),
-              on_sale: true,
-              discount: Math.round(discount),
-            };
-          } else {
-            return {
-              ...prod,
-              on_sale: false,
-              discount: 0,
-            };
-          }
-        } else {
-          return prod;
-        }
-      });
+      if (state.productsFiltered.length && state.productsFiltered[0] !== null) {
+        discountFunction(state, "productsFiltered", add, prodId, type, number);
+      }
+      if (state.productsFound.length && state.productsFound[0] !== null) {
+        discountFunction(state, "productsFound", add, prodId, type, number);
+      }
     },
 
     filterProducts: (state, action) => {
@@ -206,7 +220,6 @@ export const productsSlice = createSlice({
     loadProductDetails: (state, action) => {
       state.productDetails = action.payload;
     },
-
     loadIdProductToEdit: (state, action) => {
       state.idProductToEdit = action.payload;
     },
