@@ -72,8 +72,8 @@ const Products = () => {
       setBrandsCheckboxes([]);
     } else if (productsFound.length) {
       setBrands(productsFound);
-    }
-  }, [productsFound]);
+    } // eslint-disable-next-line
+  }, [productsFound.length]);
 
   const getProducts = () => {
     axios
