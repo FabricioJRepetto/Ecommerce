@@ -180,14 +180,13 @@ const Cart = () => {
         navigate('/buyNow');
    };
 
-    const deliverDate = (flash = false) => {        
-        if (flash) {
-            return 'mañana.';
-        }
-        // 259200000 (3 dias)
-        const today = new Date(Date.now()+259200000).getDay();
+    const deliverDate = () => {
+        // hasta las 15 de mañana + 172800000 (2 dias)
+        let now = new Date(Date.now() - 10800000);
+        let hours = (24 - now.getHours()) + 15;
+        const target = new Date(Date.now() + (hours * 3600000) + 172800000).getDay();
         let days = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'];
-        return ` el ${days[today]}.`;
+        return ` el ${days[target]}.`;
     }
 
     return (
@@ -247,7 +246,7 @@ const Cart = () => {
 
                                 <div onClick={()=> shippingMode(true)} className={flash_shipping ? 'selected-shipping-mode' : ''}>
                                     <h3>flash shipping</h3>
-                                    <p>{`llega ${deliverDate(true)}`}</p>
+                                    <p>{`llega mañana.}`}</p>
                                     <input type="checkbox" readOnly checked={flash_shipping}/>
                                 </div>
 

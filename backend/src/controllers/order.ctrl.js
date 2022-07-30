@@ -204,11 +204,15 @@ const updateOrder = async (req, res, next) => {
         if (req.body.status) {
             // cambiar estado a pagado y agregar fecha de pago y de entrega
             if (req.body.status === "approved") {
-                const flash = () => {
+                const flash = (flash) => {
                     // horas restantes hasta las 15hrs de mañana (flash_shipping true)
                     let now = new Date(Date.now() - 10800000);
-                    let hours = (24 - now.getHours()) + 15
-                    return Date.now() + (hours * 3600000)
+                    let hours = (24 - now.getHours()) + 15;
+                    if (flash) {
+                        return Date.now() + (hours * 3600000);
+                    } else {
+                        return Date.now() + (hours * 3600000) + 172800000;
+                    }
                 };
 
                 const order = await Order.findByIdAndUpdate(
@@ -217,7 +221,8 @@ const updateOrder = async (req, res, next) => {
                         $set: {
                             status: req.body.status,
                             payment_date: Date.now() - 10800000,
-                            delivery_date: flash_shipping ? flash() : Date.now() + 248400000
+                            delivery_date: flash_shipping ? flash(true) : flash(false),
+                            delivery_status: 'shipping'
                         },
                     },
                     { new: true }
