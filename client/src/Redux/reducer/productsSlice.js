@@ -108,8 +108,16 @@ export const productsSlice = createSlice({
       const { payload: _id } = action;
       deleteFunction(state, "productsOwn", _id);
 
-      if (state.productsFiltered.length && state.productsFiltered[0] !== null)
+      if (state.productsFiltered.length && state.productsFiltered[0] !== null) {
         deleteFunction(state, "productsFiltered", _id);
+        if (
+          state.productsOwnFiltersApplied.brand &&
+          state.productsFiltered[0] === null
+        ) {
+          state.productsFiltered = [];
+          delete state.productsOwnFiltersApplied.brand;
+        }
+      }
 
       if (state.productsFound.length && state.productsFound[0] !== null)
         deleteFunction(state, "productsFound", _id);

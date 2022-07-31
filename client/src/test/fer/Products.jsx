@@ -68,7 +68,7 @@ const Products = () => {
     : (source = "productsFound");
 
   useEffect(() => {
-    //productToSearch && productsFound.length === 0 && setProductToSearch("");
+    productToSearch && productsFound.length === 0 && setProductToSearch("");
     if (productsToShow[0] === null) {
       setBrandsCheckboxes([]);
     } else if (productsToShow.length) {
@@ -79,6 +79,12 @@ const Products = () => {
     productsOwnFiltersApplied.price,
     productToSearch,
   ]);
+
+  useEffect(() => {
+    if (!productsOwnFiltersApplied.brand) {
+      setBrands(productsToShow);
+    } // eslint-disable-next-line
+  }, [productsOwnFiltersApplied.brand]);
 
   const getProducts = () => {
     axios
@@ -180,7 +186,7 @@ const Products = () => {
     setPricesFilter({ min: "", max: "" });
   };
 
-  const handleSearch = (e) => {
+  const clearFilters = () => {
     handleClearPrices();
     setShippingFilter(false);
     dispatch(
@@ -190,6 +196,10 @@ const Products = () => {
         value: null,
       })
     );
+  };
+
+  const handleSearch = (e) => {
+    clearFilters();
     setProductToSearch(e.target.value);
     dispatch(searchProducts(e.target.value));
   };

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Modal from "../../components/common/Modal";
 import {
   deleteProductFromState,
@@ -22,6 +22,9 @@ const ModalAdminProducts = ({
   const [discount, setDiscount] = useState({ type: "", number: "" });
   const [priceOff, setPriceOff] = useState("");
   const dispatch = useDispatch();
+  const { productsFiltered, productsOwnFiltersApplied } = useSelector(
+    (state) => state.productsReducer
+  );
   const [notification] = useNotification();
 
   const deleteProduct = () => {
