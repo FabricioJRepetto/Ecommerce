@@ -1,0 +1,8 @@
+.sales-results {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.sales-results > * {
+    margin: 25px 10px;
+}
