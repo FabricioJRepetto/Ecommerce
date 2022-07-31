@@ -192,10 +192,16 @@ export const productsSlice = createSlice({
     },
 
     searchProducts: (state, action) => {
-      state.productsFound = state.productsOwn.filter((prod) =>
-        prod.name.toUpperCase().includes(action.payload.toUpperCase())
-      );
-      if (state.productsFound.length === 0) state.productsFound = [null];
+      if (!action.payload) {
+        state.productsFound = [];
+        state.productsFiltered = [];
+      } else {
+        state.productsFound = state.productsOwn.filter((prod) =>
+          prod.name.toUpperCase().includes(action.payload.toUpperCase())
+        );
+        state.productsFiltered = [];
+        if (state.productsFound.length === 0) state.productsFound = [null];
+      }
     },
 
     orderProducts: (state, action) => {
