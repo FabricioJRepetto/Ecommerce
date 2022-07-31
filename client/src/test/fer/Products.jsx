@@ -68,15 +68,17 @@ const Products = () => {
     : (source = "productsFound");
 
   useEffect(() => {
-    productToSearch && productsFound.length === 0 && setProductToSearch("");
-    if (productsFound[0] === null) {
+    //productToSearch && productsFound.length === 0 && setProductToSearch("");
+    if (productsToShow[0] === null) {
       setBrandsCheckboxes([]);
-    } else if (productsFound.length) {
-      setBrands(productsFound);
-    } else {
-      setBrands(productsOwn);
+    } else if (productsToShow.length) {
+      setBrands(productsToShow);
     } // eslint-disable-next-line
-  }, [productsFound.length]);
+  }, [
+    productsOwnFiltersApplied.free_shipping,
+    productsOwnFiltersApplied.price,
+    productToSearch,
+  ]);
 
   const getProducts = () => {
     axios
@@ -91,6 +93,11 @@ const Products = () => {
   const setBrands = (products) => {
     let brandsCheckbox = {};
     let newBrands = [];
+    // newBrands => para cargar brandsCheckboxes
+    //      => renderiza checkboxes
+    // brandsCheckbox => {BRAND: boolean}
+    //      => para cargar brandsFilter
+    // brandsFilter => estado que maneja checkboxes
     for (const product of products) {
       const brandCamelCase =
         product.brand.charAt(0).toUpperCase() + product.brand.slice(1);
@@ -105,38 +112,11 @@ const Products = () => {
       return;
     }
     for (const brand of newBrands) {
-      // brands => para cargar brandsCheckboxes
-      //      => renderiza checkboxes
-      // brandsCheckbox => {BRAND: boolean}
-      //      => para cargar BrandsFilter
-      // brandsFilter => estado que maneja checkboxes
       brandsCheckbox[brand] = false;
     }
     setBrandsFilter(brandsCheckbox);
     setBrandsCheckboxes(newBrands);
   };
-
-  /* const setBrands = (products) => {
-      let brands = [];
-      let brandsCheckbox = {};
-      for (const product of products) {
-        // brands => para cargar brandsCheckboxes
-      //      => renderiza checkboxes
-      // brandsCheckbox => {BRAND: boolean}
-      //      => para cargar BrandsFilter
-      // brandsFilter => estado que maneja checkboxes
-        if (product.brand) {
-          const brandCamelCase =
-            product.brand.charAt(0).toUpperCase() + product.brand.slice(1);
-          !Object.keys(brandsCheckbox).includes(brandCamelCase) &&
-            brands.push(brandCamelCase);
-          brandsCheckbox[brandCamelCase] = false;
-        }
-      }
-      setBrandsFilter(brandsCheckbox);
-      brands.sort();
-      setBrandsCheckboxes(brands);
-    }; */
 
   const filterPrices = (e) => {
     e.preventDefault();

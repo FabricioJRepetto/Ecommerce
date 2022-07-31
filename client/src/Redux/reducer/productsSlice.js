@@ -105,14 +105,14 @@ export const productsSlice = createSlice({
     },
 
     deleteProductFromState: (state, action) => {
-      deleteFunction(state, "productsOwn", action.payload);
+      const { payload: _id } = action;
+      deleteFunction(state, "productsOwn", _id);
 
-      if (state.productsFiltered.length && state.productsFiltered[0] !== null) {
-        deleteFunction(state, "productsFiltered", action.payload);
-      }
-      if (state.productsFound.length && state.productsFound[0] !== null) {
-        deleteFunction(state, "productsFound", action.payload);
-      }
+      if (state.productsFiltered.length && state.productsFiltered[0] !== null)
+        deleteFunction(state, "productsFiltered", _id);
+
+      if (state.productsFound.length && state.productsFound[0] !== null)
+        deleteFunction(state, "productsFound", _id);
     },
 
     applyDiscount: (state, action) => {
@@ -120,12 +120,11 @@ export const productsSlice = createSlice({
 
       discountFunction(state, "productsOwn", add, prodId, type, number);
 
-      if (state.productsFiltered.length && state.productsFiltered[0] !== null) {
+      if (state.productsFiltered.length && state.productsFiltered[0] !== null)
         discountFunction(state, "productsFiltered", add, prodId, type, number);
-      }
-      if (state.productsFound.length && state.productsFound[0] !== null) {
+
+      if (state.productsFound.length && state.productsFound[0] !== null)
         discountFunction(state, "productsFound", add, prodId, type, number);
-      }
     },
 
     filterProducts: (state, action) => {
