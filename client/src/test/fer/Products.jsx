@@ -1,18 +1,15 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
-
 import {
+  loadProductsOwn,
   filterProducts,
-  loadProductsFound,
-  deleteProductFromState,
+  searchProducts,
 } from "../../Redux/reducer/productsSlice";
-import { useEffect } from "react";
 import Card from "../../components/Products/Card";
 import { useModal } from "../../hooks/useModal";
-import Modal from "../../components/common/Modal";
-import { useNotification } from "../../hooks/useNotification";
+import ModalAdminProducts from "./ModalAdminProducts";
 
 const Products = () => {
   const [pricesFilter, setPricesFilter] = useState({
@@ -20,13 +17,17 @@ const Products = () => {
     max: "",
   });
   const [shippingFilter, setShippingFilter] = useState(false);
-  const [brandsFilter, setBrandsFilter] = useState();
+  const [productToSearch, setProductToSearch] = useState("");
   const [loading, setLoading] = useState(true);
-  const brands = useRef();
+  const [brandsFilter, setBrandsFilter] = useState();
+  const [brandsCheckboxes, setBrandsCheckboxes] = useState([]);
   const dispatch = useDispatch();
-  const { productsFound, productsFiltered } = useSelector(
-    (state) => state.productsReducer
-  );
+  const {
+    productsOwn,
+    productsFound,
+    productsFiltered,
+    productsOwnFiltersApplied,
+  } = useSelector((state) => state.productsReducer);
   const { wishlist } = useSelector((state) => state.cartReducer);
   const location = useLocation();
   const [
@@ -35,7 +36,18 @@ const Products = () => {
     closeDeleteProduct,
     productToDelete,
   ] = useModal();
-  const [notification] = useNotification();
+  const [
+    isOpenDiscountProduct,
+    openDiscountProduct,
+    closeDiscountProduct,
+    productToDiscount,
+  ] = useModal();
+  const [
+    isOpenRemoveDiscount,
+    openRemoveDiscount,
+    closeRemoveDiscount,
+    productToRemoveDiscount,
+  ] = useModal();
 
   useEffect(() => {
     getProducts();
@@ -44,53 +56,80 @@ const Products = () => {
   }, []);
 
   let productsToShow;
-  productsFiltered.length === 0
+  productsFound.length === 0 && productsFiltered.length === 0
+    ? (productsToShow = productsOwn)
+    : productsFiltered.length === 0
     ? (productsToShow = productsFound)
     : (productsToShow = productsFiltered);
 
-  /* let productsToShow;
-      productsFiltered.length === 0
-        ? location.pathname === "/admin/products"
-          ? (productsToShow = productsOwn)
-          : (productsToShow = productsFound)
-        : (productsToShow = productsFiltered); */
+  let source;
+  productsFound.length === 0
+    ? (source = "productsOwn")
+    : (source = "productsFound");
+
+  useEffect(() => {
+    //productToSearch && productsFound.length === 0 && setProductToSearch("");
+    if (productsToShow[0] === null) {
+      setBrandsCheckboxes([]);
+    } else if (productsToShow.length) {
+      setBrands(productsToShow);
+    } // eslint-disable-next-line
+  }, [
+    productsOwnFiltersApplied.free_shipping,
+    productsOwnFiltersApplied.price,
+    productToSearch,
+  ]);
 
   const getProducts = () => {
     axios
       .get("/product")
-      .then((res) => {
-        dispatch(loadProductsFound(res.data));
-        brands.current = [];
-        let brandsCheckbox = {};
-        for (const product of res.data) {
-          // brands.current => renderiza checkboxes
-          // brandsCheckbox => {BRAND: boolean}
-          //      => para cargar BrandsFilter
-          // brandsFilter => estado que maneja checkboxes
-          if (product.brand) {
-            const brandCamelCase =
-              product.brand.charAt(0).toUpperCase() + product.brand.slice(1);
-            !Object.keys(brandsCheckbox).includes(brandCamelCase) &&
-              brands.current.push(brandCamelCase);
-            brandsCheckbox[brandCamelCase] = false;
-          }
-        }
-        setBrandsFilter(brandsCheckbox);
-        brands.current.sort();
+      .then(({ data }) => {
+        dispatch(loadProductsOwn(data));
+        setBrands(data);
       })
       .catch((err) => console.log(err)); //! VOLVER A VER manejo de errores
   };
 
+  const setBrands = (products) => {
+    let brandsCheckbox = {};
+    let newBrands = [];
+    // newBrands => para cargar brandsCheckboxes
+    //      => renderiza checkboxes
+    // brandsCheckbox => {BRAND: boolean}
+    //      => para cargar brandsFilter
+    // brandsFilter => estado que maneja checkboxes
+    for (const product of products) {
+      const brandCamelCase =
+        product.brand.charAt(0).toUpperCase() + product.brand.slice(1);
+      !newBrands.includes(brandCamelCase) && newBrands.push(brandCamelCase);
+    }
+    newBrands.sort();
+
+    if (
+      newBrands.length === brandsCheckboxes.length &&
+      newBrands.every((b, i) => b === brandsCheckboxes[i])
+    ) {
+      return;
+    }
+    for (const brand of newBrands) {
+      brandsCheckbox[brand] = false;
+    }
+    setBrandsFilter(brandsCheckbox);
+    setBrandsCheckboxes(newBrands);
+  };
+
   const filterPrices = (e) => {
     e.preventDefault();
-
-    dispatch(
-      filterProducts({
-        source: "productsFound",
-        type: "price",
-        value: `${pricesFilter.min}-${pricesFilter.max}`,
-      })
-    );
+    pricesFilter.min !== "" &&
+      pricesFilter.max !== "" &&
+      parseInt(pricesFilter.min) < parseInt(pricesFilter.max) &&
+      dispatch(
+        filterProducts({
+          source,
+          type: "price",
+          value: `${pricesFilter.min}-${pricesFilter.max}`,
+        })
+      );
   };
 
   const handlePrices = ({ target }) => {
@@ -108,7 +147,7 @@ const Products = () => {
     setShippingFilter(!shippingFilter);
     dispatch(
       filterProducts({
-        source: "productsFound",
+        source,
         type: "free_shipping",
         value: !shippingFilter,
       })
@@ -123,32 +162,17 @@ const Products = () => {
 
     dispatch(
       filterProducts({
-        source: "productsFound",
+        source,
         type: "brand",
         value: [target.name, !brandsFilter[target.name]],
       })
     );
   };
 
-  const handleDeleteProduct = () => {
-    deleteProduct();
-    closeDeleteProduct();
-  };
-
-  const deleteProduct = () => {
-    axios
-      .delete(`/admin/product/${productToDelete.prodId}`)
-      .then((_) => {
-        dispatch(deleteProductFromState(productToDelete.prodId));
-        notification("Producto eliminado exitosamente", "", "success");
-      })
-      .catch((err) => console.log(err)); //! VOLVER A VER manejo de errores
-  };
-
   const handleClearPrices = () => {
     dispatch(
       filterProducts({
-        source: "productsFound",
+        source,
         type: "price",
         value: null,
       })
@@ -156,9 +180,29 @@ const Products = () => {
     setPricesFilter({ min: "", max: "" });
   };
 
+  const handleSearch = (e) => {
+    handleClearPrices();
+    setShippingFilter(false);
+    dispatch(
+      filterProducts({
+        source,
+        type: "free_shipping",
+        value: null,
+      })
+    );
+    setProductToSearch(e.target.value);
+    dispatch(searchProducts(e.target.value));
+  };
+
   return (
     <div className="products-container">
       <div className="products-results-container">
+        <input
+          type="text"
+          placeholder="Buscar por nombre"
+          onChange={handleSearch}
+          value={productToSearch}
+        />
         {productsToShow[0] === null ? (
           <h1>NO HUBIERON COINCIDENCIAS</h1>
         ) : (
@@ -172,6 +216,8 @@ const Products = () => {
                       productData={product}
                       fav={wishlist.includes(product._id)}
                       openDeleteProduct={openDeleteProduct}
+                      openDiscountProduct={openDiscountProduct}
+                      openRemoveDiscount={openRemoveDiscount}
                       outOfStock={product.available_quantity <= 0}
                     />
                   )
@@ -183,87 +229,94 @@ const Products = () => {
       {pricesFilter.min && pricesFilter.max && <></>}
 
       <div className="products-filters">
-        <h3>BRANDS</h3>
-        <div className="filter-brand-checkbox-container">
-          {loading ? (
-            <h1>CARGANDO</h1>
-          ) : (
-            brandsFilter &&
-            Object.keys(brandsFilter).length > 0 &&
-            React.Children.toArray(
-              brands.current?.map((brand) => (
-                <label>
-                  <input
-                    type="checkbox"
-                    name={brand}
-                    checked={brandsFilter[brand]}
-                    onChange={handleBrands}
-                  />
-                  {brand}
-                </label>
-              ))
-            )
-          )}
-          <br />
-          <hr />
-          <br />
-        </div>
-
-        <h3>PRICES</h3>
-        <>
-          <form onSubmit={filterPrices}>
-            <div>
-              <input
-                type="text"
-                pattern="[0-9]*"
-                placeholder="min"
-                name="min"
-                onChange={handlePrices}
-                value={pricesFilter.min}
-              />
+        {productsFound[0] === null ? (
+          <></>
+        ) : (
+          <>
+            <h3>MARCAS</h3>
+            <div className="filter-brand-checkbox-container">
+              {loading ? (
+                <h1>CARGANDO</h1>
+              ) : (
+                brandsFilter &&
+                Object.keys(brandsFilter).length > 0 &&
+                React.Children.toArray(
+                  brandsCheckboxes?.map((brand) => (
+                    <label>
+                      <input
+                        type="checkbox"
+                        name={brand}
+                        checked={brandsFilter[brand]}
+                        onChange={handleBrands}
+                      />
+                      {brand}
+                    </label>
+                  ))
+                )
+              )}
+              <br />
+              <hr />
+              <br />
             </div>
-            <div>
-              <input
-                type="text"
-                pattern="[0-9]*"
-                placeholder="max"
-                name="max"
-                onChange={handlePrices}
-                value={pricesFilter.max}
-              />
-            </div>
-            <input type="submit" value="filter" />
-          </form>
-          <button onClick={handleClearPrices}>clear</button>
-        </>
 
-        <br />
-        <label>
-          <input
-            type="checkbox"
-            name="free_shipping"
-            checked={shippingFilter}
-            onChange={filterShipping}
-          />
-          Envío gratis
-        </label>
+            <h3>RANGO DE PRECIOS</h3>
+            <>
+              {productsOwnFiltersApplied.price ? (
+                <>
+                  <h4>{productsOwnFiltersApplied.price}</h4>
+                  <button onClick={handleClearPrices}>limpiar</button>
+                </>
+              ) : (
+                <form onSubmit={filterPrices}>
+                  <div>
+                    <input
+                      type="text"
+                      pattern="[0-9]*"
+                      placeholder="min"
+                      name="min"
+                      onChange={handlePrices}
+                      value={pricesFilter.min}
+                    />
+                  </div>
+                  <div>
+                    <input
+                      type="text"
+                      pattern="[0-9]*"
+                      placeholder="max"
+                      name="max"
+                      onChange={handlePrices}
+                      value={pricesFilter.max}
+                    />
+                  </div>
+                  <input type="submit" value="filter" />
+                </form>
+              )}
+            </>
+
+            <br />
+            <label>
+              <input
+                type="checkbox"
+                name="free_shipping"
+                checked={shippingFilter}
+                onChange={filterShipping}
+              />
+              Envío gratis
+            </label>
+          </>
+        )}
       </div>
-
-      <Modal
-        isOpen={isOpenDeleteProduct}
-        closeModal={closeDeleteProduct}
-        type="warn"
-      >
-        <p>{`¿Eliminar el producto ${
-          productToDelete ? productToDelete.name : null
-        }?`}</p>
-        <button type="button" onClick={() => handleDeleteProduct()}>
-          Aceptar
-        </button>
-        <button type="button" onClick={closeDeleteProduct}>
-          Cancelar
-        </button>
-      </Modal>
+      <ModalAdminProducts
+        isOpenDeleteProduct={isOpenDeleteProduct}
+        closeDeleteProduct={closeDeleteProduct}
+        isOpenDiscountProduct={isOpenDiscountProduct}
+        closeDiscountProduct={closeDiscountProduct}
+        isOpenRemoveDiscount={isOpenRemoveDiscount}
+        closeRemoveDiscount={closeRemoveDiscount}
+        productToDelete={productToDelete}
+        productToDiscount={productToDiscount}
+        productToRemoveDiscount={productToRemoveDiscount}
+      />
     </div>
   );
 };
