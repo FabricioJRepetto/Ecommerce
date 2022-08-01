@@ -20,13 +20,53 @@ const filterFunction = (state, source, type, value, firstIteration) => {
     );
   } else if (type === "brand") {
     state.productsFiltered = productsToFilter.filter((product) =>
-      state.filtersApplied.brand.includes(product.brand.toUpperCase())
+      state.productsOwnFiltersApplied.brand.includes(
+        product.brand.toUpperCase()
+      )
     );
   } else {
     state.productsFiltered = productsToFilter.filter(
       (product) => product[type] === value
     );
   }
+};
+
+const deleteFunction = (state, source, _id) => {
+  state[source] = state[source].filter((prod) => prod._id !== _id);
+  if (!state[source].length) state[source] = [null];
+};
+
+const discountFunction = (state, source, add, prodId, type, number) => {
+  state[source] = state[source].map((prod) => {
+    if (prod._id === prodId) {
+      if (add) {
+        let discount, sale_price;
+
+        if (type === "percent") {
+          discount = parseInt(number);
+          sale_price = prod.price - (parseInt(number) * prod.price) / 100;
+        } else {
+          discount = (parseInt(number) * 100) / prod.price;
+          sale_price = prod.price - parseInt(number);
+        }
+
+        return {
+          ...prod,
+          sale_price: Math.round(sale_price),
+          on_sale: true,
+          discount: Math.round(discount),
+        };
+      } else {
+        return {
+          ...prod,
+          on_sale: false,
+          discount: 0,
+        };
+      }
+    } else {
+      return prod;
+    }
+  });
 };
 
 export const productsSlice = createSlice({
@@ -39,7 +79,7 @@ export const productsSlice = createSlice({
     productsAppliedFilters: [],
     breadCrumbs: [],
     searchQuerys: {},
-    filtersApplied: {},
+    productsOwnFiltersApplied: {},
     productsFiltered: [],
     productDetails: {},
     idProductToEdit: null,
@@ -48,31 +88,43 @@ export const productsSlice = createSlice({
     loadProductsOwn: (state, action) => {
       state.productsOwn = action.payload;
     },
-
     loadProductsFound: (state, action) => {
       state.productsFound = action.payload;
     },
-
     loadFilters: (state, action) => {
       state.productsFilters = action.payload;
     },
-
     loadApplied: (state, action) => {
       state.productsAppliedFilters = action.payload;
     },
-
     loadQuerys: (state, action) => {
       state.searchQuerys = action.payload;
     },
-
     loadBreadCrumbs: (state, action) => {
       state.breadCrumbs = action.payload;
     },
 
     deleteProductFromState: (state, action) => {
-      state.productsFound = state.productsFound.filter(
-        (prod) => prod._id !== action.payload
-      );
+      const { payload: _id } = action;
+      deleteFunction(state, "productsOwn", _id);
+
+      if (state.productsFiltered.length && state.productsFiltered[0] !== null)
+        deleteFunction(state, "productsFiltered", _id);
+
+      if (state.productsFound.length && state.productsFound[0] !== null)
+        deleteFunction(state, "productsFound", _id);
+    },
+
+    applyDiscount: (state, action) => {
+      const { add, prodId, type, number } = action.payload;
+
+      discountFunction(state, "productsOwn", add, prodId, type, number);
+
+      if (state.productsFiltered.length && state.productsFiltered[0] !== null)
+        discountFunction(state, "productsFiltered", add, prodId, type, number);
+
+      if (state.productsFound.length && state.productsFound[0] !== null)
+        discountFunction(state, "productsFound", add, prodId, type, number);
     },
 
     filterProducts: (state, action) => {
@@ -82,57 +134,73 @@ export const productsSlice = createSlice({
                 value [STRING, BOOLEAN] ||     BOOLEAN     || STRING => min-max || null
              } */
       const { source, type, value } = action.payload;
-      /* filtersApplied = {
+      /* productsOwnFiltersApplied = {
                 brand: [STRING],
                 free_shipping: BOOLEAN,
                 price: STRING => min-max
              } */
 
       if (value === null || value === false) {
-        delete state.filtersApplied[type];
+        delete state.productsOwnFiltersApplied[type];
       } else {
         if (type === "brand") {
           if (value[1]) {
-            state.filtersApplied = {
-              ...state.filtersApplied,
-              brand: state.filtersApplied.brand
-                ? [...state.filtersApplied.brand, value[0].toUpperCase()]
+            state.productsOwnFiltersApplied = {
+              ...state.productsOwnFiltersApplied,
+              brand: state.productsOwnFiltersApplied.brand
+                ? [
+                    ...state.productsOwnFiltersApplied.brand,
+                    value[0].toUpperCase(),
+                  ]
                 : [value[0].toUpperCase()],
             };
           } else {
-            state.filtersApplied = {
-              ...state.filtersApplied,
-              brand: state.filtersApplied.brand.filter(
+            state.productsOwnFiltersApplied = {
+              ...state.productsOwnFiltersApplied,
+              brand: state.productsOwnFiltersApplied.brand.filter(
                 (brand) => brand.toUpperCase() !== value[0].toUpperCase()
               ),
             };
-            if (state.filtersApplied.brand.length === 0)
-              delete state.filtersApplied.brand;
+            if (state.productsOwnFiltersApplied.brand.length === 0)
+              delete state.productsOwnFiltersApplied.brand;
           }
         } else {
-          state.filtersApplied = {
-            ...state.filtersApplied,
+          state.productsOwnFiltersApplied = {
+            ...state.productsOwnFiltersApplied,
             [type]: value,
           };
         }
       }
 
-      if (Object.keys(state.filtersApplied).length === 0) {
+      if (Object.keys(state.productsOwnFiltersApplied).length === 0) {
         state.productsFiltered = [];
       } else {
         let firstIteration = true;
-        for (const filterApplied in state.filtersApplied) {
+        for (const filterApplied in state.productsOwnFiltersApplied) {
           filterFunction(
             state,
             source,
             filterApplied,
-            state.filtersApplied[filterApplied],
+            state.productsOwnFiltersApplied[filterApplied],
             firstIteration
           );
           firstIteration = false;
         }
         if (state.productsFiltered.length === 0)
           state.productsFiltered = [null];
+      }
+    },
+
+    searchProducts: (state, action) => {
+      if (!action.payload) {
+        state.productsFound = [];
+        state.productsFiltered = [];
+      } else {
+        state.productsFound = state.productsOwn.filter((prod) =>
+          prod.name.toUpperCase().includes(action.payload.toUpperCase())
+        );
+        state.productsFiltered = [];
+        if (state.productsFound.length === 0) state.productsFound = [null];
       }
     },
 
@@ -158,7 +226,6 @@ export const productsSlice = createSlice({
     loadProductDetails: (state, action) => {
       state.productDetails = action.payload;
     },
-
     loadIdProductToEdit: (state, action) => {
       state.idProductToEdit = action.payload;
     },
@@ -173,7 +240,9 @@ export const {
   loadApplied,
   loadBreadCrumbs,
   deleteProductFromState,
+  applyDiscount,
   filterProducts,
+  searchProducts,
   orderProducts,
   loadProductDetails,
   loadIdProductToEdit,

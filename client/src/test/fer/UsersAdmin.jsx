@@ -55,12 +55,14 @@ const UsersAdmin = () => {
   return (
     <div>
       <div>
-        <input
-          type="text"
-          placeholder="Buscar por nombre"
-          value={nameSearch}
-          onChange={handleNameSearch}
-        />
+        {location.pathname === "/admin/users" && (
+          <input
+            type="text"
+            placeholder="Buscar por nombre"
+            value={nameSearch}
+            onChange={handleNameSearch}
+          />
+        )}
         {usersToShow && usersToShow[0] === null ? (
           <h4>No hubieron coincidencias</h4>
         ) : (

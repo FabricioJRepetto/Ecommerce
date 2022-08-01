@@ -1,5 +1,5 @@
 const app = require("./src/app.js");
-const PORT = 4000;
+const PORT = process.env.PORT || 4000;
 const { salesChecker, flashSales } = require('./src/jobs/salesMaker');
 const { deliveryGuy, deliveryUpdater } = require('./src/jobs/deliveryGuy');
 
