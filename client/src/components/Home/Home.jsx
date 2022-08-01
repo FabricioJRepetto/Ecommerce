@@ -91,7 +91,7 @@ const Home = () => {
           <Five className={"svg"} />
           <p>Videogames</p>
         </div>
-        <div onClick={()=> console.log('mostrar ofertas y que lo filtre su vieja')}>
+        <div onClick={()=> navigate('/sales')}>
           <Six className={"svg"} />
           <p>Ofertas</p>
         </div>

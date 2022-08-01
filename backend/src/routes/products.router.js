@@ -10,8 +10,8 @@ const {
 
 router.get("/", getAll);
 router.get("/search", getByQuery);
-router.get("/:id", getById);
 router.put("/stock/", stock);
 router.get("/promos", getPromos);
+router.get("/:id", getById);
 
 module.exports = router;

@@ -25,7 +25,7 @@ const Results = () => {
     const {productsFilters} = useSelector((state) => state.productsReducer);
     const {breadCrumbs} = useSelector((state) => state.productsReducer);
     
-    const [open, setOpen] = useState('')
+    const [open, setOpen] = useState('category');
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -37,6 +37,7 @@ const Results = () => {
 
             const { data } = await axios(`/product/search/?${newQuery}`)
             // const { data } = await axios(`/product/promos`)
+            console.log(data.filters);
             
             dispatch(loadProductsOwn(data.db));
             dispatch(loadProductsFound(data.meli));
@@ -64,12 +65,15 @@ const Results = () => {
         <div className='results-container'>
 
             <div className='bread-crumbs'>
-                {breadCrumbs?.length > 0 &&
-                    React.Children.toArray(
+                {breadCrumbs?.length > 0 && 
+                    <>
+                    <button onClick={()=> removeFilter('category')}>x</button>
+                    {React.Children.toArray(
                         breadCrumbs.map((c, index) => (
                             <span key={c.id} onClick={ () => addFilter({filter: 'category', value: c.id})}>{ (index > 0 ? ' > ' : '') + c.name }</span>
                         ))
-                    )
+                    )}
+                    </>
                 }
             </div>
 
