@@ -148,6 +148,25 @@ const ProductForm = () => {
   };
 
   useEffect(() => {
+    //! VOLVER A VER eliminar hasta linea 169
+    setValue("brand", "1marcaa");
+    setCategoryPath([
+      {
+        _id: "62e58e4177ee611ae1369fe6",
+        id: "MLA5725",
+        name: "Accesorios para Vehículos",
+      },
+      {
+        _id: "62e58e4177ee611ae1369fe7",
+        id: "MLA4711",
+        name: "Acc. para Motos y Cuatriciclos",
+      },
+      {
+        _id: "62e58e4177ee611ae1369fe8",
+        id: "MLA86379",
+        name: "Alarmas para Motos",
+      },
+    ]);
     if (idProductToEdit) {
       axios(`/product/${idProductToEdit}`)
         .then(({ data }) => {
