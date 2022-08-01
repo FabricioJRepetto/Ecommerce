@@ -1,6 +1,5 @@
 require('dotenv').config();
 const { STRIPE_SKEY } = process.env;
-const order = require('../models/order');
 const Order = require('../models/order');
 const { stripePrice } = require('../utils/priceForStripe');
 const stripe = require('stripe')(STRIPE_SKEY);
