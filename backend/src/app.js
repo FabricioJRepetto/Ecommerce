@@ -15,7 +15,7 @@ const passportLocal = require("passport-local").Strategy;
 const { DB_NAME, SESSION_SECRET_CODE } = process.env;
 //const csrf = require("csurf");
 
-const clientDb = require("./database/db");
+require("./database/db");
 
 const app = express();
 
