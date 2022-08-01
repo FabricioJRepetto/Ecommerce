@@ -9,6 +9,7 @@ const Product = require("../models/product");
 const axios = require("axios");
 const { meliSearchParser } = require("../utils/meliParser");
 const { rawIdProductGetter } = require("../utils/rawIdProductGetter");
+const product = require("../models/product");
 
 cloudinary.config({
     cloud_name: CLOUDINARY_CLOUD,
@@ -186,10 +187,14 @@ const getPromos = async (req, res, next) => {
         results = meliSearchParser(results);
 
         let allResults = [...dbResults, ...results];
-        let filters = {
-            category: [],
-            brand: []
-        }
+
+        // let filters = {
+        //     category: [],
+        //     brand: []
+        // }
+        // for (const porduct of allResults) {
+
+        // }
 
         return res.json(allResults);
     } catch (error) {
