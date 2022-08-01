@@ -3,14 +3,14 @@ const mongoose = require("mongoose");
 const { DB_URL } = process.env;
 
 const clientDb = mongoose.connect(
-  DB_URL,
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  },
-  () => {
-    console.log("Mongoose connected");
-  }
+    process.env.DB_URL,
+    {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    },
+    () => {
+        console.log("Mongoose connected");
+    }
 );
 
 module.exports = clientDb;
