@@ -6,3 +6,7 @@ const checkoutNotif = (req, res, next) => {
         next(error)
     }
 };
+
+module.exports = {
+    checkoutNotif
+};
