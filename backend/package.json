@@ -1,5 +1,5 @@
 {
-  "name": "back",
+  "name": "provider-backend",
   "version": "1.0.0",
   "description": "eCommerce back-end",
   "main": "index.js",
