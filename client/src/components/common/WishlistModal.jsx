@@ -8,18 +8,18 @@ import './WishlistModal.css';
 
 const WishlistModal = ({ close }) => {
     const navigate = useNavigate();
-  const { wishlist } = useSelector((state) => state.cartReducer);
+    const { wishlist } = useSelector((state) => state.cartReducer);
     const [data, setData] = useState();
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         (async () => {
             setLoading(true);
-            const { data } = await axios('/wishlist');
+            const { data } = await axios('/wishlist/');
             setData(data);
             setLoading(false);
         })();
-    }, [wishlist]);
+    }, [wishlist]);    
 
     return (
         <div className='card-modal-container'>
@@ -30,7 +30,7 @@ const WishlistModal = ({ close }) => {
             : <div className='wishlist-modal-container'>
                 <div className='modal-card-header'>Favoritos</div>
                 {data.products.length > 0  
-                   ? <div>{React.Children.toArray(
+                   ? <div className='wishlist-modal-card-container'>{React.Children.toArray(
                         data?.products.map(e => (
                             <ModalCard 
                                 productData={e}
@@ -42,7 +42,7 @@ const WishlistModal = ({ close }) => {
                   : <p>sin favoritos</p>
                 }
                 <div 
-                    onClick={() => navigate('/profile/wishlist')}
+                    onClick={() => [navigate('/profile/wishlist'), close()]}
                     className='modal-card-all-favs pointer'
                     >Ver todos los fav</div>
             </div>}

@@ -17,26 +17,24 @@ const Signout = () => {
 
   const signOut = () => {
     window.localStorage.removeItem("loggedTokenEcommerce");
-    window.localStorage.removeItem("loggedAvatarEcommerce");
-    window.localStorage.removeItem("loggedEmailEcommerce");
     dispatch(sessionActive(false));
     dispatch(loadUsername(null));
     dispatch(loadAvatar(null));
     dispatch(loadEmail(null));
     dispatch(loadRole(null));
     dispatch(resetCartSlice());
-    navigate("/signin");
+    navigate("/");
   };
 
   useEffect(() => {
-    if (!session) navigate("/signin");
+    if (!session) navigate("/");
     // eslint-disable-next-line
   }, []);
 
   return (
     <>
       <button onClick={signOut}>
-        <b>Sign Out</b>
+        <b>Salir</b>
       </button>
     </>
   );

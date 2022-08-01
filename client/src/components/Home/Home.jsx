@@ -21,8 +21,8 @@ const Home = () => {
     const [countdown, setCountdown] = useState("");
     const [loading, setLoading] = useState(true);
     const [suggestion, setSuggestion] = useState(false);
-    const wishlist = useSelector((state) => state.cartReducer.wishlist);
-    const session = useSelector((state) => state.sessionReducer.session);
+    const {wishlist} = useSelector((state) => state.cartReducer);
+    const {session} = useSelector((state) => state.sessionReducer);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -42,12 +42,12 @@ const Home = () => {
     }, 100);
 
     (async () => {
-      const data = await Promise.all([
+      const data = await Promise.allSettled([
         axios(`/sales/`),
         session && axios(`/history/suggestion`),
       ]);
-      setProducts(data[0]?.data);
-      setSuggestion(data[1]?.data || false);
+      setProducts(data[0]?.value.data);
+      setSuggestion(data[1]?.value.data || false);
       setLoading(false);
     })();
 
@@ -91,7 +91,7 @@ const Home = () => {
           <Five className={"svg"} />
           <p>Videogames</p>
         </div>
-        <div onClick={()=> console.log('mostrar ofertas y que lo filtre su vieja')}>
+        <div onClick={()=> navigate('/sales')}>
           <Six className={"svg"} />
           <p>Ofertas</p>
         </div>

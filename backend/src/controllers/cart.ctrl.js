@@ -1,7 +1,6 @@
-const { SHIP_COST } = require("../../constants");
+const cart = require("../models/cart");
 const Cart = require("../models/cart");
 const { cartFormater } = require("../utils/cartFormater");
-const { rawIdProductGetter } = require('../utils/rawIdProductGetter')
 
 const getUserCart = async (req, res, next) => {
     try {
@@ -12,9 +11,10 @@ const getUserCart = async (req, res, next) => {
                 products: [],
                 buyLater: [],
                 buyNow: '',
+                last_order: '',
                 owner: req.user._id
             })
-            return res.json({ ...newCart, id_list: [] })
+            return res.json(newCart)
         }
 
         const response = await cartFormater(cart);
@@ -194,14 +194,12 @@ const deleteCart = async (req, res, next) => {
 
 const quantity = async (req, res, next) => {
     try {
-        let userId = req.user._id;
-        let target = req.query.id;
         let amount = 1;
         req.query.mode === 'add' || (amount = -1);
 
         const cart = await Cart.findOneAndUpdate({
-            'owner': userId,
-            'products.product_id': target
+            'owner': req.user._id,
+            'products.product_id': req.query.id
         },
             {
                 "$inc": {
@@ -236,6 +234,55 @@ const quantityEx = async (req, res, next) => {
     }
 };
 
+const shippingMode = async (req, res, next) => {
+    try {
+
+        const cart = await Cart.findOneAndUpdate({
+            'owner': req.user._id
+        },
+            {
+                "$set": {
+                    "products.$.quantity": amount
+                }
+            }, { new: true }
+        );
+
+    } catch (error) {
+        next(error)
+    }
+}
+
+const saveOrder = async (req, res, next) => {
+    try {
+        await Cart.findOneAndUpdate({ owner: req.user._id },
+            {
+                '$set': {
+                    'last_order': req.query.id || ''
+                }
+            },
+            { new: true }
+        );
+        return res.json({ message: 'Last order id updated on database.' })
+    } catch (error) {
+        next(error)
+    }
+}
+
+const flashShippingMode = async (req, res, next) => {
+    try {
+        const rawCart = await Cart.findOneAndUpdate({ owner: req.user._id },
+            {
+                '$set': {
+                    'flash_shipping': req.body.flash_shipping
+                }
+            }, { new: true });
+        const cart = await cartFormater(rawCart);
+        res.json({ cart })
+    } catch (error) {
+        next(error)
+    }
+}
+
 module.exports = {
     getUserCart,
     addToCart,
@@ -245,5 +292,7 @@ module.exports = {
     emptyCart,
     deleteCart,
     quantity,
-    quantityEx
+    quantityEx,
+    saveOrder,
+    flashShippingMode,
 };

@@ -1,6 +1,5 @@
 require('dotenv').config();
 const { STRIPE_SKEY } = process.env;
-const order = require('../models/order');
 const Order = require('../models/order');
 const { stripePrice } = require('../utils/priceForStripe');
 const stripe = require('stripe')(STRIPE_SKEY);
@@ -35,7 +34,8 @@ const create = async (req, res, next) => {
             line_items: items,
             shipping_options: [{
                 shipping_rate_data: {
-                    display_name: order.free_shipping ? 'con descuento' : 'normal',
+                    // order.free_shipping ? 'con descuento' : 'normal'
+                    display_name: order.flash_shipping ? `Flash${order.free_shipping ? ' & free shipping applied.' : ' shipping.'}` : order.free_shipping ? 'Free shipping.' : 'Standard shipping.',
                     type: 'fixed_amount',
                     fixed_amount: {
                         currency: 'ars',
@@ -45,7 +45,7 @@ const create = async (req, res, next) => {
             }],
             mode: 'payment',
             success_url: `${YOUR_DOMAIN}&status=approved`,
-            cancel_url: `${YOUR_DOMAIN}&status=canceled`,
+            cancel_url: `${YOUR_DOMAIN}&status=cancelled`,
         });
 
         //? setea el link de pago y la expiración de 24hrs (max de stripe)

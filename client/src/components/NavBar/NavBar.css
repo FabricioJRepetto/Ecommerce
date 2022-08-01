@@ -11,6 +11,7 @@
   font-weight: 600;
   text-decoration: none;
   margin: 0 1vw 0 0;
+  padding-top: 4px;
 }
 
 .navbar-central-section {
@@ -161,7 +162,7 @@
   width: 150px;
   border: 1px solid rgb(115, 115, 115);
   background: rgb(33, 33, 33);
-  z-index: 1000;
+  z-index: 12;
 }
 .navbar-modal-w {
     visibility: hidden;
@@ -172,7 +173,7 @@
     width: 400px;
     border: 1px solid rgb(115, 115, 115);
     background: rgb(33, 33, 33);
-    z-index: 1000;
+    z-index: 12;
 }
 .profile-modal-option-button {
   margin-top: 20px;
@@ -192,7 +193,7 @@
 }
 
 .provider-store {
-    font-weight: 800;
+    font-weight: 600;
 
     background: linear-gradient(45deg, #35a7ff 0%, #7e54de 30%, #f40259 60%, #fea30d 100%);
     -webkit-background-clip: text; 

@@ -33,7 +33,7 @@ let corsOptions = {
 };
 
 const fileFilters = (req, file, cb) => {
-    if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
+    if (file.mimetype === "image/jpeg" || file.mimetype === "image/png" || file.mimetype === "image/gif") {
         cb(null, true);
     } else {
         cb(null, false);
@@ -80,6 +80,10 @@ app.use((err, req, res, next) => {
     const message = err.message || err;
     console.error(err);
     return res.status(status).send(message);
+});
+
+app.get('/', (req, res) => {
+    res.send('"hola." -Facu')
 });
 
 module.exports = app;

@@ -16,10 +16,14 @@
     padding-bottom: 60px;
     overflow-y: auto;
 }
+.wishlist-modal-card-container {
+    display: flex;
+    flex-direction: column-reverse;
+}
 
 .modal-card-header {
     position: absolute;
-    z-index: 90;
+    z-index: 13;
     width: 100%;
     padding: 8px;
     top: 0;
@@ -27,7 +31,7 @@
 }
 .modal-card-all-favs {
     position: absolute;
-    z-index: 90;
+    z-index: 13;
     width: 100%;
     padding: 20px;
     bottom: 0;

@@ -1,13 +1,23 @@
-const mongoose = require("mongoose");
+require("dotenv").config();
+const { CLOUDINARY_CLOUD, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } =
+  process.env;
+const cloudinary = require("cloudinary").v2;
+const axios = require("axios");
 const fs = require("fs-extra");
 const User = require("../models/user");
 const Product = require("../models/product");
 const Address = require("../models/Address");
 const Order = require("../models/order");
 const Wishlist = require("../models/wishlist");
-const Sale = require("../models/Sales");
-//const setUserKey = require("../utils/setUserKey");
+const Sales = require("../models/Sales");
 const { rawIdProductGetter } = require("../utils/rawIdProductGetter");
+
+cloudinary.config({
+  cloud_name: CLOUDINARY_CLOUD,
+  api_key: CLOUDINARY_API_KEY,
+  api_secret: CLOUDINARY_API_SECRET,
+  secure: true,
+});
 
 const verifyAdminRoute = (req, res, next) => {
   return res.send("ok");
@@ -19,6 +29,8 @@ const promoteUser = async (req, res, next) => {
   try {
     const userFound = await User.findById(id);
     if (!userFound) return res.status(404).json({ message: "User not found" });
+    if (userFound.isGoogleUser)
+      return res.status(401).json({ message: "A google User can't be admin" });
     userFound.role === "client" && (userFound.role = "admin");
     await userFound.save();
     return res.json({ message: "User promoted successfully" });
@@ -54,7 +66,6 @@ const getAllUsers = async (req, res, next) => {
     };
     for (const key in user) {
       if (usefulData.includes(key)) {
-        //console.log(key + " " + user[key]);
         newUser[key] = user[key];
       }
     }
@@ -178,7 +189,7 @@ const deleteUser = async (req, res, next) => {
       return res.status(401).json({ message: "Unauthorized" });
     //const { avatar: imgToDelete } = await User.findById(id);
     //! VOLVER A VER agregar estraegia para eliminar avatar de cloudinary
-    await User.findByIdAndDelete(id);
+    await User.findByIdAndUpdate(id, { role: "deleted" });
     return res.status(204).json({ message: "Deleted successfully" });
   } catch (error) {
     next(error);
@@ -221,14 +232,17 @@ const createProduct = async (req, res, next) => {
 
     //? path_from_root
     const { data } = await axios(
-      `https://api.mercadolibre.com/categories/${category}`
+      `https://api.mercadolibre.com/categories/${category.id}`
     );
-    const path_from_root = data.path_from_root.map((e) => e.id);
+
+    const { path_from_root } = data;
+
+    let brandLowerCase = brand.toLowerCase();
 
     const newProduct = new Product({
       name,
       price,
-      brand,
+      brand: brandLowerCase,
       main_features,
       attributes,
       description,
@@ -259,6 +273,7 @@ const updateProduct = async (req, res, next) => {
       available_quantity,
       free_shipping,
       imgsToEdit,
+      mainImgIndex,
     } = JSON.parse(req.body.data);
     let images = [...imgsToEdit];
 
@@ -284,16 +299,21 @@ const updateProduct = async (req, res, next) => {
       });
     }
 
+    if (mainImgIndex !== 0) {
+      const mainImg = images.splice(mainImgIndex, 1)[0];
+      images.splice(0, 0, mainImg);
+    }
+
     //? actualizar lista de imagenes
     const productFound = await Product.findById(req.params.id);
+    if (!productFound)
+      return res.status(404).json({ message: "Product not found" });
+    let deleteList = [];
     if (imgsToEdit.length === 0) {
-      let deleteList = [];
       for (const img of productFound.images) {
         deleteList.push(img.public_id);
       }
-      cloudinary.api.delete_resources(deleteList);
     } else if (imgsToEdit.length > 0) {
-      let deleteList = [];
       let imgToKeepId = [];
       for (const img of imgsToEdit) {
         imgToKeepId.push(img.public_id);
@@ -303,14 +323,16 @@ const updateProduct = async (req, res, next) => {
           deleteList.push(img.public_id);
         }
       }
-      cloudinary.api.delete_resources(deleteList);
     }
+    deleteList.length && cloudinary.api.delete_resources(deleteList);
 
     //? path_from_root
     const { data } = await axios(
-      `https://api.mercadolibre.com/categories/${category}`
+      `https://api.mercadolibre.com/categories/${category.id}`
     );
-    const path_from_root = data.path_from_root.map((e) => e.id);
+
+    const { path_from_root } = data;
+    let brandLowerCase = brand.toLowerCase();
 
     const updatedProduct = await Product.findByIdAndUpdate(
       req.params.id,
@@ -318,7 +340,7 @@ const updateProduct = async (req, res, next) => {
         $set: {
           name,
           price,
-          brand,
+          brand: brandLowerCase,
           main_features,
           attributes,
           description,
@@ -333,6 +355,68 @@ const updateProduct = async (req, res, next) => {
     );
 
     res.json(updatedProduct);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const setDiscount = async (req, res, next) => {
+  const { type, number } = req.body;
+
+  if (!type) return res.status(400).json({ message: "Tipo no recibido" });
+  if (!number)
+    return res.status(400).json({ message: "Número de descuento no recibido" });
+  if (type !== "percent" && type !== "fixed") {
+    return res.status(400).json({ message: "Tipo de descuento no soportado" });
+  }
+
+  try {
+    const productFound = await Product.findById(req.params.id);
+    if (!productFound)
+      return res.status(404).json({ message: "Product not found" });
+
+    const autoSales = await Sales.find();
+    if (!autoSales) return res.status(404).json({ message: "Sales not found" });
+
+    if (autoSales[0].products.includes(req.params.id))
+      return res.status(401).json({
+        message: "No puedes modificar el descuento de este producto",
+      });
+
+    if (type === "percent") {
+      productFound.discount = parseInt(number);
+    } else {
+      const discount = (parseInt(number) * 100) / productFound.price;
+
+      productFound.discount = discount;
+    }
+
+    productFound.on_sale = true;
+    await productFound.save();
+    return res.json({ message: "Descuento aplicado con éxito" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const removeDiscount = async (req, res, next) => {
+  try {
+    const productFound = await Product.findById(req.params.id);
+    if (!productFound)
+      return res.status(404).json({ message: "Product not found" });
+
+    const autoSales = await Sales.find();
+    if (!autoSales) return res.status(404).json({ message: "Sales not found" });
+
+    if (autoSales[0].products.includes(req.params.id))
+      return res.status(401).json({
+        message: "No puedes remover el descuento de este producto",
+      });
+
+    productFound.discount = 0;
+    productFound.on_sale = false;
+    await productFound.save();
+    return res.json({ message: "Discount removed succesfully" });
   } catch (error) {
     next(error);
   }
@@ -374,13 +458,6 @@ const getMetrics = async (req, res, next) => {
 
     //! PRODUCTOS POR CATEGORIA
 
-    const sales = await Sale.find();
-    //! VOLVER A VER modelo sales que indica?
-    let activeSales = 0;
-    sales.forEach((sale) => {
-      activeSales += sale.products.length;
-    });
-
     const orders = await Order.find();
     let productsSold = 0;
     let totalProfits = 0;
@@ -389,9 +466,8 @@ const getMetrics = async (req, res, next) => {
       totalProfits += order.total;
     });
     const ordersApproved = await Order.countDocuments({ status: "approved" });
-    const ordersCanceled = await Order.countDocuments({ status: "canceled" });
-    const ordersRejected = await Order.countDocuments({ status: "rejected" });
     const ordersPending = await Order.countDocuments({ status: "pending" });
+    const ordersExpired = await Order.countDocuments({ status: "expired" });
 
     const wishlists = await Wishlist.find();
     let productsWished = 0;
@@ -404,14 +480,12 @@ const getMetrics = async (req, res, next) => {
       googleUsers,
       publishedProducts,
       productsOnSale,
-      activeSales,
       productsSold,
       totalProfits,
       productsWished,
       ordersApproved,
-      ordersCanceled,
-      ordersRejected,
       ordersPending,
+      ordersExpired,
     });
   } catch (error) {
     next(error);
@@ -430,6 +504,8 @@ module.exports = {
   deleteUser,
   createProduct,
   updateProduct,
+  setDiscount,
+  removeDiscount,
   deleteProduct,
   deleteAllProducts,
   getMetrics,

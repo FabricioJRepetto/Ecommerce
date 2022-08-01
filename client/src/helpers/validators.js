@@ -52,7 +52,6 @@ export const validationProductFormSchema = yup.object().shape({
       (value) => validatePrice(value)
     ),
   brand: yup.string().required("Marca es requerida"),
-  category: yup.string().required("Categoría es requerida"),
   available_quantity: yup
     .string()
     .required("Stock es requerido")

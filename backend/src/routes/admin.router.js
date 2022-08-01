@@ -12,6 +12,8 @@ const {
   deleteUser,
   createProduct,
   updateProduct,
+  setDiscount,
+  removeDiscount,
   deleteProduct,
   deleteAllProducts,
   getMetrics,
@@ -36,10 +38,12 @@ router.put("/user/promote/:id", promoteUser);
 router.post("/user/getAddresses", getUserAddresses);
 router.post("/user/getOrders", getUserOrders);
 router.post("/user/getWishlist", getUserWishlist);
-router.delete("user/:id", deleteUser);
+router.delete("/user/:id", deleteUser);
 
 router.post("/product/", createProduct);
 router.put("/product/:id", updateProduct);
+router.put("/product/discount/:id", setDiscount);
+router.delete("/product/discount/:id", removeDiscount);
 router.delete("/product/deleteall", deleteAllProducts);
 router.delete("/product/:id", deleteProduct);
 /* router.post("/", createProduct);

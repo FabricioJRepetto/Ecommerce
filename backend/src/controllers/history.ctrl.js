@@ -6,25 +6,41 @@ const { meliSearchParser } = require('../utils/meliParser');
 
 const getHistory = async (req, res, next) => {
     try {
+        let message = false;
         const history = await History.findOne({ user: req.user._id });
 
-        if (history === null) {
+        if (!history) {
             await History.create({
                 products: [],
+                last_category: '',
                 last_search: '',
                 user: req.user._id
             })
-            return res.json({ message: 'History created' })
+            return res.json({ message: 'History created', products: [] })
         }
 
         let promises = [];
         history.products.map(e => (
             promises.push(rawIdProductGetter(e))
         ));
-        const rawProds = await Promise.all(promises);
-        let response = rawProds.filter(e => e !== null);
+        const rawProds = await Promise.allSettled(promises);
 
-        return res.json({ products: response });
+        let response = [];
+        let new_id_list = [];
+        rawProds.forEach((e) => {
+            if (e.value) {
+                response.push(e.value)
+                new_id_list.push(e.value._id)
+            }
+        });
+
+        if (history.products.length !== new_id_list.length) {
+            history.products = new_id_list;
+            await history.save();
+            message = 'Some products are not available. History updated.';
+        };
+
+        return res.json({ products: response, message });
     } catch (error) {
         next(error)
     }
@@ -33,48 +49,55 @@ const getHistory = async (req, res, next) => {
 const getSuggestion = async (req, res, next) => {
     try {
         const history = await History.findOne({ 'user': req.user._id });
-        let response = '';
 
-        //? busco categoria del ultimo visto
-        const { category } = await rawIdProductGetter(history.products[0]);
-        if (!category) return res.json({ error: 404, message: 'No category found in history' });
-
-        //? busco descuento maximo disponible
-        const { data: categoryRes } = await axios(`https://api.mercadolibre.com/sites/MLA/search?&official_store=all&category=${category}`);
-        const desc = categoryRes.available_filters.find(e => e.id === 'discount')?.values.pop().id || false;
-        //? si no hay desc disponibles, filtramos por envio gratis
-        let ship = false
-        if (!desc) {
-            ship = 'free'
+        if (!history) {
+            await History.create({
+                products: [],
+                last_search: '',
+                user: req.user._id
+            })
+            return res.json({ message: 'History created', products: [] })
         }
 
-        //? genero busqueda aplicando descuento max
-        const { data } = await axios(`https://api.mercadolibre.com/sites/MLA/search?&official_store=all&category=${category}&discount=${desc}&shipping_cost=${ship}`);
+        if (!history.last_category) return res.json({ error: 404, message: 'No category found in history' });
+
+        //? genero busqueda aplicando descuento
+        const { data } = await axios(`https://api.mercadolibre.com/sites/MLA/search?official_store=all&category=${history.last_category}&discount=5-100`);
         //? formateo resultados
-        response = await meliSearchParser(data.results.slice(0, 5));
+        let parsed = await meliSearchParser(data.results);
+
+        let response = [];
+        let idList = [];
+        if (parsed.length > 0) {
+            for (let i = 0; response.length < 5; i++) {
+                // todas ofertas tarda mucho :( data.discount > 0 &&
+                if (parsed[i]) {
+                    const product = await rawIdProductGetter(parsed[i]._id);
+                    if (product._id) {
+                        response.push(product)
+                        idList.push(product._id)
+                    }
+                } else {
+                    break
+                }
+            }
+        }
 
         //? si no llega a 5 resultados
         if (response.length < 5) {
-            //? parseamos todos los resultados de la categoria
-            let fillers = await meliSearchParser(categoryRes.results);
+            const { data } = await axios(`https://api.mercadolibre.com/sites/MLA/search?category=${history.last_category}&shipping=free`);
+            let parsed = await meliSearchParser(data.results);
 
-            if (desc) {
-                //? agregamos resultados con envio gratis
-                response = [...response, ...fillers.filter(e =>
-                    !e.on_sale && e.free_shipping
-                )];
-                //? ...agregamos el resto de resultados
-                if (response.length < 5) {
-                    response = [...response, ...fillers.filter(e =>
-                        !e.on_sale && !e.free_shipping
-                    )].slice(0, 5);
+            for (let i = 0; response.length < 5; i++) {
+                if (parsed[i]) {
+                    const product = await rawIdProductGetter(parsed[i]._id);
+                    if (product._id) {
+                        !product.message && !idList.includes(product._id) && response.push(product)
+                    }
+                } else {
+                    break
                 }
-            } else {
-                //? ...agregamos el resto de resultados
-                response = [...response, ...fillers.filter(e =>
-                    !e.free_shipping
-                )].slice(0, 5);
-            }
+            };
         };
 
         return res.json(response)
@@ -87,6 +110,7 @@ const postVisited = async (req, res, next) => {
     try {
         const {
             product_id,
+            category
         } = req.body;
 
         const h = await History.findOne({ 'user': req.user._id });
@@ -100,12 +124,14 @@ const postVisited = async (req, res, next) => {
                 h.products.unshift(product_id);
                 h.products.pop();
             }
+            h.last_category = category;
             await h.save();
 
             return res.json({ message: 'History updated' });
         } else {
             const h = await History.create({
                 products: [product_id],
+                last_category: category,
                 last_search: '',
                 user: req.user._id
             });

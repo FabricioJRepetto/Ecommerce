@@ -4,55 +4,124 @@ import Controls from './Controls';
 import Indicators from './Indicators';
 import './Carousel.css'
 
-const Slider = ({ images, interval = 5000, controls = false, indicators = false, pointer = false, width }) => {
+const Slider = (prop) => {
+    const { 
+        images, 
+        interval = 5000, 
+        controls = false, 
+        indicators = false, 
+        pointer = false, 
+        width 
+    } = prop;
+
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [move, setMove] = useState(false);
     const slideInterval = useRef(null);
     const navigate = useNavigate();
+    
+    const slider = document.getElementById('slider');   
+
+    // manejador del Intervalo
+    const startSlideTimer = () => {
+        slideInterval.current = setInterval(() => {
+            next(true);
+        }, interval)
+    };
+     const stopSlideTimer = () => {
+        // importante preguntar si hay intervalo activo
+        slideInterval.current && clearInterval(slideInterval.current)
+    };
 
     useEffect(() => {
-        startSlideTimer();
+        if (document.visibilityState === 'visible') {
+            clearInterval(slideInterval.current);
+            startSlideTimer();
+        } else {
+            stopSlideTimer();
+        }
         return () => stopSlideTimer();
         // eslint-disable-next-line
-    }, []);
+    }, [document.visibilityState]);
 
-    const startSlideTimer = () => { 
-        slideInterval.current = setInterval(() => {
-            // si el setCurrent no tiene una CB solo se ejecuta una vez
-            setCurrentIndex(currentIndex => currentIndex < images.length-1 ? currentIndex+1 : 0 );
-        }, interval);
-     };
-
-     const stopSlideTimer = () => { 
-        if (slideInterval.current) clearInterval(slideInterval.current)
-    };
 
     const prev = () => {
         stopSlideTimer();
-        const index = currentIndex > 0 ? currentIndex -1 : images.length - 1;
-        setCurrentIndex(index)
+        setMove('prev');
      }
 
-    const next = () => {
-        stopSlideTimer();
-        const index = currentIndex < images.length - 1 ? currentIndex + 1 : 0;
-        setCurrentIndex(index)
+    const next = (auto) => {
+        !auto && stopSlideTimer();
+        setMove('next');
      }
 
-     const switchIndex = (index) => { 
+     const switchIndex = (index) => {
         stopSlideTimer();
-        setCurrentIndex(index);
+        let steps = Array.from(slider.children).findIndex(e => e.id === 'img'+index);
+        setMove(steps);
+    
+        if (steps === 6) prev();
+        else {
+            setCurrentIndex(index);
+            slider.style.transform = `translateX(${- steps *100}%)`;
+        };
       }
 
+    // esta f se encarga de las acciones que se tienen que ejecutar DESPUES de que termine la animación
+      const graber = () => {
+        if (move === 'next') {
+            setMove(false);            
+            slider.style.transform = 'none';
+            slider.style.transition = 'none';
+            slider.appendChild(slider.firstElementChild);
+            setTimeout(() => {
+                slider.style.transition = 'all 1s ease';
+            });
+        } else if (typeof move === 'number') {
+            for (let i = 0; i < move; i++) {
+                slider.style.transform = 'none';
+                slider.style.transition = 'none';
+                slider.appendChild(slider.firstElementChild);
+            };
+            setTimeout(() => {
+                slider.style.transition = 'all 1s ease';
+            });
+            setMove(false);
+        }
+       };
+
+    // este useEffect produce la transición necesaria segun el estado move
+       useEffect(() => {
+            if (move === 'next') {
+                let i = currentIndex < images.length-1 ? currentIndex+1 : 0;
+                setCurrentIndex(i);
+                slider.style.transform = 'translateX(-100%)'
+            } else if (move === 'prev') {
+                setMove(false);
+                let i = currentIndex > 0 ? currentIndex-1 : images.length-1;
+                setCurrentIndex(i);
+                slider.prepend(slider.lastElementChild)
+                slider.style.transition = 'none';
+                slider.style.transform = 'translateX(-100%)'
+                setTimeout(() => {
+                    slider.style.transition = 'all 1s ease';
+                    slider.style.transform = 'translateX(0%)';
+                });
+            }
+        // eslint-disable-next-line
+       }, [move]);
+
     return (
-            <div className="slide_container">
+            <div className="slide_container"
+                onMouseEnter={stopSlideTimer}
+                onMouseLeave={startSlideTimer}>
                 <div className="slide" style={{ maxWidth: width }}>
                     <div 
+                        id='slider'
                         className="slide-inner"
-                        style={{transform: `translateX(${-currentIndex * 100}%)`}}
-                        onMouseEnter={stopSlideTimer}
-                        onMouseLeave={startSlideTimer}>
-                            {images?.map(e => (
+                        onTransitionEnd={graber}>
+                            {images?.map((e,index) => (
                                 <div 
+                                    id={'img'+index}
                                     key={e.img}
                                     style={ pointer ? {cursor: 'pointer'} : ''}
                                     onClick={() => navigate(e.url || '')}
@@ -76,19 +145,3 @@ const Slider = ({ images, interval = 5000, controls = false, indicators = false,
 }
 
 export default Slider
-
-
-// <div class="slides">
-    //     <img
-    //         alt='banner'
-    //         src="https://http2.mlstatic.com/D_NQ_674809-MLA50293741186_062022-OO.webp" />
-    //     <img
-    //         alt='banner'
-    //         src="https://http2.mlstatic.com/D_NQ_977617-MLA50409269868_062022-OO.webp" />
-    //     <img
-    //         alt='banner'
-    //         src="https://http2.mlstatic.com/D_NQ_745108-MLA50330042982_062022-OO.webp" />
-    //     <img
-    //         alt='banner'
-    //         src="https://http2.mlstatic.com/D_NQ_751727-MLA50292961776_062022-OO.webp" />
-    // </div>

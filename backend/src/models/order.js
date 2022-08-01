@@ -18,10 +18,6 @@ const orderSchema = new Schema(
             type: Schema.Types.ObjectId,
             ref: "User",
         },
-        // googleUser: {
-        //     type: Schema.Types.ObjectId,
-        //     ref: "GoogleUser",
-        // },
         shipping_address: {
             state: String,
             city: String,
@@ -29,16 +25,20 @@ const orderSchema = new Schema(
             street_name: String,
             street_number: Number,
         },
-        expiration_date_from: String,
-        expiration_date_to: String,
-        payment_date: Number,
-        total: Number,
-        status: String,
+        flash_shipping: Boolean,
         free_shipping: Boolean,
         shipping_cost: Number,
+        total: Number,
+        status: String,
         order_type: String,
         payment_link: String,
         payment_source: String,
+        expiration_date_from: String,
+        expiration_date_to: String,
+        created_at: Number,
+        payment_date: Number,
+        delivery_date: Number,
+        delivery_status: String,
     },
     {
         timestamps: false,
@@ -60,6 +60,7 @@ orderSchema.virtual("description").get(function () {
 orderSchema.pre('save', async function (next) {
     // convierte la zonahoraria a -3 (-10800000)
     // 36hrs de expiración (stripe no acepta mas de 24hr)
+    this.created_at = Date.now() - 10800000;
     this.expiration_date_from = new Date(Date.now() - 10800000).toISOString().slice(0, -1) + '-03:00';
     this.expiration_date_to = new Date(Date.now() + 248400000).toISOString().slice(0, -1) + '-03:00';
     next();

@@ -27,7 +27,7 @@ const CartCard = ({ img, name, price, sale_price, on_sale, discount, brand, prod
                     <p className='pointer'
                         onClick={() => deleteP(prodId, source)}>Delete</p>
                     <p className='pointer'
-                        onClick={() => buyLater(prodId)}>{source === 'buyLater' ? 'Add to cart' : 'Buy later'}</p>
+                        onClick={() => buyLater(prodId)}>{source === 'buyLater' ? 'Move to cart' : 'Buy later'}</p>
                     <p className='pointer'
                         onClick={() => buyNow(prodId, source)}>Buy Now</p>
                 </div>

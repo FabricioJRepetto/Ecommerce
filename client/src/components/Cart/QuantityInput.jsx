@@ -6,7 +6,7 @@ import './QuantityInput.css';
 
 const QuantityInput = ({prodId: id, prodQuantity, stock, price, bnMode = false, setQ, loading}) => {
     const [quantity, setQuantity] = useState(prodQuantity);
-    const total = useSelector((state) => state.cartReducer.total);
+    const {total} = useSelector((state) => state.cartReducer);
     const dispatch = useDispatch();
 
     const handleQuantity = async (id, mode) => {

@@ -1,7 +1,9 @@
 const { rawIdProductGetter } = require('./rawIdProductGetter');
+const Order = require('../models/order');
+const Cart = require('../models/cart');
+const { SHIP_COST } = require('../../constants');
 
 const cartFormater = async (cart) => {
-
     let promises = [];
     for (const id of cart.products) {
         promises.push(rawIdProductGetter(id.product_id))
@@ -12,13 +14,26 @@ const cartFormater = async (cart) => {
     }
     const data = await Promise.allSettled(promises);
 
-    let products = [];
-    let buyLater = [];
-    let id_list = [];
-    let total = 0;
-    let free_ship_cart = false;
-    let shipping_cost = 0;
-    let message = false;
+    let products = [],
+        buyLater = [],
+        id_list = [],
+        total = 0,
+        flash_shipping = cart.flash_shipping,
+        free_ship_cart = false,
+        shipping_cost = 0,
+        message = false,
+        last_order = cart.last_order;
+
+    if (last_order) {
+        const order = await Order.findById(cart.last_order);
+        if (order && order.status !== 'pending') {
+            last_order = false;
+            Cart.findByIdAndUpdate(
+                cart.id,
+                { last_order: '' }
+            )
+        }
+    }
 
     const quantityGetter = (id, source) => {
         let { quantity } = cart[source].find(e => e.product_id === id)
@@ -44,9 +59,22 @@ const cartFormater = async (cart) => {
             id_list.push(p.value._id.toString());
 
             total += (p.value.on_sale ? p.value.sale_price : p.value.price) * quantityGetter(p.value._id.toString(), 'products');
-            console.log(total);
 
-            p.value.free_shipping ? (free_ship_cart = true) : shipping_cost += SHIP_COST;
+            if (p.value.free_shipping) {
+                free_ship_cart = true;
+                if (flash_shipping) {
+                    shipping_cost = shipping_cost + (SHIP_COST / 2)
+                    console.log(` free + flash ${shipping_cost}`);
+                }
+            } else {
+                if (flash_shipping) {
+                    shipping_cost = shipping_cost + (SHIP_COST * 1.5)
+                    console.log(` only flash ${shipping_cost}`);
+                } else {
+                    shipping_cost = shipping_cost + SHIP_COST
+                    console.log(` standard ${shipping_cost}`);
+                }
+            };
         }
     });
 
@@ -83,8 +111,10 @@ const cartFormater = async (cart) => {
         buyNow: cart.buyNow,
         id_list,
         total,
+        flash_shipping,
         free_ship_cart,
         shipping_cost,
+        last_order,
     });
 };
 

@@ -1,182 +1,251 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const filterFunction = (state, source, type, value, firstIteration) => {
-    let productsToFilter;
+  let productsToFilter;
 
-    if (firstIteration) {
-        productsToFilter = state[source];
+  if (firstIteration) {
+    productsToFilter = state[source];
+  } else {
+    state.productsFiltered.length === 0
+      ? (productsToFilter = state[source])
+      : (productsToFilter = state.productsFiltered);
+  }
+
+  if (type === "price") {
+    let minPrice = value.split("-")[0];
+    let maxPrice = value.split("-")[1];
+
+    state.productsFiltered = productsToFilter.filter(
+      (product) => product[type] >= minPrice && product[type] <= maxPrice
+    );
+  } else if (type === "brand") {
+    state.productsFiltered = productsToFilter.filter((product) =>
+      state.productsOwnFiltersApplied.brand.includes(
+        product.brand.toUpperCase()
+      )
+    );
+  } else {
+    state.productsFiltered = productsToFilter.filter(
+      (product) => product[type] === value
+    );
+  }
+};
+
+const deleteFunction = (state, source, _id) => {
+  state[source] = state[source].filter((prod) => prod._id !== _id);
+  if (!state[source].length) state[source] = [null];
+};
+
+const discountFunction = (state, source, add, prodId, type, number) => {
+  state[source] = state[source].map((prod) => {
+    if (prod._id === prodId) {
+      if (add) {
+        let discount, sale_price;
+
+        if (type === "percent") {
+          discount = parseInt(number);
+          sale_price = prod.price - (parseInt(number) * prod.price) / 100;
+        } else {
+          discount = (parseInt(number) * 100) / prod.price;
+          sale_price = prod.price - parseInt(number);
+        }
+
+        return {
+          ...prod,
+          sale_price: Math.round(sale_price),
+          on_sale: true,
+          discount: Math.round(discount),
+        };
+      } else {
+        return {
+          ...prod,
+          on_sale: false,
+          discount: 0,
+        };
+      }
     } else {
-        state.productsFiltered.length === 0
-            ? (productsToFilter = state[source])
-            : (productsToFilter = state.productsFiltered);
+      return prod;
     }
-
-    if (type === "price") {
-        let minPrice = value.split("-")[0];
-        let maxPrice = value.split("-")[1];
-
-        state.productsFiltered = productsToFilter.filter(
-            (product) => product[type] >= minPrice && product[type] <= maxPrice
-        );
-    } else if (type === "brand") {
-        state.productsFiltered = productsToFilter.filter((product) =>
-            state.filtersApplied.brand.includes(product.brand.toUpperCase())
-        );
-    } else {
-        state.productsFiltered = productsToFilter.filter(
-            (product) => product[type] === value
-        );
-    }
+  });
 };
 
 export const productsSlice = createSlice({
-    name: "products",
-    initialState: {
-        productsOwn: [],
-        productsRandom: [],
-        productsFound: [],
-        productsFilters: [],
-        productsAppliedFilters: [],
-        breadCrumbs: [],
-        searchQuerys: {},
-        filtersApplied: {},
-        productsFiltered: [],
-        productDetails: {},
-        idProductToEdit: null,
+  name: "products",
+  initialState: {
+    productsOwn: [],
+    productsRandom: [],
+    productsFound: [],
+    productsFilters: [],
+    productsAppliedFilters: [],
+    breadCrumbs: [],
+    searchQuerys: {},
+    productsOwnFiltersApplied: {},
+    productsFiltered: [],
+    productDetails: {},
+    idProductToEdit: null,
+  },
+  reducers: {
+    loadProductsOwn: (state, action) => {
+      state.productsOwn = action.payload;
     },
-    reducers: {
-        loadProductsOwn: (state, action) => {
-            state.productsOwn = action.payload;
-        },
+    loadProductsFound: (state, action) => {
+      state.productsFound = action.payload;
+    },
+    loadFilters: (state, action) => {
+      state.productsFilters = action.payload;
+    },
+    loadApplied: (state, action) => {
+      state.productsAppliedFilters = action.payload;
+    },
+    loadQuerys: (state, action) => {
+      state.searchQuerys = action.payload;
+    },
+    loadBreadCrumbs: (state, action) => {
+      state.breadCrumbs = action.payload;
+    },
 
-        loadProductsFound: (state, action) => {
-            state.productsFound = action.payload;
-        },
+    deleteProductFromState: (state, action) => {
+      const { payload: _id } = action;
+      deleteFunction(state, "productsOwn", _id);
 
-        loadFilters: (state, action) => {
-            state.productsFilters = action.payload;
-        },
+      if (state.productsFiltered.length && state.productsFiltered[0] !== null)
+        deleteFunction(state, "productsFiltered", _id);
 
-        loadApplied: (state, action) => {
-            state.productsAppliedFilters = action.payload;
-        },
+      if (state.productsFound.length && state.productsFound[0] !== null)
+        deleteFunction(state, "productsFound", _id);
+    },
 
-        loadQuerys: (state, action) => {
-            state.searchQuerys = action.payload;
-        },
+    applyDiscount: (state, action) => {
+      const { add, prodId, type, number } = action.payload;
 
-        loadBreadCrumbs: (state, action) => {
-            state.breadCrumbs = action.payload;
-        },
+      discountFunction(state, "productsOwn", add, prodId, type, number);
 
-        deleteProductFromState: (state, action) => {
-            state.productsFound = state.productsFound.filter(
-                (prod) => prod._id !== action.payload
-            );
-        },
+      if (state.productsFiltered.length && state.productsFiltered[0] !== null)
+        discountFunction(state, "productsFiltered", add, prodId, type, number);
 
-        filterProducts: (state, action) => {
-            /* action.payload = {
+      if (state.productsFound.length && state.productsFound[0] !== null)
+        discountFunction(state, "productsFound", add, prodId, type, number);
+    },
+
+    filterProducts: (state, action) => {
+      /* action.payload = {
                 source: "productsOwn" || "productsFound" || "productsRandom",
                 type:      'brand'      || 'free_shipping' ||     'price',
                 value [STRING, BOOLEAN] ||     BOOLEAN     || STRING => min-max || null
              } */
-            const { source, type, value } = action.payload;
-            /* filtersApplied = {
+      const { source, type, value } = action.payload;
+      /* productsOwnFiltersApplied = {
                 brand: [STRING],
                 free_shipping: BOOLEAN,
                 price: STRING => min-max
              } */
 
-            if (value === null || value === false) {
-                delete state.filtersApplied[type];
-            } else {
-                if (type === "brand") {
-                    if (value[1]) {
-                        state.filtersApplied = {
-                            ...state.filtersApplied,
-                            brand: state.filtersApplied.brand
-                                ? [...state.filtersApplied.brand, value[0].toUpperCase()]
-                                : [value[0].toUpperCase()],
-                        };
-                    } else {
-                        state.filtersApplied = {
-                            ...state.filtersApplied,
-                            brand: state.filtersApplied.brand.filter(
-                                (brand) => brand.toUpperCase() !== value[0].toUpperCase()
-                            ),
-                        };
-                        if (state.filtersApplied.brand.length === 0)
-                            delete state.filtersApplied.brand;
-                    }
-                } else {
-                    state.filtersApplied = {
-                        ...state.filtersApplied,
-                        [type]: value,
-                    };
-                }
-            }
+      if (value === null || value === false) {
+        delete state.productsOwnFiltersApplied[type];
+      } else {
+        if (type === "brand") {
+          if (value[1]) {
+            state.productsOwnFiltersApplied = {
+              ...state.productsOwnFiltersApplied,
+              brand: state.productsOwnFiltersApplied.brand
+                ? [
+                    ...state.productsOwnFiltersApplied.brand,
+                    value[0].toUpperCase(),
+                  ]
+                : [value[0].toUpperCase()],
+            };
+          } else {
+            state.productsOwnFiltersApplied = {
+              ...state.productsOwnFiltersApplied,
+              brand: state.productsOwnFiltersApplied.brand.filter(
+                (brand) => brand.toUpperCase() !== value[0].toUpperCase()
+              ),
+            };
+            if (state.productsOwnFiltersApplied.brand.length === 0)
+              delete state.productsOwnFiltersApplied.brand;
+          }
+        } else {
+          state.productsOwnFiltersApplied = {
+            ...state.productsOwnFiltersApplied,
+            [type]: value,
+          };
+        }
+      }
 
-            if (Object.keys(state.filtersApplied).length === 0) {
-                state.productsFiltered = [];
-            } else {
-                let firstIteration = true;
-                for (const filterApplied in state.filtersApplied) {
-                    filterFunction(
-                        state,
-                        source,
-                        filterApplied,
-                        state.filtersApplied[filterApplied],
-                        firstIteration
-                    );
-                    firstIteration = false;
-                }
-                if (state.productsFiltered.length === 0)
-                    state.productsFiltered = [null];
-            }
-        },
+      if (Object.keys(state.productsOwnFiltersApplied).length === 0) {
+        state.productsFiltered = [];
+      } else {
+        let firstIteration = true;
+        for (const filterApplied in state.productsOwnFiltersApplied) {
+          filterFunction(
+            state,
+            source,
+            filterApplied,
+            state.productsOwnFiltersApplied[filterApplied],
+            firstIteration
+          );
+          firstIteration = false;
+        }
+        if (state.productsFiltered.length === 0)
+          state.productsFiltered = [null];
+      }
+    },
 
-        orderProducts: (state, action) => {
-            /* action.payload = {
+    searchProducts: (state, action) => {
+      if (!action.payload) {
+        state.productsFound = [];
+        state.productsFiltered = [];
+      } else {
+        state.productsFound = state.productsOwn.filter((prod) =>
+          prod.name.toUpperCase().includes(action.payload.toUpperCase())
+        );
+        state.productsFiltered = [];
+        if (state.productsFound.length === 0) state.productsFound = [null];
+      }
+    },
+
+    orderProducts: (state, action) => {
+      /* action.payload = {
                       source: "productsOwn" || "productsFound" || "productsRandom",
                       order: "asc" || "desc"
                    } */
-            let productsToOrder;
-            state.productsFiltered.length === 0
-                ? (productsToOrder = state[action.payload.source])
-                : (productsToOrder = state.productsFiltered);
+      let productsToOrder;
+      state.productsFiltered.length === 0
+        ? (productsToOrder = state[action.payload.source])
+        : (productsToOrder = state.productsFiltered);
 
-            state[productsToOrder] = state[productsToOrder].sort((a, b) => {
-                if (action.payload.order === "asc") {
-                    return a.price - b.price;
-                } else {
-                    return b.price - a.price;
-                }
-            });
-        },
-
-        loadProductDetails: (state, action) => {
-            state.productDetails = action.payload;
-        },
-
-        loadIdProductToEdit: (state, action) => {
-            state.idProductToEdit = action.payload;
-        },
+      state[productsToOrder] = state[productsToOrder].sort((a, b) => {
+        if (action.payload.order === "asc") {
+          return a.price - b.price;
+        } else {
+          return b.price - a.price;
+        }
+      });
     },
+
+    loadProductDetails: (state, action) => {
+      state.productDetails = action.payload;
+    },
+    loadIdProductToEdit: (state, action) => {
+      state.idProductToEdit = action.payload;
+    },
+  },
 });
 
 export const {
-    loadProductsOwn,
-    loadProductsFound,
-    loadFilters,
-    loadQuerys,
-    loadApplied,
-    loadBreadCrumbs,
-    deleteProductFromState,
-    filterProducts,
-    orderProducts,
-    loadProductDetails,
-    loadIdProductToEdit,
+  loadProductsOwn,
+  loadProductsFound,
+  loadFilters,
+  loadQuerys,
+  loadApplied,
+  loadBreadCrumbs,
+  deleteProductFromState,
+  applyDiscount,
+  filterProducts,
+  searchProducts,
+  orderProducts,
+  loadProductDetails,
+  loadIdProductToEdit,
 } = productsSlice.actions;
 
 export default productsSlice.reducer;
