@@ -32,7 +32,5 @@ router.use(
     [verifyToken, googleUserShallNotPass, verifyAdmin],
     adminRouter
 );
-router.get('/', (req, res) => {
-    res.send('"hola." -Facu')
-})
+
 module.exports = router;

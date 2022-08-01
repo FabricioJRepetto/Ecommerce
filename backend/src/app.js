@@ -82,4 +82,8 @@ app.use((err, req, res, next) => {
     return res.status(status).send(message);
 });
 
+app.get('/', (req, res) => {
+    res.send('"hola." -Facu')
+});
+
 module.exports = app;
