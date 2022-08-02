@@ -11,7 +11,7 @@ app.listen(PORT, () => {
 flashSales.start();
 console.log(flashSales.running ? '# Cron Job (flashSales): Running.' : '# Cron Job (flashSales): Not executed.');
 salesChecker();
-salesMaker();
+// salesMaker();
 
 deliveryUpdater.start();
 console.log(deliveryUpdater.running ? '# Cron Job (deliveryUpdater): Running.' : '# Cron Job (flashSales): Not executed.');
