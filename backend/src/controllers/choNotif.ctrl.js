@@ -52,7 +52,6 @@ const notificationStripe = async (req, res, next) => {
                         delivery_date: target.flash_shipping ? flash(true) : flash(false),
                     }
                 }, { new: true });
-            console.log(newOrder);
 
             //? restar unidades de cada stock
             stockUpdater(target.products);
@@ -92,7 +91,6 @@ const notificationMercadopago = async (req, res, next) => {
                             delivery_date: target.flash_shipping ? flash(true) : flash(false),
                         }
                     }, { new: true });
-                console.log(newOrder);
 
                 //? restar unidades de cada stock
                 stockUpdater(target.products);
