@@ -84,44 +84,6 @@ const mpCho = async (req, res, next) => {
     };
 };
 
-const notifications = async (req, res, next) => {
-    try {
-        //! checkear estos params
-        const id = req.params.external_reference;
-
-        // con la id, pregunto a mp el estado del pago
-        const { data } = await axios.get(`https://api.mercadopago.com/v1/payments/search?sort=date_created&criteria=desc&external_reference=${id}`, {
-            headers: {
-                Authorization: `Bearer ${MP_SKEY}`,
-            }
-        });
-
-        const status = data.results[0].status;
-
-        if (status) {
-            // cambio el estado de la order
-            await Order.findByIdAndUpdate(id,
-                {
-                    "$set": {
-                        status: status
-                    }
-                });
-
-            if (status === 'approved') {
-                // si está todo OK
-                //: vaciar carrito
-                //: restar unidades de cada stock
-            }
-
-            return res.status(200);
-        };
-
-    } catch (error) {
-        next(error);
-    }
-};
-
 module.exports = {
-    mpCho,
-    notifications
+    mpCho
 };
