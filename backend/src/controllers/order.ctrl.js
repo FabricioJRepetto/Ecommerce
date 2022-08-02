@@ -229,16 +229,24 @@ const updateOrder = async (req, res, next) => {
                 );
                 return res.json({ message: `Order status: ${order.status}` });
             } else {
-                const order = await Order.findByIdAndUpdate(
-                    req.params.id,
-                    {
-                        $set: {
-                            status: req.body.status,
-                        },
-                    },
-                    { new: true }
-                );
-                return res.json({ message: `Order status: ${order.status}` });
+
+                const order = await Order.findById(req.params.id);
+
+                if (order.status !== 'approved') {
+                    // await Order.findByIdAndUpdate(
+                    //     req.params.id,
+                    //     {
+                    //         $set: {
+                    //             status: req.body.status,
+                    //         },
+                    //     },
+                    //     { new: true }
+                    // );
+                    order.status = req.body.status;
+                    await order.save()
+                    return res.json({ message: `Order status: ${order.status}` });
+                }
+                return res.json({ message: `Order status: approved` });
             }
         }
 

@@ -32,14 +32,13 @@ const PostSale = () => {
             if (status === 'approved' && data.status !== 'approved') {
                 if (data.order_type === 'cart') {
                     //? vaciar carrito
-                    const { data: cartEmpty } = await axios.delete(`/cart/empty`);
-                    console.log(cartEmpty.message);
+                    await axios.delete(`/cart/empty`);
+                    
                     //? Vaciar el estado de redux onCart
                     dispatch(loadCart([]));
-                    console.log('Estado actualizado');
+                    
                     //? Quitar last_order en el carrito de la db
-                    const { data: cartOrder } = await axios.put(`/cart/order/`);
-                    console.log(cartOrder.message);
+                    await axios.put(`/cart/order/`);
                 } else {
                     //? vaciar el buynow
                     axios.post(`/cart/`, {product_id: ''});
@@ -47,16 +46,16 @@ const PostSale = () => {
                 }
 
                 //? cambiar orden a pagada
-                const orderUpdt = await axios.put(`/order/${id}`,{
-                    status: 'approved',
-                    flash_shipping: data.flash_shipping
-                });
-                console.log(orderUpdt.data.message);    
+                // const orderUpdt = await axios.put(`/order/${id}`,{
+                //     status: 'approved',
+                //     flash_shipping: data.flash_shipping
+                // });
+                // console.log(orderUpdt.data.message);    
     
                 //? restar unidades de cada stock
-                let list = data.products.map(e => ({id: e.product_id, amount: e.quantity}));
-                const { data: stockUpdt } = await axios.put(`/product/stock/`, list);
-                console.log(stockUpdt);
+                // let list = data.products.map(e => ({id: e.product_id, amount: e.quantity}));
+                // const { data: stockUpdt } = await axios.put(`/product/stock/`, list);
+                // console.log(stockUpdt);
 
                 //! first load solo sirve pre deploy
                 setFirstLoad(false);
@@ -64,10 +63,9 @@ const PostSale = () => {
             };
             if (status !== 'approved' && data.status !== 'approved') {
                 //? cambiar stado de la orden
-                const orderUpdt = await axios.put(`/order/${id}`,{
+                await axios.put(`/order/${id}`,{
                     status
                 });
-                console.log(orderUpdt.data.message);
 
                 //! first load solo sirve pre deploy
                 setFirstLoad(false);
