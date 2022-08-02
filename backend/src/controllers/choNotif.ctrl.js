@@ -36,35 +36,36 @@ const stockUpdater = async (products) => {
 
 const notificationStripe = async (req, res, next) => {
     try {
-        const { object } = req.body,
-            paid = object.charges.data[0].paid,
-            id = object.charges.data[0].payment_intent,
-            status = object.status;
+        console.log(req.body);
+        // const { object } = req.body,
+        //     paid = object.charges.data[0].paid,
+        //     id = object.charges.data[0].payment_intent,
+        //     status = object.status;
 
-        if (paid && status === 'succeeded') {
-            //? cambiar orden a pagada
-            //! volver a ver: checkear zona horaria del servidor ( Date.now() )
-            // await order.findOneAndUpdate(
-            //     { payment_intent: id },
-            //     {
-            //         '$set': {
-            //             status: 'approved',
-            //             delivery_status: 'shipping',
-            //             payment_date: Date.now() - 10800000,
-            //             delivery_date: flash_shipping ? flash(true) : flash(false),
-            //         }
-            //     });
-            const target = await order.findOne({ payment_intent: id });
-            target.status = 'approved';
-            target.delivery_status = 'shipping';
-            target.payment_date = Date.now() - 10800000;
-            target.delivery_date = target.flash_shipping ? flash(true) : flash(false);
+        // if (paid && status === 'succeeded') {
+        //     //? cambiar orden a pagada
+        //     //! volver a ver: checkear zona horaria del servidor ( Date.now() )
+        //     // await order.findOneAndUpdate(
+        //     //     { payment_intent: id },
+        //     //     {
+        //     //         '$set': {
+        //     //             status: 'approved',
+        //     //             delivery_status: 'shipping',
+        //     //             payment_date: Date.now() - 10800000,
+        //     //             delivery_date: flash_shipping ? flash(true) : flash(false),
+        //     //         }
+        //     //     });
+        //     const target = await order.findOne({ payment_intent: id });
+        //     target.status = 'approved';
+        //     target.delivery_status = 'shipping';
+        //     target.payment_date = Date.now() - 10800000;
+        //     target.delivery_date = target.flash_shipping ? flash(true) : flash(false);
 
-            await target.save();
+        //     await target.save();
 
-            //? restar unidades de cada stock
-            stockUpdater(target.products);
-        };
+        //     //? restar unidades de cada stock
+        //     stockUpdater(target.products);
+        // };
 
         return res.status(200).send('hola buen dia');
     } catch (error) {
