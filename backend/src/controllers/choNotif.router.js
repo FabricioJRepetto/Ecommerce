@@ -32,7 +32,7 @@ const notificationMercadopago = async (req, res, next) => {
         const { type } = req.query;
 
         if (type === 'payment') {
-            let aux = req.url.replace('/?data.id=', '');
+            let aux = req.url.replace('/mp/?data.id=', '');
             let id = aux.replace('&type=payment', '');
 
             const { data } = await axios(`https://api.mercadopago.com/v1/payments/${id}`, {
