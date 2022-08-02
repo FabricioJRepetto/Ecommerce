@@ -36,36 +36,27 @@ const stockUpdater = async (products) => {
 
 const notificationStripe = async (req, res, next) => {
     try {
-        console.log(req.body);
-        // const { object } = req.body,
-        //     paid = object.charges.data[0].paid,
-        //     id = object.charges.data[0].payment_intent,
-        //     status = object.status;
+        const { id, status } = req.body.data.object;
 
-        // if (paid && status === 'succeeded') {
-        //     //? cambiar orden a pagada
-        //     //! volver a ver: checkear zona horaria del servidor ( Date.now() )
-        //     // await order.findOneAndUpdate(
-        //     //     { payment_intent: id },
-        //     //     {
-        //     //         '$set': {
-        //     //             status: 'approved',
-        //     //             delivery_status: 'shipping',
-        //     //             payment_date: Date.now() - 10800000,
-        //     //             delivery_date: flash_shipping ? flash(true) : flash(false),
-        //     //         }
-        //     //     });
-        //     const target = await order.findOne({ payment_intent: id });
-        //     target.status = 'approved';
-        //     target.delivery_status = 'shipping';
-        //     target.payment_date = Date.now() - 10800000;
-        //     target.delivery_date = target.flash_shipping ? flash(true) : flash(false);
+        if (status === 'succeeded') {
+            //? cambiar orden a pagada
+            //! volver a ver: checkear zona horaria del servidor ( Date.now() )
+            const target = await order.findOne({ payment_intent: id });
+            const newOrder = await order.findOneAndUpdate(
+                { payment_intent: id },
+                {
+                    '$set': {
+                        status: 'approved',
+                        delivery_status: 'shipping',
+                        payment_date: Date.now() - 10800000,
+                        delivery_date: target.flash_shipping ? flash(true) : flash(false),
+                    }
+                }, { new: true });
+            console.log(newOrder);
 
-        //     await target.save();
-
-        //     //? restar unidades de cada stock
-        //     stockUpdater(target.products);
-        // };
+            //? restar unidades de cada stock
+            stockUpdater(target.products);
+        };
 
         return res.status(200).send('hola buen dia');
     } catch (error) {
@@ -91,20 +82,17 @@ const notificationMercadopago = async (req, res, next) => {
             if (data.status === 'approved') {
                 //? cambiar orden a pagada
                 //! volver a ver: checkear zona horaria del servidor ( Date.now() )
-                // const newOrder = await order.findByIdAndUpdate(data.external_reference,
-                //     {
-                //         '$set': {
-                //             'status': 'approved'
-                //         }
-                //     }, { new: true });
-                // console.log(newOrder);
                 const target = await order.findById(data.external_reference);
-                target.status = 'approved';
-                target.delivery_status = 'shipping';
-                target.payment_date = Date.now() - 10800000;
-                target.delivery_date = target.flash_shipping ? flash(true) : flash(false);
-
-                await target.save();
+                const newOrder = await order.findByIdAndUpdate(data.external_reference,
+                    {
+                        '$set': {
+                            status: 'approved',
+                            delivery_status: 'shipping',
+                            payment_date: Date.now() - 10800000,
+                            delivery_date: target.flash_shipping ? flash(true) : flash(false),
+                        }
+                    }, { new: true });
+                console.log(newOrder);
 
                 //? restar unidades de cada stock
                 stockUpdater(target.products);
