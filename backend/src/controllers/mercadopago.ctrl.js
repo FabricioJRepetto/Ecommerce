@@ -57,7 +57,7 @@ const mpCho = async (req, res, next) => {
                     apartment: '4B',
                 },
             },
-            notification_url: `${NOTIF_BACK_URL}`,
+            notification_url: `${NOTIF_BACK_URL}?orderid=${id}`,
             back_urls: {
                 success: `http://localhost:3000/orders/post-sale/`,
                 failure: `http://localhost:3000/orders/post-sale/`,
