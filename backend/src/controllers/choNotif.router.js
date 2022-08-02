@@ -1,5 +1,7 @@
+require("dotenv").config();
 const { default: axios } = require("axios");
 const order = require("../models/order");
+const { MP_SKEY } = process.env;
 
 // object.charges.data[0].paid: true
 // object.charges.data[0].payment_intent: id
@@ -23,7 +25,7 @@ const notificationStripe = async (req, res, next) => {
                 })
         };
 
-        res.status(200).send('hola buen dia');
+        return res.status(200).send('hola buen dia');
     } catch (error) {
         next(error)
     }
@@ -31,16 +33,19 @@ const notificationStripe = async (req, res, next) => {
 
 const notificationMercadopago = async (req, res, next) => {
     try {
-        console.log(req.query);
+        console.log(req);
         const { type, id } = req.query;
 
         if (type === 'payment') {
-            const { data } = await axios(`https://api.mercadopago.com/v1/payments/${id}`);
+            const { data } = await axios(`https://api.mercadopago.com/v1/payments/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${MP_SKEY}`
+                }
+            });
             console.log('##### MERCADOPAGO');
-            console.log(data);
         }
 
-        res.status(200).send('')
+        return res.status(200).send('')
     } catch (error) {
         next(error)
     }
