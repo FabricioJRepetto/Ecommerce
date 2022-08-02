@@ -55,7 +55,7 @@ const PostSale = () => {
     return (
         <div>
             <h1>Post Venta</h1>
-            { (!loading && !order )
+            { (loading && !order )
                 ? <p>LOADING · · ·</p>
                 : <>
                     <div >
