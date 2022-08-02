@@ -59,7 +59,11 @@ const Orders = () => {
                     <p>payment status: {e.status}</p>
                     {e.status === 'approved' && <p>payment date: {formatDate(e.payment_date)}</p>}
                     {e.status === 'pending' && e.payment_link && <div><a style={{ color: '#3483fa'}} href={e.payment_link}>Continue payment.</a></div>}
+                    {
+                        //! volver a ver: Quitar este botón ?
+                    }
                     {e.status === 'pending' && <button onClick={()=> cancelOrder(e._id)}>Cancel order</button>}
+
                     <p>{e.payment_source}</p>
                     <p>order id: <i>{e.id}</i></p>
                     {e.delivery_date && <div>
@@ -70,7 +74,7 @@ const Orders = () => {
                                 <div style={{width: percent(e.delivery_date, e.created_at).percent+'%'}}></div>
                             </div>
                             {
-                            //! volver aver BORRAR ESTE PORCENTAJE 
+                            //! volver a ver: BORRAR ESTE PORCENTAJE 
                             }
                             <p>{percent(e.delivery_date, e.created_at).percent+'%'}</p>
                         </div>
