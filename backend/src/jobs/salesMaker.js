@@ -39,7 +39,8 @@ const salesMaker = async () => {
                 '$set': {
                     'on_sale': true,
                     'discount': discounts[i],
-                    'free_shipping': true
+                    'free_shipping': true,
+                    'available_quantity': 50,
                 }
             }))()
         };
