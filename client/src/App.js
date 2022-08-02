@@ -35,6 +35,7 @@ import Results from "./components/Products/Results";
 import AdminLayout from "./test/fer/AdminLayout";
 import OrdersAdmin from "./test/fer/OrdersAdmin";
 import Metrics from "./test/fer/Metrics";
+import SalesResults from "./components/Products/SalesResults";
 
 import BackToTop from "./helpers/backToTop/BackToTop";
 import RequireRole from "./test/fer/RequireRole";
@@ -108,6 +109,7 @@ function App() {
                         <Route path="/profile/:section" element={<Profile />} />
                         <Route path="/reset/:userId/:resetToken" element={<ResetPassword />} />
                         <Route path="/results" element={<Results />} />
+                        <Route path="/sales" element={<SalesResults />} />
                         <Route path="/signin" element={<Signupin />} />
                         <Route path="/signout" element={<Signout />} />
                         <Route path="/verify/:verifyToken" element={<VerifyEmail />} />

@@ -9,6 +9,7 @@ const Product = require("../models/product");
 const axios = require("axios");
 const { meliSearchParser } = require("../utils/meliParser");
 const { rawIdProductGetter } = require("../utils/rawIdProductGetter");
+const product = require("../models/product");
 
 cloudinary.config({
     cloud_name: CLOUDINARY_CLOUD,
@@ -173,10 +174,11 @@ const getPromos = async (req, res, next) => {
         categories.forEach((c) => {
             promises.push(
                 axios(
-                    `http://api.mercadolibre.com/sites/MLA/search?&official_store=all&promotion_type=deal_of_the_day&category=${c}`
+                    `http://api.mercadolibre.com/sites/MLA/search?promotion_type=deal_of_the_day&category=${c}`
                 )
             );
         });
+        let dbResults = await Product.find({ on_sale: true });
 
         const promiseAll = await Promise.all(promises);
         promiseAll.forEach((r) => {
@@ -184,7 +186,17 @@ const getPromos = async (req, res, next) => {
         });
         results = meliSearchParser(results);
 
-        return res.json(results);
+        let allResults = [...dbResults, ...results];
+
+        // let filters = {
+        //     category: [],
+        //     brand: []
+        // }
+        // for (const porduct of allResults) {
+
+        // }
+
+        return res.json(allResults);
     } catch (error) {
         next(error);
     }

@@ -143,7 +143,7 @@ const Cart = () => {
         const { data } = await axios.post(`/stripe/${orderId || fastId}`);
         notification('Serás redirigido a la plataforma de pago.', '', 'warning');
         setTimeout(() => {
-            window.location.replace(data);
+            window.location.replace(data.url);
         }, 3000);
         return null
     };

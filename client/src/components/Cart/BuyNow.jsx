@@ -52,14 +52,12 @@ const BuyNow = () => {
 
         return () => {
             axios.post(`/cart/`, {product_id: ''});
-            console.log('buynow reseted');
         }
     // eslint-disable-next-line    
     }, []);
 
     const getProd = async () => {        
         const { data } = await axios(`/cart/`);
-        console.log(data);
         setId(data.buyNow);
         if (data.buyNow === '') {
             if (hasPreviousState) {
@@ -69,7 +67,6 @@ const BuyNow = () => {
             }
         } else {
             const { data: p } = await axios(`/product/${data.buyNow}`);
-            console.log(p);
             if (p) {
                 setProduct(p);
             }
@@ -109,7 +106,6 @@ const BuyNow = () => {
         if (newAdd.state && newAdd.city && newAdd.zip_code && newAdd.street_name && newAdd.street_number) {
             closeAddForm();
             const { data } = await axios.post(`/address`, newAdd);
-            console.log(data);
             notification(data.message, '', 'success')
             setSelectedAdd(data.address.pop());
             getAddress();
@@ -123,8 +119,7 @@ const BuyNow = () => {
 
      const shippingMode = async (boolean) => { 
         setflash_shipping(boolean);
-        const { data } = await axios.put('/cart/flash', {flash_shipping: boolean});
-        console.log(data.cart);
+        await axios.put('/cart/flash', {flash_shipping: boolean});
     }
 
     const goCheckout = async () => {
@@ -140,7 +135,7 @@ const BuyNow = () => {
         const { data } = await axios.post(`/stripe/${orderId}`);
         notification('Serás redirigido a la plataforma de pago.', '', 'warning');
         setTimeout(() => {
-            window.location.replace(data);
+            window.location.replace(data.url);
         }, 4000);
         return null
     };
@@ -156,6 +151,7 @@ const BuyNow = () => {
         });
         // crea la preferencia para mp con la order y ridirige
         const { data }  = await axios.get(`/mercadopago/${orderId}`);
+        console.log(data);
         notification('Serás redirigido a la plataforma de pago.', '', 'warning');
         setTimeout(() => {
             window.location.replace(data.init_point);
