@@ -38,8 +38,7 @@
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
     "stripe": "^9.6.0",
-    "uuid": "^8.3.2",
-    "vercel": "^27.3.3"
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.16"
