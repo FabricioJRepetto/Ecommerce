@@ -3,7 +3,7 @@ const { MP_SKEY } = process.env;
 const Order = require('../models/order');
 const mercadopago = require("mercadopago");
 
-const NOTIF_BACK_URL = 'https://provider-backend.herokuapp.com/checkout-notification/mp?source_news=ipn';
+const NOTIF_BACK_URL = 'https://provider-backend.herokuapp.com/checkout-notification/mp/';
 
 const mpCho = async (req, res, next) => {
     try {
@@ -57,7 +57,7 @@ const mpCho = async (req, res, next) => {
                     apartment: '4B',
                 },
             },
-            notification_url: `${NOTIF_BACK_URL}?orderid=${id}`,
+            notification_url: `${NOTIF_BACK_URL}`,
             back_urls: {
                 success: `http://localhost:3000/orders/post-sale/`,
                 failure: `http://localhost:3000/orders/post-sale/`,

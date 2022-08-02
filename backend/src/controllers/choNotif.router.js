@@ -1,3 +1,4 @@
+const { default: axios } = require("axios");
 const order = require("../models/order");
 
 // object.charges.data[0].paid: true
@@ -31,9 +32,15 @@ const notificationStripe = async (req, res, next) => {
 const notificationMercadopago = async (req, res, next) => {
     try {
         console.log(req.query);
-        console.log(req.body);
-        const { id } = req.query
-        res.status(200).send(`id: ${id}`)
+        const { type, id } = req.query;
+
+        if (type === 'payment') {
+            const { data } = await axios(`https://api.mercadopago.com/v1/payments/${id}`);
+            console.log('##### MERCADOPAGO');
+            console.log(data);
+        }
+
+        res.status(200).send('')
     } catch (error) {
         next(error)
     }
