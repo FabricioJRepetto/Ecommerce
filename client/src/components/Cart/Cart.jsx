@@ -141,10 +141,11 @@ const Cart = () => {
 
         //? crea session de stripe y redirige
         const { data } = await axios.post(`/stripe/${orderId || fastId}`);
-        notification('Serás redirigido a la plataforma de pago.', '', 'warning');
-        setTimeout(() => {
-            window.location.replace(data);
-        }, 3000);
+        console.log(data);
+        // notification('Serás redirigido a la plataforma de pago.', '', 'warning');
+        // setTimeout(() => {
+        //     window.location.replace(data.url);
+        // }, 3000);
         return null
     };
     

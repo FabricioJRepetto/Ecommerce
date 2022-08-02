@@ -1,7 +1,11 @@
 const { Router } = require("express");
 const router = Router();
-const { checkoutNotif } = require('../controllers/choNotif.router.js');
+const {
+    notificationStripe,
+    notificationMercadopago
+} = require('../controllers/choNotif.router.js');
 
-router.post('/', checkoutNotif);
+router.post('/s', notificationStripe);
+router.post('/mp', notificationMercadopago);
 
 module.exports = router;

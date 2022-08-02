@@ -33,6 +33,7 @@ const orderSchema = new Schema(
         order_type: String,
         payment_link: String,
         payment_source: String,
+        payment_intent: String,
         expiration_date_from: String,
         expiration_date_to: String,
         created_at: Number,
