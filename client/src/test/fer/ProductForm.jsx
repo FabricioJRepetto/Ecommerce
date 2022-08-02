@@ -148,8 +148,12 @@ const ProductForm = () => {
   };
 
   useEffect(() => {
-    //! VOLVER A VER eliminar hasta linea 169
+    /*  //! VOLVER A VER eliminar hasta linea 173
     setValue("brand", "1marcaa");
+    setValue("name", "1nombre");
+    setValue("price", 100);
+    setValue("available_quantity", 10);
+    setValue("description", "descripcion");
     setCategoryPath([
       {
         _id: "62e58e4177ee611ae1369fe6",
@@ -166,7 +170,7 @@ const ProductForm = () => {
         id: "MLA86379",
         name: "Alarmas para Motos",
       },
-    ]);
+    ]); */
     if (idProductToEdit) {
       axios(`/product/${idProductToEdit}`)
         .then(({ data }) => {
@@ -176,8 +180,9 @@ const ProductForm = () => {
         })
         .catch((err) => console.log(err)); //!VOLVER A VER manejo de errores
     } else {
-      appendAttribute({ name: "", value_name: "" });
-      appendFeature("");
+      //! VOLVER A VER poner strings vacias en lineas 184 y 185
+      appendAttribute({ name: "color", value_name: "negro" });
+      appendFeature("lindo");
     }
     // eslint-disable-next-line
   }, []);

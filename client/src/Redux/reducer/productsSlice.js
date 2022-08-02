@@ -110,13 +110,13 @@ export const productsSlice = createSlice({
 
       if (state.productsFiltered.length && state.productsFiltered[0] !== null) {
         deleteFunction(state, "productsFiltered", _id);
-        if (
+        /* if (
           state.productsOwnFiltersApplied.brand &&
           state.productsFiltered[0] === null
         ) {
           state.productsFiltered = [];
           delete state.productsOwnFiltersApplied.brand;
-        }
+        } */
       }
 
       if (state.productsFound.length && state.productsFound[0] !== null)

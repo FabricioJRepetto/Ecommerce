@@ -28,6 +28,7 @@ passport.use(
             password,
             isGoogleUser: false,
           });
+          //req.user = newUser;
           return done(null, newUser, {
             message:
               "Signup successfully, check your email to verify your account",

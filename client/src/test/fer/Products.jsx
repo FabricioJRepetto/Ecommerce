@@ -69,22 +69,20 @@ const Products = () => {
 
   useEffect(() => {
     productToSearch && productsFound.length === 0 && setProductToSearch("");
-    if (productsToShow[0] === null) {
+    if (productsFound[0] === null) {
       setBrandsCheckboxes([]);
-    } else if (productsToShow.length) {
-      setBrands(productsToShow);
+    } else if (productsFound.length) {
+      setBrands(productsFound);
+    } else {
+      setBrands(productsOwn);
     } // eslint-disable-next-line
-  }, [
-    productsOwnFiltersApplied.free_shipping,
-    productsOwnFiltersApplied.price,
-    productToSearch,
-  ]);
+  }, [source, productsFound.length]);
 
-  useEffect(() => {
+  /*   useEffect(() => {
     if (!productsOwnFiltersApplied.brand) {
       setBrands(productsToShow);
     } // eslint-disable-next-line
-  }, [productsOwnFiltersApplied.brand]);
+  }, [productsOwnFiltersApplied.brand]); */
 
   const getProducts = () => {
     axios
