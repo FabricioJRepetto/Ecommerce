@@ -33,16 +33,22 @@ const notificationStripe = async (req, res, next) => {
 
 const notificationMercadopago = async (req, res, next) => {
     try {
-        console.log(req);
-        const { type, id } = req.query;
+        const { type } = req.query;
 
         if (type === 'payment') {
+            // url: '/?data.id=1305024198&type=payment',
+            console.log('##### MERCADOPAGO');
+            console.log(req.url);
+            let aux = req.url.replace('/?data.id=', '');
+            let id = aux.replace('&type=payment', '');
+
             const { data } = await axios(`https://api.mercadopago.com/v1/payments/${id}`, {
                 headers: {
                     Authorization: `Bearer ${MP_SKEY}`
                 }
             });
-            console.log('##### MERCADOPAGO');
+            console.log('##### RESPUESTA');
+            console.log(data);
         }
 
         return res.status(200).send('')
