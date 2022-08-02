@@ -140,7 +140,7 @@ const BuyNow = () => {
         const { data } = await axios.post(`/stripe/${orderId}`);
         notification('Serás redirigido a la plataforma de pago.', '', 'warning');
         setTimeout(() => {
-            window.location.replace(data);
+            window.location.replace(data.url);
         }, 4000);
         return null
     };
