@@ -38,12 +38,16 @@ const PostSale = () => {
                     //? vaciar el buynow
                     axios.post(`/cart/`, {product_id: ''});
                 }
+                //? Cambiar el estado a 'processing'
+                await axios.put(`/order/${id}`,{
+                    status: 'processing'
+                });
                 //? en el back:
                 // cambiar orden a pagada    
                 // restar unidades de cada stock
             };
             if (status !== 'approved' && data.status !== 'approved') {
-                //? cambiar stado de la orden
+                //? cambiar estado de la orden si el status no es aprobado en ninguno de los casos
                 await axios.put(`/order/${id}`,{
                     status
                 });
