@@ -41,13 +41,13 @@ const Profile = () => {
   const [newAvatar, setNewAvatar] = useState();
   const [avatarPreview, setAvatarPreview] = useState();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-    setValue,
-  } = useForm();
+//   const {
+//     register,
+//     handleSubmit,
+//     formState: { errors },
+//     reset,
+//     setValue,
+//   } = useForm();
 
   const {
     register: registerForgot,

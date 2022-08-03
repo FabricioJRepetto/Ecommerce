@@ -202,52 +202,60 @@ const updateOrder = async (req, res, next) => {
         } = req.body;
 
         if (req.body.status) {
-            // cambiar estado a pagado y agregar fecha de pago y de entrega
-            if (req.body.status === "approved") {
-                const flash = (flash) => {
-                    // horas restantes hasta las 15hrs de mañana (flash_shipping true)
-                    let now = new Date(Date.now() - 10800000);
-                    let hours = (24 - now.getHours()) + 15;
-                    if (flash) {
-                        return Date.now() + (hours * 3600000);
-                    } else {
-                        return Date.now() + (hours * 3600000) + 172800000;
-                    }
-                };
+            //! esto no debería estár en uso
+            // // cambiar estado a pagado y agregar fecha de pago y de entrega
+            // if (req.body.status === "approved") {
+            //     const flash = (flash) => {
+            //         // horas restantes hasta las 15hrs de mañana (flash_shipping true)
+            //         let now = new Date();
 
-                const order = await Order.findByIdAndUpdate(
-                    req.params.id,
-                    {
-                        $set: {
-                            status: req.body.status,
-                            payment_date: Date.now() - 10800000,
-                            delivery_date: flash_shipping ? flash(true) : flash(false),
-                            delivery_status: 'shipping'
-                        },
-                    },
-                    { new: true }
-                );
+            //         if (flash) {
+            //             now = now.setDate(now.getDate() + 1);
+            //         } else {
+            //             now = now.setDate(now.getDate() + 3);
+            //         }
+            //         now = new Date(now).toISOString();
+            //         //? ISO string
+            //         // let targetDate = `${now.split('T')[0]}T15:00:00.000Z`;
+            //         //? Milliseconds
+            //         let targetDate = new Date(`${now.split('T')[0]}T15:00:00.000Z`).getTime();
+
+            //         return targetDate;
+            //     };
+
+            //     const order = await Order.findByIdAndUpdate(
+            //         req.params.id,
+            //         {
+            //             $set: {
+            //                 status: req.body.status,
+            //                 payment_date: Date.now() - 10800000,
+            //                 delivery_date: flash_shipping ? flash(true) : flash(false),
+            //                 delivery_status: 'shipping'
+            //             },
+            //         },
+            //         { new: true }
+            //     );
+            //     return res.json({ message: `Order status: ${order.status}` });
+            // } else {
+
+            const order = await Order.findById(req.params.id);
+
+            if (order.status !== 'approved') {
+                // await Order.findByIdAndUpdate(
+                //     req.params.id,
+                //     {
+                //         $set: {
+                //             status: req.body.status,
+                //         },
+                //     },
+                //     { new: true }
+                // );
+                order.status = req.body.status;
+                await order.save()
                 return res.json({ message: `Order status: ${order.status}` });
-            } else {
-
-                const order = await Order.findById(req.params.id);
-
-                if (order.status !== 'approved') {
-                    // await Order.findByIdAndUpdate(
-                    //     req.params.id,
-                    //     {
-                    //         $set: {
-                    //             status: req.body.status,
-                    //         },
-                    //     },
-                    //     { new: true }
-                    // );
-                    order.status = req.body.status;
-                    await order.save()
-                    return res.json({ message: `Order status: ${order.status}` });
-                }
-                return res.json({ message: `Order status: approved` });
             }
+            return res.json({ message: `Order status: approved` });
+            //}
         }
 
         if (product_id) {

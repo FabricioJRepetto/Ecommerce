@@ -93,6 +93,18 @@ const Orders = () => {
                     <p>shipping cost: {e.shipping_cost}</p>
                     <p>total payment: ${e.total}</p>
                     <hr />
+                    <b>TEST FECHAS</b>
+                    <ul>
+                        <li>{`expiration_date_from: ${e.expiration_date_from ? formatDate(e.expiration_date_from) : 'no date'}`}</li>
+                        <li>{`expiration_date_to: ${e.expiration_date_to ? formatDate(e.expiration_date_to) : 'no date'}`}</li>
+                        <li>{`created_at: ${e.created_at ? formatDate(e.created_at) : 'no date'}`}</li>
+                        <li>{`payment_date: ${e.payment_date ? formatDate(e.payment_date) : 'no date'}`}</li>
+                        <li><b>{`flash: ${e.flash_shipping}`}</b></li>
+                        <li>{`delivery_date: ${e.delivery_date ? formatDate(e.delivery_date) : 'no date'}`}</li>
+                    </ul>
+                    <hr />
+                    <br />
+                    <hr />
                     <br />
                 </div>
                 ))

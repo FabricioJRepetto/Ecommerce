@@ -6,13 +6,20 @@ const { MP_SKEY } = process.env;
 
 const flash = (flash) => {
     // horas restantes hasta las 15hrs de mañana (flash_shipping true)
-    let now = new Date(Date.now() - 10800000);
-    let hours = (24 - now.getHours()) + 15;
+    let now = new Date();
+
     if (flash) {
-        return Date.now() + (hours * 3600000);
+        now = now.setDate(now.getDate() + 1);
     } else {
-        return Date.now() + (hours * 3600000) + 172800000;
+        now = now.setDate(now.getDate() + 3);
     }
+    now = new Date(now).toISOString();
+    //? ISO string
+    // let targetDate = `${now.split('T')[0]}T15:00:00.000Z`;
+    //? Milliseconds
+    let targetDate = new Date(`${now.split('T')[0]}T15:00:00.000Z`).getTime();
+
+    return targetDate;
 };
 
 const stockUpdater = async (products) => {
