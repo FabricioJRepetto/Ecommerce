@@ -6,10 +6,8 @@ import { useForm } from "react-hook-form";
 import { useModal } from "../../hooks/useModal";
 import Modal from "../common/Modal";
 import Signout from "../Session/Signout";
-import { resizer, avatarResizer } from "../../helpers/resizer";
+import { avatarResizer } from "../../helpers/resizer";
 import { useNotification } from "../../hooks/useNotification";
-import Card from "../Products/Card";
-import MiniCard from "../Products/MiniCard";
 import { loadAvatar, loadFullName, loadUsername } from "../../Redux/reducer/sessionSlice";
 import "./Profile.css";
 import Orders from "./Orders";
@@ -43,13 +41,13 @@ const Profile = () => {
   const [newAvatar, setNewAvatar] = useState();
   const [avatarPreview, setAvatarPreview] = useState();
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-    setValue,
-  } = useForm();
+//   const {
+//     register,
+//     handleSubmit,
+//     formState: { errors },
+//     reset,
+//     setValue,
+//   } = useForm();
 
   const {
     register: registerForgot,

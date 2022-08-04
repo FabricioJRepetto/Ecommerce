@@ -7,7 +7,6 @@ import { loadCart } from '../../Redux/reducer/cartSlice';
 
 const PostSale = () => {
     const [order, setOrder] = useState(false)
-    const [firstLoad, setFirstLoad] = useState(true)
     const [loading, setLoading] = useState(true)
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -17,61 +16,41 @@ const PostSale = () => {
     let status = params.get('status') ?? 'cancelled'
     
     useEffect(() => {
-        //! CAMBIAR PARA EL DEPLOY
-        // solo pedir la order al back para mostrar detalles
-        // mp y stripe avisan el status del pago por query
-        // pero tienen que hacerlo notificando al back
-
-        firstLoad && (async () => {
+        (async () => {
             if (status === 'null' || status === 'cancelled') return navigate('/');
 
             const { data } = await axios(`/order/${id}`);
             console.log(data);
             setOrder(data);
+            setLoading(false)
             
-            if (status === 'approved' && data.status !== 'approved') {
+            if (status === 'approved') {
                 if (data.order_type === 'cart') {
                     //? vaciar carrito
-                    const { data: cartEmpty } = await axios.delete(`/cart/empty`);
-                    console.log(cartEmpty.message);
+                    await axios.delete(`/cart/empty`);
+                    
                     //? Vaciar el estado de redux onCart
                     dispatch(loadCart([]));
-                    console.log('Estado actualizado');
+                    
                     //? Quitar last_order en el carrito de la db
-                    const { data: cartOrder } = await axios.put(`/cart/order/`);
-                    console.log(cartOrder.message);
+                    await axios.put(`/cart/order/`);
                 } else {
                     //? vaciar el buynow
                     axios.post(`/cart/`, {product_id: ''});
-                    console.log('buynow reseted');
                 }
-
-                //? cambiar orden a pagada
-                const orderUpdt = await axios.put(`/order/${id}`,{
-                    status: 'approved',
-                    flash_shipping: data.flash_shipping
+                //? Cambiar el estado a 'processing'
+                await axios.put(`/order/${id}`,{
+                    status: 'processing'
                 });
-                console.log(orderUpdt.data.message);    
-    
-                //? restar unidades de cada stock
-                let list = data.products.map(e => ({id: e.product_id, amount: e.quantity}));
-                const { data: stockUpdt } = await axios.put(`/product/stock/`, list);
-                console.log(stockUpdt);
-
-                //! first load solo sirve pre deploy
-                setFirstLoad(false);
-                setLoading(false);
+                //? en el back:
+                // cambiar orden a pagada    
+                // restar unidades de cada stock
             };
             if (status !== 'approved' && data.status !== 'approved') {
-                //? cambiar stado de la orden
-                const orderUpdt = await axios.put(`/order/${id}`,{
+                //? cambiar estado de la orden si el status no es aprobado en ninguno de los casos
+                await axios.put(`/order/${id}`,{
                     status
                 });
-                console.log(orderUpdt.data.message);
-
-                //! first load solo sirve pre deploy
-                setFirstLoad(false);
-                setLoading(false);
             }
         })()
       // eslint-disable-next-line
