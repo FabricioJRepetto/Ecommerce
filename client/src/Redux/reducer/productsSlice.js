@@ -99,6 +99,7 @@ export const productsSlice = createSlice({
     productDetails: {},
     idProductToEdit: null,
     reloadFlag: false,
+    brandsFlag: false,
   },
   reducers: {
     loadProductsOwn: (state, action) => {
@@ -309,6 +310,7 @@ export const productsSlice = createSlice({
       }
 
       productsToShowFunction(state);
+      state.brandsFlag = !state.brandsFlag;
     },
 
     orderProducts: (state, action) => {

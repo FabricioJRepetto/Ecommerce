@@ -30,11 +30,11 @@ const Products = () => {
   const {
     productsOwn,
     productsFound,
-    productsFiltered,
     productsOwnFiltersApplied,
     productsOwnProductToSearch,
-    reloadFlag,
     productsToShowReference,
+    reloadFlag,
+    brandsFlag,
   } = stateProductsReducer;
   const { wishlist } = useSelector((state) => state.cartReducer);
   const location = useLocation();
@@ -76,19 +76,19 @@ const Products = () => {
     // eslint-disable-next-line
   }, []);
 
-  /*   useEffect(() => {
+  useEffect(() => {
     productToSearch && productsFound.length === 0 && setProductToSearch("");
+    let source;
+    productsFound.length === 0
+      ? (source = "productsOwn")
+      : (source = "productsFound");
+
     if (productsFound[0] === null) {
       setBrandsCheckboxes([]);
-    } else if (productsFound.length) {
-      setBrands(productsFound);
-    } else if (reloadFlag) {
-      setBrands(productsOwn);
-      dispatch(changeReloadFlag(false));
-    } else {
-      setBrands(productsOwn);
-    } // eslint-disable-next-line
-  }, [source, productsFound.length]); */
+    } else if (stateProductsReducer[source].length) {
+      setBrands(stateProductsReducer[source]);
+    }
+  }, [brandsFlag]);
 
   const getProducts = () => {
     console.log("1.5 getProducts");
@@ -187,9 +187,11 @@ const Products = () => {
     //      => para cargar brandsFilter
     // brandsFilter => estado que maneja checkboxes
     for (const product of products) {
-      const brandCamelCase =
-        product.brand.charAt(0).toUpperCase() + product.brand.slice(1);
-      !newBrands.includes(brandCamelCase) && newBrands.push(brandCamelCase);
+      if (product.brand) {
+        const brandCamelCase =
+          product.brand.charAt(0).toUpperCase() + product.brand.slice(1);
+        !newBrands.includes(brandCamelCase) && newBrands.push(brandCamelCase);
+      }
     }
     newBrands.sort();
 
