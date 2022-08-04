@@ -74,6 +74,14 @@ const discountFunction = (state, source, add, prodId, type, number) => {
   });
 };
 
+const productsToShowFunction = (state) => {
+  state.productsFound.length === 0 && state.productsFiltered.length === 0
+    ? (state.productsToShowReference = "productsOwn")
+    : state.productsFiltered.length === 0
+    ? (state.productsToShowReference = "productsFound")
+    : (state.productsToShowReference = "productsFiltered");
+};
+
 export const productsSlice = createSlice({
   name: "products",
   initialState: {
@@ -87,6 +95,7 @@ export const productsSlice = createSlice({
     productsOwnFiltersApplied: {},
     productsOwnProductToSearch: "",
     productsFiltered: [],
+    productsToShowReference: "",
     productDetails: {},
     idProductToEdit: null,
     reloadFlag: false,
@@ -94,6 +103,7 @@ export const productsSlice = createSlice({
   reducers: {
     loadProductsOwn: (state, action) => {
       state.productsOwn = action.payload;
+      state.productsToShowReference = "productsOwn";
     },
     loadProductsFound: (state, action) => {
       state.productsFound = action.payload;
@@ -170,6 +180,7 @@ export const productsSlice = createSlice({
       }
 
       state.reloadFlag = true;
+      productsToShowFunction(state);
     },
 
     changeReloadFlag: (state, action) => {
@@ -196,11 +207,14 @@ export const productsSlice = createSlice({
 
     filterProducts: (state, action) => {
       /* action.payload = {
-                source: "productsOwn" || "productsFound" || "productsRandom",
                 type:      'brand'      || 'free_shipping' ||     'price',
                 value [STRING, BOOLEAN] ||     BOOLEAN     || STRING => min-max || null
              } */
-      const { source, type, value } = action.payload;
+      const { type, value } = action.payload;
+      let source;
+      state.productsFound.length === 0
+        ? (source = "productsOwn")
+        : (source = "productsFound");
       /* productsOwnFiltersApplied = {
                 brand: [STRING],
                 free_shipping: BOOLEAN,
@@ -277,6 +291,8 @@ export const productsSlice = createSlice({
         if (state.productsFiltered.length === 0)
           state.productsFiltered = [null];
       }
+
+      productsToShowFunction(state);
     },
 
     searchProducts: (state, action) => {
@@ -291,6 +307,8 @@ export const productsSlice = createSlice({
         state.productsFiltered = [];
         if (state.productsFound.length === 0) state.productsFound = [null];
       }
+
+      productsToShowFunction(state);
     },
 
     orderProducts: (state, action) => {

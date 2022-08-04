@@ -26,6 +26,7 @@ const Products = () => {
   const [filtersApplied, setFiltersApplied] = useState({});
   const [getProductsFlag, setGetProductsFlag] = useState(false);
   const dispatch = useDispatch();
+  const stateProductsReducer = useSelector((state) => state.productsReducer);
   const {
     productsOwn,
     productsFound,
@@ -33,7 +34,8 @@ const Products = () => {
     productsOwnFiltersApplied,
     productsOwnProductToSearch,
     reloadFlag,
-  } = useSelector((state) => state.productsReducer);
+    productsToShowReference,
+  } = stateProductsReducer;
   const { wishlist } = useSelector((state) => state.cartReducer);
   const location = useLocation();
   const [
@@ -74,18 +76,6 @@ const Products = () => {
     // eslint-disable-next-line
   }, []);
 
-  let productsToShow;
-  productsFound.length === 0 && productsFiltered.length === 0
-    ? (productsToShow = productsOwn)
-    : productsFiltered.length === 0
-    ? (productsToShow = productsFound)
-    : (productsToShow = productsFiltered);
-
-  let source;
-  productsFound.length === 0
-    ? (source = "productsOwn")
-    : (source = "productsFound");
-
   /*   useEffect(() => {
     productToSearch && productsFound.length === 0 && setProductToSearch("");
     if (productsFound[0] === null) {
@@ -104,10 +94,10 @@ const Products = () => {
     console.log("1.5 getProducts");
     axios
       .get("/product")
-      .then(({ data }) => {
+      .then((r) => {
         setGetProductsFlag(!getProductsFlag);
-        dispatch(loadProductsOwn(data));
-        setBrands(data);
+        dispatch(loadProductsOwn(r.data));
+        setBrands(r.data);
       })
       .catch((err) => console.log(err)); //! VOLVER A VER manejo de errores
   };
@@ -130,7 +120,6 @@ const Products = () => {
         };
         dispatch(
           filterProducts({
-            source,
             type: "brand",
             value: [brand, true],
           })
@@ -146,7 +135,6 @@ const Products = () => {
       setShippingFilter(filtersApplied.free_shipping);
       dispatch(
         filterProducts({
-          source,
           type: "free_shipping",
           value: filtersApplied.free_shipping,
         })
@@ -160,7 +148,6 @@ const Products = () => {
       });
       dispatch(
         filterProducts({
-          source,
           type: "price",
           value: filtersApplied.price,
         })
@@ -226,7 +213,6 @@ const Products = () => {
       parseInt(pricesFilter.min) < parseInt(pricesFilter.max) &&
       dispatch(
         filterProducts({
-          source,
           type: "price",
           value: `${pricesFilter.min}-${pricesFilter.max}`,
         })
@@ -248,7 +234,6 @@ const Products = () => {
     setShippingFilter(!shippingFilter);
     dispatch(
       filterProducts({
-        source,
         type: "free_shipping",
         value: !shippingFilter,
       })
@@ -263,7 +248,6 @@ const Products = () => {
 
     dispatch(
       filterProducts({
-        source,
         type: "brand",
         value: [target.name, !brandsFilter[target.name]],
       })
@@ -273,7 +257,6 @@ const Products = () => {
   const handleClearPrices = () => {
     dispatch(
       filterProducts({
-        source,
         type: "price",
         value: null,
       })
@@ -286,14 +269,12 @@ const Products = () => {
     setShippingFilter(false);
     dispatch(
       filterProducts({
-        source,
         type: "free_shipping",
         value: null,
       })
     );
     dispatch(
       filterProducts({
-        source,
         type: "brand",
         value: null,
       })
@@ -315,12 +296,13 @@ const Products = () => {
           onChange={handleSearch}
           value={productToSearch}
         />
-        {productsToShow[0] === null ? (
+        {stateProductsReducer[productsToShowReference] &&
+        stateProductsReducer[productsToShowReference][0] === null ? (
           <h1>NO HUBIERON COINCIDENCIAS</h1>
         ) : (
           <div className="products-results-inner">
             {React.Children.toArray(
-              productsToShow?.map(
+              stateProductsReducer[productsToShowReference]?.map(
                 (product) =>
                   (product.available_quantity > 0 ||
                     location.pathname === "/admin/products") && (
