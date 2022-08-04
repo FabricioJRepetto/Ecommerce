@@ -6,6 +6,8 @@ import {
   loadProductsOwn,
   filterProducts,
   searchProducts,
+  changeReloadFlag,
+  clearProducts,
 } from "../../Redux/reducer/productsSlice";
 import Card from "../../components/Products/Card";
 import { useModal } from "../../hooks/useModal";
@@ -21,12 +23,16 @@ const Products = () => {
   const [loading, setLoading] = useState(true);
   const [brandsFilter, setBrandsFilter] = useState();
   const [brandsCheckboxes, setBrandsCheckboxes] = useState([]);
+  const [filtersApplied, setFiltersApplied] = useState({});
+  const [getProductsFlag, setGetProductsFlag] = useState(false);
   const dispatch = useDispatch();
   const {
     productsOwn,
     productsFound,
     productsFiltered,
     productsOwnFiltersApplied,
+    productsOwnProductToSearch,
+    reloadFlag,
   } = useSelector((state) => state.productsReducer);
   const { wishlist } = useSelector((state) => state.cartReducer);
   const location = useLocation();
@@ -50,8 +56,21 @@ const Products = () => {
   ] = useModal();
 
   useEffect(() => {
+    if (Object.keys(productsOwnFiltersApplied).length > 0)
+      setFiltersApplied(productsOwnFiltersApplied);
+    if (!reloadFlag) {
+      console.log("aca debe limpiar redux");
+      clearFilters();
+      setProductToSearch("");
+      dispatch(searchProducts(""));
+    }
     getProducts();
     setLoading(false);
+
+    return () => {
+      //clearFilters();
+      dispatch(clearProducts());
+    };
     // eslint-disable-next-line
   }, []);
 
@@ -67,34 +86,112 @@ const Products = () => {
     ? (source = "productsOwn")
     : (source = "productsFound");
 
-  useEffect(() => {
+  /*   useEffect(() => {
     productToSearch && productsFound.length === 0 && setProductToSearch("");
     if (productsFound[0] === null) {
       setBrandsCheckboxes([]);
     } else if (productsFound.length) {
       setBrands(productsFound);
+    } else if (reloadFlag) {
+      setBrands(productsOwn);
+      dispatch(changeReloadFlag(false));
     } else {
       setBrands(productsOwn);
     } // eslint-disable-next-line
-  }, [source, productsFound.length]);
-
-  /*   useEffect(() => {
-    if (!productsOwnFiltersApplied.brand) {
-      setBrands(productsToShow);
-    } // eslint-disable-next-line
-  }, [productsOwnFiltersApplied.brand]); */
+  }, [source, productsFound.length]); */
 
   const getProducts = () => {
+    console.log("1.5 getProducts");
     axios
       .get("/product")
       .then(({ data }) => {
+        setGetProductsFlag(!getProductsFlag);
         dispatch(loadProductsOwn(data));
         setBrands(data);
       })
       .catch((err) => console.log(err)); //! VOLVER A VER manejo de errores
   };
 
+  const applyFilters = () => {
+    console.log("4 applyFilters"); //! 4
+    console.log("filtersApplied", filtersApplied);
+    if (productsOwnProductToSearch) {
+      clearFilters();
+      setProductToSearch(productsOwnProductToSearch);
+      dispatch(searchProducts(productsOwnProductToSearch));
+    }
+
+    if (filtersApplied.brand) {
+      let oldBrandsFilter = {};
+      for (const brand of filtersApplied.brand) {
+        oldBrandsFilter = {
+          ...oldBrandsFilter,
+          [brand]: true,
+        };
+        dispatch(
+          filterProducts({
+            source,
+            type: "brand",
+            value: [brand, true],
+          })
+        );
+      }
+      setBrandsFilter({
+        ...brandsFilter,
+        ...oldBrandsFilter,
+      });
+    }
+
+    if (filtersApplied.free_shipping) {
+      setShippingFilter(filtersApplied.free_shipping);
+      dispatch(
+        filterProducts({
+          source,
+          type: "free_shipping",
+          value: filtersApplied.free_shipping,
+        })
+      );
+    }
+
+    if (filtersApplied.price) {
+      setPricesFilter({
+        min: filtersApplied.price.split("-")[0],
+        max: filtersApplied.price.split("-")[1],
+      });
+      dispatch(
+        filterProducts({
+          source,
+          type: "price",
+          value: filtersApplied.price,
+        })
+      );
+    }
+
+    setFiltersApplied({});
+  };
+
+  useEffect(() => {
+    if (reloadFlag) {
+      console.log("1 reloadFlag ef"); //! 1
+      if (Object.keys(productsOwnFiltersApplied).length > 0)
+        setFiltersApplied(productsOwnFiltersApplied);
+      dispatch(clearProducts());
+      getProducts();
+      dispatch(changeReloadFlag(false));
+      setLoading(false);
+    } // eslint-disable-next-line
+  }, [reloadFlag]);
+
+  useEffect(() => {
+    if (productsOwn.length) {
+      console.log("3 getProductsFlag ef"); //! 3
+      applyFilters();
+    } // eslint-disable-next-line
+  }, [getProductsFlag]);
+
+  //! 2
   const setBrands = (products) => {
+    console.log("2 setBrands");
     let brandsCheckbox = {};
     let newBrands = [];
     // newBrands => para cargar brandsCheckboxes
@@ -191,6 +288,13 @@ const Products = () => {
       filterProducts({
         source,
         type: "free_shipping",
+        value: null,
+      })
+    );
+    dispatch(
+      filterProducts({
+        source,
+        type: "brand",
         value: null,
       })
     );
