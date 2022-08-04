@@ -58,15 +58,22 @@ const Products = () => {
   ] = useModal();
 
   useEffect(() => {
-    if (Object.keys(productsOwnFiltersApplied).length > 0)
-      setFiltersApplied(productsOwnFiltersApplied);
+    reloadFunction();
+
+    /* if (reloadFlag) {
+      if (Object.keys(productsOwnFiltersApplied).length > 0)
+        setFiltersApplied(productsOwnFiltersApplied);
+      dispatch(clearProducts());
+      getProducts();
+    } */
     if (!reloadFlag) {
       console.log("aca debe limpiar redux");
       clearFilters();
       setProductToSearch("");
       dispatch(searchProducts(""));
+      getProducts();
     }
-    getProducts();
+    dispatch(changeReloadFlag(false));
     setLoading(false);
 
     return () => {
@@ -87,23 +94,25 @@ const Products = () => {
       setBrandsCheckboxes([]);
     } else if (stateProductsReducer[source].length) {
       setBrands(stateProductsReducer[source]);
-    }
+    } // eslint-disable-next-line
   }, [brandsFlag]);
 
+  //! 1.5
   const getProducts = () => {
     console.log("1.5 getProducts");
     axios
       .get("/product")
       .then((r) => {
-        setGetProductsFlag(!getProductsFlag);
         dispatch(loadProductsOwn(r.data));
         setBrands(r.data);
+        setGetProductsFlag(!getProductsFlag);
       })
       .catch((err) => console.log(err)); //! VOLVER A VER manejo de errores
   };
 
+  //! 4
   const applyFilters = () => {
-    console.log("4 applyFilters"); //! 4
+    console.log("4 applyFilters");
     console.log("filtersApplied", filtersApplied);
     if (productsOwnProductToSearch) {
       clearFilters();
@@ -114,9 +123,11 @@ const Products = () => {
     if (filtersApplied.brand) {
       let oldBrandsFilter = {};
       for (const brand of filtersApplied.brand) {
+        let brandCamelCase =
+          brand.charAt(0).toUpperCase() + brand.slice(1).toLowerCase();
         oldBrandsFilter = {
           ...oldBrandsFilter,
-          [brand]: true,
+          [brandCamelCase]: true,
         };
         dispatch(
           filterProducts({
@@ -157,21 +168,28 @@ const Products = () => {
     setFiltersApplied({});
   };
 
-  useEffect(() => {
+  //! 1
+  const reloadFunction = () => {
     if (reloadFlag) {
-      console.log("1 reloadFlag ef"); //! 1
+      console.log("1 reloadFlag ef");
       if (Object.keys(productsOwnFiltersApplied).length > 0)
         setFiltersApplied(productsOwnFiltersApplied);
       dispatch(clearProducts());
       getProducts();
-      dispatch(changeReloadFlag(false));
-      setLoading(false);
-    } // eslint-disable-next-line
-  }, [reloadFlag]);
+    }
+  };
 
   useEffect(() => {
+    reloadFunction();
+    dispatch(changeReloadFlag(false));
+    setLoading(false);
+    // eslint-disable-next-line
+  }, [reloadFlag]);
+
+  //! 3
+  useEffect(() => {
     if (productsOwn.length) {
-      console.log("3 getProductsFlag ef"); //! 3
+      console.log("3 getProductsFlag ef");
       applyFilters();
     } // eslint-disable-next-line
   }, [getProductsFlag]);
@@ -221,8 +239,8 @@ const Products = () => {
       );
   };
 
-  const handlePrices = ({ target }) => {
-    const { name, value, validity } = target;
+  const handlePrices = (e) => {
+    const { name, value, validity } = e.target;
 
     let validatedValue = validity.valid ? value : pricesFilter[name];
 

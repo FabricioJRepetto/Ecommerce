@@ -34,44 +34,9 @@ const filterFunction = (state, source, type, value, firstIteration) => {
   }
 };
 
-const updateFunction = (state, source, _id, productData) => {};
-
 const deleteFunction = (state, source, _id) => {
   state[source] = state[source].filter((prod) => prod._id !== _id);
   if (!state[source].length) state[source] = [null];
-};
-
-const discountFunction = (state, source, add, prodId, type, number) => {
-  state[source] = state[source].map((prod) => {
-    if (prod._id === prodId) {
-      if (add) {
-        let discount, sale_price;
-
-        if (type === "percent") {
-          discount = parseInt(number);
-          sale_price = prod.price - (parseInt(number) * prod.price) / 100;
-        } else {
-          discount = (parseInt(number) * 100) / prod.price;
-          sale_price = prod.price - parseInt(number);
-        }
-
-        return {
-          ...prod,
-          sale_price: Math.round(sale_price),
-          on_sale: true,
-          discount: Math.round(discount),
-        };
-      } else {
-        return {
-          ...prod,
-          on_sale: false,
-          discount: 0,
-        };
-      }
-    } else {
-      return prod;
-    }
-  });
 };
 
 const productsToShowFunction = (state) => {
@@ -121,17 +86,6 @@ export const productsSlice = createSlice({
     loadBreadCrumbs: (state, action) => {
       state.breadCrumbs = action.payload;
     },
-
-    /* updateProductFromState: (state, action) => {
-      const { payload: _id } = action;
-      updateFunction(state, "productsOwn", _id);
-
-      if (state.productsFiltered.length)
-        updateFunction(state, "productsFiltered", _id);
-
-      if (state.productsFound.length)
-        updateFunction(state, "productsFound", _id);
-    }, */
 
     deleteProductFromState: (state, action) => {
       const { payload: _id } = action;
@@ -193,18 +147,6 @@ export const productsSlice = createSlice({
       state.productsFound = [];
       state.productsFiltered = [];
     },
-
-    /* applyDiscount: (state, action) => {
-      const { add, prodId, type, number } = action.payload;
-
-      discountFunction(state, "productsOwn", add, prodId, type, number);
-
-      if (state.productsFiltered.length && state.productsFiltered[0] !== null)
-        discountFunction(state, "productsFiltered", add, prodId, type, number);
-
-      if (state.productsFound.length && state.productsFound[0] !== null)
-        discountFunction(state, "productsFound", add, prodId, type, number);
-    }, */
 
     filterProducts: (state, action) => {
       /* action.payload = {
@@ -348,12 +290,9 @@ export const {
   loadQuerys,
   loadApplied,
   loadBreadCrumbs,
-  //updateProductFromState,
-  //deleteProductFromState,
   changeReloadFlag,
   deleteProductFromState,
   clearProducts,
-  //applyDiscount,
   filterProducts,
   searchProducts,
   orderProducts,
