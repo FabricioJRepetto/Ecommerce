@@ -3,8 +3,8 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import Modal from "../../components/common/Modal";
 import {
+  changeReloadFlag,
   deleteProductFromState,
-  applyDiscount,
 } from "../../Redux/reducer/productsSlice";
 import { useNotification } from "../../hooks/useNotification";
 
@@ -44,9 +44,7 @@ const ModalAdminProducts = ({
       .put(`/admin/product/discount/${productToDiscount.prodId}`, discount)
       .then((_) => {
         closeDiscountProduct();
-        dispatch(
-          applyDiscount({ add: true, ...productToDiscount, ...discount })
-        );
+        dispatch(changeReloadFlag(true));
         notification("Descuento aplicado exitosamente", "", "success");
       })
       .catch((error) => console.log(error)); //! VOLVER A VER manejo de errores
@@ -87,7 +85,7 @@ const ModalAdminProducts = ({
       .delete(`/admin/product/discount/${productToRemoveDiscount.prodId}`)
       .then((_) => {
         closeRemoveDiscount();
-        dispatch(applyDiscount({ add: false, ...productToRemoveDiscount }));
+        dispatch(changeReloadFlag(true));
         notification("Descuento removido exitosamente", "", "success");
       })
       .catch((error) => console.log(error)); //! VOLVER A VER manejo de errores

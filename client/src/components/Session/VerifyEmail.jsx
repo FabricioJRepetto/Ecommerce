@@ -10,7 +10,7 @@ const VerifyEmail = () => {
 
   useEffect(() => {
     axios
-      .put("/admin/verifyEmail", null, {
+      .put("/user/verifyEmail", null, {
         headers: {
           Authorization: `Bearer ${verifyToken}`,
         },
@@ -24,10 +24,10 @@ const VerifyEmail = () => {
         //! VOLVER A VER agregar mensaje y timeout antes de redirigir
         console.log(err);
         navigate("/home");
-      });
+      }); // eslint-disable-next-line
   }, []);
 
-  return <div>Verify Email</div>;
+  return <h1>Verify Email</h1>;
 };
 
 export default VerifyEmail;

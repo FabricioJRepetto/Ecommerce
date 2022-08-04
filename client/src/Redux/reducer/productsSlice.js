@@ -19,10 +19,13 @@ const filterFunction = (state, source, type, value, firstIteration) => {
       (product) => product[type] >= minPrice && product[type] <= maxPrice
     );
   } else if (type === "brand") {
-    state.productsFiltered = productsToFilter.filter((product) =>
-      state.productsOwnFiltersApplied.brand.includes(
-        product.brand.toUpperCase()
-      )
+    state.productsFiltered = productsToFilter.filter(
+      (product) =>
+        state.productsOwnFiltersApplied &&
+        state.productsOwnFiltersApplied.brand &&
+        state.productsOwnFiltersApplied.brand.includes(
+          product.brand.toUpperCase()
+        )
     );
   } else {
     state.productsFiltered = productsToFilter.filter(
@@ -36,37 +39,12 @@ const deleteFunction = (state, source, _id) => {
   if (!state[source].length) state[source] = [null];
 };
 
-const discountFunction = (state, source, add, prodId, type, number) => {
-  state[source] = state[source].map((prod) => {
-    if (prod._id === prodId) {
-      if (add) {
-        let discount, sale_price;
-
-        if (type === "percent") {
-          discount = parseInt(number);
-          sale_price = prod.price - (parseInt(number) * prod.price) / 100;
-        } else {
-          discount = (parseInt(number) * 100) / prod.price;
-          sale_price = prod.price - parseInt(number);
-        }
-
-        return {
-          ...prod,
-          sale_price: Math.round(sale_price),
-          on_sale: true,
-          discount: Math.round(discount),
-        };
-      } else {
-        return {
-          ...prod,
-          on_sale: false,
-          discount: 0,
-        };
-      }
-    } else {
-      return prod;
-    }
-  });
+const productsToShowFunction = (state) => {
+  state.productsFound.length === 0 && state.productsFiltered.length === 0
+    ? (state.productsToShowReference = "productsOwn")
+    : state.productsFiltered.length === 0
+    ? (state.productsToShowReference = "productsFound")
+    : (state.productsToShowReference = "productsFiltered");
 };
 
 export const productsSlice = createSlice({
@@ -80,13 +58,18 @@ export const productsSlice = createSlice({
     breadCrumbs: [],
     searchQuerys: {},
     productsOwnFiltersApplied: {},
+    productsOwnProductToSearch: "",
     productsFiltered: [],
+    productsToShowReference: "",
     productDetails: {},
     idProductToEdit: null,
+    reloadFlag: false,
+    brandsFlag: false,
   },
   reducers: {
     loadProductsOwn: (state, action) => {
       state.productsOwn = action.payload;
+      state.productsToShowReference = "productsOwn";
     },
     loadProductsFound: (state, action) => {
       state.productsFound = action.payload;
@@ -106,34 +89,75 @@ export const productsSlice = createSlice({
 
     deleteProductFromState: (state, action) => {
       const { payload: _id } = action;
+
       deleteFunction(state, "productsOwn", _id);
 
-      if (state.productsFiltered.length && state.productsFiltered[0] !== null)
+      if (state.productsFiltered.length) {
         deleteFunction(state, "productsFiltered", _id);
+        if (
+          state.productsOwnFiltersApplied.brand &&
+          state.productsFiltered[0] === null
+        ) {
+          let brands = [];
+          for (const prod of state.productsOwn) {
+            brands.push(prod.brand.toUpperCase());
+          }
+          if (
+            !brands.includes(
+              state.productsOwnFiltersApplied.brand[0].toUpperCase()
+            )
+          ) {
+            delete state.productsOwnFiltersApplied.brand;
+          }
+        }
+      }
 
-      if (state.productsFound.length && state.productsFound[0] !== null)
+      if (state.productsFound.length) {
         deleteFunction(state, "productsFound", _id);
+        console.log("entra");
+        if (
+          state.productsOwnFiltersApplied.brand &&
+          state.productsFound[0] === null
+        ) {
+          let brands = [];
+          for (const prod of state.productsOwn) {
+            brands.push(prod.brand.toUpperCase());
+          }
+          if (
+            !brands.includes(
+              state.productsOwnFiltersApplied.brand[0].toUpperCase()
+            )
+          ) {
+            console.log("0 delete product");
+            delete state.productsOwnFiltersApplied.brand;
+          }
+        }
+      }
+
+      state.reloadFlag = true;
+      productsToShowFunction(state);
     },
 
-    applyDiscount: (state, action) => {
-      const { add, prodId, type, number } = action.payload;
+    changeReloadFlag: (state, action) => {
+      state.reloadFlag = action.payload;
+    },
 
-      discountFunction(state, "productsOwn", add, prodId, type, number);
-
-      if (state.productsFiltered.length && state.productsFiltered[0] !== null)
-        discountFunction(state, "productsFiltered", add, prodId, type, number);
-
-      if (state.productsFound.length && state.productsFound[0] !== null)
-        discountFunction(state, "productsFound", add, prodId, type, number);
+    clearProducts: (state, action) => {
+      state.productsOwn = [];
+      state.productsFound = [];
+      state.productsFiltered = [];
     },
 
     filterProducts: (state, action) => {
       /* action.payload = {
-                source: "productsOwn" || "productsFound" || "productsRandom",
                 type:      'brand'      || 'free_shipping' ||     'price',
                 value [STRING, BOOLEAN] ||     BOOLEAN     || STRING => min-max || null
              } */
-      const { source, type, value } = action.payload;
+      const { type, value } = action.payload;
+      let source;
+      state.productsFound.length === 0
+        ? (source = "productsOwn")
+        : (source = "productsFound");
       /* productsOwnFiltersApplied = {
                 brand: [STRING],
                 free_shipping: BOOLEAN,
@@ -144,22 +168,43 @@ export const productsSlice = createSlice({
         delete state.productsOwnFiltersApplied[type];
       } else {
         if (type === "brand") {
+          //console.log("type", type);
+          //console.log("value", value);
           if (value[1]) {
-            state.productsOwnFiltersApplied = {
-              ...state.productsOwnFiltersApplied,
-              brand: state.productsOwnFiltersApplied.brand
-                ? [
-                    ...state.productsOwnFiltersApplied.brand,
-                    value[0].toUpperCase(),
-                  ]
-                : [value[0].toUpperCase()],
-            };
+            //console.log("reduc 1");
+            if (state.productsOwnFiltersApplied) {
+              if (
+                state.productsOwnFiltersApplied.brand /* &&
+                !state.productsOwnFiltersApplied.brand.includes */
+              ) {
+                if (
+                  !state.productsOwnFiltersApplied.brand.includes(
+                    value[0].toUpperCase()
+                  )
+                )
+                  state.productsOwnFiltersApplied = {
+                    ...state.productsOwnFiltersApplied,
+                    brand: [
+                      ...state.productsOwnFiltersApplied.brand,
+                      value[0].toUpperCase(),
+                    ],
+                  };
+              } else {
+                state.productsOwnFiltersApplied = {
+                  ...state.productsOwnFiltersApplied,
+                  brand: [value[0].toUpperCase()],
+                };
+              }
+            }
           } else {
             state.productsOwnFiltersApplied = {
               ...state.productsOwnFiltersApplied,
-              brand: state.productsOwnFiltersApplied.brand.filter(
-                (brand) => brand.toUpperCase() !== value[0].toUpperCase()
-              ),
+              brand:
+                state.productsOwnFiltersApplied &&
+                state.productsOwnFiltersApplied.brand &&
+                state.productsOwnFiltersApplied.brand.filter(
+                  (brand) => brand.toUpperCase() !== value[0].toUpperCase()
+                ),
             };
             if (state.productsOwnFiltersApplied.brand.length === 0)
               delete state.productsOwnFiltersApplied.brand;
@@ -189,9 +234,12 @@ export const productsSlice = createSlice({
         if (state.productsFiltered.length === 0)
           state.productsFiltered = [null];
       }
+
+      productsToShowFunction(state);
     },
 
     searchProducts: (state, action) => {
+      state.productsOwnProductToSearch = action.payload;
       if (!action.payload) {
         state.productsFound = [];
         state.productsFiltered = [];
@@ -202,6 +250,9 @@ export const productsSlice = createSlice({
         state.productsFiltered = [];
         if (state.productsFound.length === 0) state.productsFound = [null];
       }
+
+      productsToShowFunction(state);
+      state.brandsFlag = !state.brandsFlag;
     },
 
     orderProducts: (state, action) => {
@@ -239,8 +290,9 @@ export const {
   loadQuerys,
   loadApplied,
   loadBreadCrumbs,
+  changeReloadFlag,
   deleteProductFromState,
-  applyDiscount,
+  clearProducts,
   filterProducts,
   searchProducts,
   orderProducts,

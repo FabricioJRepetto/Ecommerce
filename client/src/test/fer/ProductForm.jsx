@@ -4,7 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { useForm, useFieldArray } from "react-hook-form";
 import axios from "axios";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { loadIdProductToEdit } from "../../Redux/reducer/productsSlice";
+import {
+  loadIdProductToEdit,
+  changeReloadFlag,
+} from "../../Redux/reducer/productsSlice";
 import "./ProductForm.css";
 import {
   validateImgs,
@@ -148,8 +151,12 @@ const ProductForm = () => {
   };
 
   useEffect(() => {
-    //! VOLVER A VER eliminar hasta linea 169
-    setValue("brand", "1marcaa");
+    //! VOLVER A VER eliminar hasta linea 173
+    setValue("brand", "marcaa1");
+    setValue("name", "nombre1");
+    setValue("price", 100);
+    setValue("available_quantity", 10);
+    setValue("description", "descripcion");
     setCategoryPath([
       {
         _id: "62e58e4177ee611ae1369fe6",
@@ -176,8 +183,9 @@ const ProductForm = () => {
         })
         .catch((err) => console.log(err)); //!VOLVER A VER manejo de errores
     } else {
-      appendAttribute({ name: "", value_name: "" });
-      appendFeature("");
+      //! VOLVER A VER poner strings vacias en lineas 184 y 185
+      appendAttribute({ name: "color", value_name: "negro" });
+      appendFeature("lindo");
     }
     // eslint-disable-next-line
   }, []);
@@ -189,9 +197,6 @@ const ProductForm = () => {
   };
 
   const handleRemoveImg = (i) => {
-    console.log("entra");
-    console.log("mainImgIndex:", mainImgIndex);
-    console.log("i:", i);
     setProductImg(productImg.filter((_, index) => index !== i));
     mainImgIndex === i && setMainImgIndex(0);
     mainImgIndex >= productImg.length + imgsToEdit.length - 1 &&
@@ -243,16 +248,18 @@ const ProductForm = () => {
             "Content-Type": "multipart/form-data",
           },
         });
+        dispatch(changeReloadFlag(true));
         notification("Producto editado exitosamente", "", "success");
         navigate("/admin/products");
       } else {
         formData.append("data", JSON.stringify(productData));
 
-        await axios.post(`/admin/product/`, formData, {
+        await axios.post("/admin/product/", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
+        dispatch(changeReloadFlag(true));
         notification("Producto creado exitosamente", "", "success");
         openCreateProduct();
       }

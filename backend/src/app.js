@@ -8,11 +8,6 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const router = require("./routes/index");
 const { v4: uuidv4 } = require("uuid");
-const MongoStore = require("connect-mongo");
-const mongoose = require("mongoose");
-const passport = require("passport");
-const passportLocal = require("passport-local").Strategy;
-const { DB_NAME, SESSION_SECRET_CODE } = process.env;
 //const csrf = require("csurf");
 
 const clientDb = require("./database/db");
@@ -22,32 +17,36 @@ const app = express();
 // ---------------- Config
 let whitelist = ["http://localhost:3000", "otro dominio"];
 let corsOptions = {
-    origin: function (origin, callback) {
-        if (whitelist.indexOf(origin) !== -1 || !origin) {
-            callback(null, true);
-        } else {
-            callback(new Error("Not allowed by CORS"));
-        }
-    },
-    credentials: true,
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
 };
 
 const fileFilters = (req, file, cb) => {
-    if (file.mimetype === "image/jpeg" || file.mimetype === "image/png" || file.mimetype === "image/gif") {
-        cb(null, true);
-    } else {
-        cb(null, false);
-    }
+  if (
+    file.mimetype === "image/jpeg" ||
+    file.mimetype === "image/png" ||
+    file.mimetype === "image/gif"
+  ) {
+    cb(null, true);
+  } else {
+    cb(null, false);
+  }
 };
 const StorageConfig = multer.diskStorage({
-    destination: path.join(__dirname, "public/uploads"),
-    filename: (req, file, cb) => {
-        cb(null, uuidv4() + path.extname(file.originalname));
-    },
+  destination: path.join(__dirname, "public/uploads"),
+  filename: (req, file, cb) => {
+    cb(null, uuidv4() + path.extname(file.originalname));
+  },
 });
 const Multerupload = multer({
-    storage: StorageConfig,
-    fileFilter: fileFilters,
+  storage: StorageConfig,
+  fileFilter: fileFilters,
 });
 
 // ---------------- MIDDLEWARES
@@ -58,28 +57,17 @@ app.use(morgan("dev"));
 
 app.use(Multerupload.any("images")); //? single/array/any tiene el nombre del objeto que viene en el req.
 
-/* app.use(
-  session({
-    secret: SESSION_SECRET_CODE,
-    resave: true,
-    saveUninitialized: true,
-    // store: MongoStore.create({
-    //  clientPromise: clientDb,
-    //  dbName: DB_NAME,
-    })
-  ) */
-
-app.use(cookieParser(/* SESSION_SECRET_CODE */));
+app.use(cookieParser());
 
 app.use(mongoSanitize());
 app.use("/", cors(corsOptions), router);
 require("./config/auth");
 
 app.use((err, req, res, next) => {
-    const status = err.status || 500;
-    const message = err.message || err;
-    console.error(err);
-    return res.status(status).send(message);
+  const status = err.status || 500;
+  const message = err.message || err;
+  console.error(err);
+  return res.status(status).send(message);
 });
 
 app.get('/', (req, res) => {
