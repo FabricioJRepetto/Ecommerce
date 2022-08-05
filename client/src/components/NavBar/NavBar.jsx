@@ -17,6 +17,9 @@ import { ReactComponent as Avatar } from "../../assets/svg/avatar.svg";
 import Signout from "../Session/Signout";
 import WishlistModal from "../common/WishlistModal";
 import { avatarResizer } from "../../helpers/resizer";
+import { PowerGlitch } from 'powerglitch';
+import { useEffect } from "react";
+import { useRef } from "react";
 
 
 const NavBar = () => {
@@ -29,6 +32,44 @@ const NavBar = () => {
 
   const [profileModal, setProfileModal] = useState(false);
   const [wishModal, setWishModal] = useState(false);
+    const eldiv = useRef(null)
+
+  useEffect(() => {    
+    eldiv.current = document.querySelector('.glitch');
+    console.log(eldiv);
+    PowerGlitch.glitch(
+        eldiv.current,
+        {
+            imageUrl: 'https://res.cloudinary.com/dsyjj0sch/image/upload/v1659650791/PROVIDER_LOGO_glitch_aberration_kt2hyv.png',
+            backgroundColor: 'transparent',
+            hideOverflow: false,
+            timing: {
+                duration: 10000,
+                iterations: 'Infinity',
+            },
+            glitchTimeSpan: {
+                start: 0.6,
+                end: 0.7,
+            },
+            shake: {
+                velocity: 15,
+                amplitudeX: 0.1,
+                amplitudeY: 0.2,
+            },
+            slice: {
+                count: 3,
+                velocity: 15,
+                minHeight: 0.03,
+                maxHeight: 0.15,
+                hueRotate: true,
+            },
+        }
+    )
+    
+    
+  }, [])
+  
+
 
   const querySearch = async (e) => {
     if (e.key === "Enter" && e.target.value) {
@@ -56,13 +97,13 @@ const NavBar = () => {
 
   return (
     <div className="navBar">
-      <div className="navbar-logo-section">
-        <img
+      <div className="glitch" onClick={logoClick}>
+        {/* <img
           onClick={logoClick}
-          src={require("../../assets/provider-logo.png")}
+          src={require("../../assets/provider-logo3.png")}
           alt="logo"
-          className="logo"
-        />
+          className="logo glitch"
+        /> */}
       </div>
 
       <div className="navbar-central-section">
