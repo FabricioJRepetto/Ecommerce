@@ -13,7 +13,7 @@ const { REACT_APP_OAUTH_CLIENT_ID } = process.env;
 
 const Signupin = () => {
   const [signSelect, setSignSelect] = useState("signin");
-  const [flag, setFlag] = useState(false)
+  const [flag, setFlag] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { session } = useSelector((state) => state.sessionReducer);
@@ -52,7 +52,7 @@ const Signupin = () => {
     //! VOLVER A VER manejo de errores
   };
 
-//? LOGIN CON MAIL
+  //? LOGIN CON MAIL
   const signin = async (signinData) => {
     try {
       const { data } = await axios.post(`/user/signin`, signinData);
@@ -60,7 +60,7 @@ const Signupin = () => {
       if (data.user) {
         window.localStorage.setItem("loggedTokenEcommerce", data.token);
         dispatch(sessionActive(true));
-        
+
         notification(`Bienvenido, ${data.user.name}`, "", "success");
       }
     } catch (error) {
@@ -69,7 +69,7 @@ const Signupin = () => {
     }
   };
 
-//? LOGIN CON GOOGLE
+  //? LOGIN CON GOOGLE
   const handleCallbackResponse = async (response) => {
     //response.credential = Google user token
     const googleToken = "google" + response.credential;
@@ -113,7 +113,7 @@ const Signupin = () => {
         navigate("/");
       }
     }
-    setFlag(true) // solo se usa para la animacion fade-in
+    setFlag(true); // solo se usa para la animacion fade-in
 
     /* global google */
     google.accounts.id.initialize({
@@ -122,10 +122,10 @@ const Signupin = () => {
     });
 
     google.accounts.id.renderButton(document.getElementById("signInDiv"), {
-        type: 'standard',
-        size: 'large',
-        width: 240,
-        text: 'continue_with',
+      type: "standard",
+      size: "large",
+      width: 240,
+      text: "continue_with",
     });
     // eslint-disable-next-line
   }, [session]);
@@ -141,123 +141,129 @@ const Signupin = () => {
   };
 
   const handleSign = (sign) => {
-        setSignSelect(sign);
+    setSignSelect(sign);
   };
 
   return (
     <div className="signin-container">
-        <div className={`signin-inner ${flag && 'signin-visible'}`}>
-            <img src={require('../../assets/provider-logo.png')} alt="logo" 
-                onClick={() => navigate('/')} style={{ cursor: 'pointer'}}/>
-            <div>
-                <span onClick={() => handleSign("signup")}>SIGN UP</span>
-            </div>
-            <div>
-                <span onClick={() => handleSign("signin")}>SIGN IN</span>
-            </div>
+      <div className={`signin-inner ${flag && "signin-visible"}`}>
+        <div>
+          <span onClick={() => handleSign("signup")}>SIGN UP</span>
+        </div>
+        <div>
+          <span onClick={() => handleSign("signin")}>SIGN IN</span>
+        </div>
+        <img
+          src={require("../../assets/provider-logo.png")}
+          alt="logo"
+          onClick={() => navigate("/")}
+          style={{ cursor: "pointer" }}
+        />
 
-            {signSelect === "signup" && (
-                <form onSubmit={handleSubmitSignup(signup)}>
-                <h2>Sign Up</h2>
-                <input
-                    type="text"
-                    placeholder="email"
-                    autoComplete="off"
-                    {...registerSignup("email", {
-                    required: true,
-                    pattern: emailRegex,
-                    })}
-                />
-                {errorsSignup.email?.type === "required" && <p>Enter your email</p>}
-                {errorsSignup.email?.type === "pattern" && <p>Enter a valid email</p>}
-
-                <input
-                    type="text"
-                    placeholder="Password"
-                    autoComplete="off"
-                    {...registerSignup("password", {
-                    required: true,
-                    minLength: 6,
-                    })}
-                />
-                {errorsSignup.password?.type === "required" && (
-                    <p>Enter a password</p>
-                )}
-                {errorsSignup.password?.type === "minLength" && (
-                    <p>Password must be 6 characters long at least</p>
-                )}
-
-                <input
-                    type="text"
-                    placeholder="Repeat Password"
-                    autoComplete="off"
-                    {...registerSignup("repPassword", {
-                    required: true,
-                    validate: (repPassword) => {
-                        if (watchSignup("password") !== repPassword) {
-                        return "Passwords don't match";
-                        }
-                    },
-                    })}
-                />
-                {errorsSignup.repPassword?.type === "required" && (
-                    <p>Repeat your password</p>
-                )}
-                {errorsSignup.repPassword?.type === "validate" && (
-                    <p>Passwords don't match</p>
-                )}
-
-                <input type="submit" value="Sign Up" />
-                <div>
-                    <span onClick={() => handleSign("signin")}>
-                    You already have an account? SIGN IN
-                    </span>
-                </div>
-                </form>
+        {signSelect === "signup" && (
+          <form onSubmit={handleSubmitSignup(signup)}>
+            <h2>Sign Up</h2>
+            <input
+              type="text"
+              placeholder="email"
+              autoComplete="off"
+              {...registerSignup("email", {
+                required: true,
+                pattern: emailRegex,
+              })}
+            />
+            {errorsSignup.email?.type === "required" && <p>Enter your email</p>}
+            {errorsSignup.email?.type === "pattern" && (
+              <p>Enter a valid email</p>
             )}
 
-            {signSelect === "signin" && (
-                <form onSubmit={handleSubmitSignin(signin)}>
-                <h2>Sign In</h2>
-                <input
-                    type="text"
-                    placeholder="email"
-                    autoComplete="off"
-                    {...registerSignin("email", {
-                    required: true,
-                    pattern: emailRegex,
-                    })}
-                />
-                {errorsSignin.email?.type === "required" && <p>Enter your email</p>}
-                {errorsSignin.email?.type === "pattern" && <p>Enter a valid email</p>}
-
-                <input
-                    type="text"
-                    placeholder="Password"
-                    autoComplete="off"
-                    {...registerSignin("password", {
-                    required: true,
-                    })}
-                />
-                {errorsSignin.password?.type === "required" && (
-                    <p>Enter your password</p>
-                )}
-                <input type="submit" value="Sign In" />
-                <br />
-                <span onClick={openForgotPassword}>Forgot password?</span>
-                <div>
-                    <span onClick={() => handleSign("signup")}>
-                    You don't have an account? SIGN UP
-                    </span>
-                </div>
-                </form>
+            <input
+              type="text"
+              placeholder="Password"
+              autoComplete="off"
+              {...registerSignup("password", {
+                required: true,
+                minLength: 6,
+              })}
+            />
+            {errorsSignup.password?.type === "required" && (
+              <p>Enter a password</p>
             )}
-        
-            <span className="google-signin-container" id="signInDiv"></span>
+            {errorsSignup.password?.type === "minLength" && (
+              <p>Password must be 6 characters long at least</p>
+            )}
 
-            <NavLink to={'/'}>{'< volver'}</NavLink>
+            <input
+              type="text"
+              placeholder="Repeat Password"
+              autoComplete="off"
+              {...registerSignup("repPassword", {
+                required: true,
+                validate: (repPassword) => {
+                  if (watchSignup("password") !== repPassword) {
+                    return "Passwords don't match";
+                  }
+                },
+              })}
+            />
+            {errorsSignup.repPassword?.type === "required" && (
+              <p>Repeat your password</p>
+            )}
+            {errorsSignup.repPassword?.type === "validate" && (
+              <p>Passwords don't match</p>
+            )}
+
+            <input type="submit" value="Sign Up" />
+            <div>
+              <span onClick={() => handleSign("signin")}>
+                You already have an account? SIGN IN
+              </span>
+            </div>
+          </form>
+        )}
+
+        {signSelect === "signin" && (
+          <form onSubmit={handleSubmitSignin(signin)}>
+            <h2>Sign In</h2>
+            <input
+              type="text"
+              placeholder="email"
+              autoComplete="off"
+              {...registerSignin("email", {
+                required: true,
+                pattern: emailRegex,
+              })}
+            />
+            {errorsSignin.email?.type === "required" && <p>Enter your email</p>}
+            {errorsSignin.email?.type === "pattern" && (
+              <p>Enter a valid email</p>
+            )}
+
+            <input
+              type="text"
+              placeholder="Password"
+              autoComplete="off"
+              {...registerSignin("password", {
+                required: true,
+              })}
+            />
+            {errorsSignin.password?.type === "required" && (
+              <p>Enter your password</p>
+            )}
+            <input type="submit" value="Sign In" />
+            <br />
+            <span onClick={openForgotPassword}>Forgot password?</span>
+            <div>
+              <span onClick={() => handleSign("signup")}>
+                You don't have an account? SIGN UP
+              </span>
+            </div>
+          </form>
+        )}
+
+        <span className="google-signin-container" id="signInDiv"></span>
       </div>
-      
+
       <Modal isOpen={isOpenForgotPassword} closeModal={closeForgotPassword}>
         <form onSubmit={handleSubmitForgot(forgotPassword)}>
           <h2>Ingrese su email para reestablecer la contraseña</h2>
