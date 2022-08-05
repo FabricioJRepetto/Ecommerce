@@ -74,7 +74,7 @@ const Slider = (prop) => {
             slider.style.transition = 'none';
             slider.appendChild(slider.firstElementChild);
             setTimeout(() => {
-                slider.style.transition = 'all 1s ease';
+                slider.style.transition = 'all .5s ease';
             });
         } else if (typeof move === 'number') {
             for (let i = 0; i < move; i++) {
@@ -83,7 +83,7 @@ const Slider = (prop) => {
                 slider.appendChild(slider.firstElementChild);
             };
             setTimeout(() => {
-                slider.style.transition = 'all 1s ease';
+                slider.style.transition = 'all .5s ease';
             });
             setMove(false);
         }
@@ -103,7 +103,7 @@ const Slider = (prop) => {
                 slider.style.transition = 'none';
                 slider.style.transform = 'translateX(-100%)'
                 setTimeout(() => {
-                    slider.style.transition = 'all 1s ease';
+                    slider.style.transition = 'all .5s ease';
                     slider.style.transform = 'translateX(0%)';
                 });
             }
@@ -115,7 +115,8 @@ const Slider = (prop) => {
                 onMouseEnter={stopSlideTimer}
                 onMouseLeave={startSlideTimer}>
                 <div className="slide" style={{ maxWidth: width }}>
-                    <div 
+                    <div
+                        style={{ maxWidth: width }}
                         id='slider'
                         className="slide-inner"
                         onTransitionEnd={graber}>

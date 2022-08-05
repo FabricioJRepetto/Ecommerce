@@ -84,9 +84,9 @@ const Orders = () => {
                     <p>
                     shipping address:{" "}
                     {`
-                            ${e.shipping_address?.street_name} 
-                            ${e.shipping_address?.street_number}, 
-                            ${e.shipping_address?.city} 
+                            ${e.shipping_address?.street_name}
+                            ${e.shipping_address?.street_number},
+                            ${e.shipping_address?.city}
                         `}
                     </p>
                     <p>free shipping: {e.free_shipping ? "Yes" : "No"}</p>

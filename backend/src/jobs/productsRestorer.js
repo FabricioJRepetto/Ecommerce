@@ -2,12 +2,24 @@ const CronJob = require('cron').CronJob;
 const product = require('../models/product')
 
 const restorer = async () => {
-    // borrar 
     let ogProducts = [];
-    await product.deleteMany('');
 
-    for (const product of ogProducts) {
-        await product.create(product);
+    for (const prod of ogProducts) {
+        await product.findOneAndUpdate({ id: prod._id }, prod, { new: true }, function (error, result) {
+            if (!error) {
+                // If the document doesn't exist
+                if (!result) {
+                    // Create it
+                    result = await new product(prod);
+                }
+                // Save the document
+                await result.save(function (error) {
+                    if (error) {
+                        throw error;
+                    }
+                });
+            }
+        });
     };
 
     return '// Products restored';

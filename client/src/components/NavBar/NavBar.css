@@ -204,3 +204,8 @@
     
     animation: gradientTextAnim 10s infinite;
 }
+
+.glitch {
+    width: 200px;
+    height: 100px;
+}

@@ -68,7 +68,7 @@ const Home = () => {
   return (
     <div className="home-container">
       <div>
-        <Carousel images={IMAGES} controls indicators pointer width="100%" />
+        <Carousel images={IMAGES} controls indicators pointer width="100vw" />
       </div>
       <div className="categories">
         <div onClick={() => categorySearch("MLA1051")}>

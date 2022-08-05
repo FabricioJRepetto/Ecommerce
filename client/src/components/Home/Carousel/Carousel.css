@@ -7,11 +7,14 @@
 
 .slide-inner {
     white-space: nowrap;
-    transition: 1s ease;
+    transition: .5s ease;
 }
 
 .slide-item {
     display: inline-block;
+    width: 100%;
+}
+.slide-item img {
     width: 100%;
 }
 
