@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import axios from "axios";
-import "./VerifyEmail.css";
 
 const VerifyEmail = () => {
   const navigate = useNavigate();
