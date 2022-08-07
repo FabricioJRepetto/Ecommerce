@@ -18,8 +18,6 @@ import Signout from "../Session/Signout";
 import WishlistModal from "../common/WishlistModal";
 import { avatarResizer } from "../../helpers/resizer";
 import { PowerGlitch } from "powerglitch";
-import { useModal } from "../../hooks/useModal";
-import Modal from "../common/Modal";
 import Signupin from "../Session/Signupin";
 
 const NavBar = () => {
@@ -29,14 +27,12 @@ const NavBar = () => {
   const cart = useSelector((state) => state.cartReducer.onCart);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [isOpenSign, openSign, closeSign] = useModal();
   const [profileModal, setProfileModal] = useState(false);
   const [wishModal, setWishModal] = useState(false);
   const eldiv = useRef(null);
 
   useEffect(() => {
     eldiv.current = document.querySelector(".glitch");
-    console.log(eldiv);
     PowerGlitch.glitch(eldiv.current, {
       imageUrl:
         "https://res.cloudinary.com/dsyjj0sch/image/upload/v1659650791/PROVIDER_LOGO_glitch_aberration_kt2hyv.png",
@@ -130,7 +126,9 @@ const NavBar = () => {
       <div className="navbar-profile-container">
         <div className="navbar-profile-section">
           {!session ? (
-            <p onClick={openSign}>Log In / Sign in</p>
+            <NavLink to={"signin"}>
+              <p>Sign in</p>
+            </NavLink>
           ) : (
             <>
               <div
@@ -227,9 +225,6 @@ const NavBar = () => {
           )}
         </div>
       </div>
-      <Modal isOpen={isOpenSign} closeModal={closeSign}>
-        <Signupin />
-      </Modal>
     </div>
   );
 };

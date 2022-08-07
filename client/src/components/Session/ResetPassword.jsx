@@ -78,42 +78,47 @@ const ResetPassword = () => {
   return (
     <>
       <form onSubmit={handleSubmit(changePassword)}>
+        <>
+          {!errors.password && <p className="hidden-placeholder">hidden</p>}
+          {errors.password?.type === "required" && <p>Ingresa tu contraseña</p>}
+          {errors.password?.type === "minLength" && (
+            <p>La contraseña debe tener al menos 6 caracteres</p>
+          )}
+        </>
+
         <input
           type="text"
-          placeholder="Password"
-          /* name="password"
-          onChange={handleSignup}
-          value={signupData.password} */
+          placeholder="Contraseña"
           {...register("password", {
             required: true,
             minLength: 6,
           })}
         />
-        {errors.password?.type === "required" && <p>Enter a password</p>}
-        {errors.password?.type === "minLength" && (
-          <p>Password must be 6 characters long at least</p>
-        )}
+
+        <>
+          {!errors.repPassword && <p className="hidden-placeholder">hidden</p>}
+          {errors.repPassword?.type === "required" && (
+            <p>Ingresa una contraseña</p>
+          )}
+          {errors.repPassword?.type === "validate" && (
+            <p>Las contraseñas no coinciden</p>
+          )}
+        </>
 
         <input
           type="text"
-          placeholder="Repeat Password"
-          /* name="repPassword"
-          onChange={handleSignup}
-          value={signupData.repPassword} */
+          placeholder="Repite tu contraseña"
           {...register("repPassword", {
             required: true,
             validate: (repPassword) => {
               if (watch("password") !== repPassword) {
-                return "Passwords don't match";
+                return "Las contraseñas no coinciden";
               }
             },
           })}
         />
-        {errors.repPassword?.type === "required" && <p>Repeat your password</p>}
-        {errors.repPassword?.type === "validate" && (
-          <p>Passwords don't match</p>
-        )}
-        <input type="submit" value="Change password" />
+
+        <input type="submit" value="Cambiar contraseña" />
       </form>
     </>
   );

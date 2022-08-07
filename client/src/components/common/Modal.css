@@ -14,7 +14,7 @@
 
 .modal-container {
   position: relative;
-  padding: 1rem;
+  /* padding: 1rem; */
   min-width: 400px;
   max-width: 600px;
   min-height: 200px;

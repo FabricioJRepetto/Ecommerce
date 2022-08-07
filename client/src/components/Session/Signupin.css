@@ -1,6 +1,6 @@
 .signin-container {
   opacity: 1;
-  /*  position: fixed; */
+  position: fixed;
   top: 0;
   left: 0;
   display: flex;
@@ -8,21 +8,32 @@
   justify-content: center;
   align-items: center;
   background: #111;
-  /* height: 70vh;
-  width: 50vw; */
+  height: 100vh;
+  width: 100vw;
   z-index: 10;
   transition: opacity 0.5s ease;
   color: white;
 }
 
 .signin-inner {
-  margin-top: 30px;
-  opacity: 0;
+  /* margin-top: 30px;
+  opacity: 0; */
   transition: all 0.4s cubic-bezier(0.65, 0.05, 0.36, 1);
+  height: 60vh;
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 .signin-visible {
   margin-top: 0;
   opacity: 1;
+}
+.forgot-container {
+  justify-content: start;
+}
+.forgot-container > form {
+  margin-top: 2rem;
 }
 
 .google-signin-container {
@@ -35,3 +46,123 @@
 /* .google-signin-container > div > div:first-child{
   display: none;
 }  */
+
+.google-container {
+  border-top: 1px solid lightgrey;
+  padding-top: 1.5rem;
+  margin-top: 1rem;
+}
+
+/* .sign-active {
+  font-weight: bolder;
+}
+.signin-inactive {
+  border-right: 1px solid lightgrey;
+}
+.signup-inactive {
+  border-left: 1px solid lightgrey;
+} 
+.sign-inactive {
+  border-bottom: 1px solid lightgrey;
+  color: lightgrey;
+}
+.sign-select {
+  width: 100%;
+  padding: 0.7rem 0 0.7rem 0;
+}*/
+
+.sign-select-container {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.input-with-button {
+  position: relative;
+}
+.input-with-button > input {
+  width: 100%;
+  font-weight: 300;
+  margin: 0.1rem 0 0.3rem 0;
+  display: flex;
+}
+
+.input-with-button .password {
+  text-shadow: 0 0 0.4rem #000;
+  color: transparent;
+  font-weight: 500;
+  letter-spacing: -1px;
+}
+
+.input-with-button .password::selection {
+  text-shadow: 0 0 0.4rem black;
+  background: rgb(204, 204, 204);
+  color: transparent;
+  font-weight: 500;
+  letter-spacing: -1px;
+}
+
+form .sign-button {
+  font-weight: 200;
+  border: 0;
+  padding: 0.5rem 3rem;
+  margin: 1rem 0 1rem 0;
+  cursor: pointer;
+  font-weight: 300;
+}
+.sign-button:hover {
+  background-color: rgb(197, 197, 197);
+  cursor: pointer;
+}
+.sign-button:active {
+  background-color: rgb(165, 165, 165);
+  cursor: pointer;
+}
+
+.x-container {
+  color: black;
+  position: absolute;
+  right: 0;
+  top: 0.2rem;
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-right: 1rem;
+  cursor: pointer;
+  padding: 0.2rem;
+}
+
+form > .input-with-button {
+  display: flex;
+  justify-content: center;
+}
+
+.hidden-placeholder {
+  visibility: hidden;
+}
+
+.error-sign {
+  text-align: left;
+}
+
+.text-button {
+  cursor: pointer;
+  font-weight: 400;
+}
+
+.forgot-text {
+  text-align: left;
+}
+.forgot-response {
+  margin: 2rem 0;
+  font-weight: 300;
+}
+
+.forgot-buttons-container {
+  display: flex;
+  justify-content: space-between;
+}
+.forgot-buttons-container > input {
+  padding: 0.5rem 2rem;
+  width: 48%;
+  text-align: center;
+}

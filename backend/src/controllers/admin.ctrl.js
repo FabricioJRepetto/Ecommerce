@@ -117,8 +117,7 @@ const getAllOrders = async (req, res, next) => {
 };
 
 const getUserAddresses = async (req, res, next) => {
-  const { _id /* isGoogleUser */ } = req.body;
-  //const userKey = setUserKey(isGoogleUser);
+  const { _id } = req.body;
 
   try {
     const addressFound = await Address.findOne({
@@ -136,8 +135,7 @@ const getUserAddresses = async (req, res, next) => {
 };
 
 const getUserOrders = async (req, res, next) => {
-  const { _id /* , isGoogleUser */ } = req.body;
-  //const userKey = setUserKey(isGoogleUser);
+  const { _id } = req.body;
 
   try {
     const ordersFound = await Order.find({
@@ -155,8 +153,7 @@ const getUserOrders = async (req, res, next) => {
 };
 
 const getUserWishlist = async (req, res, next) => {
-  const { _id /* , isGoogleUser */ } = req.body;
-  //const userKey = setUserKey(isGoogleUser);
+  const { _id } = req.body;
 
   try {
     const wishlistFound = await Wishlist.findOne({
@@ -190,7 +187,7 @@ const deleteUser = async (req, res, next) => {
     //const { avatar: imgToDelete } = await User.findById(id);
     //! VOLVER A VER agregar estraegia para eliminar avatar de cloudinary
     await User.findByIdAndUpdate(id, { role: "deleted" });
-    return res.status(204).json({ message: "Deleted successfully" });
+    return res.json({ message: "Usuario eliminado exitosamente" });
   } catch (error) {
     next(error);
   }
@@ -430,7 +427,7 @@ const deleteProduct = async (req, res, next) => {
     cloudinary.api.delete_resources(deleteList);
 
     await Product.findByIdAndDelete(req.params.id);
-    res.status(204).json("deleted");
+    res.json("Producto eliminado exitosamente");
   } catch (error) {
     next(error);
   }
@@ -442,7 +439,7 @@ const deleteAllProducts = async (req, res, next) => {
     cloudinary.api.delete_resources(true);
     //cloudinary.api.delete_folder("products", (error, result) => { console.log(result); });
     const deleted = await Product.deleteMany();
-    res.status(200).json(deleted);
+    return res.json(deleted);
   } catch (error) {
     next(error);
   }
