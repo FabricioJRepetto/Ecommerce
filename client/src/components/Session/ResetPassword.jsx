@@ -37,7 +37,7 @@ const ResetPassword = () => {
       } catch (error) {
         //! VOLVER A VER manejo de errores
         console.log("error", error);
-        notification("Link de restablecimiento vencido", "", "error");
+        notification("Link de recuperación vencido", "", "error");
         navigate("/signin");
       }
     })();
@@ -56,9 +56,7 @@ const ResetPassword = () => {
           },
         }
       );
-      console.log(data);
       setResponse(data.message);
-      /* notification("Password modificado con éxito", "", "success");  */
       setTimeout(() => {
         navigate("/signin");
       }, 4000);

@@ -1,7 +1,10 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import { sessionActive } from "../../Redux/reducer/sessionSlice";
+import {
+  sessionActive,
+  loadingUserData,
+} from "../../Redux/reducer/sessionSlice";
 import jwt_decode from "jwt-decode";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -10,6 +13,7 @@ import { useModal } from "../../hooks/useModal";
 import Modal from "../common/Modal";
 import "./Signupin.css";
 import { CloseIcon, ArrowBackIcon } from "@chakra-ui/icons";
+import LoaderBars from "../common/LoaderBars";
 const { REACT_APP_OAUTH_CLIENT_ID } = process.env;
 
 const Signupin = () => {
@@ -70,7 +74,8 @@ const Signupin = () => {
 
   //? LOGIN CON MAIL
   const signin = async (signinData) => {
-    openLoader();
+    dispatch(loadingUserData(true));
+    // openLoader();
     try {
       const { data } = await axios.post(`/user/signin`, signinData);
 
@@ -81,16 +86,18 @@ const Signupin = () => {
         notification(`Bienvenido, ${data.user.name}`, "", "success");
       }
     } catch (error) {
-      notification(error.response.data.message, "", "error");
       //! VOLVER A VER manejo de errores
+      notification(error.response.data.message, "", "error");
+      dispatch(loadingUserData(false));
     } finally {
-      closeLoader();
+      // closeLoader();
     }
   };
 
   //? LOGIN CON GOOGLE
   const handleCallbackResponse = async (response) => {
-    openLoader();
+    dispatch(loadingUserData(true));
+    //openLoader();
     //response.credential = Google user token
     const googleToken = "google" + response.credential;
     window.localStorage.setItem("loggedTokenEcommerce", googleToken);
@@ -120,9 +127,10 @@ const Signupin = () => {
       notification(`Bienvenido, ${data.name}`, "", "success");
       dispatch(sessionActive(true));
     } catch (error) {
+      dispatch(loadingUserData(false));
       console.log(error); //! VOLVER A VER manejo de errores
     } finally {
-      closeLoader();
+      //closeLoader();
     }
   };
 
@@ -180,28 +188,6 @@ const Signupin = () => {
   return (
     <div className="signin-container">
       <div className={`signin-inner ${flag && "signin-visible"}`}>
-        {/* <div className="sign-select-container">
-          <div
-            onClick={() => handleSign("signin")}
-            className={`sign-select ${
-              signSelect === "signin"
-                ? "sign-active"
-                : "sign-inactive signin-inactive"
-            }`}
-          >
-            SIGN IN
-          </div>
-          <div
-            onClick={() => handleSign("signup")}
-            className={`sign-select ${
-              signSelect === "signup"
-                ? "sign-active"
-                : "sign-inactive signup-inactive"
-            }`}
-          >
-            SIGN UP
-          </div>
-        </div> */}
         <img
           src={require("../../assets/provider-logo.png")}
           alt="logo"
@@ -281,7 +267,11 @@ const Signupin = () => {
             </span>
 
             <div>
-              <input type="submit" value="Sign In" className="sign-button" />
+              <input
+                type="submit"
+                value="Iniciar sesión"
+                className="sign-button"
+              />
             </div>
 
             <div>
@@ -289,7 +279,7 @@ const Signupin = () => {
                 onClick={() => handleSign("signup")}
                 className="text-button"
               >
-                ¿No tienes una cuenta? SIGN UP
+                ¿No tienes una cuenta? REGÍSTRATE
               </span>
             </div>
           </form>
@@ -414,13 +404,13 @@ const Signupin = () => {
               )}
             </span>
 
-            <input type="submit" value="Sign Up" className="sign-button" />
+            <input type="submit" value="Registrarse" className="sign-button" />
             <div>
               <span
                 onClick={() => handleSign("signin")}
                 className="text-button"
               >
-                ¿Ya tienes una cuenta? SIGN IN
+                ¿Ya tienes una cuenta? INICIA SESIÓN
               </span>
             </div>
           </form>
@@ -519,21 +509,7 @@ const Signupin = () => {
       <Modal isOpen={isOpenLoader}>
         <div className="signin-container">
           <div className="signin-inner forgot-container">
-            <h1>CARGANDO</h1>
-            <h1>CARGANDO</h1>
-            <h1>CARGANDO</h1>
-            <h1>CARGANDO</h1>
-            <h1>CARGANDO</h1>
-            <h1>CARGANDO</h1>
-            <h1>CARGANDO</h1>
-            <h1>CARGANDO</h1>
-            <h1>CARGANDO</h1>
-            <h1>CARGANDO</h1>
-            <h1>CARGANDO</h1>
-            <h1>CARGANDO</h1>
-            <h1>CARGANDO</h1>
-            <h1>CARGANDO</h1>
-            <h1>CARGANDO</h1>
+            <LoaderBars />
           </div>
         </div>
       </Modal>

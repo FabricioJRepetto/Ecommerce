@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import {
@@ -10,6 +10,7 @@ import {
   loadGoogleUser,
   loadId,
   loadFullName,
+  loadingUserData,
 } from "./Redux/reducer/sessionSlice";
 import { loadCart, loadWishlist } from "./Redux/reducer/cartSlice";
 import axios from "axios";
@@ -41,19 +42,21 @@ import BackToTop from "./helpers/backToTop/BackToTop";
 import RequireRole from "./test/fer/RequireRole";
 import UsersAdmin from "./test/fer/UsersAdmin";
 import AboutUs from "./components/common/AboutUs";
+import LoaderBars from "./components/common/LoaderBars";
 
 function App() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { session } = useSelector((state) => state.sessionReducer);
-  const [loading, setLoading] = useState(true);
+  const { session, isUserDataLoading } = useSelector(
+    (state) => state.sessionReducer
+  );
 
   useEffect(() => {
-    setLoading(true);
     const loggedUserToken = window.localStorage.getItem("loggedTokenEcommerce");
     (async () => {
       try {
         if (loggedUserToken) {
+          dispatch(loadingUserData(true));
           const { data } = await axios(`/user/profile/${loggedUserToken}`); //! VOLVER A VER fijarse con nuevos usuarios de google
 
           const {
@@ -89,11 +92,11 @@ function App() {
           const { data: wish } = await axios(`/wishlist`);
           dispatch(loadWishlist(wish.id_list));
         }
-        setLoading(false);
       } catch (error) {
         window.localStorage.removeItem("loggedTokenEcommerce");
         navigate("/");
-        setLoading(false);
+      } finally {
+        dispatch(loadingUserData(false));
       }
     })();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -102,8 +105,8 @@ function App() {
   return (
     <div className="App" id="scroller">
       <Notification />
-      {loading ? (
-        <div className="globalLoader"></div>
+      {isUserDataLoading ? (
+        <GlobalCover />
       ) : (
         <div>
           <GlobalCover />

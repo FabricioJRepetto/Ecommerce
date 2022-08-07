@@ -30,7 +30,7 @@
   opacity: 1;
 }
 .forgot-container {
-  justify-content: start;
+  justify-content: center;
 }
 .forgot-container > form {
   margin-top: 2rem;
@@ -52,29 +52,6 @@
   padding-top: 1.5rem;
   margin-top: 1rem;
 }
-
-/* .sign-active {
-  font-weight: bolder;
-}
-.signin-inactive {
-  border-right: 1px solid lightgrey;
-}
-.signup-inactive {
-  border-left: 1px solid lightgrey;
-} 
-.sign-inactive {
-  border-bottom: 1px solid lightgrey;
-  color: lightgrey;
-}
-.sign-select {
-  width: 100%;
-  padding: 0.7rem 0 0.7rem 0;
-}
-.sign-select-container {
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-}*/
 
 .input-with-button {
   position: relative;

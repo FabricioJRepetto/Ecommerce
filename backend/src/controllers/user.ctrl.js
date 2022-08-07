@@ -191,6 +191,7 @@ const resetPassword = async (req, res, next) => {
       return res.status(401).json({ message: "Cuenta no autorizada" });
 
     await jwt.verify(resetToken, JWT_SECRET_CODE + userFound.password);
+    return res.send("ok");
   } catch (error) {
     next(error);
   }
