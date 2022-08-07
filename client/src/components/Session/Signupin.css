@@ -95,16 +95,22 @@ form .sign-button {
   cursor: pointer;
 }
 
-.x-container {
+.input-icon-container {
   color: black;
   position: absolute;
   right: 0;
   top: 0.2rem;
   margin-top: auto;
   margin-bottom: auto;
-  margin-right: 1rem;
   cursor: pointer;
   padding: 0.2rem;
+}
+
+.x-button {
+  margin-right: 0.5rem;
+}
+.view-button {
+  margin-right: 2rem;
 }
 
 form > .input-with-button {

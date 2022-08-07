@@ -12,7 +12,12 @@ import { useNotification } from "../../hooks/useNotification";
 import { useModal } from "../../hooks/useModal";
 import Modal from "../common/Modal";
 import "./Signupin.css";
-import { CloseIcon, ArrowBackIcon } from "@chakra-ui/icons";
+import {
+  CloseIcon,
+  ArrowBackIcon,
+  ViewIcon,
+  ViewOffIcon,
+} from "@chakra-ui/icons";
 import LoaderBars from "../common/LoaderBars";
 const { REACT_APP_OAUTH_CLIENT_ID } = process.env;
 
@@ -23,6 +28,11 @@ const Signupin = () => {
   const navigate = useNavigate();
   const { session } = useSelector((state) => state.sessionReducer);
   const [response, setResponse] = useState(null);
+  const [viewPassword, setViewPassword] = useState({
+    signin: false,
+    signup: false,
+    signupRepeat: false,
+  });
 
   const {
     register: registerSignin,
@@ -160,14 +170,14 @@ const Signupin = () => {
     // eslint-disable-next-line
   }, [session]);
 
-  useEffect(() => {
+  /* useEffect(() => {
     setValueSignin("email", "fer.eze.ram@gmail.com");
     setValueSignin("password", "fer.eze.ram@gmail.com");
     setValueSignup("email", "fer.eze.ram@gmail.com");
     setValueSignup("password", "fer.eze.ram@gmail.com");
     setValueSignup("repPassword", "fer.eze.ram@gmail.com");
     setValueForgot("email", "fer.eze.ram@gmail.com");
-  }, []);
+  }, []); */
 
   const forgotPassword = async (email) => {
     openLoader();
@@ -219,9 +229,10 @@ const Signupin = () => {
                   pattern: emailRegex,
                 })}
               />
-              {watchSignin("email") !== "" && (
+              {watchSignin("email") === "" ||
+              watchSignin("email") === undefined ? null : (
                 <div
-                  className="x-container"
+                  className="input-icon-container x-button"
                   onClick={() => setValueSignin("email", "")}
                 >
                   <CloseIcon />
@@ -247,18 +258,40 @@ const Signupin = () => {
                   watchSignin("password") === undefined ||
                   watchSignin("password") === ""
                     ? ""
-                    : "password"
+                    : `${viewPassword.signin ? "" : "password"}`
                 }
                 {...registerSignin("password", {
                   required: true,
                 })}
               />
-              {watchSignin("password") !== "" && (
+              {watchSignin("password") === "" ||
+              watchSignin("password") === undefined ? null : (
                 <div
-                  className="x-container"
+                  className="input-icon-container x-button"
                   onClick={() => setValueSignin("password", "")}
                 >
                   <CloseIcon />
+                </div>
+              )}
+              {watchSignin("password") === "" ||
+              watchSignin("password") ===
+                undefined ? null : viewPassword.signin ? (
+                <div
+                  className="input-icon-container view-button"
+                  onClick={() =>
+                    setViewPassword({ ...viewPassword, signin: false })
+                  }
+                >
+                  <ViewOffIcon />
+                </div>
+              ) : (
+                <div
+                  className="input-icon-container view-button"
+                  onClick={() =>
+                    setViewPassword({ ...viewPassword, signin: true })
+                  }
+                >
+                  <ViewIcon />
                 </div>
               )}
             </span>
@@ -312,7 +345,7 @@ const Signupin = () => {
               {watchSignup("email") === "" ||
               watchSignup("email") === undefined ? null : (
                 <div
-                  className="x-container"
+                  className="input-icon-container x-button"
                   onClick={() => setValueSignup("email", "")}
                 >
                   <CloseIcon />
@@ -343,7 +376,7 @@ const Signupin = () => {
                   watchSignup("password") === undefined ||
                   watchSignup("password") === ""
                     ? ""
-                    : "password"
+                    : `${viewPassword.signup ? "" : "password"}`
                 }
                 {...registerSignup("password", {
                   required: true,
@@ -353,10 +386,31 @@ const Signupin = () => {
               {watchSignup("password") === "" ||
               watchSignup("password") === undefined ? null : (
                 <div
-                  className="x-container"
+                  className="input-icon-container x-button"
                   onClick={() => setValueSignup("password", "")}
                 >
                   <CloseIcon />
+                </div>
+              )}
+              {watchSignup("password") === "" ||
+              watchSignup("password") ===
+                undefined ? null : viewPassword.signup ? (
+                <div
+                  className="input-icon-container view-button"
+                  onClick={() =>
+                    setViewPassword({ ...viewPassword, signup: false })
+                  }
+                >
+                  <ViewOffIcon />
+                </div>
+              ) : (
+                <div
+                  className="input-icon-container view-button"
+                  onClick={() =>
+                    setViewPassword({ ...viewPassword, signup: true })
+                  }
+                >
+                  <ViewIcon />
                 </div>
               )}
             </span>
@@ -382,7 +436,7 @@ const Signupin = () => {
                   watchSignup("repPassword") === undefined ||
                   watchSignup("repPassword") === ""
                     ? ""
-                    : "password"
+                    : `${viewPassword.signupRep ? "" : "password"}`
                 }
                 {...registerSignup("repPassword", {
                   required: true,
@@ -396,10 +450,31 @@ const Signupin = () => {
               {watchSignup("repPassword") === "" ||
               watchSignup("repPassword") === undefined ? null : (
                 <div
-                  className="x-container"
+                  className="input-icon-container x-button"
                   onClick={() => setValueSignup("repPassword", "")}
                 >
                   <CloseIcon />
+                </div>
+              )}
+              {watchSignup("repPassword") === "" ||
+              watchSignup("repPassword") ===
+                undefined ? null : viewPassword.signupRep ? (
+                <div
+                  className="input-icon-container view-button"
+                  onClick={() =>
+                    setViewPassword({ ...viewPassword, signupRep: false })
+                  }
+                >
+                  <ViewOffIcon />
+                </div>
+              ) : (
+                <div
+                  className="input-icon-container view-button"
+                  onClick={() =>
+                    setViewPassword({ ...viewPassword, signupRep: true })
+                  }
+                >
+                  <ViewIcon />
                 </div>
               )}
             </span>

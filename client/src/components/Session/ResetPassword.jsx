@@ -3,7 +3,12 @@ import { NavLink, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useNotification } from "../../hooks/useNotification";
-import { CloseIcon, ArrowBackIcon } from "@chakra-ui/icons";
+import {
+  CloseIcon,
+  ArrowBackIcon,
+  ViewIcon,
+  ViewOffIcon,
+} from "@chakra-ui/icons";
 import "./ResetPassword.css";
 import { useModal } from "../../hooks/useModal";
 import Modal from "../common/Modal";
@@ -21,6 +26,10 @@ const ResetPassword = () => {
   } = useForm();
   const [isOpenLoader, openLoader, closeLoader] = useModal();
   const [response, setResponse] = useState(null);
+  const [viewPassword, setViewPassword] = useState({
+    password: false,
+    repPassword: false,
+  });
 
   useEffect(() => {
     (async () => {
@@ -116,7 +125,7 @@ const ResetPassword = () => {
                 className={
                   watch("password") === undefined || watch("password") === ""
                     ? ""
-                    : "password"
+                    : `${viewPassword.password ? "" : "password"}`
                 }
                 {...register("password", {
                   required: true,
@@ -126,10 +135,31 @@ const ResetPassword = () => {
               {watch("password") === "" ||
               watch("password") === undefined ? null : (
                 <div
-                  className="x-container"
+                  className="input-icon-container x-button"
                   onClick={() => setValue("password", "")}
                 >
                   <CloseIcon />
+                </div>
+              )}
+
+              {watch("password") === "" ||
+              watch("password") === undefined ? null : viewPassword.password ? (
+                <div
+                  className="input-icon-container view-button"
+                  onClick={() =>
+                    setViewPassword({ ...viewPassword, password: false })
+                  }
+                >
+                  <ViewOffIcon />
+                </div>
+              ) : (
+                <div
+                  className="input-icon-container view-button"
+                  onClick={() =>
+                    setViewPassword({ ...viewPassword, password: true })
+                  }
+                >
+                  <ViewIcon />
                 </div>
               )}
             </span>
@@ -155,7 +185,7 @@ const ResetPassword = () => {
                   watch("repPassword") === undefined ||
                   watch("repPassword") === ""
                     ? ""
-                    : "password"
+                    : `${viewPassword.repPassword ? "" : "password"}`
                 }
                 {...register("repPassword", {
                   required: true,
@@ -169,10 +199,32 @@ const ResetPassword = () => {
               {watch("repPassword") === "" ||
               watch("repPassword") === undefined ? null : (
                 <div
-                  className="x-container"
+                  className="input-icon-container x-button"
                   onClick={() => setValue("repPassword", "")}
                 >
                   <CloseIcon />
+                </div>
+              )}
+
+              {watch("repPassword") === "" ||
+              watch("repPassword") ===
+                undefined ? null : viewPassword.repPassword ? (
+                <div
+                  className="input-icon-container view-button"
+                  onClick={() =>
+                    setViewPassword({ ...viewPassword, repPassword: false })
+                  }
+                >
+                  <ViewOffIcon />
+                </div>
+              ) : (
+                <div
+                  className="input-icon-container view-button"
+                  onClick={() =>
+                    setViewPassword({ ...viewPassword, repPassword: true })
+                  }
+                >
+                  <ViewIcon />
                 </div>
               )}
             </span>
