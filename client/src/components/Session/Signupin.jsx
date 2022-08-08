@@ -170,14 +170,15 @@ const Signupin = () => {
     // eslint-disable-next-line
   }, [session]);
 
-  /* useEffect(() => {
+  useEffect(() => {
+    session && navigate("/");
     setValueSignin("email", "fer.eze.ram@gmail.com");
     setValueSignin("password", "fer.eze.ram@gmail.com");
     setValueSignup("email", "fer.eze.ram@gmail.com");
     setValueSignup("password", "fer.eze.ram@gmail.com");
     setValueSignup("repPassword", "fer.eze.ram@gmail.com");
     setValueForgot("email", "fer.eze.ram@gmail.com");
-  }, []); */
+  }, []);
 
   const forgotPassword = async (email) => {
     openLoader();
@@ -555,7 +556,7 @@ const Signupin = () => {
                   {watchForgot("email") === "" ||
                   watchForgot("email") === undefined ? null : (
                     <div
-                      className="x-container"
+                      className="input-icon-container x-button"
                       onClick={() => setValueForgot("email", "")}
                     >
                       <CloseIcon />

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useNotification } from "../../hooks/useNotification";
@@ -12,11 +13,13 @@ import {
 import "./ResetPassword.css";
 import { useModal } from "../../hooks/useModal";
 import Modal from "../common/Modal";
+import LoaderBars from "../common/LoaderBars";
 
 const ResetPassword = () => {
   const navigate = useNavigate();
   const { resetToken, userId } = useParams();
   const [notification] = useNotification();
+  const { session } = useSelector((state) => state.sessionReducer);
   const {
     register,
     handleSubmit,
@@ -25,6 +28,7 @@ const ResetPassword = () => {
     setValue,
   } = useForm();
   const [isOpenLoader, openLoader, closeLoader] = useModal();
+  const [loading, setLoading] = useState(true);
   const [response, setResponse] = useState(null);
   const [viewPassword, setViewPassword] = useState({
     password: false,
@@ -43,11 +47,12 @@ const ResetPassword = () => {
             },
           }
         );
+        setLoading(false);
       } catch (error) {
         //! VOLVER A VER manejo de errores
         console.log("error", error);
         notification("Link de recuperación vencido", "", "error");
-        navigate("/signin");
+        session ? navigate("/") : navigate("/signin");
       }
     })();
     // eslint-disable-next-line
@@ -80,7 +85,9 @@ const ResetPassword = () => {
     }
   };
 
-  return (
+  return loading ? (
+    <></>
+  ) : (
     <div className="reset-container">
       <div className="reset-inner">
         <img
@@ -240,21 +247,7 @@ const ResetPassword = () => {
       <Modal isOpen={isOpenLoader}>
         <div className="reset-container">
           <div className="reset-inner loader-container">
-            <h1>CARGANDO</h1>
-            <h1>CARGANDO</h1>
-            <h1>CARGANDO</h1>
-            <h1>CARGANDO</h1>
-            <h1>CARGANDO</h1>
-            <h1>CARGANDO</h1>
-            <h1>CARGANDO</h1>
-            <h1>CARGANDO</h1>
-            <h1>CARGANDO</h1>
-            <h1>CARGANDO</h1>
-            <h1>CARGANDO</h1>
-            <h1>CARGANDO</h1>
-            <h1>CARGANDO</h1>
-            <h1>CARGANDO</h1>
-            <h1>CARGANDO</h1>
+            <LoaderBars />
           </div>
         </div>
       </Modal>
