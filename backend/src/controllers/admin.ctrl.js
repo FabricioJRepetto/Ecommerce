@@ -236,11 +236,16 @@ const createProduct = async (req, res, next) => {
 
     let brandLowerCase = brand.toLowerCase();
 
+    let mainFeaturesArray = [];
+    for (const feature of main_features) {
+      mainFeaturesArray.push(feature.value);
+    }
+
     const newProduct = new Product({
       name,
       price,
       brand: brandLowerCase,
-      main_features,
+      main_features: mainFeaturesArray,
       attributes,
       description,
       category,

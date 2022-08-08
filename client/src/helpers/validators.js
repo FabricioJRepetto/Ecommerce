@@ -59,9 +59,11 @@ export const validationProductFormSchema = yup.object().shape({
       validateNumbers(value)
     ),
   description: yup.string().required("Descripción es requerida"),
-  main_features: yup
-    .array()
-    .of(yup.string().required("Principales características requeridas")),
+  main_features: yup.array().of(
+    yup.object().shape({
+      value: yup.string().required("Principales características requeridas"),
+    })
+  ),
   attributes: yup.array().of(
     yup.object().shape({
       name: yup.string().required("Nombre de atributo es requerido"),

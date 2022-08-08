@@ -77,10 +77,11 @@ const ProductForm = () => {
 
   const handleAddFeature = () => {
     const feature = document.getElementById(
-      `main_feature_${featuresQuantity - 1}`
+      `main_feature_value_${featuresQuantity - 1}`
     );
+
     if (feature.value !== "") {
-      appendFeature("");
+      appendFeature({ value: "" });
       setFeaturesQuantity(featuresQuantity + 1);
     } else {
       warnTimer(
@@ -91,6 +92,7 @@ const ProductForm = () => {
   };
 
   const handleRemoveFeature = (i) => {
+    console.log("index", i);
     if (featuresQuantity > 1) {
       removeFeature(i);
       setFeaturesQuantity(featuresQuantity - 1);
@@ -108,6 +110,15 @@ const ProductForm = () => {
     name: "attributes",
     control,
   });
+
+  useEffect(() => {
+    console.log("featuresQuantity", featuresQuantity);
+    console.log("fieldsFeatures", fieldsFeatures);
+  }, [fieldsFeatures]);
+  /* useEffect(() => {
+    console.log("attributesQuantity", attributesQuantity);
+    console.log("fieldsAttributes", fieldsAttributes);
+  }, [fieldsAttributes]); */
 
   const handleAddAttribute = () => {
     const attribute_name = document.getElementById(
@@ -152,7 +163,7 @@ const ProductForm = () => {
   };
 
   useEffect(() => {
-    //! VOLVER A VER eliminar hasta linea 173
+    //! VOLVER A VER eliminar hasta linea 188
     setValue("brand", "marcaa1");
     setValue("name", "nombre1");
     setValue("price", 100);
@@ -184,9 +195,9 @@ const ProductForm = () => {
         })
         .catch((err) => console.log(err)); //!VOLVER A VER manejo de errores
     } else {
-      //! VOLVER A VER poner strings vacias en lineas 184 y 185
-      appendAttribute({ name: "color", value_name: "negro" });
-      appendFeature("lindo");
+      //! VOLVER A VER poner strings vacias en lineas 199 y 200
+      appendAttribute({ name: "color", value_name: "amarillo" });
+      appendFeature({ value: "piola" });
     }
     // eslint-disable-next-line
   }, []);
@@ -196,7 +207,6 @@ const ProductForm = () => {
     validateImgs(fileListArrayImg, warnTimer, productImg);
     setProductImg([...productImg, ...fileListArrayImg]);
   };
-
   const handleRemoveImg = (i) => {
     setProductImg(productImg.filter((_, index) => index !== i));
     mainImgIndex === i && setMainImgIndex(0);
@@ -283,7 +293,7 @@ const ProductForm = () => {
     setAttributesQuantity(1);
     appendAttribute({ name: "", value_name: "" });
     setFeaturesQuantity(1);
-    appendFeature("");
+    appendFeature({ value: "" });
   };
 
   const handleModalCreateProduct = (value) => {
@@ -415,11 +425,11 @@ const ProductForm = () => {
                     type="text"
                     placeholder="Característica principal"
                     autoComplete="off"
-                    id={`main_feature_${i}`}
-                    {...register(`main_features.${i}`)}
+                    id={`main_feature_value_${i}`}
+                    {...register(`main_features.${i}.value`)}
                   />
                   <span onClick={() => handleRemoveFeature(i)}> X</span>
-                  <p>{errors.main_features?.[i]?.message}</p>
+                  <p>{errors.main_features?.[i]?.value.message}</p>
                 </>
               ))
             )}
