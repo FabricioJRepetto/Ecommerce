@@ -9,8 +9,8 @@ import {
   loadProductsOwn,
   loadQuerys,
 } from "../../Redux/reducer/productsSlice";
+import { CloseIcon, SearchIcon } from "@chakra-ui/icons";
 
-import "./NavBar.css";
 import { ReactComponent as Cart } from "../../assets/svg/cart.svg";
 import { ReactComponent as Fav } from "../../assets/svg/fav.svg";
 import { ReactComponent as Avatar } from "../../assets/svg/avatar.svg";
@@ -19,16 +19,19 @@ import WishlistModal from "../common/WishlistModal";
 import { avatarResizer } from "../../helpers/resizer";
 import { PowerGlitch } from "powerglitch";
 import Signupin from "../Session/Signupin";
+import "./NavBar.css";
+import "../../App.css";
 
 const NavBar = () => {
-  const session = useSelector((state) => state.sessionReducer.session);
-  const username = useSelector((state) => state.sessionReducer.username);
-  const avatar = useSelector((state) => state.sessionReducer.avatar);
+  const { session, username, avatar } = useSelector(
+    (state) => state.sessionReducer
+  );
   const cart = useSelector((state) => state.cartReducer.onCart);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [profileModal, setProfileModal] = useState(false);
   const [wishModal, setWishModal] = useState(false);
+  const [productToSearch, setProductToSearch] = useState("");
   const eldiv = useRef(null);
 
   useEffect(() => {
@@ -61,20 +64,19 @@ const NavBar = () => {
     });
   }, []);
 
-  const querySearch = async (e) => {
-    if (e.key === "Enter" && e.target.value) {
-      if (session) {
-        //: logear busqueda en el historial
-        axios.post(`/history/search/${e.target.value}`);
-      }
-      dispatch(loadProductsOwn("loading"));
-      dispatch(loadProductsFound("loading"));
-      dispatch(loadFilters("loading"));
-      dispatch(loadApplied("loading"));
-
-      navigate("/results");
-      dispatch(loadQuerys({ q: e.target.value }));
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    if (session) {
+      //: logear busqueda en el historial
+      axios.post(`/history/search/${productToSearch}`);
     }
+    dispatch(loadProductsOwn("loading"));
+    dispatch(loadProductsFound("loading"));
+    dispatch(loadFilters("loading"));
+    dispatch(loadApplied("loading"));
+
+    navigate("/results");
+    dispatch(loadQuerys({ q: productToSearch }));
   };
 
   const logoClick = () => {
@@ -97,12 +99,33 @@ const NavBar = () => {
       </div>
 
       <div className="navbar-central-section">
-        <input
-          type="text"
-          placeholder="search"
-          onKeyUp={querySearch}
-          id="navbar-searchbar"
-        />
+        <form onSubmit={handleSearch}>
+          <span className="g-input-with-button">
+            <input
+              type="text"
+              placeholder="Busca un producto"
+              id="navbar-searchbar"
+              onChange={(e) => setProductToSearch(e.target.value)}
+              value={productToSearch}
+            />
+            {productToSearch && (
+              <>
+                <div
+                  className="g-input-icon-container g-input-view-button"
+                  onClick={handleSearch}
+                >
+                  <SearchIcon />
+                </div>
+                <div
+                  className="g-input-icon-container g-input-x-button"
+                  onClick={() => setProductToSearch("")}
+                >
+                  <CloseIcon />
+                </div>
+              </>
+            )}
+          </span>
+        </form>
 
         <div className="navbar-central-subsection">
           <NavLink to={"products"}>

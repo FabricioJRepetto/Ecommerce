@@ -11,7 +11,6 @@ import { useForm } from "react-hook-form";
 import { useNotification } from "../../hooks/useNotification";
 import { useModal } from "../../hooks/useModal";
 import Modal from "../common/Modal";
-import "./Signupin.css";
 import {
   CloseIcon,
   ArrowBackIcon,
@@ -19,6 +18,8 @@ import {
   ViewOffIcon,
 } from "@chakra-ui/icons";
 import LoaderBars from "../common/LoaderBars";
+import "./Signupin.css";
+import "../../App.css";
 const { REACT_APP_OAUTH_CLIENT_ID } = process.env;
 
 const Signupin = () => {
@@ -172,12 +173,12 @@ const Signupin = () => {
 
   useEffect(() => {
     session && navigate("/");
-    /* setValueSignin("email", "fer.eze.ram@gmail.com");
+    setValueSignin("email", "fer.eze.ram@gmail.com");
     setValueSignin("password", "fer.eze.ram@gmail.com");
     setValueSignup("email", "fer.eze.ram@gmail.com");
     setValueSignup("password", "fer.eze.ram@gmail.com");
     setValueSignup("repPassword", "fer.eze.ram@gmail.com");
-    setValueForgot("email", "fer.eze.ram@gmail.com"); */
+    setValueForgot("email", "fer.eze.ram@gmail.com");
   }, []);
 
   const forgotPassword = async (email) => {
@@ -210,7 +211,7 @@ const Signupin = () => {
           <form onSubmit={handleSubmitSignin(signin)}>
             <>
               {!errorsSignin.email && (
-                <p className="hidden-placeholder">hidden</p>
+                <p className="g-hidden-placeholder">hidden</p>
               )}
               {errorsSignin.email?.type === "required" && (
                 <p className="error-sign">Ingresa tu email</p>
@@ -220,7 +221,7 @@ const Signupin = () => {
               )}
             </>
 
-            <span className="input-with-button">
+            <span className="g-input-with-button">
               <input
                 type="text"
                 placeholder="Email"
@@ -233,7 +234,7 @@ const Signupin = () => {
               {watchSignin("email") === "" ||
               watchSignin("email") === undefined ? null : (
                 <div
-                  className="input-icon-container x-button"
+                  className="g-input-icon-container g-input-x-button"
                   onClick={() => setValueSignin("email", "")}
                 >
                   <CloseIcon />
@@ -243,14 +244,14 @@ const Signupin = () => {
 
             <>
               {!errorsSignin.password && (
-                <p className="hidden-placeholder">hidden</p>
+                <p className="g-hidden-placeholder">hidden</p>
               )}
               {errorsSignin.password?.type === "required" && (
                 <p className="error-sign">Ingresa tu contraseña</p>
               )}
             </>
 
-            <span className="input-with-button">
+            <span className="g-input-with-button">
               <input
                 type="text"
                 placeholder="Contraseña"
@@ -259,7 +260,7 @@ const Signupin = () => {
                   watchSignin("password") === undefined ||
                   watchSignin("password") === ""
                     ? ""
-                    : `${viewPassword.signin ? "" : "password"}`
+                    : `${viewPassword.signin ? "" : "g-password"}`
                 }
                 {...registerSignin("password", {
                   required: true,
@@ -268,7 +269,7 @@ const Signupin = () => {
               {watchSignin("password") === "" ||
               watchSignin("password") === undefined ? null : (
                 <div
-                  className="input-icon-container x-button"
+                  className="g-input-icon-container g-input-x-button"
                   onClick={() => setValueSignin("password", "")}
                 >
                   <CloseIcon />
@@ -278,7 +279,7 @@ const Signupin = () => {
               watchSignin("password") ===
                 undefined ? null : viewPassword.signin ? (
                 <div
-                  className="input-icon-container view-button"
+                  className="g-input-icon-container g-input-view-button"
                   onClick={() =>
                     setViewPassword({ ...viewPassword, signin: false })
                   }
@@ -287,7 +288,7 @@ const Signupin = () => {
                 </div>
               ) : (
                 <div
-                  className="input-icon-container view-button"
+                  className="g-input-icon-container g-input-view-button"
                   onClick={() =>
                     setViewPassword({ ...viewPassword, signin: true })
                   }
@@ -296,7 +297,7 @@ const Signupin = () => {
                 </div>
               )}
             </span>
-            <span onClick={openForgotPassword} className="text-button">
+            <span onClick={openForgotPassword} className="g-text-button">
               ¿Has olvidado tu contraseña?
             </span>
 
@@ -304,14 +305,14 @@ const Signupin = () => {
               <input
                 type="submit"
                 value="Iniciar sesión"
-                className="sign-button"
+                className="g-white-button"
               />
             </div>
 
             <div>
               <span
                 onClick={() => handleSign("signup")}
-                className="text-button"
+                className="g-text-button"
               >
                 ¿No tienes una cuenta? REGÍSTRATE
               </span>
@@ -323,7 +324,7 @@ const Signupin = () => {
           <form onSubmit={handleSubmitSignup(signup)}>
             <>
               {!errorsSignup.email && (
-                <p className="hidden-placeholder">hidden</p>
+                <p className="g-hidden-placeholder">hidden</p>
               )}
               {errorsSignup.email?.type === "required" && (
                 <p className="error-sign">Ingresa tu email</p>
@@ -333,7 +334,7 @@ const Signupin = () => {
               )}
             </>
 
-            <span className="input-with-button">
+            <span className="g-input-with-button">
               <input
                 type="text"
                 placeholder="Email"
@@ -346,7 +347,7 @@ const Signupin = () => {
               {watchSignup("email") === "" ||
               watchSignup("email") === undefined ? null : (
                 <div
-                  className="input-icon-container x-button"
+                  className="g-input-icon-container g-input-x-button"
                   onClick={() => setValueSignup("email", "")}
                 >
                   <CloseIcon />
@@ -356,7 +357,7 @@ const Signupin = () => {
 
             <>
               {!errorsSignup.password && (
-                <p className="hidden-placeholder">hidden</p>
+                <p className="g-hidden-placeholder">hidden</p>
               )}
               {errorsSignup.password?.type === "required" && (
                 <p className="error-sign">Ingresa una contraseña</p>
@@ -368,7 +369,7 @@ const Signupin = () => {
               )}
             </>
 
-            <span className="input-with-button">
+            <span className="g-input-with-button">
               <input
                 type="text"
                 placeholder="Contraseña"
@@ -377,7 +378,7 @@ const Signupin = () => {
                   watchSignup("password") === undefined ||
                   watchSignup("password") === ""
                     ? ""
-                    : `${viewPassword.signup ? "" : "password"}`
+                    : `${viewPassword.signup ? "" : "g-password"}`
                 }
                 {...registerSignup("password", {
                   required: true,
@@ -387,7 +388,7 @@ const Signupin = () => {
               {watchSignup("password") === "" ||
               watchSignup("password") === undefined ? null : (
                 <div
-                  className="input-icon-container x-button"
+                  className="g-input-icon-container g-input-x-button"
                   onClick={() => setValueSignup("password", "")}
                 >
                   <CloseIcon />
@@ -397,7 +398,7 @@ const Signupin = () => {
               watchSignup("password") ===
                 undefined ? null : viewPassword.signup ? (
                 <div
-                  className="input-icon-container view-button"
+                  className="g-input-icon-container g-input-view-button"
                   onClick={() =>
                     setViewPassword({ ...viewPassword, signup: false })
                   }
@@ -406,7 +407,7 @@ const Signupin = () => {
                 </div>
               ) : (
                 <div
-                  className="input-icon-container view-button"
+                  className="g-input-icon-container g-input-view-button"
                   onClick={() =>
                     setViewPassword({ ...viewPassword, signup: true })
                   }
@@ -418,7 +419,7 @@ const Signupin = () => {
 
             <>
               {!errorsSignup.repPassword && (
-                <p className="hidden-placeholder">hidden</p>
+                <p className="g-hidden-placeholder">hidden</p>
               )}
               {errorsSignup.repPassword?.type === "required" && (
                 <p className="error-sign">Ingresa una contraseña</p>
@@ -428,7 +429,7 @@ const Signupin = () => {
               )}
             </>
 
-            <span className="input-with-button">
+            <span className="g-input-with-button">
               <input
                 type="text"
                 placeholder="Repite tu contraseña"
@@ -437,7 +438,7 @@ const Signupin = () => {
                   watchSignup("repPassword") === undefined ||
                   watchSignup("repPassword") === ""
                     ? ""
-                    : `${viewPassword.signupRep ? "" : "password"}`
+                    : `${viewPassword.signupRep ? "" : "g-password"}`
                 }
                 {...registerSignup("repPassword", {
                   required: true,
@@ -451,7 +452,7 @@ const Signupin = () => {
               {watchSignup("repPassword") === "" ||
               watchSignup("repPassword") === undefined ? null : (
                 <div
-                  className="input-icon-container x-button"
+                  className="g-input-icon-container g-input-x-button"
                   onClick={() => setValueSignup("repPassword", "")}
                 >
                   <CloseIcon />
@@ -461,7 +462,7 @@ const Signupin = () => {
               watchSignup("repPassword") ===
                 undefined ? null : viewPassword.signupRep ? (
                 <div
-                  className="input-icon-container view-button"
+                  className="g-input-icon-container g-input-view-button"
                   onClick={() =>
                     setViewPassword({ ...viewPassword, signupRep: false })
                   }
@@ -470,7 +471,7 @@ const Signupin = () => {
                 </div>
               ) : (
                 <div
-                  className="input-icon-container view-button"
+                  className="g-input-icon-container g-input-view-button"
                   onClick={() =>
                     setViewPassword({ ...viewPassword, signupRep: true })
                   }
@@ -480,11 +481,15 @@ const Signupin = () => {
               )}
             </span>
 
-            <input type="submit" value="Registrarse" className="sign-button" />
+            <input
+              type="submit"
+              value="Registrarse"
+              className="g-white-button"
+            />
             <div>
               <span
                 onClick={() => handleSign("signin")}
-                className="text-button"
+                className="g-text-button"
               >
                 ¿Ya tienes una cuenta? INICIA SESIÓN
               </span>
@@ -496,7 +501,7 @@ const Signupin = () => {
           <span>O ingresa con tu cuenta de Google</span>
           <span className="google-signin-container" id="signInDiv"></span>
           <NavLink to={"/"}>
-            <span className="back-button text-button">
+            <span className="g-back-button g-text-button">
               <ArrowBackIcon />
               {"   regresar"}
             </span>
@@ -518,7 +523,7 @@ const Signupin = () => {
               <>
                 <div className="forgot-response">{response}</div>
                 <NavLink to={"/"}>
-                  <span className="back-button text-button">
+                  <span className="g-back-button g-text-button">
                     <ArrowBackIcon />
                     {"   regresar"}
                   </span>
@@ -533,7 +538,7 @@ const Signupin = () => {
 
                 <>
                   {!errorsForgot.email && (
-                    <p className="hidden-placeholder">hidden</p>
+                    <p className="g-hidden-placeholder">hidden</p>
                   )}
                   {errorsForgot.email?.type === "required" && (
                     <p className="error-sign">Ingresa tu email</p>
@@ -543,7 +548,7 @@ const Signupin = () => {
                   )}
                 </>
 
-                <span className="input-with-button">
+                <span className="g-input-with-button">
                   <input
                     type="text"
                     placeholder="Email"
@@ -556,7 +561,7 @@ const Signupin = () => {
                   {watchForgot("email") === "" ||
                   watchForgot("email") === undefined ? null : (
                     <div
-                      className="input-icon-container x-button"
+                      className="g-input-icon-container g-input-x-button"
                       onClick={() => setValueForgot("email", "")}
                     >
                       <CloseIcon />
@@ -568,13 +573,13 @@ const Signupin = () => {
                   <input
                     type="submit"
                     value="Enviar email"
-                    className="sign-button"
+                    className="g-white-button"
                   />
                   <input
                     type="button"
                     onClick={closeForgotPassword}
                     value="Cancelar"
-                    className="sign-button"
+                    className="g-white-button"
                   />
                 </div>
               </form>
