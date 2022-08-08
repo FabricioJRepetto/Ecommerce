@@ -111,15 +111,6 @@ const ProductForm = () => {
     control,
   });
 
-  useEffect(() => {
-    console.log("featuresQuantity", featuresQuantity);
-    console.log("fieldsFeatures", fieldsFeatures);
-  }, [fieldsFeatures]);
-  /* useEffect(() => {
-    console.log("attributesQuantity", attributesQuantity);
-    console.log("fieldsAttributes", fieldsAttributes);
-  }, [fieldsAttributes]); */
-
   const handleAddAttribute = () => {
     const attribute_name = document.getElementById(
       `attribute_name_${attributesQuantity - 1}`
