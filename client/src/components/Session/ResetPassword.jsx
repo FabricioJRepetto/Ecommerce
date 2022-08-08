@@ -10,10 +10,11 @@ import {
   ViewIcon,
   ViewOffIcon,
 } from "@chakra-ui/icons";
-import "./ResetPassword.css";
 import { useModal } from "../../hooks/useModal";
 import Modal from "../common/Modal";
 import LoaderBars from "../common/LoaderBars";
+import "./ResetPassword.css";
+import "../../App.css";
 
 const ResetPassword = () => {
   const navigate = useNavigate();
@@ -101,7 +102,7 @@ const ResetPassword = () => {
           <>
             <div className="reset-response">{response}</div>
             <NavLink to={"/"}>
-              <span className="back-button text-button">
+              <span className="g-back-button g-text-button">
                 <ArrowBackIcon />
                 {"   regresar"}
               </span>
@@ -113,7 +114,9 @@ const ResetPassword = () => {
             <div className="reset-text">Ingresa tu nueva contraseña</div>
 
             <>
-              {!errors.password && <p className="hidden-placeholder">hidden</p>}
+              {!errors.password && (
+                <p className="g-hidden-placeholder">hidden</p>
+              )}
               {errors.password?.type === "required" && (
                 <p className="error-sign">Ingresa una contraseña</p>
               )}
@@ -124,7 +127,7 @@ const ResetPassword = () => {
               )}
             </>
 
-            <span className="input-with-button">
+            <span className="g-input-with-button">
               <input
                 type="text"
                 placeholder="Contraseña"
@@ -132,7 +135,7 @@ const ResetPassword = () => {
                 className={
                   watch("password") === undefined || watch("password") === ""
                     ? ""
-                    : `${viewPassword.password ? "" : "password"}`
+                    : `${viewPassword.password ? "" : "g-password"}`
                 }
                 {...register("password", {
                   required: true,
@@ -142,7 +145,7 @@ const ResetPassword = () => {
               {watch("password") === "" ||
               watch("password") === undefined ? null : (
                 <div
-                  className="input-icon-container x-button"
+                  className="g-input-icon-container g-input-x-button"
                   onClick={() => setValue("password", "")}
                 >
                   <CloseIcon />
@@ -152,7 +155,7 @@ const ResetPassword = () => {
               {watch("password") === "" ||
               watch("password") === undefined ? null : viewPassword.password ? (
                 <div
-                  className="input-icon-container view-button"
+                  className="g-input-icon-container g-input-view-button"
                   onClick={() =>
                     setViewPassword({ ...viewPassword, password: false })
                   }
@@ -161,7 +164,7 @@ const ResetPassword = () => {
                 </div>
               ) : (
                 <div
-                  className="input-icon-container view-button"
+                  className="g-input-icon-container g-input-view-button"
                   onClick={() =>
                     setViewPassword({ ...viewPassword, password: true })
                   }
@@ -173,7 +176,7 @@ const ResetPassword = () => {
 
             <>
               {!errors.repPassword && (
-                <p className="hidden-placeholder">hidden</p>
+                <p className="g-hidden-placeholder">hidden</p>
               )}
               {errors.repPassword?.type === "required" && (
                 <p className="error-sign">Ingresa tu contraseña</p>
@@ -183,7 +186,7 @@ const ResetPassword = () => {
               )}
             </>
 
-            <span className="input-with-button">
+            <span className="g-input-with-button">
               <input
                 type="text"
                 placeholder="Repite tu contraseña"
@@ -192,7 +195,7 @@ const ResetPassword = () => {
                   watch("repPassword") === undefined ||
                   watch("repPassword") === ""
                     ? ""
-                    : `${viewPassword.repPassword ? "" : "password"}`
+                    : `${viewPassword.repPassword ? "" : "g-password"}`
                 }
                 {...register("repPassword", {
                   required: true,
@@ -206,7 +209,7 @@ const ResetPassword = () => {
               {watch("repPassword") === "" ||
               watch("repPassword") === undefined ? null : (
                 <div
-                  className="input-icon-container x-button"
+                  className="g-input-icon-container g-input-x-button"
                   onClick={() => setValue("repPassword", "")}
                 >
                   <CloseIcon />
@@ -217,7 +220,7 @@ const ResetPassword = () => {
               watch("repPassword") ===
                 undefined ? null : viewPassword.repPassword ? (
                 <div
-                  className="input-icon-container view-button"
+                  className="g-input-icon-container g-input-view-button"
                   onClick={() =>
                     setViewPassword({ ...viewPassword, repPassword: false })
                   }
@@ -226,7 +229,7 @@ const ResetPassword = () => {
                 </div>
               ) : (
                 <div
-                  className="input-icon-container view-button"
+                  className="g-input-icon-container g-input-view-button"
                   onClick={() =>
                     setViewPassword({ ...viewPassword, repPassword: true })
                   }
@@ -239,7 +242,7 @@ const ResetPassword = () => {
             <input
               type="submit"
               value="Cambiar contraseña"
-              className="sign-button"
+              className="g-white-button"
             />
           </form>
         )}
