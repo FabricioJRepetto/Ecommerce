@@ -88,13 +88,16 @@ a:active {
 }
 
 /* BOTON RECTANGULAR BLANCO */
-form .g-white-button {
+/* form  */
+.g-white-button {
   font-weight: 200;
   border: 0;
   padding: 0.5rem 3rem;
   margin: 1rem 0 1rem 0;
   cursor: pointer;
   font-weight: 300;
+  background-color: white;
+  color: black;
 }
 .g-white-button:hover {
   background-color: rgb(197, 197, 197);

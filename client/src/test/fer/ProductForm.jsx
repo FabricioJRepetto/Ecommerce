@@ -8,7 +8,6 @@ import {
   loadIdProductToEdit,
   changeReloadFlag,
 } from "../../Redux/reducer/productsSlice";
-import "./ProductForm.css";
 import {
   validateImgs,
   validationProductFormSchema,
@@ -17,6 +16,8 @@ import { useNotification } from "../../hooks/useNotification";
 import { useModal } from "../../hooks/useModal";
 import Modal from "../../components/common/Modal";
 import SelectsNested from "./SelectsNested";
+import "./ProductForm.css";
+import "../../App.css";
 
 const ProductForm = () => {
   const [featuresQuantity, setFeaturesQuantity] = useState(1);
@@ -468,7 +469,9 @@ const ProductForm = () => {
         </>
 
         <div>
-          <label htmlFor="filesButton">BOTON PARA IMAGENES</label>
+          <label htmlFor="filesButton" className="g-white-button">
+            Subir imágenes
+          </label>
           <input
             type="file"
             name="image"
@@ -531,19 +534,30 @@ const ProductForm = () => {
         <input
           type="submit"
           value={productToEdit ? "Actualizar producto" : "Crear producto"}
+          className="g-white-button"
         />
       </form>
-      <button onClick={clearInputs}>RESETEAR</button>
+      <button onClick={clearInputs} className="g-white-button">
+        RESETEAR
+      </button>
       <Modal
         isOpen={isOpenCreateProduct}
         closeModal={closeCreateProduct}
         type="warn"
       >
         <p>¿Crear otro producto?</p>
-        <button type="button" onClick={() => handleModalCreateProduct(true)}>
+        <button
+          type="button"
+          onClick={() => handleModalCreateProduct(true)}
+          className="g-white-button"
+        >
           Aceptar
         </button>
-        <button type="button" onClick={() => handleModalCreateProduct(false)}>
+        <button
+          type="button"
+          onClick={() => handleModalCreateProduct(false)}
+          className="g-white-button"
+        >
           Cancelar
         </button>
       </Modal>
