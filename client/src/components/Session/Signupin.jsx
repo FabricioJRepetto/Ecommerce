@@ -173,12 +173,13 @@ const Signupin = () => {
 
   useEffect(() => {
     session && navigate("/");
-    setValueSignin("email", "fer.eze.ram@gmail.com");
-    setValueSignin("password", "fer.eze.ram@gmail.com");
-    setValueSignup("email", "fer.eze.ram@gmail.com");
-    setValueSignup("password", "fer.eze.ram@gmail.com");
-    setValueSignup("repPassword", "fer.eze.ram@gmail.com");
-    setValueForgot("email", "fer.eze.ram@gmail.com");
+    setValueSignin("email", "");
+    setValueSignin("password", "");
+    setValueSignup("email", "");
+    setValueSignup("password", "");
+    setValueSignup("repPassword", "");
+    setValueForgot("email", "");
+    // eslint-disable-next-line
   }, []);
 
   const forgotPassword = async (email) => {
