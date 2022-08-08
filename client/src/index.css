@@ -1,25 +1,21 @@
 /* Normalize 8.0.1 */
 html {
-  line-height: 1.15; 
-  -webkit-text-size-adjust: 100%; 
+  line-height: 1.15;
+  -webkit-text-size-adjust: 100%;
 }
-
 
 body {
   margin: 0;
 }
 
-
 main {
   display: block;
 }
-
 
 h1 {
   font-size: 2em;
   margin: 0;
 }
-
 
 hr {
   box-sizing: content-box; /* 1 */
@@ -27,24 +23,20 @@ hr {
   overflow: visible; /* 2 */
 }
 
-
 pre {
   font-family: monospace, monospace; /* 1 */
   font-size: 1em; /* 2 */
 }
 
-
 a {
   background-color: transparent;
 }
-
 
 abbr[title] {
   border-bottom: none; /* 1 */
   text-decoration: underline; /* 2 */
   text-decoration: underline dotted; /* 2 */
 }
-
 
 b,
 strong {
@@ -58,11 +50,9 @@ samp {
   font-size: 1em; /* 2 */
 }
 
-
 small {
   font-size: 80%;
 }
-
 
 sub,
 sup {
@@ -80,11 +70,9 @@ sup {
   top: -0.5em;
 }
 
-
 img {
   border-style: none;
 }
-
 
 button,
 input,
@@ -96,7 +84,6 @@ textarea {
   line-height: 1.15; /* 1 */
   margin: 0; /* 2 */
 }
-
 
 button,
 input {
@@ -191,59 +178,60 @@ template {
 /* ------------ */
 
 body {
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
+  font-weight: 200;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 
-@keyframes loaderSwipeAnim{
-  0%{
-      left: -100%;
+@keyframes loaderSwipeAnim {
+  0% {
+    left: -100%;
   }
-  100%{
-      left: 100%;
+  100% {
+    left: 100%;
   }
 }
 
-@keyframes gradientTextAnim{
-    0% {
-		background-position: 0% 50%;
-	}
-	50% {
-		background-position: 100% 50%;
-	}
-	100% {
-		background-position: 0% 50%;
-	}
+@keyframes gradientTextAnim {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
-@keyframes gradientBorderAnim{
-    0% {
-		background-position: 50% 0%;
-	}
-	50% {
-		background-position: 50% 100%;
-	}
-	100% {
-		background-position: 50% 0%;
-	}
+@keyframes gradientBorderAnim {
+  0% {
+    background-position: 50% 0%;
+  }
+  50% {
+    background-position: 50% 100%;
+  }
+  100% {
+    background-position: 50% 0%;
+  }
 }
 
 ::-webkit-scrollbar {
   width: 10px;
 }
 ::-webkit-scrollbar-track {
-    background: rgb(255, 255, 255);
+  background: rgb(255, 255, 255);
 }
 ::-webkit-scrollbar-thumb {
   background: #7a7a7a;
   width: 8px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #404040; 
+  background: #404040;
 }

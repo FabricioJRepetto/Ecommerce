@@ -19,6 +19,8 @@ cloudinary.config({
 });
 
 const signup = async (req, res, next) => {
+  if (req.authInfo.error) return res.json(req.authInfo);
+
   const { _id, email } = req.user;
   const body = { _id, email };
 
@@ -26,9 +28,9 @@ const signup = async (req, res, next) => {
     const verifyToken = jwt.sign({ user: body }, JWT_SECRET_CODE);
 
     const link = `http://localhost:3000/verify/${verifyToken}`;
-    await sendEmail(email, "Verify Email", link); //!VOLVER A VER modificar url de localhost
+    await sendEmail(email, "Verificar email", link); //!VOLVER A VER modificar url de localhost
 
-    return res.status(201).json({
+    return res.json({
       message: req.authInfo,
     });
   } catch (error) {
@@ -55,7 +57,7 @@ const signin = async (req, res, next) => {
         const { _id, email, name, role, avatar, isGoogleUser } = user;
 
         if (role === "deleted")
-          return res.status(401).json({ message: "User deleted" });
+          return res.status(401).json({ message: "Cuenta eliminada" });
 
         const body = { _id, email, role, isGoogleUser };
 
@@ -107,7 +109,7 @@ const profile = async (req, res, next) => {
   try {
     const userFound = await User.findById(userId);
     if (!userFound) {
-      return res.status(404).json({ message: "User not Found" });
+      return res.status(404).json({ message: "Cuenta no encontrada" });
     }
 
     let aux = userFound;
@@ -121,15 +123,20 @@ const profile = async (req, res, next) => {
 
 const verifyEmail = async (req, res, next) => {
   const { _id } = req.user;
-  if (!_id) return res.status(401).send({ message: "No user ID provided" });
+  if (!_id) return res.status(401).send({ message: "ID de cuenta no enviado" });
 
   try {
     const userFound = await User.findById(_id);
-    if (!userFound) return res.status(404).json({ message: "User not found" });
+
+    if (!userFound)
+      return res.status(404).json({ message: "Cuenta no encontrada" });
+    if (userFound.emailVerified)
+      return res.status(400).json({ message: "Email ya verificado" });
+
     userFound.emailVerified = true;
     await userFound.save();
 
-    return res.status(204).json({ message: "Email verified successfully" });
+    return res.json({ message: "Email verificado con éxito" });
   } catch (error) {
     next(error);
   }
@@ -137,13 +144,14 @@ const verifyEmail = async (req, res, next) => {
 
 const forgotPassword = async (req, res, next) => {
   const { email } = req.body;
-  if (!email) return res.status(401).send({ message: "Email is required" });
+  if (!email) return res.status(401).send({ message: "Email requerido" });
 
   try {
     let userFound = await User.findOne({ email });
-    if (!userFound) return res.status(404).send({ message: "User not found" });
+    if (!userFound)
+      return res.status(404).send({ message: "Cuenta no encontrada" });
     if (userFound.isGoogleUser) {
-      return res.status(401).json({ message: "Google user unauthorized" });
+      return res.status(401).json({ message: "Cuenta no autorizada" });
     }
 
     const body = { _id: userFound._id, email: userFound.email };
@@ -154,9 +162,11 @@ const forgotPassword = async (req, res, next) => {
     );
 
     const link = `http://localhost:3000/reset/${body._id}/${resetToken}`;
-    await sendEmail(userFound.email, "Reset Password", link);
+    await sendEmail(userFound.email, "Reestablecer contraseña", link);
 
-    return res.json({ message: "Check your email to reset your password" });
+    return res.json({
+      message: "Revisa tu email para reestablecer la contraseña",
+    });
   } catch (error) {
     next(error);
   }
@@ -166,18 +176,19 @@ const resetPassword = async (req, res, next) => {
   const { _id } = req.body;
   const authHeader = req.headers.authorization;
 
-  if (!_id) return res.status(403).json({ message: "No id provided" });
-  if (!authHeader)
-    return res.status(403).json({ message: "No token provided" });
+  if (!_id) return res.status(403).json({ message: "ID de cuenta no enviado" });
+  if (!authHeader) return res.status(403).json({ message: "Token no enviado" });
   let resetToken = authHeader.split(" ")[1];
 
   try {
     const userFound = await User.findById(_id);
-    if (!userFound) return res.status(404).json({ message: "User not found" });
+    if (!userFound)
+      return res.status(404).json({ message: "Cuenta no encontrada" });
     if (userFound.isGoogleUser)
-      return res.status(401).json({ message: "Google user unauthorized" });
+      return res.status(401).json({ message: "Cuenta no autorizada" });
 
     await jwt.verify(resetToken, JWT_SECRET_CODE + userFound.password);
+    return res.send("ok");
   } catch (error) {
     next(error);
   }
@@ -193,21 +204,21 @@ const changePassword = async (req, res, next) => {
   const { password, _id } = req.body;
   const authHeader = req.headers.authorization;
 
-  if (!authHeader)
-    return res.status(403).json({ message: "No token provided" });
+  if (!authHeader) return res.status(403).json({ message: "Token no enviado" });
   let resetToken = authHeader.split(" ")[1];
 
   try {
     const userFound = await User.findById(_id);
-    if (!userFound) return res.status(404).json({ message: "User not found" });
+    if (!userFound)
+      return res.status(404).json({ message: "Cuenta no encontrada" });
     if (userFound.isGoogleUser)
-      return res.status(401).json({ message: "Google user unauthorized" });
+      return res.status(401).json({ message: "Cuenta no autorizada" });
 
     await jwt.verify(resetToken, JWT_SECRET_CODE + userFound.password);
 
     userFound.password = password;
     await userFound.save();
-    return res.json({ message: "Password changed successfully" });
+    return res.json({ message: "Contraseña modificada con éxito" });
   } catch (error) {
     next(error);
   }
@@ -227,7 +238,7 @@ const editProfile = async (req, res, next) => {
       { new: true }
     );
 
-    return res.json({ message: "Edited successfully", user });
+    return res.json({ message: "Editado con éxito", user });
   } catch (error) {
     next(error);
   }
