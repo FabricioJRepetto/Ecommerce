@@ -55,6 +55,7 @@
 
 .input-with-button {
   position: relative;
+  height: 2.3rem;
 }
 .input-with-button > input {
   width: 100%;
@@ -148,4 +149,8 @@ form > .input-with-button {
   padding: 0.5rem 2rem;
   width: 48%;
   text-align: center;
+}
+
+.back-button {
+  color: white;
 }
