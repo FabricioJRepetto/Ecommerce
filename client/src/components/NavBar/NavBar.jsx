@@ -1,90 +1,82 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import {
-    loadApplied,
-    loadFilters,
-    loadProductsFound,
-    loadProductsOwn,
-    loadQuerys,
+  loadApplied,
+  loadFilters,
+  loadProductsFound,
+  loadProductsOwn,
+  loadQuerys,
 } from "../../Redux/reducer/productsSlice";
+import { CloseIcon, SearchIcon } from "@chakra-ui/icons";
 
-import "./NavBar.css";
 import { ReactComponent as Cart } from "../../assets/svg/cart.svg";
 import { ReactComponent as Fav } from "../../assets/svg/fav.svg";
 import { ReactComponent as Avatar } from "../../assets/svg/avatar.svg";
 import Signout from "../Session/Signout";
 import WishlistModal from "../common/WishlistModal";
 import { avatarResizer } from "../../helpers/resizer";
-import { PowerGlitch } from 'powerglitch';
-import { useEffect } from "react";
-import { useRef } from "react";
-
+import { PowerGlitch } from "powerglitch";
+import Signupin from "../Session/Signupin";
+import "./NavBar.css";
+import "../../App.css";
 
 const NavBar = () => {
-  const session = useSelector((state) => state.sessionReducer.session);
-  const username = useSelector((state) => state.sessionReducer.username);
-  const avatar = useSelector((state) => state.sessionReducer.avatar);
+  const { session, username, avatar } = useSelector(
+    (state) => state.sessionReducer
+  );
   const cart = useSelector((state) => state.cartReducer.onCart);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const [profileModal, setProfileModal] = useState(false);
   const [wishModal, setWishModal] = useState(false);
-    const eldiv = useRef(null)
+  const [productToSearch, setProductToSearch] = useState("");
+  const eldiv = useRef(null);
 
-  useEffect(() => {    
-    eldiv.current = document.querySelector('.glitch');
-    console.log(eldiv);
-    PowerGlitch.glitch(
-        eldiv.current,
-        {
-            imageUrl: 'https://res.cloudinary.com/dsyjj0sch/image/upload/v1659650791/PROVIDER_LOGO_glitch_aberration_kt2hyv.png',
-            backgroundColor: 'transparent',
-            hideOverflow: false,
-            timing: {
-                duration: 10000,
-                iterations: 'Infinity',
-            },
-            glitchTimeSpan: {
-                start: 0.6,
-                end: 0.7,
-            },
-            shake: {
-                velocity: 15,
-                amplitudeX: 0.1,
-                amplitudeY: 0.2,
-            },
-            slice: {
-                count: 3,
-                velocity: 15,
-                minHeight: 0.03,
-                maxHeight: 0.15,
-                hueRotate: true,
-            },
-        }
-    )
-    
-    
-  }, [])
-  
+  useEffect(() => {
+    eldiv.current = document.querySelector(".glitch");
+    PowerGlitch.glitch(eldiv.current, {
+      imageUrl:
+        "https://res.cloudinary.com/dsyjj0sch/image/upload/v1659650791/PROVIDER_LOGO_glitch_aberration_kt2hyv.png",
+      backgroundColor: "transparent",
+      hideOverflow: false,
+      timing: {
+        duration: 10000,
+        iterations: "Infinity",
+      },
+      glitchTimeSpan: {
+        start: 0.6,
+        end: 0.7,
+      },
+      shake: {
+        velocity: 15,
+        amplitudeX: 0.1,
+        amplitudeY: 0.2,
+      },
+      slice: {
+        count: 3,
+        velocity: 15,
+        minHeight: 0.03,
+        maxHeight: 0.15,
+        hueRotate: true,
+      },
+    });
+  }, []);
 
-
-  const querySearch = async (e) => {
-    if (e.key === "Enter" && e.target.value) {
-      if (session) {
-        //: logear busqueda en el historial
-        axios.post(`/history/search/${e.target.value}`);
-      }
-        dispatch(loadProductsOwn("loading"));
-        dispatch(loadProductsFound("loading"));
-        dispatch(loadFilters("loading"));
-        dispatch(loadApplied('loading'));
-
-        navigate("/results");
-        dispatch(loadQuerys({q: e.target.value}));
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    if (session) {
+      //: logear busqueda en el historial
+      axios.post(`/history/search/${productToSearch}`);
     }
+    dispatch(loadProductsOwn("loading"));
+    dispatch(loadProductsFound("loading"));
+    dispatch(loadFilters("loading"));
+    dispatch(loadApplied("loading"));
+
+    navigate("/results");
+    dispatch(loadQuerys({ q: productToSearch }));
   };
 
   const logoClick = () => {
@@ -107,30 +99,50 @@ const NavBar = () => {
       </div>
 
       <div className="navbar-central-section">
-        <input
-          type="text"
-          placeholder="search"
-          onKeyUp={querySearch}
-          id="navbar-searchbar"
-        />
+        <form onSubmit={handleSearch}>
+          <span className="g-input-with-button">
+            <input
+              type="text"
+              placeholder="Busca un producto"
+              id="navbar-searchbar"
+              onChange={(e) => setProductToSearch(e.target.value)}
+              value={productToSearch}
+            />
+            {productToSearch && (
+              <>
+                <div
+                  className="g-input-icon-container g-input-view-button"
+                  onClick={handleSearch}
+                >
+                  <SearchIcon />
+                </div>
+                <div
+                  className="g-input-icon-container g-input-x-button"
+                  onClick={() => setProductToSearch("")}
+                >
+                  <CloseIcon />
+                </div>
+              </>
+            )}
+          </span>
+        </form>
 
         <div className="navbar-central-subsection">
           <NavLink to={"products"}>
-            <p className='provider-store'>Provider Store</p>
+            <p className="provider-store">Provider Store</p>
           </NavLink>
 
           <NavLink to={"about"}>
             <p>About Us</p>
           </NavLink>
 
-          <NavLink to={'/'}>
+          <NavLink to={"/"}>
             <p>Contact</p>
           </NavLink>
 
           <NavLink to={"admin"}>
             <p>ADMIN</p>
           </NavLink>
-
         </div>
       </div>
 
@@ -138,7 +150,7 @@ const NavBar = () => {
         <div className="navbar-profile-section">
           {!session ? (
             <NavLink to={"signin"}>
-              <p>Log In / Sign in</p>
+              <p>Sign in</p>
             </NavLink>
           ) : (
             <>
@@ -158,7 +170,7 @@ const NavBar = () => {
                 ) : (
                   <Avatar className="navbar-avatar-svg" />
                 )}
-                <p>{ username || 'Profile' }</p>
+                <p>{username || "Profile"}</p>
 
                 <div className="navBar-modal-container">
                   <div className={`navbar-modal ${profileModal && "visible"}`}>
@@ -209,15 +221,16 @@ const NavBar = () => {
                 </div>
               </div>
 
-              <div 
+              <div
                 className="navbar-wishlist-button"
                 onMouseEnter={() => setWishModal(true)}
-                onMouseLeave={() => setWishModal(false)}>
+                onMouseLeave={() => setWishModal(false)}
+              >
                 <Fav className="wishlist-icon" />
                 <div className="navBar-modal-container-w">
-                    <div className={`navbar-modal-w ${wishModal && "visible"}`} >
-                        {wishModal && <WishlistModal close={setWishModal} />}
-                    </div>
+                  <div className={`navbar-modal-w ${wishModal && "visible"}`}>
+                    {wishModal && <WishlistModal close={setWishModal} />}
+                  </div>
                 </div>
               </div>
 

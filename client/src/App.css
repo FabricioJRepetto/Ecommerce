@@ -1,25 +1,118 @@
 .App {
-    text-align: center;
-    background: #111;
-    color: rgb(255, 255, 255);
-    width: 100;
-    min-height: 100vh;
-    overflow: hidden; 
+  text-align: center;
+  background: #111;
+  color: rgb(255, 255, 255);
+  width: 100;
+  min-height: 100vh;
+  overflow: hidden;
 }
-
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-
 html {
   overflow-x: hidden;
   box-sizing: border-box;
 }
-
 *,
 *:after,
 *::before {
   box-sizing: inherit;
+}
+
+/* LINKS */
+a:link {
+  text-decoration: none;
+}
+a:visited {
+  text-decoration: none;
+  color: rgb(255, 255, 255);
+}
+a:hover {
+  text-decoration: none;
+}
+a:active {
+  text-decoration: none;
+}
+
+/* INPUT */
+.g-input-with-button {
+  position: relative;
+  height: 2.3rem;
+}
+.g-input-with-button > input {
+  width: 100%;
+  font-weight: 300;
+  margin: 0.1rem 0 0.3rem 0;
+  display: flex;
+}
+form > .g-input-with-button {
+  display: flex;
+  justify-content: center;
+}
+
+/* BLUR PASSWORD */
+.g-input-with-button .g-password {
+  text-shadow: 0 0 0.4rem #000;
+  color: transparent;
+  font-weight: 500;
+  letter-spacing: -1px;
+}
+.g-input-with-button .g-password::selection {
+  text-shadow: 0 0 0.4rem black;
+  background: rgb(204, 204, 204);
+  color: transparent;
+  font-weight: 500;
+  letter-spacing: -1px;
+}
+
+/* SVGS DENTRO DE INPUTS */
+.g-input-icon-container {
+  color: black;
+  position: absolute;
+  right: 0;
+  top: 0.2rem;
+  margin-top: auto;
+  margin-bottom: auto;
+  cursor: pointer;
+  padding: 0.2rem;
+}
+.g-input-x-button {
+  margin-right: 0.5rem;
+}
+.g-input-view-button {
+  margin-right: 2rem;
+}
+
+/* BOTON RECTANGULAR BLANCO */
+form .g-white-button {
+  font-weight: 200;
+  border: 0;
+  padding: 0.5rem 3rem;
+  margin: 1rem 0 1rem 0;
+  cursor: pointer;
+  font-weight: 300;
+}
+.g-white-button:hover {
+  background-color: rgb(197, 197, 197);
+}
+.g-white-button:active {
+  background-color: rgb(165, 165, 165);
+}
+
+/* BOTON DE TEXTO */
+.g-text-button {
+  cursor: pointer;
+  font-weight: 400;
+}
+
+/* PLACEHOLDER ERROR OCULTO */
+.g-hidden-placeholder {
+  visibility: hidden;
+}
+
+/* BOTON "REGRESAR" */
+.g-back-button {
+  color: white;
 }

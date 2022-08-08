@@ -1,60 +1,63 @@
 const { Router } = require("express");
 const router = Router();
 const {
-    verifyToken,
-    verifyEmailVerified,
-    googleUserShallNotPass,
+  verifyToken,
+  verifyEmailVerified,
+  googleUserShallNotPass,
 } = require("../middlewares/verify");
 const passport = require("passport");
 const {
-    signin,
-    signinGoogle,
-    signup,
-    profile,
-    verifyEmail,
-    forgotPassword,
-    resetPassword,
-    changePassword,
-    editProfile,
-    setAvatar,
+  signin,
+  signinGoogle,
+  signup,
+  profile,
+  verifyEmail,
+  forgotPassword,
+  resetPassword,
+  changePassword,
+  editProfile,
+  setAvatar,
 } = require("../controllers/user.ctrl");
 const { body } = require("express-validator");
 
-const emailValidation = body("email", "Enter a valid e-mail")
-    .trim()
-    .notEmpty()
-    .isEmail()
-    .escape();
+const emailValidation = body("email", "Ingresa un email válido")
+  .trim()
+  .notEmpty()
+  .isEmail()
+  .escape();
 
 const passwordValidation = body(
-    "password",
-    "Password must be 6 characters long at least"
+  "password",
+  "La contraseña debe tener al menos 6 caracteres"
 )
-    .trim()
-    .notEmpty()
-    .isLength({ min: 6 })
-    .escape()
-    .custom((value, { req }) => {
-        if (value !== req.body.repPassword) {
-            throw new Error("Passwords don't match");
-        } else {
-            return value;
-        }
-    });
+  .trim()
+  .notEmpty()
+  .isLength({ min: 6 })
+  .escape()
+  .custom((value, { req }) => {
+    if (value !== req.body.repPassword) {
+      throw new Error("Las contraseñas no coinciden");
+    } else {
+      return value;
+    }
+  });
 
-const passwordValidationSignin = body("password", "Enter a valid password")
-    .trim()
-    .notEmpty()
-    .escape();
+const passwordValidationSignin = body(
+  "password",
+  "Ingresa una contraseña válida"
+)
+  .trim()
+  .notEmpty()
+  .escape();
 
 router.post(
-    "/signup",
-    [
-        emailValidation,
-        passwordValidation,
-        passport.authenticate("signup", { session: false }),
-    ],
-    signup
+  "/signup",
+  [
+    emailValidation,
+    passwordValidation,
+    passport.authenticate("signup", { session: false }),
+  ],
+  signup
 );
 router.post("/signin", [emailValidation, passwordValidationSignin], signin);
 router.post("/signinGoogle", signinGoogle);

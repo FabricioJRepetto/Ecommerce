@@ -16,7 +16,7 @@ const oAuth2Client = new google.auth.OAuth2(
 );
 oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
 
-const sendEmail = async (email, subject, link, html) => {
+const sendEmail = async (email, subject, link) => {
   try {
     const accessToken = await oAuth2Client.getAccessToken();
     const transport = nodemailer.createTransport({
@@ -41,7 +41,7 @@ const sendEmail = async (email, subject, link, html) => {
     const result = await transport.sendMail(mailOptions);
     return result;
   } catch (error) {
-    console.log(error.response.data);
+    console.log(error);
     throw new Error(error);
   }
 };
