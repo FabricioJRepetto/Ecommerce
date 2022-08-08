@@ -72,7 +72,7 @@ const Signupin = () => {
     openLoader();
     try {
       const { data } = await axios.post(`/user/signup`, signupData);
-      console.log(data);
+      data.error && notification(data.message, "", "error");
     } catch (error) {
       console.log(error);
       //! VOLVER A VER agregar notif de email

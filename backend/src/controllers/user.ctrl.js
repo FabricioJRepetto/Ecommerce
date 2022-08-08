@@ -19,10 +19,7 @@ cloudinary.config({
 });
 
 const signup = async (req, res, next) => {
-  if (req.authInfo.error)
-    return res.json({
-      message: req.authInfo,
-    });
+  if (req.authInfo.error) return res.json(req.authInfo);
 
   const { _id, email } = req.user;
   const body = { _id, email };
