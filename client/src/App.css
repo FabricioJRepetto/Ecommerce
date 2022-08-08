@@ -40,6 +40,8 @@ a:active {
 .g-input-with-button {
   position: relative;
   height: 2.3rem;
+  display: flex;
+  justify-content: center;
 }
 .g-input-with-button > input {
   width: 100%;
@@ -47,10 +49,10 @@ a:active {
   margin: 0.1rem 0 0.3rem 0;
   display: flex;
 }
-form > .g-input-with-button {
+/* form > .g-input-with-button {
   display: flex;
   justify-content: center;
-}
+} */
 
 /* BLUR PASSWORD */
 .g-input-with-button .g-password {
