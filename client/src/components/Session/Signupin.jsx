@@ -73,7 +73,7 @@ const Signupin = () => {
     openLoader();
     try {
       const { data } = await axios.post(`/user/signup`, signupData);
-      data.error && notification(data.message, "", "error");
+      data.error && notification(data.message, "", "warning");
     } catch (error) {
       console.log(error);
       //! VOLVER A VER agregar notif de email
@@ -214,10 +214,10 @@ const Signupin = () => {
                 <p className="g-hidden-placeholder">hidden</p>
               )}
               {errorsSignin.email?.type === "required" && (
-                <p className="error-sign">Ingresa tu email</p>
+                <p className="g-error-input">Ingresa tu email</p>
               )}
               {errorsSignin.email?.type === "pattern" && (
-                <p className="error-sign">Ingresa un email válido</p>
+                <p className="g-error-input">Ingresa un email válido</p>
               )}
             </>
 
@@ -247,7 +247,7 @@ const Signupin = () => {
                 <p className="g-hidden-placeholder">hidden</p>
               )}
               {errorsSignin.password?.type === "required" && (
-                <p className="error-sign">Ingresa tu contraseña</p>
+                <p className="g-error-input">Ingresa tu contraseña</p>
               )}
             </>
 
@@ -327,10 +327,10 @@ const Signupin = () => {
                 <p className="g-hidden-placeholder">hidden</p>
               )}
               {errorsSignup.email?.type === "required" && (
-                <p className="error-sign">Ingresa tu email</p>
+                <p className="g-error-input">Ingresa tu email</p>
               )}
               {errorsSignup.email?.type === "pattern" && (
-                <p className="error-sign">Ingresa un email válido</p>
+                <p className="g-error-input">Ingresa un email válido</p>
               )}
             </>
 
@@ -360,10 +360,10 @@ const Signupin = () => {
                 <p className="g-hidden-placeholder">hidden</p>
               )}
               {errorsSignup.password?.type === "required" && (
-                <p className="error-sign">Ingresa una contraseña</p>
+                <p className="g-error-input">Ingresa una contraseña</p>
               )}
               {errorsSignup.password?.type === "minLength" && (
-                <p className="error-sign">
+                <p className="g-error-input">
                   La contraseña debe tener al menos 6 caracteres
                 </p>
               )}
@@ -422,10 +422,10 @@ const Signupin = () => {
                 <p className="g-hidden-placeholder">hidden</p>
               )}
               {errorsSignup.repPassword?.type === "required" && (
-                <p className="error-sign">Ingresa una contraseña</p>
+                <p className="g-error-input">Ingresa una contraseña</p>
               )}
               {errorsSignup.repPassword?.type === "validate" && (
-                <p className="error-sign">Las contraseñas no coinciden</p>
+                <p className="g-error-input">Las contraseñas no coinciden</p>
               )}
             </>
 
@@ -541,10 +541,10 @@ const Signupin = () => {
                     <p className="g-hidden-placeholder">hidden</p>
                   )}
                   {errorsForgot.email?.type === "required" && (
-                    <p className="error-sign">Ingresa tu email</p>
+                    <p className="g-error-input">Ingresa tu email</p>
                   )}
                   {errorsForgot.email?.type === "pattern" && (
-                    <p className="error-sign">Ingresa un email válido</p>
+                    <p className="g-error-input">Ingresa un email válido</p>
                   )}
                 </>
 

@@ -12,6 +12,8 @@ import {
 import Card from "../../components/Products/Card";
 import { useModal } from "../../hooks/useModal";
 import ModalAdminProducts from "./ModalAdminProducts";
+import { CloseIcon } from "@chakra-ui/icons";
+import "../../App.css";
 
 const Products = () => {
   const [pricesFilter, setPricesFilter] = useState({
@@ -69,8 +71,7 @@ const Products = () => {
     if (!reloadFlag) {
       console.log("aca debe limpiar redux");
       clearFilters();
-      setProductToSearch("");
-      dispatch(searchProducts(""));
+      handleClearSearch();
       getProducts();
     }
     dispatch(changeReloadFlag(false));
@@ -306,16 +307,30 @@ const Products = () => {
     setProductToSearch(e.target.value);
     dispatch(searchProducts(e.target.value));
   };
+  const handleClearSearch = () => {
+    setProductToSearch("");
+    dispatch(searchProducts(""));
+  };
 
   return (
     <div className="products-container">
       <div className="products-results-container">
-        <input
-          type="text"
-          placeholder="Buscar por nombre"
-          onChange={handleSearch}
-          value={productToSearch}
-        />
+        <span className="g-input-with-button">
+          <input
+            type="text"
+            placeholder="Busca un producto"
+            onChange={handleSearch}
+            value={productToSearch}
+          />
+          {productToSearch && (
+            <div
+              className="g-input-icon-container g-input-x-button"
+              onClick={handleClearSearch}
+            >
+              <CloseIcon />
+            </div>
+          )}
+        </span>
         {stateProductsReducer[productsToShowReference] &&
         stateProductsReducer[productsToShowReference][0] === null ? (
           <h1>NO HUBIERON COINCIDENCIAS</h1>

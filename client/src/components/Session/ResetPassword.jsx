@@ -118,10 +118,10 @@ const ResetPassword = () => {
                 <p className="g-hidden-placeholder">hidden</p>
               )}
               {errors.password?.type === "required" && (
-                <p className="error-sign">Ingresa una contraseña</p>
+                <p className="g-error-input">Ingresa una contraseña</p>
               )}
               {errors.password?.type === "minLength" && (
-                <p className="error-sign">
+                <p className="g-error-input">
                   La contraseña debe tener al menos 6 caracteres
                 </p>
               )}
@@ -179,10 +179,10 @@ const ResetPassword = () => {
                 <p className="g-hidden-placeholder">hidden</p>
               )}
               {errors.repPassword?.type === "required" && (
-                <p className="error-sign">Ingresa tu contraseña</p>
+                <p className="g-error-input">Ingresa tu contraseña</p>
               )}
               {errors.repPassword?.type === "validate" && (
-                <p className="error-sign">Las contraseñas no coinciden</p>
+                <p className="g-error-input">Las contraseñas no coinciden</p>
               )}
             </>
 
