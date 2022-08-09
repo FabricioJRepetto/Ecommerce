@@ -352,13 +352,14 @@ const ProductForm = () => {
   };
 
   return (
-    <div>
+    <div className="form-width-test">
       <h2>{productToEdit ? "EDITAR" : "CREAR"} producto</h2>
 
       <form
         encType="multipart/form-data"
         onSubmit={customSubmit}
         onKeyDown={checkKeyDown}
+        className="form-width-test"
       >
         <>
           <div>
@@ -561,15 +562,15 @@ const ProductForm = () => {
                         <CloseIcon />
                       </div>
                     )}
-                    <>
-                      {!errors.attributes?.[i]?.name && (
-                        <p className="g-hidden-placeholder">hidden</p>
-                      )}
-                      <p className="g-error-input">
-                        {errors.attributes?.[i]?.name?.message}
-                      </p>
-                    </>
                   </span>
+                  <>
+                    {!errors.attributes?.[i]?.name && (
+                      <p className="g-hidden-placeholder">hidden</p>
+                    )}
+                    <p className="g-error-input">
+                      {errors.attributes?.[i]?.name?.message}
+                    </p>
+                  </>
 
                   <span className="g-input-with-button">
                     <input
@@ -590,15 +591,15 @@ const ProductForm = () => {
                         <CloseIcon />
                       </div>
                     )}
-                    <>
-                      {!errors.attributes?.[i]?.value_name && (
-                        <p className="g-hidden-placeholder">hidden</p>
-                      )}
-                      <p className="g-error-input">
-                        {errors.attributes?.[i]?.value_name?.message}
-                      </p>
-                    </>
                   </span>
+                  <>
+                    {!errors.attributes?.[i]?.value_name && (
+                      <p className="g-hidden-placeholder">hidden</p>
+                    )}
+                    <p className="g-error-input">
+                      {errors.attributes?.[i]?.value_name?.message}
+                    </p>
+                  </>
 
                   {attributesQuantity > 1 && (
                     <span

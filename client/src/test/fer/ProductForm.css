@@ -12,3 +12,12 @@
   margin: 0 0.5rem;
   font-size: 1.2rem;
 }
+
+.form-width-test {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.form-width-test > form {
+  width: 600px;
+}
