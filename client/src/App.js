@@ -60,6 +60,8 @@ function App() {
           dispatch(loadingUserData(true));
           const { data } = await axios(`/user/profile/${loggedUserToken}`); //! VOLVER A VER fijarse con nuevos usuarios de google
 
+          console.log(data);
+
           const {
             _id,
             email,

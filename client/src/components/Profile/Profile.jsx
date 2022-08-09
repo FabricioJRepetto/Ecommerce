@@ -133,6 +133,7 @@ const Profile = () => {
   };
 
   const updateDetails = async (updateData) => {
+    console.log("updateData", updateData);
     try {
       const { data, statusText } = await axios.put(
         "/user/editProfile",
@@ -144,6 +145,8 @@ const Profile = () => {
         setValueEditDetails("lastname", "");
         return notification(data.message, "", "warning");
       }
+
+      console.log("data", data);
 
       dispatch(
         loadUserData({
@@ -333,6 +336,9 @@ const Profile = () => {
               {errorsEditDetails.name?.type === "pattern" && (
                 <p className="g-error-input">Ingresa un nombre válido</p>
               )}
+              {errorsEditDetails.name?.type === "required" && (
+                <p className="g-error-input">Ingresa tu nombre</p>
+              )}
             </>
 
             <span className="g-input-with-button">
@@ -342,6 +348,7 @@ const Profile = () => {
                 autoComplete="off"
                 {...registerEditDetails("name", {
                   pattern: onlyLettersRegex,
+                  required: true,
                 })} /* //! VOLVER A VER agregar length, agregar validación en back */
               />
               {watchEditDetails("name") === "" ||
@@ -362,6 +369,9 @@ const Profile = () => {
               {errorsEditDetails.lastname?.type === "pattern" && (
                 <p className="g-error-input">Ingresa un apellido válido</p>
               )}
+              {errorsEditDetails.lastname?.type === "required" && (
+                <p className="g-error-input">Ingresa tu apellido</p>
+              )}
             </>
 
             <span className="g-input-with-button">
@@ -371,6 +381,7 @@ const Profile = () => {
                 autoComplete="off"
                 {...registerEditDetails("lastname", {
                   patter: onlyLettersRegex,
+                  required: true,
                 })} /* //! VOLVER A VER agregar validación en back */
               />
               {watchEditDetails("lastname") === "" ||

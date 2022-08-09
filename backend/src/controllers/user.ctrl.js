@@ -10,6 +10,7 @@ const fs = require("fs-extra");
 const { JWT_SECRET_CODE } = process.env;
 const { validationResult } = require("express-validator");
 const sendEmail = require("../utils/sendEmail");
+const user = require("../models/user");
 
 cloudinary.config({
   cloud_name: CLOUDINARY_CLOUD,
@@ -227,17 +228,18 @@ const changePassword = async (req, res, next) => {
 
 const editProfile = async (req, res, next) => {
   try {
-    const { username, first, last } = req.body;
+    const { username, name, lastname } = req.body;
 
     const user = await User.findByIdAndUpdate(
       req.user._id,
       {
-        username: username || "",
-        firstName: first || "",
-        lastName: last || "",
+        username: username || user.username,
+        firstName: name || user.name,
+        lastName: lastname || user.lastname,
       },
       { new: true }
     );
+    console.log("user", user);
 
     return res.json({ message: "Editado con éxito", user });
   } catch (error) {
