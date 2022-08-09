@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import SelectList from "./SelectList";
+import { ChevronRightIcon } from "@chakra-ui/icons";
+import "../../App.css";
+import "./SelectsNested.css";
 
 const SelectsNested = ({
   setCategory,
@@ -40,33 +43,51 @@ const SelectsNested = ({
 
   return (
     <div>
-      <span onClick={handleRoot}>Categoría{" > "}</span>
+      <span>
+        <span onClick={handleRoot} className="category-selected-button">
+          Categoría
+        </span>
+      </span>
       {categoryPath &&
         React.Children.toArray(
           categoryPath.map((category, index) =>
             notRender && index === categoryPath.length - 1 ? (
-              <span>{category.name} </span>
+              <span>
+                <span className="category-arrow-icon">
+                  <ChevronRightIcon />
+                </span>
+                <span className="category-selected-last">{category.name} </span>
+              </span>
             ) : (
-              <span onClick={(e) => handleChange(e, index)}>
-                {category.name}
-                {" > "}
+              <span>
+                <span className="category-arrow-icon">
+                  <ChevronRightIcon />
+                </span>
+                <span
+                  onClick={(e) => handleChange(e, index)}
+                  className="category-selected-button"
+                >
+                  {category.name}
+                </span>
               </span>
             )
           )
         )}
       {!notRender && (
-        <SelectList
-          categoryPath={categoryPath}
-          handleChange={handleChange}
-          setNotRender={setNotRender}
-          setCategory={setCategory}
-        />
+        <>
+          <span className="category-arrow-icon">
+            <ChevronRightIcon />
+          </span>
+          <SelectList
+            categoryPath={categoryPath}
+            handleChange={handleChange}
+            setNotRender={setNotRender}
+            setCategory={setCategory}
+          />
+        </>
       )}
     </div>
   );
 };
 
 export default SelectsNested;
-
-// https://api.mercadolibre.com/sites/MLA/categories
-// https://api.mercadolibre.com/categories/MLA5725

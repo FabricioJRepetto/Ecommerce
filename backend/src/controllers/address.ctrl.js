@@ -21,7 +21,7 @@ const addAddress = async (req, res, next) => {
 
     try {
         const addressFound = await Address.findOne({
-            'user': _id,
+            user: _id,
         });
 
         if (addressFound) {
@@ -87,11 +87,11 @@ const removeAddress = async (req, res, next) => {
     try {
         const { address } = await Address.findOneAndUpdate(
             {
-                'user': _id,
+                user: _id,
             },
             {
                 $pull: {
-                    'address': { _id: req.params.id },
+                    address: { _id: req.params.id },
                 },
             },
             { new: true }

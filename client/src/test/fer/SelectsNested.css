@@ -1,0 +1,12 @@
+.category-arrow-icon {
+  padding: 0 0.5rem;
+}
+
+.category-selected-button {
+  cursor: pointer;
+  font-weight: 300;
+}
+
+.category-selected-last {
+  font-weight: 500;
+}

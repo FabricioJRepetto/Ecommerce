@@ -10,7 +10,6 @@ import {
   loadQuerys,
 } from "../../Redux/reducer/productsSlice";
 import { CloseIcon, SearchIcon } from "@chakra-ui/icons";
-
 import { ReactComponent as Cart } from "../../assets/svg/cart.svg";
 import { ReactComponent as Fav } from "../../assets/svg/fav.svg";
 import { ReactComponent as Avatar } from "../../assets/svg/avatar.svg";

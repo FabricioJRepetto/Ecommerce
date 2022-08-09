@@ -36,10 +36,26 @@ a:active {
   text-decoration: none;
 }
 
+/* SELECT */
+select {
+  cursor: pointer;
+}
+/* LABEL */
+label {
+  cursor: pointer;
+}
+
+/* CHECKBOX */
+input[type="checkbox"] {
+  cursor: pointer;
+}
+
 /* INPUT */
 .g-input-with-button {
   position: relative;
   height: 2.3rem;
+  display: flex;
+  justify-content: center;
 }
 .g-input-with-button > input {
   width: 100%;
@@ -47,10 +63,10 @@ a:active {
   margin: 0.1rem 0 0.3rem 0;
   display: flex;
 }
-form > .g-input-with-button {
+/* form > .g-input-with-button {
   display: flex;
   justify-content: center;
-}
+} */
 
 /* BLUR PASSWORD */
 .g-input-with-button .g-password {
@@ -86,13 +102,16 @@ form > .g-input-with-button {
 }
 
 /* BOTON RECTANGULAR BLANCO */
-form .g-white-button {
+/* form  */
+.g-white-button {
   font-weight: 200;
   border: 0;
   padding: 0.5rem 3rem;
   margin: 1rem 0 1rem 0;
   cursor: pointer;
   font-weight: 300;
+  background-color: white;
+  color: black;
 }
 .g-white-button:hover {
   background-color: rgb(197, 197, 197);
@@ -115,4 +134,14 @@ form .g-white-button {
 /* BOTON "REGRESAR" */
 .g-back-button {
   color: white;
+}
+
+/* MENSAJE DE ERROR PARA INPUTS */
+.g-error-input {
+  text-align: left;
+}
+
+/* SVG BOTON */
+.g-icon-button {
+  cursor: pointer;
 }

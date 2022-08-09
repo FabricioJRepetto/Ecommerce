@@ -39,13 +39,9 @@
   display: none;
 }  */
 .google-container {
-  border-top: 1px solid lightgrey;
+  border-top: 2px solid lightgrey;
   padding-top: 1.5rem;
   margin-top: 1rem;
-}
-
-.error-sign {
-  text-align: left;
 }
 
 .forgot-container {
