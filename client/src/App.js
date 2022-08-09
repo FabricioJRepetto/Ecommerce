@@ -10,6 +10,7 @@ import {
   loadGoogleUser,
   loadId,
   loadFullName,
+  loadUserData,
   loadingUserData,
 } from "./Redux/reducer/sessionSlice";
 import { loadCart, loadWishlist } from "./Redux/reducer/cartSlice";
@@ -72,7 +73,22 @@ function App() {
             avatar,
           } = data;
 
-          dispatch(sessionActive(true));
+          dispatch(
+            loadUserData({
+              session: true,
+              username: username || name,
+              full_name: {
+                first: firstName || false,
+                last: lastName || false,
+              },
+              avatar: avatar ? avatar : false,
+              email: googleEmail || email,
+              id: _id,
+              role,
+              isGoogleUser,
+            })
+          );
+          /* dispatch(sessionActive(true));
           dispatch(loadUsername(username || name));
           dispatch(
             loadFullName({
@@ -84,7 +100,7 @@ function App() {
           dispatch(loadEmail(googleEmail || email));
           dispatch(loadId(_id));
           dispatch(loadRole(role));
-          dispatch(loadGoogleUser(isGoogleUser));
+          dispatch(loadGoogleUser(isGoogleUser)); */
 
           const { data: cart } = await axios(`/cart`);
           dispatch(loadCart(cart.id_list || []));
@@ -106,7 +122,7 @@ function App() {
     <div className="App" id="scroller">
       <Notification />
       {isUserDataLoading ? (
-        <GlobalCover />
+        <LoaderBars />
       ) : (
         <div>
           <GlobalCover />

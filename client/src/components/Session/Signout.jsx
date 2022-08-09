@@ -1,11 +1,12 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  sessionActive,
+  loadUserData,
+  /* sessionActive,
   loadUsername,
   loadAvatar,
   loadEmail,
-  loadRole,
+  loadRole, */
 } from "../../Redux/reducer/sessionSlice";
 import { useNavigate } from "react-router-dom";
 import { resetCartSlice } from "../../Redux/reducer/cartSlice";
@@ -17,11 +18,26 @@ const Signout = () => {
 
   const signOut = () => {
     window.localStorage.removeItem("loggedTokenEcommerce");
-    dispatch(sessionActive(false));
+    dispatch(
+      loadUserData({
+        session: false,
+        username: null,
+        full_name: {
+          first: null,
+          last: null,
+        },
+        avatar: null,
+        email: null,
+        id: null,
+        role: null,
+        isGoogleUser: null,
+      })
+    );
+    /* dispatch(sessionActive(false));
     dispatch(loadUsername(null));
     dispatch(loadAvatar(null));
     dispatch(loadEmail(null));
-    dispatch(loadRole(null));
+    dispatch(loadRole(null)); */
     dispatch(resetCartSlice());
     navigate("/");
   };
