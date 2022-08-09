@@ -43,7 +43,7 @@
         rgb(124, 124, 124) 75%
     );
     mask-size: 400%;
-    mask-position: 100%;
+    mask-position: 100%;    
     -webkit-mask-image: linear-gradient(
         60deg,
         rgb(118, 118, 118) 25%,

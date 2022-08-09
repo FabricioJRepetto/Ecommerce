@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import "./GlobalCover.css";
-import LoaderBars from "./LoaderBars";
 import { loadingUserData } from "../../Redux/reducer/sessionSlice";
 import { useDispatch } from "react-redux";
+import LoaderBars from "./LoaderBars";
+import "./GlobalCover.css";
 
 const GlobalCover = () => {
   const [aux, setAux] = useState(false);

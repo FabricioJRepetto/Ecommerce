@@ -2,7 +2,7 @@
     position: fixed;
     top: 15%;
     right: -254px;
-    z-index: 11;
+    z-index: 12;
     background: rgba(0, 0, 0, .5);
     cursor: pointer;
     transition: .4s ease;
