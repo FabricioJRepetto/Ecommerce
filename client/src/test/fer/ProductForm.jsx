@@ -516,7 +516,7 @@ const ProductForm = () => {
                     )}
                   </div>
                   <>
-                    {!errors.main_features && (
+                    {!errors.main_features?.[i] && (
                       <p className="g-hidden-placeholder">hidden</p>
                     )}
                     <p className="g-error-input">
@@ -561,9 +561,14 @@ const ProductForm = () => {
                         <CloseIcon />
                       </div>
                     )}
-                    <p className="g-error-input">
-                      {errors.attributes?.[i]?.name?.message}
-                    </p>
+                    <>
+                      {!errors.attributes?.[i]?.name && (
+                        <p className="g-hidden-placeholder">hidden</p>
+                      )}
+                      <p className="g-error-input">
+                        {errors.attributes?.[i]?.name?.message}
+                      </p>
+                    </>
                   </span>
 
                   <span className="g-input-with-button">
@@ -585,9 +590,14 @@ const ProductForm = () => {
                         <CloseIcon />
                       </div>
                     )}
-                    <p className="g-error-input">
-                      {errors.attributes?.[i]?.value_name?.message}
-                    </p>
+                    <>
+                      {!errors.attributes?.[i]?.value_name && (
+                        <p className="g-hidden-placeholder">hidden</p>
+                      )}
+                      <p className="g-error-input">
+                        {errors.attributes?.[i]?.value_name?.message}
+                      </p>
+                    </>
                   </span>
 
                   {attributesQuantity > 1 && (
