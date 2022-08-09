@@ -30,33 +30,10 @@
 }
 
 .details-button {
-    background: white;
-    margin: .5rem;
-    border: none;
-    height: 2.5rem;
-    width: 10rem;
-    cursor: pointer;
-    mask-image: linear-gradient(
-        60deg,
-        rgb(118, 118, 118) 25%,
-        rgba(0, 0, 0, 0.2) 50%,
-        rgb(124, 124, 124) 75%
-    );
-    mask-size: 400%;
-    mask-position: 100%;    
-    -webkit-mask-image: linear-gradient(
-        60deg,
-        rgb(118, 118, 118) 25%,
-        rgba(0, 0, 0, 0.2) 50%,
-        rgb(124, 124, 124) 75%
-    );
-    -webkit-mask-size: 400%;
-    -webkit-mask-position: 100%;
-}
-.details-button:hover {
-  mask-position: 0%;
-  -webkit-mask-position: 0%;
-  transition: mask-position .5s ease, -webkit-mask-position .5s ease;
+    margin: .5rem !important;
+    height: 2.5rem !important;
+    width: 10rem !important;
+    padding: 0 !important;
 }
 
 .details-mainfeatures {

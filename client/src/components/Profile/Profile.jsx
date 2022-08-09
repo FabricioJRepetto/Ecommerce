@@ -246,7 +246,7 @@ const Profile = () => {
             <h1>editar avatar</h1>
             <div className="avatar-preview">
               <img
-                src={avatarPreview ? avatarPreview : avatarResizer(avatar)}
+                src={avatarPreview ? avatarPreview : avatar ? avatarResizer(avatar) : require("../../assets/avatardefault.png")}
                 alt="avatar-preview"
               />
             </div>

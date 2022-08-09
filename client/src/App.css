@@ -105,16 +105,35 @@ input[type="checkbox"] {
 /* form  */
 .g-white-button {
   font-weight: 200;
-  border: 0;
+  border: none;
   padding: 0.5rem 3rem;
   margin: 1rem 0 1rem 0;
   cursor: pointer;
   font-weight: 300;
   background-color: white;
   color: black;
+  mask-image: linear-gradient(
+        60deg,
+        rgb(118, 118, 118) 25%,
+        rgba(0, 0, 0, 0.2) 50%,
+        rgb(124, 124, 124) 75%
+    );
+    mask-size: 400%;
+    mask-position: 100%;    
+    -webkit-mask-image: linear-gradient(
+        60deg,
+        rgb(118, 118, 118) 25%,
+        rgba(0, 0, 0, 0.2) 50%,
+        rgb(124, 124, 124) 75%
+    );
+    -webkit-mask-size: 400%;
+    -webkit-mask-position: 100%;
 }
 .g-white-button:hover {
   background-color: rgb(197, 197, 197);
+  mask-position: 0%;
+  -webkit-mask-position: 0%;
+  transition: mask-position .5s ease, -webkit-mask-position .5s ease;
 }
 .g-white-button:active {
   background-color: rgb(165, 165, 165);

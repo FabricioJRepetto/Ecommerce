@@ -123,9 +123,9 @@ const Details = () => {
                                 )}
                                 <p>{data.free_shipping && "free shipping"}</p>
                                 <p>{data.available_quantity > 0 ? 'stock: '+data.available_quantity : 'out of stock'}</p>
-                                <button className="details-button" disabled={data.available_quantity < 1} onClick={() => addToCart(data._id)}>Add to cart</button>
+                                <button className="g-white-button details-button" disabled={data.available_quantity < 1} onClick={() => addToCart(data._id)}>Add to cart</button>
                                 <br />
-                                <button className="details-button" disabled={data.available_quantity < 1} onClick={() => buyNow(data._id)}>Buy now</button>
+                                <button className="g-white-button details-button" disabled={data.available_quantity < 1} onClick={() => buyNow(data._id)}>Buy now</button>
                             </div>
 
                             {data.main_features && (
