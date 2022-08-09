@@ -57,14 +57,6 @@ const Profile = () => {
   const [newAvatar, setNewAvatar] = useState();
   const [avatarPreview, setAvatarPreview] = useState();
 
-  //   const {
-  //     register,
-  //     handleSubmit,
-  //     formState: { errors },
-  //     reset,
-  //     setValue,
-  //   } = useForm();
-
   const {
     register: registerForgot,
     handleSubmit: handleSubmitForgot,
@@ -220,22 +212,16 @@ const Profile = () => {
                           <div key={e.id}>
                             <p>{`${e.street_name} ${e.street_number}, ${e.zip_code}, ${e.city}, ${e.state}.`}</p>
                             {e.isDefault && <p>⭐</p>}
-                          </div>
-                        )
-                    )
-                  )
-                : "Aún no tienes un dirección seleccionada"}
-            </div>
-            <button
-              onClick={() => navigate("/profile/address")}
-              className="g-white-button"
-            >
-              Direcciones
-            </button>
-          </div>
-        )}
+                            </div>
+                        )))
+                        : 'Aún no tienes un dirección seleccionada'}</div>
+                    <button onClick={()=> navigate("/profile/address")}>Direcciones</button>
+                </div>
+                )}
 
-        {render === "orders" && <Orders />}
+                {render === "orders" && (
+                    <Orders />
+                )}
 
         {render === "address" && (
           <Address
@@ -245,14 +231,14 @@ const Profile = () => {
           />
         )}
 
-        {render === "wishlist" && (
-          <Wishlist loading={loading} wishlist={wishlist} wl_id={wl_id} />
-        )}
+                {render === "wishlist" && (
+                    <Wishlist loading={loading} wishlist={wishlist} wl_id={wl_id}/>
+                )}
 
-        {render === "history" && (
-          <History loading={loading} history={history} wl_id={wl_id} />
-        )}
-      </div>
+                {render === "history" && (
+                    <History loading={loading} history={history} wl_id={wl_id}/>
+                )}
+            </div>
 
       <Modal isOpen={isOpenAvatar} closeModal={closeAvatar}>
         {isOpenAvatar && (
@@ -260,7 +246,7 @@ const Profile = () => {
             <h1>editar avatar</h1>
             <div className="avatar-preview">
               <img
-                src={avatarPreview ? avatarPreview : avatarResizer(avatar)}
+                src={avatarPreview ? avatarPreview : avatar ? avatarResizer(avatar) : require("../../assets/avatardefault.png")}
                 alt="avatar-preview"
               />
             </div>

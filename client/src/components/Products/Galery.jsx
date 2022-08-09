@@ -42,18 +42,25 @@ const Galery = ({ imgs }) => {
 
     return (
         <div className='galery'>
-            <div>
-                {imgs.slice(0,8)?.map((e, index) => 
-                    <div 
-                    key={e.imgURL}
-                    className={`galery-selector ${(current === index) && 'selected'}`}
-                    onPointerEnter={() => handleHover(index)}
-                    onClick={() => {(index > 6) && open()}}>
-                        {loading && <LoadingPlaceHolder extraStyles={{ height: "100%" }}/>}
-                        <img className={`selector-img ${!loading && 'visible'}`} src={resizer(e.imgURL, 50)} alt="controller" />
-                        {index > 6 && imgs.length > 8 && !loading && <p className='galery-text'>+{imgs.length - index - 1}</p>}
+            <div className='galery-selector-container'>                
+                <div className='galery-selector-inner'>
+
+                    <div className='galery-selector-imgs'>                    
+                        {imgs.slice(0,8)?.map((e, index) => 
+                            <div 
+                            key={e.imgURL}
+                            className={`galery-selector ${(current === index) && 'selected'}`}
+                            onPointerEnter={() => handleHover(index)}
+                            onClick={() => {(index > 6) && open()}}>
+                                {loading && <LoadingPlaceHolder extraStyles={{ height: "100%" }}/>}
+                                <img className={`selector-img ${!loading && 'visible'}`} src={resizer(e.imgURL, 50)} alt="controller" />
+                                {index > 6 && imgs.length > 8 && !loading && <p className='galery-text'>+{imgs.length - index - 1}</p>}
+                            </div>
+                        )}
                     </div>
-                )}
+                    <div className='galery-selector-pointer' style={{ 'transform': `translateX(${current * 100}%)`}}></div>
+
+                </div>
             </div>
             <div className='preview-container'>
                 {loading && <LoadingPlaceHolder extraStyles={{ height: "100%" }}/>}
