@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export const sessionSlice = createSlice({
   name: "session",
   initialState: {
+    session: false,
     username: null,
     full_name: {
       first: "",
@@ -10,7 +11,7 @@ export const sessionSlice = createSlice({
     },
     avatar: null,
     email: null,
-    session: false,
+    emailVerified: null,
     id: null,
     role: null,
     isGoogleUser: null,
@@ -20,14 +21,36 @@ export const sessionSlice = createSlice({
     isUserDataLoading: false,
   },
   reducers: {
-    loadUsername: (state, action) => {
+    loadUserData: (state, action) => {
+      const {
+        session,
+        username,
+        full_name,
+        avatar,
+        email,
+        emailVerified,
+        id,
+        role,
+        isGoogleUser,
+      } = action.payload;
+      state.session = session;
+      state.username = username;
+      state.full_name = full_name;
+      state.avatar = avatar;
+      state.email = email;
+      state.emailVerified = emailVerified;
+      state.id = id;
+      state.role = role;
+      state.isGoogleUser = isGoogleUser;
+    },
+    sessionActive: (state, action) => {
+      state.session = action.payload;
+    },
+    /* loadUsername: (state, action) => {
       state.username = action.payload;
     },
     loadFullName: (state, action) => {
       state.full_name = action.payload;
-    },
-    sessionActive: (state, action) => {
-      state.session = action.payload;
     },
     loadId: (state, action) => {
       state.id = action.payload;
@@ -43,7 +66,7 @@ export const sessionSlice = createSlice({
     },
     loadGoogleUser: (state, action) => {
       state.isGoogleUser = action.payload;
-    },
+    }, */
     adminLoadUsers: (state, action) => {
       state.allUsersData = action.payload;
     },
@@ -83,19 +106,20 @@ export const sessionSlice = createSlice({
 });
 
 export const {
-  loadUsername,
-  loadFullName,
+  loadUserData,
+  loadingUserData,
   sessionActive,
+  /* loadUsername,
+  loadFullName,
   loadId,
   loadAvatar,
   loadEmail,
   loadRole,
-  loadGoogleUser,
+  loadGoogleUser, */
   adminLoadUsers,
   adminDeleteUser,
   adminPromoteUser,
   adminFilterUsers,
-  loadingUserData,
 } = sessionSlice.actions;
 
 export default sessionSlice.reducer;

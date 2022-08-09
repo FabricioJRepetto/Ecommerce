@@ -9,6 +9,7 @@ import Signout from "../Session/Signout";
 import { avatarResizer } from "../../helpers/resizer";
 import { useNotification } from "../../hooks/useNotification";
 import {
+  loadUserData,
   loadAvatar,
   loadFullName,
   loadUsername,
@@ -123,20 +124,24 @@ const Profile = () => {
       "",
       `${statusText === "OK" ? "success" : "warning"}`
     );
-    dispatch(loadAvatar(data.avatar));
+    // dispatch(loadAvatar(data.avatar));
+    dispatch(loadUserData({ avatar: data.avatar }));
     closeAvatar();
   };
 
-  const detailsHandler = async (e) => {
+  const updateDetails = async (e) => {
     e.preventDefault();
     e.target.disabled = true;
 
     const { data, statusText } = await axios.put("/user/editProfile", details);
 
     dispatch(
-      loadFullName({ first: data.user.firstName, last: data.user.lastName })
+      loadUserData({
+        full_name: { first: data.user.firstName, last: data.user.lastName },
+        username: data.user.username,
+      })
     );
-    dispatch(loadUsername(data.user.username));
+    //dispatch(loadUsername(data.user.username));
     notification(
       data.message,
       "",
@@ -156,6 +161,9 @@ const Profile = () => {
       })
       .catch((err) => console.log(err)); //! VOLVER A VER manejo de errores
   };
+
+  const handleDetails = (e) =>
+    setDetails({ ...details, [e.target.name]: e.target.value });
 
   return (
     <div className="profile-container">
@@ -229,7 +237,13 @@ const Profile = () => {
 
         {render === "orders" && <Orders />}
 
-        {render === "address" && <Address loading={loading} />}
+        {render === "address" && (
+          <Address
+            loading={loading}
+            setAddress={setAddress}
+            address={address}
+          />
+        )}
 
         {render === "wishlist" && (
           <Wishlist loading={loading} wishlist={wishlist} wl_id={wl_id} />
@@ -264,38 +278,32 @@ const Profile = () => {
 
       <Modal isOpen={isOpenDetails} closeModal={closeDetails}>
         {isOpenDetails && (
-          <form onSubmit={detailsHandler}>
+          <form onSubmit={updateDetails}>
             <input
               type="text"
               placeholder="Nombre de usuario"
               value={details.username}
-              maxLength="20"
-              onChange={(e) =>
-                setDetails({ ...details, [e.target.name]: e.target.value })
-              }
+              maxLength="20" /* //! VOLVER A VER agregar validación en back */
+              onChange={handleDetails}
               name="username"
             />
             <input
               type="text"
-              placeholder="Primer nombre"
+              placeholder="Nombre"
               value={details.first}
-              maxLength="20"
-              onChange={(e) =>
-                setDetails({ ...details, [e.target.name]: e.target.value })
-              }
+              maxLength="20" /* //! VOLVER A VER agregar validación en back */
+              onChange={handleDetails}
               name="first"
             />
             <input
               type="text"
               placeholder="Apellido"
               value={details.last}
-              maxLength="20"
-              onChange={(e) =>
-                setDetails({ ...details, [e.target.name]: e.target.value })
-              }
+              maxLength="20" /* //! VOLVER A VER agregar validación en back */
+              onChange={handleDetails}
               name="last"
             />
-            <button>Actualizar</button>
+            <button className="g-white-button">Actualizar</button>
           </form>
         )}
       </Modal>
