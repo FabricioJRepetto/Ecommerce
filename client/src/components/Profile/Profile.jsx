@@ -41,14 +41,6 @@ const Profile = () => {
   const [newAvatar, setNewAvatar] = useState();
   const [avatarPreview, setAvatarPreview] = useState();
 
-//   const {
-//     register,
-//     handleSubmit,
-//     formState: { errors },
-//     reset,
-//     setValue,
-//   } = useForm();
-
   const {
     register: registerForgot,
     handleSubmit: handleSubmitForgot,
@@ -186,7 +178,7 @@ const Profile = () => {
                 )}
 
                 {render === "address" && (
-                    <Address loading={loading}/>
+                    <Address loading={loading} setAddress={setAddress} address={address}/>
                 )}
 
                 {render === "wishlist" && (

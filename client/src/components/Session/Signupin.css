@@ -15,14 +15,14 @@
   color: white;
 }
 .signin-inner {
-  /* margin-top: 30px;
-  opacity: 0; */
-  transition: all 0.4s cubic-bezier(0.65, 0.05, 0.36, 1);
+  margin-top: 20px;
+  opacity: 0; 
   height: 60vh;
   min-height: 500px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  transition: margin-top 0.6s cubic-bezier(.64,.11,0,1.01), opacity 0.7s ease;
 }
 .signin-visible {
   margin-top: 0;

@@ -9,11 +9,11 @@ const GlobalCover = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log("renderiza global");
     setTimeout(() => {
       setAux(true);
       dispatch(loadingUserData(false));
-    }, 100);
+    }, 1000);
+    // eslint-disable-next-line
   }, []);
 
   return <div className={`globalLoader ${aux && "globalLoaded"}`}></div>;

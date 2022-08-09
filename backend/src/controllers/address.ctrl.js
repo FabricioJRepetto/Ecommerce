@@ -48,7 +48,7 @@ const addAddress = async (req, res, next) => {
             await newAddress.save();
             return res.json({
                 message: "New address registered.",
-                address: [newAddress],
+                address: newAddress.address,
                 //! VOLVER A VER al crear la primer address se renderiza undefined undefined undefined undefined
             });
         }

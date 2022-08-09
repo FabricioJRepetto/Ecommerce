@@ -20,12 +20,6 @@ const Address = ({ loading, setLoading, address, setAddress }) => {
         setValue,
     } = useForm();
 
-    const {
-        register: registerForgot,
-        handleSubmit: handleSubmitForgot,
-        formState: { errors: errorsForgot },
-    } = useForm();
-
     //? ADDRESS
   const deleteAddress = async (id) => {
     setLoading(true);
