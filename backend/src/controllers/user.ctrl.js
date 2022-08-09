@@ -89,6 +89,7 @@ const signinGoogle = async (req, res, next) => {
         avatar,
         firstName,
         lastName,
+        username: firstName || email.split("@")[0],
         isGoogleUser: true,
       });
       return res.json(newGoogleUser);
