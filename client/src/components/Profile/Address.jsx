@@ -99,8 +99,18 @@ const Address = ({ loading, setLoading, address, setAddress }) => {
             address?.map((e) => (
               <div key={e.id}>
                 <p>{`${e.street_name} ${e.street_number}, ${e.zip_code}, ${e.city}, ${e.state}.`}</p>
-                <button onClick={() => editAddress(e._id)}>Editar</button>
-                <button onClick={() => deleteAddress(e._id)}>Eliminar</button>
+                <button
+                  onClick={() => editAddress(e._id)}
+                  className="g-white-button"
+                >
+                  Editar
+                </button>
+                <button
+                  onClick={() => deleteAddress(e._id)}
+                  className="g-white-button"
+                >
+                  Eliminar
+                </button>
                 {e.isDefault ? (
                   <p>⭐</p>
                 ) : (
