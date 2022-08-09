@@ -2,3 +2,13 @@
   height: 150px;
   width: 150px;
 }
+
+.input-with-trash {
+  display: flex;
+  align-items: center;
+}
+
+.trash-button {
+  margin: 0 0.5rem;
+  font-size: 1.2rem;
+}

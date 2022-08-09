@@ -16,6 +16,7 @@ import { useNotification } from "../../hooks/useNotification";
 import { useModal } from "../../hooks/useModal";
 import Modal from "../../components/common/Modal";
 import SelectsNested from "./SelectsNested";
+import { CloseIcon, AddIcon, DeleteIcon } from "@chakra-ui/icons";
 import "./ProductForm.css";
 import "../../App.css";
 
@@ -63,6 +64,7 @@ const ProductForm = () => {
     reset,
     setValue,
     formState: { errors },
+    watch,
   } = useForm(formOptions);
 
   const {
@@ -345,21 +347,41 @@ const ProductForm = () => {
     }
   };
 
+  const checkKeyDown = (e) => {
+    if (e.key === "Enter") e.preventDefault();
+  };
+
   return (
     <div>
-      <hr />
       <h2>{productToEdit ? "EDITAR" : "CREAR"} producto</h2>
-      <br />
-      <form encType="multipart/form-data" onSubmit={customSubmit}>
+
+      <form
+        encType="multipart/form-data"
+        onSubmit={customSubmit}
+        onKeyDown={checkKeyDown}
+      >
         <>
           <div>
-            <input
-              type="text"
-              placeholder="Título/Nombre"
-              autoComplete="off"
-              {...register("name")}
-            />
-            <div>{errors.name?.message}</div>
+            <span className="g-input-with-button">
+              <input
+                type="text"
+                placeholder="Título"
+                autoComplete="off"
+                {...register("name")}
+              />
+              {watch("name") === "" || watch("name") === undefined ? null : (
+                <div
+                  className="g-input-icon-container g-input-x-button"
+                  onClick={() => setValue("name", "")}
+                >
+                  <CloseIcon />
+                </div>
+              )}
+            </span>
+            <>
+              {!errors.name && <p className="g-hidden-placeholder">hidden</p>}
+              <p className="g-error-input">{errors.name?.message}</p>
+            </>
 
             <SelectsNested
               setCategory={setCategory}
@@ -367,106 +389,257 @@ const ProductForm = () => {
               setCategoryPath={setCategoryPath}
               categoryPath={categoryPath}
             />
-            {showCustomErrors && categoryError && (
-              <h3>ESTADO {categoryError}</h3>
-            )}
+            <>
+              {showCustomErrors && categoryError ? (
+                <p className="g-error-input">{categoryError}</p>
+              ) : (
+                <p className="g-hidden-placeholder">NO CATEGORY</p>
+              )}
+            </>
 
-            <input
-              type="text"
-              placeholder="Precio"
-              autoComplete="off"
-              {...register("price")}
-            />
-            <div>{errors.price?.message}</div>
+            <span className="g-input-with-button">
+              <input
+                type="text"
+                placeholder="Precio"
+                autoComplete="off"
+                {...register("price")}
+              />
+              {watch("price") === "" || watch("price") === undefined ? null : (
+                <div
+                  className="g-input-icon-container g-input-x-button"
+                  onClick={() => setValue("price", "")}
+                >
+                  <CloseIcon />
+                </div>
+              )}
+            </span>
+            <>
+              {!errors.price && <p className="g-hidden-placeholder">hidden</p>}
+              <p className="g-error-input">{errors.price?.message}</p>
+            </>
 
-            <input
-              type="text"
-              placeholder="Marca"
-              autoComplete="off"
-              {...register("brand")}
-            />
-            <div>{errors.brand?.message}</div>
+            <span className="g-input-with-button">
+              <input
+                type="text"
+                placeholder="Marca"
+                autoComplete="off"
+                {...register("brand")}
+              />
+              {watch("brand") === "" || watch("brand") === undefined ? null : (
+                <div
+                  className="g-input-icon-container g-input-x-button"
+                  onClick={() => setValue("brand", "")}
+                >
+                  <CloseIcon />
+                </div>
+              )}
+            </span>
+            <>
+              {!errors.brand && <p className="g-hidden-placeholder">hidden</p>}
+              <p className="g-error-input">{errors.brand?.message}</p>
+            </>
 
-            <input
-              type="text"
-              placeholder="Stock"
-              autoComplete="off"
-              {...register("available_quantity", {
-                required: true,
-                pattern: /^[0-9]*$/,
-              })}
-            />
-            <div>{errors.available_quantity?.message}</div>
+            <span className="g-input-with-button">
+              <input
+                type="text"
+                placeholder="Stock"
+                autoComplete="off"
+                {...register("available_quantity", {
+                  required: true,
+                  pattern: /^[0-9]*$/,
+                })}
+              />
+              {watch("available_quantity") === "" ||
+              watch("available_quantity") === undefined ? null : (
+                <div
+                  className="g-input-icon-container g-input-x-button"
+                  onClick={() => setValue("available_quantity", "")}
+                >
+                  <CloseIcon />
+                </div>
+              )}
+            </span>
+            <>
+              {!errors.available_quantity && (
+                <p className="g-hidden-placeholder">hidden</p>
+              )}
+              <p className="g-error-input">
+                {errors.available_quantity?.message}
+              </p>
+            </>
 
             <label>
               <input type="checkbox" {...register("free_shipping")} />
               Envío gratis
             </label>
-            <div>{errors.free_shipping?.message}</div>
+            <>
+              {!errors.free_shipping && (
+                <p className="g-hidden-placeholder">hidden</p>
+              )}
+              <p className="g-error-input">{errors.free_shipping?.message}</p>
+            </>
           </div>
-          <br />
-          <hr />
-          <br />
 
           <div>
             {React.Children.toArray(
               fieldsFeatures.map((_, i) => (
                 <>
-                  <input
-                    type="text"
-                    placeholder="Característica principal"
-                    autoComplete="off"
-                    id={`main_feature_value_${i}`}
-                    {...register(`main_features.${i}.value`)}
-                  />
-                  <span onClick={() => handleRemoveFeature(i)}> X</span>
-                  <p>{errors.main_features?.[i]?.value.message}</p>
+                  <div className="input-with-trash">
+                    <span className="g-input-with-button">
+                      <input
+                        type="text"
+                        placeholder="Característica principal"
+                        autoComplete="off"
+                        id={`main_feature_value_${i}`}
+                        {...register(`main_features.${i}.value`)}
+                      />
+                      {watch(`main_features.${i}.value`) === "" ||
+                      watch(`main_features.${i}.value`) === undefined ? null : (
+                        <div
+                          className="g-input-icon-container g-input-x-button"
+                          onClick={() =>
+                            setValue(`main_features.${i}.value`, "")
+                          }
+                        >
+                          <CloseIcon />
+                        </div>
+                      )}
+                    </span>
+
+                    {featuresQuantity > 1 && (
+                      <span
+                        onClick={() => handleRemoveFeature(i)}
+                        className="g-icon-button trash-button"
+                      >
+                        <DeleteIcon />
+                      </span>
+                    )}
+                  </div>
+                  <>
+                    {!errors.main_features && (
+                      <p className="g-hidden-placeholder">hidden</p>
+                    )}
+                    <p className="g-error-input">
+                      {errors.main_features?.[i]?.value.message}
+                    </p>
+                  </>
                 </>
               ))
             )}
-            {warn.main_features && <p>{warn.main_features}</p>}
-            <h3 onClick={() => handleAddFeature()}>+</h3>
-
-            <br />
-            <hr />
-            <br />
+            <>
+              {!warn.main_features && (
+                <p className="g-hidden-placeholder">hidden</p>
+              )}
+              {warn.main_features && (
+                <p className="g-error-input">{warn.main_features}</p>
+              )}
+              <span
+                onClick={() => handleAddFeature()}
+                className="g-icon-button"
+              >
+                <AddIcon />
+              </span>
+            </>
 
             {React.Children.toArray(
               fieldsAttributes.map((_, i) => (
                 <>
-                  <input
-                    type="text"
-                    placeholder="Nombre del atributo"
-                    autoComplete="off"
-                    id={`attribute_name_${i}`}
-                    {...register(`attributes.${i}.name`)}
-                  />
-                  <p>{errors.attributes?.[i]?.name?.message}</p>
-                  <input
-                    type="text"
-                    placeholder="Valor del atributo"
-                    autoComplete="off"
-                    id={`attribute_value_${i}`}
-                    {...register(`attributes.${i}.value_name`)}
-                  />
-                  <span onClick={() => handleRemoveAttribute(i)}> X</span>
-                  <p>{errors.attributes?.[i]?.value_name?.message}</p>
+                  <span className="g-input-with-button">
+                    <input
+                      type="text"
+                      placeholder="Nombre del atributo"
+                      autoComplete="off"
+                      id={`attribute_name_${i}`}
+                      {...register(`attributes.${i}.name`)}
+                    />
+                    {watch(`attributes.${i}.name`) === "" ||
+                    watch(`attributes.${i}.name`) === undefined ? null : (
+                      <div
+                        className="g-input-icon-container g-input-x-button"
+                        onClick={() => setValue(`attributes.${i}.name`, "")}
+                      >
+                        <CloseIcon />
+                      </div>
+                    )}
+                    <p className="g-error-input">
+                      {errors.attributes?.[i]?.name?.message}
+                    </p>
+                  </span>
+
+                  <span className="g-input-with-button">
+                    <input
+                      type="text"
+                      placeholder="Valor del atributo"
+                      autoComplete="off"
+                      id={`attribute_value_${i}`}
+                      {...register(`attributes.${i}.value_name`)}
+                    />
+                    {watch(`attributes.${i}.value_name`) === "" ||
+                    watch(`attributes.${i}.value_name`) === undefined ? null : (
+                      <div
+                        className="g-input-icon-container g-input-x-button"
+                        onClick={() =>
+                          setValue(`attributes.${i}.value_name`, "")
+                        }
+                      >
+                        <CloseIcon />
+                      </div>
+                    )}
+                    <p className="g-error-input">
+                      {errors.attributes?.[i]?.value_name?.message}
+                    </p>
+                  </span>
+
+                  {attributesQuantity > 1 && (
+                    <span
+                      onClick={() => handleRemoveAttribute(i)}
+                      className="g-icon-button trash-button"
+                    >
+                      <DeleteIcon />
+                    </span>
+                  )}
                 </>
               ))
             )}
-            {warn.attributes && <p>{warn.attributes}</p>}
-            <h3 onClick={() => handleAddAttribute()}>+</h3>
+            <>
+              {!warn.attributes && (
+                <p className="g-hidden-placeholder">hidden</p>
+              )}
+              {warn.attributes && (
+                <p className="g-error-input">{warn.attributes}</p>
+              )}
+              <span
+                onClick={() => handleAddAttribute()}
+                className="g-icon-button"
+              >
+                <AddIcon />
+              </span>
+            </>
           </div>
-          <br />
-          <hr />
-          <br />
+
           <div>
-            <textarea placeholder="Descripción" {...register("description")} />
-            <div>{errors.description?.message}</div>
+            <span>
+              <textarea
+                placeholder="Descripción"
+                {...register("description")}
+              />
+              {watch("description") === "" ||
+              watch("description") === undefined ? null : (
+                <div
+                  /* className="g-input-icon-container g-input-x-button" */
+                  onClick={() => setValue("description", "")}
+                >
+                  <CloseIcon />
+                </div>
+              )}
+              <>
+                {!errors.description && (
+                  <p className="g-hidden-placeholder">hidden</p>
+                )}
+                <p className="g-error-input">{errors.description?.message}</p>
+              </>
+            </span>
           </div>
-          <br />
-          <hr />
-          <br />
         </>
 
         <div>
@@ -483,7 +656,12 @@ const ProductForm = () => {
             id="filesButton"
           />
         </div>
-        {showCustomErrors && imagesError && <h3>{imagesError}</h3>}
+        <>
+          {!imagesError && <p className="g-hidden-placeholder">hidden</p>}
+          {showCustomErrors && imagesError && (
+            <p className="g-error-input">{imagesError}</p>
+          )}
+        </>
 
         {imgsToEdit &&
           React.Children.toArray(
@@ -539,7 +717,7 @@ const ProductForm = () => {
         />
       </form>
       <button onClick={clearInputs} className="g-white-button">
-        RESETEAR
+        Limpiar
       </button>
       <Modal
         isOpen={isOpenCreateProduct}

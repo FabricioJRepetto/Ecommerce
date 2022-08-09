@@ -36,6 +36,20 @@ a:active {
   text-decoration: none;
 }
 
+/* SELECT */
+select {
+  cursor: pointer;
+}
+/* LABEL */
+label {
+  cursor: pointer;
+}
+
+/* CHECKBOX */
+input[type="checkbox"] {
+  cursor: pointer;
+}
+
 /* INPUT */
 .g-input-with-button {
   position: relative;
@@ -120,4 +134,14 @@ a:active {
 /* BOTON "REGRESAR" */
 .g-back-button {
   color: white;
+}
+
+/* MENSAJE DE ERROR PARA INPUTS */
+.g-error-input {
+  text-align: left;
+}
+
+/* SVG BOTON */
+.g-icon-button {
+  cursor: pointer;
 }

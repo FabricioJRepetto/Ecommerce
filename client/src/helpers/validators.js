@@ -42,35 +42,35 @@ export const validateImgs = (imagesList, warnTimer, productImg) => {
 };
 
 export const validationProductFormSchema = yup.object().shape({
-  name: yup.string().required("Nombre es requerido"),
+  name: yup.string().required("Ingresa el título"),
   price: yup
     .string()
-    .required("Precio es requerido")
+    .required("Ingresa el precio")
     .test(
       "price",
-      "Precio debe ser un número válido (ej: '1234.56')",
+      "El precio debe ser un número válido (ej: '1234.56')",
       (value) => validatePrice(value)
     ),
-  brand: yup.string().required("Marca es requerida"),
+  brand: yup.string().required("Ingresa la marca"),
   available_quantity: yup
     .string()
-    .required("Stock es requerido")
-    .test("stock", "Stock debe ser un número", (value) =>
+    .required("Ingresa el stock")
+    .test("stock", "El stock debe ser un número", (value) =>
       validateNumbers(value)
     ),
-  description: yup.string().required("Descripción es requerida"),
+  description: yup.string().required("Ingresa la descripción"),
   main_features: yup.array().of(
     yup.object().shape({
-      value: yup.string().required("Principales características requeridas"),
+      value: yup.string().required("Ingresa las características principales"),
     })
   ),
   attributes: yup.array().of(
     yup.object().shape({
-      name: yup.string().required("Nombre de atributo es requerido"),
-      value_name: yup.string().required("Valor de atributo es requerido"),
+      name: yup.string().required("Ingresa el nombre del atributo"),
+      value_name: yup.string().required("Ingresa la descripción del atributo"),
     })
   ),
   free_shipping: yup
-    .bool('Tipo de envío solo acepta "true" o "false" como valor')
-    .required("Tipo de envío es requerido"),
+    .bool('El tipo de envío solo acepta "true" o "false" como valor')
+    .required("Selecciona el tipo de envío"),
 });
