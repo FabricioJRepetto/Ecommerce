@@ -11,7 +11,7 @@ const Address = ({ loading, setLoading, address, setAddress }) => {
   const [notification] = useNotification();
 
   const [addressToEditId, setaddressToEditId] = useState(null);
-  const [isOpenAddForm, openModalAddForm, closeAddForm, prop] = useModal();
+  const [isOpenAddForm, openAddForm, closeAddForm, prop] = useModal();
 
   const {
     register,
@@ -51,7 +51,7 @@ const Address = ({ loading, setLoading, address, setAddress }) => {
   const editAddress = async (id) => {
     const { data } = await axios(`/address/`);
     const target = data.address?.find((e) => e._id === id);
-    openModalAddForm();
+    openAddForm();
     setaddressToEditId(id);
     setValue("state", target.state);
     setValue("city", target.city);
@@ -91,7 +91,7 @@ const Address = ({ loading, setLoading, address, setAddress }) => {
   };
   return (
     <div>
-      <h1>Address</h1>
+      <h1>Dirección</h1>
       {!loading ? (
         <div>
           {React.Children.toArray(
@@ -113,13 +113,14 @@ const Address = ({ loading, setLoading, address, setAddress }) => {
           )}
           <button
             default={loading || true}
-            onClick={() => openModalAddForm(true)}
+            onClick={() => openAddForm(true)}
+            className="g-white-button"
           >
             Agregar dirección
           </button>
         </div>
       ) : (
-        <p>LOADING</p>
+        <p>LOADING</p> /* //! VOLVER A VER agregar loader */
       )}
 
       <Modal isOpen={isOpenAddForm} closeModal={closeAddForm}>
@@ -271,7 +272,15 @@ const Address = ({ loading, setLoading, address, setAddress }) => {
               )}
             </span>
 
-            <button>{prop ? "Agregar dirección" : "Editar dirección"}</button>
+            <button className="g-white-button">
+              {prop ? "Agregar dirección" : "Editar dirección"}
+            </button>
+            <button
+              onClick={() => closeAddForm(true)}
+              className="g-white-button"
+            >
+              Cancelar
+            </button>
           </form>
         )}
       </Modal>
