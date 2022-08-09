@@ -123,13 +123,13 @@ const Details = () => {
                                 )}
                                 <p>{data.free_shipping && "free shipping"}</p>
                                 <p>{data.available_quantity > 0 ? 'stock: '+data.available_quantity : 'out of stock'}</p>
-                                <button disabled={data.available_quantity < 1} onClick={() => addToCart(data._id)}>Add to cart</button>
+                                <button className="details-button" disabled={data.available_quantity < 1} onClick={() => addToCart(data._id)}>Add to cart</button>
                                 <br />
-                                <button disabled={data.available_quantity < 1} onClick={() => buyNow(data._id)}>Buy now</button>
+                                <button className="details-button" disabled={data.available_quantity < 1} onClick={() => buyNow(data._id)}>Buy now</button>
                             </div>
 
                             {data.main_features && (
-                                <div className="details-mainfeatures">                   
+                                <div className="details-mainfeatures">
                                     <b>Caracteristicas principales</b>
                                     <div>
                                         <ul>                            
