@@ -51,14 +51,19 @@
 .all-attributes-container {
   display: flex;
   flex-direction: column;
-  flex-wrap: wrap;
   width: 80vw;
   margin: 0 auto;
+}
+.attributes-two-columns {
+  flex-wrap: wrap;
 }
 
 .attribute-container {
   display: flex;
   height: fit-content;
+}
+.attributes-two-columns > .attribute-container {
+  width: 50%;
 }
 
 .attribute-container > div:first-child {
@@ -77,19 +82,5 @@
   width: 80vw;
   margin: 0 auto;
 }
-
-.attribute-container {
-  display: flex;
-  height: fit-content;
-}
-
-.attribute-container > div:first-child {
-  width: 45%;
-  text-align: left;
-}
-.attribute-container > div:last-child {
-  padding-left: 1rem;
-  width: 55%;
-  text-align: left;
 }
  */
