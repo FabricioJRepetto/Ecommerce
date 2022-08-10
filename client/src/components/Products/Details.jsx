@@ -8,6 +8,7 @@ import Galery from "./Galery";
 import { WishlistButton as Fav } from "./WishlistButton";
 import "./Details.css";
 
+import Footer from '../common/Footer'
 import { ReactComponent as Sale } from "../../assets/svg/sale.svg";
 import { ReactComponent as Spinner } from "../../assets/svg/spinner.svg";
 import { loadQuerys } from "../../Redux/reducer/productsSlice";
@@ -46,12 +47,13 @@ const Details = () => {
       setLoading(true);
       const { data } = await axios(`/product/${id}`);
       setData(data);
+      console.log(data.attributes);
       if (data.attributes) {
         if (data.attributes.length > 10) {
           setAttributesColumns(true);
-          setAttributesHeight((data.attributes.length / 2) * 1.4);
+          setAttributesHeight(Math.ceil((data.attributes.length / 2) * 2.5));
         } else {
-          setAttributesHeight(data.attributes.length * 1.3);
+          setAttributesHeight(Math.ceil(data.attributes.length * 2.5));
         }
       }
       setLoading(false);
@@ -184,10 +186,12 @@ const Details = () => {
                         >
                             {React.Children.toArray(
                             data.attributes?.map((e) => (
+                                (e.value_name) &&
                                 <div className="attribute-container">
-                                <div>{e.name}</div>
-                                <div>{e.value_name}</div>
+                                    <div>{e.name}</div>
+                                    <div>{e.value_name}</div>
                                 </div>
+                                
                             ))
                             )}
                         </div>
@@ -197,6 +201,7 @@ const Details = () => {
 
             </div>
         )}
+        <Footer />
         </div>
     );
 };

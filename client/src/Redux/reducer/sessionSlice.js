@@ -33,15 +33,15 @@ export const sessionSlice = createSlice({
                 role,
                 isGoogleUser,
             } = action.payload;
-            state.session = session;
-            state.username = username;
-            state.full_name = full_name;
-            state.avatar = avatar;
-            state.email = email;
-            state.emailVerified = emailVerified;
-            state.id = id;
-            state.role = role;
-            state.isGoogleUser = isGoogleUser;
+            if (session !== undefined) state.session = session;
+            if (username !== undefined) state.username = username;
+            if (full_name !== undefined) state.full_name = full_name;
+            if (avatar !== undefined) state.avatar = avatar;
+            if (email !== undefined) state.email = email;
+            if (emailVerified !== undefined) state.emailVerified = emailVerified;
+            if (id !== undefined) state.id = id;
+            if (role !== undefined) state.role = role;
+            if (isGoogleUser !== undefined) state.isGoogleUser = isGoogleUser;
         },
         sessionActive: (state, action) => {
             state.session = action.payload;
