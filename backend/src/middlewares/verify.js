@@ -65,7 +65,10 @@ async function verifyEmailVerified(req, res, next) {
   if (user.emailVerified === true) {
     return next();
   } else {
-    return res.status(401).json({ message: "Unauthorized" });
+    return res.json({
+      message: "Verifica tu email para tener autorización",
+      error: true,
+    });
   }
 }
 

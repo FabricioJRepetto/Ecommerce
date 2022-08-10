@@ -76,7 +76,6 @@ const Signupin = () => {
       data.error && notification(data.message, "", "warning");
     } catch (error) {
       console.log(error);
-      //! VOLVER A VER agregar notif de email
       //! VOLVER A VER manejo de errores
     } finally {
       closeLoader();
@@ -86,7 +85,6 @@ const Signupin = () => {
   //? LOGIN CON MAIL
   const signin = async (signinData) => {
     dispatch(loadingUserData(true));
-    // openLoader();
     try {
       const { data } = await axios.post(`/user/signin`, signinData);
 
@@ -100,15 +98,12 @@ const Signupin = () => {
       //! VOLVER A VER manejo de errores
       notification(error.response.data.message, "", "error");
       dispatch(loadingUserData(false));
-    } finally {
-      // closeLoader();
     }
   };
 
   //? LOGIN CON GOOGLE
   const handleCallbackResponse = async (response) => {
     dispatch(loadingUserData(true));
-    //openLoader();
     //response.credential = Google user token
     const googleToken = "google" + response.credential;
     window.localStorage.setItem("loggedTokenEcommerce", googleToken);
@@ -140,8 +135,6 @@ const Signupin = () => {
     } catch (error) {
       dispatch(loadingUserData(false));
       console.log(error); //! VOLVER A VER manejo de errores
-    } finally {
-      //closeLoader();
     }
   };
 
@@ -171,16 +164,16 @@ const Signupin = () => {
     // eslint-disable-next-line
   }, [session]);
 
-//   useEffect(() => {
-//     session && navigate("/");
-//     setValueSignin("email", "");
-//     setValueSignin("password", "");
-//     setValueSignup("email", "");
-//     setValueSignup("password", "");
-//     setValueSignup("repPassword", "");
-//     setValueForgot("email", "");
-//     // eslint-disable-next-line
-//   }, []);
+  useEffect(() => {
+    // session && navigate("/");
+    setValueSignin("email", "fer.eze.ram@gmail.com");
+    setValueSignin("password", "fer.eze.ram@gmail.com");
+    setValueSignup("email", "fer.eze.ram@gmail.com");
+    setValueSignup("password", "fer.eze.ram@gmail.com");
+    setValueSignup("repPassword", "fer.eze.ram@gmail.com");
+    setValueForgot("email", "fer.eze.ram@gmail.com");
+    // eslint-disable-next-line
+  }, []);
 
   const forgotPassword = async (email) => {
     openLoader();

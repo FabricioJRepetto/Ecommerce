@@ -26,6 +26,7 @@ passport.use(
           const newUser = await User.create({
             email,
             password,
+            username: email.split("@")[0],
             isGoogleUser: false,
           });
           return done(null, newUser, {

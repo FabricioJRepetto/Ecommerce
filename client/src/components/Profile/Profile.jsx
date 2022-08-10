@@ -10,16 +10,17 @@ import { avatarResizer } from "../../helpers/resizer";
 import { useNotification } from "../../hooks/useNotification";
 import {
   loadUserData,
-  loadAvatar,
+  /* loadAvatar,
   loadFullName,
-  loadUsername,
+  loadUsername, */
 } from "../../Redux/reducer/sessionSlice";
-import "./Profile.css";
+import { CloseIcon } from "@chakra-ui/icons";
 import Orders from "./Orders";
 import Address from "./Address";
 import Wishlist from "./Wishlist";
 import History from "./History";
 import "../../App.css";
+import "./Profile.css";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -40,19 +41,15 @@ const Profile = () => {
   const { wishlist: wl_id } = useSelector((state) => state.cartReducer);
   const {
     session,
-    id,
     username,
+    full_name,
     avatar,
     email,
+    emailVerified,
+    id,
     role,
-    full_name,
     isGoogleUser,
   } = useSelector((state) => state.sessionReducer);
-  const [details, setDetails] = useState({
-    username,
-    first: full_name.first,
-    last: full_name.last,
-  });
 
   const [newAvatar, setNewAvatar] = useState();
   const [avatarPreview, setAvatarPreview] = useState();
@@ -62,6 +59,20 @@ const Profile = () => {
     handleSubmit: handleSubmitForgot,
     formState: { errors: errorsForgot },
   } = useForm();
+
+  const {
+    register: registerEditDetails,
+    handleSubmit: handleSubmitEditDetails,
+    formState: { errors: errorsEditDetails },
+    setValue: setValueEditDetails,
+    watch: watchEditDetails,
+  } = useForm();
+
+  useEffect(() => {
+    setValueEditDetails("username", username);
+    setValueEditDetails("name", full_name.first);
+    setValueEditDetails("lastname", full_name.last);
+  }, []);
 
   useEffect(() => {
     setRender(section || "details");
@@ -121,28 +132,43 @@ const Profile = () => {
     closeAvatar();
   };
 
-  const updateDetails = async (e) => {
-    e.preventDefault();
-    e.target.disabled = true;
+  const updateDetails = async (updateData) => {
+    console.log("updateData", updateData);
+    try {
+      const { data, statusText } = await axios.put(
+        "/user/editProfile",
+        updateData
+      );
+      if (data.error) {
+        setValueEditDetails("username", username);
+        setValueEditDetails("name", "");
+        setValueEditDetails("lastname", "");
+        return notification(data.message, "", "warning");
+      }
 
-    const { data, statusText } = await axios.put("/user/editProfile", details);
+      console.log("data", data);
 
-    dispatch(
-      loadUserData({
-        full_name: { first: data.user.firstName, last: data.user.lastName },
-        username: data.user.username,
-      })
-    );
-    //dispatch(loadUsername(data.user.username));
-    notification(
-      data.message,
-      "",
-      `${statusText === "OK" ? "success" : "warning"}`
-    );
-    closeDetails();
+      dispatch(
+        loadUserData({
+          full_name: { first: data.user.firstName, last: data.user.lastName },
+          username: data.user.username,
+        })
+      );
+      //dispatch(loadUsername(data.user.username));
+      notification(
+        data.message,
+        "",
+        `${statusText === "OK" ? "success" : "warning"}`
+      );
+    } catch (error) {
+      console.log(error); //! VOLVER A VER manejo de errores
+    } finally {
+      closeDetails();
+    }
   };
 
   const emailRegex = /^[\w-.]+@([\w-])+[.\w-]*$/i;
+  const onlyLettersRegex = /^[a-zA-Z\s]*$/;
 
   const forgotPassword = (email) => {
     console.log(email);
@@ -153,9 +179,6 @@ const Profile = () => {
       })
       .catch((err) => console.log(err)); //! VOLVER A VER manejo de errores
   };
-
-  const handleDetails = (e) =>
-    setDetails({ ...details, [e.target.name]: e.target.value });
 
   return (
     <div className="profile-container">
@@ -212,16 +235,22 @@ const Profile = () => {
                           <div key={e.id}>
                             <p>{`${e.street_name} ${e.street_number}, ${e.zip_code}, ${e.city}, ${e.state}.`}</p>
                             {e.isDefault && <p>⭐</p>}
-                            </div>
-                        )))
-                        : 'Aún no tienes un dirección seleccionada'}</div>
-                    <button onClick={()=> navigate("/profile/address")}>Direcciones</button>
-                </div>
-                )}
+                          </div>
+                        )
+                    )
+                  )
+                : "Aún no tienes un dirección seleccionada"}
+            </div>
+            <button
+              onClick={() => navigate("/profile/address")}
+              className="g-white-button"
+            >
+              Direcciones
+            </button>
+          </div>
+        )}
 
-                {render === "orders" && (
-                    <Orders />
-                )}
+        {render === "orders" && <Orders />}
 
         {render === "address" && (
           <Address
@@ -231,14 +260,14 @@ const Profile = () => {
           />
         )}
 
-                {render === "wishlist" && (
-                    <Wishlist loading={loading} wishlist={wishlist} wl_id={wl_id}/>
-                )}
+        {render === "wishlist" && (
+          <Wishlist loading={loading} wishlist={wishlist} wl_id={wl_id} />
+        )}
 
-                {render === "history" && (
-                    <History loading={loading} history={history} wl_id={wl_id}/>
-                )}
-            </div>
+        {render === "history" && (
+          <History loading={loading} history={history} wl_id={wl_id} />
+        )}
+      </div>
 
       <Modal isOpen={isOpenAvatar} closeModal={closeAvatar}>
         {isOpenAvatar && (
@@ -246,7 +275,13 @@ const Profile = () => {
             <h1>editar avatar</h1>
             <div className="avatar-preview">
               <img
-                src={avatarPreview ? avatarPreview : avatar ? avatarResizer(avatar) : require("../../assets/avatardefault.png")}
+                src={
+                  avatarPreview
+                    ? avatarPreview
+                    : avatar
+                    ? avatarResizer(avatar)
+                    : require("../../assets/avatardefault.png")
+                }
                 alt="avatar-preview"
               />
             </div>
@@ -264,32 +299,106 @@ const Profile = () => {
 
       <Modal isOpen={isOpenDetails} closeModal={closeDetails}>
         {isOpenDetails && (
-          <form onSubmit={updateDetails}>
-            <input
-              type="text"
-              placeholder="Nombre de usuario"
-              value={details.username}
-              maxLength="20" /* //! VOLVER A VER agregar validación en back */
-              onChange={handleDetails}
-              name="username"
-            />
-            <input
-              type="text"
-              placeholder="Nombre"
-              value={details.first}
-              maxLength="20" /* //! VOLVER A VER agregar validación en back */
-              onChange={handleDetails}
-              name="first"
-            />
-            <input
-              type="text"
-              placeholder="Apellido"
-              value={details.last}
-              maxLength="20" /* //! VOLVER A VER agregar validación en back */
-              onChange={handleDetails}
-              name="last"
-            />
+          <form onSubmit={handleSubmitEditDetails(updateDetails)}>
+            <>
+              {!errorsEditDetails.username && (
+                <p className="g-hidden-placeholder">hidden</p>
+              )}
+              {errorsEditDetails.username?.type === "required" && (
+                <p className="g-error-input">Ingresa tu nombre de usuario</p>
+              )}
+            </>
+
+            <span className="g-input-with-button">
+              <input
+                type="text"
+                placeholder="Nombre de usuario"
+                autoComplete="off"
+                {...registerEditDetails("username", {
+                  required: true,
+                })} /* //! VOLVER A VER agregar length, agregar validación en back */
+              />
+              {watchEditDetails("username") === "" ||
+              watchEditDetails("username") === undefined ? null : (
+                <div
+                  className="g-input-icon-container g-input-x-button"
+                  onClick={() => setValueEditDetails("username", "")}
+                >
+                  <CloseIcon />
+                </div>
+              )}
+            </span>
+
+            <>
+              {!errorsEditDetails.name && (
+                <p className="g-hidden-placeholder">hidden</p>
+              )}
+              {errorsEditDetails.name?.type === "pattern" && (
+                <p className="g-error-input">Ingresa un nombre válido</p>
+              )}
+              {errorsEditDetails.name?.type === "required" && (
+                <p className="g-error-input">Ingresa tu nombre</p>
+              )}
+            </>
+
+            <span className="g-input-with-button">
+              <input
+                type="text"
+                placeholder="Nombre"
+                autoComplete="off"
+                {...registerEditDetails("name", {
+                  pattern: onlyLettersRegex,
+                  required: true,
+                })} /* //! VOLVER A VER agregar length, agregar validación en back */
+              />
+              {watchEditDetails("name") === "" ||
+              watchEditDetails("name") === undefined ? null : (
+                <div
+                  className="g-input-icon-container g-input-x-button"
+                  onClick={() => setValueEditDetails("name", "")}
+                >
+                  <CloseIcon />
+                </div>
+              )}
+            </span>
+
+            <>
+              {!errorsEditDetails.lastname && (
+                <p className="g-hidden-placeholder">hidden</p>
+              )}
+              {errorsEditDetails.lastname?.type === "pattern" && (
+                <p className="g-error-input">Ingresa un apellido válido</p>
+              )}
+              {errorsEditDetails.lastname?.type === "required" && (
+                <p className="g-error-input">Ingresa tu apellido</p>
+              )}
+            </>
+
+            <span className="g-input-with-button">
+              <input
+                type="text"
+                placeholder="Apellido"
+                autoComplete="off"
+                {...registerEditDetails("lastname", {
+                  patter: onlyLettersRegex,
+                  required: true,
+                })} /* //! VOLVER A VER agregar validación en back */
+              />
+              {watchEditDetails("lastname") === "" ||
+              watchEditDetails("lastname") === undefined ? null : (
+                <div
+                  className="g-input-icon-container g-input-x-button"
+                  onClick={() => setValueEditDetails("lastname", "")}
+                >
+                  <CloseIcon />
+                </div>
+              )}
+            </span>
+
             <button className="g-white-button">Actualizar</button>
+            <button onClick={closeDetails} className="g-white-button">
+              Cancelar
+            </button>
           </form>
         )}
       </Modal>
