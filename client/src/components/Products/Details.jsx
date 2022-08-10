@@ -47,13 +47,13 @@ const Details = () => {
       setLoading(true);
       const { data } = await axios(`/product/${id}`);
       setData(data);
-      console.log(data.attributes);
+      setDescription(!!data.description)
       if (data.attributes) {
-        if (data.attributes.length > 10) {
+        if (data.attributes.length > 15) {
           setAttributesColumns(true);
-          setAttributesHeight(Math.ceil((data.attributes.length / 2) * 2.5));
+          setAttributesHeight(`${Math.floor((data.attributes.length / 2) * 2.2)}rem`);
         } else {
-          setAttributesHeight(Math.ceil(data.attributes.length * 2.5));
+          setAttributesHeight('fit-content');
         }
       }
       setLoading(false);
@@ -165,15 +165,16 @@ const Details = () => {
 
                 <div className="tab-container">
                     <div className="tab-button-container">
-                        <button onClick={()=>handleTabChange(true)} 
+
+                        {data.description && <button onClick={()=>handleTabChange(true)} 
                             className={`tab-button ${description ? 'tab-button-active' : ''}`}>
                                 Descripción
-                        </button>
+                        </button>}
 
-                        <button onClick={()=>handleTabChange(false)} 
+                        {data.attributes && <button onClick={()=>handleTabChange(false)} 
                             className={`tab-button ${!description ? 'tab-button-active' : ''}`}>
                                 Atributos
-                        </button>
+                        </button>}
                     </div>
                     
                     {description 
@@ -182,7 +183,7 @@ const Details = () => {
                         <div className={`all-attributes-container ${
                             attributesColumns ? "attributes-two-columns" : ""
                             }`}
-                            style={{ height: `${attributesHeight}rem` }}
+                            style={{ height: attributesHeight }}
                         >
                             {React.Children.toArray(
                             data.attributes?.map((e) => (
