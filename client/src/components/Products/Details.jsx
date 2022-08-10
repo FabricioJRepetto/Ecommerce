@@ -26,7 +26,7 @@ const Details = () => {
   const [data, setData] = useState(false);
   const [loading, setLoading] = useState(true);
   const [attributesHeight, setAttributesHeight] = useState(null);
-  const [attributesColumns, setAttributesColumns] = useState(1);
+  const [attributesColumns, setAttributesColumns] = useState(false);
 
   useEffect(() => {
     if (session && data) {
@@ -47,7 +47,8 @@ const Details = () => {
       setData(data);
       if (data.attributes) {
         if (data.attributes.length > 10) {
-          setAttributesHeight((data.attributes.length / 2) * 1.3);
+          setAttributesColumns(true);
+          setAttributesHeight((data.attributes.length / 2) * 1.4);
         } else {
           setAttributesHeight(data.attributes.length * 1.3);
         }
@@ -189,7 +190,9 @@ const Details = () => {
             <b>attributes</b>
           </p>
           <div
-            className="all-attributes-container"
+            className={`all-attributes-container ${
+              attributesColumns ? "attributes-two-columns" : ""
+            }`}
             style={{ height: `${attributesHeight}rem` }}
           >
             {React.Children.toArray(
