@@ -1,6 +1,7 @@
 .galery {
     display: flex;
     flex-direction: column-reverse;
+    justify-content: flex-end;
 }
 
 .galery-selector-container {
@@ -117,3 +118,28 @@
 .fs-visible {
     visibility: visible;
 }
+
+/**RIPPLE**/
+.ripple-container {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    z-index: 2;
+    overflow: hidden;
+}
+.ripple {
+    filter:blur(.1rem);
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    background: #000000;  
+    border-radius: 50%;
+    opacity: 1;
+    animation: ripple-effect 1s ease-in-out;
+  
+}
+.content {
+  opacity: 1;
+  position: relative;
+}
+

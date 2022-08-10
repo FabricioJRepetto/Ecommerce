@@ -25,6 +25,7 @@ const Details = () => {
 
     const [data, setData] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [description, setDescription] = useState(true)
 
     useEffect(() => {
         if (session && data) {
@@ -80,6 +81,10 @@ const Details = () => {
         navigate('/results')
     }
 
+    const handleTabChange = (prop) => { 
+        setDescription(prop);
+     }
+
     return (
         <div>
         {loading && <Spinner className='details-spinner'/>}
@@ -87,42 +92,44 @@ const Details = () => {
             <div>
                 <div className="details-head-container">
                     <div className='bread-crumbs'>
-                        {data.path_from_root?.length > 0 &&
-                            React.Children.toArray(
-                                data.path_from_root.map((c, index) => (
-                                    <span key={c.id} onClick={ () => addFilter({filter: 'category', value: c.id})}>
-                                        { (index > 0 ? ' > ' : '') + c.name }
-                                    </span>
-                                ))
-                            )
-                        }
+                        <div>
+                            {data.path_from_root?.length > 0 &&
+                                React.Children.toArray(
+                                    data.path_from_root.map((c, index) => (
+                                        <span key={c.id} onClick={ () => addFilter({filter: 'category', value: c.id})}>
+                                            { (index > 0 ? ' > ' : '') + c.name }
+                                        </span>
+                                    ))
+                                )
+                            }
+                        </div>
+
+                        <Fav
+                            prodId={data._id}
+                            visible={true}
+                            position={false}
+                            fav={wishlist.includes(data._id)} />
                     </div>
                     <div className="details-head-main">
-                        <Galery imgs={data.images} />
-                        <div className="details-price-section">
-                            <div>
-                                <div className="details-fav-button-container">
-                                    <Fav
-                                        prodId={data._id}
-                                        visible={true}
-                                        fav={wishlist.includes(data._id)}
-                                    />
+                        <Galery imgs={data.images} ripple={true}/>
+                        <div className="details-head-section">
+                            <div>                                
+                                <div className="details-title-container">
+                                    <p>{data.brand?.toUpperCase()}</p>
+                                    <h1>{data.name}</h1>                                    
                                 </div>
-                                <p>{data.brand?.toUpperCase()}</p>
-                                <h1>{data.name}</h1>
-                                <div onClick={() => addFilter({filter: 'category', value: data.category.id})}>{data.category.name}</div>
-                                <del>{data.on_sale && "$" + data.price}</del>
-                                <h2>
-                                {`$ ${priceFormat(data.on_sale ? data.sale_price : data.price).int}${priceFormat(data.on_sale ? data.sale_price : data.price).cents || ''}`}
-                                </h2>
-                                {data.on_sale && (
-                                <div className="details-sale-section">
-                                    <Sale className="onsale-svg" />
-                                    <p>{data.discount}% off</p>
+                               
+                                <div className="details-price-section">
+                                    {data.on_sale && (
+                                        <div className="details-sale-section">
+                                            <p>$<del>{priceFormat(data.price).int}</del> 
+                                            <b>{' '+data.discount}% off</b></p>
+                                        </div>
+                                    )}
+                                    <h2>{`$ ${priceFormat(data.on_sale ? data.sale_price : data.price).int}${priceFormat(data.on_sale ? data.sale_price : data.price).cents || ''}`}</h2>
+                                    <p>{data.free_shipping && "free shipping"}</p>
                                 </div>
-                                )}
-                                <p>{data.free_shipping && "free shipping"}</p>
-                                <p>{data.available_quantity > 0 ? 'stock: '+data.available_quantity : 'out of stock'}</p>
+                                
                                 <button className="g-white-button details-button" disabled={data.available_quantity < 1} onClick={() => addToCart(data._id)}>Add to cart</button>
                                 <br />
                                 <button className="g-white-button details-button" disabled={data.available_quantity < 1} onClick={() => buyNow(data._id)}>Buy now</button>
@@ -145,22 +152,29 @@ const Details = () => {
                     
                 </div>
 
-                <div>
-                    <br />
-                    <p>
-                    <b>attributes</b>
-                    </p>
-                    <div>
-                    {React.Children.toArray(
-                        data.attributes?.map((e) => (
-                        <p key={e.name}>{`${e.name}: ${e.value_name}`}</p>
-                        ))
-                    )}
+                <div className="tab-container">
+                    <div className="tab-button-container">
+                        <button onClick={()=>handleTabChange(true)} 
+                            className={`tab-button ${description ? 'tab-button-active' : ''}`}>
+                                Descripción
+                        </button>
+
+                        <button onClick={()=>handleTabChange(false)} 
+                            className={`tab-button ${!description ? 'tab-button-active' : ''}`}>
+                                Atributos
+                        </button>
                     </div>
-                    <br />
-                    {data.description && <p>{data.description}</p>}
+                    
+                    {description 
+                    ? <div className="details-description-container">{data.description && <p>{data.description}</p>}</div>
+                    : <div className="details-attributes-container">{React.Children.toArray(
+                            data.attributes?.map((e) => (
+                            <p key={e.name}>{`${e.name}: ${e.value_name}`}</p>
+                            ))
+                        )}</div>
+                    }
                 </div>
-                <div></div>
+
             </div>
         )}
         </div>
