@@ -1,4 +1,3 @@
-const cart = require("../models/cart");
 const Cart = require("../models/cart");
 const { cartFormater } = require("../utils/cartFormater");
 
@@ -113,7 +112,7 @@ const buyLater = async (req, res, next) => {
                     }
                 }, { new: true });
 
-            return res.json({ message: 'Product moved to Cart.', cart: newCart });
+            return res.json({ message: 'Product saved for buying later.', cart: newCart });
 
         } else {
             aux = cart.buyLater.find(e => e.product_id === req.params.id);
@@ -127,7 +126,7 @@ const buyLater = async (req, res, next) => {
                     }
                 }, { new: true });
 
-            return res.json({ message: 'Product saved for buying later.', cart: newCart })
+            return res.json({ message: 'Product moved to Cart.', cart: newCart })
         }
     } catch (error) {
         next(error)

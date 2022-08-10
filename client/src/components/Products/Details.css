@@ -94,14 +94,14 @@
     margin: 2rem;
     display: flex;
     flex-direction: column;
-    /* height: 50vh; */
+    min-height: 50vh;
     flex-wrap: wrap;
     align-content: center;
 }
 .all-attributes-container {
   display: flex;
   flex-direction: column;
-  width: 50vw;
+  width: 70vw;
   margin: 0 auto;
 }
 .attributes-two-columns {
@@ -112,9 +112,10 @@
 .attribute-container {
   display: flex;
   height: fit-content;
+  border-bottom: 1px solid #FFFFFF10;
 }
 .attributes-two-columns > .attribute-container {
-    width: 20vw;
+    width: 30vw;
     margin-bottom: 0.5rem;
 }
 
