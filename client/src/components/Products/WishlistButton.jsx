@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNotification } from "../../hooks/useNotification";
 import "./WishlistButton.css";
 
-export const WishlistButton = ({ prodId: id, size = 30, fav, visible }) => {
+export const WishlistButton = ({ prodId: id, size = 30, fav, visible, position = true }) => {
   const dispatch = useDispatch();
   const { wishlist } = useSelector((state) => state.cartReducer);
   const { session } = useSelector((state) => state.sessionReducer);
@@ -35,7 +35,8 @@ export const WishlistButton = ({ prodId: id, size = 30, fav, visible }) => {
   };
 
   return (
-    <div className={`fav-button-container ${(fav || visible) && "visible"}`}>
+    <div className={`fav-button-container ${(fav || visible) && "visible"}`} 
+        style={position ? {position: 'absolute', top: '1rem', right: '1rem'} : {}}>
       <button
         style={{ height: size, width: size }}
         onClick={() => addToWish(id)}

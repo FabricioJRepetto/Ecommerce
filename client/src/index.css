@@ -235,3 +235,19 @@ code {
 ::-webkit-scrollbar-thumb:hover {
   background: #404040;
 }
+
+/*RIPPLE*/
+@keyframes ripple-effect {
+  0% {
+    transform: scale(1);
+    opacity: .25;
+  }
+  80% {
+    transform: scale(800);
+    opacity: .1;
+  }
+  100% {
+    transform: scale(1000);
+    opacity: 0;
+  }
+}

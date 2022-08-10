@@ -8,6 +8,7 @@ import Galery from "./Galery";
 import { WishlistButton as Fav } from "./WishlistButton";
 import "./Details.css";
 
+import Footer from '../common/Footer'
 import { ReactComponent as Sale } from "../../assets/svg/sale.svg";
 import { ReactComponent as Spinner } from "../../assets/svg/spinner.svg";
 import { loadQuerys } from "../../Redux/reducer/productsSlice";
@@ -27,6 +28,7 @@ const Details = () => {
   const [loading, setLoading] = useState(true);
   const [attributesHeight, setAttributesHeight] = useState(null);
   const [attributesColumns, setAttributesColumns] = useState(false);
+    const [description, setDescription] = useState(true)
 
   useEffect(() => {
     if (session && data) {
@@ -45,12 +47,13 @@ const Details = () => {
       setLoading(true);
       const { data } = await axios(`/product/${id}`);
       setData(data);
+      console.log(data.attributes);
       if (data.attributes) {
         if (data.attributes.length > 10) {
           setAttributesColumns(true);
-          setAttributesHeight((data.attributes.length / 2) * 1.4);
+          setAttributesHeight(Math.ceil((data.attributes.length / 2) * 2.5));
         } else {
-          setAttributesHeight(data.attributes.length * 1.3);
+          setAttributesHeight(Math.ceil(data.attributes.length * 2.5));
         }
       }
       setLoading(false);
@@ -90,85 +93,59 @@ const Details = () => {
     navigate("/results");
   };
 
-  return (
-    <div>
-      {loading && <Spinner className="details-spinner" />}
-      {data && (
+    const handleTabChange = (prop) => { 
+        setDescription(prop);
+     }
+
+    return (
         <div>
-          <div className="details-head-container">
-            <div className="bread-crumbs">
-              {data.path_from_root?.length > 0 &&
-                React.Children.toArray(
-                  data.path_from_root.map((c, index) => (
-                    <span
-                      key={c.id}
-                      onClick={() =>
-                        addFilter({ filter: "category", value: c.id })
-                      }
-                    >
-                      {(index > 0 ? " > " : "") + c.name}
-                    </span>
-                  ))
-                )}
-            </div>
-            <div className="details-head-main">
-              <Galery imgs={data.images} />
-              <div className="details-price-section">
-                <div>
-                  <div className="details-fav-button-container">
-                    <Fav
-                      prodId={data._id}
-                      visible={true}
-                      fav={wishlist.includes(data._id)}
-                    />
-                  </div>
-                  <p>{data.brand?.toUpperCase()}</p>
-                  <h1>{data.name}</h1>
-                  <div
-                    onClick={() =>
-                      addFilter({ filter: "category", value: data.category.id })
-                    }
-                  >
-                    {data.category.name}
-                  </div>
-                  <del>{data.on_sale && "$" + data.price}</del>
-                  <h2>
-                    {`$ ${
-                      priceFormat(data.on_sale ? data.sale_price : data.price)
-                        .int
-                    }${
-                      priceFormat(data.on_sale ? data.sale_price : data.price)
-                        .cents || ""
-                    }`}
-                  </h2>
-                  {data.on_sale && (
-                    <div className="details-sale-section">
-                      <Sale className="onsale-svg" />
-                      <p>{data.discount}% off</p>
+        {loading && <Spinner className='details-spinner'/>}
+        {data && (
+            <div>
+                <div className="details-head-container">
+                    <div className='bread-crumbs'>
+                        <div>
+                            {data.path_from_root?.length > 0 &&
+                                React.Children.toArray(
+                                    data.path_from_root.map((c, index) => (
+                                        <span key={c.id} onClick={ () => addFilter({filter: 'category', value: c.id})}>
+                                            { (index > 0 ? ' > ' : '') + c.name }
+                                        </span>
+                                    ))
+                                )
+                            }
+                        </div>
+
+                        <Fav
+                            prodId={data._id}
+                            visible={true}
+                            position={false}
+                            fav={wishlist.includes(data._id)} />
                     </div>
-                  )}
-                  <p>{data.free_shipping && "free shipping"}</p>
-                  <p>
-                    {data.available_quantity > 0
-                      ? "stock: " + data.available_quantity
-                      : "out of stock"}
-                  </p>
-                  <button
-                    className="g-white-button details-button"
-                    disabled={data.available_quantity < 1}
-                    onClick={() => addToCart(data._id)}
-                  >
-                    Add to cart
-                  </button>
-                  <br />
-                  <button
-                    className="g-white-button details-button"
-                    disabled={data.available_quantity < 1}
-                    onClick={() => buyNow(data._id)}
-                  >
-                    Buy now
-                  </button>
-                </div>
+                    <div className="details-head-main">
+                        <Galery imgs={data.images} ripple={true}/>
+                        <div className="details-head-section">
+                            <div>                                
+                                <div className="details-title-container">
+                                    <p>{data.brand?.toUpperCase()}</p>
+                                    <h1>{data.name}</h1>                                    
+                                </div>
+                               
+                                <div className="details-price-section">
+                                    {data.on_sale && (
+                                        <div className="details-sale-section">
+                                            <p>$<del>{priceFormat(data.price).int}</del> 
+                                            <b>{' '+data.discount}% off</b></p>
+                                        </div>
+                                    )}
+                                    <h2>{`$ ${priceFormat(data.on_sale ? data.sale_price : data.price).int}${priceFormat(data.on_sale ? data.sale_price : data.price).cents || ''}`}</h2>
+                                    <p>{data.free_shipping && "free shipping"}</p>
+                                </div>
+                                
+                                <button className="g-white-button details-button" disabled={data.available_quantity < 1} onClick={() => addToCart(data._id)}>Add to cart</button>
+                                <br />
+                                <button className="g-white-button details-button" disabled={data.available_quantity < 1} onClick={() => buyNow(data._id)}>Buy now</button>
+                            </div>
 
                 {data.main_features && (
                   <div className="details-mainfeatures">
@@ -186,31 +163,47 @@ const Details = () => {
             </div>
           </div>
 
-          <p>
-            <b>attributes</b>
-          </p>
-          <div
-            className={`all-attributes-container ${
-              attributesColumns ? "attributes-two-columns" : ""
-            }`}
-            style={{ height: `${attributesHeight}rem` }}
-          >
-            {React.Children.toArray(
-              data.attributes?.map((e) => (
-                <div className="attribute-container">
-                  <div>{e.name}</div>
-                  <div>{e.value_name}</div>
+                <div className="tab-container">
+                    <div className="tab-button-container">
+                        <button onClick={()=>handleTabChange(true)} 
+                            className={`tab-button ${description ? 'tab-button-active' : ''}`}>
+                                Descripción
+                        </button>
+
+                        <button onClick={()=>handleTabChange(false)} 
+                            className={`tab-button ${!description ? 'tab-button-active' : ''}`}>
+                                Atributos
+                        </button>
+                    </div>
+                    
+                    {description 
+                    ? <div className="details-description-container">{data.description && <p>{data.description}</p>}</div>
+                    : <div className="details-attributes-container">
+                        <div className={`all-attributes-container ${
+                            attributesColumns ? "attributes-two-columns" : ""
+                            }`}
+                            style={{ height: `${attributesHeight}rem` }}
+                        >
+                            {React.Children.toArray(
+                            data.attributes?.map((e) => (
+                                (e.value_name) &&
+                                <div className="attribute-container">
+                                    <div>{e.name}</div>
+                                    <div>{e.value_name}</div>
+                                </div>
+                                
+                            ))
+                            )}
+                        </div>
+                    </div>
+                    }
                 </div>
-              ))
-            )}
-          </div>
-          <br />
-          {data.description && <p>{data.description}</p>}
-          <div></div>
+
+            </div>
+        )}
+        <Footer />
         </div>
-      )}
-    </div>
-  );
+    );
 };
 
 export default Details;

@@ -8,7 +8,7 @@
   grid-gap: 0.5em;
   place-content: center;
   height: 100vh;
-  background: #111;
+  background: #000000;
   --n: 10;
   --p: 3;
   z-index: 999;
@@ -22,12 +22,12 @@
   max-width: 95%;
   height: 3px;
   border-radius: 6px/3px;
-  transform: rotate(-5deg);
+  transform: rotate(-2deg);
   background: hsl(calc(var(--k) * 360), 100%, 50%);
   mix-blend-mode: screen;
   animation: b 0.5s ease-out infinite alternate,
     r 2s cubic-bezier(0, 0, calc(0.5 * (var(--k) + 1)), 1) infinite;
-  animation-delay: calc((var(--j) / var(--n) - 1) * 4s);
+  animation-delay: calc((var(--j) / var(--n) - 1) * 1.7s);
 }
 
 hr:nth-of-type(3n + 1) {
@@ -72,7 +72,7 @@ hr:nth-of-type(n + 28) {
 
 @keyframes r {
   50% {
-    transform: rotate(5deg);
+    transform: rotate(2deg);
   }
 }
 @keyframes b {

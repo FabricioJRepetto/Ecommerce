@@ -1,16 +1,31 @@
-import React, { useEffect } from 'react';
-import { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { resizer } from '../../helpers/resizer';
 import LoadingPlaceHolder from '../common/LoadingPlaceHolder';
 import { ReactComponent as Arrow } from '../../assets/svg/arrow-right.svg';
 import './Galery.css'
 
-const Galery = ({ imgs }) => {
+const Galery = ({ imgs, ripple = false }) => {
     const [current, setCurrent] = useState(0);
     const [loading, setLoading] = useState(true);
-    const [isOpen, setIsOpen] = useState(false)
+    const [isOpen, setIsOpen] = useState(false);
 
-    //? failsafe
+    //? Ripple effect //
+    const [coords, setCoords] = useState({ x: -1, y: -1 });
+    const [isRippling, setIsRippling] = useState(false);
+
+    useEffect(() => {
+        if (coords.x !== -1 && coords.y !== -1) {
+        setIsRippling(true);
+        console.log('ripple');
+        setTimeout(() => setIsRippling(false), 300);
+        } else setIsRippling(false);
+    }, [coords]);
+
+    useEffect(() => {
+        if (!isRippling) setCoords({ x: -1, y: -1 });
+    }, [isRippling]);
+
+    //? failsafe //
     useEffect(() => {
       let timer = null;
         timer = setTimeout(() => {
@@ -21,8 +36,16 @@ const Galery = ({ imgs }) => {
       }
     }, []);
 
-    const open = () => { 
-    setIsOpen(true)
+    const open = (e) => {
+        if (ripple) {
+            const rect = e.target.getBoundingClientRect();
+            setCoords({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+            setTimeout(() => {
+                setIsOpen(true);                
+            }, 150);
+        } else {
+            setIsOpen(true);
+        }
     }
 
     const next = (e) => { 
@@ -63,15 +86,20 @@ const Galery = ({ imgs }) => {
                 </div>
             </div>
             <div className='preview-container'>
+                <div onClick={e => open(e)} 
+                    className='ripple-container'>
+                    <span className={isRippling ? "ripple" : 'content'}
+                        style={{ left: coords.x, top: coords.y }}>
+                    </span>
+                </div>                        
                 {loading && <LoadingPlaceHolder extraStyles={{ height: "100%" }}/>}
-                {imgs?.map((e, index) => 
-                    <img 
-                    key={e.imgURL}
-                    onClick={open}
-                    onLoad={()=>{(index === imgs.length -1) && setLoading(false)}}
-                    className={`galery-img ${(current === index) && !loading && 'visible'}`}
-                    src={e.imgURL} 
-                    alt="img" />
+                {imgs?.map((e, index) =>                     
+                    <img key={e.imgURL}
+                        onClick={open}
+                        onLoad={()=>{(index === imgs.length -1) && setLoading(false)}}
+                        className={`galery-img ${(current === index) && !loading && 'visible'}`}
+                        src={e.imgURL} 
+                        alt="img" />                                      
                 )}
             </div>
 
