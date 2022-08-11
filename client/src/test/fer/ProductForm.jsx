@@ -142,6 +142,7 @@ const ProductForm = () => {
   };
 
   const loadInputs = (data) => {
+    console.log(data);
     setValue("name", data.name);
     setValue("price", data.price);
     setValue("brand", data.brand);
@@ -150,14 +151,19 @@ const ProductForm = () => {
     setValue("free_shipping", data.free_shipping);
     setValue("category", data.category);
     setCategoryPath(data.path_from_root);
-    replaceFeature([...data.main_features]);
+    //replaceFeature([...data.main_features]);
+    let featuresToEdit = [];
+    for (const feature of data.main_features) {
+      featuresToEdit.push({ value: feature });
+    }
+    replaceFeature(featuresToEdit);
     replaceAttribute([...data.attributes]);
     setImgsToEdit(data.images);
   };
 
   useEffect(() => {
     //! VOLVER A VER eliminar hasta linea 188
-    setValue("brand", "marcaa1");
+    /* setValue("brand", "marcaa1");
     setValue("name", "nombre1");
     setValue("price", 100);
     setValue("available_quantity", 10);
@@ -178,7 +184,7 @@ const ProductForm = () => {
         id: "MLA86379",
         name: "Alarmas para Motos",
       },
-    ]);
+    ]); */
     if (idProductToEdit) {
       axios(`/product/${idProductToEdit}`)
         .then(({ data }) => {
@@ -189,8 +195,10 @@ const ProductForm = () => {
         .catch((err) => console.log(err)); //!VOLVER A VER manejo de errores
     } else {
       //! VOLVER A VER poner strings vacias en lineas 199 y 200
-      appendAttribute({ name: "color", value_name: "amarillo" });
-      appendFeature({ value: "piola" });
+      appendAttribute({ name: "", value_name: "" });
+      appendFeature({ value: "" });
+      /* appendAttribute({ name: "color", value_name: "amarillo" });
+      appendFeature({ value: "piola" }); */
     }
     // eslint-disable-next-line
   }, []);
