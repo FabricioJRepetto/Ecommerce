@@ -12,6 +12,7 @@ import {
   validateImgs,
   validationProductFormSchema,
 } from "../../helpers/validators";
+import { avoidEnterSubmit } from "../../helpers/AvoidEnterSubmit";
 import { useNotification } from "../../hooks/useNotification";
 import { useModal } from "../../hooks/useModal";
 import Modal from "../../components/common/Modal";
@@ -354,10 +355,6 @@ const ProductForm = () => {
     }
   };
 
-  const checkKeyDown = (e) => {
-    if (e.key === "Enter") e.preventDefault();
-  };
-
   return (
     <div className="form-width-test">
       <h2>{productToEdit ? "EDITAR" : "CREAR"} producto</h2>
@@ -365,7 +362,7 @@ const ProductForm = () => {
       <form
         encType="multipart/form-data"
         onSubmit={customSubmit}
-        onKeyDown={checkKeyDown}
+        onKeyDown={avoidEnterSubmit}
         className="form-width-test"
       >
         <>

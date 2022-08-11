@@ -43,30 +43,3 @@
   padding-top: 1.5rem;
   margin-top: 1rem;
 }
-
-.forgot-container {
-  justify-content: center;
-  opacity: 1;
-}
-.forgot-container > form {
-  margin-top: 2rem;
-}
-
-.forgot-text {
-  text-align: left;
-  font-weight: 300;
-}
-.forgot-response {
-  margin: 2rem 0;
-  font-weight: 300;
-}
-
-.forgot-buttons-container {
-  display: flex;
-  justify-content: space-between;
-}
-.forgot-buttons-container > input {
-  padding: 0.5rem 2rem;
-  width: 48%;
-  text-align: center;
-}

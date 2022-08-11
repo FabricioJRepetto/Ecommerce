@@ -62,7 +62,7 @@ passport.use(
 
         const validity = await user.comparePassword(password);
         if (!validity) {
-          return done(null, false, { message: "Password incorrecto" });
+          return done(null, false, { message: "Contraseña incorrecta" });
         }
 
         return done(null, user, { message: "Sesión iniciada con éxito" });

@@ -11,13 +11,14 @@ import { useForm } from "react-hook-form";
 import { useNotification } from "../../hooks/useNotification";
 import { useModal } from "../../hooks/useModal";
 import Modal from "../common/Modal";
+import LoaderBars from "../common/LoaderBars";
+import ForgotPassword from "./ForgotPassword";
 import {
   CloseIcon,
   ArrowBackIcon,
   ViewIcon,
   ViewOffIcon,
 } from "@chakra-ui/icons";
-import LoaderBars from "../common/LoaderBars";
 import "./Signupin.css";
 import "../../App.css";
 const { REACT_APP_OAUTH_CLIENT_ID } = process.env;
@@ -28,7 +29,6 @@ const Signupin = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { session } = useSelector((state) => state.sessionReducer);
-  const [response, setResponse] = useState(null);
   const [viewPassword, setViewPassword] = useState({
     signin: false,
     signup: false,
@@ -51,19 +51,9 @@ const Signupin = () => {
     watch: watchSignup,
   } = useForm();
 
-  const {
-    register: registerForgot,
-    handleSubmit: handleSubmitForgot,
-    formState: { errors: errorsForgot },
-    setValue: setValueForgot,
-    watch: watchForgot,
-  } = useForm();
-
   const location = useLocation();
   const hasPreviousState = location.key !== "default";
   const [notification] = useNotification();
-  const [isOpenForgotPassword, openForgotPassword, closeForgotPassword] =
-    useModal();
   const [isOpenLoader, openLoader, closeLoader] = useModal();
 
   const emailRegex = /^[\w-.]+@([\w-])+[.\w-]*$/i;
@@ -171,21 +161,8 @@ const Signupin = () => {
     setValueSignup("email", "fer.eze.ram@gmail.com");
     setValueSignup("password", "fer.eze.ram@gmail.com");
     setValueSignup("repPassword", "fer.eze.ram@gmail.com");
-    setValueForgot("email", "fer.eze.ram@gmail.com");
     // eslint-disable-next-line
   }, []);
-
-  const forgotPassword = async (email) => {
-    openLoader();
-    try {
-      const { data } = await axios.put("/user/forgotPassword", email);
-      setResponse(data.message);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      closeLoader();
-    } //! VOLVER A VER manejo de errores
-  };
 
   const handleSign = (sign) => {
     setSignSelect(sign);
@@ -291,9 +268,12 @@ const Signupin = () => {
                 </div>
               )}
             </span>
-            <span onClick={openForgotPassword} className="g-text-button">
-              ¿Has olvidado tu contraseña?
-            </span>
+
+            <NavLink to={"/forgotPassword"}>
+              <span className="g-text-button">
+                ¿Has olvidado tu contraseña?
+              </span>
+            </NavLink>
 
             <div>
               <input
@@ -504,83 +484,6 @@ const Signupin = () => {
         </div>
       </div>
 
-      <Modal isOpen={isOpenForgotPassword} closeModal={closeForgotPassword}>
-        <div className="signin-container">
-          <div className="signin-inner forgot-container">
-            <img
-              src={require("../../assets/provider-logo.png")}
-              alt="logo"
-              onClick={() => navigate("/")}
-              style={{ cursor: "pointer" }}
-            />
-            {response ? (
-              <>
-                <div className="forgot-response">{response}</div>
-                <NavLink to={"/"}>
-                  <span className="g-back-button g-text-button">
-                    <ArrowBackIcon />
-                    {"   regresar"}
-                  </span>
-                  {/* //! VOLVER A VER que esto rediriga a la pagina anterior, no a home*/}
-                </NavLink>
-              </>
-            ) : (
-              <form onSubmit={handleSubmitForgot(forgotPassword)}>
-                <div className="forgot-text">
-                  Ingresa tu email para reestablecer la contraseña
-                </div>
-
-                <>
-                  {!errorsForgot.email && (
-                    <p className="g-hidden-placeholder">hidden</p>
-                  )}
-                  {errorsForgot.email?.type === "required" && (
-                    <p className="g-error-input">Ingresa tu email</p>
-                  )}
-                  {errorsForgot.email?.type === "pattern" && (
-                    <p className="g-error-input">Ingresa un email válido</p>
-                  )}
-                </>
-
-                <span className="g-input-with-button">
-                  <input
-                    type="text"
-                    placeholder="Email"
-                    autoComplete="off"
-                    {...registerForgot("email", {
-                      required: true,
-                      pattern: emailRegex,
-                    })}
-                  />
-                  {watchForgot("email") === "" ||
-                  watchForgot("email") === undefined ? null : (
-                    <div
-                      className="g-input-icon-container g-input-x-button"
-                      onClick={() => setValueForgot("email", "")}
-                    >
-                      <CloseIcon />
-                    </div>
-                  )}
-                </span>
-
-                <div className="forgot-buttons-container">
-                  <input
-                    type="submit"
-                    value="Enviar email"
-                    className="g-white-button"
-                  />
-                  <input
-                    type="button"
-                    onClick={closeForgotPassword}
-                    value="Cancelar"
-                    className="g-white-button"
-                  />
-                </div>
-              </form>
-            )}
-          </div>
-        </div>
-      </Modal>
       <Modal isOpen={isOpenLoader}>
         <div className="signin-container">
           <div className="signin-inner forgot-container">
