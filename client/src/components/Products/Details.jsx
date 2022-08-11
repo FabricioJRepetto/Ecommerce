@@ -56,11 +56,25 @@ const Details = () => {
 
   const handleAttributesColumns = () => {
     if (data.attributes) {
-      if (data.attributes.length > 15 && windowWidth > 1640) {
+      if (data.attributes.length > 15 && windowWidth > 1200) {
         setAttributesColumns(true);
-        setAttributesHeight(
-          `${Math.floor((data.attributes.length / 2) * 2.2)}rem`
-        );
+        if (windowWidth > 1640) {
+          setAttributesHeight(
+            `${Math.floor((data.attributes.length / 2) * 2.2)}rem`
+          );
+        } else if (windowWidth > 1550) {
+          setAttributesHeight(
+            `${Math.floor((data.attributes.length / 2) * 2.3)}rem`
+          );
+        } else if (windowWidth > 1350) {
+          setAttributesHeight(
+            `${Math.floor((data.attributes.length / 2) * 2.5)}rem`
+          );
+        } else if (windowWidth > 1200) {
+          setAttributesHeight(
+            `${Math.floor((data.attributes.length / 2) * 2.7)}rem`
+          );
+        }
       } else {
         setAttributesColumns(false);
         setAttributesHeight("fit-content");

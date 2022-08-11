@@ -194,13 +194,12 @@ const ProductForm = () => {
         })
         .catch((err) => console.log(err)); //!VOLVER A VER manejo de errores
     } else {
-      //! VOLVER A VER poner strings vacias en lineas 199 y 200
+      //! VOLVER A VER poner strings vacias en lineas 192 y 193
       appendAttribute({ name: "", value_name: "" });
       appendFeature({ value: "" });
       /* appendAttribute({ name: "color", value_name: "amarillo" });
       appendFeature({ value: "piola" }); */
-    }
-    // eslint-disable-next-line
+    } // eslint-disable-next-line
   }, []);
 
   const handleAddImg = (e) => {
