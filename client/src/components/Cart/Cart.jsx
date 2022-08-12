@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import CartCard from "../Products/CartCard";
+import Footer from '../common/Footer'
 import Modal from "../common/Modal";
 import { useModal } from "../../hooks/useModal";
 import { useNotification } from "../../hooks/useNotification";
@@ -16,6 +17,8 @@ import { ReactComponent as Ship } from '../../assets/svg/ship.svg'
 import { ReactComponent as Pin } from '../../assets/svg/location.svg'
 import { ReactComponent as Spinner } from '../../assets/svg/spinner.svg'
 import LoaderBars from "../common/LoaderBars";
+import { WarningIcon } from "@chakra-ui/icons";
+
 
 const Cart = () => {
     const navigate = useNavigate();
@@ -199,7 +202,7 @@ const Cart = () => {
         <div>
 
             <div className="cart-container">
-
+                
                 <div className="tab-button-container" style={{ width: '70vw'}}>
                     {<button onClick={()=>navigate("/cart/")} 
                         className={`tab-button ${(render === 'cart') ? 'tab-button-active' : ''}`}>
@@ -253,35 +256,36 @@ const Cart = () => {
 
                                         <div className="cart-shipping-container">
                                             {selectedAdd
-                                                ?<div 
-                                                    onClick={openAddList}
+                                                ?<div onClick={openAddList}
                                                     className='cart-address-selector'
                                                     name={'address-container'}>
                                                         <Pin className='address-icon'/>
                                                         {selectedAdd.street_name+' '+selectedAdd.street_number+', '+selectedAdd.city}
                                                         <Arrow className='arrow-address-selector'/>
+
                                                 </div>
-                                                :<div 
+                                                : <div 
                                                     onClick={openAddForm}
                                                     className="cart-address-selector">
-                                                    <b>No tienes una dirección asociada</b> 
-                                                    , agrega una para continuar la compra. 
+                                                    <b><u>Agrega una dirección para continuar la compra.</u></b>
                                                     <Arrow className='arrow-address-selector'/>
                                                 </div>}
 
-                                                <div className="cart-shipping-mode-container">
-                                                    <div onClick={()=> shippingMode(true)} className={flash_shipping ? 'selected-shipping-mode' : ''}>
+                                                {selectedAdd && <div className="cart-shipping-mode-container">
+                                                    <div onClick={()=> shippingMode(true)} 
+                                                        className={flash_shipping ? 'selected-shipping-mode' : ''}>
                                                         <p className="provider-store">Envío Flash</p>
                                                         <p>{`llega mañana`}</p>
                                                         <input type="checkbox" readOnly checked={flash_shipping}/>
                                                     </div>
 
-                                                    <div onClick={()=> shippingMode(false)} className={!flash_shipping ? 'selected-shipping-mode' : ''}>
+                                                    <div onClick={()=> shippingMode(false)} 
+                                                        className={!flash_shipping ? 'selected-shipping-mode' : ''}>
                                                         <p>Envío standard</p>
                                                         <p>{`llega ${deliverDate()}`}</p>
                                                         <input type="checkbox" readOnly checked={!flash_shipping} />
                                                     </div>
-                                                </div>
+                                                </div>}
                                         </div>
 
                                         <div className="cart-sumary-section">
@@ -312,8 +316,10 @@ const Cart = () => {
 
                                             <div className="total-section-inner">
                                                 <h2>Total:</h2>
-                                                <h2 className="cart-total">${priceFormat(total+cart.shipping_cost).int}</h2>
-                                                <p>{priceFormat(total).cents}</p>
+                                                <div>
+                                                    <h2>${priceFormat(total+cart.shipping_cost).int}</h2>
+                                                    <p>{priceFormat(total).cents}</p>
+                                                </div>
                                             </div>
 
                                             <div className="cart-button-section">
@@ -321,8 +327,17 @@ const Cart = () => {
                                                 onClick={openCheckout}>Pagar</button>
                                             </div>
 
+
                                         </div>
-                                    </div>
+                                    </div>            
+
+                                  {!selectedAdd && <div className="cart-warning-message">
+                                        <span onClick={openAddForm}>
+                                            <WarningIcon style={{ margin: '0 .5rem 0 0' }}/>
+                                            Necesitas especificar una dirección de envío antes de realizar el pago.
+                                        </span>
+                                    </div>}
+
                                   </div>
                                 :<div className="cart-buylater-inner">
                                     {(!loading && (!cart || cart.buyLater?.length < 1))
@@ -358,33 +373,12 @@ const Cart = () => {
 
             </div>
 
-
             <form 
                 id='checkout-container'
                 method="GET"
                 action={`/orders/post-sale/${orderId}`}>
             </form>
-
-            <br />
-            <br />
-            <br />
-            <br />
-            <hr />
-            <ul>
-                <br/>
-                <p><b>Mercadopago</b></p>
-                <li><p>card: <i>5416 7526 0258 2580</i></p></li>
-                <li><p>expiration: <i>11/25</i></p></li>
-                <li><p>cvc: <i>123</i></p></li>
-                <li><p>nombre: <i>apro</i></p></li>
-                <li><p>dni: <i>12345678</i></p></li>
-                <br/>
-                <p><b>stripe</b></p>
-                <li><p>card: <i>4242 4242 4242 4242</i></p></li>
-                <li><p>expiration: <i>fecha mayor a la actual</i></p></li>
-                <li><p>cvc: <i>123</i></p></li>
-            </ul>
-
+            
             <Modal isOpen={isOpenAddForm} closeModal={closeAddForm}>
                 <h1>New shipping address</h1>
                 <form onSubmit={handleSubmit}>
@@ -470,12 +464,28 @@ const Cart = () => {
                 onClick={goCheckout}>{ loadingPayment === 'S' 
                 ? <Spinner className='cho-svg'/> 
                 : 'Stripe' }</button>
+                <br/>
+                <p><b>stripe</b></p>
+                <li><p>card: <i>4242 4242 4242 4242</i></p></li>
+                <li><p>expiration: <i>fecha mayor a la actual</i></p></li>
+                <li><p>cvc: <i>123</i></p></li>
+                <br/>
 
                 <button className="g-white-button details-button" disabled={(!cart || cart.length < 1 || !selectedAdd || loadingPayment)} 
                 onClick={openMP}>{ loadingPayment === 'MP' 
                 ? <Spinner className='cho-svg'/> 
-                : 'MercadoPago' }</button>
+                : 'MercadoPago' }</button>                
+                <br/>
+                <p><b>Mercadopago</b></p>
+                <li><p>card: <i>5416 7526 0258 2580</i></p></li>
+                <li><p>expiration: <i>11/25</i></p></li>
+                <li><p>cvc: <i>123</i></p></li>
+                <li><p>nombre: <i>apro</i></p></li>
+                <li><p>dni: <i>12345678</i></p></li>                
+                <br/>            
             </Modal>
+
+            <Footer />
         </div>
     );
 };
