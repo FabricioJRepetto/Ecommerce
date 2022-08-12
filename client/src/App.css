@@ -204,6 +204,12 @@ input[type="checkbox"] {
   font-weight: 300;
   font-size: 0.8rem;
 }
+.g-warn-input {
+  text-align: left;
+  color: yellow;
+  font-weight: 300;
+  font-size: 0.8rem;
+}
 
 /* SVG BOTON */
 .g-icon-button {

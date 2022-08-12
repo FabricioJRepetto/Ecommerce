@@ -215,9 +215,7 @@ const ProductForm = () => {
       setMainImgIndex(mainImgIndex - 1);
   };
   const handleRemoveImgToEdit = (_id, i) => {
-    /*     console.log("mainImgIndex:", mainImgIndex);
-    console.log("i:", i);
- */ setImgsToEdit(imgsToEdit.filter((img) => img._id !== _id));
+    setImgsToEdit(imgsToEdit.filter((img) => img._id !== _id));
     mainImgIndex === i && setMainImgIndex(0);
     mainImgIndex >= productImg.length + imgsToEdit.length - 1 &&
       setMainImgIndex(mainImgIndex - 1);
@@ -536,7 +534,7 @@ const ProductForm = () => {
                 <p className="g-hidden-placeholder">hidden</p>
               )}
               {warn.main_features && (
-                <p className="g-error-input">{warn.main_features}</p>
+                <p className="g-warn-input">{warn.main_features}</p>
               )}
               <span
                 onClick={() => handleAddFeature()}
@@ -621,7 +619,7 @@ const ProductForm = () => {
                 <p className="g-hidden-placeholder">hidden</p>
               )}
               {warn.attributes && (
-                <p className="g-error-input">{warn.attributes}</p>
+                <p className="g-warn-input">{warn.attributes}</p>
               )}
               <span
                 onClick={() => handleAddAttribute()}
