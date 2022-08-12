@@ -164,16 +164,16 @@ const Signupin = () => {
     // eslint-disable-next-line
   }, [session]);
 
-  useEffect(() => {
-    // session && navigate("/");
-    setValueSignin("email", "fer.eze.ram@gmail.com");
-    setValueSignin("password", "fer.eze.ram@gmail.com");
-    setValueSignup("email", "fer.eze.ram@gmail.com");
-    setValueSignup("password", "fer.eze.ram@gmail.com");
-    setValueSignup("repPassword", "fer.eze.ram@gmail.com");
-    setValueForgot("email", "fer.eze.ram@gmail.com");
-    // eslint-disable-next-line
-  }, []);
+//   useEffect(() => {
+//     // session && navigate("/");
+//     setValueSignin("email", "fer.eze.ram@gmail.com");
+//     setValueSignin("password", "fer.eze.ram@gmail.com");
+//     setValueSignup("email", "fer.eze.ram@gmail.com");
+//     setValueSignup("password", "fer.eze.ram@gmail.com");
+//     setValueSignup("repPassword", "fer.eze.ram@gmail.com");
+//     setValueForgot("email", "fer.eze.ram@gmail.com");
+//     // eslint-disable-next-line
+//   }, []);
 
   const forgotPassword = async (email) => {
     openLoader();

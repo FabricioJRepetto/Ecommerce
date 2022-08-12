@@ -12,24 +12,28 @@ const CartCard = ({ img, name, price, sale_price, on_sale, discount, brand, prod
     <div
         className='cart-card-container'>
         <div className='product-cart-card-head'>
-            <div className='product-cart-image-container'>
-                <img src={resizer(img)} alt="product" />
+
+            <div onClick={() => navigate(`/details/${prodId}`)} 
+                className='product-cart-image-container pointer'>
+                <img src={resizer(img, 130)} alt="product" />
+                <div className='card-image-back-style'></div>
             </div>
+
             <div className='cart-prod-details'>
                 <div className='cart-main-details'>
                     <div 
                         className='cart-card-name pointer'
                         onClick={() => navigate(`/details/${prodId}`)} >{name}</div>
-                    <div>{brand && brand.toUpperCase()}</div>
-                    {free_shipping && <div className='free-shipping'>envío gratis</div>}
+                    <div className='cart-card-brand'>{brand && brand.toUpperCase()}</div>
+                    {free_shipping && <div className='cart-free-shipping'>envío gratis</div>}
                 </div>
                 <div className='cart-product-options'>
                     <p className='pointer'
-                        onClick={() => deleteP(prodId, source)}>Delete</p>
+                        onClick={() => deleteP(prodId, source)}>Eliminar</p>
                     <p className='pointer'
-                        onClick={() => buyLater(prodId)}>{source === 'buyLater' ? 'Move to cart' : 'Buy later'}</p>
+                        onClick={() => buyLater(prodId)}>{source === 'buyLater' ? 'Mover al carrito' : 'Comprar luego'}</p>
                     <p className='pointer'
-                        onClick={() => buyNow(prodId, source)}>Buy Now</p>
+                        onClick={() => buyNow(prodId, source)}>Comprar ahora</p>
                 </div>
             </div>
         </div>
@@ -39,7 +43,6 @@ const CartCard = ({ img, name, price, sale_price, on_sale, discount, brand, prod
             price={on_sale ? sale_price : price}
             stock={stock}
             prodQuantity={prodQuantity}
-            className='quantity-input'
             loading={loading}
         />}
 

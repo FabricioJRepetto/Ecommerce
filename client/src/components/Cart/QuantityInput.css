@@ -7,15 +7,17 @@ input[type=number] {
     margin: 0; 
 }
 .q-input-container {
+    align-self: flex-end;
     width: 130px;
     height: 100px;
+}
+.q-input-container p {
+    color: rgba(255, 255, 255, 0.6);
 }
 .q-input-inner {
     background: white;
     height: 3.1rem;
     margin-bottom: 1rem;
-    border: 1px solid grey;
-    border-radius: 5px;
     display: flex;
     align-items: center;
     justify-content: space-evenly;
