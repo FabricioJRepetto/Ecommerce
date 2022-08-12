@@ -66,7 +66,11 @@ const UserCard = ({ user, openDeleteUser, openPromoteUser }) => {
             Promover a Administrador
           </button>
         )}
-        {avatar ? <img src={avatar} alt={`${name}`} /> : <h4>Sin avatar</h4>}
+        {avatar ? (
+          <img src={avatar} referrerPolicy="no-referrer" alt={`${name}`} />
+        ) : (
+          <h4>Sin avatar</h4>
+        )}
         {role === "client" && (
           <button onClick={() => openDeleteUser({ _id, name })}>
             Eliminar

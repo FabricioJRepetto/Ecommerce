@@ -230,7 +230,7 @@ const updatePassword = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const message = errors.errors.map((err) => err.msg);
-    return res.json({ message });
+    return res.json({ message, error: true }); //! VOLVER A VER agregar el error:true a los res.json
   }
 
   try {
@@ -244,7 +244,6 @@ const updatePassword = async (req, res, next) => {
 
     userFound.password = password;
     await userFound.save();
-    console.log("----------se cambio");
     return res.json({ message: "Contraseña modificada con éxito" });
   } catch (error) {
     next(error);

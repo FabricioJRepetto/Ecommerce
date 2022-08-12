@@ -12,7 +12,6 @@ import { useNotification } from "../../hooks/useNotification";
 import { useModal } from "../../hooks/useModal";
 import Modal from "../common/Modal";
 import LoaderBars from "../common/LoaderBars";
-import ForgotPassword from "./ForgotPassword";
 import {
   CloseIcon,
   ArrowBackIcon,
@@ -396,7 +395,7 @@ const Signupin = () => {
                 <p className="g-hidden-placeholder">hidden</p>
               )}
               {errorsSignup.repPassword?.type === "required" && (
-                <p className="g-error-input">Ingresa una contraseña</p>
+                <p className="g-error-input">Ingresa la contraseña</p>
               )}
               {errorsSignup.repPassword?.type === "validate" && (
                 <p className="g-error-input">Las contraseñas no coinciden</p>
@@ -479,7 +478,6 @@ const Signupin = () => {
               <ArrowBackIcon />
               {"   regresar"}
             </span>
-            {/* //! VOLVER A VER que esto rediriga a la pagina anterior, no a home*/}
           </NavLink>
         </div>
       </div>

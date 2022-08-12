@@ -124,7 +124,9 @@ function App() {
     <div className="App" id="scroller">
       <Notification />
       {isUserDataLoading ? (
-        <LoaderBars />
+        <div className="g-container-totalvh">
+          <LoaderBars />
+        </div>
       ) : (
         <div>
           <GlobalCover />
@@ -147,7 +149,6 @@ function App() {
             <Route path="/signin" element={<Signupin />} />
             <Route path="/signout" element={<Signout />} />
             <Route path="/forgotPassword" element={<ForgotPassword />} />
-            <Route path="/changePassword" element={<ChangePassword />} />
             <Route
               path="/reset/:userId/:resetToken"
               element={<ResetPassword />}

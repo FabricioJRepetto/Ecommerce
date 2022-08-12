@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { NavLink } from "react-router-dom";
 import axios from "axios";
-import { useModal } from "../../hooks/useModal";
+import { useNotification } from "../../hooks/useNotification";
 import { avoidEnterSubmit } from "../../helpers/AvoidEnterSubmit";
-import Modal from "../common/Modal";
 import LoaderBars from "../common/LoaderBars";
 import {
   CloseIcon,
@@ -20,7 +20,9 @@ const ChangePassword = () => {
     password: false,
     repPassword: false,
   });
-  const [isOpenLoader, openLoader, closeLoader] = useModal();
+  const [response, setResponse] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [notification] = useNotification();
   const {
     register,
     handleSubmit,
@@ -30,226 +32,244 @@ const ChangePassword = () => {
   } = useForm();
 
   const updatePassword = async (passwordData) => {
-    openLoader();
+    setLoading(true);
     try {
       const { data } = await axios.put("/user/updatePassword", passwordData);
-      //setResponse(data.message);
+      if (data.error && data.message && Array.isArray(data.message))
+        notification(data.message[0], "", "error");
+      data.message && setResponse(data.message);
     } catch (error) {
       console.log(error);
       //setResponse(error.response.data.message); //! VOLVER A VER manejo de errores
     } finally {
-      closeLoader();
+      setLoading(false);
     }
   };
 
   return (
-    <div className="reset-container">
-      <div className="reset-inner">
-        <form
-          onSubmit={handleSubmit(updatePassword)}
-          onKeyDown={avoidEnterSubmit}
-        >
-          {/* <div className="reset-text">Ingresa tu nueva contraseña</div> */}
+    <div className="change-inner">
+      {loading ? (
+        <LoaderBars />
+      ) : response ? (
+        <>
+          <div className="change-password-response">{response}</div>
+          <NavLink to={"/profile/details"}>
+            <span className="g-back-button g-text-button">
+              <ArrowBackIcon />
+              {"   regresar"}
+            </span>
+          </NavLink>
+        </>
+      ) : (
+        <>
+          <form
+            onSubmit={handleSubmit(updatePassword)}
+            onKeyDown={avoidEnterSubmit}
+          >
+            {/* <div className="reset-text">Ingresa tu nueva contraseña</div> */}
 
-          <span>Ingresa tu actual contraseña</span>
-          <>
-            {!errors.oldPassword && (
-              <p className="g-hidden-placeholder">hidden</p>
-            )}
-            {errors.oldPassword?.type === "required" && (
-              <p className="g-error-input">Ingresa tu contraseña</p>
-            )}
-          </>
+            <div className="title-text">Ingresa tu actual contraseña</div>
+            <>
+              {!errors.oldPassword && (
+                <p className="g-hidden-placeholder">hidden</p>
+              )}
+              {errors.oldPassword?.type === "required" && (
+                <p className="g-error-input">Ingresa tu contraseña</p>
+              )}
+            </>
 
-          <span className="g-input-with-button">
-            <input
-              type="text"
-              placeholder="Contraseña"
-              autoComplete="off"
-              className={
-                watch("oldPassword") === undefined ||
-                watch("oldPassword") === ""
-                  ? ""
-                  : `${viewPassword.oldPassword ? "" : "g-password"}`
-              }
-              {...register("oldPassword", {
-                required: true,
-              })}
-            />
-            {watch("oldPassword") === "" ||
-            watch("oldPassword") === undefined ? null : (
-              <div
-                className="g-input-icon-container g-input-x-button"
-                onClick={() => setValue("oldPassword", "")}
-              >
-                <CloseIcon />
-              </div>
-            )}
-
-            {watch("oldPassword") === "" ||
-            watch("oldPassword") ===
-              undefined ? null : viewPassword.oldPassword ? (
-              <div
-                className="g-input-icon-container g-input-view-button"
-                onClick={() =>
-                  setViewPassword({ ...viewPassword, oldPassword: false })
+            <span className="g-input-with-button">
+              <input
+                type="text"
+                placeholder="Contraseña"
+                autoComplete="off"
+                className={
+                  watch("oldPassword") === undefined ||
+                  watch("oldPassword") === ""
+                    ? ""
+                    : `${viewPassword.oldPassword ? "" : "g-password"}`
                 }
-              >
-                <ViewOffIcon />
-              </div>
-            ) : (
-              <div
-                className="g-input-icon-container g-input-view-button"
-                onClick={() =>
-                  setViewPassword({ ...viewPassword, oldPassword: true })
-                }
-              >
-                <ViewIcon />
-              </div>
-            )}
-          </span>
+                {...register("oldPassword", {
+                  required: true,
+                })}
+              />
+              {watch("oldPassword") === "" ||
+              watch("oldPassword") === undefined ? null : (
+                <div
+                  className="g-input-icon-container g-input-x-button"
+                  onClick={() => setValue("oldPassword", "")}
+                >
+                  <CloseIcon />
+                </div>
+              )}
 
-          <span>Ingresa tu nueva contraseña</span>
-
-          <>
-            {!errors.password && <p className="g-hidden-placeholder">hidden</p>}
-            {errors.password?.type === "required" && (
-              <p className="g-error-input">Ingresa una contraseña</p>
-            )}
-            {errors.password?.type === "minLength" && (
-              <p className="g-error-input">
-                La contraseña debe tener al menos 6 caracteres
-              </p>
-            )}
-          </>
-
-          <span className="g-input-with-button">
-            <input
-              type="text"
-              placeholder="Contraseña"
-              autoComplete="off"
-              className={
-                watch("password") === undefined || watch("password") === ""
-                  ? ""
-                  : `${viewPassword.password ? "" : "g-password"}`
-              }
-              {...register("password", {
-                required: true,
-                minLength: 6,
-              })}
-            />
-            {watch("password") === "" ||
-            watch("password") === undefined ? null : (
-              <div
-                className="g-input-icon-container g-input-x-button"
-                onClick={() => setValue("password", "")}
-              >
-                <CloseIcon />
-              </div>
-            )}
-
-            {watch("password") === "" ||
-            watch("password") === undefined ? null : viewPassword.password ? (
-              <div
-                className="g-input-icon-container g-input-view-button"
-                onClick={() =>
-                  setViewPassword({ ...viewPassword, password: false })
-                }
-              >
-                <ViewOffIcon />
-              </div>
-            ) : (
-              <div
-                className="g-input-icon-container g-input-view-button"
-                onClick={() =>
-                  setViewPassword({ ...viewPassword, password: true })
-                }
-              >
-                <ViewIcon />
-              </div>
-            )}
-          </span>
-
-          <>
-            {!errors.repPassword && (
-              <p className="g-hidden-placeholder">hidden</p>
-            )}
-            {errors.repPassword?.type === "required" && (
-              <p className="g-error-input">Ingresa tu contraseña</p>
-            )}
-            {errors.repPassword?.type === "validate" && (
-              <p className="g-error-input">Las contraseñas no coinciden</p>
-            )}
-          </>
-
-          <span className="g-input-with-button">
-            <input
-              type="text"
-              placeholder="Repite tu contraseña"
-              autoComplete="off"
-              className={
-                watch("repPassword") === undefined ||
-                watch("repPassword") === ""
-                  ? ""
-                  : `${viewPassword.repPassword ? "" : "g-password"}`
-              }
-              {...register("repPassword", {
-                required: true,
-                validate: (repPassword) => {
-                  if (watch("repPassword") !== repPassword) {
-                    return "Las contraseñas no coinciden";
+              {watch("oldPassword") === "" ||
+              watch("oldPassword") ===
+                undefined ? null : viewPassword.oldPassword ? (
+                <div
+                  className="g-input-icon-container g-input-view-button"
+                  onClick={() =>
+                    setViewPassword({ ...viewPassword, oldPassword: false })
                   }
-                },
-              })}
+                >
+                  <ViewOffIcon />
+                </div>
+              ) : (
+                <div
+                  className="g-input-icon-container g-input-view-button"
+                  onClick={() =>
+                    setViewPassword({ ...viewPassword, oldPassword: true })
+                  }
+                >
+                  <ViewIcon />
+                </div>
+              )}
+            </span>
+
+            <div className="title-text input-margin-top">
+              Ingresa tu nueva contraseña
+            </div>
+
+            <>
+              {!errors.password && (
+                <p className="g-hidden-placeholder">hidden</p>
+              )}
+              {errors.password?.type === "required" && (
+                <p className="g-error-input">Ingresa una contraseña</p>
+              )}
+              {errors.password?.type === "minLength" && (
+                <p className="g-error-input">
+                  La contraseña debe tener al menos 6 caracteres
+                </p>
+              )}
+            </>
+
+            <span className="g-input-with-button">
+              <input
+                type="text"
+                placeholder="Contraseña"
+                autoComplete="off"
+                className={
+                  watch("password") === undefined || watch("password") === ""
+                    ? ""
+                    : `${viewPassword.password ? "" : "g-password"}`
+                }
+                {...register("password", {
+                  required: true,
+                  minLength: 6,
+                })}
+              />
+              {watch("password") === "" ||
+              watch("password") === undefined ? null : (
+                <div
+                  className="g-input-icon-container g-input-x-button"
+                  onClick={() => setValue("password", "")}
+                >
+                  <CloseIcon />
+                </div>
+              )}
+
+              {watch("password") === "" ||
+              watch("password") === undefined ? null : viewPassword.password ? (
+                <div
+                  className="g-input-icon-container g-input-view-button"
+                  onClick={() =>
+                    setViewPassword({ ...viewPassword, password: false })
+                  }
+                >
+                  <ViewOffIcon />
+                </div>
+              ) : (
+                <div
+                  className="g-input-icon-container g-input-view-button"
+                  onClick={() =>
+                    setViewPassword({ ...viewPassword, password: true })
+                  }
+                >
+                  <ViewIcon />
+                </div>
+              )}
+            </span>
+
+            <>
+              {!errors.repPassword && (
+                <p className="g-hidden-placeholder">hidden</p>
+              )}
+              {errors.repPassword?.type === "required" && (
+                <p className="g-error-input">Ingresa la contraseña</p>
+              )}
+              {errors.repPassword?.type === "validate" && (
+                <p className="g-error-input">Las contraseñas no coinciden</p>
+              )}
+            </>
+
+            <span className="g-input-with-button">
+              <input
+                type="text"
+                placeholder="Repite la contraseña"
+                autoComplete="off"
+                className={
+                  watch("repPassword") === undefined ||
+                  watch("repPassword") === ""
+                    ? ""
+                    : `${viewPassword.repPassword ? "" : "g-password"}`
+                }
+                {...register("repPassword", {
+                  required: true,
+                  validate: (repPassword) => {
+                    if (watch("password") !== repPassword) {
+                      return "Las contraseñas no coinciden";
+                    }
+                  },
+                })}
+              />
+              {watch("repPassword") === "" ||
+              watch("repPassword") === undefined ? null : (
+                <div
+                  className="g-input-icon-container g-input-x-button"
+                  onClick={() => setValue("repPassword", "")}
+                >
+                  <CloseIcon />
+                </div>
+              )}
+
+              {watch("repPassword") === "" ||
+              watch("repPassword") ===
+                undefined ? null : viewPassword.repPassword ? (
+                <div
+                  className="g-input-icon-container g-input-view-button"
+                  onClick={() =>
+                    setViewPassword({ ...viewPassword, repPassword: false })
+                  }
+                >
+                  <ViewOffIcon />
+                </div>
+              ) : (
+                <div
+                  className="g-input-icon-container g-input-view-button"
+                  onClick={() =>
+                    setViewPassword({ ...viewPassword, repPassword: true })
+                  }
+                >
+                  <ViewIcon />
+                </div>
+              )}
+            </span>
+
+            <input
+              type="submit"
+              value="Cambiar contraseña"
+              className="g-white-button"
             />
-            {watch("repPassword") === "" ||
-            watch("repPassword") === undefined ? null : (
-              <div
-                className="g-input-icon-container g-input-x-button"
-                onClick={() => setValue("repPassword", "")}
-              >
-                <CloseIcon />
-              </div>
-            )}
-
-            {watch("repPassword") === "" ||
-            watch("repPassword") ===
-              undefined ? null : viewPassword.repPassword ? (
-              <div
-                className="g-input-icon-container g-input-view-button"
-                onClick={() =>
-                  setViewPassword({ ...viewPassword, repPassword: false })
-                }
-              >
-                <ViewOffIcon />
-              </div>
-            ) : (
-              <div
-                className="g-input-icon-container g-input-view-button"
-                onClick={() =>
-                  setViewPassword({ ...viewPassword, repPassword: true })
-                }
-              >
-                <ViewIcon />
-              </div>
-            )}
-          </span>
-
-          <input
-            type="submit"
-            value="Cambiar contraseña"
-            className="g-white-button"
-          />
-        </form>
-      </div>
-
-      <Modal isOpen={isOpenLoader}>
-        <div className="reset-container">
-          <div className="reset-inner loader-container">
-            <LoaderBars />
-          </div>
-        </div>
-      </Modal>
+          </form>
+          <NavLink to={"/profile/details"}>
+            <span className="g-back-button g-text-button">
+              <ArrowBackIcon />
+              {"   regresar"}
+            </span>
+          </NavLink>
+        </>
+      )}
     </div>
   );
 };

@@ -22,6 +22,7 @@ import Wishlist from "./Wishlist";
 import History from "./History";
 import "../../App.css";
 import "./Profile.css";
+import ChangePassword from "../Session/ChangePassword";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -223,11 +224,12 @@ const Profile = () => {
             </button>
             <br />
             {!isGoogleUser && (
-              <NavLink to={"/ChangePassword"}>
-                {/* <button onClick={openForgotPassword} className="g-white-button"> */}
+              <button
+                onClick={() => navigate("/profile/password")}
+                className="g-white-button"
+              >
                 Cambiar contraseña
-                {/* </button> */}
-              </NavLink>
+              </button>
             )}
             <br />
             <div>
@@ -271,6 +273,8 @@ const Profile = () => {
         {render === "history" && (
           <History loading={loading} history={history} wl_id={wl_id} />
         )}
+
+        {render === "password" && <ChangePassword />}
       </div>
 
       <Modal isOpen={isOpenAvatar} closeModal={closeAvatar}>
@@ -409,28 +413,6 @@ const Profile = () => {
           </form>
         )}
       </Modal>
-
-      {/* <Modal isOpen={isOpenForgotPassword} closeModal={closeForgotPassword}>
-        <form onSubmit={handleSubmitForgot(forgotPassword)}>
-          <h2>Ingrese su email para reestablecer la contraseña</h2>
-          <input
-            type="text"
-            placeholder="email"
-            autoComplete="off"
-            {...registerForgot("email", {
-              required: true,
-              pattern: emailRegex,
-            })}
-          />
-          {errorsForgot.emailForgot?.type === "required" && (
-            <p>Ingresa tu email</p>
-          )}
-          {errorsForgot.emailForgot?.type === "pattern" && (
-            <p>Ingresa un email válido</p>
-          )}
-          <input type="submit" value="Enviar email" />
-        </form>
-      </Modal> */}
     </div>
   );
 };

@@ -42,8 +42,8 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="signin-container">
-      <div className="signin-inner forgot-container">
+    <div className="forgot-outer-container">
+      <div className="forgot-inner forgot-container">
         <img
           src={require("../../assets/provider-logo.png")}
           alt="logo"
@@ -107,7 +107,9 @@ const ForgotPassword = () => {
                 className="g-white-button"
               />
 
-              <NavLink to={"/signin"}>Cancelar</NavLink>
+              <span className="g-navlink-white-button navlink-container">
+                <NavLink to={"/signin"}>Cancelar</NavLink>
+              </span>
             </div>
           </form>
         )}
