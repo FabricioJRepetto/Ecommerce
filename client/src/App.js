@@ -44,6 +44,8 @@ import RequireRole from "./test/fer/RequireRole";
 import UsersAdmin from "./test/fer/UsersAdmin";
 import AboutUs from "./components/common/AboutUs";
 import LoaderBars from "./components/common/LoaderBars";
+import ForgotPassword from "./components/Session/ForgotPassword";
+import ChangePassword from "./components/Session/ChangePassword";
 
 function App() {
   const dispatch = useDispatch();
@@ -122,7 +124,9 @@ function App() {
     <div className="App" id="scroller">
       <Notification />
       {isUserDataLoading ? (
-        <LoaderBars />
+        <div className="g-container-totalvh">
+          <LoaderBars />
+        </div>
       ) : (
         <div>
           <GlobalCover />
@@ -140,14 +144,15 @@ function App() {
             <Route path="/products" element={<Products />} />
             <Route path="/profile/" element={<Profile />} />
             <Route path="/profile/:section" element={<Profile />} />
-            <Route
-              path="/reset/:userId/:resetToken"
-              element={<ResetPassword />}
-            />
             <Route path="/results" element={<Results />} />
             <Route path="/sales" element={<SalesResults />} />
             <Route path="/signin" element={<Signupin />} />
             <Route path="/signout" element={<Signout />} />
+            <Route path="/forgotPassword" element={<ForgotPassword />} />
+            <Route
+              path="/reset/:userId/:resetToken"
+              element={<ResetPassword />}
+            />
             <Route path="/verify/:verifyToken" element={<VerifyEmail />} />
             <Route
               element={<RequireRole allowedRoles={["admin", "superadmin"]} />}
@@ -160,7 +165,8 @@ function App() {
                 <Route path="users" element={<UsersAdmin />} />
                 <Route path="users/:id" element={<UsersAdmin />} />
                 <Route path="orders" element={<OrdersAdmin />} />
-                <Route path="*" element={<h1>404 ADMIN</h1>} />
+                <Route path="*" element={<h1>404 ADMIN</h1>} />{" "}
+                {/* //! VOLVER A VER darle estilos al 404 */}
               </Route>
             </Route>
             <Route path="/unauthorized" element={<h1>UNAUTHORIZED</h1>} />

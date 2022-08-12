@@ -7,6 +7,7 @@ import { useModal } from "../../hooks/useModal";
 import Modal from "../common/Modal";
 import Signout from "../Session/Signout";
 import { avatarResizer } from "../../helpers/resizer";
+import { avoidEnterSubmit } from "../../helpers/AvoidEnterSubmit";
 import { useNotification } from "../../hooks/useNotification";
 import {
   loadUserData,
@@ -21,6 +22,7 @@ import Wishlist from "./Wishlist";
 import History from "./History";
 import "../../App.css";
 import "./Profile.css";
+import ChangePassword from "../Session/ChangePassword";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -72,6 +74,7 @@ const Profile = () => {
     setValueEditDetails("username", username);
     setValueEditDetails("name", full_name.first);
     setValueEditDetails("lastname", full_name.last);
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -221,7 +224,10 @@ const Profile = () => {
             </button>
             <br />
             {!isGoogleUser && (
-              <button onClick={openForgotPassword} className="g-white-button">
+              <button
+                onClick={() => navigate("/profile/password")}
+                className="g-white-button"
+              >
                 Cambiar contraseña
               </button>
             )}
@@ -239,7 +245,7 @@ const Profile = () => {
                         )
                     )
                   )
-                : "Aún no tienes un dirección seleccionada"}
+                : "Aún no tienes una dirección predeterminada seleccionada"}
             </div>
             <button
               onClick={() => navigate("/profile/address")}
@@ -267,6 +273,8 @@ const Profile = () => {
         {render === "history" && (
           <History loading={loading} history={history} wl_id={wl_id} />
         )}
+
+        {render === "password" && <ChangePassword />}
       </div>
 
       <Modal isOpen={isOpenAvatar} closeModal={closeAvatar}>
@@ -299,7 +307,10 @@ const Profile = () => {
 
       <Modal isOpen={isOpenDetails} closeModal={closeDetails}>
         {isOpenDetails && (
-          <form onSubmit={handleSubmitEditDetails(updateDetails)}>
+          <form
+            onSubmit={handleSubmitEditDetails(updateDetails)}
+            onKeyDown={avoidEnterSubmit}
+          >
             <>
               {!errorsEditDetails.username && (
                 <p className="g-hidden-placeholder">hidden</p>
@@ -401,28 +412,6 @@ const Profile = () => {
             </button>
           </form>
         )}
-      </Modal>
-
-      <Modal isOpen={isOpenForgotPassword} closeModal={closeForgotPassword}>
-        <form onSubmit={handleSubmitForgot(forgotPassword)}>
-          <h2>Ingrese su email para reestablecer la contraseña</h2>
-          <input
-            type="text"
-            placeholder="email"
-            autoComplete="off"
-            {...registerForgot("email", {
-              required: true,
-              pattern: emailRegex,
-            })}
-          />
-          {errorsForgot.emailForgot?.type === "required" && (
-            <p>Ingresa tu email</p>
-          )}
-          {errorsForgot.emailForgot?.type === "pattern" && (
-            <p>Ingresa un email válido</p>
-          )}
-          <input type="submit" value="Enviar email" />
-        </form>
       </Modal>
     </div>
   );

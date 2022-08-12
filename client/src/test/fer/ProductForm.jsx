@@ -12,6 +12,7 @@ import {
   validateImgs,
   validationProductFormSchema,
 } from "../../helpers/validators";
+import { avoidEnterSubmit } from "../../helpers/AvoidEnterSubmit";
 import { useNotification } from "../../hooks/useNotification";
 import { useModal } from "../../hooks/useModal";
 import Modal from "../../components/common/Modal";
@@ -194,13 +195,12 @@ const ProductForm = () => {
         })
         .catch((err) => console.log(err)); //!VOLVER A VER manejo de errores
     } else {
-      //! VOLVER A VER poner strings vacias en lineas 199 y 200
+      //! VOLVER A VER poner strings vacias en lineas 192 y 193
       appendAttribute({ name: "", value_name: "" });
       appendFeature({ value: "" });
       /* appendAttribute({ name: "color", value_name: "amarillo" });
       appendFeature({ value: "piola" }); */
-    }
-    // eslint-disable-next-line
+    } // eslint-disable-next-line
   }, []);
 
   const handleAddImg = (e) => {
@@ -355,10 +355,6 @@ const ProductForm = () => {
     }
   };
 
-  const checkKeyDown = (e) => {
-    if (e.key === "Enter") e.preventDefault();
-  };
-
   return (
     <div className="form-width-test">
       <h2>{productToEdit ? "EDITAR" : "CREAR"} producto</h2>
@@ -366,7 +362,7 @@ const ProductForm = () => {
       <form
         encType="multipart/form-data"
         onSubmit={customSubmit}
-        onKeyDown={checkKeyDown}
+        onKeyDown={avoidEnterSubmit}
         className="form-width-test"
       >
         <>

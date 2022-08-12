@@ -226,6 +226,30 @@ const changePassword = async (req, res, next) => {
   }
 };
 
+const updatePassword = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    const message = errors.errors.map((err) => err.msg);
+    return res.json({ message, error: true }); //! VOLVER A VER agregar el error:true a los res.json
+  }
+
+  try {
+    const { password, oldPassword } = req.body;
+
+    const userFound = await User.findById(req.user._id);
+    const validity = await userFound.comparePassword(oldPassword);
+    if (!validity) {
+      return res.json({ message: "Contraseña incorrecta" });
+    }
+
+    userFound.password = password;
+    await userFound.save();
+    return res.json({ message: "Contraseña modificada con éxito" });
+  } catch (error) {
+    next(error);
+  }
+};
+
 const editProfile = async (req, res, next) => {
   try {
     const { username, name, lastname } = req.body;
@@ -275,6 +299,7 @@ module.exports = {
   forgotPassword,
   resetPassword,
   changePassword,
+  updatePassword,
   editProfile,
   setAvatar,
 };

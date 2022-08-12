@@ -98,7 +98,7 @@
   flex-wrap: wrap;
   align-content: center;
 }
-@media (min-width: 1640px) {
+@media (min-width: 1200px) {
   .attributes-two-columns {
     flex-wrap: wrap;
     align-content: space-around;
@@ -115,6 +115,23 @@
   .attribute-container {
     width: 60vw;
     margin-bottom: 0.5rem;
+  }
+}
+@media (max-width: 1000px) {
+  .details-description-container {
+    width: 80vw;
+    margin: 2rem 10vw;
+  }
+  .details-attributes-container {
+    width: 80vw;
+    margin: 2rem 10vw;
+  }
+  .all-attributes-container {
+    width: 100%;
+    align-items: center;
+  }
+  .tab-button-container {
+    width: 80vw;
   }
 }
 

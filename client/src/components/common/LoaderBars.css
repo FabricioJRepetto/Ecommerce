@@ -7,7 +7,7 @@
   justify-items: center;
   grid-gap: 0.5em;
   place-content: center;
-  height: 100vh;
+  height: 100%;
   background: #000000;
   --n: 10;
   --p: 3;
