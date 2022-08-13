@@ -147,15 +147,26 @@
     justify-content: flex-end;
     position: relative;
 }
-
-.ship-svg {
-    transform: scale(.7);
-    position: absolute;
-    top: -5px;
-    left: -22px;
+.cart-shipping-cost-container {
+    display: flex;
+    align-items: flex-end;
+    position: relative;
 }
-.ship-svg path {
-    fill: #39b54a;
+
+.ship-gradient {
+    height: 1.5rem;
+    width: 1.5rem;
+    margin: 0 1rem;
+    background: linear-gradient(
+    45deg,
+    #35a7ff 0%,
+    #7e54de 20%,
+    #f40259 60%,
+    #fea30d 100%
+  );
+  mask-image: url('../../assets/svg/ship.svg');
+  background-size: 400%;
+  animation: gradientTextAnim 5s infinite;
 }
 
 .cho-svg {
@@ -183,6 +194,16 @@
     margin-top: 1rem;
     padding: .5rem .9rem;
 }
+
+.cart-checkout-modal-button-container {
+    display: flex;
+    justify-content: space-around;
+}
+.cart-checkout-modal-button-container div {
+    margin: 2rem;
+    text-align: left;
+}
+
 .cart-warning-message span {
     cursor: pointer;
 }
