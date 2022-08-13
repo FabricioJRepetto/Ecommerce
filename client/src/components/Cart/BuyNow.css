@@ -86,8 +86,8 @@
     position: absolute;
     color: #3483fa;
     transform: scale(.55);
-    top: -6px;
-    left: -30px;
+    top: -0.55rem;
+    left: -2rem;
 }
 .buynow-arrow-address-selector {
     position: absolute;

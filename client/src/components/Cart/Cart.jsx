@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import CartCard from "../Products/CartCard";
+import Footer from '../common/Footer'
 import Modal from "../common/Modal";
 import { useModal } from "../../hooks/useModal";
 import { useNotification } from "../../hooks/useNotification";
@@ -13,7 +14,11 @@ import './Cart.css'
 
 import { ReactComponent as Arrow } from '../../assets/svg/arrow-right.svg'
 import { ReactComponent as Ship } from '../../assets/svg/ship.svg'
+import { ReactComponent as Pin } from '../../assets/svg/location.svg'
 import { ReactComponent as Spinner } from '../../assets/svg/spinner.svg'
+import LoaderBars from "../common/LoaderBars";
+import Checkbox from "../common/Checkbox";
+import { WarningIcon } from "@chakra-ui/icons";
 
 const Cart = () => {
     const navigate = useNavigate();
@@ -34,31 +39,32 @@ const Cart = () => {
 
     const [isOpenAddForm, openAddForm, closeAddForm] = useModal();
     const [isOpenAddList, openAddList, closeAddList] = useModal();
+    const [isOpenCheckout, openCheckout, closeCheckout] = useModal();
 
     const SHIP_COST = 500;
 
     useEffect(() => {
-        getCart();
-        getAddress();
+        (async ()=>{
+            await getCart();
+            await getAddress();
+            setLoading(false);            
+        })();
     // eslint-disable-next-line    
     }, [])
     useEffect(() => {
         setRender(section || "cart");
-    }, [section])
-    
+    }, [section])    
 
     const getCart = async () => {
         const { data } = await axios('/cart/');
         if (data) {
-            console.log(data);
             setCart(data);
             setflash_shipping(data.flash_shipping || false);
             data.last_order?.length && setOrderId(data.last_order);
             data.message && notification(data.message, '', 'warning');
+            dispatch(cartTotal(data.total));
+            dispatch(loadCart(data.id_list));
         };
-        dispatch(cartTotal(data.total));
-        dispatch(loadCart(data.id_list));
-        setLoading(false);
     };
 
     const getAddress = async () => { 
@@ -71,8 +77,7 @@ const Cart = () => {
                 )
                 setSelectedAdd(def);
             }
-        }
-        setLoading(false);
+        };
     };
 
     const handleChange = ({ target }) => {
@@ -185,169 +190,216 @@ const Cart = () => {
         let now = new Date(Date.now() - 10800000);
         let hours = (24 - now.getHours()) + 15;
         const target = new Date(Date.now() + (hours * 3600000) + 172800000).getDay();
-        let days = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'];
-        return ` el ${days[target]}.`;
+        let days = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sábado'];
+        return ` el ${days[target]}`;
     }
 
     return (
-        <div className="cart-container">
+        <div>
+
+            <div className="cart-container">
                 
-            <div className="cart-menu-container">
-                <NavLink to={"/cart/"}>{`Cart ${cart.products?.length ? `(${cart?.products?.length})` : ''}`}</NavLink>
-                <NavLink to={"/cart/saved"}>{`Saved ${cart.buyLater?.length ? `(${cart?.buyLater?.length})` : ''}`}</NavLink>
-            </div>
+                <div className="tab-button-container" style={{ width: '70vw'}}>
+                    {<button onClick={()=>navigate("/cart/")} 
+                        className={`tab-button ${(render === 'cart') ? 'tab-button-active' : ''}`}>
+                            {`Carrito ${cart.products?.length ? `(${cart?.products?.length})` : ''}`}
+                    </button>}
 
-            {(render === 'cart')
-            ?<div className="cart-inner">
-                {(cart && cart?.products?.length > 0)
-                ? <div className="">
-                    
-                    {cart.products.map((p) => (
-                        <CartCard
-                            key={p._id}
-                            on_cart={true}
-                            on_sale={p.on_sale}
-                            img={p.thumbnail}
-                            name={p.name}
-                            prodId={p._id}
-                            price={p.price}
-                            sale_price={p.sale_price}
-                            free_shipping={p.free_shipping}
-                            discount={p.discount}
-                            brand={p.brand}
-                            prodQuantity={p.quantity}
-                            stock={p.stock}
-                            buyLater={buyLater}
-                            deleteP={deleteProduct}
-                            buyNow={buyNow}
-                            source={'products'}
-                            loading={loadingPayment}
-                            />
-                    ))}
-
-                    <div className="total-section-container">
-                        <div className="total-section-inner">
-                            <div>
-                                {selectedAdd
-                                ?<div 
-                                    onClick={openAddList}
-                                    className='cart-address-selector'
-                                    name={'address-container'}>
-                                        {selectedAdd.street_name+' '+selectedAdd.street_number+', '+selectedAdd.city}
-                                    <Arrow className='arrow-address-selector'/>
-                                </div>
-                                :<div 
-                                    onClick={openAddForm}
-                                    className="cart-address-selector">
-                                    <b>You have no address asociated,</b> 
-                                    please add one to proceed. 
-                                    <Arrow className='arrow-address-selector'/>
-                                </div>}
-
-                                <div onClick={()=> shippingMode(true)} className={flash_shipping ? 'selected-shipping-mode' : ''}>
-                                    <h3>flash shipping</h3>
-                                    <p>{`llega mañana.}`}</p>
-                                    <input type="checkbox" readOnly checked={flash_shipping}/>
-                                </div>
-
-                                <div onClick={()=> shippingMode(false)} className={!flash_shipping ? 'selected-shipping-mode' : ''}>
-                                    <h3>Envío standard</h3>
-                                    <p>{`llega ${deliverDate()}`}</p>
-                                    <input type="checkbox" readOnly checked={!flash_shipping} />
-                                </div>
-                            </div>
-                            
-                                <div className="cart-total">
-                                    {cart.free_ship_cart && <del className="grey">${priceFormat(cart.products.length * SHIP_COST).int}</del>}
-                                    {cart.shipping_cost === 0
-                                    ? <div className="cart-ship-total green">
-                                        <Ship className='ship-svg' />
-                                        <h3>Envío gratis!</h3>
-                                      </div>
-                                    : <div>
-                                        <h3>${priceFormat(cart.shipping_cost).int}</h3><p>{priceFormat(cart.shipping_cost).cents}</p>
-                                      </div> }
-                                </div>
-                            </div>
-
-                        <div className="total-section-inner">
-                            <h2>Total:</h2>
-                            <h2 className="cart-total">${priceFormat(total+cart.shipping_cost).int}</h2>
-                            <p>{priceFormat(total).cents}</p>
-                        </div>
-                    </div>
-                    
-                        <div className="cart-button-section">
-                            <button disabled={(!cart || cart.length < 1 || !selectedAdd || loadingPayment)} 
-                            onClick={goCheckout}>{ loadingPayment === 'S' 
-                            ? <Spinner className='cho-svg'/> 
-                            : 'Stripe checkout' }</button>
-
-                            <button disabled={(!cart || cart.length < 1 || !selectedAdd || loadingPayment)} 
-                            onClick={openMP}>{ loadingPayment === 'MP' 
-                            ? <Spinner className='cho-svg'/> 
-                            : 'MercadoPago checkout' }</button>
-                        </div>
-                    
+                    {<button onClick={()=>navigate("/cart/saved")} 
+                        className={`tab-button ${!(render === 'cart') ? 'tab-button-active' : ''}`}>
+                            {`Guardados ${cart.buyLater?.length ? `(${cart?.buyLater?.length})` : ''}`}
+                    </button>}
                 </div>
-                : <div>
-                    {loading && <Spinner />}
-                    {!loading && cart?.products?.length < 1 && <h1 style={{ color: 'black'}}>Your cart is empty.</h1>}
-                </div>}
+
+                <div>
+                    {(loading && (!cart || cart.products?.length < 1))
+                        ? <div className="cart-loading-placeholder">
+                            {loading && <LoaderBars />}
+                        </div>                        
+                        : <div>
+                            {(render === 'cart')
+                                ? <div className="cart-inner">
+                                    {(!loading && cart?.products?.length > 0)
+                                        ?<div>                                    
+                                        <div>
+                                            {cart.products.map((p) => (
+                                                <CartCard
+                                                    key={p._id}
+                                                    on_cart={true}
+                                                    on_sale={p.on_sale}
+                                                    img={p.thumbnail}
+                                                    name={p.name}
+                                                    prodId={p._id}
+                                                    price={p.price}
+                                                    sale_price={p.sale_price}
+                                                    free_shipping={p.free_shipping}
+                                                    discount={p.discount}
+                                                    brand={p.brand}
+                                                    prodQuantity={p.quantity}
+                                                    stock={p.stock}
+                                                    buyLater={buyLater}
+                                                    deleteP={deleteProduct}
+                                                    buyNow={buyNow}
+                                                    source={'products'}
+                                                    loading={loadingPayment}
+                                                    />
+                                            ))}
+                                          </div>                                    
+
+                                    <div className="total-section-container">
+
+                                        <div className="cart-shipping-container">
+                                            {selectedAdd
+                                                ?<div onClick={openAddList}
+                                                    className='cart-address-selector'
+                                                    name={'address-container'}>
+                                                        <Pin className='address-icon'/>
+                                                        {selectedAdd.street_name+' '+selectedAdd.street_number+', '+selectedAdd.city}
+                                                        <Arrow className='arrow-address-selector'/>
+
+                                                </div>
+                                                : <div 
+                                                    onClick={openAddForm}
+                                                    className="cart-address-selector">
+                                                    <b><u>Agrega una dirección para continuar la compra.</u></b>
+                                                    <Arrow className='arrow-address-selector'/>
+                                                </div>}
+
+                                                {selectedAdd && <div className="cart-shipping-mode-container">                                                    
+
+                                                    <div onClick={()=> shippingMode(true)} 
+                                                        style={{cursor: 'pointer'}}>
+                                                        <div className="cart-shipping-mode-card">
+                                                            <Checkbox isChecked={flash_shipping} 
+                                                                extraStyles={{
+                                                                        border: true,
+                                                                        rounded: true,
+                                                                        innerBorder: true,
+                                                                        margin: '1rem', 
+                                                                        size: '1.2' }}/>
+                                                            <div>
+                                                                <p className="provider-store">Envío Flash</p>
+                                                                <p>{`llega mañana`}</p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div onClick={()=> shippingMode(false)} 
+                                                        style={{cursor: 'pointer'}}>
+                                                            <div className="cart-shipping-mode-card">
+                                                                <Checkbox isChecked={!flash_shipping} 
+                                                                    extraStyles={{
+                                                                        border: true,
+                                                                        rounded: true,
+                                                                        innerBorder: true,
+                                                                        margin: '1rem', 
+                                                                        size: '1.2' }}/>
+                                                                <div>
+                                                                    <p>Envío standard</p>
+                                                                    <p>{`llega ${deliverDate()}`}</p>
+                                                                </div>
+                                                            </div>
+                                                            
+                                                    </div>
+                                                    
+                                                </div>}
+                                        </div>
+
+                                        <div className="cart-sumary-section">
+
+                                            <div className="cart-total">
+                                                <p>subotal:</p>
+                                                <div>
+                                                    <h3>${priceFormat(total).int}</h3>
+                                                    <p>{priceFormat(total).cents}</p>
+                                                </div>
+                                            </div>
+
+                                            <div className="cart-total">
+                                                <p>envío:</p>
+                                                <div>
+                                                    {cart.free_ship_cart && <del className="grey">${priceFormat(cart.products.length * SHIP_COST).int}</del>}
+                                                    {cart.shipping_cost === 0
+                                                    ? <div className="cart-ship-total green">
+                                                        <Ship className='ship-svg' />
+                                                        <h3>Envío gratis!</h3>
+                                                        </div>
+                                                    : <div>
+                                                        <h3>${priceFormat(cart.shipping_cost).int}</h3>
+                                                        <p>{priceFormat(cart.shipping_cost).cents}</p>
+                                                        </div> }
+                                                </div>
+                                            </div>
+
+                                            <div className="total-section-inner">
+                                                <h2>Total:</h2>
+                                                <div>
+                                                    <h2>${priceFormat(total+cart.shipping_cost).int}</h2>
+                                                    <p>{priceFormat(total).cents}</p>
+                                                </div>
+                                            </div>
+
+                                            <div className="cart-button-section">
+                                                <button className="g-white-button details-button" disabled={(!cart || cart.length < 1 || !selectedAdd || loadingPayment)} 
+                                                onClick={openCheckout}>Pagar</button>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                    
+
+                                  {!selectedAdd && <div className="cart-warning-message">
+                                        <span onClick={openAddForm}>
+                                            <WarningIcon style={{ margin: '0 .5rem 0 0' }}/>
+                                            Necesitas especificar una dirección de envío antes de realizar el pago.
+                                        </span>
+                                    </div>}
+
+                                    </div>
+                                    : <h1>Tu carrito está vacío</h1>}
+                                  </div>
+
+                                :<div className="cart-buylater-inner">
+                                    {(!loading && (!cart.buyLater || cart.buyLater?.length < 1))
+                                        ? <h1>No tienes productos guradados</h1>
+                                        : <div>{cart.buyLater.map((p) => (
+                                                <CartCard
+                                                    key={p._id}
+                                                    on_cart={false}
+                                                    on_sale={p.on_sale}
+                                                    img={p.thumbnail}
+                                                    name={p.name}
+                                                    prodId={p._id}
+                                                    price={p.price}
+                                                    sale_price={p.sale_price}
+                                                    free_shipping={p.free_shipping}
+                                                    discount={p.discount}
+                                                    brand={p.brand}
+                                                    prodQuantity={p.quantity}
+                                                    stock={p.stock}
+                                                    buyLater={buyLater}
+                                                    buyNow={buyNow}
+                                                    deleteP={deleteProduct}
+                                                    source={'buyLater'}
+                                                />
+                                            ))}</div>
+
+                                    }
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+
             </div>
-
-            :<div className="cart-buylater-inner">
-                {(cart && cart.buyLater?.length > 0)
-                    ? <div>{cart.buyLater.map((p) => (
-                            <CartCard
-                                key={p._id}
-                                on_cart={false}
-                                on_sale={p.on_sale}
-                                img={p.thumbnail}
-                                name={p.name}
-                                prodId={p._id}
-                                price={p.price}
-                                sale_price={p.sale_price}
-                                free_shipping={p.free_shipping}
-                                discount={p.discount}
-                                brand={p.brand}
-                                prodQuantity={p.quantity}
-                                stock={p.stock}
-                                buyLater={buyLater}
-                                buyNow={buyNow}
-                                deleteP={deleteProduct}
-                                source={'buyLater'}
-                            />
-                        ))}</div>
-
-                    : <h1>No tienes productos guradados</h1>
-                }
-            </div>}
 
             <form 
-            id='checkout-container'
-            method="GET"
-            action={`/orders/post-sale/${orderId}`}></form>
-            <br />
-            <br />
-            <br />
-            <br />
-            <hr />
-            <ul>
-                <br/>
-                <p><b>Mercadopago</b></p>
-                <li><p>card: <i>5416 7526 0258 2580</i></p></li>
-                <li><p>expiration: <i>11/25</i></p></li>
-                <li><p>cvc: <i>123</i></p></li>
-                <li><p>nombre: <i>apro</i></p></li>
-                <li><p>dni: <i>12345678</i></p></li>
-                <br/>
-                <p><b>stripe</b></p>
-                <li><p>card: <i>4242 4242 4242 4242</i></p></li>
-                <li><p>expiration: <i>fecha mayor a la actual</i></p></li>
-                <li><p>cvc: <i>123</i></p></li>
-            </ul>
-
+                id='checkout-container'
+                method="GET"
+                action={`/orders/post-sale/${orderId}`}>
+            </form>
+            
             <Modal isOpen={isOpenAddForm} closeModal={closeAddForm}>
                 <h1>New shipping address</h1>
                 <form onSubmit={handleSubmit}>
@@ -410,22 +462,51 @@ const Cart = () => {
 
             <Modal isOpen={isOpenAddList} closeModal={closeAddList}>
                 <div>
-                    <h1>Select an address</h1>
+                    <h1>Selecciona una dirección</h1>
                     <div>
                         {address?.map(e =>
                             <div key={e._id}>
                                 {`${e.street_name} ${e.street_number}, ${e.city}`}
-                                <button onClick={()=>handleSelect(e._id.toString())}> Select </button>
+                                <button onClick={()=>handleSelect(e._id.toString())}> Seleccionar </button>
                             </div>
                         )}
                         <button onClick={() =>{
                             openAddForm();
                             closeAddList();
-                        }}>Add new address</button>
+                        }}>Añadir una nueva</button>
                     </div>
                 </div>
             </Modal>
 
+            <Modal isOpen={isOpenCheckout} closeModal={closeCheckout}>
+                <p>Pagar con:</p>
+
+                <button className="g-white-button details-button" disabled={(!cart || cart.length < 1 || !selectedAdd || loadingPayment)} 
+                onClick={goCheckout}>{ loadingPayment === 'S' 
+                ? <Spinner className='cho-svg'/> 
+                : 'Stripe' }</button>
+                <br/>
+                <p><b>stripe</b></p>
+                <li><p>card: <i>4242 4242 4242 4242</i></p></li>
+                <li><p>expiration: <i>fecha mayor a la actual</i></p></li>
+                <li><p>cvc: <i>123</i></p></li>
+                <br/>
+
+                <button className="g-white-button details-button" disabled={(!cart || cart.length < 1 || !selectedAdd || loadingPayment)} 
+                onClick={openMP}>{ loadingPayment === 'MP' 
+                ? <Spinner className='cho-svg'/> 
+                : 'MercadoPago' }</button>                
+                <br/>
+                <p><b>Mercadopago</b></p>
+                <li><p>card: <i>5416 7526 0258 2580</i></p></li>
+                <li><p>expiration: <i>11/25</i></p></li>
+                <li><p>cvc: <i>123</i></p></li>
+                <li><p>nombre: <i>apro</i></p></li>
+                <li><p>dni: <i>12345678</i></p></li>                
+                <br/>            
+            </Modal>
+
+            <Footer />
         </div>
     );
 };
