@@ -44,8 +44,11 @@ const Cart = () => {
     const SHIP_COST = 500;
 
     useEffect(() => {
-        getCart();
-        getAddress();
+        (async ()=>{
+            await getCart();
+            await getAddress();
+            setLoading(false);            
+        })();
     // eslint-disable-next-line    
     }, [])
     useEffect(() => {
@@ -55,17 +58,13 @@ const Cart = () => {
     const getCart = async () => {
         const { data } = await axios('/cart/');
         if (data) {
-            console.log(data);
             setCart(data);
             setflash_shipping(data.flash_shipping || false);
             data.last_order?.length && setOrderId(data.last_order);
             data.message && notification(data.message, '', 'warning');
+            dispatch(cartTotal(data.total));
+            dispatch(loadCart(data.id_list));
         };
-        dispatch(cartTotal(data.total));
-        dispatch(loadCart(data.id_list));
-        setTimeout(() => {            
-            setLoading(false);
-        }, 1000);
     };
 
     const getAddress = async () => { 
@@ -78,10 +77,7 @@ const Cart = () => {
                 )
                 setSelectedAdd(def);
             }
-        }
-        setTimeout(() => {            
-            setLoading(false);
-        }, 1000);
+        };
     };
 
     const handleChange = ({ target }) => {
@@ -219,14 +215,13 @@ const Cart = () => {
                     {(loading && (!cart || cart.products?.length < 1))
                         ? <div className="cart-loading-placeholder">
                             {loading && <LoaderBars />}
-                            {(!loading && cart?.products?.length < 1) && <h1>Tu carrito está vacío</h1>}
                         </div>                        
                         : <div>
                             {(render === 'cart')
                                 ? <div className="cart-inner">
-                                    {(!loading && (!cart || cart.products?.length < 1))
-                                        ? <h1>No tienes productos guradados</h1>
-                                        : <div>
+                                    {(!loading && cart?.products?.length > 0)
+                                        ?<div>                                    
+                                        <div>
                                             {cart.products.map((p) => (
                                                 <CartCard
                                                     key={p._id}
@@ -249,8 +244,7 @@ const Cart = () => {
                                                     loading={loadingPayment}
                                                     />
                                             ))}
-                                          </div>
-                                    }
+                                          </div>                                    
 
                                     <div className="total-section-container">
 
@@ -352,7 +346,8 @@ const Cart = () => {
 
 
                                         </div>
-                                    </div>            
+                                    </div>
+                                    
 
                                   {!selectedAdd && <div className="cart-warning-message">
                                         <span onClick={openAddForm}>
@@ -361,9 +356,12 @@ const Cart = () => {
                                         </span>
                                     </div>}
 
+                                    </div>
+                                    : <h1>Tu carrito está vacío</h1>}
                                   </div>
+
                                 :<div className="cart-buylater-inner">
-                                    {(!loading && (!cart || cart.buyLater?.length < 1))
+                                    {(!loading && (!cart.buyLater || cart.buyLater?.length < 1))
                                         ? <h1>No tienes productos guradados</h1>
                                         : <div>{cart.buyLater.map((p) => (
                                                 <CartCard

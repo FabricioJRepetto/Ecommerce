@@ -15,7 +15,7 @@ const Checkbox = ({ isChecked = false, extraStyles = {} }) => {
   return (
     <div className='checkbox-container' style={{
         border: border ? `${border} solid ${borderColor}` : 'none',
-        'border-radius': rounded,
+        'borderRadius': rounded,
         margin: margin,
         transform: `scale(${size})`
      }}>
@@ -23,7 +23,7 @@ const Checkbox = ({ isChecked = false, extraStyles = {} }) => {
         <div className='checkbox-inner' style={{transform: isChecked ? 'rotate(0deg)': 'rotate(-180deg)'}}>
             <div className={isChecked ? 'checkbox-on' : 'checkbox-off'} style={{ 
                 background: color, 
-                'border-radius': rounded,
+                'borderRadius': rounded,
                 border: innerBorder ? `1px solid #000000` : 'none'
                 }}></div>
         </div>

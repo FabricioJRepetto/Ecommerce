@@ -45,6 +45,7 @@
     margin-right: 30px;
     position: relative;
     cursor: pointer;
+    margin-left: 2.5rem;
 }
 .arrow-address-selector {
     position: absolute;
