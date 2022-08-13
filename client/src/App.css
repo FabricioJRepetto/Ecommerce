@@ -216,20 +216,7 @@ input[type="checkbox"] {
   cursor: pointer;
 }
 
-/* CARD IMAGE BACKGROUND */
-.card-image-back-style {
-    position: absolute;
-    background: rgb(255, 255, 255);
-    height: 130%;
-    width: 110%; /* 50% */
-    transform: translateX(0%) rotate(5deg); /* 59 */
-    /* outline-offset: 5px;
-    outline: 1px solid rgb(255, 255, 255); */
-}
-
-.green {
-    color: #39b54a;
-}
-.grey {
-    color: #a0a0a0;
+/* CONTAINER PARA LOADER */
+.g-container-totalvh {
+  height: 100vh;
 }

@@ -183,3 +183,10 @@
 .cart-warning-message span {
     cursor: pointer;
 }
+
+.green {
+    color: #39b54a;
+}
+.grey {
+    color: #a0a0a0;
+}
