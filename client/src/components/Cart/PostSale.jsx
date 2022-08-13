@@ -4,13 +4,10 @@ import { useDispatch } from 'react-redux';
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { resizer } from '../../helpers/resizer';
 import { loadCart } from '../../Redux/reducer/cartSlice';
-import { deliveryPercent } from '../../helpers/deliveryPercent';
-import { formatDate } from '../../helpers/formatDate';
 import './PostSale.css';
 
 import LoaderBars from '../common/LoaderBars';
-import { ReactComponent as Gift } from '../../assets/svg/gift.svg';
-import { correctStyle } from '../../helpers/correctStyle';
+import DeliveryProgress from '../common/DeliveryProgress';
 
 const PostSale = () => {
     const [order, setOrder] = useState(false)
@@ -97,24 +94,7 @@ const PostSale = () => {
                         </div>}
                         {/* <p>Resumen: {order?.description}</p> */}
                         {order.delivery_date && (
-                            <div className='delivery-progress-container'>
-                                <p>{deliveryPercent(order.delivery_date, order.created_at).state}</p>
-                                <div className="delivery-container">
-                                    <div className="delivery-inner">
-                                        <div className='delivery-bar'
-                                            style={ correctStyle(order) }
-                                        >{order.flash_shipping ? <div className='ship-gradient delivery-pointer'></div> : <div><Gift className='delivery-pointer'/></div>}<div className='delivery-pointer-back'></div></div>
-                                    </div>
-                                    {
-                                    //! volver a ver: BORRAR ESTE PORCENTAJE
-                                    }
-                                    <p>
-                                    {deliveryPercent(order.delivery_date, order.created_at).percent + "%"}
-                                    </p>
-                                </div>
-                                <p>Fecha estimada de llegada: {formatDate(order.delivery_date)}</p>
-                                <p>{`Dirección de envío: ${order?.shipping_address.street_name} ${order?.shipping_address.street_number}, ${order?.shipping_address.city}, ${order?.shipping_address.state}.`}</p>
-                            </div>
+                            <DeliveryProgress order={order}/>
                         )}
                         <p>{`Estado del pago: ${status}`}</p>
                         <p>Medio de pago: {order.payment_source}</p>

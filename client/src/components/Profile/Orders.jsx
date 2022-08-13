@@ -4,9 +4,7 @@ import { resizer } from "../../helpers/resizer";
 import { useAxios } from "../../hooks/useAxios";
 import axios from "axios";
 import { useNotification } from "../../hooks/useNotification";
-import { deliveryPercent } from "../../helpers/deliveryPercent";
-import { correctStyle } from "../../helpers/correctStyle";
-import { ReactComponent as Gift } from "../../assets/svg/gift.svg";
+import DeliveryProgress from "../common/DeliveryProgress";
 
 const Orders = () => {
   const [notification] = useNotification();
@@ -62,24 +60,7 @@ const Orders = () => {
                     order id: <i>{e.id}</i>
                   </p>
                   {e.delivery_date && (
-                    <div>
-                      <p>- - -</p>
-                      <p>{deliveryPercent(e.delivery_date, e.created_at).state}</p>
-                      <div className="delivery-container">
-                        <div className="delivery-inner">
-                          <div className='delivery-bar'
-                            style={ correctStyle(e) }
-                          >{e.flash_shipping ? <div className='ship-gradient delivery-pointer'></div> : <div><Gift className='delivery-pointer'/></div>}<div className='delivery-pointer-back'></div></div>
-                        </div>
-                        {
-                          //! volver a ver: BORRAR ESTE PORCENTAJE
-                        }
-                        <p>
-                          {deliveryPercent(e.delivery_date, e.created_at).percent + "%"}
-                        </p>
-                      </div>
-                      <p>delivery ETA: {formatDate(e.delivery_date)}</p>
-                    </div>
+                    <DeliveryProgress order={e}/>
                   )}
                   <p>- - -</p>
                   <p>
