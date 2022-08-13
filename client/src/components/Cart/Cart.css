@@ -69,11 +69,16 @@
     width: 100%;
 }
 .cart-shipping-mode-container div {
-    margin-right: 2rem;
+    text-align: left;
 }
 .cart-shipping-mode-container p:first-child /* 1-0-0 */ {
     font-size: 1.2rem;
     font-weight: 400;
+}
+.cart-shipping-mode-card {
+    margin-right: 2rem;
+    display: flex;
+    align-items: center;
 }
 
 .cart-sumary-section {

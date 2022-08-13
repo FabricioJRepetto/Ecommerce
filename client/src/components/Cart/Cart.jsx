@@ -17,8 +17,8 @@ import { ReactComponent as Ship } from '../../assets/svg/ship.svg'
 import { ReactComponent as Pin } from '../../assets/svg/location.svg'
 import { ReactComponent as Spinner } from '../../assets/svg/spinner.svg'
 import LoaderBars from "../common/LoaderBars";
+import Checkbox from "../common/Checkbox";
 import { WarningIcon } from "@chakra-ui/icons";
-
 
 const Cart = () => {
     const navigate = useNavigate();
@@ -271,20 +271,43 @@ const Cart = () => {
                                                     <Arrow className='arrow-address-selector'/>
                                                 </div>}
 
-                                                {selectedAdd && <div className="cart-shipping-mode-container">
+                                                {selectedAdd && <div className="cart-shipping-mode-container">                                                    
+
                                                     <div onClick={()=> shippingMode(true)} 
-                                                        className={flash_shipping ? 'selected-shipping-mode' : ''}>
-                                                        <p className="provider-store">Envío Flash</p>
-                                                        <p>{`llega mañana`}</p>
-                                                        <input type="checkbox" readOnly checked={flash_shipping}/>
+                                                        style={{cursor: 'pointer'}}>
+                                                        <div className="cart-shipping-mode-card">
+                                                            <Checkbox isChecked={flash_shipping} 
+                                                                extraStyles={{
+                                                                        border: true,
+                                                                        rounded: true,
+                                                                        innerBorder: true,
+                                                                        margin: '1rem', 
+                                                                        size: '1.2' }}/>
+                                                            <div>
+                                                                <p className="provider-store">Envío Flash</p>
+                                                                <p>{`llega mañana`}</p>
+                                                            </div>
+                                                        </div>
                                                     </div>
 
                                                     <div onClick={()=> shippingMode(false)} 
-                                                        className={!flash_shipping ? 'selected-shipping-mode' : ''}>
-                                                        <p>Envío standard</p>
-                                                        <p>{`llega ${deliverDate()}`}</p>
-                                                        <input type="checkbox" readOnly checked={!flash_shipping} />
+                                                        style={{cursor: 'pointer'}}>
+                                                            <div className="cart-shipping-mode-card">
+                                                                <Checkbox isChecked={!flash_shipping} 
+                                                                    extraStyles={{
+                                                                        border: true,
+                                                                        rounded: true,
+                                                                        innerBorder: true,
+                                                                        margin: '1rem', 
+                                                                        size: '1.2' }}/>
+                                                                <div>
+                                                                    <p>Envío standard</p>
+                                                                    <p>{`llega ${deliverDate()}`}</p>
+                                                                </div>
+                                                            </div>
+                                                            
                                                     </div>
+                                                    
                                                 </div>}
                                         </div>
 
