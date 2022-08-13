@@ -9,7 +9,7 @@ async function verifyToken(req, res, next) {
     const authHeader = req.headers.authorization;
 
     if (!authHeader)
-      return res.status(403).json({ message: "No token provided" });
+      return res.status(403).json({ message: "Token no recibido" });
     let token = authHeader.split(" ")[1];
     const isGoogleUser = token.slice(0, 6);
 
@@ -27,7 +27,7 @@ async function verifyToken(req, res, next) {
 
         const userFound = await User.findOne({ email: sub });
         if (!userFound) {
-          return res.status(404).json({ message: "User not found" });
+          return res.status(404).json({ message: "Cuenta no encontrada" });
         }
 
         req.user = {
@@ -35,7 +35,7 @@ async function verifyToken(req, res, next) {
           isGoogleUser: true,
         };
       } catch (error) {
-        return res.status(403).send("Invalid credentials");
+        return res.status(403).send("Credenciales inválidas");
       }
     } else {
       try {
@@ -45,16 +45,16 @@ async function verifyToken(req, res, next) {
 
         const userFound = await User.findById(req.user._id);
         if (!userFound) {
-          return res.status(404).json({ message: "User not found" });
+          return res.status(404).json({ message: "Cuenta no encontrada" });
         }
       } catch (error) {
-        return res.status(403).json({ message: "Invalid token" });
+        return res.status(403).json({ message: "Token inválido" });
       }
     }
 
     next();
   } catch (error) {
-    return res.status(401).json({ message: "Unauthorized" });
+    return res.status(401).json({ message: "Sin autorización" });
   }
 }
 
@@ -74,30 +74,33 @@ async function verifyEmailVerified(req, res, next) {
 
 async function verifyAdmin(req, res, next) {
   if (req.user.isGoogleUser)
-    return res.status(401).json({ message: "Unauthorized" });
+    return res.status(401).json({ message: "Sin autorización" });
 
   const user = await User.findById(req.user._id);
   if (user.role === "admin" || user.role === "superadmin") {
     next();
   } else {
-    return res.status(401).json({ message: "Unauthorized" });
+    return res.status(401).json({ message: "Sin autorización" });
   }
 }
 
 async function verifySuperAdmin(req, res, next) {
-  if (req.user.isGoogleUser) res.status(401).json({ message: "Unauthorized" });
+  if (req.user.isGoogleUser)
+    res.status(401).json({ message: "Sin autorización" });
 
   const user = await User.findById(req.user._id);
   if (user.role === "superadmin") {
     next();
   } else {
-    return res.status(401).json({ message: "Unauthorized" });
+    return res.status(401).json({ message: "Sin autorización" });
   }
 }
 
 async function googleUserShallNotPass(req, res, next) {
   if (req.user.isGoogleUser) {
-    return res.status(401).json({ message: "Google user unauthorized" });
+    return res
+      .status(401)
+      .json({ message: "Cuenta de Google sin autorización" });
   } else {
     next();
   }
