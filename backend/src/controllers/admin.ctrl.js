@@ -184,8 +184,6 @@ const deleteUser = async (req, res, next) => {
     const userFound = await User.findById(id);
     if (userFound.role === "admin")
       return res.status(401).json({ message: "Unauthorized" });
-    //const { avatar: imgToDelete } = await User.findById(id);
-    //! VOLVER A VER agregar estraegia para eliminar avatar de cloudinary
     await User.findByIdAndUpdate(id, { role: "deleted" });
     return res.json({ message: "Usuario eliminado exitosamente" });
   } catch (error) {
@@ -210,9 +208,10 @@ const createProduct = async (req, res, next) => {
 
     let aux = [];
     // creamos una promise por cada archivo.
-    req.files.forEach((img) => {
+    for (const img of req.files) {
+      if (img.size > 10526315) continue;
       aux.push(cloudinary.uploader.upload(img.path));
-    });
+    }
     // esperamos que se suban.
     const promiseAll = await Promise.all(aux);
     // guardamos los datos de cada imagen.
@@ -283,9 +282,11 @@ const updateProduct = async (req, res, next) => {
     if (req.files) {
       let aux = [];
       // creamos una promise por cada archivo.
-      req.files.forEach((img) => {
+      for (const img of req.files) {
+        if (img.size > 10526315) continue;
         aux.push(cloudinary.uploader.upload(img.path));
-      });
+      }
+
       // esperamos que se suban.
       const promiseAll = await Promise.all(aux);
       // guardamos los datos de cada imagen.

@@ -147,7 +147,7 @@ const ChangePassword = () => {
             <span className="g-input-with-button">
               <input
                 type="text"
-                placeholder="Contraseña"
+                placeholder="Nueva contraseña"
                 autoComplete="off"
                 className={
                   watch("password") === undefined || watch("password") === ""
