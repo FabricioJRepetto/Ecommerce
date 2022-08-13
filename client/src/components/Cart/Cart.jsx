@@ -265,7 +265,7 @@ const Cart = () => {
                                                     <Arrow className='arrow-address-selector'/>
                                                 </div>}
 
-                                                {selectedAdd && <div className="cart-shipping-mode-container">                                                    
+                                                <div className="cart-shipping-mode-container">
 
                                                     <div onClick={()=> shippingMode(true)} 
                                                         style={{cursor: 'pointer'}}>
@@ -286,29 +286,28 @@ const Cart = () => {
 
                                                     <div onClick={()=> shippingMode(false)} 
                                                         style={{cursor: 'pointer'}}>
-                                                            <div className="cart-shipping-mode-card">
-                                                                <Checkbox isChecked={!flash_shipping} 
-                                                                    extraStyles={{
-                                                                        border: true,
-                                                                        rounded: true,
-                                                                        innerBorder: true,
-                                                                        margin: '1rem', 
-                                                                        size: '1.2' }}/>
-                                                                <div>
-                                                                    <p>Envío standard</p>
-                                                                    <p>{`llega ${deliverDate()}`}</p>
-                                                                </div>
+                                                        <div className="cart-shipping-mode-card">
+                                                            <Checkbox isChecked={!flash_shipping} 
+                                                                extraStyles={{
+                                                                    border: true,
+                                                                    rounded: true,
+                                                                    innerBorder: true,
+                                                                    margin: '1rem', 
+                                                                    size: '1.2' }}/>
+                                                            <div>
+                                                                <p>Envío standard</p>
+                                                                <p>{`llega ${deliverDate()}`}</p>
                                                             </div>
-                                                            
+                                                        </div>
                                                     </div>
                                                     
-                                                </div>}
+                                                </div>
                                         </div>
 
                                         <div className="cart-sumary-section">
 
                                             <div className="cart-total">
-                                                <p>subotal:</p>
+                                                <p>subtotal:</p>
                                                 <div>
                                                     <h3>${priceFormat(total).int}</h3>
                                                     <p>{priceFormat(total).cents}</p>
