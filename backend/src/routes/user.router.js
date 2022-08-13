@@ -15,6 +15,7 @@ const {
   forgotPassword,
   resetPassword,
   changePassword,
+  updatePassword,
   editProfile,
   setAvatar,
 } = require("../controllers/user.ctrl");
@@ -26,7 +27,20 @@ const emailValidation = body("email", "Ingresa un email válido")
   .isEmail()
   .escape();
 
-const passwordValidation = body(
+const passwordValidation = body("password", "Ingresa una contraseña válida")
+  .trim()
+  .notEmpty()
+  .escape();
+
+const passwordValidationToUpdate = body(
+  "oldPassword",
+  "Ingresa una contraseña válida"
+)
+  .trim()
+  .notEmpty()
+  .escape();
+
+const passwordValidationChange = body(
   "password",
   "La contraseña debe tener al menos 6 caracteres"
 )
@@ -42,14 +56,6 @@ const passwordValidation = body(
     }
   });
 
-const passwordValidationSignin = body(
-  "password",
-  "Ingresa una contraseña válida"
-)
-  .trim()
-  .notEmpty()
-  .escape();
-
 router.post(
   "/signup",
   [
@@ -59,15 +65,24 @@ router.post(
   ],
   signup
 );
-router.post("/signin", [emailValidation, passwordValidationSignin], signin);
+router.post("/signin", [emailValidation, passwordValidation], signin);
 router.post("/signinGoogle", signinGoogle);
 router.post("/avatar", verifyToken, setAvatar);
 router.get("/profile/:token", verifyToken, profile);
 router.put("/verifyEmail", [verifyToken, googleUserShallNotPass], verifyEmail);
 router.put("/forgotPassword", forgotPassword);
 router.put("/resetPassword", resetPassword);
-router.put("/changePassword", passwordValidation, changePassword);
+router.put("/changePassword", passwordValidationChange, changePassword);
+router.put(
+  "/updatePassword",
+  [
+    verifyToken,
+    googleUserShallNotPass,
+    passwordValidationToUpdate,
+    passwordValidationChange,
+  ],
+  updatePassword
+);
 router.put("/editProfile", [verifyToken, verifyEmailVerified], editProfile);
-/*googleUserShallNotPass, */
 
 module.exports = router;

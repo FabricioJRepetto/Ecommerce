@@ -11,13 +11,13 @@ import { useForm } from "react-hook-form";
 import { useNotification } from "../../hooks/useNotification";
 import { useModal } from "../../hooks/useModal";
 import Modal from "../common/Modal";
+import LoaderBars from "../common/LoaderBars";
 import {
   CloseIcon,
   ArrowBackIcon,
   ViewIcon,
   ViewOffIcon,
 } from "@chakra-ui/icons";
-import LoaderBars from "../common/LoaderBars";
 import "./Signupin.css";
 import "../../App.css";
 const { REACT_APP_OAUTH_CLIENT_ID } = process.env;
@@ -28,7 +28,6 @@ const Signupin = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { session } = useSelector((state) => state.sessionReducer);
-  const [response, setResponse] = useState(null);
   const [viewPassword, setViewPassword] = useState({
     signin: false,
     signup: false,
@@ -51,19 +50,9 @@ const Signupin = () => {
     watch: watchSignup,
   } = useForm();
 
-  const {
-    register: registerForgot,
-    handleSubmit: handleSubmitForgot,
-    formState: { errors: errorsForgot },
-    setValue: setValueForgot,
-    watch: watchForgot,
-  } = useForm();
-
   const location = useLocation();
   const hasPreviousState = location.key !== "default";
   const [notification] = useNotification();
-  const [isOpenForgotPassword, openForgotPassword, closeForgotPassword] =
-    useModal();
   const [isOpenLoader, openLoader, closeLoader] = useModal();
 
   const emailRegex = /^[\w-.]+@([\w-])+[.\w-]*$/i;
@@ -175,18 +164,6 @@ const Signupin = () => {
 //     // eslint-disable-next-line
 //   }, []);
 
-  const forgotPassword = async (email) => {
-    openLoader();
-    try {
-      const { data } = await axios.put("/user/forgotPassword", email);
-      setResponse(data.message);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      closeLoader();
-    } //! VOLVER A VER manejo de errores
-  };
-
   const handleSign = (sign) => {
     setSignSelect(sign);
   };
@@ -291,9 +268,12 @@ const Signupin = () => {
                 </div>
               )}
             </span>
-            <span onClick={openForgotPassword} className="g-text-button">
-              ¿Has olvidado tu contraseña?
-            </span>
+
+            <NavLink to={"/forgotPassword"}>
+              <span className="g-text-button">
+                ¿Has olvidado tu contraseña?
+              </span>
+            </NavLink>
 
             <div>
               <input
@@ -416,7 +396,7 @@ const Signupin = () => {
                 <p className="g-hidden-placeholder">hidden</p>
               )}
               {errorsSignup.repPassword?.type === "required" && (
-                <p className="g-error-input">Ingresa una contraseña</p>
+                <p className="g-error-input">Ingresa la contraseña</p>
               )}
               {errorsSignup.repPassword?.type === "validate" && (
                 <p className="g-error-input">Las contraseñas no coinciden</p>

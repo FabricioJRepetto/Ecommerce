@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { useNotification } from "../../hooks/useNotification";
 import Modal from "../common/Modal";
 import { useModal } from "../../hooks/useModal";
+import { avoidEnterSubmit } from "../../helpers/AvoidEnterSubmit";
 import { CloseIcon } from "@chakra-ui/icons";
 import "../../App.css";
 
@@ -137,7 +138,10 @@ const Address = ({ loading, setLoading, address, setAddress }) => {
       <Modal isOpen={isOpenAddForm} closeModal={closeAddForm}>
         <h1>{prop ? "Agregar dirección" : "Editar dirección"}</h1>
         {isOpenAddForm && (
-          <form onSubmit={handleSubmit((data) => handleAddress(data, prop))}>
+          <form
+            onSubmit={handleSubmit((data) => handleAddress(data, prop))}
+            onKeyDown={avoidEnterSubmit}
+          >
             <>
               {errors.state ? (
                 <p className="g-error-input">Ingresa la provincia</p>

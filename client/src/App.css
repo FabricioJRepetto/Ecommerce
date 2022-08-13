@@ -36,6 +36,51 @@ a:active {
   text-decoration: none;
 }
 
+/* NAVLINK CON ESTILO DE BOTON */
+.g-navlink-white-button {
+  display: flex;
+}
+.g-navlink-white-button > a {
+  padding: 0.5rem 2rem;
+  text-align: center;
+  background-color: white;
+}
+.g-navlink-white-button > a {
+  font-weight: 200;
+  border: none;
+  padding: 0.5rem 3rem;
+  margin: 1rem 0 1rem 0;
+  cursor: pointer;
+  font-weight: 300;
+  background-color: white;
+  color: black;
+  mask-image: linear-gradient(
+    60deg,
+    rgb(118, 118, 118) 25%,
+    rgba(0, 0, 0, 0.5) 50%,
+    rgb(124, 124, 124) 75%
+  );
+  mask-size: 400%;
+  mask-position: 100%;
+  -webkit-mask-image: linear-gradient(
+    60deg,
+    rgb(118, 118, 118) 25%,
+    rgba(0, 0, 0, 0.7) 50%,
+    rgb(124, 124, 124) 75%
+  );
+  -webkit-mask-size: 400%;
+  -webkit-mask-position: 100%;
+}
+.g-navlink-white-button > a:hover {
+  background-color: rgb(228, 228, 228);
+  mask-position: 0%;
+  -webkit-mask-position: 0%;
+  transition: mask-position 0.5s ease, -webkit-mask-position 0.5s ease;
+}
+.g-navlink-white-button > a:active {
+  background-color: rgb(165, 165, 165);
+}
+
 /* SELECT */
 select {
   cursor: pointer;
@@ -63,10 +108,6 @@ input[type="checkbox"] {
   margin: 0.1rem 0 0.3rem 0;
   display: flex;
 }
-/* form > .g-input-with-button {
-  display: flex;
-  justify-content: center;
-} */
 
 /* BLUR PASSWORD */
 .g-input-with-button .g-password {
@@ -113,27 +154,27 @@ input[type="checkbox"] {
   background-color: white;
   color: black;
   mask-image: linear-gradient(
-        60deg,
-        rgb(118, 118, 118) 25%,
-        rgba(0, 0, 0, 0.5) 50%,
-        rgb(124, 124, 124) 75%
-    );
-    mask-size: 400%;
-    mask-position: 100%;     
-    -webkit-mask-image: linear-gradient(
-        60deg,
-        rgb(118, 118, 118) 25%,
-        rgba(0, 0, 0, 0.7) 50%,
-        rgb(124, 124, 124) 75%
-    );
-    -webkit-mask-size: 400%;
-    -webkit-mask-position: 100%;     
+    60deg,
+    rgb(118, 118, 118) 25%,
+    rgba(0, 0, 0, 0.5) 50%,
+    rgb(124, 124, 124) 75%
+  );
+  mask-size: 400%;
+  mask-position: 100%;
+  -webkit-mask-image: linear-gradient(
+    60deg,
+    rgb(118, 118, 118) 25%,
+    rgba(0, 0, 0, 0.7) 50%,
+    rgb(124, 124, 124) 75%
+  );
+  -webkit-mask-size: 400%;
+  -webkit-mask-position: 100%;
 }
 .g-white-button:hover:enabled {
   background-color: rgb(228, 228, 228);
   mask-position: 0%;
   -webkit-mask-position: 0%;
-  transition: mask-position .5s ease, -webkit-mask-position .5s ease; 
+  transition: mask-position 0.5s ease, -webkit-mask-position 0.5s ease;
 }
 .g-white-button:active {
   background-color: rgb(165, 165, 165);
@@ -154,6 +195,7 @@ input[type="checkbox"] {
 /* PLACEHOLDER ERROR OCULTO */
 .g-hidden-placeholder {
   visibility: hidden;
+  font-size: 0.8rem;
 }
 
 /* BOTON "REGRESAR" */
@@ -164,6 +206,9 @@ input[type="checkbox"] {
 /* MENSAJE DE ERROR PARA INPUTS */
 .g-error-input {
   text-align: left;
+  color: red;
+  font-weight: 300;
+  font-size: 0.8rem;
 }
 
 /* SVG BOTON */

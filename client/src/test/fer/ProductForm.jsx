@@ -12,6 +12,7 @@ import {
   validateImgs,
   validationProductFormSchema,
 } from "../../helpers/validators";
+import { avoidEnterSubmit } from "../../helpers/AvoidEnterSubmit";
 import { useNotification } from "../../hooks/useNotification";
 import { useModal } from "../../hooks/useModal";
 import Modal from "../../components/common/Modal";
@@ -142,6 +143,7 @@ const ProductForm = () => {
   };
 
   const loadInputs = (data) => {
+    console.log(data);
     setValue("name", data.name);
     setValue("price", data.price);
     setValue("brand", data.brand);
@@ -150,14 +152,19 @@ const ProductForm = () => {
     setValue("free_shipping", data.free_shipping);
     setValue("category", data.category);
     setCategoryPath(data.path_from_root);
-    replaceFeature([...data.main_features]);
+    //replaceFeature([...data.main_features]);
+    let featuresToEdit = [];
+    for (const feature of data.main_features) {
+      featuresToEdit.push({ value: feature });
+    }
+    replaceFeature(featuresToEdit);
     replaceAttribute([...data.attributes]);
     setImgsToEdit(data.images);
   };
 
   useEffect(() => {
     //! VOLVER A VER eliminar hasta linea 188
-    setValue("brand", "marcaa1");
+    /* setValue("brand", "marcaa1");
     setValue("name", "nombre1");
     setValue("price", 100);
     setValue("available_quantity", 10);
@@ -178,7 +185,7 @@ const ProductForm = () => {
         id: "MLA86379",
         name: "Alarmas para Motos",
       },
-    ]);
+    ]); */
     if (idProductToEdit) {
       axios(`/product/${idProductToEdit}`)
         .then(({ data }) => {
@@ -188,11 +195,12 @@ const ProductForm = () => {
         })
         .catch((err) => console.log(err)); //!VOLVER A VER manejo de errores
     } else {
-      //! VOLVER A VER poner strings vacias en lineas 199 y 200
-      appendAttribute({ name: "color", value_name: "amarillo" });
-      appendFeature({ value: "piola" });
-    }
-    // eslint-disable-next-line
+      //! VOLVER A VER poner strings vacias en lineas 192 y 193
+      appendAttribute({ name: "", value_name: "" });
+      appendFeature({ value: "" });
+      /* appendAttribute({ name: "color", value_name: "amarillo" });
+      appendFeature({ value: "piola" }); */
+    } // eslint-disable-next-line
   }, []);
 
   const handleAddImg = (e) => {
@@ -347,10 +355,6 @@ const ProductForm = () => {
     }
   };
 
-  const checkKeyDown = (e) => {
-    if (e.key === "Enter") e.preventDefault();
-  };
-
   return (
     <div className="form-width-test">
       <h2>{productToEdit ? "EDITAR" : "CREAR"} producto</h2>
@@ -358,7 +362,7 @@ const ProductForm = () => {
       <form
         encType="multipart/form-data"
         onSubmit={customSubmit}
-        onKeyDown={checkKeyDown}
+        onKeyDown={avoidEnterSubmit}
         className="form-width-test"
       >
         <>

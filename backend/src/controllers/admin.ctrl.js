@@ -268,10 +268,10 @@ const updateProduct = async (req, res, next) => {
       name,
       price,
       brand,
-      main_features,
-      attributes,
-      description,
       category,
+      description,
+      attributes,
+      main_features,
       available_quantity,
       free_shipping,
       imgsToEdit,
@@ -336,6 +336,11 @@ const updateProduct = async (req, res, next) => {
     const { path_from_root } = data;
     let brandLowerCase = brand.toLowerCase();
 
+    let mainFeaturesArray = [];
+    for (const feature of main_features) {
+      mainFeaturesArray.push(feature.value);
+    }
+
     const updatedProduct = await Product.findByIdAndUpdate(
       req.params.id,
       {
@@ -343,7 +348,7 @@ const updateProduct = async (req, res, next) => {
           name,
           price,
           brand: brandLowerCase,
-          main_features,
+          main_features: mainFeaturesArray,
           attributes,
           description,
           category,
