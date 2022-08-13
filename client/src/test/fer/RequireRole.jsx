@@ -3,15 +3,14 @@ import { useSelector } from "react-redux";
 
 const RequireRole = ({ allowedRoles }) => {
   const location = useLocation();
-  const { role, session } = useSelector((state) => state.sessionReducer);
+  const { role, session } = useSelector((state) => state.sessionReducer);  
 
-  return allowedRoles.includes(role) ? (
+  return !session ? ('Checking credentials') : allowedRoles.includes(role) ? (
     <Outlet />
-  ) : session ? (
-    <Navigate to="/unauthorized" state={{ from: location }} replace />
   ) : (
-    <Navigate to="/signin" state={{ from: location }} replace />
-  );
+    // <Navigate to="/unauthorized" state={{ from: location }} replace />
+    'unauthorized'.toUpperCase()
+  ) 
 };
 
 export default RequireRole;

@@ -170,7 +170,7 @@ input[type="checkbox"] {
   -webkit-mask-size: 400%;
   -webkit-mask-position: 100%;
 }
-.g-white-button:hover {
+.g-white-button:hover:enabled {
   background-color: rgb(228, 228, 228);
   mask-position: 0%;
   -webkit-mask-position: 0%;
@@ -178,6 +178,12 @@ input[type="checkbox"] {
 }
 .g-white-button:active {
   background-color: rgb(165, 165, 165);
+}
+.g-white-button:disabled {
+    background: rgb(0, 0, 0);
+    color: white;
+    border: white 1px solid;
+    cursor: default;
 }
 
 /* BOTON DE TEXTO */

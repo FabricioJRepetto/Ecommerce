@@ -261,6 +261,7 @@ const Profile = () => {
         {render === "address" && (
           <Address
             loading={loading}
+            setLoading={setLoading}
             setAddress={setAddress}
             address={address}
           />

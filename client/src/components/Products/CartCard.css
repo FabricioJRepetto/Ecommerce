@@ -1,12 +1,12 @@
 .cart-card-container {
     min-width: 60vw;
-    background: white;
-    color: black;
-    border-bottom: 1px solid rgb(218, 218, 218);
+    background: rgba(255, 255, 255, 0);
+    color: rgb(255, 255, 255);
+    border-bottom: 1px solid rgba(255, 255, 255, .3);
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    padding: 20px 0;
+    padding: 1rem 0 1rem 2rem;
 }
 
 .pointer {
@@ -21,16 +21,24 @@
 }
 
 .product-cart-image-container {
-    height: 96px;
-    width: 96px;
+    height: 8rem;
+    width: 8rem;
+    /* height: 96px;
+    width: 96px; */
     display: flex;
     justify-content: center;
     align-items: center;
+    background: white;
+    position: relative;
+    overflow: visible clip;
 }
 .product-cart-image-container img {
-    max-height: 96px;
-    max-width: 96px;
+    max-height: 100%;
+    max-width: 100%;
+    z-index: 1;    
 }
+
+
 .cart-prod-details {
     display: flex;
     flex-direction: column;
@@ -42,8 +50,13 @@
     overflow: hidden;
 }
 
+.cart-main-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
 .cart-card-name {
-    font-weight: 600;
     font-size: 1rem;
     font-weight: 600;
     width: 100%;
@@ -51,30 +64,38 @@
     -webkit-line-clamp: 1;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    margin-left: 1.2rem;
 }
-.cart-main-details {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-.cart-main-details div {
+.cart-card-brand {
     height: 1.2rem;
-    margin: .5rem 0 0 0;
+    font-weight: 300;
+    margin: .5rem 0 0 1.2rem;
 }
-
+.cart-free-shipping {
+    color: #39b54a;
+    text-align: left;
+    height: 20px;
+    font-weight: 400;
+    margin-left: 1.2rem;
+}
 .cart-product-options {
     display: flex;
+    font-weight: 200;
+    color: rgba(255, 255, 255, 0.6);
+    margin-left: .5rem;
 }
 .cart-product-options p {
-    margin-right:10px;
+    margin-right:1.5rem; 
 }
 
 .cart-card-price-discount {
     display: flex;
     justify-content: flex-end;
+    font-weight: 400;
     font-size: 1.1rem;
 }
 .cart-card-price-discount div {
+    font-weight: 500;
     font-size: 1rem;
     margin: 0 .5rem 0 0;
     color: #39b54a;
@@ -86,6 +107,7 @@
 .cart-card-price {
     text-align: end;
     width: 7rem;
+    
 }
 .cart-card-price-inner {
     display: flex;

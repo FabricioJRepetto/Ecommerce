@@ -12,7 +12,7 @@ const GlobalCover = () => {
     setTimeout(() => {
       setAux(true);
       dispatch(loadingUserData(false));
-    }, 1000);
+    }, 100);
     // eslint-disable-next-line
   }, []);
 
