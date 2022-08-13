@@ -4,37 +4,18 @@ import { resizer } from "../../helpers/resizer";
 import { useAxios } from "../../hooks/useAxios";
 import axios from "axios";
 import { useNotification } from "../../hooks/useNotification";
+import { deliveryPercent } from "../../helpers/deliveryPercent";
+import { correctStyle } from "../../helpers/correctStyle";
+import { ReactComponent as Gift } from "../../assets/svg/gift.svg";
 
 const Orders = () => {
   const [notification] = useNotification();
   const { data: orders, loading } = useAxios("GET", `/order/userall/`);
 
-  const percent = (date, start) => {
-    let total = date - start;
-    let progress = date - Date.now();
-    let percent = Math.floor(100 - (progress * 100) / total);
-
-    let state = "";
-    if (percent > 10 && percent <= 30) {
-      state = "Dispatching";
-    } else if (percent > 30 && percent <= 70) {
-      state = "Ready to deliver";
-    } else if (percent > 70 && percent < 100) {
-      state = "Delivering...";
-    } else if (percent >= 100) {
-      state = "Delivered!";
-    } else {
-      state = "Geting your package ready";
-    }
-    percent > 100 && (percent = 100);
-
-    return { percent, state };
-  };
-
   const cancelOrder = async (id) => {
     const { data } = await axios.put(`/order/${id}`, { status: "cancelled" });
     notification(data.message, "", "warning");
-  };
+  };  
 
   return (
     <div>
@@ -83,22 +64,18 @@ const Orders = () => {
                   {e.delivery_date && (
                     <div>
                       <p>- - -</p>
-                      <p>{percent(e.delivery_date, e.created_at).state}</p>
+                      <p>{deliveryPercent(e.delivery_date, e.created_at).state}</p>
                       <div className="delivery-container">
                         <div className="delivery-inner">
-                          <div
-                            style={{
-                              width:
-                                percent(e.delivery_date, e.created_at).percent +
-                                "%",
-                            }}
-                          ></div>
+                          <div className='delivery-bar'
+                            style={ correctStyle(e) }
+                          >{e.flash_shipping ? <div className='ship-gradient delivery-pointer'></div> : <div><Gift className='delivery-pointer'/></div>}<div className='delivery-pointer-back'></div></div>
                         </div>
                         {
                           //! volver a ver: BORRAR ESTE PORCENTAJE
                         }
                         <p>
-                          {percent(e.delivery_date, e.created_at).percent + "%"}
+                          {deliveryPercent(e.delivery_date, e.created_at).percent + "%"}
                         </p>
                       </div>
                       <p>delivery ETA: {formatDate(e.delivery_date)}</p>

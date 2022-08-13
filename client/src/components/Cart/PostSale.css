@@ -1,0 +1,24 @@
+.postsale-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.postsale-inner {
+    width: 80vw;
+    height: 50vh;
+}
+
+.postsale-header {
+    height: 20vh;
+    background: green;
+}
+
+.postsale-details-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding: 6rem ;
+    border-top: 1px solid white;
+    border-bottom: 1px solid white;
+}

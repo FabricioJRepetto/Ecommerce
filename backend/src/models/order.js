@@ -51,7 +51,7 @@ const orderSchema = new Schema(
 
 // Order.description
 orderSchema.virtual("description").get(function () {
-    let desc = "Order summary: ";
+    let desc = "";
     this.products.forEach((product) => {
         desc += `${product.product_name} x${product.quantity}. `;
     });
