@@ -5,12 +5,10 @@ const cloudinary = require("cloudinary").v2;
 const User = require("../models/user");
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
-const axios = require("axios");
 const fs = require("fs-extra");
 const { JWT_SECRET_CODE } = process.env;
 const { validationResult } = require("express-validator");
 const sendEmail = require("../utils/sendEmail");
-const user = require("../models/user");
 
 cloudinary.config({
   cloud_name: CLOUDINARY_CLOUD,
