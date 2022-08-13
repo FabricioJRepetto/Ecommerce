@@ -424,6 +424,7 @@ const BuyNow = () => {
             </Modal>
 
             <Modal isOpen={isOpenCheckout} closeModal={closeCheckout}>
+                <p>A continuación se simulará un pago. <br/> Es necesario utilizar los datos de prueba correspondientes a la plataforma que se elija.</p>
                 <p>Pagar con:</p>
 
                 <button className="g-white-button details-button" disabled={(!product || !selectedAdd || loadingPayment)} 
@@ -433,7 +434,7 @@ const BuyNow = () => {
                 <br/>
                 <p><b>stripe</b></p>
                 <li><p>card: <i>4242 4242 4242 4242</i></p></li>
-                <li><p>expiration: <i>fecha mayor a la actual</i></p></li>
+                <li><p>expiration: <i> cualquier fecha mayor a la actual</i></p></li>
                 <li><p>cvc: <i>123</i></p></li>
                 <br/>
 

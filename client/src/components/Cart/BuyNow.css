@@ -20,12 +20,9 @@
     justify-content: center;
     align-items: center;
     min-width: 75vw;
-    min-height: 54vh;
+    min-height: 80vh;
     width: fit-content;
-    border-radius: 4px;
-    box-shadow: 0px 5px 10px rgba(0, 0, 0, .8);
-    color: black;
-    background: white;
+    color: white;
 }
 
 .buynow-product-details {
