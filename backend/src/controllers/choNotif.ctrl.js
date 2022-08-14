@@ -16,11 +16,9 @@ const flash = (flash) => {
     }
     now = new Date(now).toISOString();
     //? ISO string
-    // let targetDate = `${now.split('T')[0]}T15:00:00.000Z`;
+    return `${now.split('T')[0]}T15:00:00.000-03:00`;
     //? Milliseconds
-    let targetDate = new Date(`${now.split('T')[0]}T15:00:00.000-03:00`).getTime();
-
-    return targetDate;
+    // return new Date(`${now.split('T')[0]}T15:00:00.000-03:00`).getTime();
 };
 
 const stockUpdater = async (products) => {
