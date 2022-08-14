@@ -4,7 +4,7 @@ const order = require("../models/order");
 const product = require("../models/product");
 const { MP_SKEY } = process.env;
 
-const flash = (flash) => {
+const deliveryDate = (flash) => {
     // horas restantes hasta las 15hrs de mañana (flash_shipping true)
     let now = new Date();
 
@@ -16,9 +16,9 @@ const flash = (flash) => {
     }
     now = new Date(now).toISOString();
     //? ISO string
-    return `${now.split('T')[0]}T15:00:00.000-03:00`;
+    // return `${now.split('T')[0]}T15:00:00.000-03:00`;
     //? Milliseconds
-    // return new Date(`${now.split('T')[0]}T15:00:00.000-03:00`).getTime();
+    return new Date(`${now.split('T')[0]}T15:00:00.000-03:00`).getTime();
 };
 
 const stockUpdater = async (products) => {
@@ -54,8 +54,8 @@ const notificationStripe = async (req, res, next) => {
                     '$set': {
                         status: 'approved',
                         delivery_status: 'shipping',
-                        payment_date: new Date(Date.now()).toISOString().slice(0, -1) + '-03:00',
-                        delivery_date: target.flash_shipping ? flash(true) : flash(false),
+                        payment_date: new Date().getTime() - 10800000,
+                        delivery_date: target.flash_shipping ? deliveryDate(true) : deliveryDate(false),
                     }
                 }, { new: true });
 
@@ -93,8 +93,8 @@ const notificationMercadopago = async (req, res, next) => {
                         '$set': {
                             status: 'approved',
                             delivery_status: 'shipping',
-                            payment_date: Date.now() - 10800000,
-                            delivery_date: target.flash_shipping ? flash(true) : flash(false),
+                            payment_date: new Date().getTime() - 10800000,
+                            delivery_date: target.flash_shipping ? deliveryDate(true) : deliveryDate(false),
                         }
                     }, { new: true });
 
