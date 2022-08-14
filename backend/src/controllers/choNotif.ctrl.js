@@ -54,7 +54,7 @@ const notificationStripe = async (req, res, next) => {
                     '$set': {
                         status: 'approved',
                         delivery_status: 'shipping',
-                        payment_date: new Date().getTime() - 10800000,
+                        payment_date: new Date().getTime(),
                         delivery_date: target.flash_shipping ? deliveryDate(true) : deliveryDate(false),
                     }
                 }, { new: true });
@@ -93,7 +93,7 @@ const notificationMercadopago = async (req, res, next) => {
                         '$set': {
                             status: 'approved',
                             delivery_status: 'shipping',
-                            payment_date: new Date().getTime() - 10800000,
+                            payment_date: new Date().getTime(),
                             delivery_date: target.flash_shipping ? deliveryDate(true) : deliveryDate(false),
                         }
                     }, { new: true });

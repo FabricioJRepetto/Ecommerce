@@ -38,7 +38,7 @@ const orderSchema = new Schema(
         expiration_date_to: String,
         created_at: Number,
         payment_date: Number,
-        delivery_date: String,
+        delivery_date: Number,
         delivery_status: String,
     },
     {
