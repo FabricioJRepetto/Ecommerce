@@ -8,10 +8,9 @@ import { priceFormat } from "../../helpers/priceFormat"
 import { useNotification } from "../../hooks/useNotification";
 import './BuyNow.css'
 
-import { ReactComponent as Arrow } from '../../assets/svg/arrow-right.svg'
-import { ReactComponent as Pin } from '../../assets/svg/location.svg'
-import { ReactComponent as Ship } from '../../assets/svg/ship.svg'
-import { ReactComponent as Spinner } from '../../assets/svg/spinner.svg'
+import { ReactComponent as Arrow } from '../../assets/svg/arrow-right.svg';
+import { ReactComponent as Pin } from '../../assets/svg/location.svg';
+import { ReactComponent as Spinner } from '../../assets/svg/spinner.svg';
 import Checkbox from "../common/Checkbox";
 import QuantityInput from "./QuantityInput";
 import { useSelector } from "react-redux";
@@ -299,11 +298,11 @@ const BuyNow = () => {
                                 <div>
                                     {product.free_shipping && <del className="grey">${priceFormat(SHIP_COST).int}</del>}
                                     {product.free_shipping && !flash_shipping
-                                    ? <div className="cart-ship-total green">
-                                        <Ship className='ship-svg' />
+                                    ? <div className="cart-ship-total green">                                        
                                         <h3>Envío gratis!</h3>
                                     </div>
-                                    : <div>
+                                    : <div className="cart-shipping-cost-container">
+                                        {flash_shipping && <div className='ship-gradient'></div>}
                                         <h3>${priceFormat(shippingCost()).int}</h3><p>{priceFormat(shippingCost()).cents}</p>
                                     </div> }
                                 </div>
@@ -424,32 +423,48 @@ const BuyNow = () => {
             </Modal>
 
             <Modal isOpen={isOpenCheckout} closeModal={closeCheckout}>
-                <p>A continuación se simulará un pago. <br/> Es necesario utilizar los datos de prueba correspondientes a la plataforma que se elija.</p>
-                <p>Pagar con:</p>
+                <div>                    
+                    <p>Pagar con:</p>
 
-                <button className="g-white-button details-button" disabled={(!product || !selectedAdd || loadingPayment)} 
-                onClick={goCheckout}>{ loadingPayment === 'S' 
-                ? <Spinner className='cho-svg'/> 
-                : 'Stripe' }</button>
-                <br/>
-                <p><b>stripe</b></p>
-                <li><p>card: <i>4242 4242 4242 4242</i></p></li>
-                <li><p>expiration: <i> cualquier fecha mayor a la actual</i></p></li>
-                <li><p>cvc: <i>123</i></p></li>
-                <br/>
+                    <div className="cart-checkout-modal-button-container">
+                        <div>
+                            <button className="g-white-button details-button" disabled={(!product || !selectedAdd || loadingPayment)} 
+                            onClick={goCheckout}>{ loadingPayment === 'S' 
+                            ? <Spinner className='cho-svg'/> 
+                            : 'Stripe' }</button>
+                            <br />
+                            <b>Stripe</b>
+                            
+                            <ul>
+                                <li><b>card:</b> <i>4242 4242 4242 4242</i></li>
+                                <li><b>expiration:</b> <i>fecha mayor a la actual</i></li>
+                                <li><b>cvc:</b> <i>123</i></li>
+                                <li><b>mail:</b> <i>cualquiera</i></li>
+                            </ul>
+                            
+                        </div>
 
-                <button className="g-white-button details-button" disabled={(!product || !selectedAdd || loadingPayment)} 
-                onClick={openMP}>{ loadingPayment === 'MP' 
-                ? <Spinner className='cho-svg'/> 
-                : 'MercadoPago' }</button>                
-                <br/>
-                <p><b>Mercadopago</b></p>
-                <li><p>card: <i>5416 7526 0258 2580</i></p></li>
-                <li><p>expiration: <i>11/25</i></p></li>
-                <li><p>cvc: <i>123</i></p></li>
-                <li><p>nombre: <i>apro</i></p></li>
-                <li><p>dni: <i>12345678</i></p></li>                
-                <br/>            
+                        <div>
+                            <button className="g-white-button details-button" disabled={(!product || !selectedAdd || loadingPayment)} 
+                            onClick={openMP}>{ loadingPayment === 'MP' 
+                            ? <Spinner className='cho-svg'/> 
+                            : 'MercadoPago' }</button>                
+                            <br />
+                            <b>Mercadopago</b>
+                            
+                            <ul>
+                                <li><b>card:</b> <i>5416 7526 0258 2580</i></li>
+                                <li><b>expiration:</b> <i>11/25</i></li>
+                                <li><b>cvc:</b> <i>123</i></li>
+                                <li><b>nombre:</b> <i>apro</i></li>
+                                <li><b>dni:</b> <i>12345678</i></li>
+                                <li><b>mail:</b> <i>cualquiera argentino</i></li>
+                            </ul>
+                             
+                        </div>
+                    </div>
+                    <p className="cart-warning-message">< WarningIcon/> A continuación se simulará un pago. Seleccione un Checkout y<br/> utilize los datos de prueba correspondientes a la plataforma que se elija.</p>                       
+                </div>            
             </Modal>
 
         </div>

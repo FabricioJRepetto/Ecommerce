@@ -8,6 +8,7 @@ const flash = (flash) => {
     // horas restantes hasta las 15hrs de mañana (flash_shipping true)
     let now = new Date();
 
+    //: saltear Domingos
     if (flash) {
         now = now.setDate(now.getDate() + 1);
     } else {
@@ -17,7 +18,7 @@ const flash = (flash) => {
     //? ISO string
     // let targetDate = `${now.split('T')[0]}T15:00:00.000Z`;
     //? Milliseconds
-    let targetDate = new Date(`${now.split('T')[0]}T15:00:00.000Z`).getTime();
+    let targetDate = new Date(`${now.split('T')[0]}T15:00:00.000-03:00`).getTime();
 
     return targetDate;
 };
@@ -55,7 +56,7 @@ const notificationStripe = async (req, res, next) => {
                     '$set': {
                         status: 'approved',
                         delivery_status: 'shipping',
-                        payment_date: Date.now() - 10800000,
+                        payment_date: new Date(Date.now()).toISOString().slice(0, -1) + '-03:00',
                         delivery_date: target.flash_shipping ? flash(true) : flash(false),
                     }
                 }, { new: true });

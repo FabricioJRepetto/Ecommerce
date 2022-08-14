@@ -4,6 +4,10 @@ import { useDispatch } from 'react-redux';
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { resizer } from '../../helpers/resizer';
 import { loadCart } from '../../Redux/reducer/cartSlice';
+import './PostSale.css';
+
+import LoaderBars from '../common/LoaderBars';
+import DeliveryProgress from '../common/DeliveryProgress';
 
 const PostSale = () => {
     const [order, setOrder] = useState(false)
@@ -13,7 +17,7 @@ const PostSale = () => {
     
     const [params] = useSearchParams(),
     id = params.get('external_reference');
-    let status = params.get('status') ?? 'cancelled'
+    let status = params.get('status') ?? 'cancelled';
     
     useEffect(() => {
         (async () => {
@@ -55,14 +59,25 @@ const PostSale = () => {
         })()
       // eslint-disable-next-line
     }, [])
+
+    const messageQuantity = () => {
+        if (order.products.length === 1) {
+            if (order.products[0].quantity > 1) {
+                return 'Los productos ya son tuyos!'
+            } else {
+                return 'El producto ya es tuyo!'
+            }
+        } 
+
+        return 'Los productos ya son tuyos!'        
+     };     
     
     return (
-        <div>
-            <h1>Post Venta</h1>
+        <div className='postsale-container'>
             { (loading && !order )
-                ? <p>LOADING · · ·</p>
-                : <>
-                    <div >
+                ? <LoaderBars />
+                : <div className='postsale-inner'>
+                    <div className='postsale-header'>
                         {order?.products.map(e =>(
                             <img src={resizer(e.img)} 
                             alt="product"
@@ -70,12 +85,21 @@ const PostSale = () => {
                             style={{ height: '96px'}}/>
                         ))}
                     </div>
-                    <p>{`Estado de la orden: ${status}`}</p>
-                    <p><i>{order?.id}</i></p>
-                    <p>{order?.description}</p>
-                    <p><i>shipping info</i></p>
-                    <p>{`${order?.shipping_address.street_name} ${order?.shipping_address.street_number}, ${order?.shipping_address.city}, ${order?.shipping_address.state}.`}</p>
-            </>}
+                    <div className="postsale-details-container">
+                        {status === 'approved' && <div>
+                            <h1>YA CASI!</h1>
+                            <h3>{messageQuantity()}</h3>
+                            <h3>Ahora estamos preparando el envío.</h3>
+                        </div>}
+                        {/* <p>Resumen: {order?.description}</p> */}
+                        {order.delivery_date && (
+                            <DeliveryProgress order={order}/>
+                        )}
+                        <p>{`Estado del pago: ${status}`}</p>
+                        <p>Medio de pago: {order.payment_source}</p>
+                        <p>Id de orden: <i>{order?.id}</i></p>
+                    </div>
+                </div>}
         </div>
     )
 }
