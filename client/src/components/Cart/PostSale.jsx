@@ -87,7 +87,7 @@ const PostSale = () => {
                     </div>
                     <div className="postsale-details-container">
                         {status === 'approved' && <div>
-                            <h1>PERFECTO!</h1>
+                            <h1>YA CASI!</h1>
                             <h3>{messageQuantity()}</h3>
                             <h3>Ahora estamos preparando el envío.</h3>
                         </div>}
