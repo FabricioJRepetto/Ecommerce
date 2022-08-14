@@ -36,8 +36,8 @@ const orderSchema = new Schema(
         payment_intent: String,
         expiration_date_from: String,
         expiration_date_to: String,
-        created_at: String,
-        payment_date: String,
+        created_at: Number,
+        payment_date: Number,
         delivery_date: String,
         delivery_status: String,
     },
@@ -61,7 +61,10 @@ orderSchema.virtual("description").get(function () {
 orderSchema.pre('save', async function (next) {
     // convertir la zonahoraria a -3 (-10800000) ?
     // 36hrs de expiración para MP (259200000) (stripe no acepta mas de 24hr)
-    this.created_at = new Date(Date.now()).toISOString().slice(0, -1) + '-03:00';
+
+    // este campo se crea solo
+    //! this.created_at = Date.now() + 10800000;
+
     this.expiration_date_from = new Date(Date.now()).toISOString().slice(0, -1) + '-03:00';
     this.expiration_date_to = new Date(Date.now() + 259200000).toISOString().slice(0, -1) + '-03:00';
     next();
