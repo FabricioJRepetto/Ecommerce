@@ -14,7 +14,7 @@ const CartCard = ({ img, name, price, sale_price, on_sale, discount, brand, prod
         <div className='product-cart-card-head'>
 
             <div onClick={() => navigate(`/details/${prodId}`)} 
-                className='product-cart-image-container pointer'>
+                className='product-cart-image-container pointer'>                   
                 <img src={resizer(img, 130)} alt="product" />
                 <div className='card-image-back-style'></div>
             </div>

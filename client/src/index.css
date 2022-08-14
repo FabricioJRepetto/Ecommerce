@@ -251,3 +251,14 @@ code {
     opacity: 0;
   }
 }
+
+/*POSTSALE BACKGROUND*/
+@keyframes background-effect {
+  0% {
+    background-position: 0% 0%;
+  }
+  
+  100% {
+    background-position: 0% 100%;
+  }
+}
