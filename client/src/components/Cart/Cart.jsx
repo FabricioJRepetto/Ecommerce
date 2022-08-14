@@ -213,39 +213,38 @@ const Cart = () => {
                 </div>
 
                 <div>
-                    {(loading && (!cart || cart.products?.length < 1))
+                    {(!cart || cart.products?.length < 1)
                         ? <div className="cart-loading-placeholder">
                             {loading && <LoaderBars />}
-                            {!loading && (cart?.products?.length > 0) && <h1>Tu carrito está vacío "loader"</h1>}
+                            {!loading && (cart.products?.length < 1) && <h2>Tu carrito está vacío</h2>}
                         </div>                        
                         : <div>
                             {(render === 'cart')
-                                ? <div className="cart-inner">
-                                    <div>                                    
-                                        <div>
-                                            {cart.products.map((p) => (
-                                                <CartCard
-                                                    key={p._id}
-                                                    on_cart={true}
-                                                    on_sale={p.on_sale}
-                                                    img={p.thumbnail}
-                                                    name={p.name}
-                                                    prodId={p._id}
-                                                    price={p.price}
-                                                    sale_price={p.sale_price}
-                                                    free_shipping={p.free_shipping}
-                                                    discount={p.discount}
-                                                    brand={p.brand}
-                                                    prodQuantity={p.quantity}
-                                                    stock={p.stock}
-                                                    buyLater={buyLater}
-                                                    deleteP={deleteProduct}
-                                                    buyNow={buyNow}
-                                                    source={'products'}
-                                                    loading={loadingPayment}
-                                                    />
-                                            ))}
-                                          </div>                                    
+                                ? <div className="cart-inner">                                                                        
+                                    <div>
+                                        {cart.products.map((p) => (
+                                            <CartCard
+                                                key={p._id}
+                                                on_cart={true}
+                                                on_sale={p.on_sale}
+                                                img={p.thumbnail}
+                                                name={p.name}
+                                                prodId={p._id}
+                                                price={p.price}
+                                                sale_price={p.sale_price}
+                                                free_shipping={p.free_shipping}
+                                                discount={p.discount}
+                                                brand={p.brand}
+                                                prodQuantity={p.quantity}
+                                                stock={p.stock}
+                                                buyLater={buyLater}
+                                                deleteP={deleteProduct}
+                                                buyNow={buyNow}
+                                                source={'products'}
+                                                loading={loadingPayment}
+                                                />
+                                        ))}
+                                        </div>                                    
 
                                     <div className="total-section-container">
 
@@ -348,14 +347,14 @@ const Cart = () => {
                                     </div>
                                     
 
-                                  {!selectedAdd && <div className="cart-warning-message">
+                                    {!selectedAdd && <div className="cart-warning-message">
                                         <span onClick={openAddForm}>
                                             <WarningIcon style={{ margin: '0 .5rem 0 0' }}/>
                                             Necesitas especificar una dirección de envío antes de realizar el pago.
                                         </span>
                                     </div>}
 
-                                    </div>                                    
+                                                                        
                                   </div>
 
                                 :<div className="cart-buylater-inner">

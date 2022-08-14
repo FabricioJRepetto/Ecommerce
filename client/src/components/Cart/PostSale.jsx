@@ -74,7 +74,6 @@ const PostSale = () => {
     
     return (
         <div className='postsale-container'>
-            <h1>Post Venta</h1>
             { (loading && !order )
                 ? <LoaderBars />
                 : <div className='postsale-inner'>
