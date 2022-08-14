@@ -7,11 +7,14 @@ import './Carousel.css'
 const Slider = (prop) => {
     const { 
         images, 
-        interval = 5000, 
+        interval = 5000,
+        pausable = true,
         controls = false, 
         indicators = false, 
         pointer = false, 
-        width 
+        width,
+        height = 'none',
+        autoplay = true,
     } = prop;
 
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -23,13 +26,17 @@ const Slider = (prop) => {
 
     // manejador del Intervalo
     const startSlideTimer = () => {
-        slideInterval.current = setInterval(() => {
-            next(true);
-        }, interval)
+        if (autoplay && images.length > 1) {
+            slideInterval.current = setInterval(() => {
+                next(true);
+            }, interval)
+        }
     };
      const stopSlideTimer = () => {
         // importante preguntar si hay intervalo activo
-        slideInterval.current && clearInterval(slideInterval.current)
+        if (pausable) {
+            slideInterval.current && clearInterval(slideInterval.current)
+        }
     };
 
     useEffect(() => {
@@ -114,20 +121,20 @@ const Slider = (prop) => {
             <div className="slide_container"
                 onMouseEnter={stopSlideTimer}
                 onMouseLeave={startSlideTimer}>
-                <div className="slide" style={{ maxWidth: width }}>
-                    <div
+                <div className="slide" style={{ maxWidth: width, maxHeight: height }}>
+                    <div className="slide-inner"
                         style={{ maxWidth: width }}
                         id='slider'
-                        className="slide-inner"
                         onTransitionEnd={graber}>
                             {images?.map((e,index) => (
                                 <div 
                                     id={'img'+index}
                                     key={e.img}
-                                    style={ pointer ? {cursor: 'pointer'} : ''}
+                                    style={ pointer ? {cursor: 'pointer'} : {cursor: 'auto'}}
                                     onClick={() => navigate(e.url || '')}
-                                    className="slide-item">
-                                    <img src={e.img} alt="img" />
+                                    className="slide-item"> 
+                                        <img src={e.img} alt="img" 
+                                            style={{maxHeight: height}}/>
                                 </div>
                             ))}
                     </div>

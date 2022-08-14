@@ -1,31 +1,41 @@
 import axios from 'axios'
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { useNavigate, useSearchParams } from 'react-router-dom'
-import { resizer } from '../../helpers/resizer';
+import { useSearchParams } from 'react-router-dom'
 import { loadCart } from '../../Redux/reducer/cartSlice';
 import './PostSale.css';
-
+import Carousel from '../Home/Carousel/Carousel';
 import LoaderBars from '../common/LoaderBars';
 import DeliveryProgress from '../common/DeliveryProgress';
 
 const PostSale = () => {
-    const [order, setOrder] = useState(false)
-    const [loading, setLoading] = useState(true)
+    const [order, setOrder] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [images, setImages] = useState(false);
+    const [background, setBackground] = useState('')
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     
     const [params] = useSearchParams(),
     id = params.get('external_reference');
-    let status = params.get('status') ?? 'cancelled';
+    let status = params.get('status') || 'cancelled';
     
     useEffect(() => {
         (async () => {
-            if (status === 'null' || status === 'cancelled') return navigate('/');
+            if (status === 'null' || status === 'cancelled') {
+                setBackground('postsale-pending')
+                // return navigate('/')
+            };
 
             const { data } = await axios(`/order/${id}`);
             console.log(data);
             setOrder(data);
+
+            let aux = [];
+            data.products.forEach(e => {
+                aux.push({img: e.img, url: ''});
+            });
+            setImages(aux);
+
             setLoading(false)
             
             if (status === 'approved') {
@@ -46,9 +56,11 @@ const PostSale = () => {
                 await axios.put(`/order/${id}`,{
                     status: 'processing'
                 });
-                //? en el back:
-                // cambiar orden a pagada    
-                // restar unidades de cada stock
+                //? en el back (choNotif):
+                // cambia orden a pagada    
+                // resta unidades de cada stock
+
+                setBackground('postsale-approved');
             };
             if (status !== 'approved' && data.status !== 'approved') {
                 //? cambiar estado de la orden si el status no es aprobado en ninguno de los casos
@@ -70,20 +82,18 @@ const PostSale = () => {
         } 
 
         return 'Los productos ya son tuyos!'        
-     };     
+     };
     
     return (
         <div className='postsale-container'>
             { (loading && !order )
                 ? <LoaderBars />
                 : <div className='postsale-inner'>
-                    <div className='postsale-header'>
-                        {order?.products.map(e =>(
-                            <img src={resizer(e.img)} 
-                            alt="product"
-                            key={e.product_id}
-                            style={{ height: '96px'}}/>
-                        ))}
+                    <div className={`postsale-header ${background}`}>
+                        <div className="postsale-img-container">
+                            <Carousel images={images} interval={2500} pausable ={false} width="15vw" height='15vw'/>
+                            <div className='card-image-back-style'></div>
+                        </div>                        
                     </div>
                     <div className="postsale-details-container">
                         {status === 'approved' && <div>

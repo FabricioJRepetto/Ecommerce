@@ -38,7 +38,7 @@ const orderSchema = new Schema(
         expiration_date_to: String,
         created_at: Number,
         payment_date: Number,
-        delivery_date: String,
+        delivery_date: Number,
         delivery_status: String,
     },
     {
@@ -64,6 +64,8 @@ orderSchema.pre('save', async function (next) {
 
     // este campo se crea solo
     //! this.created_at = Date.now() + 10800000;
+
+    //! volver a ver: POST deploy del front, revisar si Date.now() funciona bien, sino usar new Date().getTime()
 
     this.expiration_date_from = new Date(Date.now()).toISOString().slice(0, -1) + '-03:00';
     this.expiration_date_to = new Date(Date.now() + 259200000).toISOString().slice(0, -1) + '-03:00';
