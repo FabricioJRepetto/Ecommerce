@@ -11,7 +11,6 @@ import { ReactComponent as Spinner } from '../../assets/svg/spinner.svg';
 const PostSale = () => {
     const [order, setOrder] = useState(false);
     const [loading, setLoading] = useState(true);
-    const [loadingDelivery, setLoadingDelivery] = useState(true);
     const [images, setImages] = useState(false);
     const [background, setBackground] = useState('')
     const dispatch = useDispatch();
@@ -32,7 +31,9 @@ const PostSale = () => {
             
             const { data } = await axios(`/order/${id}`);
             console.log(data);
-            setOrder(data);                
+            setOrder(data);
+
+            deliveryWaiter(id);
 
             let aux = [];
             data.products.forEach(e => {
@@ -85,16 +86,17 @@ const PostSale = () => {
     }, [])
 
     const deliveryWaiter = async (id) => {
-        let aux = null;
-        aux = setInterval(async () => {
-            const { data } = await axios(`/order/${id}`);
-            if (data.payment_date) {
-                setOrder(data);
-                setLoadingDelivery(false);
-                clearInterval(aux)
-            }
-        }, 1000);
-     }
+        if (!order.payment_date) {
+            let aux = null;
+            aux = setInterval(async () => {
+                const { data } = await axios(`/order/${id}`);
+                if (data.payment_date) {
+                    setOrder(data);
+                    clearInterval(aux)
+                }
+            }, 1000);
+        }
+     };
 
     const messageQuantity = () => {
         if (order.products.length === 1) {

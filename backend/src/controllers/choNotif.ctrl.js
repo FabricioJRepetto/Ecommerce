@@ -6,7 +6,7 @@ const { MP_SKEY } = process.env;
 
 const deliveryDate = (flash) => {
     // horas restantes hasta las 15hrs de mañana (flash_shipping true)
-    let now = new Date();
+    let now = Date.now() - 1800000;
 
     //: saltear Domingos
     if (flash) {
@@ -54,7 +54,7 @@ const notificationStripe = async (req, res, next) => {
                     '$set': {
                         status: 'approved',
                         delivery_status: 'shipping',
-                        payment_date: new Date().getTime(),
+                        payment_date: Date.now() - 1800000,
                         delivery_date: target.flash_shipping ? deliveryDate(true) : deliveryDate(false),
                     }
                 }, { new: true });
@@ -93,7 +93,7 @@ const notificationMercadopago = async (req, res, next) => {
                         '$set': {
                             status: 'approved',
                             delivery_status: 'shipping',
-                            payment_date: new Date().getTime(),
+                            payment_date: Date.now() - 1800000,
                             delivery_date: target.flash_shipping ? deliveryDate(true) : deliveryDate(false),
                         }
                     }, { new: true });
