@@ -7,10 +7,11 @@ import './PostSale.css';
 import Carousel from '../Home/Carousel/Carousel';
 import LoaderBars from '../common/LoaderBars';
 import DeliveryProgress from '../common/DeliveryProgress';
-
+import { ReactComponent as Spinner } from '../../assets/svg/spinner.svg';
 const PostSale = () => {
     const [order, setOrder] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [loadingDelivery, setLoadingDelivery] = useState(true);
     const [images, setImages] = useState(false);
     const [background, setBackground] = useState('')
     const dispatch = useDispatch();
@@ -22,13 +23,16 @@ const PostSale = () => {
     useEffect(() => {
         (async () => {
             if (status === 'null' || status === 'cancelled') {
-                setBackground('postsale-pending')
+                setBackground('postsale-pending animation-start');
+                setTimeout(() => {
+                    setBackground('postsale-pending animation-loop');                    
+                }, 6000);
                 // return navigate('/')
             };
-
+            
             const { data } = await axios(`/order/${id}`);
             console.log(data);
-            setOrder(data);
+            setOrder(data);                
 
             let aux = [];
             data.products.forEach(e => {
@@ -60,9 +64,17 @@ const PostSale = () => {
                 // cambia orden a pagada    
                 // resta unidades de cada stock
 
-                setBackground('postsale-approved');
+                //? background effect
+                setBackground('postsale-approved animation-start');
+                setTimeout(() => {
+                    setBackground('postsale-approved animation-loop');                    
+                }, 6000);
             };
             if (status !== 'approved' && data.status !== 'approved') {
+                setBackground('postsale-pending animation-start');
+                setTimeout(() => {
+                    setBackground('postsale-pending animation-loop');                    
+                }, 6000);
                 //? cambiar estado de la orden si el status no es aprobado en ninguno de los casos
                 await axios.put(`/order/${id}`,{
                     status
@@ -71,6 +83,18 @@ const PostSale = () => {
         })()
       // eslint-disable-next-line
     }, [])
+
+    const deliveryWaiter = async (id) => {
+        let aux = null;
+        aux = setInterval(async () => {
+            const { data } = await axios(`/order/${id}`);
+            if (data.payment_date) {
+                setOrder(data);
+                setLoadingDelivery(false);
+                clearInterval(aux)
+            }
+        }, 1000);
+     }
 
     const messageQuantity = () => {
         if (order.products.length === 1) {
@@ -100,11 +124,21 @@ const PostSale = () => {
                             <h1>YA CASI!</h1>
                             <h3>{messageQuantity()}</h3>
                             <h3>Ahora estamos preparando el envío.</h3>
+
+                            {order.delivery_date 
+                                ? <DeliveryProgress order={order}/>
+                                : <Spinner />
+                            }
                         </div>}
                         {/* <p>Resumen: {order?.description}</p> */}
-                        {order.delivery_date && (
-                            <DeliveryProgress order={order}/>
-                        )}
+                        {status !== 'approved' && <div>
+                            <h1>HUBO ALGÚN ERROR...</h1>
+                            <h3>Pero podés retomar el pago!</h3>
+                            <button className='g-white-button'>
+                                <a href={order.payment_link}>Voy a intentarlo de nuevo</a>
+                            </button>
+                            <p className='postsale-text-margin'>También podés encontrar el link de pago en tu perfil para realizarlo más tarde.</p>
+                        </div>}
                         <p>{`Estado del pago: ${status}`}</p>
                         <p>Medio de pago: {order.payment_source}</p>
                         <p>Id de orden: <i>{order?.id}</i></p>

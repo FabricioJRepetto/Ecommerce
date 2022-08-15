@@ -185,6 +185,9 @@ input[type="checkbox"] {
     border: white 1px solid;
     cursor: default;
 }
+.g-white-button a {
+    color: #000;
+}
 
 /* BOTON DE TEXTO */
 .g-text-button {
