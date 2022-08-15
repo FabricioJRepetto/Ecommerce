@@ -5,15 +5,15 @@ export const deliveryPercent = (date, start) => {
 
     let state = "";
     if (percent > 10 && percent <= 30) {
-        state = "Dispatching";
+        state = "Despachando";
     } else if (percent > 30 && percent <= 70) {
-        state = "Ready to deliver";
+        state = "Listo para enviar";
     } else if (percent > 70 && percent < 100) {
-        state = "Delivering...";
+        state = "Enviando...";
     } else if (percent >= 100) {
-        state = "Delivered!";
+        state = "Entregado!";
     } else {
-        state = "Geting your package ready";
+        state = "Preparando tu orden...";
     }
     percent > 100 && (percent = 100);
 

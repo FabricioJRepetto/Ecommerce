@@ -9,12 +9,6 @@ const DeliveryProgress = ({ order }) => {
   return (
     <div className='delivery-progress-container'>
         <p>{deliveryPercent(order.delivery_date, order.created_at).state}</p>
-        {
-            //! volver a ver: BORRAR ESTE PORCENTAJE
-        }
-        <p>
-        {deliveryPercent(order.delivery_date, order.created_at).percent + "%"}
-        </p>
         <div className="delivery-container">
             <div className="delivery-inner">
                 <div className='delivery-bar'
@@ -22,8 +16,11 @@ const DeliveryProgress = ({ order }) => {
                 >{order.flash_shipping ? <div className='ship-gradient delivery-pointer'></div> : <div><Gift className='delivery-pointer'/></div>}<div className='delivery-pointer-back'></div></div>
             </div>            
         </div>
-        <p>Fecha estimada de llegada: {formatDate(order.delivery_date)}</p>
-        <p>{`Dirección de envío: ${order?.shipping_address.street_name} ${order?.shipping_address.street_number}, ${order?.shipping_address.city}, ${order?.shipping_address.state}.`}</p>
+        <p>Fecha estimada de llegada:</p>
+        <b>{formatDate(order.delivery_date)}</b>
+        
+        <p>Dirección de envío:</p>
+        <b>{`${order?.shipping_address.street_name} ${order?.shipping_address.street_number}, ${order?.shipping_address.city}, ${order?.shipping_address.state}.`}</b>
     </div>
   )
 }
