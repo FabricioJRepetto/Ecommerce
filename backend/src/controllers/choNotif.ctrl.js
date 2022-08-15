@@ -6,7 +6,7 @@ const { MP_SKEY } = process.env;
 
 const deliveryDate = (flash) => {
     // horas restantes hasta las 15hrs de mañana (flash_shipping true)
-    let now = Date.now() - 1800000;
+    let now = new Date();
 
     //: saltear Domingos
     if (flash) {
