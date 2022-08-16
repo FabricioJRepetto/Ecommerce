@@ -195,7 +195,7 @@ const Details = () => {
                       priceFormat(data.on_sale ? data.sale_price : data.price)
                         .cents || ""
                     }`}</h2>
-                    <p>{data.free_shipping && "Envío gratis"}</p>
+                    <b className="green">{data.free_shipping && "Envío gratis"}</b>
                   </div>
 
                   <button
