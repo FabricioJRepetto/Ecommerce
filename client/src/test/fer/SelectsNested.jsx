@@ -42,7 +42,7 @@ const SelectsNested = ({
   }, [categoryPath]);
 
   return (
-    <div>
+    <div className="select-nested-container">
       <span>
         <span onClick={handleRoot} className="category-selected-button">
           Categoría

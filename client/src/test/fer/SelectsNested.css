@@ -10,3 +10,8 @@
 .category-selected-last {
   font-weight: 500;
 }
+
+.select-nested-container {
+  margin: 1rem 0 0.3rem 0;
+  width: 100%;
+}

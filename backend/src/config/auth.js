@@ -57,12 +57,16 @@ passport.use(
       try {
         const user = await User.findOne({ email });
         if (!user) {
-          return done(null, false, { message: "Cuenta no encontrada" });
+          return done(null, false, {
+            message: "Email o contraseña incorrectos",
+          });
         }
 
         const validity = await user.comparePassword(password);
         if (!validity) {
-          return done(null, false, { message: "Contraseña incorrecta" });
+          return done(null, false, {
+            message: "Email o contraseña incorrectos",
+          });
         }
 
         return done(null, user, { message: "Sesión iniciada con éxito" });

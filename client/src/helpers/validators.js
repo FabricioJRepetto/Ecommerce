@@ -16,10 +16,6 @@ export const validateImgs = (imagesList, warnTimer, productImg) => {
   let warnFlagExcess = false;
   let warnFlagSize = false;
 
-  for (const image of imagesList) {
-    console.log(image.size);
-  }
-
   for (let i = 0; i < imagesList.length; i++) {
     if (!fileTypesAllowed.includes(imagesList[i].type)) {
       warnFlagFormat = true;
@@ -37,24 +33,28 @@ export const validateImgs = (imagesList, warnTimer, productImg) => {
     imagesList.splice(-excess, excess);
   }
   if (warnFlagExcess || warnFlagFormat || warnFlagSize) {
+    let lineBreakFirst = "",
+      lineBreakSecond = "",
+      lineBreakThird = "";
+    if (warnFlagFormat && warnFlagExcess) lineBreakFirst = `\n`;
+    if (warnFlagExcess && warnFlagSize) lineBreakSecond = `\n`;
+    if (warnFlagFormat && warnFlagSize && !warnFlagExcess)
+      lineBreakThird = `\n`;
+
     warnTimer(
       "image",
       `${
-        warnFlagFormat &&
-        "Formato no soportado. Seleccione imagenes .jpg .jpeg o .png"
+        warnFlagFormat
+          ? "Formato no soportado. Seleccione imagenes .jpg .jpeg o .png"
+          : ""
       }
-      ${
-        warnFlagFormat && warnFlagExcess && `\n`
-      } //! VOLVER A VER meter salto de linea
-      ${warnFlagExcess && "Se permiten 8 imágenes como máximo"}
-      ${
-        warnFlagExcess && warnFlagSize && `\n`
-      } //! VOLVER A VER meter salto de linea
-      ${
-        warnFlagFormat && warnFlagSize && !warnFlagExcess && `\n`
-      } //! VOLVER A VER meter salto de linea
-      ${warnFlagSize && "Las imágenes deben pesar menos de 10mb"}`
+      ${lineBreakFirst}
+      ${warnFlagExcess ? "Se permiten 8 imágenes como máximo" : ""}
+      ${lineBreakSecond}
+      ${lineBreakThird}
+      ${warnFlagSize ? "Las imágenes deben pesar menos de 10mb" : ""}`
     );
+    //! VOLVER A VER meter salto de linea
   }
 };
 

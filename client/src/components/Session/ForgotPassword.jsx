@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
-import { useForm } from "react-hook-form";
 import { NavLink, useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useForm } from "react-hook-form";
+import axios from "axios";
 import { CloseIcon, ArrowBackIcon } from "@chakra-ui/icons";
 import { useModal } from "../../hooks/useModal";
 import Modal from "../common/Modal";
@@ -10,6 +11,7 @@ import "../../App.css";
 import "./ForgotPassword.css";
 
 const ForgotPassword = () => {
+  const { session } = useSelector((state) => state.sessionReducer);
   const [response, setResponse] = useState(null);
   const navigate = useNavigate();
   const {
@@ -108,7 +110,7 @@ const ForgotPassword = () => {
               />
 
               <span className="g-navlink-white-button navlink-container">
-                <NavLink to={"/signin"}>Cancelar</NavLink>
+                <NavLink to={`${session ? "/" : "/signin"}`}>Cancelar</NavLink>
               </span>
             </div>
           </form>
