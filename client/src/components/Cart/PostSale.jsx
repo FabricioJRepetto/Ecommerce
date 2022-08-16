@@ -20,15 +20,7 @@ const PostSale = () => {
     let status = params.get('status') || 'cancelled';
     
     useEffect(() => {
-        (async () => {
-            if (status === 'null' || status === 'cancelled') {
-                setBackground('postsale-pending animation-start');
-                setTimeout(() => {
-                    setBackground('postsale-pending animation-loop');                    
-                }, 6000);
-                // return navigate('/')
-            };
-            
+        (async () => {            
             const { data } = await axios(`/order/${id}`);
             console.log(data);
             setOrder(data);
@@ -44,6 +36,12 @@ const PostSale = () => {
             setLoading(false)
             
             if (status === 'approved') {
+                //? background effect
+                setBackground('postsale-approved animation-start');
+                setTimeout(() => {
+                    setBackground('postsale-approved animation-loop');                    
+                }, 6000);
+
                 if (data.order_type === 'cart') {
                     //? vaciar carrito
                     await axios.delete(`/cart/empty`);
@@ -61,25 +59,28 @@ const PostSale = () => {
                 await axios.put(`/order/${id}`,{
                     status: 'processing'
                 });
+                
                 //? en el back (choNotif):
-                // cambia orden a pagada    
+                // cambia orden a pagada
                 // resta unidades de cada stock
-
-                //? background effect
-                setBackground('postsale-approved animation-start');
-                setTimeout(() => {
-                    setBackground('postsale-approved animation-loop');                    
-                }, 6000);
             };
+
             if (status !== 'approved' && data.status !== 'approved') {
                 setBackground('postsale-pending animation-start');
                 setTimeout(() => {
                     setBackground('postsale-pending animation-loop');                    
                 }, 6000);
-                //? cambiar estado de la orden si el status no es aprobado en ninguno de los casos
-                await axios.put(`/order/${id}`,{
-                    status
-                });
+                //? si llega como null o cancelled cambiar estado a "pending"
+                if (status === 'null' || status === 'cancelled') {                    
+                    await axios.put(`/order/${id}`,{
+                        status: 'pending'
+                    });
+                } else {
+                    //? cambiar estado de la orden si el status no es aprobado en ninguno de los casos
+                    await axios.put(`/order/${id}`,{
+                        status
+                    });
+                }
             }
         })()
       // eslint-disable-next-line
@@ -136,7 +137,6 @@ const PostSale = () => {
                                 : <Spinner />
                             }
                         </div>}
-                        {/* <p>Resumen: {order?.description}</p> */}
                         {status !== 'approved' && <div>
                             <h1>HUBO ALGÚN ERROR...</h1>
                             <h3>Pero podés retomar el pago!</h3>
