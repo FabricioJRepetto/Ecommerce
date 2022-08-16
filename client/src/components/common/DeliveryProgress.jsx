@@ -29,12 +29,12 @@ const DeliveryProgress = ({ order }) => {
 export default DeliveryProgress;
 
 /* 
-    created_at: 1660592892278​
-    new Date(1660592892278)
+    created_at:
+    new Date(1660608496901)
 
-    payment_date: 1660603715978
-    new Date(1660603715978)
+    payment_date:
+    new Date(1660606724194)
 
-    delivery_date: 1660845600000
-    new Date(1660845600000)
+    delivery_date:
+    new Date(1660932000000)
 */

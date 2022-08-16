@@ -63,7 +63,7 @@ orderSchema.pre('save', async function (next) {
     // 36hrs de expiración para MP (259200000) (stripe no acepta mas de 24hr)
 
     // este campo se crea solo ???
-    this.created_at = Date.now() - 10800000;
+    this.created_at = Date.now();
 
     //! volver a ver: POST deploy del front, revisar si Date.now() funciona bien, sino usar new Date().getTime()
 

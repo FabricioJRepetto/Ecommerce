@@ -33,7 +33,7 @@ const PostSale = () => {
             console.log(data);
             setOrder(data);
 
-            deliveryWaiter(id);
+            if (!order.payment_date && status !== 'approved') deliveryWaiter(id);
 
             let aux = [];
             data.products.forEach(e => {
@@ -86,15 +86,18 @@ const PostSale = () => {
     }, [])
 
     const deliveryWaiter = async (id) => {
-        if (!order.payment_date) {
-            let aux = null;
-            aux = setInterval(async () => {
-                const { data } = await axios(`/order/${id}`);
-                if (data.payment_date) {
-                    setOrder(data);
-                    clearInterval(aux)
-                }
-            }, 1000);
+        try {
+            console.log('pidiendo orden nueva');
+            const { data } = await axios(`/order/${id}`);            
+            if (data.payment_date) {                
+                setOrder(data);
+            } else {
+                throw new Error('')
+            }
+        } catch (error) {
+            setTimeout(() => {
+                deliveryWaiter(id);
+            }, 2000);
         }
      };
 
