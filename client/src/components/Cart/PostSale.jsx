@@ -33,7 +33,7 @@ const PostSale = () => {
             console.log(data);
             setOrder(data);
 
-            if (!order.payment_date && status !== 'approved') deliveryWaiter(id);
+            if (!data.payment_date && status === 'approved') deliveryWaiter(id);
 
             let aux = [];
             data.products.forEach(e => {
@@ -90,6 +90,7 @@ const PostSale = () => {
             console.log('pidiendo orden nueva');
             const { data } = await axios(`/order/${id}`);            
             if (data.payment_date) {                
+                console.log('orden nueva recibida');
                 setOrder(data);
             } else {
                 throw new Error('')
@@ -120,7 +121,7 @@ const PostSale = () => {
                 : <div className='postsale-inner'>
                     <div className={`postsale-header ${background}`}>
                         <div className="postsale-img-container">
-                            <Carousel images={images} interval={2500} pausable ={false} width="15vw" height='15vw'/>
+                            <Carousel images={images} interval={2500} pausable ={false} width="25vh" height="25vh"/>
                             <div className='card-image-back-style'></div>
                         </div>                        
                     </div>
