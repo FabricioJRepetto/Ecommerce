@@ -1,13 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  loadUserData,
-  /* sessionActive,
-  loadUsername,
-  loadAvatar,
-  loadEmail,
-  loadRole, */
-} from "../../Redux/reducer/sessionSlice";
+import { loadUserData } from "../../Redux/reducer/sessionSlice";
 import { useNavigate } from "react-router-dom";
 import { resetCartSlice } from "../../Redux/reducer/cartSlice";
 
@@ -33,11 +26,6 @@ const Signout = () => {
         isGoogleUser: null,
       })
     );
-    /* dispatch(sessionActive(false));
-    dispatch(loadUsername(null));
-    dispatch(loadAvatar(null));
-    dispatch(loadEmail(null));
-    dispatch(loadRole(null)); */
     dispatch(resetCartSlice());
     navigate("/");
   };
@@ -48,11 +36,12 @@ const Signout = () => {
   }, []);
 
   return (
-    <>
-      <button onClick={signOut}>
-        <b>Salir</b>
-      </button>
-    </>
+    <p onClick={signOut}>Salir</p>
+    // <>
+    //   <button onClick={signOut}>
+    //     <b>Salir</b>
+    //   </button>
+    // </>
   );
 };
 

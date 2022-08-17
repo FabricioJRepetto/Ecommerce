@@ -1,8 +1,5 @@
 .fav-button-container  {
     z-index: 2;
-    /* position: absolute;
-    top: 1rem;
-    right: 1rem; */
     opacity: 0;
 }
 .visible {
@@ -13,13 +10,14 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background: rgba(255, 255, 255, .8);
     border: none; 
     cursor: pointer;
-    border-radius: 50%;
     position: relative;
+    background: none;
+    /* background: rgba(255, 255, 255, .8);
+    border-radius: 50%; */
 }
-.fav-button-svg  {
+.fav-button-svg {
     position: absolute;
     top: 0px;
 }

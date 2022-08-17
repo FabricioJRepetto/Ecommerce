@@ -34,7 +34,7 @@
     margin-top: 5px;
 }
 .minicard-height {
-    height: 330px;
+    height: 20.6rem;
 }
 
 .product-mini-card:hover p {
@@ -81,7 +81,7 @@
 .free-shipping {
     color: #39b54a;
     text-align: left;
-    height: 20px;
+    /* height: 20px; */
     font-weight: 400;
 }
 

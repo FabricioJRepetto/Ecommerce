@@ -5,7 +5,6 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useModal } from "../../hooks/useModal";
 import Modal from "../common/Modal";
-import Signout from "../Session/Signout";
 import { avatarResizer } from "../../helpers/resizer";
 import { avoidEnterSubmit } from "../../helpers/AvoidEnterSubmit";
 import { useNotification } from "../../hooks/useNotification";
@@ -23,6 +22,7 @@ import History from "./History";
 import "../../App.css";
 import "./Profile.css";
 import ChangePassword from "../Session/ChangePassword";
+import { useSignout } from "../../hooks/useSignout";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -33,6 +33,7 @@ const Profile = () => {
     useModal();
   const { section } = useParams();
   const dispatch = useDispatch();
+  const signOut = useSignout();
 
   const [render, setRender] = useState(section);
   const [address, setAddress] = useState([]);
@@ -171,7 +172,7 @@ const Profile = () => {
   };
 
   const emailRegex = /^[\w-.]+@([\w-])+[.\w-]*$/i;
-  const onlyLettersRegex = /^[a-zA-Z\s]*$/;
+  const onlyLettersRegex = /^[a-z A-Z .\s]*$/; //! a ver
 
   const forgotPassword = (email) => {
     console.log(email);
@@ -185,14 +186,18 @@ const Profile = () => {
 
   return (
     <div className="profile-container">
-      <h1>Mi perfil</h1>
+      {/* <div className="chromatic-text">
+        <p className="layer1">Mi perfil</p>
+        <p className="layer2">Mi perfil</p>
+        <p className="layer3">Mi perfil</p>
+      </div> */}
 
       <div className="profile-menu-container">
-        <NavLink to={"/profile/details"}>Detalles</NavLink>
-        <NavLink to={"/profile/orders"}>Mis compras</NavLink>
-        <NavLink to={"/profile/wishlist"}>Favoritos</NavLink>
-        <NavLink to={"/profile/history"}>Historial</NavLink>
-        <Signout />
+        <p onClick={()=>navigate("/profile/details")}>Detalles</p>
+        <p onClick={()=>navigate("/profile/orders")}>Ordenes</p>
+        <p onClick={()=>navigate("/profile/wishlist")}>Favoritos</p>
+        <p onClick={()=>navigate("/profile/history")}>Historial</p>
+        <p onClick={()=>signOut()}>Salir</p>        
       </div>
 
       <hr />
