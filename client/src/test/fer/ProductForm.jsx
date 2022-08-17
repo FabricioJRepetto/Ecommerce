@@ -209,20 +209,24 @@ const ProductForm = () => {
   }, []);
 
   const handleAddImg = (e) => {
+    console.log("entra");
     const fileListArrayImg = Array.from(e.target.files);
     validateImgs(fileListArrayImg, warnTimer, productImg);
     setProductImg([...productImg, ...fileListArrayImg]);
   };
   const handleRemoveImg = (i) => {
     setProductImg(productImg.filter((_, index) => index !== i));
-    mainImgIndex === i && setMainImgIndex(0);
-    mainImgIndex >= productImg.length + imgsToEdit.length - 1 &&
+    if (mainImgIndex === i) {
+      setMainImgIndex(0);
+    } else if (mainImgIndex >= productImg.length + imgsToEdit.length - 1) {
       setMainImgIndex(mainImgIndex - 1);
+    }
   };
   const handleRemoveImgToEdit = (_id, i) => {
     setImgsToEdit(imgsToEdit.filter((img) => img._id !== _id));
-    mainImgIndex === i && setMainImgIndex(0);
-    mainImgIndex >= productImg.length + imgsToEdit.length - 1 &&
+    if (mainImgIndex === i) {
+      setMainImgIndex(0);
+    } else if (mainImgIndex >= productImg.length + imgsToEdit.length - 1)
       setMainImgIndex(mainImgIndex - 1);
   };
 
@@ -391,7 +395,7 @@ const ProductForm = () => {
         </div>
 
         {/* CATEGORÍA */}
-        <>
+        <div className="form-categorypath-container">
           <SelectsNested
             setCategory={setCategory}
             category={category}
@@ -400,12 +404,14 @@ const ProductForm = () => {
           />
           <>
             {showCustomErrors && categoryError ? (
-              <p className="g-error-input">{categoryError}</p>
+              <p className="g-error-input form-category-error">
+                {categoryError}
+              </p>
             ) : (
               <p className="g-hidden-placeholder">hidden</p>
             )}
           </>
-        </>
+        </div>
 
         <div className="product-form-width">
           <div className="two-inputs-container">
@@ -458,7 +464,9 @@ const ProductForm = () => {
                 {!errors.price && (
                   <p className="g-hidden-placeholder">hidden</p>
                 )}
-                <p className="g-error-input">{errors.price?.message}</p>
+                <p className="g-error-input form-price-error">
+                  {errors.price?.message}
+                </p>
               </>
             </div>
           </div>
@@ -712,6 +720,85 @@ const ProductForm = () => {
             id="filesButton"
             className="hidden-button"
           />
+          {!warn.image && <p className="g-hidden-placeholder">hidden</p>}
+          {warn.image && (
+            <p className="g-warn-input warn-block">{warn.image}</p>
+          )}
+
+          <div className="form-all-images-container">
+            {imgsToEdit &&
+              React.Children.toArray(
+                imgsToEdit.map(({ imgURL, _id }, i) => (
+                  <div
+                    className={`form-img-product-container  ${
+                      mainImgIndex === i ? "main-image" : "not-main-image"
+                    }`}
+                  >
+                    {mainImgIndex === i && (
+                      <span className="main-image-text">PORTADA</span>
+                    )}
+                    <img
+                      src={imgURL}
+                      alt={`img_${_id}`}
+                      className="form-img-product"
+                      onClick={() => handleMainImg(i)}
+                    />
+                    <span className="form-delete-image">
+                      <DeleteIcon
+                        onClick={() => handleRemoveImgToEdit(_id, i)}
+                      />
+                    </span>
+                  </div>
+                ))
+              )}
+            {React.Children.toArray(
+              productImgUrls.map((imageURL, i) => (
+                <>
+                  {imgsToEdit ? (
+                    <div
+                      className={`form-img-product-container ${
+                        mainImgIndex - imgsToEdit.length === i
+                          ? "main-image"
+                          : "not-main-image"
+                      }`}
+                    >
+                      {mainImgIndex - imgsToEdit.length === i && (
+                        <span className="main-image-text">PORTADA</span>
+                      )}
+                      <img
+                        src={imageURL}
+                        alt={`img_${i}`}
+                        className="form-img-product"
+                        onClick={() => handleMainImg(imgsToEdit.length + i)}
+                      />
+                      <span className="form-delete-image">
+                        <DeleteIcon onClick={() => handleRemoveImg(i)} />
+                      </span>
+                    </div>
+                  ) : (
+                    <div
+                      className={`form-img-product-container ${
+                        mainImgIndex === i ? "main-image" : "not-main-image"
+                      }`}
+                    >
+                      {mainImgIndex === i && (
+                        <span className="main-image-text">PORTADA</span>
+                      )}
+                      <img
+                        src={imageURL}
+                        alt={`img_${i}`}
+                        className="form-img-product"
+                        onClick={() => handleMainImg(i)}
+                      />
+                      <span className="form-delete-image">
+                        <DeleteIcon onClick={() => handleRemoveImg(i)} />
+                      </span>
+                    </div>
+                  )}
+                </>
+              ))
+            )}
+          </div>
           <>
             {showCustomErrors && imagesError ? (
               <p className="g-error-input">{imagesError}</p>
@@ -719,72 +806,23 @@ const ProductForm = () => {
               <p className="g-hidden-placeholder">hidden</p>
             )}
           </>
-          {!warn.image && <p className="g-hidden-placeholder">hidden</p>}
-          {warn.image && (
-            <p className="g-warn-input warn-block">{warn.image}</p>
-          )}
-
-          <div>
-            {imgsToEdit &&
-              React.Children.toArray(
-                imgsToEdit.map(({ imgURL, _id }, i) => (
-                  <>
-                    {mainImgIndex === i && <span>PORTADA</span>}
-                    <img
-                      src={imgURL}
-                      alt={`img_${_id}`}
-                      className="imgs-product"
-                      onClick={() => handleMainImg(i)}
-                    />
-                    <span onClick={() => handleRemoveImgToEdit(_id, i)}>
-                      {" "}
-                      X
-                    </span>
-                  </>
-                ))
-              )}
-            {React.Children.toArray(
-              productImgUrls.map((imageURL, i) => (
-                <>
-                  {imgsToEdit ? (
-                    <>
-                      {mainImgIndex - imgsToEdit.length === i && (
-                        <span>PORTADA</span>
-                      )}
-                      <img
-                        src={imageURL}
-                        alt={`img_${i}`}
-                        className="imgs-product"
-                        onClick={() => handleMainImg(imgsToEdit.length + i)}
-                      />
-                      <span onClick={() => handleRemoveImg(i)}> X</span>
-                    </>
-                  ) : (
-                    <>
-                      {mainImgIndex === i && <span>PORTADA</span>}
-                      <img
-                        src={imageURL}
-                        alt={`img_${i}`}
-                        className="imgs-product"
-                        onClick={() => handleMainImg(i)}
-                      />
-                      <span onClick={() => handleRemoveImg(i)}> X</span>
-                    </>
-                  )}
-                </>
-              ))
-            )}
-          </div>
         </>
-        <input
-          type="submit"
-          value={productToEdit ? "Actualizar producto" : "Crear producto"}
-          className="g-white-button"
-        />
+
+        {/* FORM BUTTONS */}
+        <div className="product-form-width form-buttons-container">
+          <input
+            type="submit"
+            value={productToEdit ? "Actualizar" : "Publicar"}
+            className="g-white-button"
+          />
+          <input
+            type="button"
+            value="Resetear"
+            onClick={clearInputs}
+            className="g-white-button"
+          />
+        </div>
       </form>
-      <button onClick={clearInputs} className="g-white-button">
-        Limpiar
-      </button>
 
       <NavLink to={"/profile/details"}>
         {/* //! VOLVER A VER si está en CREAR enviar a /admin, en EDITAR a /admin/products */}
