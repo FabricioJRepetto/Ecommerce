@@ -46,6 +46,7 @@ const ProductForm = () => {
   const [imagesError, setImagesError] = useState(null);
   const [categoryError, setCategoryError] = useState(null);
   const [showCustomErrors, setShowCustomErrors] = useState(false);
+  const [focusFlag, setFocusFlag] = useState(false);
   let timeoutId = useRef();
   const navigate = useNavigate();
   const [notification] = useNotification();
@@ -71,6 +72,7 @@ const ProductForm = () => {
     setValue,
     formState: { errors },
     watch,
+    setFocus,
   } = useForm(formOptions);
 
   const {
@@ -100,7 +102,6 @@ const ProductForm = () => {
   };
 
   const handleRemoveFeature = (i) => {
-    console.log("index", i);
     if (featuresQuantity > 1) {
       removeFeature(i);
       setFeaturesQuantity(featuresQuantity - 1);
@@ -168,7 +169,6 @@ const ProductForm = () => {
   };
 
   useEffect(() => {
-    //! VOLVER A VER eliminar hasta linea 188
     /* setValue("brand", "marcaa1");
     setValue("name", "nombre1");
     setValue("price", 100);
@@ -200,13 +200,17 @@ const ProductForm = () => {
         })
         .catch((err) => console.log(err)); //!VOLVER A VER manejo de errores
     } else {
-      //! VOLVER A VER poner strings vacias en lineas 192 y 193
       appendAttribute({ name: "", value_name: "" });
       appendFeature({ value: "" });
+      setFocusFlag(true);
       /* appendAttribute({ name: "color", value_name: "amarillo" });
       appendFeature({ value: "piola" }); */
     } // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    focusFlag === true && setFocus("name");
+  }, [focusFlag]);
 
   const handleAddImg = (e) => {
     console.log("entra");
