@@ -4,9 +4,16 @@
 
 .category-selected-button {
   cursor: pointer;
-  font-weight: 300;
+  font-weight: 200;
+  display: inline-block;
 }
 
 .category-selected-last {
   font-weight: 500;
+  display: inline-block;
+}
+
+.select-nested-container {
+  margin: 1rem 0 0.3rem 0;
+  width: 100%;
 }

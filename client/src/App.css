@@ -180,10 +180,10 @@ input[type="checkbox"] {
   background-color: rgb(165, 165, 165);
 }
 .g-white-button:disabled {
-    background: rgb(0, 0, 0);
-    color: white;
-    border: white 1px solid;
-    cursor: default;
+  background: rgb(0, 0, 0);
+  color: white;
+  border: white 1px solid;
+  cursor: default;
 }
 .g-white-button a {
     color: #000;
@@ -213,6 +213,12 @@ input[type="checkbox"] {
   font-weight: 300;
   font-size: 0.8rem;
 }
+.g-warn-input {
+  text-align: left;
+  color: rgb(255, 187, 0);
+  font-weight: 300;
+  font-size: 0.8rem;
+}
 
 /* SVG BOTON */
 .g-icon-button {
@@ -226,11 +232,11 @@ input[type="checkbox"] {
 
 /* CARD IMAGE BACKGROUND */
 .card-image-back-style {
-    position: absolute;
-    background: rgb(255, 255, 255);
-    height: 130%;
-    width: 110%; /* 50% */
-    transform: translateX(0%) rotate(5deg); /* 59 */
-    /* outline-offset: 5px;
+  position: absolute;
+  background: rgb(255, 255, 255);
+  height: 130%;
+  width: 110%; /* 50% */
+  transform: translateX(0%) rotate(5deg); /* 59 */
+  /* outline-offset: 5px;
     outline: 1px solid rgb(255, 255, 255); */
 }

@@ -42,7 +42,7 @@ const SelectsNested = ({
   }, [categoryPath]);
 
   return (
-    <div>
+    <div className="select-nested-container">
       <span>
         <span onClick={handleRoot} className="category-selected-button">
           Categoría
@@ -56,19 +56,19 @@ const SelectsNested = ({
                 <span className="category-arrow-icon">
                   <ChevronRightIcon />
                 </span>
-                <span className="category-selected-last">{category.name} </span>
+                <div className="category-selected-last">{category.name} </div>
               </span>
             ) : (
               <span>
                 <span className="category-arrow-icon">
                   <ChevronRightIcon />
                 </span>
-                <span
+                <div
                   onClick={(e) => handleChange(e, index)}
                   className="category-selected-button"
                 >
                   {category.name}
-                </span>
+                </div>
               </span>
             )
           )
