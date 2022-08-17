@@ -35,6 +35,7 @@
   top: 1rem;
   right: 0.1rem;
   /* color: black; */
+  z-index: 2;
 }
 .main-image {
   border: 0.2rem solid red;
@@ -49,6 +50,25 @@
   color: black;
   top: -1rem;
   font-weight: 500;
+}
+.not-main-image-text-container {
+  height: 150px;
+  width: 150px;
+  position: absolute;
+  color: transparent;
+  z-index: 1;
+}
+.not-main-image-text-container:hover {
+  background-color: rgba(255, 0, 0, 0.8);
+  color: black;
+  font-weight: 500;
+}
+.not-main-image-text {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .form-categorypath-container {
@@ -80,9 +100,6 @@
   width: 600px;
 }
 
-/* .description-container {
-  margin-top: 2rem;
-} */
 .description-container > textarea {
   width: 100%;
   height: 5rem;
@@ -98,6 +115,15 @@
   mask-position: 0%;
   -webkit-mask-position: 0%;
   transition: mask-position 0.5s ease, -webkit-mask-position 0.5s ease;
+}
+.upload-images-disabled {
+  background: rgb(0, 0, 0);
+  color: white;
+  border: white 1px solid;
+  cursor: default;
+}
+.upload-images-disabled:active {
+  background: rgb(0, 0, 0);
 }
 .hidden-button {
   display: none;

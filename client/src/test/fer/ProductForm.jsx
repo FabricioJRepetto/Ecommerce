@@ -210,6 +210,7 @@ const ProductForm = () => {
 
   useEffect(() => {
     focusFlag === true && setFocus("name");
+    // eslint-disable-next-line
   }, [focusFlag]);
 
   const handleAddImg = (e) => {
@@ -712,7 +713,14 @@ const ProductForm = () => {
 
         {/* IMÁGENES */}
         <>
-          <label htmlFor="filesButton" className="g-white-button upload-images">
+          <label
+            htmlFor="filesButton"
+            className={`g-white-button ${
+              productImg?.length + imgsToEdit?.length >= 8
+                ? "upload-images-disabled"
+                : "upload-images"
+            }`}
+          >
             Subir imágenes
           </label>
           <input
@@ -722,6 +730,7 @@ const ProductForm = () => {
             accept="image/png, image/jpeg"
             onChange={handleAddImg}
             id="filesButton"
+            disabled={productImg?.length + imgsToEdit?.length >= 8}
             className="hidden-button"
           />
           {!warn.image && <p className="g-hidden-placeholder">hidden</p>}
@@ -738,14 +747,22 @@ const ProductForm = () => {
                       mainImgIndex === i ? "main-image" : "not-main-image"
                     }`}
                   >
-                    {mainImgIndex === i && (
+                    {mainImgIndex === i ? (
                       <span className="main-image-text">PORTADA</span>
+                    ) : (
+                      <span
+                        className="not-main-image-text-container"
+                        onClick={() => handleMainImg(i)}
+                      >
+                        <span className="not-main-image-text">
+                          Seleccionar portada
+                        </span>
+                      </span>
                     )}
                     <img
                       src={imgURL}
                       alt={`img_${_id}`}
                       className="form-img-product"
-                      onClick={() => handleMainImg(i)}
                     />
                     <span className="form-delete-image">
                       <DeleteIcon
@@ -766,14 +783,22 @@ const ProductForm = () => {
                           : "not-main-image"
                       }`}
                     >
-                      {mainImgIndex - imgsToEdit.length === i && (
+                      {mainImgIndex - imgsToEdit.length === i ? (
                         <span className="main-image-text">PORTADA</span>
+                      ) : (
+                        <span
+                          className="not-main-image-text-container"
+                          onClick={() => handleMainImg(imgsToEdit.length + i)}
+                        >
+                          <span className="not-main-image-text">
+                            Seleccionar portada
+                          </span>
+                        </span>
                       )}
                       <img
                         src={imageURL}
                         alt={`img_${i}`}
                         className="form-img-product"
-                        onClick={() => handleMainImg(imgsToEdit.length + i)}
                       />
                       <span className="form-delete-image">
                         <DeleteIcon onClick={() => handleRemoveImg(i)} />
@@ -785,14 +810,22 @@ const ProductForm = () => {
                         mainImgIndex === i ? "main-image" : "not-main-image"
                       }`}
                     >
-                      {mainImgIndex === i && (
+                      {mainImgIndex === i ? (
                         <span className="main-image-text">PORTADA</span>
+                      ) : (
+                        <span
+                          className="not-main-image-text-container"
+                          onClick={() => handleMainImg(i)}
+                        >
+                          <span className="not-main-image-text">
+                            Seleccionar portada
+                          </span>
+                        </span>
                       )}
                       <img
                         src={imageURL}
                         alt={`img_${i}`}
                         className="form-img-product"
-                        onClick={() => handleMainImg(i)}
                       />
                       <span className="form-delete-image">
                         <DeleteIcon onClick={() => handleRemoveImg(i)} />
