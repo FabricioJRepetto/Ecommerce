@@ -22,86 +22,86 @@ const PostSale = () => {
     let status = params.get('status') || 'cancelled';
     
     useEffect(() => {
-        // (async () => {            
-        //     const { data } = await axios(`/order/${id}`);
-        //     if (!data.products) {
-        //         console.error('no order');
-        //         navigate('/')
-        //     }
-        //     console.log(data);
-        //     setOrder(data);
-        //     setLoading(false);
+        (async () => {            
+            const { data } = await axios(`/order/${id}`);
+            if (!data.products) {
+                console.error('no order');
+                navigate('/')
+            }
+            console.log(data);
+            setOrder(data);
+            setLoading(false);
 
 
-        //     if (data && !data?.payment_date && status === 'approved') deliveryWaiter(id);
+            if (data && !data?.payment_date && status === 'approved') deliveryWaiter(id);
 
-        //     let aux = [];
-        //     data.products.forEach(e => {
-        //         aux.push({img: e.img, url: ''});
-        //     });
-        //     setImages(aux);
+            let aux = [];
+            data.products.forEach(e => {
+                aux.push({img: e.img, url: ''});
+            });
+            setImages(aux);
             
-        //     if (data && status === 'approved') {
-        //         console.log('llega aca approved #1');
-        //         //? background effect
-        //         setBackground('postsale-approved animation-start');
-        //         setTimeout(() => {
-        //             setBackground('postsale-approved animation-loop');                    
-        //         }, 6000);
-        //         console.log('llega aca approved #2');
+            if (data && status === 'approved') {
+                console.log('llega aca approved #1');
+                //? background effect
+                setBackground('postsale-approved animation-start');
+                setTimeout(() => {
+                    setBackground('postsale-approved animation-loop');                    
+                }, 6000);
+                console.log('llega aca approved #2');
 
-        //         if (data.order_type === 'cart') {
-        //         console.log('llega aca approved #3');
-        //             //? vaciar carrito
-        //             await axios.delete(`/cart/empty`);
+                if (data.order_type === 'cart') {
+                console.log('llega aca approved #3');
+                    //? vaciar carrito
+                    await axios.delete(`/cart/empty`);
                     
-        //             //? Vaciar el estado de redux onCart
-        //             dispatch(loadCart([]));
+                    //? Vaciar el estado de redux onCart
+                    dispatch(loadCart([]));
                     
-        //             //? Quitar last_order en el carrito de la db
-        //             await axios.put(`/cart/order/`);
-        //         } else {
-        //         console.log('llega aca approved #3b');
-        //             //? vaciar el buynow
-        //             axios.post(`/cart/`, {product_id: ''});
-        //         }
-        //         console.log('llega aca approved #4');
-        //         //? Cambiar el estado a 'processing'
-        //         await axios.put(`/order/${id}`,{
-        //             status: 'processing'
-        //         });
+                    //? Quitar last_order en el carrito de la db
+                    await axios.put(`/cart/order/`);
+                } else {
+                console.log('llega aca approved #3b');
+                    //? vaciar el buynow
+                    axios.post(`/cart/`, {product_id: ''});
+                }
+                console.log('llega aca approved #4');
+                //? Cambiar el estado a 'processing'
+                await axios.put(`/order/${id}`,{
+                    status: 'processing'
+                });
                 
-        //         console.log('llega aca approved #5');
-        //         //? en el back (choNotif):
-        //         // cambia orden a pagada
-        //         // resta unidades de cada stock
-        //     };
+                console.log('llega aca approved #5');
+                //? en el back (choNotif):
+                // cambia orden a pagada
+                // resta unidades de cada stock
+            };
 
-        //     if (data && status !== 'approved' && data.status !== 'approved') {
-        //         console.log('llega aca not approved');
+            if (data && status !== 'approved' && data.status !== 'approved') {
+                console.log('llega aca not approved');
 
-        //         setBackground('postsale-pending animation-start');
-        //         setTimeout(() => {
-        //             setBackground('postsale-pending animation-loop');                    
-        //         }, 6000);
-        //         //? si llega como null o cancelled cambiar estado a "pending"
-        //         if (status === 'null' || status === 'cancelled') {
-        //             console.log('llega aca cambiar estado');
+                setBackground('postsale-pending animation-start');
+                setTimeout(() => {
+                    setBackground('postsale-pending animation-loop');                    
+                }, 6000);
+                //? si llega como null o cancelled cambiar estado a "pending"
+                if (status === 'null' || status === 'cancelled') {
+                    console.log('llega aca cambiar estado');
 
-        //             await axios.put(`/order/${id}`,{
-        //                 status: 'pending'
-        //             });
-        //         } else {
-        //             console.log('llega aca cambiar estado');
-        //             //? cambiar estado de la orden si el status no es aprobado en ninguno de los casos
-        //             await axios.put(`/order/${id}`,{
-        //                 status
-        //             });
-        //         }
-        //     }
+                    await axios.put(`/order/${id}`,{
+                        status: 'pending'
+                    });
+                } else {
+                    console.log('llega aca cambiar estado');
+                    //? cambiar estado de la orden si el status no es aprobado en ninguno de los casos
+                    await axios.put(`/order/${id}`,{
+                        status
+                    });
+                }
+            }
 
-        // })()
-      // eslint-disable-next-line
+        })()
+      //eslint-disable-next-line
     }, [])
 
     const deliveryWaiter = async (id) => {
@@ -135,45 +135,43 @@ const PostSale = () => {
     
     return (
         <div className='postsale-container'>
-            {'cargando contenido'}
+            {(loading && !order)
+                ? <LoaderBars />
+                : <div className='postsale-inner'>
+                    <div className={`postsale-header ${background}`}>
+                        <div className="postsale-img-container">
+                            <Carousel images={images} interval={2500} pausable ={false} width="25vh" height="25vh"/>
+                            <div className='card-image-back-style'></div>
+                        </div>
+                    </div>
+                    <div className="postsale-details-container">
+                        {status === 'approved' && <div>
+                            <h1>YA CASI!</h1>
+                            <h3>{messageQuantity()}</h3>
+                            <h3>Ahora estamos preparando el envío.</h3>
+
+                            {order?.delivery_date 
+                                ? <DeliveryProgress order={order}/>
+                                : <Spinner />
+                            }
+                        </div>}
+                        {status !== 'approved' && <div>
+                            <h1>HUBO ALGÚN ERROR...</h1>
+                            <h3>Pero podés retomar el pago!</h3>
+                            <button className='g-white-button'>
+                                <a href={order?.payment_link}>Voy a intentarlo de nuevo</a>
+                            </button>
+                            <p className='postsale-text-margin'>También podés encontrar el link de pago en tu perfil para realizarlo más tarde.</p>
+                        </div>}
+                        <p>{`Estado del pago: ${status}`}</p>
+                        <p>Medio de pago: {order?.payment_source}</p>
+                        <p>Id de orden: <i>{order?.id}</i></p>
+                    </div>
+                </div>}
         </div>
     )
 }
 
 export default PostSale
 
-/* 
-{(loading && !order)
-    ? <LoaderBars />
-    : <div className='postsale-inner'>
-        <div className={`postsale-header ${background}`}>
-            <div className="postsale-img-container">
-                <Carousel images={images} interval={2500} pausable ={false} width="25vh" height="25vh"/>
-                <div className='card-image-back-style'></div>
-            </div>
-        </div>
-        <div className="postsale-details-container">
-            {status === 'approved' && <div>
-                <h1>YA CASI!</h1>
-                <h3>{messageQuantity()}</h3>
-                <h3>Ahora estamos preparando el envío.</h3>
 
-                {order?.delivery_date 
-                    ? <DeliveryProgress order={order}/>
-                    : <Spinner />
-                }
-            </div>}
-            {status !== 'approved' && <div>
-                <h1>HUBO ALGÚN ERROR...</h1>
-                <h3>Pero podés retomar el pago!</h3>
-                <button className='g-white-button'>
-                    <a href={order?.payment_link}>Voy a intentarlo de nuevo</a>
-                </button>
-                <p className='postsale-text-margin'>También podés encontrar el link de pago en tu perfil para realizarlo más tarde.</p>
-            </div>}
-            <p>{`Estado del pago: ${status}`}</p>
-            <p>Medio de pago: {order?.payment_source}</p>
-            <p>Id de orden: <i>{order?.id}</i></p>
-        </div>
-    </div>}
- */

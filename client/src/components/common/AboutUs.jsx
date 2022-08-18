@@ -13,7 +13,7 @@ const AboutUs = () => {
               alt="avatar"
             />
           </div>
-          <h3> Fabricio Repetto</h3>
+          <h3> Rosky #1</h3>
           <ul>
             <li>
               <a

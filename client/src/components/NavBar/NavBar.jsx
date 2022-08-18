@@ -124,39 +124,31 @@ const NavBar = () => {
 
         <div className="navbar-central-subsection">
             
-            {/* <div className="navbar-central-options">
+            <div className="navbar-central-options">
                 <div className="chromatic-text" onClick={()=>navigate("products")}>                    
-                    <p>Provider Store</p>
-                    <p>Provider Store</p>
-                    <p>Provider Store</p>
+                    <p className="layer1">Provider Store</p>
+                    <p className="layer2">Provider Store</p>
+                    <p className="layer3">Provider Store</p>
                 </div>
             </div>
 
             <div className="navbar-central-options">
                 <div className="chromatic-text" onClick={()=>navigate("about")}>
-                    <p>About Us</p>
-                    <p>About Us</p>
-                    <p>About Us</p>
-                </div>
-            </div>
-          
-            <div className="navbar-central-options">                
-                <div className="chromatic-text" onClick={()=>navigate("/")}>
-                    <p>Contact</p>
-                    <p>Contact</p>
-                    <p>Contact</p>
+                    <p className="layer1">About Us</p>
+                    <p className="layer2">About Us</p>
+                    <p className="layer3">About Us</p>
                 </div>
             </div>
 
             <div className="navbar-central-options">                
                 <div className="chromatic-text" onClick={()=>navigate("admin")}>
-                    <p>ADMIN</p>
-                    <p>ADMIN</p>
-                    <p>ADMIN</p>
+                    <p className="layer1">ADMIN</p>
+                    <p className="layer2">ADMIN</p>
+                    <p className="layer3">ADMIN</p>
                 </div>
-            </div> */}
+            </div>
 
-             <NavLink to={"products"}>
+             {/* <NavLink to={"products"}>
                 <p className="provider-store">Provider Store</p>
             </NavLink>
 
@@ -170,7 +162,7 @@ const NavBar = () => {
 
             <NavLink to={"admin"}>
                 <p>ADMIN</p>
-            </NavLink>
+            </NavLink> */}
 
         </div>
       </div>
