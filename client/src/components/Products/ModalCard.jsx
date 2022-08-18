@@ -50,10 +50,7 @@ const ModalCard = ({ productData, fav, close }) => {
 
         <div className="card-details-container">
 
-          <p className="modal-card-name-container modalcard-mrgn"
-            onClick={() => openProduct(prodId)}>
-            {name}
-          </p>
+          <p className="modal-card-name-container modalcard-mrgn">{name}</p>
 
           <div className="card-price-container modalcard-mrgn">
             <div className="modal-card-price-section">
