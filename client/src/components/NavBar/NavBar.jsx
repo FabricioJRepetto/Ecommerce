@@ -13,14 +13,13 @@ import { CloseIcon, SearchIcon } from "@chakra-ui/icons";
 import { ReactComponent as Cart } from "../../assets/svg/cart.svg";
 import { ReactComponent as Fav } from "../../assets/svg/fav.svg";
 import { ReactComponent as Avatar } from "../../assets/svg/avatar.svg";
-import Signout from "../Session/Signout";
 import WishlistModal from "../common/WishlistModal";
 import { avatarResizer } from "../../helpers/resizer";
 import { PowerGlitch } from "powerglitch";
-import Signupin from "../Session/Signupin";
 import "./NavBar.css";
 import "../../App.css";
 import { useSignout } from "../../hooks/useSignout";
+import ChromaticText from "../common/ChromaticText";
 
 const NavBar = () => {
   const { session, username, avatar } = useSelector(
@@ -123,46 +122,29 @@ const NavBar = () => {
         </form>
 
         <div className="navbar-central-subsection">
-            
             <div className="navbar-central-options">
-                <div className="chromatic-text" onClick={()=>navigate("products")}>                    
-                    <p className="layer1">Provider Store</p>
-                    <p className="layer2">Provider Store</p>
-                    <p className="layer3">Provider Store</p>
-                </div>
+                <ChromaticText text={'Provider Store'}
+                    route={'products'}
+                    size={'1rem'}
+                    movementAfter={'1rem 0 0 0'}
+                    />
             </div>
 
             <div className="navbar-central-options">
-                <div className="chromatic-text" onClick={()=>navigate("about")}>
-                    <p className="layer1">About Us</p>
-                    <p className="layer2">About Us</p>
-                    <p className="layer3">About Us</p>
-                </div>
+                <ChromaticText text={'About Us'}
+                    route={'about'}
+                    size={'1rem'}
+                    movementAfter={'1rem 0 0 0'}
+                    />
             </div>
 
-            <div className="navbar-central-options">                
-                <div className="chromatic-text" onClick={()=>navigate("admin")}>
-                    <p className="layer1">ADMIN</p>
-                    <p className="layer2">ADMIN</p>
-                    <p className="layer3">ADMIN</p>
-                </div>
+            <div className="navbar-central-options">
+                <ChromaticText text={'ADMIN'}
+                    route={'admin'}
+                    size={'1rem'}
+                    movementAfter={'1rem 0 0 0'}
+                    />
             </div>
-
-             {/* <NavLink to={"products"}>
-                <p className="provider-store">Provider Store</p>
-            </NavLink>
-
-            <NavLink to={"about"}>
-                <p>About Us</p>
-            </NavLink>
-
-            <NavLink to={"/"}>
-                <p>Contact</p>
-            </NavLink>
-
-            <NavLink to={"admin"}>
-                <p>ADMIN</p>
-            </NavLink> */}
 
         </div>
       </div>
@@ -196,58 +178,34 @@ const NavBar = () => {
                     <div className="navbar-modal-menu-container"
                       onClick={() => setProfileModal(false)}>
 
-                        <div className="profile-modal-option pointer" 
-                            onClick={()=>navigate('/profile/details')}>
-                            <div className="chromatic-text">
-                                <p className="layer1">Mi perfil</p>
-                                <p className="layer2">Mi perfil</p>
-                                <p className="layer3">Mi perfil</p>
-                            </div>
+                        <div className="profile-modal-option pointer">
+                            <ChromaticText text='Mi perfil'
+                                route='/profile/details'/>
                         </div>
 
-                        <div className="profile-modal-option pointer" 
-                            onClick={()=>navigate('/profile/address')}>
-                            <div className="chromatic-text">
-                                <p className="layer1">Direcciones</p>
-                                <p className="layer2">Direcciones</p>
-                                <p className="layer3">Direcciones</p>
-                            </div>
+                        <div className="profile-modal-option pointer">                            
+                            <ChromaticText text='Direcciones'
+                                route='/profile/address'/>
                         </div>
 
-                        <div className="profile-modal-option pointer" 
-                            onClick={()=>navigate('/profile/wishlist')}>
-                            <div className="chromatic-text">
-                                <p className="layer1">Favoritos</p>
-                                <p className="layer2">Favoritos</p>
-                                <p className="layer3">Favoritos</p>
-                            </div>
+                        <div className="profile-modal-option pointer">                            
+                            <ChromaticText text='Favoritos'
+                                route='/profile/wishlist'/>
                         </div>
 
-                        <div className="profile-modal-option pointer" 
-                            onClick={()=>navigate('/profile/orders')}>
-                            <div className="chromatic-text">
-                                <p className="layer1">Ordenes</p>
-                                <p className="layer2">Ordenes</p>
-                                <p className="layer3">Ordenes</p>
-                            </div>
+                        <div className="profile-modal-option pointer">
+                            <ChromaticText text='Ordenes'
+                                route='/profile/orders'/>
                         </div>
 
-                        <div className="profile-modal-option pointer" 
-                            onClick={()=>navigate('/profile/history')}>
-                            <div className="chromatic-text">
-                                <p className="layer1">Historial</p>
-                                <p className="layer2">Historial</p>
-                                <p className="layer3">Historial</p>
-                            </div>
+                        <div className="profile-modal-option pointer">
+                            <ChromaticText text='Historial'
+                                route='/profile/history'/>
                         </div>
                         
                         <div className="profile-modal-option logout pointer"
                             onClick={()=>signOut()}>                            
-                            <div className="chromatic-text">
-                                <p className="layer1">Salir</p>
-                                <p className="layer2">Salir</p>
-                                <p className="layer3">Salir</p>
-                            </div>
+                            <ChromaticText text='Salir'/>                            
                         </div>
 
                     </div>
