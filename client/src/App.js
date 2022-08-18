@@ -45,7 +45,6 @@ import UsersAdmin from "./test/fer/UsersAdmin";
 import AboutUs from "./components/common/AboutUs";
 import LoaderBars from "./components/common/LoaderBars";
 import ForgotPassword from "./components/Session/ForgotPassword";
-import ChangePassword from "./components/Session/ChangePassword";
 
 function App() {
     const dispatch = useDispatch();
@@ -90,19 +89,6 @@ function App() {
                             isGoogleUser,
                         })
                     );
-                    /* dispatch(sessionActive(true));
-                                        dispatch(loadUsername(username || name));
-                                        dispatch(
-                                            loadFullName({
-                                                first: firstName || false,
-                                                last: lastName || false,
-                                            })
-                                        );
-                                        dispatch(loadAvatar(avatar ? avatar : false));
-                                        dispatch(loadEmail(googleEmail || email));
-                                        dispatch(loadId(_id));
-                                        dispatch(loadRole(role));
-                                        dispatch(loadGoogleUser(isGoogleUser)); */
 
                     const { data: cart } = await axios(`/cart`);
                     dispatch(loadCart(cart.id_list || []));
@@ -112,6 +98,7 @@ function App() {
                 }
             } catch (error) {
                 window.localStorage.removeItem("loggedTokenEcommerce");
+                console.log('redirección desde app.js');
                 navigate("/");
             } finally {
                 dispatch(loadingUserData(false));
@@ -147,7 +134,7 @@ function App() {
                         <Route path="/results" element={<Results />} />
                         <Route path="/sales" element={<SalesResults />} />
                         <Route path="/signin" element={<Signupin />} />
-                        <Route path="/signout" element={<Signout />} />
+                        {/* <Route path="/signout" element={<Signout />} /> */}
                         <Route path="/forgotPassword" element={<ForgotPassword />} />
                         <Route
                             path="/reset/:userId/:resetToken"

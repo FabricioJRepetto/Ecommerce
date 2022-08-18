@@ -183,11 +183,9 @@ const NavBar = () => {
             </NavLink>
           ) : (
             <>
-              <div
-                className="navbar-profile-button"
+              <div className="navbar-profile-button"
                 onMouseEnter={() => setProfileModal(true)}
-                onMouseLeave={() => setProfileModal(false)}
-              >
+                onMouseLeave={() => setProfileModal(false)}>
                 {avatar ? (
                   <div className="navbar-avatar">
                     <img
@@ -199,7 +197,7 @@ const NavBar = () => {
                 ) : (
                   <Avatar className="navbar-avatar-svg" />
                 )}
-                <p>{username || "Profile"}</p>
+                <p className="navbar-username">{username || "Profile"}</p>
 
                 <div className="navBar-modal-container">
                   <div className={`navbar-modal ${profileModal && "visible"}`}>
@@ -250,8 +248,6 @@ const NavBar = () => {
                                 <p className="layer3">Historial</p>
                             </div>
                         </div>
-
-                        <div className="testing"></div>
                         
                         <div className="profile-modal-option logout pointer"
                             onClick={()=>signOut()}>                            

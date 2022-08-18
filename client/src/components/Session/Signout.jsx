@@ -36,12 +36,11 @@ const Signout = () => {
   }, []);
 
   return (
-    <p onClick={signOut}>Salir</p>
-    // <>
-    //   <button onClick={signOut}>
-    //     <b>Salir</b>
-    //   </button>
-    // </>
+    <>
+      <button onClick={signOut}>
+        <b>Salir</b>
+      </button>
+    </>
   );
 };
 
