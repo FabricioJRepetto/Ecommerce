@@ -50,7 +50,7 @@ const Card = ({
             className={` ${special && "special-frame-left"}`}
         ></div> */}
 
-      {special && <i className="provider-store special-card">PROVIDER</i>}
+      {special && <i className="provider-text special-card">PROVIDER</i>}
 
       <div
         key={prodId}

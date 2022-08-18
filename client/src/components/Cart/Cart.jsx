@@ -279,7 +279,7 @@ const Cart = () => {
                                                                             margin: '1rem', 
                                                                             size: '1.2' }}/>
                                                                 <div>
-                                                                    <p className="provider-store">Envío Flash</p>
+                                                                    <p className="provider-text">Envío Flash</p>
                                                                     <p>{`llega mañana`}</p>
                                                                 </div>
                                                             </div>

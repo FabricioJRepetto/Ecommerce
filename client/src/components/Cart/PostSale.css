@@ -16,8 +16,8 @@
     justify-content: center;
 }
 .postsale-img-container {
-    height: 15vw;
-    width: 15vw;
+    height: 25vh;
+    width: 25vh;
     display: flex;
     justify-content: center;
     align-items: center;

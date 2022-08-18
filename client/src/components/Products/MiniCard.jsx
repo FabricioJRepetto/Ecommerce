@@ -102,7 +102,7 @@ const MiniCard = ({
                 {free_shipping && "envío gratis"}
               </div>
 
-              <div className={`minicard-prod-name-container mc-mrgn `}>
+              <div className={`minicard-prod-name-container mc-mrgn`}>
                 <div className={`minicard-prod-name ${visible && "visible"}`}>
                   {name}
                 </div>

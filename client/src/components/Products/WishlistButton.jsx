@@ -1,12 +1,14 @@
 import React from "react";
-import { ReactComponent as Fav } from "../../assets/svg/fav.svg";
 import axios from "axios";
 import { loadWishlist } from "../../Redux/reducer/cartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useNotification } from "../../hooks/useNotification";
 import "./WishlistButton.css";
 
-export const WishlistButton = ({ prodId: id, size = 30, fav, visible, position = true }) => {
+import { ReactComponent as Fav } from "../../assets/svg/fav.svg";
+import { DeleteIcon, StarIcon } from "@chakra-ui/icons";
+
+export const WishlistButton = ({ prodId: id, size = 30, fav, visible, position = true, modal = false }) => {
   const dispatch = useDispatch();
   const { wishlist } = useSelector((state) => state.cartReducer);
   const { session } = useSelector((state) => state.sessionReducer);
@@ -16,12 +18,10 @@ export const WishlistButton = ({ prodId: id, size = 30, fav, visible, position =
     if (session) {
       if (!wishlist.includes(id)) {
         const { data } = await axios.post(`/wishlist/${id}`);
-        console.log(data);
         dispatch(loadWishlist(data.list?.products));
         notification(data.message, "/profile/wishlist", "success");
       } else {
         const { data } = await axios.delete(`/wishlist/${id}`);
-        console.log(data);
         dispatch(loadWishlist(data.list?.products));
         notification(data.message, "", "warning");
       }
@@ -37,14 +37,12 @@ export const WishlistButton = ({ prodId: id, size = 30, fav, visible, position =
   return (
     <div className={`fav-button-container ${(fav || visible) && "visible"}`} 
         style={position ? {position: 'absolute', top: '1rem', right: '1rem'} : {}}>
-      <button
-        style={{ height: size, width: size }}
-        onClick={() => addToWish(id)}
-      >
-        <Fav
-          className={`fav-button-svg ${fav && "faved"}`}
-          style={{ transform: "scale(.6)" }}
-        />
+      <button style={{ height: size, width: size }}
+        onClick={() => addToWish(id)}>            
+            {!modal && <StarIcon color={fav ? '#ffd000' : '#ffffff7f'}/>}
+            {modal && <DeleteIcon color='#ffffff'/>}
+        {/* <Fav className={`fav-button-svg ${fav && "faved"}`}
+          style={{ transform: "scale(.6)" }}/> */}
       </button>
     </div>
   );

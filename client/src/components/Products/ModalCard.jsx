@@ -24,38 +24,38 @@ const ModalCard = ({ productData, fav, close }) => {
     on_sale,
   } = productData;
 
-  const first = (id) => { 
+  const openProduct = (id) => { 
         navigate(`/details/${id}`);
         close(false);
    }
 
   return (
-    <div
-      key={prodId}
-      onMouseEnter={() => setVisible(true)}
-      onMouseLeave={() => setVisible(false)}
-      className="product-modal-card"
-    >
-      {session && <Fav visible={visible} fav={fav} prodId={prodId} />}
+    <div key={prodId}
+        onClick={() => openProduct(prodId)}
+        onMouseEnter={() => setVisible(true)}
+        onMouseLeave={() => setVisible(false)}
+        className="product-modal-card pointer">
+        
+        {session && visible &&
+            <div className="modal-card-wishlist-button-container">
+                <Fav visible={visible} fav={fav} prodId={prodId} modal position={false}/>
+            </div>}
 
-      <div className="card-main-container">
-        <div
-          onClick={() => first(prodId)}
-          className="modal-card-img-container pointer"
-        >
-          <img src={resizer(img, 96)} alt="product" />
+      <div className={`card-main-container ${visible && 'card-hover'}`}>
+        <div 
+          className="modal-card-img-container">
+            <img src={resizer(img, 96)} alt="product" />
+            <div className="card-image-back-style"></div>
         </div>
 
         <div className="card-details-container">
 
-          <p
-            className="card-name pointer c-mrgn"
-            onClick={() => first(prodId)}
-          >
+          <p className="modal-card-name-container modalcard-mrgn"
+            onClick={() => openProduct(prodId)}>
             {name}
           </p>
 
-          <div className="card-price-container c-mrgn">
+          <div className="card-price-container modalcard-mrgn">
             <div className="modal-card-price-section">
               <div className="modalcard-price-section-inner">
                 <p>${priceFormat(on_sale ? sale_price : price).int}</p>
@@ -70,7 +70,7 @@ const ModalCard = ({ productData, fav, close }) => {
             </div>
           </div>
 
-          <div className="free-shipping c-mrgn">
+          <div className="free-shipping modalcard-mrgn">
             {free_shipping && "envío gratis"}
           </div>         
         </div>

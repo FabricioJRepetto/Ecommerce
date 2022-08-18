@@ -20,6 +20,7 @@ import { PowerGlitch } from "powerglitch";
 import Signupin from "../Session/Signupin";
 import "./NavBar.css";
 import "../../App.css";
+import { useSignout } from "../../hooks/useSignout";
 
 const NavBar = () => {
   const { session, username, avatar } = useSelector(
@@ -31,6 +32,7 @@ const NavBar = () => {
   const [profileModal, setProfileModal] = useState(false);
   const [wishModal, setWishModal] = useState(false);
   const [productToSearch, setProductToSearch] = useState("");
+  const signOut = useSignout();
   const eldiv = useRef(null);
 
   useEffect(() => {
@@ -88,13 +90,7 @@ const NavBar = () => {
 
   return (
     <div className="navBar">
-      <div className="glitch" onClick={logoClick}>
-        {/* <img
-          onClick={logoClick}
-          src={require("../../assets/provider-logo3.png")}
-          alt="logo"
-          className="logo glitch"
-        /> */}
+      <div className="glitch" onClick={logoClick}>       
       </div>
 
       <div className="navbar-central-section">
@@ -127,21 +123,47 @@ const NavBar = () => {
         </form>
 
         <div className="navbar-central-subsection">
-          <NavLink to={"products"}>
-            <p className="provider-store">Provider Store</p>
-          </NavLink>
+            
+            <div className="navbar-central-options">
+                <div className="chromatic-text" onClick={()=>navigate("products")}>                    
+                    <p className="layer1">Provider Store</p>
+                    <p className="layer2">Provider Store</p>
+                    <p className="layer3">Provider Store</p>
+                </div>
+            </div>
 
-          <NavLink to={"about"}>
-            <p>About Us</p>
-          </NavLink>
+            <div className="navbar-central-options">
+                <div className="chromatic-text" onClick={()=>navigate("about")}>
+                    <p className="layer1">About Us</p>
+                    <p className="layer2">About Us</p>
+                    <p className="layer3">About Us</p>
+                </div>
+            </div>
 
-          <NavLink to={"/"}>
-            <p>Contact</p>
-          </NavLink>
+            <div className="navbar-central-options">                
+                <div className="chromatic-text" onClick={()=>navigate("admin")}>
+                    <p className="layer1">ADMIN</p>
+                    <p className="layer2">ADMIN</p>
+                    <p className="layer3">ADMIN</p>
+                </div>
+            </div>
 
-          <NavLink to={"admin"}>
-            <p>ADMIN</p>
-          </NavLink>
+             {/* <NavLink to={"products"}>
+                <p className="provider-store">Provider Store</p>
+            </NavLink>
+
+            <NavLink to={"about"}>
+                <p>About Us</p>
+            </NavLink>
+
+            <NavLink to={"/"}>
+                <p>Contact</p>
+            </NavLink>
+
+            <NavLink to={"admin"}>
+                <p>ADMIN</p>
+            </NavLink> */}
+
         </div>
       </div>
 
@@ -153,11 +175,9 @@ const NavBar = () => {
             </NavLink>
           ) : (
             <>
-              <div
-                className="navbar-profile-button"
+              <div className="navbar-profile-button"
                 onMouseEnter={() => setProfileModal(true)}
-                onMouseLeave={() => setProfileModal(false)}
-              >
+                onMouseLeave={() => setProfileModal(false)}>
                 {avatar ? (
                   <div className="navbar-avatar">
                     <img
@@ -169,52 +189,67 @@ const NavBar = () => {
                 ) : (
                   <Avatar className="navbar-avatar-svg" />
                 )}
-                <p>{username || "Profile"}</p>
+                <p className="navbar-username">{username || "Profile"}</p>
 
                 <div className="navBar-modal-container">
                   <div className={`navbar-modal ${profileModal && "visible"}`}>
-                    <div
-                      className="navbar-modal-menu-container"
-                      onClick={() => setProfileModal(false)}
-                    >
-                      <NavLink
-                        to={"/profile/details"}
-                        className="profile-modal-option"
-                      >
-                        Profile
-                      </NavLink>
+                    <div className="navbar-modal-menu-container"
+                      onClick={() => setProfileModal(false)}>
 
-                      <NavLink
-                        to={"/profile/address"}
-                        className="profile-modal-option"
-                      >
-                        Address
-                      </NavLink>
+                        <div className="profile-modal-option pointer" 
+                            onClick={()=>navigate('/profile/details')}>
+                            <div className="chromatic-text">
+                                <p className="layer1">Mi perfil</p>
+                                <p className="layer2">Mi perfil</p>
+                                <p className="layer3">Mi perfil</p>
+                            </div>
+                        </div>
 
-                      <NavLink
-                        to={"/profile/wishlist"}
-                        className="profile-modal-option"
-                      >
-                        Wishlist
-                      </NavLink>
+                        <div className="profile-modal-option pointer" 
+                            onClick={()=>navigate('/profile/address')}>
+                            <div className="chromatic-text">
+                                <p className="layer1">Direcciones</p>
+                                <p className="layer2">Direcciones</p>
+                                <p className="layer3">Direcciones</p>
+                            </div>
+                        </div>
 
-                      <NavLink
-                        to={"/profile/orders"}
-                        className="profile-modal-option"
-                      >
-                        Orders
-                      </NavLink>
+                        <div className="profile-modal-option pointer" 
+                            onClick={()=>navigate('/profile/wishlist')}>
+                            <div className="chromatic-text">
+                                <p className="layer1">Favoritos</p>
+                                <p className="layer2">Favoritos</p>
+                                <p className="layer3">Favoritos</p>
+                            </div>
+                        </div>
 
-                      <NavLink
-                        to={"/profile/history"}
-                        className="profile-modal-option"
-                      >
-                        History
-                      </NavLink>
+                        <div className="profile-modal-option pointer" 
+                            onClick={()=>navigate('/profile/orders')}>
+                            <div className="chromatic-text">
+                                <p className="layer1">Ordenes</p>
+                                <p className="layer2">Ordenes</p>
+                                <p className="layer3">Ordenes</p>
+                            </div>
+                        </div>
 
-                      <div className="profile-modal-option-button">
-                        <Signout />
-                      </div>
+                        <div className="profile-modal-option pointer" 
+                            onClick={()=>navigate('/profile/history')}>
+                            <div className="chromatic-text">
+                                <p className="layer1">Historial</p>
+                                <p className="layer2">Historial</p>
+                                <p className="layer3">Historial</p>
+                            </div>
+                        </div>
+                        
+                        <div className="profile-modal-option logout pointer"
+                            onClick={()=>signOut()}>                            
+                            <div className="chromatic-text">
+                                <p className="layer1">Salir</p>
+                                <p className="layer2">Salir</p>
+                                <p className="layer3">Salir</p>
+                            </div>
+                        </div>
+
                     </div>
                   </div>
                 </div>

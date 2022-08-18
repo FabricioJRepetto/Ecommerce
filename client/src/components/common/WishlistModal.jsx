@@ -22,7 +22,7 @@ const WishlistModal = ({ close }) => {
     }, [wishlist]);    
 
     return (
-        <div className='card-modal-container'>
+        <div className={`card-modal-container ${!loading ? 'wishlist-modal-loaded' : ''}`}>
             {loading
             ? <div className='modal-card-loading'>
                 <Spinner />
@@ -44,7 +44,7 @@ const WishlistModal = ({ close }) => {
                 <div 
                     onClick={() => [navigate('/profile/wishlist'), close()]}
                     className='modal-card-all-favs pointer'
-                    >Ver todos los fav</div>
+                    >Ver todos los favoritos</div>
             </div>}
         </div>
     )
