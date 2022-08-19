@@ -14,7 +14,8 @@ export const WishlistButton = ({ prodId: id, size = 30, fav, visible, position =
   const { session } = useSelector((state) => state.sessionReducer);
   const [notification] = useNotification();
 
-  const addToWish = async (id) => {
+  const addToWish = async (e,id) => {
+    e.stopPropagation()
     if (session) {
       if (!wishlist.includes(id)) {
         const { data } = await axios.post(`/wishlist/${id}`);
@@ -38,7 +39,7 @@ export const WishlistButton = ({ prodId: id, size = 30, fav, visible, position =
     <div className={`fav-button-container ${(fav || visible) && "visible"}`} 
         style={position ? {position: 'absolute', top: '1rem', right: '1rem'} : {}}>
       <button style={{ height: size, width: size }}
-        onClick={() => addToWish(id)}>            
+        onClick={(e) => addToWish(e,id)}>            
             {!modal && <StarIcon color={fav ? '#ffd000' : '#ffffff7f'}/>}
             {modal && <DeleteIcon color='#ffffff'/>}
         {/* <Fav className={`fav-button-svg ${fav && "faved"}`}

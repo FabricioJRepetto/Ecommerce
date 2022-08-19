@@ -111,40 +111,4 @@
 }
 
 
-/* CHROMATIC TEXT CSS TEST */
-.chromatic-text {
-    display: flex;
-    align-items: center;
-    height: 100%;
-    width: 100%;
-    font-weight: 600;
-    position: relative;
-}
-.chromatic-text p {
-    position: absolute;
-    --delay: 0.15;
-    --n: 10;
-    --p: 3;
-    --k: calc(var(--i) / 3);
-    background: hsl(calc(var(--k) * -360), 100%, 50%);
-    /* background: hsl(calc(var(--k) * 360), 100%, 50%); */
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    mix-blend-mode: screen;
-    transform: translateX(0%);
-    transition: transform .2s cubic-bezier(0.22, 1, 0.36, 1);
-    transition-delay: calc(((var(--delay) / 3) * var(--i)) * 1s);
-}
-.chromatic-text:hover p {
-    transform: translateX(8%);
-}
-.layer1:nth-of-type(n) {
-    --i: 1;
-}
-.layer2:nth-of-type(n) {
-    --i: 2;
-}
-.layer3:nth-of-type(n) {
-    --i: 3;
-}
+
