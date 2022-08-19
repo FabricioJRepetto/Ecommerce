@@ -1,11 +1,16 @@
 import React from "react";
 import { Link, Outlet } from "react-router-dom";
+import { useNotification } from "../../hooks/useNotification";
 import { useVerifyAdmin } from "../../hooks/useVerifyAdmin";
 
 const AdminLayout = () => {
+    const [notification] = useNotification();
   useVerifyAdmin();
   return (
     <div>
+        <button onClick={()=> notification('test notif error', '', 'error')}>Error</button>
+        <button onClick={()=> notification('test notif warning', '', 'warning')}>Warning</button>
+        <button onClick={()=> notification('test notif success', '', 'success')}>Success</button>
       <nav>
         <Link to="/admin/metrics">
           <h3>Métricas</h3>

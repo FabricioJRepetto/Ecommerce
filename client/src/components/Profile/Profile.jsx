@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useModal } from "../../hooks/useModal";
@@ -8,29 +8,22 @@ import Modal from "../common/Modal";
 import { avatarResizer } from "../../helpers/resizer";
 import { avoidEnterSubmit } from "../../helpers/AvoidEnterSubmit";
 import { useNotification } from "../../hooks/useNotification";
-import {
-  loadUserData,
-  /* loadAvatar,
-  loadFullName,
-  loadUsername, */
-} from "../../Redux/reducer/sessionSlice";
+import { loadUserData } from "../../Redux/reducer/sessionSlice";
 import { CloseIcon } from "@chakra-ui/icons";
 import Orders from "./Orders";
 import Address from "./Address";
 import Wishlist from "./Wishlist";
 import History from "./History";
-import "../../App.css";
-import "./Profile.css";
 import ChangePassword from "../Session/ChangePassword";
 import { useSignout } from "../../hooks/useSignout";
+import "../../App.css";
+import "./Profile.css";
 
 const Profile = () => {
   const navigate = useNavigate();
   const [notification] = useNotification();
   const [isOpenAvatar, openAvatar, closeAvatar] = useModal();
   const [isOpenDetails, openDetails, closeDetails] = useModal();
-  const [isOpenForgotPassword, openForgotPassword, closeForgotPassword] =
-    useModal();
   const { section } = useParams();
   const dispatch = useDispatch();
   const signOut = useSignout();
@@ -48,7 +41,6 @@ const Profile = () => {
     full_name,
     avatar,
     email,
-    emailVerified,
     id,
     role,
     isGoogleUser,
@@ -57,11 +49,11 @@ const Profile = () => {
   const [newAvatar, setNewAvatar] = useState();
   const [avatarPreview, setAvatarPreview] = useState();
 
-  const {
-    register: registerForgot,
-    handleSubmit: handleSubmitForgot,
-    formState: { errors: errorsForgot },
-  } = useForm();
+//   const {
+//     register: registerForgot,
+//     handleSubmit: handleSubmitForgot,
+//     formState: { errors: errorsForgot },
+//   } = useForm();
 
   const {
     register: registerEditDetails,
@@ -171,27 +163,10 @@ const Profile = () => {
     }
   };
 
-  const emailRegex = /^[\w-.]+@([\w-])+[.\w-]*$/i;
-  const onlyLettersRegex = /^[a-z A-Z .\s]*$/; //! a ver
-
-  const forgotPassword = (email) => {
-    console.log(email);
-    axios
-      .put("/user/forgotPassword", email)
-      .then(({ data }) => {
-        console.log(data);
-      })
-      .catch((err) => console.log(err)); //! VOLVER A VER manejo de errores
-  };
-
+  const onlyLettersRegex = /^([a-zñ .]){2,}$/gi;
+ 
   return (
     <div className="profile-container">
-      {/* <div className="chromatic-text">
-        <p className="layer1">Mi perfil</p>
-        <p className="layer2">Mi perfil</p>
-        <p className="layer3">Mi perfil</p>
-      </div> */}
-
       <div className="profile-menu-container">
         <p onClick={()=>navigate("/profile/details")}>Detalles</p>
         <p onClick={()=>navigate("/profile/orders")}>Ordenes</p>
