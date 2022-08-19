@@ -11,6 +11,12 @@
   /* font-weight: bold; */
 }
 @font-face {
+  font-family: "HelveticaNeueLTPro-BdOu";
+  src: local("HelveticaNeueLTPro-BdOu"),
+    url("./assets/fonts/HelveticaNeueLTProBdOu.otf") format("truetype");
+  font-weight: bold;
+}
+@font-face {
   font-family: "HelveticaNeueLTPro-Blk";
   src: local("HelveticaNeueLTPro-Blk"),
     url("./assets/fonts/HelveticaNeueLTProBlk.otf") format("truetype");

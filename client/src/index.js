@@ -8,6 +8,7 @@ import axios from "axios";
 import { BACK_URL } from "./constants";
 import "./assets/fonts/HelveticaNeueLTProBd.otf";
 import "./assets/fonts/HelveticaNeueLTProBdIt.otf";
+import "./assets/fonts/HelveticaNeueLTProBdOu.otf";
 import "./assets/fonts/HelveticaNeueLTProBlk.otf";
 import "./assets/fonts/HelveticaNeueLTProBlkIt.otf";
 import "./assets/fonts/HelveticaNeueLTProHv.otf";

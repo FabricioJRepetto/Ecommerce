@@ -47,6 +47,7 @@ const ProductForm = () => {
   const [categoryError, setCategoryError] = useState(null);
   const [showCustomErrors, setShowCustomErrors] = useState(false);
   const [focusFlag, setFocusFlag] = useState(false);
+  const [waitingResponse, setWaitingResponse] = useState(false);
   let timeoutId = useRef();
   const navigate = useNavigate();
   const [notification] = useNotification();
@@ -169,7 +170,7 @@ const ProductForm = () => {
   };
 
   useEffect(() => {
-    /* setValue("brand", "marcaa1");
+    setValue("brand", "marcaa1");
     setValue("name", "nombre1");
     setValue("price", 100);
     setValue("available_quantity", 10);
@@ -190,7 +191,7 @@ const ProductForm = () => {
         id: "MLA86379",
         name: "Alarmas para Motos",
       },
-    ]); */
+    ]);
     if (idProductToEdit) {
       axios(`/product/${idProductToEdit}`)
         .then(({ data }) => {
@@ -200,12 +201,14 @@ const ProductForm = () => {
         })
         .catch((err) => console.log(err)); //!VOLVER A VER manejo de errores
     } else {
-      appendAttribute({ name: "", value_name: "" });
-      appendFeature({ value: "" });
+      appendAttribute({ name: "color", value_name: "amarillo" });
+      appendFeature({ value: "piola" });
+      /* appendAttribute({ name: "", value_name: "" });
+      appendFeature({ value: "" }); */
       setFocusFlag(true);
-      /* appendAttribute({ name: "color", value_name: "amarillo" });
-      appendFeature({ value: "piola" }); */
-    } // eslint-disable-next-line
+    }
+    openCreateProduct();
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -263,6 +266,7 @@ const ProductForm = () => {
 
     //! VOLVER A VER poner disabled el boton de submit al hacer la petición
     try {
+      setWaitingResponse(true);
       if (productToEdit) {
         let data = { ...productData, imgsToEdit, mainImgIndex };
         formData.append("data", JSON.stringify(data));
@@ -292,6 +296,8 @@ const ProductForm = () => {
       notification("Hubo un error, vuelve a intentar", "", "error");
       //!VOLVER A VER manejo de errores
       console.log(error);
+    } finally {
+      setWaitingResponse(false);
     }
   };
 
@@ -310,7 +316,6 @@ const ProductForm = () => {
   };
 
   const handleModalCreateProduct = (value) => {
-    //! VOLVER A VER poner notif por encima de modal
     if (value) {
       clearInputs();
       closeCreateProduct();
@@ -716,7 +721,7 @@ const ProductForm = () => {
           <label
             htmlFor="filesButton"
             className={`g-white-button ${
-              productImg?.length + imgsToEdit?.length >= 8
+              productImg?.length + imgsToEdit?.length >= 8 || waitingResponse
                 ? "upload-images-disabled"
                 : "upload-images"
             }`}
@@ -730,7 +735,9 @@ const ProductForm = () => {
             accept="image/png, image/jpeg"
             onChange={handleAddImg}
             id="filesButton"
-            disabled={productImg?.length + imgsToEdit?.length >= 8}
+            disabled={
+              productImg?.length + imgsToEdit?.length >= 8 || waitingResponse
+            }
             className="hidden-button"
           />
           {!warn.image && <p className="g-hidden-placeholder">hidden</p>}
@@ -851,12 +858,14 @@ const ProductForm = () => {
             type="submit"
             value={productToEdit ? "Actualizar" : "Publicar"}
             className="g-white-button"
+            disabled={waitingResponse}
           />
           <input
             type="button"
             value="Resetear"
             onClick={clearInputs}
             className="g-white-button"
+            disabled={waitingResponse}
           />
         </div>
       </form>

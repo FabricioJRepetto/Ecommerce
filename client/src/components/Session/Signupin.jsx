@@ -159,12 +159,12 @@ const Signupin = () => {
   }, [session]);
 
   useEffect(() => {
-    // session && navigate("/");
-    // setValueSignin("email", "fer.eze.ram@gmail.com");
-    // setValueSignin("password", "fer.eze.ram@gmail.com");
-    // setValueSignup("email", "fer.eze.ram@gmail.com");
-    // setValueSignup("password", "fer.eze.ram@gmail.com");
-    // setValueSignup("repPassword", "fer.eze.ram@gmail.com");
+    //session && navigate("/");
+    setValueSignin("email", "fer.eze.ram@gmail.com");
+    setValueSignin("password", "fer.eze.ram@gmail.com");
+    setValueSignup("email", "fer.eze.ram@gmail.com");
+    setValueSignup("password", "fer.eze.ram@gmail.com");
+    setValueSignup("repPassword", "fer.eze.ram@gmail.com");
     // eslint-disable-next-line
   }, []);
 
