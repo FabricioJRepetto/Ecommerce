@@ -1,4 +1,48 @@
+@font-face {
+  font-family: "HelveticaNeueLTPro-Bd";
+  src: local("HelveticaNeueLTPro-Bd"),
+    url("./assets/fonts/HelveticaNeueLTProBd.otf") format("truetype");
+  /* font-weight: bold; */
+}
+@font-face {
+  font-family: "HelveticaNeueLTPro-BdIt";
+  src: local("HelveticaNeueLTPro-BdIt"),
+    url("./assets/fonts/HelveticaNeueLTProBdIt.otf") format("truetype");
+  /* font-weight: bold; */
+}
+@font-face {
+  font-family: "HelveticaNeueLTPro-Blk";
+  src: local("HelveticaNeueLTPro-Blk"),
+    url("./assets/fonts/HelveticaNeueLTProBlk.otf") format("truetype");
+  /* font-weight: bold; */
+}
+@font-face {
+  font-family: "HelveticaNeueLTPro-BlkIt";
+  src: local("HelveticaNeueLTPro-BlkIt"),
+    url("./assets/fonts/HelveticaNeueLTProBlkIt.otf") format("truetype");
+  /* font-weight: bold; */
+}
+@font-face {
+  font-family: "HelveticaNeueLTPro-Hv";
+  src: local("HelveticaNeueLTPro-Hv"),
+    url("./assets/fonts/HelveticaNeueLTProHv.otf") format("truetype");
+  /* font-weight: bold; */
+}
+@font-face {
+  font-family: "HelveticaNeueLTPro-HvIt";
+  src: local("HelveticaNeueLTPro-HvIt"),
+    url("./assets/fonts/HelveticaNeueLTProHvIt.otf") format("truetype");
+  /* font-weight: bold; */
+}
+@font-face {
+  font-family: "HelveticaNeueLTPro-Roman";
+  src: local("HelveticaNeueLTPro-Roman"),
+    url("./assets/fonts/HelveticaNeueLTProRoman.otf") format("truetype");
+  /* font-weight: bold; */
+}
+
 /* Normalize 8.0.1 */
+
 html {
   line-height: 1.15;
   -webkit-text-size-adjust: 100%;
@@ -240,11 +284,11 @@ code {
 @keyframes ripple-effect {
   0% {
     transform: scale(1);
-    opacity: .25;
+    opacity: 0.25;
   }
   80% {
     transform: scale(800);
-    opacity: .1;
+    opacity: 0.1;
   }
   100% {
     transform: scale(1000);
@@ -256,7 +300,7 @@ code {
 @keyframes background-start {
   0% {
     background-position: 0% 0%;
-  }  
+  }
   100% {
     background-position: 0% 100%;
   }
@@ -267,7 +311,7 @@ code {
   }
   50% {
     background-position: 0% 50%;
-  }  
+  }
   0% {
     background-position: 0% 100%;
   }
