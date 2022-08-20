@@ -4,6 +4,7 @@
     right: 0;
     height: 80px;
     width: 250px;
+    z-index: 13;
 }
 
 .notification-container {

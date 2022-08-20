@@ -3,7 +3,6 @@ import { useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { close } from '../../Redux/reducer/notificationSlice';
-import ChromaticText from './ChromaticText';
 import './Notification.css';
 
 import { ReactComponent as LinkIcon } from "../../assets/svg/link.svg";
@@ -44,14 +43,14 @@ const Notification = () => {
         }
      }
 
-    const closeNotification = () => {
-        url && navigate(url)
+    const closeNotification = (click) => {
+        url && click && navigate(url)
         dispatch(close());
         clearTimeout(timeout.current);
      };
 
     return (
-        <div className={`notification-area ${isOpen && ''}`}>
+        <div className={`notification-area`} style={{pointerEvents: isOpen ? 'all' : 'none'}}>
 
            <div className='chromatic-container'>
                 <div className={`notification-color-placeholder ${isOpen && `notification-border-${color}`}`}></div>
@@ -64,7 +63,7 @@ const Notification = () => {
            </div>            
 
             <div className={`notification-container ${isOpen && 'notif-open'}`}
-                onClick={() => closeNotification()}>
+                onClick={() => closeNotification(true)}>
                 <div className={`notification-inner`}>
                     {type !== 'error' && <div className={`notification-timer ${isOpen && 'timer-active'}`}></div>}
                     {url && <LinkIcon className='link-svg' />}
