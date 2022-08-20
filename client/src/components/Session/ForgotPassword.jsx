@@ -108,10 +108,12 @@ const ForgotPassword = () => {
                 value="Enviar email"
                 className="g-white-button"
               />
-
-              <span className="g-navlink-white-button navlink-container">
-                <NavLink to={`${session ? "/" : "/signin"}`}>Cancelar</NavLink>
-              </span>
+              <NavLink to={`${session ? "/" : "/signin"}`}>
+                <span className="g-back-button g-text-button">
+                  <ArrowBackIcon />
+                  {"   regresar"}
+                </span>
+              </NavLink>
             </div>
           </form>
         )}

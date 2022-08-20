@@ -83,12 +83,14 @@ const ChangePassword = () => {
                 type="text"
                 placeholder="Contraseña"
                 autoComplete="off"
-                className={
+                className={`input-two-icons ${
                   watch("oldPassword") === undefined ||
                   watch("oldPassword") === ""
                     ? ""
-                    : `${viewPassword.oldPassword ? "" : "g-password"}`
-                }
+                    : viewPassword.oldPassword
+                    ? ""
+                    : "g-password"
+                }`}
                 {...register("oldPassword", {
                   required: true,
                 })}
@@ -149,11 +151,13 @@ const ChangePassword = () => {
                 type="text"
                 placeholder="Nueva contraseña"
                 autoComplete="off"
-                className={
+                className={`input-two-icons ${
                   watch("password") === undefined || watch("password") === ""
                     ? ""
-                    : `${viewPassword.password ? "" : "g-password"}`
-                }
+                    : viewPassword.password
+                    ? ""
+                    : "g-password"
+                }`}
                 {...register("password", {
                   required: true,
                   minLength: 6,
@@ -208,12 +212,14 @@ const ChangePassword = () => {
                 type="text"
                 placeholder="Repite la contraseña"
                 autoComplete="off"
-                className={
+                className={`input-two-icons ${
                   watch("repPassword") === undefined ||
                   watch("repPassword") === ""
                     ? ""
-                    : `${viewPassword.repPassword ? "" : "g-password"}`
-                }
+                    : viewPassword.repPassword
+                    ? ""
+                    : "g-password"
+                }`}
                 {...register("repPassword", {
                   required: true,
                   validate: (repPassword) => {

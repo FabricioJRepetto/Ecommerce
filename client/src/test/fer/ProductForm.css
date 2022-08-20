@@ -103,8 +103,9 @@
 .description-container > textarea {
   width: 100%;
   height: 5rem;
-  resize: none;
+  resize: vertical;
   margin: 0.1rem 0 0.3rem 0;
+  padding-bottom: 2rem;
 }
 
 .upload-images {
@@ -226,4 +227,14 @@
 }
 .form-buttons-container > input {
   width: 45%;
+}
+.create-another-container {
+  display: flex;
+  flex-direction: column;
+}
+.create-another-buttons-container {
+  display: flex;
+}
+.create-another-buttons-container > button {
+  margin: 1rem;
 }

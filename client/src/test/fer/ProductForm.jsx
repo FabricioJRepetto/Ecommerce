@@ -206,9 +206,7 @@ const ProductForm = () => {
       /* appendAttribute({ name: "", value_name: "" });
       appendFeature({ value: "" }); */
       setFocusFlag(true);
-    }
-    openCreateProduct();
-    // eslint-disable-next-line
+    } // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -700,7 +698,7 @@ const ProductForm = () => {
               {watch("description") === "" ||
               watch("description") === undefined ? null : (
                 <div
-                  /* className="g-input-icon-container g-input-x-button" */
+                  className="g-input-icon-container g-input-x-button"
                   onClick={() => setValue("description", "")}
                 >
                   <CloseIcon />
@@ -883,21 +881,25 @@ const ProductForm = () => {
         closeModal={closeCreateProduct}
         type="warn"
       >
-        <p>¿Crear otro producto?</p>
-        <button
-          type="button"
-          onClick={() => handleModalCreateProduct(true)}
-          className="g-white-button"
-        >
-          Aceptar
-        </button>
-        <button
-          type="button"
-          onClick={() => handleModalCreateProduct(false)}
-          className="g-white-button"
-        >
-          Cancelar
-        </button>
+        <div className="create-another-container">
+          <p>¿Crear otro producto?</p>
+          <div className="create-another-buttons-container">
+            <button
+              type="button"
+              onClick={() => handleModalCreateProduct(true)}
+              className="g-white-button"
+            >
+              Aceptar
+            </button>
+            <button
+              type="button"
+              onClick={() => handleModalCreateProduct(false)}
+              className="g-white-button"
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
       </Modal>
     </div>
   );

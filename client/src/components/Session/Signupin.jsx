@@ -231,12 +231,14 @@ const Signupin = () => {
                 type="text"
                 placeholder="Contraseña"
                 autoComplete="off"
-                className={
+                className={`input-two-icons ${
                   watchSignin("password") === undefined ||
                   watchSignin("password") === ""
                     ? ""
-                    : `${viewPassword.signin ? "" : "g-password"}`
-                }
+                    : viewPassword.signin
+                    ? ""
+                    : "g-password"
+                }`}
                 {...registerSignin("password", {
                   required: true,
                 })}
@@ -352,12 +354,14 @@ const Signupin = () => {
                 type="text"
                 placeholder="Contraseña"
                 autoComplete="off"
-                className={
+                className={`input-two-icons ${
                   watchSignup("password") === undefined ||
                   watchSignup("password") === ""
                     ? ""
-                    : `${viewPassword.signup ? "" : "g-password"}`
-                }
+                    : viewPassword.signup
+                    ? ""
+                    : "g-password"
+                }`}
                 {...registerSignup("password", {
                   required: true,
                   minLength: 6,
@@ -412,12 +416,14 @@ const Signupin = () => {
                 type="text"
                 placeholder="Repite tu contraseña"
                 autoComplete="off"
-                className={
+                className={`input-two-icons ${
                   watchSignup("repPassword") === undefined ||
                   watchSignup("repPassword") === ""
                     ? ""
-                    : `${viewPassword.signupRep ? "" : "g-password"}`
-                }
+                    : viewPassword.signupRep
+                    ? ""
+                    : "g-password"
+                }`}
                 {...registerSignup("repPassword", {
                   required: true,
                   validate: (repPassword) => {
