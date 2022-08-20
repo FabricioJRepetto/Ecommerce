@@ -182,6 +182,7 @@
 
 .shipping-title {
   font-weight: 300;
+  margin-left: 0.5rem;
 }
 
 .form-shipping-container {
@@ -189,6 +190,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding-top: 1.2rem;
 }
 .form-shipping-input {
   display: flex;
@@ -201,9 +203,7 @@
   margin-top: 1rem;
 }
 .form-shipping-input > input {
-  height: 100%;
-  width: fit-content;
-  margin-right: 1rem;
+  display: none;
 }
 .form-shipping-input > span {
   width: fit-content;
@@ -211,6 +211,7 @@
 .form-container-border {
   border-top: 2px solid white;
   margin-top: 1.5rem;
+  padding-top: 1rem;
 }
 .form-attribute-container {
   display: flex;
@@ -237,4 +238,7 @@
 }
 .create-another-buttons-container > button {
   margin: 1rem;
+}
+.form-add-input {
+  margin-top: 0.5rem;
 }
