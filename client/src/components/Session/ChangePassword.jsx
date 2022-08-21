@@ -83,7 +83,7 @@ const ChangePassword = () => {
                 type="text"
                 placeholder="Contraseña"
                 autoComplete="off"
-                className={`input-two-icons ${
+                className={`g-input-two-icons ${
                   watch("oldPassword") === undefined ||
                   watch("oldPassword") === ""
                     ? ""
@@ -151,7 +151,7 @@ const ChangePassword = () => {
                 type="text"
                 placeholder="Nueva contraseña"
                 autoComplete="off"
-                className={`input-two-icons ${
+                className={`g-input-two-icons ${
                   watch("password") === undefined || watch("password") === ""
                     ? ""
                     : viewPassword.password
@@ -212,7 +212,7 @@ const ChangePassword = () => {
                 type="text"
                 placeholder="Repite la contraseña"
                 autoComplete="off"
-                className={`input-two-icons ${
+                className={`g-input-two-icons ${
                   watch("repPassword") === undefined ||
                   watch("repPassword") === ""
                     ? ""

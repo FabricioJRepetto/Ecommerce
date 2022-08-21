@@ -1,47 +1,84 @@
-.navBar {
+.navbar {
+  width: 100%;
   display: flex;
   justify-content: center;
-  align-items: center;
-  padding: 10px;
-  margin-bottom: 20px;
+  align-items: flex-start;
+  position: fixed;
+  top: 0;
+  z-index: 5; /* //! VOLVER A VER ver z-index */
+  background-color: black;
 }
-.navBar a {
+.navbar-dumb-hidden {
+  height: 6rem;
+  background-color: black;
+}
+.navbar a {
   color: rgb(255, 255, 255);
   font-size: 1rem;
   font-weight: 400;
   text-decoration: none;
-  margin: 0 1vw 0 0;
-  padding-top: 4px;
+}
+
+.navbar-main-sections {
+  display: flex;
+  padding: 0.3rem 0;
+  z-index: 7; /* //! VOLVER A VER ver z-index */
+  background-color: #000000;
+  position: relative;
 }
 
 .navbar-central-section {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  min-width: 10vw;
-  max-width: 50vw;
+  /* justify-content: flex-start; */
+  /* min-width: 30vw; */
+  /* width: 40vw; */
+  margin-top: 0.2rem;
+  align-items: flex-start;
 }
-.navbar-central-subsection {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  height: 4rem;
+.navbar-central-section > form {
+  /*  width: 35vw; */
 }
-.navbar-central-options {
-    display: flex;
-    white-space: nowrap;
-    align-content: center;
-    padding-left: 20px;
-    height: 2rem;
-    cursor: pointer;
+@media (max-width: 1240px) {
+  .navbar-username {
+    display: none;
+  }
 }
 
-.navBar input[type="text"] {
+.navbar-central-subsection {
+  display: flex;
+  align-items: flex-start;
+  height: 3rem;
+  margin-bottom: 0.5rem;
+
+  position: fixed;
+  top: 3rem;
+  transition: 0.3s ease-in-out;
+  width: 100%;
+}
+.hidden-box {
+  height: 4rem;
+  width: 100%;
+  /* position: fixed; */
+  top: -1rem;
+  transition: 0.3s ease-in-out;
+}
+
+.navbar-central-options {
+  display: flex;
+  white-space: nowrap;
+  align-content: center;
+  padding-left: 20px;
+  height: 2rem;
+  cursor: pointer;
+}
+
+.navbar input[type="text"] {
   border: none;
   width: 600px;
-  padding: 0 1rem;
+  padding-left: 1rem;
 }
-.navBar input[type="text"]:focus {
+.navbar input[type="text"]:focus {
   outline: none;
 }
 
@@ -49,50 +86,41 @@
   width: 200px;
   position: relative;
 }
-.navBar .logo {
-  height: 80px;
-  position: absolute;
-  top: -55px;
-  left: -120px;
-  cursor: pointer;
-}
 
 .navbar-profile-container {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-end;
+  align-items: flex-end;
+  justify-content: flex-start;
   height: 99px;
   width: 400px;
 }
 .navbar-profile-section {
-  /* width: 200px; */
-  height: 4rem;
+  /* width: 35vw; */
   display: flex;
   flex-direction: row;
-  align-items: center;
+  justify-content: flex-start;
   margin: 0;
 }
 .navbar-profile-button {
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-right: 15px;
+  margin: 0 1rem;
 }
 .navbar-avatar {
   height: 1.5rem;
   width: 1.5rem;
   border-radius: 50%;
   overflow: hidden;
-  margin-right: 1rem;
+  margin: 0 1rem;
 }
 .navbar-avatar img {
   height: 100%;
   width: 100%;
 }
 .navbar-avatar-svg {
-  transform: scale(0.7);
-  margin-right: 0.5rem;
+  margin-left: 1rem;
 }
 .navbar-avatar-svg path {
   fill: white;
@@ -105,15 +133,22 @@
   fill: white;
 }
 .navbar-username {
-    font-weight: 400;
+  font-weight: 400;
 }
 
 .cart-icon-container {
   position: relative;
-  margin: 0px;
+  height: 2.5rem;
+  width: 2.5rem;
+  margin: 0 1rem;
 }
 .cart-icon {
-  transform: scale(0.5);
+  transform: scale(0.6);
+  position: absolute;
+  height: 2.7rem;
+  width: 2.7rem;
+  right: 0;
+  top: -0.2rem;
 }
 .cart-icon path {
   fill: white;
@@ -123,11 +158,11 @@
   width: 2rem;
   text-align: left;
   position: absolute;
-  top: 5px;
-  right: -20px;
+  top: -0.2rem;
+  right: -1.5rem;
 }
 
-.navBar-modal-container {
+.navbar-modal-container {
   position: absolute;
   height: 50px;
   text-align: left;
@@ -139,11 +174,15 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  height: 50px;
-  width: 64px;
+  /* height: 50px; */
+  width: 2rem;
   position: relative;
+  margin: 0 1rem;
 }
-.navBar-modal-container-w {
+.navbar-wishlist-button svg {
+  transform: scale(1);
+}
+.navbar-modal-container-w {
   position: absolute;
   height: 100%;
   width: 100%;
@@ -153,27 +192,32 @@
 }
 .navbar-modal-menu-container {
   display: flex;
-  flex-direction: column;  
-  padding-top: .75rem;
+  flex-direction: column;
+  padding-top: 0.75rem;
 }
 .navbar-modal-menu-container a {
-    font-weight: 200;
+  font-weight: 200;
 }
 
 .profile-modal-option {
-    display: flex;
-    align-items: center;
-    padding-left: 20px;
-    width: 100%;
-    height: 2rem;
-    color: white;
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+  width: 100%;
+  height: 2rem;
+  color: white;
 }
 .profile-modal-option:hover {
-  background: linear-gradient(90deg, rgba(34,34,34,1) 0%, rgba(17,17,17,1) 24%, rgba(34,34,34,1) 100%);
+  background: linear-gradient(
+    90deg,
+    rgba(34, 34, 34, 1) 0%,
+    rgba(17, 17, 17, 1) 24%,
+    rgba(34, 34, 34, 1) 100%
+  );
 }
 .logout {
-    margin-top: 2rem;
-    border-top: 1px solid rgb(115, 115, 115);
+  margin-top: 2rem;
+  border-top: 1px solid rgb(115, 115, 115);
 }
 
 .navbar-modal {
@@ -188,15 +232,15 @@
   z-index: 12;
 }
 .navbar-modal-w {
-    visibility: hidden;
-    position: relative;
-    left: calc(50% - 300px);
-    bottom: -50px;
-    height: fit-content;
-    width: 400px;
-    border: 1px solid rgb(115, 115, 115);
-    background: rgb(33, 33, 33);
-    z-index: 12;
+  visibility: hidden;
+  position: relative;
+  left: calc(50% - 300px);
+  bottom: -50px;
+  height: fit-content;
+  width: 400px;
+  border: 1px solid rgb(115, 115, 115);
+  background: rgb(33, 33, 33);
+  z-index: 12;
 }
 
 .provider-text {
@@ -216,7 +260,16 @@
 }
 
 .glitch {
-  width: 200px;
-  height: 100px;
+  width: 20vw;
+  height: 6rem;
   cursor: pointer;
+  padding-right: 2rem;
+  padding-left: 2rem;
+  margin-right: 1rem;
+  margin-left: 2rem;
+  transition: 0.3s ease-in-out;
+}
+.little-glitch {
+  height: 3rem;
+  transition: 0.3s ease-in-out;
 }

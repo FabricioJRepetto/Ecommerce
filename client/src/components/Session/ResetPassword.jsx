@@ -132,7 +132,7 @@ const ResetPassword = () => {
                 type="text"
                 placeholder="Contraseña"
                 autoComplete="off"
-                className={`input-two-icons ${
+                className={`g-input-two-icons ${
                   watch("password") === undefined || watch("password") === ""
                     ? ""
                     : viewPassword.password
@@ -193,7 +193,7 @@ const ResetPassword = () => {
                 type="text"
                 placeholder="Repite tu contraseña"
                 autoComplete="off"
-                className={`input-two-icons ${
+                className={`g-input-two-icons ${
                   watch("repPassword") === undefined ||
                   watch("repPassword") === ""
                     ? ""

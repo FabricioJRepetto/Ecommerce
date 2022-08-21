@@ -231,7 +231,7 @@ const Signupin = () => {
                 type="text"
                 placeholder="Contraseña"
                 autoComplete="off"
-                className={`input-two-icons ${
+                className={`g-input-two-icons ${
                   watchSignin("password") === undefined ||
                   watchSignin("password") === ""
                     ? ""
@@ -354,7 +354,7 @@ const Signupin = () => {
                 type="text"
                 placeholder="Contraseña"
                 autoComplete="off"
-                className={`input-two-icons ${
+                className={`g-input-two-icons ${
                   watchSignup("password") === undefined ||
                   watchSignup("password") === ""
                     ? ""
@@ -416,7 +416,7 @@ const Signupin = () => {
                 type="text"
                 placeholder="Repite tu contraseña"
                 autoComplete="off"
-                className={`input-two-icons ${
+                className={`g-input-two-icons ${
                   watchSignup("repPassword") === undefined ||
                   watchSignup("repPassword") === ""
                     ? ""

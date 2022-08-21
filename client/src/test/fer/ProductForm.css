@@ -106,6 +106,8 @@
   resize: vertical;
   margin: 0.1rem 0 0.3rem 0;
   padding-bottom: 2rem;
+  padding-left: 0.5rem;
+  padding-top: 0.2rem;
 }
 
 .upload-images {

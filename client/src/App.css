@@ -109,10 +109,11 @@ input[type="checkbox"] {
   margin: 0.1rem 0 0.3rem 0;
   display: flex;
   padding-right: 2rem;
+  padding-left: 0.5rem;
 }
 
 /* INPUT DOS ICONOS */
-input.input-two-icons {
+input.g-input-two-icons {
   padding-right: 3.5rem;
 }
 
