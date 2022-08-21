@@ -1,4 +1,5 @@
 .App {
+  font-family: "HelveticaNeueLTPro-Roman";
   text-align: center;
   background: #000000;
   color: rgb(255, 255, 255);
@@ -107,6 +108,13 @@ input[type="checkbox"] {
   font-weight: 300;
   margin: 0.1rem 0 0.3rem 0;
   display: flex;
+  padding-right: 2rem;
+  padding-left: 0.5rem;
+}
+
+/* INPUT DOS ICONOS */
+input.g-input-two-icons {
+  padding-right: 3.5rem;
 }
 
 /* BLUR PASSWORD */
@@ -115,6 +123,7 @@ input[type="checkbox"] {
   color: transparent;
   font-weight: 500;
   letter-spacing: -1px;
+  padding-right: 3.5rem;
 }
 .g-input-with-button .g-password::selection {
   text-shadow: 0 0 0.4rem black;
@@ -186,7 +195,7 @@ input[type="checkbox"] {
   cursor: default;
 }
 .g-white-button a {
-    color: #000;
+  color: #000;
 }
 
 /* BOTON DE TEXTO */

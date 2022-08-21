@@ -383,9 +383,6 @@ const Products = () => {
                   ))
                 )
               )}
-              <br />
-              <hr />
-              <br />
             </div>
 
             <h3>RANGO DE PRECIOS</h3>
@@ -422,7 +419,6 @@ const Products = () => {
               )}
             </>
 
-            <br />
             <label>
               <input
                 type="checkbox"

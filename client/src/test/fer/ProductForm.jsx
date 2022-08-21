@@ -25,6 +25,7 @@ import {
 } from "@chakra-ui/icons";
 import "./ProductForm.css";
 import "../../App.css";
+import Checkbox from "../../components/common/Checkbox";
 
 const ProductForm = () => {
   const [featuresQuantity, setFeaturesQuantity] = useState(1);
@@ -47,6 +48,7 @@ const ProductForm = () => {
   const [categoryError, setCategoryError] = useState(null);
   const [showCustomErrors, setShowCustomErrors] = useState(false);
   const [focusFlag, setFocusFlag] = useState(false);
+  const [waitingResponse, setWaitingResponse] = useState(false);
   let timeoutId = useRef();
   const navigate = useNavigate();
   const [notification] = useNotification();
@@ -169,7 +171,7 @@ const ProductForm = () => {
   };
 
   useEffect(() => {
-    /* setValue("brand", "marcaa1");
+    setValue("brand", "marcaa1");
     setValue("name", "nombre1");
     setValue("price", 100);
     setValue("available_quantity", 10);
@@ -190,7 +192,7 @@ const ProductForm = () => {
         id: "MLA86379",
         name: "Alarmas para Motos",
       },
-    ]); */
+    ]);
     if (idProductToEdit) {
       axios(`/product/${idProductToEdit}`)
         .then(({ data }) => {
@@ -200,16 +202,20 @@ const ProductForm = () => {
         })
         .catch((err) => console.log(err)); //!VOLVER A VER manejo de errores
     } else {
-      appendAttribute({ name: "", value_name: "" });
-      appendFeature({ value: "" });
-      setFocusFlag(true);
-      /* appendAttribute({ name: "color", value_name: "amarillo" });
-      appendFeature({ value: "piola" }); */
-    } // eslint-disable-next-line
+      appendAttribute({ name: "color", value_name: "amarillo" });
+      appendFeature({ value: "piola" });
+      /* appendAttribute({ name: "", value_name: "" });
+      appendFeature({ value: "" }); */
+    }
+    setFocusFlag(true);
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
-    focusFlag === true && setFocus("name");
+    if (focusFlag === true) {
+      setFocus("name");
+      setFocusFlag(false);
+    }
     // eslint-disable-next-line
   }, [focusFlag]);
 
@@ -263,6 +269,7 @@ const ProductForm = () => {
 
     //! VOLVER A VER poner disabled el boton de submit al hacer la petición
     try {
+      setWaitingResponse(true);
       if (productToEdit) {
         let data = { ...productData, imgsToEdit, mainImgIndex };
         formData.append("data", JSON.stringify(data));
@@ -292,6 +299,8 @@ const ProductForm = () => {
       notification("Hubo un error, vuelve a intentar", "", "error");
       //!VOLVER A VER manejo de errores
       console.log(error);
+    } finally {
+      setWaitingResponse(false);
     }
   };
 
@@ -307,10 +316,10 @@ const ProductForm = () => {
     appendAttribute({ name: "", value_name: "" });
     setFeaturesQuantity(1);
     appendFeature({ value: "" });
+    setFocusFlag(true);
   };
 
   const handleModalCreateProduct = (value) => {
-    //! VOLVER A VER poner notif por encima de modal
     if (value) {
       clearInputs();
       closeCreateProduct();
@@ -513,6 +522,16 @@ const ProductForm = () => {
             <div className="form-shipping-container">
               <div className="form-shipping-input-container">
                 <label className="form-shipping-input">
+                  <Checkbox
+                    isChecked={watch("free_shipping")}
+                    extraStyles={{
+                      border: true,
+                      rounded: true,
+                      innerBorder: true,
+                      margin: ".05rem",
+                      size: "1.2",
+                    }}
+                  />
                   <input type="checkbox" {...register("free_shipping")} />
                   <span className="shipping-title">Envío gratis</span>
                 </label>
@@ -580,12 +599,12 @@ const ProductForm = () => {
               {warn.main_features && (
                 <p className="g-warn-input">{warn.main_features}</p>
               )}
-              <span
+              <div
                 onClick={() => handleAddFeature()}
-                className="g-icon-button"
+                className="g-icon-button form-add-input"
               >
                 <AddIcon /> Agregar característica
-              </span>
+              </div>
             </>
           </div>
 
@@ -678,12 +697,12 @@ const ProductForm = () => {
               {warn.attributes && (
                 <p className="g-warn-input">{warn.attributes}</p>
               )}
-              <span
+              <div
                 onClick={() => handleAddAttribute()}
-                className="g-icon-button"
+                className="g-icon-button form-add-input"
               >
                 <AddIcon /> Agregar atributo
-              </span>
+              </div>
             </>
           </div>
 
@@ -695,7 +714,7 @@ const ProductForm = () => {
               {watch("description") === "" ||
               watch("description") === undefined ? null : (
                 <div
-                  /* className="g-input-icon-container g-input-x-button" */
+                  className="g-input-icon-container g-input-x-button"
                   onClick={() => setValue("description", "")}
                 >
                   <CloseIcon />
@@ -716,7 +735,7 @@ const ProductForm = () => {
           <label
             htmlFor="filesButton"
             className={`g-white-button ${
-              productImg?.length + imgsToEdit?.length >= 8
+              productImg?.length + imgsToEdit?.length >= 8 || waitingResponse
                 ? "upload-images-disabled"
                 : "upload-images"
             }`}
@@ -730,9 +749,20 @@ const ProductForm = () => {
             accept="image/png, image/jpeg"
             onChange={handleAddImg}
             id="filesButton"
-            disabled={productImg?.length + imgsToEdit?.length >= 8}
+            disabled={
+              productImg?.length + imgsToEdit?.length >= 8 || waitingResponse
+            }
             className="hidden-button"
           />
+
+          <>
+            {showCustomErrors && imagesError ? (
+              <p className="g-error-input">{imagesError}</p>
+            ) : (
+              <p className="g-hidden-placeholder">hidden</p>
+            )}
+          </>
+
           {!warn.image && <p className="g-hidden-placeholder">hidden</p>}
           {warn.image && (
             <p className="g-warn-input warn-block">{warn.image}</p>
@@ -836,13 +866,6 @@ const ProductForm = () => {
               ))
             )}
           </div>
-          <>
-            {showCustomErrors && imagesError ? (
-              <p className="g-error-input">{imagesError}</p>
-            ) : (
-              <p className="g-hidden-placeholder">hidden</p>
-            )}
-          </>
         </>
 
         {/* FORM BUTTONS */}
@@ -851,12 +874,14 @@ const ProductForm = () => {
             type="submit"
             value={productToEdit ? "Actualizar" : "Publicar"}
             className="g-white-button"
+            disabled={waitingResponse}
           />
           <input
             type="button"
             value="Resetear"
             onClick={clearInputs}
             className="g-white-button"
+            disabled={waitingResponse}
           />
         </div>
       </form>
@@ -874,21 +899,25 @@ const ProductForm = () => {
         closeModal={closeCreateProduct}
         type="warn"
       >
-        <p>¿Crear otro producto?</p>
-        <button
-          type="button"
-          onClick={() => handleModalCreateProduct(true)}
-          className="g-white-button"
-        >
-          Aceptar
-        </button>
-        <button
-          type="button"
-          onClick={() => handleModalCreateProduct(false)}
-          className="g-white-button"
-        >
-          Cancelar
-        </button>
+        <div className="create-another-container">
+          <p>¿Crear otro producto?</p>
+          <div className="create-another-buttons-container">
+            <button
+              type="button"
+              onClick={() => handleModalCreateProduct(true)}
+              className="g-white-button"
+            >
+              Aceptar
+            </button>
+            <button
+              type="button"
+              onClick={() => handleModalCreateProduct(false)}
+              className="g-white-button"
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
       </Modal>
     </div>
   );
