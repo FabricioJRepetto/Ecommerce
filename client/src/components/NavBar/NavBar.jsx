@@ -155,9 +155,12 @@ const NavBar = () => {
 
             <div className="navbar-profile-section">
               {!session ? (
-                <NavLink to={"signin"}>
-                  <p>Sign in</p>
-                </NavLink>
+                <span className="navbar-signin-button">
+                  <NavLink to={"signin"}>
+                    <Avatar className="navbar-avatar-svg" />
+                    <span className="navbar-signin-text">Iniciar sesión</span>
+                  </NavLink>
+                </span>
               ) : (
                 <>
                   <div
@@ -264,6 +267,10 @@ const NavBar = () => {
           <div
             className={`navbar-central-subsection ${
               showSubsectionBar ? "hidden-box" : ""
+            } ${
+              !session
+                ? "navbar-subsection-signin-padding"
+                : "navbar-subsection-profile-padding"
             }`}
           >
             <div className="navbar-central-options">
