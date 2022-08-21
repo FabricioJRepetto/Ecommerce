@@ -122,8 +122,11 @@ input.g-input-two-icons {
   text-shadow: 0 0 0.4rem #000;
   color: transparent;
   font-weight: 500;
+  text-transform: uppercase;
   letter-spacing: -1px;
   padding-right: 3.5rem;
+  padding-left: 0;
+  font-family: "HelveticaNeueLTPro-Hv";
 }
 .g-input-with-button .g-password::selection {
   text-shadow: 0 0 0.4rem black;
