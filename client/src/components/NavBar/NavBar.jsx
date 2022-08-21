@@ -22,7 +22,7 @@ import { useSignout } from "../../hooks/useSignout";
 import ChromaticText from "../common/ChromaticText";
 
 const NavBar = () => {
-  const { session, username, avatar } = useSelector(
+  const { session, username, avatar, role } = useSelector(
     (state) => state.sessionReducer
   );
   const cart = useSelector((state) => state.cartReducer.onCart);
@@ -155,9 +155,12 @@ const NavBar = () => {
 
             <div className="navbar-profile-section">
               {!session ? (
-                <NavLink to={"signin"}>
-                  <p>Sign in</p>
-                </NavLink>
+                <span className="navbar-signin-button">
+                  <NavLink to={"signin"}>
+                    <Avatar className="navbar-avatar-svg" />
+                    <span className="navbar-signin-text">Iniciar sesión</span>
+                  </NavLink>
+                </span>
               ) : (
                 <>
                   <div
@@ -264,12 +267,34 @@ const NavBar = () => {
           <div
             className={`navbar-central-subsection ${
               showSubsectionBar ? "hidden-box" : ""
+            } ${
+              !session
+                ? "navbar-subsection-signin-padding"
+                : "navbar-subsection-profile-padding"
             }`}
           >
             <div className="navbar-central-options">
               <ChromaticText
                 text={"Provider Store"}
                 route={"products"}
+                size={"1rem"}
+                movementAfter={"1rem 0 0 0"}
+              />
+            </div>
+
+            <div className="navbar-central-options">
+              <ChromaticText
+                text={"Provider Deluxe"}
+                route={"products"}
+                size={"1rem"}
+                movementAfter={"1rem 0 0 0"}
+              />
+            </div>
+
+            <div className="navbar-central-options">
+              <ChromaticText
+                text={"FAQs"}
+                route={"about"}
                 size={"1rem"}
                 movementAfter={"1rem 0 0 0"}
               />
@@ -284,14 +309,18 @@ const NavBar = () => {
               />
             </div>
 
-            <div className="navbar-central-options">
-              <ChromaticText
-                text={"ADMIN"}
-                route={"admin"}
-                size={"1rem"}
-                movementAfter={"1rem 0 0 0"}
-              />
-            </div>
+            {role === "client" ? (
+              <></>
+            ) : (
+              <div className="navbar-central-options">
+                <ChromaticText
+                  text={"ADMIN"}
+                  route={"admin"}
+                  size={"1rem"}
+                  movementAfter={"1rem 0 0 0"}
+                />
+              </div>
+            )}
           </div>
         </div>
       </div>
