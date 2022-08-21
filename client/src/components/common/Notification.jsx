@@ -50,7 +50,7 @@ const Notification = () => {
      };
 
     return (
-        <div className={`notification-area`} style={{pointerEvents: isOpen ? 'all' : 'none'}}>
+        <div className={`notification-card-area`} style={{pointerEvents: isOpen ? 'all' : 'none'}}>
 
            <div className='chromatic-container'>
                 <div className={`notification-color-placeholder ${isOpen && `notification-border-${color}`}`}></div>

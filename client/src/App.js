@@ -20,6 +20,7 @@ import "./App.css";
 import GlobalCover from "../src/components/common/GlobalCover";
 
 import Home from "./components/Home/Home";
+import NotificationMaster from "./components/common/NotificationMaster";
 import Notification from "./components/common/Notification";
 import NavBar from "./components/NavBar/NavBar";
 import Signupin from "./components/Session/Signupin";
@@ -110,6 +111,7 @@ function App() {
     return (
         <div className="App" id="scroller">
             <Notification />
+            <NotificationMaster />
             {isUserDataLoading ? (
                 <div className="g-container-totalvh">
                     <LoaderBars />

@@ -1,4 +1,13 @@
-.notification-area {
+.notification-master-container {
+    position: fixed;
+    top: 25%;
+    right: 0;
+    min-height: 80px;
+    width: 250px;
+    border: 1px dotted #64d500;
+}
+
+.notification-card-area {
     position: fixed;
     top: 15%;
     right: 0;
