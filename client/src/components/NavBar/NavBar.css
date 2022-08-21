@@ -8,8 +8,13 @@
   z-index: 5; /* //! VOLVER A VER ver z-index */
   background-color: black;
 }
+@media (max-width: 1023px) {
+  .navbar {
+    background-color: red;
+  }
+}
 .navbar-dumb-hidden {
-  height: 6rem;
+  height: 5.5rem;
   background-color: black;
 }
 .navbar a {
@@ -39,9 +44,17 @@
 .navbar-central-section > form {
   /*  width: 35vw; */
 }
-@media (max-width: 1240px) {
+@media (min-width: 1240px) {
+  .navbar input[type="text"] {
+    width: 600px;
+  }
+}
+@media (max-width: 1239px) {
   .navbar-username {
     display: none;
+  }
+  .navbar input[type="text"] {
+    width: 400px;
   }
 }
 
@@ -74,12 +87,7 @@
 }
 
 .navbar input[type="text"] {
-  border: none;
-  width: 600px;
   padding-left: 1rem;
-}
-.navbar input[type="text"]:focus {
-  outline: none;
 }
 
 .navbar-logo-section {
@@ -260,16 +268,17 @@
 }
 
 .glitch {
-  width: 20vw;
-  height: 6rem;
+  width: 22rem;
+  height: 5.5rem;
   cursor: pointer;
   padding-right: 2rem;
-  padding-left: 2rem;
-  margin-right: 1rem;
-  margin-left: 2rem;
   transition: 0.3s ease-in-out;
+  transform: translateY(-3px);
 }
 .little-glitch {
+  width: 210px;
   height: 3rem;
   transition: 0.3s ease-in-out;
+  padding: 0;
+  transform: translateY(2px);
 }

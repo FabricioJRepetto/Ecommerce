@@ -110,6 +110,10 @@ input[type="checkbox"] {
   display: flex;
   padding-right: 2rem;
   padding-left: 0.5rem;
+  border: none;
+}
+.g-input-with-button > input:focus {
+  outline: none;
 }
 
 /* INPUT DOS ICONOS */
