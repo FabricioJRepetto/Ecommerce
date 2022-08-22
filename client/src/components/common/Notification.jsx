@@ -11,9 +11,7 @@ const Notification = (props) => {
     const [isOpen, setIsOpen] = useState(false);
     const [shrink, setShrink] = useState(false);
     const timeout = useRef(null);
-    const dispatch = useDispatch();
-    // const isOpen = useState((state) => state.notificationSlice.open);
-    // const { message, type, url } = useSelector((state) => state.notificationSlice.main);
+    const dispatch = useDispatch();    
     
     const {
         message,
