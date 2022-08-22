@@ -2,16 +2,8 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import {
-  /* loadAvatar,
-      loadEmail,
-      loadUsername,
-      sessionActive,
-      loadRole,
-      loadGoogleUser,
-      loadId,
-      loadFullName, */
-  loadUserData,
-  loadingUserData,
+    loadUserData,
+    loadingUserData,
 } from "./Redux/reducer/sessionSlice";
 import { loadCart, loadWishlist } from "./Redux/reducer/cartSlice";
 import axios from "axios";
@@ -20,7 +12,7 @@ import "./App.css";
 import GlobalCover from "../src/components/common/GlobalCover";
 
 import Home from "./components/Home/Home";
-import Notification from "./components/common/Notification";
+import NotificationMaster from "./components/common/NotificationMaster";
 import NavBar from "./components/NavBar/NavBar";
 import Signupin from "./components/Session/Signupin";
 import ResetPassword from "./components/Session/ResetPassword";
@@ -108,7 +100,7 @@ function App() {
 
   return (
     <div className="App" id="scroller">
-      <Notification />
+      <NotificationMaster />
       {isUserDataLoading ? (
         <div className="g-container-totalvh">
           <LoaderBars />

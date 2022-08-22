@@ -1,31 +1,31 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export const notificationSlice = createSlice({
-  name: "cart",
-  initialState: {
-    main: { 
-        message: '',
-        type: '',
-         url: ''
+    name: "cart",
+    initialState: {
+        main: [],
     },
-    open: false,
-  },
-  reducers: {
-    sendNotif: (state, action) => {
-      state.main = action.payload;
-      state.open = true;
+    reducers: {
+        sendNotif: (state, action) => {
+            state.main = [...state.main, { ...action.payload, id: state.main.length }];
+        },
+        show: (state, action) => {
+            let aux = [...state.main];
+            aux.map(e => (
+                e.id === action.payload && (e.status = 'displaying')
+            ));
+            state.main = aux;
+        },
+        close: (state, action) => {
+            let aux = [...state.main];
+            aux.map(e => (
+                e.id === action.payload && (e.status = 'close')
+            ));
+            state.main = aux;
+        },
     },
-    close: (state, action) => {
-        state.open = false;
-        state.main = { 
-            message: '',
-            type: '',
-            url: ''
-        };
-    },
-  },
 });
 
-export const { sendNotif, close } = notificationSlice.actions;
+export const { sendNotif, show, close } = notificationSlice.actions;
 
 export default notificationSlice.reducer;
