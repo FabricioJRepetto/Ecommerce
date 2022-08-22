@@ -12,9 +12,9 @@ import {
   ViewOffIcon,
 } from "@chakra-ui/icons";
 import "../../App.css";
-import "./ChangePassword.css";
+import "./UpdatePassword.css";
 
-const ChangePassword = () => {
+const UpdatePassword = () => {
   const [viewPassword, setViewPassword] = useState({
     oldPassword: false,
     password: false,
@@ -35,9 +35,14 @@ const ChangePassword = () => {
     setLoading(true);
     try {
       const { data } = await axios.put("/user/updatePassword", passwordData);
-      if (data.error && data.message && Array.isArray(data.message))
-        notification(data.message[0], "", "error");
-      data.message && setResponse(data.message);
+
+      console.log(data);
+
+      if (data.error && data.message && Array.isArray(data.message)) {
+        data.message.forEach((error) => notification(error, "", "error"));
+      } else {
+        data.message && setResponse(data.message);
+      }
     } catch (error) {
       console.log(error);
       //setResponse(error.response.data.message); //! VOLVER A VER manejo de errores
@@ -92,7 +97,7 @@ const ChangePassword = () => {
                     : "g-password"
                 }`}
                 {...register("oldPassword", {
-                  required: true,
+                  //required: true,
                 })}
               />
               {watch("oldPassword") === "" ||
@@ -159,8 +164,8 @@ const ChangePassword = () => {
                     : "g-password"
                 }`}
                 {...register("password", {
-                  required: true,
-                  minLength: 6,
+                  // required: true,
+                  //minLength: 6,
                 })}
               />
               {watch("password") === "" ||
@@ -221,12 +226,12 @@ const ChangePassword = () => {
                     : "g-password"
                 }`}
                 {...register("repPassword", {
-                  required: true,
+                  /* required: true,
                   validate: (repPassword) => {
                     if (watch("password") !== repPassword) {
                       return "Las contraseñas no coinciden";
                     }
-                  },
+                  }, */
                 })}
               />
               {watch("repPassword") === "" ||
@@ -280,4 +285,4 @@ const ChangePassword = () => {
   );
 };
 
-export default ChangePassword;
+export default UpdatePassword;

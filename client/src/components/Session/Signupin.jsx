@@ -62,7 +62,9 @@ const Signupin = () => {
     openLoader();
     try {
       const { data } = await axios.post(`/user/signup`, signupData);
-      data.error && notification(data.message, "", "warning");
+      if (data.error) return notification(data.message, "", "warning");
+      setSignSelect("signin");
+      notification(data.message, "", "");
     } catch (error) {
       console.log(error);
       //! VOLVER A VER manejo de errores

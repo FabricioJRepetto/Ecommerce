@@ -29,9 +29,7 @@ const signup = async (req, res, next) => {
     const link = `http://localhost:3000/verify/${verifyToken}`;
     await sendEmail(email, "Verificar email", link); //!VOLVER A VER modificar url de localhost
 
-    return res.json({
-      message: req.authInfo,
-    });
+    return res.json(req.authInfo);
   } catch (error) {
     next(error);
   }
@@ -198,6 +196,7 @@ const changePassword = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const message = errors.errors.map((err) => err.msg);
+    console.log(message);
     return res.json({ message });
   }
 
