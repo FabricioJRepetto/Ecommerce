@@ -8,13 +8,33 @@
   z-index: 5; /* //! VOLVER A VER ver z-index */
   background-color: black;
 }
+
+/* MOBILE */
 @media (max-width: 1023px) {
   .navbar {
     background-color: red;
   }
+  .navbar-profile-button {
+    display: none;
+  }
+  .navbar-wishlist-button {
+    display: none;
+  }
+  .navbar-central-section {
+    width: 50vw;
+  }
+}
+/* DESKTOP */
+@media (min-width: 1024px) {
+  .navbar-profile-button {
+    display: flex;
+  }
+  .navbar-wishlist-button {
+    display: flex;
+  }
 }
 .navbar-dumb-hidden {
-  height: 5.5rem;
+  height: 5rem;
   background-color: black;
 }
 .navbar a {
@@ -39,15 +59,11 @@
 }
 
 @media (min-width: 1240px) {
-  .navbar input[type="text"] {
-    width: 600px;
-  }
-  .navbar-central-subsection {
-    justify-content: space-around;
-    width: 60rem;
-  }
-  .navbar-subsection-signin-padding {
-    padding-right: 10rem;
+  /* .navbar input[type="text"] {
+    width: 35vw;
+  } */
+  .navbar-central-subsection > .navbar-central-options {
+    padding: 0 2.2rem;
   }
   .navbar-signin-button {
     width: 18rem;
@@ -58,26 +74,11 @@
   .navbar-username {
     display: none;
   }
-  .navbar input[type="text"] {
+  /* .navbar input[type="text"] {
     width: 400px;
-  }
+  } */
   .navbar-central-options {
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
-  }
-  .navbar-central-subsection {
-    justify-content: flex-start;
-    margin-right: 5rem;
-  }
-  .navbar-central-subsection > div {
-    padding-right: 1.3rem;
-    padding-left: 1.3rem;
-  }
-  .navbar-central-subsection > div:first-child {
-    padding-right: 1rem;
-  }
-  .navbar-subsection-profile-padding > div:first-child {
-    padding-left: 2rem;
+    padding: 0 1rem;
   }
   .navbar-signin-button {
     width: 13rem;
@@ -86,22 +87,22 @@
 
 .navbar-central-subsection {
   display: flex;
-  height: 3rem;
-  margin-bottom: 0.5rem;
-  /* width: 60rem; */
+  height: 2.5rem;
+  width: 100%;
   position: fixed;
   top: 3rem;
+  left: 0;
   transition: 0.3s ease-in-out;
+  background-color: black;
+  justify-content: center;
+  padding-right: 6rem;
 }
+
 .hidden-box {
-  height: 4rem;
-  width: 60rem;
+  height: 2rem;
+  width: 100vw;
   top: -1rem;
   transition: 0.3s ease-in-out;
-  /* justify-content: space-between; */
-}
-.navbar-subsection-profile-padding {
-  padding-right: 5rem;
 }
 
 .navbar-central-options {
@@ -109,10 +110,12 @@
   white-space: nowrap;
   align-content: center;
   height: 2rem;
+  transition: 0.3s ease-in-out;
 }
 
 .navbar input[type="text"] {
   padding-left: 1rem;
+  width: 35vw;
 }
 
 .navbar-logo-section {
@@ -133,9 +136,9 @@
   flex-direction: row;
   justify-content: flex-start;
   margin: 0;
+  width: 300px;
 }
 .navbar-profile-button {
-  display: flex;
   flex-direction: row;
   align-items: center;
   margin: 0 1rem;
@@ -202,11 +205,9 @@
 }
 
 .navbar-wishlist-button {
-  display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  /* height: 50px; */
   width: 2rem;
   position: relative;
   margin: 0 1rem;
@@ -216,7 +217,7 @@
 }
 .navbar-modal-container-w {
   position: absolute;
-  height: 100%;
+  height: 110%;
   width: 100%;
   top: 0;
   text-align: left;
@@ -294,22 +295,24 @@
 .glitch {
   width: 22rem;
   height: 5.5rem;
-  cursor: pointer;
   padding-right: 2rem;
   transition: 0.3s ease-in-out;
   transform: translateY(-3px);
 }
 .little-glitch {
+  cursor: pointer;
   width: 210px;
   height: 3rem;
   transition: 0.3s ease-in-out;
   padding: 0;
   transform: translateY(2px);
+  z-index: 6;
 }
 
 .navbar-signin-button {
   display: flex;
   justify-content: center;
+  width: 300px;
 }
 .navbar-signin-button a {
   display: flex;

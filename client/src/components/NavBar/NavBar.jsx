@@ -37,7 +37,7 @@ const NavBar = () => {
   const eldiv = useRef(null);
 
   useEffect(() => {
-    eldiv.current = document.querySelector(".glitch");
+    eldiv.current = document.querySelector(".little-glitch");
     PowerGlitch.glitch(eldiv.current, {
       imageUrl:
         "https://res.cloudinary.com/dsyjj0sch/image/upload/v1659650791/PROVIDER_LOGO_glitch_aberration_kt2hyv.png",
@@ -116,7 +116,9 @@ const NavBar = () => {
       <div className="navbar-dumb-hidden"></div>
       <div className="navbar">
         <div
-          className={`glitch ${showSubsectionBar ? "little-glitch" : ""}`}
+          className={`little-glitch ${
+            showSubsectionBar ? "little-glitch" : ""
+          }`}
           onClick={logoClick}
         ></div>
 
@@ -228,6 +230,14 @@ const NavBar = () => {
                             />
                           </div>
 
+                          {role === "client" ? (
+                            <></>
+                          ) : (
+                            <div className="profile-modal-option">
+                              <ChromaticText text={"ADMIN"} route={"admin"} />
+                            </div>
+                          )}
+
                           <div
                             className="profile-modal-option logout"
                             onClick={() => signOut()}
@@ -299,34 +309,12 @@ const NavBar = () => {
 
             <div className="navbar-central-options">
               <ChromaticText
-                text={"FAQs"}
-                route={"about"}
-                size={"1rem"}
-                movementAfter={"1rem 0 0 0"}
-              />
-            </div>
-
-            <div className="navbar-central-options">
-              <ChromaticText
                 text={"About Us"}
                 route={"about"}
                 size={"1rem"}
                 movementAfter={"1rem 0 0 0"}
               />
             </div>
-
-            {role === "client" ? (
-              <></>
-            ) : (
-              <div className="navbar-central-options">
-                <ChromaticText
-                  text={"ADMIN"}
-                  route={"admin"}
-                  size={"1rem"}
-                  movementAfter={"1rem 0 0 0"}
-                />
-              </div>
-            )}
           </div>
         </div>
       </div>
