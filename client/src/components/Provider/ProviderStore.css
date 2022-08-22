@@ -1,0 +1,22 @@
+.providerstore-echo-container {
+    position: relative;
+    font-size: 10vw;
+    font-family: HelveticaNeueLTPro-BdOu;
+    letter-spacing: -0.3rem;
+    color: #151515;
+    pointer-events: none;
+    z-index: 0;
+}
+.providerstore-echo-container p:first-child {    
+    font-family: HelveticaNeueLTPro-Bd;
+    position: absolute;
+    margin: 1rem;
+}
+.providerstore-echo-container p:nth-child(2) { 
+    position: absolute;
+    margin: 8vw 1rem;
+}
+.providerstore-echo-container p:nth-child(3) { 
+    position: absolute;
+    margin: 15.1vw 1rem;
+}

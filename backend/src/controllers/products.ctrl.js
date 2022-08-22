@@ -188,14 +188,6 @@ const getPromos = async (req, res, next) => {
 
         let allResults = [...dbResults, ...results];
 
-        // let filters = {
-        //     category: [],
-        //     brand: []
-        // }
-        // for (const porduct of allResults) {
-
-        // }
-
         return res.json(allResults);
     } catch (error) {
         next(error);

@@ -42,12 +42,18 @@ const Home = () => {
     }, 100);
 
     (async () => {
-      const data = await Promise.allSettled([
-        axios(`/sales/`),
-        session && axios(`/history/suggestion`),
-      ]);
-      setProducts(data[0]?.value.data);
-      setSuggestion(data[1]?.value.data || false);
+        const salesData = axios('/sales');
+        const suggestionData = axios(`/history/suggestion`)
+
+        salesData.then(r => setProducts(r.data));
+        session && suggestionData?.then(r => {
+            if (r.data.length > 4 ) {
+                setSuggestion(r.data);
+            } else {
+                setSuggestion(false);                
+            }            
+        });
+
       setLoading(false);
     })();
 
@@ -116,7 +122,7 @@ const Home = () => {
           ))}
         </div>
       </div>
-      <br />
+      
       {suggestion.length > 4 && (
         <div>
           <h2>Quizás te interese...</h2>
