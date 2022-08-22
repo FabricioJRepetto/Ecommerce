@@ -1,18 +1,21 @@
 /* CHROMATIC TEXT CSS TEST */
 .chromatic-text {
-    display: flex;
-    align-items: center;    
-    position: relative;
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
 }
 .chromatic-text div {
-    width: max-content;
-    height: max-content;
-    -webkit-background-clip: text !important;
-    background-clip: text; 
-    color: transparent;
-    position: absolute;
-    mix-blend-mode: screen; 
-    transition: margin .2s cubic-bezier(0.22, 1, 0.36, 1);
+  width: max-content;
+  height: max-content;
+  -webkit-background-clip: text !important;
+  background-clip: text;
+  color: transparent;
+  position: absolute;
+  mix-blend-mode: screen;
+  transition: margin 0.2s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* .chromatic-text {

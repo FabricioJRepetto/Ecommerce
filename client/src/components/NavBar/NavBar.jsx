@@ -158,7 +158,9 @@ const NavBar = () => {
                 <span className="navbar-signin-button">
                   <NavLink to={"signin"}>
                     <Avatar className="navbar-avatar-svg" />
-                    <span className="navbar-signin-text">Iniciar sesión</span>
+                    <span className="navbar-signin-text">
+                      <ChromaticText text="Iniciar sesión" />
+                    </span>
                   </NavLink>
                 </span>
               ) : (
@@ -183,52 +185,54 @@ const NavBar = () => {
 
                     <div className="navbar-modal-container">
                       <div
-                        className={`navbar-modal ${profileModal && "visible"}`}
+                        className={`navbar-modal ${
+                          profileModal ? "visible" : ""
+                        }`}
                       >
                         <div
                           className="navbar-modal-menu-container"
                           onClick={() => setProfileModal(false)}
                         >
-                          <div className="profile-modal-option pointer">
+                          <div className="profile-modal-option">
                             <ChromaticText
-                              text="Mi perfil"
+                              text="   Mi perfil"
                               route="/profile/details"
                             />
                           </div>
 
-                          <div className="profile-modal-option pointer">
+                          <div className="profile-modal-option">
                             <ChromaticText
-                              text="Direcciones"
+                              text="   Direcciones"
                               route="/profile/address"
                             />
                           </div>
 
-                          <div className="profile-modal-option pointer">
+                          <div className="profile-modal-option">
                             <ChromaticText
-                              text="Favoritos"
+                              text="   Favoritos"
                               route="/profile/wishlist"
                             />
                           </div>
 
-                          <div className="profile-modal-option pointer">
+                          <div className="profile-modal-option">
                             <ChromaticText
-                              text="Ordenes"
+                              text="   Ordenes"
                               route="/profile/orders"
                             />
                           </div>
 
-                          <div className="profile-modal-option pointer">
+                          <div className="profile-modal-option">
                             <ChromaticText
-                              text="Historial"
+                              text="   Historial"
                               route="/profile/history"
                             />
                           </div>
 
                           <div
-                            className="profile-modal-option logout pointer"
+                            className="profile-modal-option logout"
                             onClick={() => signOut()}
                           >
-                            <ChromaticText text="Salir" />
+                            <ChromaticText text="   Salir" />
                           </div>
                         </div>
                       </div>
