@@ -40,7 +40,7 @@
     right: -254px;
     z-index: 12;
     color: white;
-    background: rgba(0, 0, 0, 1);
+    background: #080808;
     cursor: pointer;
     transition: .4s ease;
 }
@@ -141,21 +141,21 @@
   border-bottom: 2px solid rgba(255, 255, 255, 0);
 }
 .timer-active {
-  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+  border-bottom: 2px solid #353535;
   transform: translateX(100%);
   transition: transform 6.4s linear;
 }
 
 .notification-seemore {
-    color: rgba(255, 255, 255, 0.3);
+    color: #4e4e4e;
     position: absolute;
-    bottom: 0;
-    left: 1rem;
+    bottom: .6rem;
+    left: .8rem;
     opacity: 0;
     transition: opacity .5s ease;
     transition-delay: 1s;
 }
-.notification-seemore:hover p {
+.notification-seemore:hover {
     color: rgb(255, 255, 255);
 }
 .seemore-visible {

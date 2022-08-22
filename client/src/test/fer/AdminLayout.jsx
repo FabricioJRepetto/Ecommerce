@@ -10,7 +10,7 @@ const AdminLayout = () => {
     <div>
         <button onClick={()=> notification('test notif standard', '', '')}>Standard</button>
         <button onClick={()=> notification('test notif success', '', 'success')}>Success</button>
-        <button onClick={()=> notification('test notif error', '', 'error')}>Error</button>
+        <button onClick={()=> notification('test notif error', '/admin', 'error')}>Error</button>
         <button onClick={()=> notification('test notif warning', '', 'warning')}>Warning</button>
       <nav>
         <Link to="/admin/metrics">
