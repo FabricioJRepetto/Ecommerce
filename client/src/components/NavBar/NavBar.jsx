@@ -195,35 +195,35 @@ const NavBar = () => {
                         >
                           <div className="profile-modal-option">
                             <ChromaticText
-                              text="   Mi perfil"
+                              text="Mi perfil"
                               route="/profile/details"
                             />
                           </div>
 
                           <div className="profile-modal-option">
                             <ChromaticText
-                              text="   Direcciones"
+                              text="Direcciones"
                               route="/profile/address"
                             />
                           </div>
 
                           <div className="profile-modal-option">
                             <ChromaticText
-                              text="   Favoritos"
+                              text="Favoritos"
                               route="/profile/wishlist"
                             />
                           </div>
 
                           <div className="profile-modal-option">
                             <ChromaticText
-                              text="   Ordenes"
+                              text="Ordenes"
                               route="/profile/orders"
                             />
                           </div>
 
                           <div className="profile-modal-option">
                             <ChromaticText
-                              text="   Historial"
+                              text="Historial"
                               route="/profile/history"
                             />
                           </div>
@@ -232,7 +232,7 @@ const NavBar = () => {
                             className="profile-modal-option logout"
                             onClick={() => signOut()}
                           >
-                            <ChromaticText text="   Salir" />
+                            <ChromaticText text="Salir" />
                           </div>
                         </div>
                       </div>
@@ -247,7 +247,9 @@ const NavBar = () => {
                     <Fav className="wishlist-icon" />
                     <div className="navbar-modal-container-w">
                       <div
-                        className={`navbar-modal-w ${wishModal && "visible"}`}
+                        className={`navbar-modal-w ${
+                          wishModal ? "visible" : ""
+                        }`}
                       >
                         {wishModal && <WishlistModal close={setWishModal} />}
                       </div>

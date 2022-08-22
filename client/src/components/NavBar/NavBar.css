@@ -267,7 +267,7 @@
   visibility: hidden;
   position: relative;
   left: calc(50% - 300px);
-  bottom: -50px;
+  bottom: -45px;
   height: fit-content;
   width: 400px;
   border: 1px solid rgb(115, 115, 115);
