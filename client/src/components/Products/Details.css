@@ -139,9 +139,9 @@
 .all-attributes-container {
   display: flex;
   flex-direction: column;
-  width: 35vw;
+  min-width: 35vw;
   margin: 0 1rem;
-  align-items: center;
+  align-items: normal;
 }
 
 .attribute-container {

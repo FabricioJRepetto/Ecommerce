@@ -145,3 +145,19 @@
   transform: translateX(100%);
   transition: transform 6.4s linear;
 }
+
+.notification-seemore {
+    color: rgba(255, 255, 255, 0.3);
+    position: absolute;
+    bottom: 0;
+    left: 1rem;
+    opacity: 0;
+    transition: opacity .5s ease;
+    transition-delay: 1s;
+}
+.notification-seemore:hover p {
+    color: rgb(255, 255, 255);
+}
+.seemore-visible {
+    opacity: 1;
+}

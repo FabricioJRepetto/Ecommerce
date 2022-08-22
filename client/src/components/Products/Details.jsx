@@ -265,7 +265,7 @@ const Details = () => {
                  className={`all-attributes-container ${
                     attributesColumns ? "attributes-two-columns" : ""
                   }`}
-                  style={{ height: attributesHeight }}
+                  style={{ height: attributesHeight, width: 'fit-content' }}
                 >
                   {React.Children.toArray(
                     data.attributes?.map(

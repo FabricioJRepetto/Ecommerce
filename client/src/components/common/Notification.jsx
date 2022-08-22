@@ -53,7 +53,7 @@ const Notification = (props) => {
      };
 
     const closeNotification = (click) => {
-        url && click && navigate(url);
+        // url && click && navigate(url);
         setIsOpen(false);
         clearTimeout(timeout.current);
 
@@ -84,7 +84,8 @@ const Notification = (props) => {
                 onClick={() => closeNotification(true)}>
                 <div className={`notification-inner`}>
                     {type !== 'error' && <div className={`notification-timer ${isOpen && 'timer-active'}`}></div>}
-                    {url && <LinkIcon className='link-svg' />}
+                    {/* {url && <LinkIcon className='link-svg' />} */}
+                    {url && <div onClick={()=>navigate(url)} className={`notification-seemore ${isOpen && 'seemore-visible'}`}><p>Ver más...</p></div>}
                     <div className='notification-message'>
                         <p>{message}</p>
                     </div>
