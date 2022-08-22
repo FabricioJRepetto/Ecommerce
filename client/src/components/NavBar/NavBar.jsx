@@ -22,7 +22,7 @@ import { useSignout } from "../../hooks/useSignout";
 import ChromaticText from "../common/ChromaticText";
 
 const NavBar = () => {
-  const { session, username, avatar } = useSelector(
+  const { session, username, avatar, role } = useSelector(
     (state) => state.sessionReducer
   );
   const cart = useSelector((state) => state.cartReducer.onCart);
@@ -31,6 +31,8 @@ const NavBar = () => {
   const [profileModal, setProfileModal] = useState(false);
   const [wishModal, setWishModal] = useState(false);
   const [productToSearch, setProductToSearch] = useState("");
+  const [showSubsectionBar, setShowSubsectionBar] = useState(false);
+  const [lastScroll, setLastScroll] = useState(0);
   const signOut = useSignout();
   const eldiv = useRef(null);
 
@@ -87,160 +89,246 @@ const NavBar = () => {
     navigate("/");
   };
 
+  const controlSubsectionBar = () => {
+    if (typeof window !== "undefined") {
+      if (window.scrollY < lastScroll) {
+        setShowSubsectionBar(false);
+      } else {
+        setShowSubsectionBar(true);
+      }
+      setLastScroll(window.scrollY);
+    }
+  };
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      window.addEventListener("scroll", controlSubsectionBar);
+
+      return () => {
+        window.removeEventListener("scroll", controlSubsectionBar);
+      };
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lastScroll]);
+
   return (
-    <div className="navBar">
-      <div className="glitch" onClick={logoClick}>       
-      </div>
+    <>
+      <div className="navbar-dumb-hidden"></div>
+      <div className="navbar">
+        <div
+          className={`glitch ${showSubsectionBar ? "little-glitch" : ""}`}
+          onClick={logoClick}
+        ></div>
 
-      <div className="navbar-central-section">
-        <form onSubmit={handleSearch}>
-          <span className="g-input-with-button">
-            <input
-              type="text"
-              placeholder="Busca un producto"
-              id="navbar-searchbar"
-              onChange={(e) => setProductToSearch(e.target.value)}
-              value={productToSearch}
-            />
-            {productToSearch && (
-              <>
-                <div
-                  className="g-input-icon-container g-input-view-button"
-                  onClick={handleSearch}
-                >
-                  <SearchIcon />
-                </div>
-                <div
-                  className="g-input-icon-container g-input-x-button"
-                  onClick={() => setProductToSearch("")}
-                >
-                  <CloseIcon />
-                </div>
-              </>
-            )}
-          </span>
-        </form>
-
-        <div className="navbar-central-subsection">
-            <div className="navbar-central-options">
-                <ChromaticText text={'Provider Store'}
-                    route={'products'}
-                    size={'1rem'}
-                    movementAfter={'1rem 0 0 0'}
-                    />
+        <div className="navbar-sections">
+          <div className="navbar-main-sections">
+            <div className="navbar-central-section">
+              <form onSubmit={handleSearch}>
+                <span className="g-input-with-button">
+                  <input
+                    type="text"
+                    placeholder="Busca un producto"
+                    className="g-input-two-icons"
+                    id="navbar-searchbar"
+                    onChange={(e) => setProductToSearch(e.target.value)}
+                    value={productToSearch}
+                  />
+                  {productToSearch && (
+                    <>
+                      <div
+                        className="g-input-icon-container g-input-view-button"
+                        onClick={handleSearch}
+                      >
+                        <SearchIcon />
+                      </div>
+                      <div
+                        className="g-input-icon-container g-input-x-button"
+                        onClick={() => setProductToSearch("")}
+                      >
+                        <CloseIcon />
+                      </div>
+                    </>
+                  )}
+                </span>
+              </form>
             </div>
 
-            <div className="navbar-central-options">
-                <ChromaticText text={'About Us'}
-                    route={'about'}
-                    size={'1rem'}
-                    movementAfter={'1rem 0 0 0'}
-                    />
-            </div>
+            <div className="navbar-profile-section">
+              {!session ? (
+                <span className="navbar-signin-button">
+                  <NavLink to={"signin"}>
+                    <Avatar className="navbar-avatar-svg" />
+                    <span className="navbar-signin-text">
+                      <ChromaticText text="Iniciar sesión" />
+                    </span>
+                  </NavLink>
+                </span>
+              ) : (
+                <>
+                  <div
+                    className="navbar-profile-button"
+                    onMouseEnter={() => setProfileModal(true)}
+                    onMouseLeave={() => setProfileModal(false)}
+                  >
+                    {avatar ? (
+                      <div className="navbar-avatar">
+                        <img
+                          src={avatarResizer(avatar)}
+                          referrerPolicy="no-referrer"
+                          alt="navbar-avatar"
+                        />
+                      </div>
+                    ) : (
+                      <Avatar className="navbar-avatar-svg" />
+                    )}
+                    <p className="navbar-username">{username || "Profile"}</p>
 
-            <div className="navbar-central-options">
-                <ChromaticText text={'ADMIN'}
-                    route={'admin'}
-                    size={'1rem'}
-                    movementAfter={'1rem 0 0 0'}
-                    />
-            </div>
+                    <div className="navbar-modal-container">
+                      <div
+                        className={`navbar-modal ${
+                          profileModal ? "visible" : ""
+                        }`}
+                      >
+                        <div
+                          className="navbar-modal-menu-container"
+                          onClick={() => setProfileModal(false)}
+                        >
+                          <div className="profile-modal-option">
+                            <ChromaticText
+                              text="   Mi perfil"
+                              route="/profile/details"
+                            />
+                          </div>
 
-        </div>
-      </div>
+                          <div className="profile-modal-option">
+                            <ChromaticText
+                              text="   Direcciones"
+                              route="/profile/address"
+                            />
+                          </div>
 
-      <div className="navbar-profile-container">
-        <div className="navbar-profile-section">
-          {!session ? (
-            <NavLink to={"signin"}>
-              <p>Sign in</p>
-            </NavLink>
-          ) : (
-            <>
-              <div className="navbar-profile-button"
-                onMouseEnter={() => setProfileModal(true)}
-                onMouseLeave={() => setProfileModal(false)}>
-                {avatar ? (
-                  <div className="navbar-avatar">
-                    <img
-                      src={avatarResizer(avatar)}
-                      referrerPolicy="no-referrer"
-                      alt="navbar-avatar"
-                    />
-                  </div>
-                ) : (
-                  <Avatar className="navbar-avatar-svg" />
-                )}
-                <p className="navbar-username">{username || "Profile"}</p>
+                          <div className="profile-modal-option">
+                            <ChromaticText
+                              text="   Favoritos"
+                              route="/profile/wishlist"
+                            />
+                          </div>
 
-                <div className="navBar-modal-container">
-                  <div className={`navbar-modal ${profileModal && "visible"}`}>
-                    <div className="navbar-modal-menu-container"
-                      onClick={() => setProfileModal(false)}>
+                          <div className="profile-modal-option">
+                            <ChromaticText
+                              text="   Ordenes"
+                              route="/profile/orders"
+                            />
+                          </div>
 
-                        <div className="profile-modal-option pointer">
-                            <ChromaticText text='Mi perfil'
-                                route='/profile/details'/>
+                          <div className="profile-modal-option">
+                            <ChromaticText
+                              text="   Historial"
+                              route="/profile/history"
+                            />
+                          </div>
+
+                          <div
+                            className="profile-modal-option logout"
+                            onClick={() => signOut()}
+                          >
+                            <ChromaticText text="   Salir" />
+                          </div>
                         </div>
-
-                        <div className="profile-modal-option pointer">                            
-                            <ChromaticText text='Direcciones'
-                                route='/profile/address'/>
-                        </div>
-
-                        <div className="profile-modal-option pointer">                            
-                            <ChromaticText text='Favoritos'
-                                route='/profile/wishlist'/>
-                        </div>
-
-                        <div className="profile-modal-option pointer">
-                            <ChromaticText text='Ordenes'
-                                route='/profile/orders'/>
-                        </div>
-
-                        <div className="profile-modal-option pointer">
-                            <ChromaticText text='Historial'
-                                route='/profile/history'/>
-                        </div>
-                        
-                        <div className="profile-modal-option logout pointer"
-                            onClick={()=>signOut()}>                            
-                            <ChromaticText text='Salir'/>                            
-                        </div>
-
+                      </div>
                     </div>
                   </div>
-                </div>
-              </div>
 
-              <div
-                className="navbar-wishlist-button"
-                onMouseEnter={() => setWishModal(true)}
-                onMouseLeave={() => setWishModal(false)}
-              >
-                <Fav className="wishlist-icon" />
-                <div className="navBar-modal-container-w">
-                  <div className={`navbar-modal-w ${wishModal && "visible"}`}>
-                    {wishModal && <WishlistModal close={setWishModal} />}
+                  <div
+                    className="navbar-wishlist-button"
+                    onMouseEnter={() => setWishModal(true)}
+                    onMouseLeave={() => setWishModal(false)}
+                  >
+                    <Fav className="wishlist-icon" />
+                    <div className="navbar-modal-container-w">
+                      <div
+                        className={`navbar-modal-w ${wishModal && "visible"}`}
+                      >
+                        {wishModal && <WishlistModal close={setWishModal} />}
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
 
-              <NavLink to={"cart"} className="cart-icon-container">
-                <Cart className="cart-icon" />
-                <div className="cart-number">
-                  {cart.length > 0
-                    ? cart.length < 10
-                      ? cart.length
-                      : "9+"
-                    : ""}
-                </div>
-              </NavLink>
-            </>
-          )}
+                  <NavLink to={"cart"} className="cart-icon-container">
+                    <Cart className="cart-icon" />
+                    <div className="cart-number">
+                      {cart.length > 0
+                        ? cart.length < 10
+                          ? cart.length
+                          : "9+"
+                        : ""}
+                    </div>
+                  </NavLink>
+                </>
+              )}
+            </div>
+          </div>
+          <div
+            className={`navbar-central-subsection ${
+              showSubsectionBar ? "hidden-box" : ""
+            } ${
+              !session
+                ? "navbar-subsection-signin-padding"
+                : "navbar-subsection-profile-padding"
+            }`}
+          >
+            <div className="navbar-central-options">
+              <ChromaticText
+                text={"Provider Store"}
+                route={"products"}
+                size={"1rem"}
+                movementAfter={"1rem 0 0 0"}
+              />
+            </div>
+
+            <div className="navbar-central-options">
+              <ChromaticText
+                text={"Provider Deluxe"}
+                route={"products"}
+                size={"1rem"}
+                movementAfter={"1rem 0 0 0"}
+              />
+            </div>
+
+            <div className="navbar-central-options">
+              <ChromaticText
+                text={"FAQs"}
+                route={"about"}
+                size={"1rem"}
+                movementAfter={"1rem 0 0 0"}
+              />
+            </div>
+
+            <div className="navbar-central-options">
+              <ChromaticText
+                text={"About Us"}
+                route={"about"}
+                size={"1rem"}
+                movementAfter={"1rem 0 0 0"}
+              />
+            </div>
+
+            {role === "client" ? (
+              <></>
+            ) : (
+              <div className="navbar-central-options">
+                <ChromaticText
+                  text={"ADMIN"}
+                  route={"admin"}
+                  size={"1rem"}
+                  movementAfter={"1rem 0 0 0"}
+                />
+              </div>
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

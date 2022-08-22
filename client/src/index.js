@@ -6,6 +6,14 @@ import { BrowserRouter } from "react-router-dom";
 import store from "./Redux/store";
 import axios from "axios";
 import { BACK_URL } from "./constants";
+import "./assets/fonts/HelveticaNeueLTProBd.otf";
+import "./assets/fonts/HelveticaNeueLTProBdIt.otf";
+import "./assets/fonts/HelveticaNeueLTProBdOu.otf";
+import "./assets/fonts/HelveticaNeueLTProBlk.otf";
+import "./assets/fonts/HelveticaNeueLTProBlkIt.otf";
+import "./assets/fonts/HelveticaNeueLTProHv.otf";
+import "./assets/fonts/HelveticaNeueLTProHvIt.otf";
+import "./assets/fonts/HelveticaNeueLTProRoman.otf";
 import "./index.css";
 
 //? cosas de axios

@@ -132,11 +132,13 @@ const ResetPassword = () => {
                 type="text"
                 placeholder="Contraseña"
                 autoComplete="off"
-                className={
+                className={`g-input-two-icons ${
                   watch("password") === undefined || watch("password") === ""
                     ? ""
-                    : `${viewPassword.password ? "" : "g-password"}`
-                }
+                    : viewPassword.password
+                    ? ""
+                    : "g-password"
+                }`}
                 {...register("password", {
                   required: true,
                   minLength: 6,
@@ -191,12 +193,14 @@ const ResetPassword = () => {
                 type="text"
                 placeholder="Repite tu contraseña"
                 autoComplete="off"
-                className={
+                className={`g-input-two-icons ${
                   watch("repPassword") === undefined ||
                   watch("repPassword") === ""
                     ? ""
-                    : `${viewPassword.repPassword ? "" : "g-password"}`
-                }
+                    : viewPassword.repPassword
+                    ? ""
+                    : "g-password"
+                }`}
                 {...register("repPassword", {
                   required: true,
                   validate: (repPassword) => {

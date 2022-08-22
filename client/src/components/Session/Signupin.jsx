@@ -159,12 +159,12 @@ const Signupin = () => {
   }, [session]);
 
   useEffect(() => {
-    // session && navigate("/");
-    // setValueSignin("email", "fer.eze.ram@gmail.com");
-    // setValueSignin("password", "fer.eze.ram@gmail.com");
-    // setValueSignup("email", "fer.eze.ram@gmail.com");
-    // setValueSignup("password", "fer.eze.ram@gmail.com");
-    // setValueSignup("repPassword", "fer.eze.ram@gmail.com");
+    //session && navigate("/");
+    setValueSignin("email", "fer.eze.ram@gmail.com");
+    setValueSignin("password", "fer.eze.ram@gmail.com");
+    setValueSignup("email", "fer.eze.ram@gmail.com");
+    setValueSignup("password", "fer.eze.ram@gmail.com");
+    setValueSignup("repPassword", "fer.eze.ram@gmail.com");
     // eslint-disable-next-line
   }, []);
 
@@ -231,12 +231,14 @@ const Signupin = () => {
                 type="text"
                 placeholder="Contraseña"
                 autoComplete="off"
-                className={
+                className={`g-input-two-icons ${
                   watchSignin("password") === undefined ||
                   watchSignin("password") === ""
                     ? ""
-                    : `${viewPassword.signin ? "" : "g-password"}`
-                }
+                    : viewPassword.signin
+                    ? ""
+                    : "g-password"
+                }`}
                 {...registerSignin("password", {
                   required: true,
                 })}
@@ -352,12 +354,14 @@ const Signupin = () => {
                 type="text"
                 placeholder="Contraseña"
                 autoComplete="off"
-                className={
+                className={`g-input-two-icons ${
                   watchSignup("password") === undefined ||
                   watchSignup("password") === ""
                     ? ""
-                    : `${viewPassword.signup ? "" : "g-password"}`
-                }
+                    : viewPassword.signup
+                    ? ""
+                    : "g-password"
+                }`}
                 {...registerSignup("password", {
                   required: true,
                   minLength: 6,
@@ -412,12 +416,14 @@ const Signupin = () => {
                 type="text"
                 placeholder="Repite tu contraseña"
                 autoComplete="off"
-                className={
+                className={`g-input-two-icons ${
                   watchSignup("repPassword") === undefined ||
                   watchSignup("repPassword") === ""
                     ? ""
-                    : `${viewPassword.signupRep ? "" : "g-password"}`
-                }
+                    : viewPassword.signupRep
+                    ? ""
+                    : "g-password"
+                }`}
                 {...registerSignup("repPassword", {
                   required: true,
                   validate: (repPassword) => {

@@ -91,7 +91,9 @@ const Notification = (props) => {
                 </div>
             </div>
         </div>
-    )
-}
+      </div>
+    </div>
+  );
+};
 
-export default Notification
+export default Notification;
