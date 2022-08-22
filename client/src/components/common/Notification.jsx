@@ -25,7 +25,9 @@ const Notification = (props) => {
     useEffect(() => {
         clearTimeout(timeout.current);
         startTimeout();
-        message && setIsOpen(true);
+        setTimeout(() => {
+            message && setIsOpen(true);            
+        }, 100);
         // eslint-disable-next-line
     }, []);
 

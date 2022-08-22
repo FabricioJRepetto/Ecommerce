@@ -9,13 +9,6 @@ export const notificationSlice = createSlice({
         sendNotif: (state, action) => {
             state.main = [...state.main, { ...action.payload, id: state.main.length }];
         },
-        show: (state, action) => {
-            let aux = [...state.main];
-            aux.map(e => (
-                e.id === action.payload && (e.status = 'displaying')
-            ));
-            state.main = aux;
-        },
         close: (state, action) => {
             let aux = [...state.main];
             aux.map(e => (
@@ -26,6 +19,6 @@ export const notificationSlice = createSlice({
     },
 });
 
-export const { sendNotif, show, close } = notificationSlice.actions;
+export const { sendNotif, close } = notificationSlice.actions;
 
 export default notificationSlice.reducer;

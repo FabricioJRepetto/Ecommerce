@@ -114,7 +114,7 @@ const Details = () => {
         `${statusText === "OK" ? "success" : "warning"}`
       );
     } else {
-      notification("Log in to proceed.", "/signin", "warning");
+      notification("Necesitas iniciar sesión primero.", "/signin", "warning");
     }
   };
 
@@ -123,7 +123,7 @@ const Details = () => {
       await axios.post(`/cart/`, { product_id: id });
       navigate("/buyNow");
     } else {
-      notification("Log in to proceed.", "/signin", "warning");
+      notification("Necesitas iniciar sesión primero.", "/signin", "warning");
     }
   };
 
@@ -262,8 +262,8 @@ const Details = () => {
               </div>
             ) : (
               <div className="details-attributes-container">
-                <div
-                  className={`all-attributes-container ${
+                <div 
+                 className={`all-attributes-container ${
                     attributesColumns ? "attributes-two-columns" : ""
                   }`}
                   style={{ height: attributesHeight }}
