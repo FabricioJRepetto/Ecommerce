@@ -11,8 +11,12 @@ const Orders = () => {
   const { data: orders, loading } = useAxios("GET", `/order/userall/`);
 
   const cancelOrder = async (id) => {
-    const { data } = await axios.put(`/order/${id}`, { status: "cancelled" });
-    notification(data.message, "", "warning");
+    const { statusText } = await axios.put(`/order/${id}`, { status: "cancelled" });
+    notification(
+        `${statusText === "OK" ? "Dirección actualizada correctamente." : "Algo salió mal."}`,
+        "",
+        "warning"
+      );
   };  
 
   return (

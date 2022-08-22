@@ -101,7 +101,7 @@ const Cart = () => {
         if (newAdd.state && newAdd.city && newAdd.zip_code && newAdd.street_name && newAdd.street_number) {
             closeAddForm();
             const { data } = await axios.post(`/address`, newAdd);
-            notification(data.message, '', 'success')
+            notification('Nueva dirección registrada.', '', 'success')
             setSelectedAdd(data.address.pop());
             getAddress();
         }
@@ -114,15 +114,15 @@ const Cart = () => {
      };
 
     const deleteProduct = async (id, source) => {
-        const { data } = await axios.delete(`/cart?id=${id}&source=${source}`);
+        await axios.delete(`/cart?id=${id}&source=${source}`);
         getCart();
-        notification(data.message, '', 'warning');
+        notification('Producto eliminado del carrito.', '', 'warning');
     };
 
     const buyLater = async (id) => { 
         const { data } = await axios.post(`/cart/buylater/${id}`);
         getCart();
-        notification(data.message, '', 'success');
+        notification(data.message, '', '');
     }
 
     const shippingMode = async (boolean) => { 

@@ -9,7 +9,6 @@ import { WishlistButton as Fav } from "./WishlistButton";
 import "./Details.css";
 
 import Footer from "../common/Footer";
-import { ReactComponent as Sale } from "../../assets/svg/sale.svg";
 import { ReactComponent as Spinner } from "../../assets/svg/spinner.svg";
 import { loadQuerys } from "../../Redux/reducer/productsSlice";
 import { priceFormat } from "../../helpers/priceFormat";

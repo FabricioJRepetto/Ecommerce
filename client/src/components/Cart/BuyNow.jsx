@@ -111,7 +111,7 @@ const BuyNow = () => {
         if (newAdd.state && newAdd.city && newAdd.zip_code && newAdd.street_name && newAdd.street_number) {
             closeAddForm();
             const { data } = await axios.post(`/address`, newAdd);
-            notification(data.message, '', 'success')
+            notification('Nueva dirección registrada.', '', 'success')
             setSelectedAdd(data.address.pop());
             getAddress();
         }

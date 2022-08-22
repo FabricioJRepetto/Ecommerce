@@ -112,7 +112,7 @@ const buyLater = async (req, res, next) => {
                     }
                 }, { new: true });
 
-            return res.json({ message: 'Product saved for buying later.', cart: newCart });
+            return res.json({ message: 'Producto guardado para comprar más tarde.', cart: newCart });
 
         } else {
             aux = cart.buyLater.find(e => e.product_id === req.params.id);
@@ -126,7 +126,7 @@ const buyLater = async (req, res, next) => {
                     }
                 }, { new: true });
 
-            return res.json({ message: 'Product moved to Cart.', cart: newCart })
+            return res.json({ message: 'Producto agregado al carrito.', cart: newCart })
         }
     } catch (error) {
         next(error)

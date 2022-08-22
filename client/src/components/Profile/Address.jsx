@@ -30,7 +30,7 @@ const Address = ({ loading, setLoading, address, setAddress }) => {
     data.address ? setAddress(data.address) : setAddress([]);
     setLoading(false);
     notification(
-      data.message,
+      `${statusText === "OK" ? "Dirección eliminada correctamente." : "Algo salió mal."}`,
       "",
       `${statusText === "OK" ? "success" : "warning"}`
     );
@@ -41,7 +41,7 @@ const Address = ({ loading, setLoading, address, setAddress }) => {
     const { data, statusText } = await axios.put(`/address/default/${id}`);
     setAddress(data.address);
     notification(
-      data.message,
+      `${statusText === "OK" ? "Dirección predeterminada establecida correctamente." : "Algo salió mal."}`,
       "/cart",
       `${statusText === "OK" ? "success" : "warning"}`
     );
@@ -70,7 +70,7 @@ const Address = ({ loading, setLoading, address, setAddress }) => {
       );
       setAddress(updated.address);
       notification(
-        updated.message,
+        `${statusText === "OK" ? "Nueva dirección creada correctamente." : "Algo salió mal."}`,
         "",
         `${statusText === "OK" ? "success" : "warning"}`
       );
@@ -82,7 +82,7 @@ const Address = ({ loading, setLoading, address, setAddress }) => {
       );
       setAddress(updated.address);
       notification(
-        updated.message,
+        `${statusText === "OK" ? "Dirección actualizada correctamente." : "Algo salió mal."}`,
         "",
         `${statusText === "OK" ? "success" : "warning"}`
       );

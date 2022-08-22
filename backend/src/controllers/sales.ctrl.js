@@ -6,13 +6,10 @@ const { salesMaker } = require("../jobs/salesMaker");
 const getSales = async (req, res, next) => {
     try {
         const sales = await Sales.findOne();
-        if (!sales) {
+        if (!sales || sales.length < 5) {
             //:! generar nuevas sales
-            const newSales = await Sales.create({
-                products: [],
-                last_update: Date.now()
-            });
-            return res.json(newSales)
+            const response = await salesMaker();
+            return res.json(response)
         };
         const prods = await Product.find({ _id: { '$in': sales.products } });
 
