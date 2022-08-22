@@ -92,7 +92,7 @@
 .notification-border-red {
     z-index: 14;
     transition: opacity .8s ease;
-    transition-delay: .8s;
+    transition-delay: 0.5s;
     position: absolute;
     left: 0;
     height: 100%;
@@ -103,7 +103,7 @@
 .notification-border-orange {
   z-index: 14;
   transition: opacity 0.8s ease;
-  transition-delay: 0.8s;
+  transition-delay: 0.5s;
   position: absolute;
   left: 0;
   height: 100%;
@@ -114,7 +114,7 @@
 .notification-border-green {
   z-index: 14;
   transition: opacity 0.8s ease;
-  transition-delay: 0.8s;
+  transition-delay: 0.5s;
   position: absolute;
   left: 0;
   height: 100%;
@@ -125,7 +125,7 @@
 .notification-border-blue {
     z-index: 14;
     transition: opacity .8s ease;
-    transition-delay: .8s;
+    transition-delay: 0.5s;
     position: absolute;
     left: 0;
     height: 100%;
