@@ -1,24 +1,33 @@
-import React, { useEffect } from 'react';
-import { useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useRef, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { close } from '../../Redux/reducer/notificationSlice';
 import './Notification.css';
 
 import { ReactComponent as LinkIcon } from "../../assets/svg/link.svg";
 
-const Notification = () => {
+const Notification = (props) => {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const isOpen = useSelector((state) => state.notificationSlice.open);
-    const { message, type, url } = useSelector((state) => state.notificationSlice.main);
+    const [isOpen, setIsOpen] = useState(false);
+    const [shrink, setShrink] = useState(false);
     const timeout = useRef(null);
+    const dispatch = useDispatch();
+    // const isOpen = useState((state) => state.notificationSlice.open);
+    // const { message, type, url } = useSelector((state) => state.notificationSlice.main);
+    
+    const {
+        message,
+        type,
+        url,
+        id
+    } = props;
 
     useEffect(() => {
         clearTimeout(timeout.current);
         startTimeout();
+        message && setIsOpen(true);
         // eslint-disable-next-line
-    }, [isOpen]);
+    }, []);
 
     let color = '';
     switch (type) {
@@ -31,7 +40,7 @@ const Notification = () => {
         case 'success':
             color = 'green';
             break;
-        default: color = 'rgba(0, 0, 0, .3)';
+        default: color = 'blue';
             break;
     };
 
@@ -41,16 +50,25 @@ const Notification = () => {
                 closeNotification();
             }, 6000);
         }
-     }
+     };
 
     const closeNotification = (click) => {
-        url && click && navigate(url)
-        dispatch(close());
+        url && click && navigate(url);
+        setIsOpen(false);
         clearTimeout(timeout.current);
+
+        setTimeout(() => {
+            setShrink(true);
+        }, 500);
+
+        setTimeout(() => {
+            dispatch(close(id));
+        }, 1000);
      };
 
     return (
-        <div className={`notification-card-area`} style={{pointerEvents: isOpen ? 'all' : 'none'}}>
+        <div className={`notification-card-area ${shrink ? 'notif-shrink' : ''}`} 
+            style={{pointerEvents: isOpen ? 'all' : 'none'}}>
 
            <div className='chromatic-container'>
                 <div className={`notification-color-placeholder ${isOpen && `notification-border-${color}`}`}></div>

@@ -8,9 +8,10 @@ const AdminLayout = () => {
   useVerifyAdmin();
   return (
     <div>
+        <button onClick={()=> notification('test notif standard', '', '')}>Standard</button>
+        <button onClick={()=> notification('test notif success', '', 'success')}>Success</button>
         <button onClick={()=> notification('test notif error', '', 'error')}>Error</button>
         <button onClick={()=> notification('test notif warning', '', 'warning')}>Warning</button>
-        <button onClick={()=> notification('test notif success', '', 'success')}>Success</button>
       <nav>
         <Link to="/admin/metrics">
           <h3>Métricas</h3>
