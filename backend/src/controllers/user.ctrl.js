@@ -29,9 +29,7 @@ const signup = async (req, res, next) => {
     const link = `http://localhost:3000/verify/${verifyToken}`;
     await sendEmail(email, "Verificar email", link); //!VOLVER A VER modificar url de localhost
 
-    return res.json({
-      message: req.authInfo,
-    });
+    return res.json({ ...req.authInfo, ok: true });
   } catch (error) {
     next(error);
   }
@@ -42,7 +40,7 @@ const signin = async (req, res, next) => {
 
   if (!errors.isEmpty()) {
     const message = errors.errors.map((err) => err.msg);
-    return res.json({ message });
+    return res.json({ message, error: true });
   }
 
   passport.authenticate("signin", async (err, user, info) => {
@@ -55,8 +53,8 @@ const signin = async (req, res, next) => {
         if (err) return next(err);
         const { _id, email, name, role, avatar, isGoogleUser } = user;
 
-        if (role === "deleted")
-          return res.status(401).json({ message: "Cuenta eliminada" });
+        if (role === "banned")
+          return res.status(401).json({ message: "Cuenta suspendida" });
 
         const body = { _id, email, role, isGoogleUser };
 
@@ -143,15 +141,21 @@ const verifyEmail = async (req, res, next) => {
 };
 
 const forgotPassword = async (req, res, next) => {
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    const message = errors.errors.map((err) => err.msg);
+    return res.json({ message, error: true });
+  }
+
   const { email } = req.body;
-  if (!email) return res.status(401).send({ message: "Email requerido" });
 
   try {
     let userFound = await User.findOne({ email });
     if (!userFound)
-      return res.status(404).send({ message: "Cuenta no encontrada" });
+      return res.json({ message: "Cuenta no encontrada", error: true });
     if (userFound.isGoogleUser) {
-      return res.status(401).json({ message: "Cuenta no autorizada" });
+      return res.json({ message: "Cuenta no autorizada", error: true });
     }
 
     const body = { _id: userFound._id, email: userFound.email };
@@ -198,7 +202,7 @@ const changePassword = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const message = errors.errors.map((err) => err.msg);
-    return res.json({ message });
+    return res.json({ message, error: true });
   }
 
   const { password, _id } = req.body;
@@ -228,7 +232,7 @@ const updatePassword = async (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     const message = errors.errors.map((err) => err.msg);
-    return res.json({ message, error: true }); //! VOLVER A VER agregar el error:true a los res.json
+    return res.json({ message, error: true });
   }
 
   try {
@@ -237,7 +241,7 @@ const updatePassword = async (req, res, next) => {
     const userFound = await User.findById(req.user._id);
     const validity = await userFound.comparePassword(oldPassword);
     if (!validity) {
-      return res.json({ message: "Contraseña incorrecta" });
+      return res.json({ message: "Contraseña incorrecta", error: true });
     }
 
     userFound.password = password;

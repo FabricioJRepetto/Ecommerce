@@ -9,11 +9,13 @@ import Modal from "../common/Modal";
 import LoaderBars from "../common/LoaderBars";
 import "../../App.css";
 import "./ForgotPassword.css";
+import { useNotification } from "../../hooks/useNotification";
 
 const ForgotPassword = () => {
   const { session } = useSelector((state) => state.sessionReducer);
   const [response, setResponse] = useState(null);
   const navigate = useNavigate();
+  const [notification] = useNotification();
   const {
     register: registerForgot,
     handleSubmit: handleSubmitForgot,
@@ -26,7 +28,10 @@ const ForgotPassword = () => {
   const emailRegex = /^[\w-.]+@([\w-])+[.\w-]*$/i;
 
   useEffect(() => {
-    setValueForgot("email", "fer.eze.ram@gmail.com");
+    setValueForgot(
+      "email",
+      "fer.eze.ram@gmail.com"
+    ); /* //!VOLVER A VER eliminar esto */
     // eslint-disable-next-line
   }, []);
 
@@ -34,7 +39,14 @@ const ForgotPassword = () => {
     openLoader();
     try {
       const { data } = await axios.put("/user/forgotPassword", email);
-      setResponse(data.message);
+
+      if (data.error && data.message && Array.isArray(data.message)) {
+        data.message.forEach((error) => notification(error, "", "warning"));
+      } else if (data.error) {
+        notification(data.message, "", "warning");
+      } else {
+        setResponse(data.message);
+      }
     } catch (error) {
       console.log(error);
       //! VOLVER A VER manejo de errores

@@ -30,7 +30,24 @@ const emailValidation = body("email", "Ingresa un email válido")
 const passwordValidation = body("password", "Ingresa una contraseña válida")
   .trim()
   .notEmpty()
+  .isLength({ min: 6 })
   .escape();
+
+const passwordValidationSignup = body(
+  "password",
+  "Ingresa una contraseña válida"
+)
+  .trim()
+  .notEmpty()
+  .isLength({ min: 6 })
+  .escape()
+  .custom((value, { req }) => {
+    if (value !== req.body.repPassword) {
+      throw new Error("Las contraseñas no coinciden");
+    } else {
+      return value;
+    }
+  });
 
 const passwordValidationToUpdate = body(
   "oldPassword",
@@ -60,7 +77,7 @@ router.post(
   "/signup",
   [
     emailValidation,
-    passwordValidation,
+    passwordValidationSignup,
     passport.authenticate("signup", { session: false }),
   ],
   signup
@@ -70,7 +87,7 @@ router.post("/signinGoogle", signinGoogle);
 router.post("/avatar", verifyToken, setAvatar);
 router.get("/profile/:token", verifyToken, profile);
 router.put("/verifyEmail", [verifyToken, googleUserShallNotPass], verifyEmail);
-router.put("/forgotPassword", forgotPassword);
+router.put("/forgotPassword", emailValidation, forgotPassword);
 router.put("/resetPassword", resetPassword);
 router.put("/changePassword", passwordValidationChange, changePassword);
 router.put(

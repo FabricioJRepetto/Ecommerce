@@ -14,7 +14,7 @@ import Orders from "./Orders";
 import Address from "./Address";
 import Wishlist from "./Wishlist";
 import History from "./History";
-import ChangePassword from "../Session/ChangePassword";
+import UpdatePassword from "../Session/UpdatePassword";
 import { useSignout } from "../../hooks/useSignout";
 import "../../App.css";
 import "./Profile.css";
@@ -49,11 +49,11 @@ const Profile = () => {
   const [newAvatar, setNewAvatar] = useState();
   const [avatarPreview, setAvatarPreview] = useState();
 
-//   const {
-//     register: registerForgot,
-//     handleSubmit: handleSubmitForgot,
-//     formState: { errors: errorsForgot },
-//   } = useForm();
+  //   const {
+  //     register: registerForgot,
+  //     handleSubmit: handleSubmitForgot,
+  //     formState: { errors: errorsForgot },
+  //   } = useForm();
 
   const {
     register: registerEditDetails,
@@ -168,15 +168,15 @@ const Profile = () => {
   };
 
   const onlyLettersRegex = /^([a-zñ .]){2,}$/gi;
- 
+
   return (
     <div className="profile-container">
       <div className="profile-menu-container">
-        <p onClick={()=>navigate("/profile/details")}>Detalles</p>
-        <p onClick={()=>navigate("/profile/orders")}>Ordenes</p>
-        <p onClick={()=>navigate("/profile/wishlist")}>Favoritos</p>
-        <p onClick={()=>navigate("/profile/history")}>Historial</p>
-        <p onClick={()=>signOut()}>Salir</p>        
+        <p onClick={() => navigate("/profile/details")}>Detalles</p>
+        <p onClick={() => navigate("/profile/orders")}>Ordenes</p>
+        <p onClick={() => navigate("/profile/wishlist")}>Favoritos</p>
+        <p onClick={() => navigate("/profile/history")}>Historial</p>
+        <p onClick={() => signOut()}>Salir</p>
       </div>
 
       <hr />
@@ -259,7 +259,7 @@ const Profile = () => {
           <History loading={loading} history={history} wl_id={wl_id} />
         )}
 
-        {render === "password" && <ChangePassword />}
+        {render === "password" && <UpdatePassword />}
       </div>
 
       <Modal isOpen={isOpenAvatar} closeModal={closeAvatar}>
