@@ -25,6 +25,7 @@ html {
 /* LINKS */
 a:link {
   text-decoration: none;
+  color: rgb(255, 255, 255);
 }
 a:visited {
   text-decoration: none;
@@ -124,9 +125,9 @@ input.g-input-two-icons {
 /* BLUR PASSWORD */
 .g-input-with-button .g-password {
   text-shadow: 0 0 0.4rem #000;
+  text-decoration: underline line-through;
   color: transparent;
   font-weight: 500;
-  text-transform: uppercase;
   letter-spacing: -1px;
   padding-right: 3.5rem;
   padding-left: 0;

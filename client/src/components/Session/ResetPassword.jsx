@@ -103,7 +103,7 @@ const ResetPassword = () => {
         {response ? (
           <>
             <div className="reset-response">{response}</div>
-            <NavLink to={"/signin"}>
+            <NavLink to={`${session ? "/" : "/signin"}`}>
               <span className="g-back-button g-text-button">
                 <ArrowBackIcon />
                 {"   regresar"}
