@@ -62,9 +62,13 @@ const Signupin = () => {
     openLoader();
     try {
       const { data } = await axios.post(`/user/signup`, signupData);
-      if (data.error) return notification(data.message, "", "warning");
-      setSignSelect("signin");
-      notification(data.message, "", "");
+
+      if (data.error && data.message && Array.isArray(data.message)) {
+        data.message.forEach((error) => notification(error, "", "warning"));
+      } else {
+        data.ok && setSignSelect("signin");
+        notification(data.message, "", "");
+      }
     } catch (error) {
       console.log(error);
       //! VOLVER A VER manejo de errores
@@ -79,6 +83,10 @@ const Signupin = () => {
     try {
       const { data } = await axios.post(`/user/signin`, signinData);
 
+      if (data.error && data.message && Array.isArray(data.message)) {
+        data.message.forEach((error) => notification(error, "", "warning"));
+      }
+
       if (data.user) {
         window.localStorage.setItem("loggedTokenEcommerce", data.token);
         dispatch(sessionActive(true));
@@ -87,12 +95,12 @@ const Signupin = () => {
       }
     } catch (error) {
       console.log(error);
+      //! VOLVER A VER manejo de errores
       if (error.response.data.message) {
         notification(error.response.data.message, "", "error");
       } else if (error.response.data) {
         notification(error.response.data, "", "error");
       }
-      //! VOLVER A VER manejo de errores
       dispatch(loadingUserData(false));
     }
   };
@@ -162,6 +170,7 @@ const Signupin = () => {
 
   useEffect(() => {
     //session && navigate("/");
+    /* //!VOLVER A VER eliminar esto */
     setValueSignin("email", "fer.eze.ram@gmail.com");
     setValueSignin("password", "fer.eze.ram@gmail.com");
     setValueSignup("email", "fer.eze.ram@gmail.com");

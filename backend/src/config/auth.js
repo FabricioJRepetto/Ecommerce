@@ -18,7 +18,7 @@ passport.use(
 
         if (!errors.isEmpty()) {
           const message = errors.errors.map((err) => err.msg);
-          return done(null, email, { message });
+          return done(null, email, { error: true, message });
         }
 
         const user = await User.exists({ email });

@@ -4,7 +4,7 @@ import Card from "../../components/Products/Card";
 import AddressCard from "./AddressCard";
 import OrderCard from "./OrderCard";
 
-const UserCard = ({ user, openDeleteUser, openPromoteUser }) => {
+const UserCard = ({ user, openBanUser, openUnbanUser, openPromoteUser }) => {
   const [addresses, setAddresses] = useState([]);
   const [orders, setOrders] = useState([]);
   const [wishlist, setWishlist] = useState([]);
@@ -72,8 +72,11 @@ const UserCard = ({ user, openDeleteUser, openPromoteUser }) => {
           <h4>Sin avatar</h4>
         )}
         {role === "client" && (
-          <button onClick={() => openDeleteUser({ _id, name })}>
-            Eliminar
+          <button onClick={() => openBanUser({ _id, name })}>Suspender</button>
+        )}
+        {role === "banned" && (
+          <button onClick={() => openUnbanUser({ _id, name })}>
+            Activar cuenta
           </button>
         )}
         {showAddresses ? (
