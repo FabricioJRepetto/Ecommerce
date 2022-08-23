@@ -8,21 +8,77 @@
   z-index: 5; /* //! VOLVER A VER ver z-index */
   background-color: black;
 }
+.navbar-menu-mobile-background {
+  height: 100vh;
+  width: 100vw;
+  background-color: #00000075;
+  position: fixed;
+  z-index: 5;
+  transition: 0.3s ease-in-out;
+  top: 0;
+}
+
+.navbar-menu-mobile {
+  padding-top: 1rem;
+  height: 100%;
+  width: 80vw;
+  position: fixed;
+  background-color: grey;
+  z-index: 5;
+  left: -81vw;
+  top: 0;
+  transition: 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.navbar-menu-mobile ul {
+  width: 100%;
+}
+.navbar-menu-mobile li {
+  text-align: left;
+  width: 100%;
+}
+.navbar-menu-mobile li div {
+  padding-left: 1rem;
+  height: 2.5rem !important;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+.navbar-menu-mobile > ul > div {
+  margin: 0.5rem 0;
+  border-top: 1px solid black;
+}
+
+.show-menu-mobile {
+  left: 0;
+}
+.hide-menu-mobile-background {
+  opacity: 0;
+  z-index: 1;
+}
 
 /* MOBILE */
 @media (max-width: 1023px) {
   .navbar {
     background-color: red;
   }
-  /* .navbar-profile-button {
-    display: none;
-  }
-  .navbar-wishlist-button {
+  .navbar-hide-mobile {
     display: none;
   }
   .navbar-central-section {
     width: 50vw;
-  } */
+  }
+  .navbar-central-subsection {
+    display: none;
+  }
+  .navbar-dumb-hidden {
+    height: 3rem;
+  }
+  .navbar-menu-mobile {
+    display: flex;
+  }
 }
 /* DESKTOP */
 @media (min-width: 1024px) {
@@ -32,9 +88,18 @@
   .navbar-wishlist-button {
     display: flex;
   }
+  .navbar-central-subsection {
+    display: flex;
+  }
+  .navbar-menu-mobile {
+    display: none;
+  }
+  .navbar-dumb-hidden {
+    height: 5.5rem;
+  }
 }
+
 .navbar-dumb-hidden {
-  height: 5.5rem;
   background-color: black;
 }
 .navbar a {
@@ -86,16 +151,16 @@
 }
 
 .navbar-central-subsection {
-  display: flex;
   height: 2.5rem;
   width: 100%;
   position: fixed;
-  top: 3rem;
+  top: 2.8rem;
   left: 0;
   transition: 0.3s ease-in-out;
   background-color: black;
   justify-content: center;
   padding-right: 6rem;
+  align-items: center;
 }
 
 .hidden-box {

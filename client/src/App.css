@@ -21,6 +21,9 @@ html {
 *::before {
   box-sizing: inherit;
 }
+ul {
+  list-style-type: none;
+}
 
 /* LINKS */
 a:link {
