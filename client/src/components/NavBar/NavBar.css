@@ -79,6 +79,7 @@
 }
 .navbar-menu-mobile-button {
   z-index: 7;
+  display: flex;
 }
 
 @media (max-width: 1023px) {
@@ -189,6 +190,10 @@
   flex-direction: column;
   margin-top: 0.2rem;
   align-items: flex-start;
+}
+.navbar-sections {
+  display: flex;
+  margin-right: 2rem;
 }
 
 @media (min-width: 1240px) {

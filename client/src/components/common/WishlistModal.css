@@ -1,64 +1,68 @@
 .card-modal-container {
-    color: white;
-    background: #111111;
-    position: relative;
-    height: 100px;
-    transition: height .1s ease;
-    overflow: hidden;
+  color: white;
+  background: #111111;
+  position: relative;
+  height: 100px;
+  transition: height 0.1s ease;
+  overflow: hidden;
 }
 .modal-card-loading {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
 }
 
 .wishlist-modal-loaded {
-    height: 50vh;
+  height: 50vh;
+}
+
+.modal-wishlist-empty {
+  padding: 1rem;
 }
 
 .wishlist-modal-container {
-    display: flex;
-    flex-direction: column;
-    height: 50vh;
-    padding: 2rem .3rem 4rem .3rem;
-    overflow-y: auto;
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+  display: flex;
+  flex-direction: column;
+  height: 50vh;
+  padding: 2rem 0.3rem 4rem 0.3rem;
+  overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
-.wishlist-modal-container::-webkit-scrollbar { 
-    display: none;
+.wishlist-modal-container::-webkit-scrollbar {
+  display: none;
 }
 
 .wishlist-modal-card-container {
-    display: flex;
-    flex-direction: column-reverse;
+  display: flex;
+  flex-direction: column-reverse;
 }
 
 .modal-card-header {
-    position: absolute;
-    z-index: 13;
-    width: 100%;
-    padding: 8px;
-    top: 0;
-    background-color: #111111;
+  position: absolute;
+  z-index: 13;
+  width: 100%;
+  padding: 8px;
+  top: 0;
+  background-color: #111111;
 }
 .modal-card-all-favs {
-    font-weight: 300;
-    position: absolute;
-    z-index: 13;
-    width: 100%;
-    padding: 20px;
-    bottom: 0;
-    background-color: #111111;
-    box-shadow: 0px -3px 3px rgba(0, 0, 0, 0.2);
+  font-weight: 300;
+  position: absolute;
+  z-index: 13;
+  width: 100%;
+  padding: 20px;
+  bottom: 0;
+  background-color: #111111;
+  box-shadow: 0px -3px 3px rgba(0, 0, 0, 0.2);
 }
 .modal-card-all-favs:hover {
-    color: rgb(220, 220, 220);
+  color: rgb(220, 220, 220);
 }
 
 .modal-card-wishlist-button-container {
-    position: absolute;
-    top: 40%;
-    right: 5%;
+  position: absolute;
+  top: 40%;
+  right: 5%;
 }
