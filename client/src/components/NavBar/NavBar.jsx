@@ -173,6 +173,7 @@ const NavBar = () => {
                     className="navbar-profile-button navbar-hide-mobile"
                     onMouseEnter={() => setProfileModal(true)}
                     onMouseLeave={() => setProfileModal(false)}
+                    onClick={() => navigate("/profile/details")}
                   >
                     {avatar ? (
                       <div className="navbar-avatar">
@@ -190,7 +191,7 @@ const NavBar = () => {
                     <div className="navbar-modal-container">
                       <div
                         className={`navbar-modal ${
-                          profileModal ? "visible" : ""
+                          profileModal ? "visible" : "navbar-modal-hide"
                         }`}
                       >
                         <div
@@ -257,12 +258,13 @@ const NavBar = () => {
                     className="navbar-wishlist-button navbar-hide-mobile"
                     onMouseEnter={() => setWishModal(true)}
                     onMouseLeave={() => setWishModal(false)}
+                    onClick={() => navigate("/profile/wishlist")}
                   >
                     <Fav className="wishlist-icon" />
                     <div className="navbar-modal-container-w">
                       <div
                         className={`navbar-modal-w ${
-                          wishModal ? "visible" : ""
+                          wishModal ? "visible" : "navbar-modal-hide"
                         }`}
                       >
                         {wishModal && <WishlistModal close={setWishModal} />}
