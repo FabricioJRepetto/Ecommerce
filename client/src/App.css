@@ -25,6 +25,7 @@ html {
 /* LINKS */
 a:link {
   text-decoration: none;
+  color: rgb(255, 255, 255);
 }
 a:visited {
   text-decoration: none;

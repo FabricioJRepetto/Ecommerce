@@ -1,22 +1,93 @@
 .providerstore-echo-container {
-    position: relative;
+    
+}
+.providerstore-echo-inner {    
     font-size: 10vw;
     font-family: HelveticaNeueLTPro-BdOu;
-    letter-spacing: -0.3rem;
+    letter-spacing: -0.7rem;
     color: #151515;
     pointer-events: none;
-    z-index: 0;
+    position: fixed;
+    z-index: 3;
 }
-.providerstore-echo-container p:first-child {    
+.providerstore-echo-inner p:first-child {    
     font-family: HelveticaNeueLTPro-Bd;
-    position: absolute;
-    margin: 1rem;
+    top: 9.8%;
+    left: 0.5%;
+    position: fixed;
+    z-index: 3;
 }
-.providerstore-echo-container p:nth-child(2) { 
-    position: absolute;
-    margin: 8vw 1rem;
+.providerstore-echo-inner p:nth-child(2) {    
+    top: 23.5%;
+    left: 0.5%;
+    position: fixed;
+    z-index: 3;
 }
-.providerstore-echo-container p:nth-child(3) { 
+.providerstore-echo-inner p:nth-child(3) {    
+    top: 37%;
+    left: 0.5%;
+    position: fixed;
+    z-index: 3;
+}
+.providerstore-title {
+    font-size: 10vw;
+    font-family: HelveticaNeueLTPro-Bd;
+    letter-spacing: -0.7rem;
+    color: white;
+    top: 9.8%;
+    left: 48%;
+    position: fixed;
+    z-index: 1;
+}
+.providerstore-header {
+           
+}
+
+.providerstore-background {
+    background: black;
     position: absolute;
-    margin: 15.1vw 1rem;
+    z-index: 2;
+    height: 100%;
+    width: 100vw;
+    border: 1px dotted lime;
+}
+
+.storecards-container {
+    font-family: HelveticaNeueLTPro-Hv;
+    padding: 4rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 4;
+}
+.store-premium {    
+    height: 45vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+}
+.store-premium-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding: 0 2rem;
+    width: 30vw;
+}
+.store-premium-text p {
+    padding: 1rem;
+}
+
+.storecards-inner {
+    display: flex;
+}
+.storecard {
+    font-size: 1.5rem;
+    color: black;
+    margin: 2rem;
+    z-index: 2;
+    height: 15rem;
+    width: 20rem;
+    background-color: white;
 }
