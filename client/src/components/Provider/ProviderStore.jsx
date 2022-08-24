@@ -1,6 +1,7 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import { resizer } from '../../helpers/resizer'
 import Footer from '../common/Footer'
 import Carousel from '../Home/Carousel/Carousel'
@@ -27,9 +28,11 @@ const ProviderStore = () => {
         },
     ];    
 
+    const navigate = useNavigate();
     const [countdown, setCountdown] = useState('');
     const [products, setProducts] = useState(false);
     const [loading, setLoading] = useState(true);
+    const [hover, setHover] = useState('');
 
     const {wishlist} = useSelector((state) => state.cartReducer);
 
@@ -87,32 +90,55 @@ const ProviderStore = () => {
                             <h1>Provider Premium</h1>
                             <p>Una selección exclusiva de los mejores productos original Provider store.</p>
                         </div>
-                        <button className='g-white-button'>Ver más</button>
+                        <button className='g-white-button'
+                            onClick={()=> navigate('/')}>Ver los productos Premium</button>
                     </div>
                 </div>
 
                 <div className='storecards-inner'>
-                    <div className="storecard">
-                        Consolas
+
+                    <div className="storecard"
+                    onClick={()=> navigate('/')}
+                        onMouseEnter={()=> setHover('console')}
+                        onMouseLeave={()=> setHover('')}>
+                        <p>Consolas</p>
+                        <p className={`storecard-subtitle ${hover === 'console' && 'subtitle-visible1'}`}>Consolas</p>
+                        <p className={`storecard-subtitle ${hover === 'console' && 'subtitle-visible2'}`}>Consolas</p>
                         <img src={resizer('https://res.cloudinary.com/dsyjj0sch/image/upload/v1661328214/Playdate-photo_hxdnpj.png', 200)} alt="img" />
                     </div>
-                    <div className="storecard">
-                        Perifericos
+                    <div className="storecard"
+                    onClick={()=> navigate('/')}
+                        onMouseEnter={()=> setHover('periph')}
+                        onMouseLeave={()=> setHover('')}>
+                        <p>Perifericos</p>
+                        <p className={`storecard-subtitle ${hover === 'periph' && 'subtitle-visible1'}`}>Perifericos</p>
+                        <p className={`storecard-subtitle ${hover === 'periph' && 'subtitle-visible2'}`}>Perifericos</p>
                         <img src={resizer('https://res.cloudinary.com/dsyjj0sch/image/upload/v1661328896/RW-ZENITH-01.2020_1400x_j4iupn.webp', 200)} alt="img" />
                     </div>
-                    <div className="storecard">
-                        Audio
+                    <div className="storecard"
+                    onClick={()=> navigate('/')}
+                        onMouseEnter={()=> setHover('audio')}
+                        onMouseLeave={()=> setHover('')}>
+                        <p>Audio</p>
+                        <p className={`storecard-subtitle ${hover === 'audio' && 'subtitle-visible1'}`}>Audio</p>
+                        <p className={`storecard-subtitle ${hover === 'audio' && 'subtitle-visible2'}`}>Audio</p>
                         <img src='https://www.tradeinn.com/f/13756/137567598/skullcandy-auriculares-inalambricos-crusher.jpg' alt="img" />
                     </div>
-                    <div className="storecard">
-                        Monitores
+                    <div className="storecard"
+                    onClick={()=> navigate('/')}
+                        onMouseEnter={()=> setHover('display')}
+                        onMouseLeave={()=> setHover('')}>
+                        <p>Monitores</p>
+                        <p className={`storecard-subtitle ${hover === 'display' && 'subtitle-visible1'}`}>Monitores</p>
+                        <p className={`storecard-subtitle ${hover === 'display' && 'subtitle-visible2'}`}>Monitores</p>
                         <img src='https://katech.com.ar/wp-content/uploads/MON351-1.jpg' alt="img" />
                     </div>
+
                 </div>
 
                 <div className='providerstore-flashsales'>
                     <h2>Flash sales! ⏱ {countdown}</h2>
-                    <div className="random-container">
+                    <div className="providerstore-flashsales-container">
                         {Array.from(Array(5).keys()).map((_, index) => (
                             <MiniCard
                                 key={`specials ${index}`}
@@ -129,6 +155,9 @@ const ProviderStore = () => {
                         ))}
                     </div>
                 </div>
+
+                <div className='providerstore-premiumbrand'></div>
+
             </div>
 
             <Footer />
