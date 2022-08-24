@@ -232,9 +232,7 @@ const NavBar = () => {
                             />
                           </div>
 
-                          {role === "client" ? (
-                            <></>
-                          ) : (
+                          {role === "admin" && (
                             <div className="profile-modal-option">
                               <ChromaticText text={"ADMIN"} route={"admin"} />
                             </div>
@@ -278,15 +276,11 @@ const NavBar = () => {
                         : ""}
                     </div>
                   </NavLink>
-
-                  <span className="navbar-menu-mobile-button">
-                    <BurgerButton
-                      setShowMenu={setShowMenu}
-                      showMenu={showMenu}
-                    />
-                  </span>
                 </>
               )}
+              <span className="navbar-menu-mobile-button">
+                <BurgerButton setShowMenu={setShowMenu} showMenu={showMenu} />
+              </span>
             </div>
           </div>
           <div
@@ -338,6 +332,15 @@ const NavBar = () => {
         className={`navbar-menu-mobile ${showMenu ? "show-menu-mobile" : ""}`}
       >
         <ul>
+          {!session && (
+            <li onClick={() => setShowMenu(false)}>
+              <ChromaticText
+                text={"Iniciar sesión"}
+                route={"signin"}
+                size={"1.1rem"}
+              />
+            </li>
+          )}
           <li onClick={() => setShowMenu(false)}>
             <ChromaticText
               text={"Provider Store"}
@@ -352,45 +355,47 @@ const NavBar = () => {
               size={"1.1rem"}
             />
           </li>
-          <div></div>
-          <li onClick={() => setShowMenu(false)}>
-            <ChromaticText
-              text="Mi perfil"
-              route="/profile/details"
-              size={"1.1rem"}
-            />
-          </li>
-          <li onClick={() => setShowMenu(false)}>
-            <ChromaticText
-              text="Direcciones"
-              route="/profile/address"
-              size={"1.1rem"}
-            />
-          </li>
-          <li onClick={() => setShowMenu(false)}>
-            <ChromaticText
-              text="Favoritos"
-              route="/profile/wishlist"
-              size={"1.1rem"}
-            />
-          </li>
-          <li onClick={() => setShowMenu(false)}>
-            <ChromaticText
-              text="Órdenes"
-              route="/profile/orders"
-              size={"1.1rem"}
-            />
-          </li>
-          <li onClick={() => setShowMenu(false)}>
-            <ChromaticText
-              text="Historial"
-              route="/profile/history"
-              size={"1.1rem"}
-            />
-          </li>
-          {role === "client" ? (
-            <></>
-          ) : (
+          {session && (
+            <>
+              <div></div>
+              <li onClick={() => setShowMenu(false)}>
+                <ChromaticText
+                  text="Mi perfil"
+                  route="/profile/details"
+                  size={"1.1rem"}
+                />
+              </li>
+              <li onClick={() => setShowMenu(false)}>
+                <ChromaticText
+                  text="Direcciones"
+                  route="/profile/address"
+                  size={"1.1rem"}
+                />
+              </li>
+              <li onClick={() => setShowMenu(false)}>
+                <ChromaticText
+                  text="Favoritos"
+                  route="/profile/wishlist"
+                  size={"1.1rem"}
+                />
+              </li>
+              <li onClick={() => setShowMenu(false)}>
+                <ChromaticText
+                  text="Órdenes"
+                  route="/profile/orders"
+                  size={"1.1rem"}
+                />
+              </li>
+              <li onClick={() => setShowMenu(false)}>
+                <ChromaticText
+                  text="Historial"
+                  route="/profile/history"
+                  size={"1.1rem"}
+                />
+              </li>
+            </>
+          )}
+          {session && role === "admin" && (
             <li onClick={() => setShowMenu(false)}>
               <ChromaticText text={"ADMIN"} route={"admin"} size={"1.1rem"} />
             </li>

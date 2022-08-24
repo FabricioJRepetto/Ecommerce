@@ -5,7 +5,6 @@
   height: 50px;
   width: 45px;
   cursor: pointer;
-  z-index: 7;
 }
 .hamburger-bottom-bread,
 .hamburger-patty,
@@ -17,8 +16,8 @@
   background-color: white;
   top: 50%;
   border-radius: 0;
-  -webkit-transition: all 100ms ease-out;
-  transition: all 100ms ease-out;
+  -webkit-transition: all 0.3s ease-out;
+  transition: all 0.3s ease-out;
   left: 12.5px;
 }
 /* HAMBURGUESA */
