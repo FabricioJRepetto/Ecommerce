@@ -206,15 +206,19 @@ const NavBar = () => {
 
                           <div className="profile-modal-option">
                             <ChromaticText
-                              text="Direcciones"
-                              route="/profile/address"
+                              text="Favoritos"
+                              route="/profile/wishlist"
                             />
                           </div>
 
                           <div className="profile-modal-option">
+                            <ChromaticText text="Carrito" route="/cart" />
+                          </div>
+
+                          <div className="profile-modal-option">
                             <ChromaticText
-                              text="Favoritos"
-                              route="/profile/wishlist"
+                              text="Historial"
+                              route="/profile/history"
                             />
                           </div>
 
@@ -227,8 +231,8 @@ const NavBar = () => {
 
                           <div className="profile-modal-option">
                             <ChromaticText
-                              text="Historial"
-                              route="/profile/history"
+                              text="Direcciones"
+                              route="/profile/address"
                             />
                           </div>
 
@@ -368,15 +372,18 @@ const NavBar = () => {
               </li>
               <li onClick={() => setShowMenu(false)}>
                 <ChromaticText
-                  text="Direcciones"
-                  route="/profile/address"
+                  text="Favoritos"
+                  route="/profile/wishlist"
                   size={"1.1rem"}
                 />
               </li>
               <li onClick={() => setShowMenu(false)}>
+                <ChromaticText text="Carrito" route="/cart" size={"1.1rem"} />
+              </li>
+              <li onClick={() => setShowMenu(false)}>
                 <ChromaticText
-                  text="Favoritos"
-                  route="/profile/wishlist"
+                  text="Historial"
+                  route="/profile/history"
                   size={"1.1rem"}
                 />
               </li>
@@ -389,8 +396,8 @@ const NavBar = () => {
               </li>
               <li onClick={() => setShowMenu(false)}>
                 <ChromaticText
-                  text="Historial"
-                  route="/profile/history"
+                  text="Direcciones"
+                  route="/profile/address"
                   size={"1.1rem"}
                 />
               </li>
