@@ -16,8 +16,8 @@
   background-color: white;
   top: 50%;
   border-radius: 0;
-  -webkit-transition: all 0.3s ease-out;
-  transition: all 0.3s ease-out;
+  -webkit-transition: all 0.2s ease-out;
+  transition: all 0.2s ease-out;
   left: 12.5px;
 }
 /* HAMBURGUESA */

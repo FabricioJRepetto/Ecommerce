@@ -25,7 +25,7 @@
   background-color: #00000075;
   position: fixed;
   z-index: 5;
-  transition: 0.3s ease-in-out;
+  transition: 0.2s ease-in-out;
   top: 0;
 }
 .navbar-menu-mobile {
@@ -35,9 +35,9 @@
   position: fixed;
   background-color: #111111;
   z-index: 5;
-  left: -81vw;
+  left: -90vw;
   top: 0;
-  transition: 0.3s ease-in-out;
+  transition: 0.2s ease-in-out;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -61,7 +61,7 @@
 .navbar-menu-mobile li div {
   padding-left: 1rem;
   height: 2.5rem !important;
-  width: 100%;
+  width: 77vw;
   display: flex;
   align-items: center;
 }
@@ -89,10 +89,11 @@
     width: 70vw;
   } */
   .navbar-central-section {
-    width: 70vw;
+    width: 60vw;
   }
   .navbar-central-section > form {
     width: 100%;
+    padding-right: 1rem;
   }
   .navbar input[type="text"] {
     width: 100%;
@@ -107,7 +108,11 @@
     display: flex;
   }
   .little-glitch {
-    display: none;
+    width: 145px;
+    margin-right: 2rem;
+  }
+  .cart-icon-container {
+    margin: 0;
   }
 }
 /* DESKTOP */
@@ -139,6 +144,26 @@
   .navbar-menu-mobile-button {
     margin-left: 2rem;
     display: none;
+  }
+  .little-glitch {
+    width: 210px;
+  }
+  .cart-icon-container {
+    margin: 0 1rem;
+  }
+}
+
+@media (max-width: 800px) {
+  .navbar-profile-section {
+    display: none;
+  }
+}
+@media (min-width: 801px) {
+  .navbar-profile-section {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin: 0;
   }
 }
 
@@ -230,20 +255,6 @@
   position: relative;
 }
 
-.navbar-profile-container {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  justify-content: flex-start;
-  height: 99px;
-  width: 400px;
-}
-.navbar-profile-section {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  margin: 0;
-}
 .navbar-profile-button {
   flex-direction: row;
   align-items: center;
@@ -281,7 +292,6 @@
   position: relative;
   height: 2.5rem;
   width: 2.5rem;
-  margin: 0 1rem;
 }
 .cart-icon {
   transform: scale(0.6);
@@ -408,7 +418,6 @@
 }
 .little-glitch {
   cursor: pointer;
-  width: 210px;
   height: 3rem;
   transition: 0.3s ease-in-out;
   padding: 0;
