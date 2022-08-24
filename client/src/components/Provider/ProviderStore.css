@@ -2,9 +2,9 @@
     
 }
 .providerstore-echo-inner {    
-    font-size: 10vw;
+    font-size: 15vh;
     font-family: HelveticaNeueLTPro-BdOu;
-    letter-spacing: -0.7rem;
+    letter-spacing: -0.3rem;
     color: #151515;
     pointer-events: none;
     position: fixed;
@@ -18,29 +18,45 @@
     z-index: 3;
 }
 .providerstore-echo-inner p:nth-child(2) {    
-    top: 23.5%;
+    top: 21%;
     left: 0.5%;
     position: fixed;
     z-index: 3;
 }
 .providerstore-echo-inner p:nth-child(3) {    
-    top: 37%;
+    top: 32%;
     left: 0.5%;
     position: fixed;
     z-index: 3;
 }
 .providerstore-title {
-    font-size: 10vw;
+    font-size: 15vh;
     font-family: HelveticaNeueLTPro-Bd;
-    letter-spacing: -0.7rem;
+    letter-spacing: -0.3rem;
     color: white;
     top: 9.8%;
-    left: 48%;
+    left: 40%;
+    pointer-events: none;
     position: fixed;
     z-index: 1;
 }
+.providerstore-title-text {
+    font-family: HelveticaNeueLTPro-Bd;
+    font-size: 2.2rem;
+    text-align: left;   
+    top: 12.6%;
+    left: 66.5%;
+    pointer-events: none;
+    position: fixed;
+    z-index: 1;
+}
+
 .providerstore-header {
-           
+    height: 42vh;
+    background: linear-gradient(90deg, rgba(255,169,0,1) 0%, rgba(211,46,7,1) 33%, rgba(0,44,168,1) 66%, rgba(110,0,196,1) 100%);
+}
+.providerstore-header img {
+    height: 100%;
 }
 
 .providerstore-background {
@@ -49,12 +65,11 @@
     z-index: 2;
     height: 100%;
     width: 100vw;
-    border: 1px dotted lime;
 }
 
 .storecards-container {
     font-family: HelveticaNeueLTPro-Hv;
-    padding: 4rem;
+    padding: 2rem;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -76,18 +91,30 @@
     width: 30vw;
 }
 .store-premium-text p {
-    padding: 1rem;
+    padding: 2rem;
 }
 
 .storecards-inner {
     display: flex;
 }
 .storecard {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
     font-size: 1.5rem;
     color: black;
     margin: 2rem;
     z-index: 2;
-    height: 15rem;
+    height: 10rem;
     width: 20rem;
     background-color: white;
+    cursor: pointer;
+}
+.storecard img {
+    max-height: 100%;
+    max-width: 100%;
+}
+
+.providerstore-flashsales {
+
 }
