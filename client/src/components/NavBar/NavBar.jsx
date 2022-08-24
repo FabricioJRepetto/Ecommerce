@@ -20,6 +20,7 @@ import "./NavBar.css";
 import "../../App.css";
 import { useSignout } from "../../hooks/useSignout";
 import ChromaticText from "../common/ChromaticText";
+import BurgerButton from "./BurgerButton";
 
 const NavBar = () => {
   const { session, username, avatar, role } = useSelector(
@@ -33,6 +34,7 @@ const NavBar = () => {
   const [productToSearch, setProductToSearch] = useState("");
   const [showSubsectionBar, setShowSubsectionBar] = useState(false);
   const [lastScroll, setLastScroll] = useState(0);
+  const [showMenu, setShowMenu] = useState(false);
   const signOut = useSignout();
   const eldiv = useRef(null);
 
@@ -160,7 +162,7 @@ const NavBar = () => {
                 <span className="navbar-signin-button">
                   <NavLink to={"signin"}>
                     <Avatar className="navbar-avatar-svg" />
-                    <span className="navbar-signin-text">
+                    <span className="navbar-signin-text navbar-hide-mobile">
                       <ChromaticText text="Iniciar sesión" />
                     </span>
                   </NavLink>
@@ -168,7 +170,7 @@ const NavBar = () => {
               ) : (
                 <>
                   <div
-                    className="navbar-profile-button"
+                    className="navbar-profile-button navbar-hide-mobile"
                     onMouseEnter={() => setProfileModal(true)}
                     onMouseLeave={() => setProfileModal(false)}
                   >
@@ -218,7 +220,7 @@ const NavBar = () => {
 
                           <div className="profile-modal-option">
                             <ChromaticText
-                              text="Ordenes"
+                              text="Órdenes"
                               route="/profile/orders"
                             />
                           </div>
@@ -230,9 +232,7 @@ const NavBar = () => {
                             />
                           </div>
 
-                          {role === "client" ? (
-                            <></>
-                          ) : (
+                          {role === "admin" && (
                             <div className="profile-modal-option">
                               <ChromaticText text={"ADMIN"} route={"admin"} />
                             </div>
@@ -250,7 +250,7 @@ const NavBar = () => {
                   </div>
 
                   <div
-                    className="navbar-wishlist-button"
+                    className="navbar-wishlist-button navbar-hide-mobile"
                     onMouseEnter={() => setWishModal(true)}
                     onMouseLeave={() => setWishModal(false)}
                   >
@@ -294,7 +294,7 @@ const NavBar = () => {
                 text={"Provider Store"}
                 route={"products"}
                 size={"1rem"}
-                movementAfter={"1rem 0 0 0"}
+                movementAfter={"0 0 1rem 0"}
               />
             </div>
 
@@ -303,7 +303,7 @@ const NavBar = () => {
                 text={"Provider Deluxe"}
                 route={"products"}
                 size={"1rem"}
-                movementAfter={"1rem 0 0 0"}
+                movementAfter={"0 0 1rem 0"}
               />
             </div>
 
@@ -312,11 +312,104 @@ const NavBar = () => {
                 text={"About Us"}
                 route={"about"}
                 size={"1rem"}
-                movementAfter={"1rem 0 0 0"}
+                movementAfter={"0 0 1rem 0"}
               />
             </div>
           </div>
+
+          <div className="navbar-menu-mobile-button">
+            <BurgerButton setShowMenu={setShowMenu} showMenu={showMenu} />
+          </div>
         </div>
+      </div>
+
+      <div
+        className={`navbar-menu-mobile-background ${
+          !showMenu ? "hide-menu-mobile-background" : ""
+        }`}
+        onClick={() => setShowMenu(false)}
+      ></div>
+      <div
+        className={`navbar-menu-mobile ${showMenu ? "show-menu-mobile" : ""}`}
+      >
+        <ul>
+          {!session && (
+            <li onClick={() => setShowMenu(false)}>
+              <ChromaticText
+                text={"Iniciar sesión"}
+                route={"signin"}
+                size={"1.1rem"}
+              />
+            </li>
+          )}
+          <li onClick={() => setShowMenu(false)}>
+            <ChromaticText
+              text={"Provider Store"}
+              route={"products"}
+              size={"1.1rem"}
+            />
+          </li>
+          <li onClick={() => setShowMenu(false)}>
+            <ChromaticText
+              text={"Provider Deluxe"}
+              route={"products"}
+              size={"1.1rem"}
+            />
+          </li>
+          {session && (
+            <>
+              <div></div>
+              <li onClick={() => setShowMenu(false)}>
+                <ChromaticText
+                  text="Mi perfil"
+                  route="/profile/details"
+                  size={"1.1rem"}
+                />
+              </li>
+              <li onClick={() => setShowMenu(false)}>
+                <ChromaticText
+                  text="Direcciones"
+                  route="/profile/address"
+                  size={"1.1rem"}
+                />
+              </li>
+              <li onClick={() => setShowMenu(false)}>
+                <ChromaticText
+                  text="Favoritos"
+                  route="/profile/wishlist"
+                  size={"1.1rem"}
+                />
+              </li>
+              <li onClick={() => setShowMenu(false)}>
+                <ChromaticText
+                  text="Órdenes"
+                  route="/profile/orders"
+                  size={"1.1rem"}
+                />
+              </li>
+              <li onClick={() => setShowMenu(false)}>
+                <ChromaticText
+                  text="Historial"
+                  route="/profile/history"
+                  size={"1.1rem"}
+                />
+              </li>
+            </>
+          )}
+          {session && role === "admin" && (
+            <li onClick={() => setShowMenu(false)}>
+              <ChromaticText text={"ADMIN"} route={"admin"} size={"1.1rem"} />
+            </li>
+          )}
+          <div></div>
+          <li onClick={() => setShowMenu(false)}>
+            <ChromaticText text={"About Us"} route={"about"} size={"1.1rem"} />
+          </li>
+          <div></div>
+          <li onClick={() => [signOut(), setShowMenu(false)]}>
+            <ChromaticText text="Salir" size={"1.1rem"} />
+          </li>
+        </ul>
       </div>
     </>
   );
