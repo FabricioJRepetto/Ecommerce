@@ -1,0 +1,55 @@
+.hamburger {
+  position: absolute;
+  top: 0;
+  right: 45px;
+  height: 50px;
+  width: 45px;
+  cursor: pointer;
+  z-index: 7;
+}
+.hamburger-bottom-bread,
+.hamburger-patty,
+.hamburger-top-bread {
+  position: absolute;
+  display: block;
+  width: 20px;
+  height: 1px;
+  background-color: white;
+  top: 50%;
+  border-radius: 0;
+  -webkit-transition: all 100ms ease-out;
+  transition: all 100ms ease-out;
+  left: 12.5px;
+}
+/* HAMBURGUESA */
+.hamburger-top-bread {
+  margin-top: -8px;
+}
+.hamburger-patty {
+  margin-top: -0.6666666667px;
+}
+.hamburger-bottom-bread {
+  margin-top: 6px;
+}
+
+/* HAMBURGUESA FINA */
+/* .hamburger-top-bread {
+  margin-top: -5px;
+}
+.hamburger-patty {
+  margin-top: -1px;
+}
+.hamburger-bottom-bread {
+  margin-top: 3px;
+} */
+
+/* TRANSFORMACION A X */
+.hamburger-top-bread-open {
+  transform: translate(0, 8px) rotate(45deg);
+}
+.hamburger-patty-open {
+  transform: scale(0, 0);
+}
+.hamburger-bottom-bread-open {
+  transform: translate(0, -6px) rotate(-45deg);
+}

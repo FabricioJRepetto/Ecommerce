@@ -20,6 +20,7 @@ import "./NavBar.css";
 import "../../App.css";
 import { useSignout } from "../../hooks/useSignout";
 import ChromaticText from "../common/ChromaticText";
+import BurgerButton from "./BurgerButton";
 
 const NavBar = () => {
   const { session, username, avatar, role } = useSelector(
@@ -277,7 +278,13 @@ const NavBar = () => {
                         : ""}
                     </div>
                   </NavLink>
-                  <span onClick={() => setShowMenu(!showMenu)}>OOOOOOOO</span>
+
+                  <span className="navbar-menu-mobile-button">
+                    <BurgerButton
+                      setShowMenu={setShowMenu}
+                      showMenu={showMenu}
+                    />
+                  </span>
                 </>
               )}
             </div>
