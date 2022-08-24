@@ -4,14 +4,18 @@ import axios from "axios";
 import { useNotification } from "../../hooks/useNotification";
 import Modal from "../../components/common/Modal";
 import {
-  adminDeleteUser,
+  adminBanUser,
+  adminUnbanUser,
   adminPromoteUser,
 } from "../../Redux/reducer/sessionSlice";
 
 const ModalAdminUsers = ({
-  isOpenDeleteUser,
-  closeDeleteUser,
-  userToDelete,
+  isOpenBanUser,
+  closeBanUser,
+  userToBan,
+  isOpenUnbanUser,
+  closeUnbanUser,
+  userToUnban,
   isOpenPromoteUser,
   closePromoteUser,
   userToPromote,
@@ -20,17 +24,32 @@ const ModalAdminUsers = ({
 
   const [notification] = useNotification();
 
-  const handleDeleteUser = () => {
-    deleteUser();
-    closeDeleteUser();
+  const handleBanUser = () => {
+    banUser();
+    closeBanUser();
   };
 
-  const deleteUser = () => {
+  const banUser = () => {
     axios
-      .delete(`/admin/user/${userToDelete._id}`)
+      .delete(`/admin/user/${userToBan._id}`)
       .then((_) => {
-        dispatch(adminDeleteUser(userToDelete._id));
-        notification("Usuario eliminado exitosamente", "", "success");
+        dispatch(adminBanUser(userToBan._id));
+        notification("Cuenta suspendida exitosamente", "", "success");
+      })
+      .catch((err) => console.log(err));
+  };
+
+  const handleUnbanUser = () => {
+    unbanUser();
+    closeUnbanUser();
+  };
+
+  const unbanUser = () => {
+    axios
+      .put(`/admin/user/${userToUnban._id}`)
+      .then((_) => {
+        dispatch(adminUnbanUser(userToUnban._id));
+        notification("Cuenta activada exitosamente", "", "success");
       })
       .catch((err) => console.log(err));
   };
@@ -56,17 +75,28 @@ const ModalAdminUsers = ({
 
   return (
     <div>
-      <Modal isOpen={isOpenDeleteUser} closeModal={closeDeleteUser} type="warn">
-        <p>{`¿Eliminar al usuario ${
-          userToDelete ? userToDelete.name : null
-        }?`}</p>
-        <button type="button" onClick={() => handleDeleteUser()}>
+      <Modal isOpen={isOpenBanUser} closeModal={closeBanUser} type="warn">
+        <p>{`¿Eliminar al usuario ${userToBan ? userToBan.name : null}?`}</p>
+        <button type="button" onClick={() => handleBanUser()}>
           Aceptar
         </button>
-        <button type="button" onClick={closeDeleteUser}>
+        <button type="button" onClick={closeBanUser}>
           Cancelar
         </button>
       </Modal>
+
+      <Modal isOpen={isOpenUnbanUser} closeModal={closeUnbanUser} type="warn">
+        <p>{`Volver a activar al usuario ${
+          userToUnban ? userToUnban.name : null
+        }?`}</p>
+        <button type="button" onClick={() => handleUnbanUser()}>
+          Aceptar
+        </button>
+        <button type="button" onClick={closeUnbanUser}>
+          Cancelar
+        </button>
+      </Modal>
+
       <Modal
         isOpen={isOpenPromoteUser}
         closeModal={closePromoteUser}

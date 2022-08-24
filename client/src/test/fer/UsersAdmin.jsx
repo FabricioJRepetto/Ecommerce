@@ -17,7 +17,8 @@ const UsersAdmin = () => {
   const [nameSearch, setNameSearch] = useState("");
   const location = useLocation();
   const { id } = useParams();
-  const [isOpenDeleteUser, openDeleteUser, closeDeleteUser, userToDelete] =
+  const [isOpenBanUser, openBanUser, closeBanUser, userToBan] = useModal();
+  const [isOpenUnbanUser, openUnbanUser, closeUnbanUser, userToUnban] =
     useModal();
   const [isOpenPromoteUser, openPromoteUser, closePromoteUser, userToPromote] =
     useModal();
@@ -70,7 +71,8 @@ const UsersAdmin = () => {
             usersToShow?.map((user) => (
               <UserCard
                 user={user}
-                openDeleteUser={openDeleteUser}
+                openBanUser={openBanUser}
+                openUnbanUser={openUnbanUser}
                 openPromoteUser={openPromoteUser}
               />
             ))
@@ -78,9 +80,12 @@ const UsersAdmin = () => {
         )}
       </div>
       <ModalAdminUsers
-        isOpenDeleteUser={isOpenDeleteUser}
-        closeDeleteUser={closeDeleteUser}
-        userToDelete={userToDelete}
+        isOpenBanUser={isOpenBanUser}
+        closeBanUser={closeBanUser}
+        userToBan={userToBan}
+        isOpenUnbanUser={isOpenUnbanUser}
+        closeUnbanUser={closeUnbanUser}
+        userToUnban={userToUnban}
         isOpenPromoteUser={isOpenPromoteUser}
         closePromoteUser={closePromoteUser}
         userToPromote={userToPromote}

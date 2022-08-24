@@ -62,7 +62,13 @@ const Signupin = () => {
     openLoader();
     try {
       const { data } = await axios.post(`/user/signup`, signupData);
-      data.error && notification(data.message, "", "warning");
+
+      if (data.error && data.message && Array.isArray(data.message)) {
+        data.message.forEach((error) => notification(error, "", "warning"));
+      } else {
+        data.ok && setSignSelect("signin");
+        notification(data.message, "", "");
+      }
     } catch (error) {
       console.log(error);
       //! VOLVER A VER manejo de errores
@@ -77,6 +83,10 @@ const Signupin = () => {
     try {
       const { data } = await axios.post(`/user/signin`, signinData);
 
+      if (data.error && data.message && Array.isArray(data.message)) {
+        data.message.forEach((error) => notification(error, "", "warning"));
+      }
+
       if (data.user) {
         window.localStorage.setItem("loggedTokenEcommerce", data.token);
         dispatch(sessionActive(true));
@@ -85,12 +95,12 @@ const Signupin = () => {
       }
     } catch (error) {
       console.log(error);
+      //! VOLVER A VER manejo de errores
       if (error.response.data.message) {
         notification(error.response.data.message, "", "error");
       } else if (error.response.data) {
         notification(error.response.data, "", "error");
       }
-      //! VOLVER A VER manejo de errores
       dispatch(loadingUserData(false));
     }
   };

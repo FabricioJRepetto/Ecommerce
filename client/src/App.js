@@ -1,10 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Routes, Route, useNavigate } from "react-router-dom";
-import {
-    loadUserData,
-    loadingUserData,
-} from "./Redux/reducer/sessionSlice";
+import { loadUserData, loadingUserData } from "./Redux/reducer/sessionSlice";
 import { loadCart, loadWishlist } from "./Redux/reducer/cartSlice";
 import axios from "axios";
 import "./App.css";

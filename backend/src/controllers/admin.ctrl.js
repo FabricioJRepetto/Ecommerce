@@ -177,15 +177,29 @@ const getUserWishlist = async (req, res, next) => {
   }
 };
 
-const deleteUser = async (req, res, next) => {
+const banUser = async (req, res, next) => {
   const { id } = req.params;
 
   try {
     const userFound = await User.findById(id);
     if (userFound.role === "admin")
       return res.status(401).json({ message: "Unauthorized" });
-    await User.findByIdAndUpdate(id, { role: "deleted" });
-    return res.json({ message: "Usuario eliminado exitosamente" });
+    await User.findByIdAndUpdate(id, { role: "banned" });
+    return res.json({ message: "Usuario suspendido exitosamente" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const unbanUser = async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    const userFound = await User.findById(id);
+    if (userFound.role === "admin")
+      return res.status(401).json({ message: "Unauthorized" });
+    await User.findByIdAndUpdate(id, { role: "client" });
+    return res.json({ message: "Usuario promovido exitosamente" });
   } catch (error) {
     next(error);
   }
@@ -509,7 +523,8 @@ module.exports = {
   getUserAddresses,
   getUserOrders,
   getUserWishlist,
-  deleteUser,
+  banUser,
+  unbanUser,
   createProduct,
   updateProduct,
   setDiscount,

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
 import axios from "axios";
 import { useNotification } from "../../hooks/useNotification";
 import { avoidEnterSubmit } from "../../helpers/AvoidEnterSubmit";
@@ -12,16 +13,18 @@ import {
   ViewOffIcon,
 } from "@chakra-ui/icons";
 import "../../App.css";
-import "./ChangePassword.css";
+import "./UpdatePassword.css";
 
-const ChangePassword = () => {
+const UpdatePassword = () => {
   const [viewPassword, setViewPassword] = useState({
     oldPassword: false,
     password: false,
     repPassword: false,
   });
   const [response, setResponse] = useState("");
+  const [waitingResponse, setWaitingResponse] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { email } = useSelector((state) => state.sessionReducer);
   const [notification] = useNotification();
   const {
     register,
@@ -35,14 +38,40 @@ const ChangePassword = () => {
     setLoading(true);
     try {
       const { data } = await axios.put("/user/updatePassword", passwordData);
-      if (data.error && data.message && Array.isArray(data.message))
-        notification(data.message[0], "", "error");
-      data.message && setResponse(data.message);
+
+      if (data.error && data.message && Array.isArray(data.message)) {
+        data.message.forEach((error) => notification(error, "", "error"));
+      } else if (data.error) {
+        notification(data.message, "", "error");
+      } else {
+        data.message && setResponse(data.message);
+      }
     } catch (error) {
       console.log(error);
-      //setResponse(error.response.data.message); //! VOLVER A VER manejo de errores
+      //! VOLVER A VER manejo de errores
     } finally {
       setLoading(false);
+    }
+  };
+
+  const forgotPassword = async () => {
+    if (waitingResponse) return;
+    setWaitingResponse(true);
+    try {
+      const { data } = await axios.put("/user/forgotPassword", { email });
+
+      if (data.error && data.message && Array.isArray(data.message)) {
+        data.message.forEach((error) => notification(error, "", "warning"));
+      } else if (data.error) {
+        notification(data.message, "", "warning");
+      } else {
+        data.message && setResponse(data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      //! VOLVER A VER manejo de errores
+    } finally {
+      setWaitingResponse(false);
     }
   };
 
@@ -66,8 +95,6 @@ const ChangePassword = () => {
             onSubmit={handleSubmit(updatePassword)}
             onKeyDown={avoidEnterSubmit}
           >
-            {/* <div className="reset-text">Ingresa tu nueva contraseña</div> */}
-
             <div className="title-text">Ingresa tu actual contraseña</div>
             <>
               {!errors.oldPassword && (
@@ -127,6 +154,11 @@ const ChangePassword = () => {
                 </div>
               )}
             </span>
+            <div className="title-text">
+              <span className="input-bottom-text" onClick={forgotPassword}>
+                Olvidé mi contraseña
+              </span>
+            </div>
 
             <div className="title-text input-margin-top">
               Ingresa tu nueva contraseña
@@ -266,6 +298,7 @@ const ChangePassword = () => {
               type="submit"
               value="Cambiar contraseña"
               className="g-white-button"
+              disabled={waitingResponse}
             />
           </form>
           <NavLink to={"/profile/details"}>
@@ -280,4 +313,4 @@ const ChangePassword = () => {
   );
 };
 
-export default ChangePassword;
+export default UpdatePassword;

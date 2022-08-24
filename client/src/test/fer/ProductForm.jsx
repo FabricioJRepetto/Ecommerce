@@ -291,7 +291,6 @@ const ProductForm = () => {
           },
         });
         dispatch(changeReloadFlag(true));
-        notification("Producto creado exitosamente", "", "success");
         openCreateProduct();
       }
       clearInputs();
@@ -900,7 +899,7 @@ const ProductForm = () => {
         type="warn"
       >
         <div className="create-another-container">
-          <p>¿Crear otro producto?</p>
+          <p>Producto creado exitosamente ¿Crear otro producto?</p>
           <div className="create-another-buttons-container">
             <button
               type="button"

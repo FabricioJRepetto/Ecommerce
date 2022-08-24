@@ -71,10 +71,12 @@ const ResetPassword = () => {
           },
         }
       );
-      setResponse(data.message);
-      setTimeout(() => {
-        navigate("/signin");
-      }, 4000);
+
+      if (data.error && data.message && Array.isArray(data.message)) {
+        data.message.forEach((error) => notification(error, "", "error"));
+      } else {
+        data.message && setResponse(data.message);
+      }
     } catch (error) {
       console.log(error);
       setResponse(error.response.data.message); //! VOLVER A VER manejo de errores
@@ -101,7 +103,7 @@ const ResetPassword = () => {
         {response ? (
           <>
             <div className="reset-response">{response}</div>
-            <NavLink to={"/"}>
+            <NavLink to={`${session ? "/" : "/signin"}`}>
               <span className="g-back-button g-text-button">
                 <ArrowBackIcon />
                 {"   regresar"}

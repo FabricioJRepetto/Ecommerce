@@ -21,6 +21,9 @@ html {
 *::before {
   box-sizing: inherit;
 }
+ul {
+  list-style-type: none;
+}
 
 /* LINKS */
 a:link {
@@ -125,9 +128,9 @@ input.g-input-two-icons {
 /* BLUR PASSWORD */
 .g-input-with-button .g-password {
   text-shadow: 0 0 0.4rem #000;
+  text-decoration: underline line-through;
   color: transparent;
   font-weight: 500;
-  text-transform: uppercase;
   letter-spacing: -1px;
   padding-right: 3.5rem;
   padding-left: 0;
