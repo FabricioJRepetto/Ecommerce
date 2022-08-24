@@ -85,8 +85,17 @@
   .navbar-hide-mobile {
     display: none;
   }
+  /* .navbar-profile-section {
+    width: 70vw;
+  } */
   .navbar-central-section {
-    width: 50vw;
+    width: 70vw;
+  }
+  .navbar-central-section > form {
+    width: 100%;
+  }
+  .navbar input[type="text"] {
+    width: 100%;
   }
   .navbar-central-subsection {
     display: none;
@@ -97,14 +106,23 @@
   .navbar-menu-mobile {
     display: flex;
   }
+  .little-glitch {
+    display: none;
+  }
 }
 /* DESKTOP */
 @media (min-width: 1024px) {
+  .navbar-profile-section {
+    width: 300px;
+  }
   .navbar-profile-button {
     display: flex;
   }
   .navbar-wishlist-button {
     display: flex;
+  }
+  .navbar input[type="text"] {
+    width: 35vw;
   }
   .navbar-central-subsection {
     display: flex;
@@ -119,6 +137,7 @@
     display: none;
   }
   .navbar-menu-mobile-button {
+    margin-left: 2rem;
     display: none;
   }
 }
@@ -204,7 +223,6 @@
 
 .navbar input[type="text"] {
   padding-left: 1rem;
-  width: 35vw;
 }
 
 .navbar-logo-section {
@@ -225,7 +243,6 @@
   flex-direction: row;
   justify-content: flex-start;
   margin: 0;
-  width: 300px;
 }
 .navbar-profile-button {
   flex-direction: row;

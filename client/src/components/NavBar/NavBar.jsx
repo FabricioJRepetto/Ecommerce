@@ -278,9 +278,6 @@ const NavBar = () => {
                   </NavLink>
                 </>
               )}
-              <span className="navbar-menu-mobile-button">
-                <BurgerButton setShowMenu={setShowMenu} showMenu={showMenu} />
-              </span>
             </div>
           </div>
           <div
@@ -318,6 +315,10 @@ const NavBar = () => {
                 movementAfter={"0 0 1rem 0"}
               />
             </div>
+          </div>
+
+          <div className="navbar-menu-mobile-button">
+            <BurgerButton setShowMenu={setShowMenu} showMenu={showMenu} />
           </div>
         </div>
       </div>
