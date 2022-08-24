@@ -317,7 +317,7 @@ const Cart = () => {
 
                                                 <div className="cart-total">
                                                     <p>envío:</p>
-                                                    <div>
+                                                    <div style={{height: '2.4rem'}}>
                                                         {cart.free_ship_cart && <del className="grey">${priceFormat(cart.products.length * SHIP_COST).int}</del>}
                                                         {cart.shipping_cost === 0
                                                         ? <div className="green">

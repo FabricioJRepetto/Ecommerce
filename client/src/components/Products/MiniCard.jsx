@@ -28,12 +28,13 @@ const MiniCard = ({
     const [ready, setReady] = useState(!fadeIn);
     const { session } = useSelector((state) => state.sessionReducer);
 
-    const [loaded, setLoaded] = useState(false);
-    useEffect(() => {
-        if (!loading) {
-        setLoaded(true);
-        }
-    }, [loading]);
+    // const [loaded, setLoaded] = useState(false);
+    // useEffect(() => {
+    //     if (!loading) {
+    //     setLoaded(true);
+    //     }
+    // }, [loading]);
+
     const readySetter = () => {
         setReady(true);
     };
@@ -50,22 +51,21 @@ const MiniCard = ({
           special && visible && "mimic"
         }`}
       ></div>
-      {!loaded ? (
-        <div className="loading-mini-card">
-          <div className="minicard-img-section">
-            <LoadingPlaceHolder extraStyles={{ height: "100%" }} />
-          </div>
-          <div>
-            <LoadingPlaceHolder
-              extraStyles={{ height: "30px", margin: "10px 0 0 0" }}
-            />
-            <LoadingPlaceHolder
-              extraStyles={{ height: "15px", margin: "10px 0 0 0" }}
-            />
-          </div>
+      {(loading || !name)
+        ? <div className="loading-mini-card">
+            <div className="minicard-img-section">
+                <LoadingPlaceHolder extraStyles={{ height: "100%" }} />
+            </div>
+            <div>
+                <LoadingPlaceHolder
+                extraStyles={{ height: "30px", margin: "10px 0 0 0" }}
+                />
+                <LoadingPlaceHolder
+                extraStyles={{ height: "15px", margin: "10px 0 0 0" }}
+                />
+            </div>
         </div>
-      ) : (
-        <div
+       : <div
           onMouseEnter={() => setVisible(true)}
           onMouseLeave={() => setVisible(false)}
           className={`product-mini-card ${visible && "minicard-height"} ${
@@ -110,7 +110,7 @@ const MiniCard = ({
             </div>
           </div>
         </div>
-      )}
+      }
     </div>
   );
 };

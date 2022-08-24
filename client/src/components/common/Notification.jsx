@@ -2,18 +2,16 @@ import React, { useRef, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { close } from '../../Redux/reducer/notificationSlice';
-import './Notification.css';
+import { ExternalLinkIcon } from "@chakra-ui/icons";
 
-import { ReactComponent as LinkIcon } from "../../assets/svg/link.svg";
+import './Notification.css';
 
 const Notification = (props) => {
     const navigate = useNavigate();
     const [isOpen, setIsOpen] = useState(false);
     const [shrink, setShrink] = useState(false);
     const timeout = useRef(null);
-    const dispatch = useDispatch();
-    // const isOpen = useState((state) => state.notificationSlice.open);
-    // const { message, type, url } = useSelector((state) => state.notificationSlice.main);
+    const dispatch = useDispatch();    
     
     const {
         message,
@@ -55,7 +53,7 @@ const Notification = (props) => {
      };
 
     const closeNotification = (click) => {
-        url && click && navigate(url);
+        // url && click && navigate(url);
         setIsOpen(false);
         clearTimeout(timeout.current);
 
@@ -86,7 +84,8 @@ const Notification = (props) => {
                 onClick={() => closeNotification(true)}>
                 <div className={`notification-inner`}>
                     {type !== 'error' && <div className={`notification-timer ${isOpen && 'timer-active'}`}></div>}
-                    {url && <LinkIcon className='link-svg' />}
+                    {/* {url && <LinkIcon className='link-svg' />} */}
+                    {url && <div onClick={()=>navigate(url)} className={`notification-seemore ${isOpen && 'seemore-visible'}`}><ExternalLinkIcon /></div>}
                     <div className='notification-message'>
                         <p>{message}</p>
                     </div>
