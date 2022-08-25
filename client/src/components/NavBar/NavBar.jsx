@@ -33,14 +33,41 @@ const NavBar = () => {
   const [wishModal, setWishModal] = useState(false);
   const [productToSearch, setProductToSearch] = useState("");
   const [showSubsectionBar, setShowSubsectionBar] = useState(false);
-  const [lastScroll, setLastScroll] = useState(0);
   const [showMenu, setShowMenu] = useState(false);
   const signOut = useSignout();
-  const eldiv = useRef(null);
+  const glitchMobile = useRef(null);
+  const glitchDesktop = useRef(null);
 
   useEffect(() => {
-    eldiv.current = document.querySelector(".little-glitch");
-    PowerGlitch.glitch(eldiv.current, {
+    glitchMobile.current = document.querySelector("#little-glitch-mobile");
+    PowerGlitch.glitch(glitchMobile.current, {
+      imageUrl:
+        "https://res.cloudinary.com/dsyjj0sch/image/upload/v1659650791/PROVIDER_LOGO_glitch_aberration_kt2hyv.png",
+      backgroundColor: "transparent",
+      hideOverflow: false,
+      timing: {
+        duration: 10000,
+        iterations: "Infinity",
+      },
+      glitchTimeSpan: {
+        start: 0.6,
+        end: 0.7,
+      },
+      shake: {
+        velocity: 15,
+        amplitudeX: 0.1,
+        amplitudeY: 0.2,
+      },
+      slice: {
+        count: 3,
+        velocity: 15,
+        minHeight: 0.03,
+        maxHeight: 0.15,
+        hueRotate: true,
+      },
+    });
+    glitchDesktop.current = document.querySelector("#little-glitch-desktop");
+    PowerGlitch.glitch(glitchDesktop.current, {
       imageUrl:
         "https://res.cloudinary.com/dsyjj0sch/image/upload/v1659650791/PROVIDER_LOGO_glitch_aberration_kt2hyv.png",
       backgroundColor: "transparent",
@@ -91,36 +118,37 @@ const NavBar = () => {
     navigate("/");
   };
 
-  const controlSubsectionBar = () => {
-    if (typeof window !== "undefined") {
-      if (window.scrollY < lastScroll) {
-        setShowSubsectionBar(false);
-      } else {
-        setShowSubsectionBar(true);
-      }
-      setLastScroll(window.scrollY);
-    }
-  };
-
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      window.addEventListener("scroll", controlSubsectionBar);
+    const controlSubsectionBar = () => {
+      window.scrollY > 100 && setShowSubsectionBar(true);
+      window.scrollY < 100 && setShowSubsectionBar(false);
+    };
 
-      return () => {
-        window.removeEventListener("scroll", controlSubsectionBar);
-      };
-    }
+    window.addEventListener("scroll", controlSubsectionBar);
+
+    return () => {
+      window.removeEventListener("scroll", controlSubsectionBar);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lastScroll]);
+  }, []);
 
   return (
     <>
       <div className="navbar-dumb-hidden"></div>
-      <div className="navbar">
+
+      <div className="glitch-mobile-container">
         <div
-          className={`little-glitch ${
-            showSubsectionBar ? "little-glitch" : ""
-          }`}
+          className="little-glitch glitch-mobile"
+          id="little-glitch-mobile"
+          onClick={() => [logoClick(), setShowMenu(false)]}
+        ></div>
+      </div>
+
+      <div className="navbar">
+        <div className="glitch-mobile-placeholder"></div>
+        <div
+          className="little-glitch glitch-desktop"
+          id="little-glitch-desktop"
           onClick={logoClick}
         ></div>
 
@@ -173,7 +201,6 @@ const NavBar = () => {
                     className="navbar-profile-button navbar-hide-mobile"
                     onMouseEnter={() => setProfileModal(true)}
                     onMouseLeave={() => setProfileModal(false)}
-                    onClick={() => navigate("/profile/details")}
                   >
                     {avatar ? (
                       <div className="navbar-avatar">
@@ -194,43 +221,58 @@ const NavBar = () => {
                           profileModal ? "visible" : "navbar-modal-hide"
                         }`}
                       >
-                        <div
-                          className="navbar-modal-menu-container"
-                          onClick={() => setProfileModal(false)}
-                        >
-                          <div className="profile-modal-option">
+                        <div className="navbar-modal-menu-container">
+                          <div
+                            className="profile-modal-option"
+                            onClick={() => setProfileModal(false)}
+                          >
                             <ChromaticText
                               text="Mi perfil"
                               route="/profile/details"
                             />
                           </div>
 
-                          <div className="profile-modal-option">
+                          <div
+                            className="profile-modal-option"
+                            onClick={() => setProfileModal(false)}
+                          >
                             <ChromaticText
                               text="Favoritos"
                               route="/profile/wishlist"
                             />
                           </div>
 
-                          <div className="profile-modal-option">
+                          <div
+                            className="profile-modal-option"
+                            onClick={() => setProfileModal(false)}
+                          >
                             <ChromaticText text="Carrito" route="/cart" />
                           </div>
 
-                          <div className="profile-modal-option">
+                          <div
+                            className="profile-modal-option"
+                            onClick={() => setProfileModal(false)}
+                          >
                             <ChromaticText
                               text="Historial"
                               route="/profile/history"
                             />
                           </div>
 
-                          <div className="profile-modal-option">
+                          <div
+                            className="profile-modal-option"
+                            onClick={() => setProfileModal(false)}
+                          >
                             <ChromaticText
                               text="Órdenes"
                               route="/profile/orders"
                             />
                           </div>
 
-                          <div className="profile-modal-option">
+                          <div
+                            className="profile-modal-option"
+                            onClick={() => setProfileModal(false)}
+                          >
                             <ChromaticText
                               text="Direcciones"
                               route="/profile/address"
@@ -238,16 +280,24 @@ const NavBar = () => {
                           </div>
 
                           {role === "admin" && (
-                            <div className="profile-modal-option">
+                            <div
+                              className="profile-modal-option"
+                              onClick={() => setProfileModal(false)}
+                            >
                               <ChromaticText text={"ADMIN"} route={"admin"} />
                             </div>
                           )}
 
-                          <div
-                            className="profile-modal-option logout"
-                            onClick={() => signOut()}
-                          >
-                            <ChromaticText text="Salir" />
+                          <div className="logout">
+                            <div
+                              className="profile-modal-option"
+                              onClick={() => [
+                                setProfileModal(false),
+                                signOut(),
+                              ]}
+                            >
+                              <ChromaticText text="Salir" />
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -322,11 +372,10 @@ const NavBar = () => {
               />
             </div>
           </div>
-
-          <div className="navbar-menu-mobile-button">
-            <BurgerButton setShowMenu={setShowMenu} showMenu={showMenu} />
-          </div>
         </div>
+      </div>
+      <div className="navbar-menu-mobile-button">
+        <BurgerButton setShowMenu={setShowMenu} showMenu={showMenu} />
       </div>
 
       <div

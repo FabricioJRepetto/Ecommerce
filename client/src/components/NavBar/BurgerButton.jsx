@@ -4,15 +4,15 @@ const BurgerButton = ({ setShowMenu, showMenu }) => {
   return (
     <label className="hamburger" onClick={() => setShowMenu(!showMenu)}>
       <span
-        class={`hamburger-top-bread ${
+        className={`hamburger-top-bread ${
           showMenu ? "hamburger-top-bread-open" : ""
         }`}
       ></span>
       <span
-        class={`hamburger-patty ${showMenu ? "hamburger-patty-open" : ""}`}
+        className={`hamburger-patty ${showMenu ? "hamburger-patty-open" : ""}`}
       ></span>
       <span
-        class={`hamburger-bottom-bread ${
+        className={`hamburger-bottom-bread ${
           showMenu ? "hamburger-bottom-bread-open" : ""
         }`}
       ></span>
