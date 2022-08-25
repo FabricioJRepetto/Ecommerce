@@ -82,6 +82,9 @@
   .navbar-hide-mobile {
     display: none;
   }
+  .navbar-signin-button {
+    width: 40px;
+  }
   .navbar-central-section {
     width: 55vw;
   }
@@ -130,6 +133,9 @@
   }
   .navbar-wishlist-button {
     display: flex;
+  }
+  .navbar-signin-button {
+    width: 250px;
   }
   .navbar input[type="text"] {
     width: 35vw;
@@ -227,17 +233,11 @@
   .navbar-username {
     display: none;
   }
-  /* .navbar input[type="text"] {
-    width: 400px;
-  } */
   .navbar-central-subsection {
     padding-right: 3.5rem;
   }
   .navbar-central-options {
     padding: 0 0.9rem;
-  }
-  .navbar-signin-button {
-    width: 13rem;
   }
   .navbar-modal-container {
     width: 3rem;
@@ -287,6 +287,9 @@
   padding-left: 1rem;
   /*  cursor: pointer; */
 }
+.navbar-profile-button svg {
+  transform: scale(0.9);
+}
 .navbar-avatar {
   height: 1.5rem;
   width: 1.5rem;
@@ -300,10 +303,6 @@
 }
 .navbar-avatar-svg path {
   fill: white;
-}
-
-.wishlist-icon {
-  transform: scale(0.7);
 }
 .wishlist-icon path {
   fill: white;
@@ -345,6 +344,7 @@
 }
 .navbar-modal-hide {
   display: none;
+  height: 2px;
 }
 
 .navbar-wishlist-button {
@@ -357,7 +357,7 @@
   /*  cursor: pointer; */
 }
 .navbar-wishlist-button svg {
-  transform: scale(1);
+  transform: scale(0.9);
 }
 .navbar-modal-container-w {
   position: absolute;
@@ -406,13 +406,24 @@
   position: relative;
   left: calc(50% - 75px);
   bottom: -50px;
-  height: fit-content;
   width: 10rem;
   border: 1px solid rgb(115, 115, 115);
   background: #111111;
   z-index: 12;
   cursor: default;
+  transition: opacity 0.3s ease;
 }
+.navbar-modal-profile div {
+  display: none;
+}
+.navbar-modal-visible {
+  /* visibility: visible; */
+  height: fit-content;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+  z-index: 12;
+}
+
 .navbar-modal-w {
   visibility: hidden;
   position: relative;
@@ -457,11 +468,9 @@
   transform: translateY(2px);
   z-index: 6;
 }
-
 .navbar-signin-button {
   display: flex;
   justify-content: center;
-  width: 300px;
 }
 .navbar-signin-button a {
   display: flex;

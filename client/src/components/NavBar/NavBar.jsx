@@ -120,8 +120,8 @@ const NavBar = () => {
 
   useEffect(() => {
     const controlSubsectionBar = () => {
-      window.scrollY > 100 && setShowSubsectionBar(true);
-      window.scrollY < 100 && setShowSubsectionBar(false);
+      window.scrollY > 80 && setShowSubsectionBar(true);
+      window.scrollY < 80 && setShowSubsectionBar(false);
     };
 
     window.addEventListener("scroll", controlSubsectionBar);
@@ -191,7 +191,7 @@ const NavBar = () => {
                   <NavLink to={"signin"}>
                     <Avatar className="navbar-avatar-svg" />
                     <span className="navbar-signin-text navbar-hide-mobile">
-                      <ChromaticText text="Iniciar sesión" />
+                      <ChromaticText text="Iniciar Sesión" />
                     </span>
                   </NavLink>
                 </span>
@@ -391,7 +391,7 @@ const NavBar = () => {
           {!session && (
             <li onClick={() => setShowMenu(false)}>
               <ChromaticText
-                text={"Iniciar sesión"}
+                text={"Iniciar Sesión"}
                 route={"signin"}
                 size={"1.1rem"}
               />
