@@ -19,6 +19,8 @@ import Cart from "./components/Cart/Cart";
 import BuyNow from "./components/Cart/BuyNow";
 import PostSale from "./components/Cart/PostSale";
 import Products from "./test/fer/Products";
+import ProviderStore from "./components/Provider/ProviderStore";
+import ProviderPremium from "./components/Provider/ProviderPremium";
 import ProductForm from "./test/fer/ProductForm";
 import Details from "./components/Products/Details";
 import Results from "./components/Products/Results";
@@ -33,7 +35,6 @@ import UsersAdmin from "./test/fer/UsersAdmin";
 import AboutUs from "./components/common/AboutUs";
 import LoaderBars from "./components/common/LoaderBars";
 import ForgotPassword from "./components/Session/ForgotPassword";
-import ProviderStore from "./components/Provider/ProviderStore";
 
 function App() {
     const dispatch = useDispatch();
@@ -116,6 +117,7 @@ function App() {
                         <Route path="/cart/:section" element={<Cart />} />
                         <Route path="/details/:id" element={<Details />} />
                         <Route path="/orders/post-sale" element={<PostSale />} />
+                        <Route path="/premium" element={<ProviderPremium />} />
                         <Route path="/productForm" element={<ProductForm />} />
                         <Route path="/products" element={<Products />} />
                         <Route path="/provider" element={<ProviderStore />} />

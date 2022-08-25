@@ -1,7 +1,9 @@
 .providerstore-echo-container {
     
 }
-.providerstore-echo-inner {    
+.providerstore-echo-inner {
+    margin-top: 2.4rem;
+    margin-left: 1rem;
     font-size: 15vh;
     font-family: HelveticaNeueLTPro-BdOu;
     letter-spacing: -0.3rem;
@@ -9,25 +11,10 @@
     pointer-events: none;
     position: fixed;
     z-index: 3;
+    line-height: 75%;
 }
-.providerstore-echo-inner p:first-child {    
-    font-family: HelveticaNeueLTPro-Bd;
-    top: 9.8%;
-    left: 0.5%;
-    position: fixed;
-    z-index: 3;
-}
-.providerstore-echo-inner p:nth-child(2) {    
-    top: 21%;
-    left: 0.5%;
-    position: fixed;
-    z-index: 3;
-}
-.providerstore-echo-inner p:nth-child(3) {    
-    top: 32%;
-    left: 0.5%;
-    position: fixed;
-    z-index: 3;
+.providerstore-echo-inner span {
+    font-family: HelveticaNeueLTPro-Bd;    
 }
 .providerstore-title {
     font-size: 15vh;
@@ -53,11 +40,10 @@
 
 .providerstore-header {
     height: 42vh;
-    background: linear-gradient(90deg, rgba(255,169,0,1) 0%, rgba(211,46,7,1) 33%, rgba(0,44,168,1) 66%, rgba(110,0,196,1) 100%);
+    background: no-repeat center url("https://res.cloudinary.com/dsyjj0sch/image/upload/v1661210139/defe786a-5490-425a-b98d-3b8c2d1b7463_desktop_header-copy_algg64.jpg");
+    background-size: 100% 100%;
 }
-.providerstore-header img {
-    height: 100%;
-}
+
 
 .providerstore-background {
     background: black;
@@ -68,7 +54,6 @@
 }
 
 .storecards-container {
-    font-family: HelveticaNeueLTPro-Hv;
     padding: 2rem;
     display: flex;
     flex-direction: column;
@@ -77,7 +62,8 @@
     position: relative;
     z-index: 4;
 }
-.store-premium {    
+.store-premium {
+    margin: 2rem 0 3rem 0;
     height: 45vh;
     width: 100vw;
     display: flex;
@@ -93,8 +79,13 @@
 .store-premium-text p {
     padding: 2rem;
 }
+.store-premium-text button {
+    width: fit-content;
+    align-self: center;
+}
 
 .storecards-inner {
+    font-family: HelveticaNeueLTPro-Hv;
     display: flex;
     margin-top: 2rem;
 }
@@ -148,8 +139,9 @@
 }
 
 .providerstore-premiumbrand {
+    margin: 3rem;
     width: 100vw;
-    height: 80vh;
+    height: 60vh;
     background: no-repeat center url('https://cdn11.bigcommerce.com/s-k11cg5mzh9/content/pdp_images/8946_15882.jpg');
     background-size: 100% auto;
 }
