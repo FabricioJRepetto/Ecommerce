@@ -9,16 +9,7 @@
   background-color: #000000;
 }
 
-/* :hover {
-  background: linear-gradient(
-    90deg,
-    rgba(34, 34, 34, 1) 0%,
-    rgba(17, 17, 17, 1) 24%,
-    rgba(34, 34, 34, 1) 100%
-  );
-} */
-
-/* MOBILE */
+/*//! MOBILE */
 .navbar-menu-mobile-background {
   height: 100%;
   width: 100%;
@@ -29,7 +20,7 @@
   top: 0;
 }
 .navbar-menu-mobile {
-  padding-top: 1rem;
+  padding-top: 3.5rem;
   height: 100%;
   width: 80vw;
   position: fixed;
@@ -75,21 +66,24 @@
 }
 .hide-menu-mobile-background {
   opacity: 0;
-  z-index: 1;
+  z-index: 0;
 }
 .navbar-menu-mobile-button {
-  z-index: 7;
+  z-index: 6;
+  display: flex;
+  height: 50px;
+  width: 45px;
+  position: fixed;
+  top: 0;
+  right: 0;
 }
 
 @media (max-width: 1023px) {
   .navbar-hide-mobile {
     display: none;
   }
-  /* .navbar-profile-section {
-    width: 70vw;
-  } */
   .navbar-central-section {
-    width: 60vw;
+    width: 55vw;
   }
   .navbar-central-section > form {
     width: 100%;
@@ -107,19 +101,30 @@
   .navbar-menu-mobile {
     display: flex;
   }
+  .cart-icon-container {
+    margin: 0;
+  }
   .little-glitch {
     width: 145px;
     margin-right: 2rem;
   }
-  .cart-icon-container {
-    margin: 0;
+  .glitch-desktop {
+    display: none;
+  }
+  .glitch-mobile-container {
+    position: fixed;
+    width: 150px;
+    top: 0;
+    left: 2rem;
+    z-index: 6;
+  }
+  .glitch-mobile-placeholder {
+    width: 150px;
+    height: 3rem;
   }
 }
-/* DESKTOP */
+/*//! DESKTOP */
 @media (min-width: 1024px) {
-  .navbar-profile-section {
-    width: 300px;
-  }
   .navbar-profile-button {
     display: flex;
   }
@@ -136,20 +141,28 @@
     display: none;
   }
   .navbar-dumb-hidden {
-    height: 5.5rem;
+    height: 5.3rem;
   }
   .navbar-menu-mobile-background {
     display: none;
   }
   .navbar-menu-mobile-button {
-    margin-left: 2rem;
     display: none;
+  }
+  .cart-icon-container {
+    margin: 0 1rem;
   }
   .little-glitch {
     width: 210px;
   }
-  .cart-icon-container {
-    margin: 0 1rem;
+  .glitch-mobile {
+    display: none;
+  }
+  .glitch-mobile-placeholder {
+    display: none;
+  }
+  .glitch-desktop {
+    margin-right: 1rem;
   }
 }
 
@@ -190,11 +203,18 @@
   margin-top: 0.2rem;
   align-items: flex-start;
 }
+.navbar-sections {
+  display: flex;
+  margin-right: 2rem;
+}
 
 @media (min-width: 1240px) {
   /* .navbar input[type="text"] {
     width: 35vw;
   } */
+  .navbar-central-subsection {
+    padding-right: 8.5rem;
+  }
   .navbar-central-subsection > .navbar-central-options {
     padding: 0 2rem;
   }
@@ -210,11 +230,17 @@
   /* .navbar input[type="text"] {
     width: 400px;
   } */
+  .navbar-central-subsection {
+    padding-right: 3.5rem;
+  }
   .navbar-central-options {
     padding: 0 0.9rem;
   }
   .navbar-signin-button {
     width: 13rem;
+  }
+  .navbar-modal-container {
+    width: 3rem;
   }
 }
 
@@ -224,18 +250,17 @@
   position: fixed;
   top: 2.8rem;
   left: 0;
-  transition: 0.3s ease-in-out;
+  transition: 0.1s ease-in-out;
   background-color: black;
   justify-content: center;
-  padding-right: 6rem;
   align-items: center;
 }
 
 .hidden-box {
   height: 2rem;
-  width: 100vw;
+  width: 100%;
   top: -1rem;
-  transition: 0.3s ease-in-out;
+  transition: 0.1s ease-in-out;
 }
 
 .navbar-central-options {
@@ -243,7 +268,7 @@
   white-space: nowrap;
   align-content: center;
   height: 2rem;
-  transition: 0.3s ease-in-out;
+  transition: 0.1s ease-in-out;
 }
 
 .navbar input[type="text"] {
@@ -258,7 +283,9 @@
 .navbar-profile-button {
   flex-direction: row;
   align-items: center;
-  margin: 0 1rem;
+  margin: 0 1rem 0 2rem;
+  padding-left: 1rem;
+  /*  cursor: pointer; */
 }
 .navbar-avatar {
   height: 1.5rem;
@@ -270,9 +297,6 @@
 .navbar-avatar img {
   height: 100%;
   width: 100%;
-}
-.navbar-avatar-svg {
-  margin-left: 1rem;
 }
 .navbar-avatar-svg path {
   fill: white;
@@ -319,14 +343,18 @@
   text-align: left;
   overflow: visible;
 }
+.navbar-modal-hide {
+  display: none;
+}
 
 .navbar-wishlist-button {
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  width: 2rem;
+  width: 3rem;
   position: relative;
   margin: 0 1rem;
+  /*  cursor: pointer; */
 }
 .navbar-wishlist-button svg {
   transform: scale(1);
@@ -365,8 +393,12 @@
   );
 }
 .logout {
-  margin-top: 2rem;
+  margin-top: 0.75rem;
+  height: 3.5rem;
   border-top: 1px solid rgb(115, 115, 115);
+}
+.logout .profile-modal-option {
+  margin-top: 0.75rem;
 }
 
 .navbar-modal {
@@ -379,6 +411,7 @@
   border: 1px solid rgb(115, 115, 115);
   background: #111111;
   z-index: 12;
+  cursor: default;
 }
 .navbar-modal-w {
   visibility: hidden;
