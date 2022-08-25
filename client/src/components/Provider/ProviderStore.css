@@ -1,0 +1,155 @@
+.providerstore-echo-container {
+    
+}
+.providerstore-echo-inner {    
+    font-size: 15vh;
+    font-family: HelveticaNeueLTPro-BdOu;
+    letter-spacing: -0.3rem;
+    color: #151515;
+    pointer-events: none;
+    position: fixed;
+    z-index: 3;
+}
+.providerstore-echo-inner p:first-child {    
+    font-family: HelveticaNeueLTPro-Bd;
+    top: 9.8%;
+    left: 0.5%;
+    position: fixed;
+    z-index: 3;
+}
+.providerstore-echo-inner p:nth-child(2) {    
+    top: 21%;
+    left: 0.5%;
+    position: fixed;
+    z-index: 3;
+}
+.providerstore-echo-inner p:nth-child(3) {    
+    top: 32%;
+    left: 0.5%;
+    position: fixed;
+    z-index: 3;
+}
+.providerstore-title {
+    font-size: 15vh;
+    font-family: HelveticaNeueLTPro-Bd;
+    letter-spacing: -0.3rem;
+    color: white;
+    top: 9.8%;
+    left: 40%;
+    pointer-events: none;
+    position: fixed;
+    z-index: 1;
+}
+.providerstore-title-text {
+    font-family: HelveticaNeueLTPro-Bd;
+    font-size: 2.2rem;
+    text-align: left;   
+    top: 12.6%;
+    left: 66.5%;
+    pointer-events: none;
+    position: fixed;
+    z-index: 1;
+}
+
+.providerstore-header {
+    height: 42vh;
+    background: linear-gradient(90deg, rgba(255,169,0,1) 0%, rgba(211,46,7,1) 33%, rgba(0,44,168,1) 66%, rgba(110,0,196,1) 100%);
+}
+.providerstore-header img {
+    height: 100%;
+}
+
+.providerstore-background {
+    background: black;
+    position: absolute;
+    z-index: 2;
+    height: 200%;
+    width: 100vw;
+}
+
+.storecards-container {
+    font-family: HelveticaNeueLTPro-Hv;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 4;
+}
+.store-premium {    
+    height: 45vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+}
+.store-premium-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding: 0 2rem;
+    width: 30vw;
+}
+.store-premium-text p {
+    padding: 2rem;
+}
+
+.storecards-inner {
+    display: flex;
+    margin-top: 2rem;
+}
+.storecard {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem;
+    font-size: 1.5rem;
+    color: black;
+    margin: 2rem;
+    z-index: 2;
+    height: 10rem;
+    width: 20rem;
+    background-color: white;
+    cursor: pointer;
+}
+.storecard-subtitle {
+    font-family: HelveticaNeueLTPro-BdOu;
+    font-size: 1.5rem;
+    letter-spacing: .035rem;
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    color: #202020;
+}
+.subtitle-visible1 {
+    transition: top .2s ease, opacity .5s ease;
+    opacity: 1;
+    top: 20%;
+}
+.subtitle-visible2 {
+    transition: top .2s ease, opacity .5s ease;
+    opacity: 1;
+    top: 31%;
+}
+
+.storecard img {
+    max-height: 100%;
+    max-width: 100%;
+}
+
+.providerstore-flashsales {
+    margin: 3rem;
+}
+.providerstore-flashsales-container {
+    display: flex;
+}
+.providerstore-flashsales-container > * {
+    margin: 1rem;
+}
+
+.providerstore-premiumbrand {
+    width: 100vw;
+    height: 80vh;
+    background: no-repeat center url('https://cdn11.bigcommerce.com/s-k11cg5mzh9/content/pdp_images/8946_15882.jpg');
+    background-size: 100% auto;
+}

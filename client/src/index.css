@@ -14,7 +14,7 @@
   font-family: "HelveticaNeueLTPro-BdOu";
   src: local("HelveticaNeueLTPro-BdOu"),
     url("./assets/fonts/HelveticaNeueLTProBdOu.otf") format("truetype");
-  font-weight: bold;
+  /* font-weight: bold; */
 }
 @font-face {
   font-family: "HelveticaNeueLTPro-Blk";
@@ -32,7 +32,7 @@
   font-family: "HelveticaNeueLTPro-Hv";
   src: local("HelveticaNeueLTPro-Hv"),
     url("./assets/fonts/HelveticaNeueLTProHv.otf") format("truetype");
-  /* font-weight: bold; */
+  font-weight: bold;
 }
 @font-face {
   font-family: "HelveticaNeueLTPro-HvIt";
