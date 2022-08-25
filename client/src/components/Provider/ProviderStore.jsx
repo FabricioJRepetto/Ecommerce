@@ -70,6 +70,8 @@ const ProviderStore = () => {
             </div>
             <p className='providerstore-title'>STORE</p>
             <p className='providerstore-title-text'>/ORIGINALES<br/>/EXCLUSIVOS<br/>/TUYOS</p>
+            <button className='providerstore-title-button g-white-button'
+                onClick={()=> navigate('/products')}>Ver todos los productos</button>
 
             <div className='providerstore-header'></div>
 

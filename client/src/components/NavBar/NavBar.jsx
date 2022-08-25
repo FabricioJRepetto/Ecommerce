@@ -300,8 +300,8 @@ const NavBar = () => {
 
             <div className="navbar-central-options">
               <ChromaticText
-                text={"Provider Deluxe"}
-                route={"products"}
+                text={"Provider Premium"}
+                route={"premium"}
                 size={"1rem"}
                 movementAfter={"0 0 1rem 0"}
               />

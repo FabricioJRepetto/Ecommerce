@@ -37,6 +37,13 @@
     position: fixed;
     z-index: 1;
 }
+.providerstore-title-button {
+    top: 24%;
+    left: 40.3%;
+    width: 40%;
+    position: fixed;
+    z-index: 1;
+}
 
 .providerstore-header {
     height: 42vh;

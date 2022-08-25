@@ -9,7 +9,6 @@ const Product = require("../models/product");
 const axios = require("axios");
 const { meliSearchParser } = require("../utils/meliParser");
 const { rawIdProductGetter } = require("../utils/rawIdProductGetter");
-const product = require("../models/product");
 
 cloudinary.config({
     cloud_name: CLOUDINARY_CLOUD,
@@ -194,10 +193,43 @@ const getPromos = async (req, res, next) => {
     }
 };
 
+const getPremium = async (req, res, next) => {
+    try {
+        const results = await Product.find({ premium: true });
+
+        return res.json(results)
+    } catch (error) {
+        next(error)
+    }
+}
+
+const putPremium = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const { premiumData } = req.body;
+
+        const prod = await Product.findByIdAndUpdate(id,
+            {
+                $set: {
+                    premium: true,
+                    premiumData
+                }
+            },
+            { new: true }
+        )
+
+        return res.json({ prod, message: 'Premium crated' })
+    } catch (error) {
+        next(error)
+    }
+}
+
 module.exports = {
     getAll,
     getByQuery,
     getById,
     stock,
     getPromos,
+    getPremium,
+    putPremium
 };

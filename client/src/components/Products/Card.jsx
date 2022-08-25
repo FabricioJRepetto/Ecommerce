@@ -43,12 +43,6 @@ const Card = ({
 
   return (
     <div style={{ position: "relative" }}>
-      {/* <div
-            className={` ${special && "special-frame-right"}`}
-        ></div>
-        <div
-            className={` ${special && "special-frame-left"}`}
-        ></div> */}
 
       {special && <i className="provider-text special-card">PROVIDER</i>}
 
