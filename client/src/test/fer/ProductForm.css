@@ -246,3 +246,7 @@
 .form-add-input {
   margin-top: 0.5rem;
 }
+
+.form-buttons-container > button[type="submit"]:disabled {
+  padding-top: 0.2rem;
+}

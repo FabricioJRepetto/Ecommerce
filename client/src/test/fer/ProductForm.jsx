@@ -282,7 +282,7 @@ const ProductForm = () => {
         });
         dispatch(changeReloadFlag(true));
         notification("Producto editado exitosamente", "", "success");
-        navigate("/admin/products");
+        /* navigate("/admin/products"); */
       } else {
         formData.append("data", JSON.stringify(productData));
 
@@ -292,15 +292,15 @@ const ProductForm = () => {
           },
         });
         dispatch(changeReloadFlag(true));
-        openCreateProduct();
+        /*  openCreateProduct(); */
       }
-      clearInputs();
+      /* clearInputs(); */
     } catch (error) {
       notification("Hubo un error, vuelve a intentar", "", "error");
       //!VOLVER A VER manejo de errores
       console.log(error);
     } finally {
-      setWaitingResponse(false);
+      /* setWaitingResponse(false); */
     }
   };
 
