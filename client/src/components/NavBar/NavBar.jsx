@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import {
@@ -34,7 +34,10 @@ const NavBar = () => {
   const [productToSearch, setProductToSearch] = useState("");
   const [showSubsectionBar, setShowSubsectionBar] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
+  const location = useLocation();
   const signOut = useSignout();
+
+  /* location.pathname === "/orders/post-sale"; */
 
   useEffect(() => {
     const glitchLogos = document.querySelectorAll(".little-glitch");
@@ -109,237 +112,266 @@ const NavBar = () => {
       <div className="glitch-mobile-container">
         <div
           className="little-glitch glitch-mobile"
-          onClick={() => [logoClick(), setShowMenu(false)]}
+          onClick={
+            location.pathname === "/orders/post-sale" ||
+            location.pathname === "/orders/post-sale/"
+              ? () => navigate("/")
+              : () => [logoClick(), setShowMenu(false)]
+          }
         ></div>
       </div>
 
       <div className="navbar">
         <div className="glitch-mobile-placeholder"></div>
-        <div className="little-glitch glitch-desktop" onClick={logoClick}></div>
+        <div
+          className={`little-glitch glitch-desktop ${
+            location.pathname === "/orders/post-sale" ||
+            location.pathname === "/orders/post-sale/"
+              ? "little-glitch-postsale"
+              : ""
+          }`}
+          onClick={
+            location.pathname === "/orders/post-sale" ||
+            location.pathname === "/orders/post-sale/"
+              ? () => navigate("/")
+              : logoClick
+          }
+        ></div>
 
-        <div className="navbar-sections">
-          <div className="navbar-main-sections">
-            <div className="navbar-central-section">
-              <form onSubmit={handleSearch}>
-                <span className="g-input-with-button">
-                  <input
-                    type="text"
-                    placeholder="Busca un producto"
-                    className="g-input-two-icons"
-                    id="navbar-searchbar"
-                    onChange={(e) => setProductToSearch(e.target.value)}
-                    value={productToSearch}
-                  />
-                  {productToSearch && (
+        {location.pathname !== "/orders/post-sale" &&
+          location.pathname !== "/orders/post-sale/" && (
+            <div className="navbar-sections">
+              <div className="navbar-main-sections">
+                <div className="navbar-central-section">
+                  <form onSubmit={handleSearch}>
+                    <span className="g-input-with-button">
+                      <input
+                        type="text"
+                        placeholder="Busca un producto"
+                        className="g-input-two-icons"
+                        id="navbar-searchbar"
+                        onChange={(e) => setProductToSearch(e.target.value)}
+                        value={productToSearch}
+                      />
+                      {productToSearch && (
+                        <>
+                          <div
+                            className="g-input-icon-container g-input-view-button"
+                            onClick={handleSearch}
+                          >
+                            <SearchIcon />
+                          </div>
+                          <div
+                            className="g-input-icon-container g-input-x-button"
+                            onClick={() => setProductToSearch("")}
+                          >
+                            <CloseIcon />
+                          </div>
+                        </>
+                      )}
+                    </span>
+                  </form>
+                </div>
+
+                <div className="navbar-profile-section">
+                  {!session ? (
+                    <span className="navbar-signin-button">
+                      <NavLink to={"signin"}>
+                        <Avatar className="navbar-avatar-svg" />
+                        <span className="navbar-signin-text navbar-hide-mobile">
+                          <ChromaticText text="Iniciar sesión" />
+                        </span>
+                      </NavLink>
+                    </span>
+                  ) : (
                     <>
                       <div
-                        className="g-input-icon-container g-input-view-button"
-                        onClick={handleSearch}
+                        className="navbar-profile-button navbar-hide-mobile"
+                        onMouseEnter={() => setProfileModal(true)}
+                        onMouseLeave={() => setProfileModal(false)}
                       >
-                        <SearchIcon />
-                      </div>
-                      <div
-                        className="g-input-icon-container g-input-x-button"
-                        onClick={() => setProductToSearch("")}
-                      >
-                        <CloseIcon />
-                      </div>
-                    </>
-                  )}
-                </span>
-              </form>
-            </div>
-
-            <div className="navbar-profile-section">
-              {!session ? (
-                <span className="navbar-signin-button">
-                  <NavLink to={"signin"}>
-                    <Avatar className="navbar-avatar-svg" />
-                    <span className="navbar-signin-text navbar-hide-mobile">
-                      <ChromaticText text="Iniciar sesión" />
-                    </span>
-                  </NavLink>
-                </span>
-              ) : (
-                <>
-                  <div
-                    className="navbar-profile-button navbar-hide-mobile"
-                    onMouseEnter={() => setProfileModal(true)}
-                    onMouseLeave={() => setProfileModal(false)}
-                  >
-                    {avatar ? (
-                      <div className="navbar-avatar">
-                        <img
-                          src={avatarResizer(avatar)}
-                          referrerPolicy="no-referrer"
-                          alt="navbar-avatar"
-                        />
-                      </div>
-                    ) : (
-                      <Avatar className="navbar-avatar-svg" />
-                    )}
-                    <p className="navbar-username">{username || "Profile"}</p>
-
-                    <div className="navbar-modal-container">
-                      <div
-                        className={`navbar-modal ${
-                          profileModal
-                            ? "navbar-modal-visible"
-                            : "navbar-modal-hide"
-                        }`}
-                      >
-                        <div className="navbar-modal-menu-container">
-                          <div
-                            className="profile-modal-option"
-                            onClick={() => setProfileModal(false)}
-                          >
-                            <ChromaticText
-                              text="Mi perfil"
-                              route="/profile/details"
+                        {avatar ? (
+                          <div className="navbar-avatar">
+                            <img
+                              src={avatarResizer(avatar)}
+                              referrerPolicy="no-referrer"
+                              alt="navbar-avatar"
                             />
                           </div>
+                        ) : (
+                          <Avatar className="navbar-avatar-svg" />
+                        )}
+                        <p className="navbar-username">
+                          {username || "Profile"}
+                        </p>
 
+                        <div className="navbar-modal-container">
                           <div
-                            className="profile-modal-option"
-                            onClick={() => setProfileModal(false)}
+                            className={`navbar-modal ${
+                              profileModal
+                                ? "navbar-modal-visible"
+                                : "navbar-modal-hide"
+                            }`}
                           >
-                            <ChromaticText
-                              text="Favoritos"
-                              route="/profile/wishlist"
-                            />
-                          </div>
+                            <div className="navbar-modal-menu-container">
+                              <div
+                                className="profile-modal-option"
+                                onClick={() => setProfileModal(false)}
+                              >
+                                <ChromaticText
+                                  text="Mi perfil"
+                                  route="/profile/details"
+                                />
+                              </div>
 
-                          <div
-                            className="profile-modal-option"
-                            onClick={() => setProfileModal(false)}
-                          >
-                            <ChromaticText text="Carrito" route="/cart" />
-                          </div>
+                              <div
+                                className="profile-modal-option"
+                                onClick={() => setProfileModal(false)}
+                              >
+                                <ChromaticText
+                                  text="Favoritos"
+                                  route="/profile/wishlist"
+                                />
+                              </div>
 
-                          <div
-                            className="profile-modal-option"
-                            onClick={() => setProfileModal(false)}
-                          >
-                            <ChromaticText
-                              text="Historial"
-                              route="/profile/history"
-                            />
-                          </div>
+                              <div
+                                className="profile-modal-option"
+                                onClick={() => setProfileModal(false)}
+                              >
+                                <ChromaticText text="Carrito" route="/cart" />
+                              </div>
 
-                          <div
-                            className="profile-modal-option"
-                            onClick={() => setProfileModal(false)}
-                          >
-                            <ChromaticText
-                              text="Órdenes"
-                              route="/profile/orders"
-                            />
-                          </div>
+                              <div
+                                className="profile-modal-option"
+                                onClick={() => setProfileModal(false)}
+                              >
+                                <ChromaticText
+                                  text="Historial"
+                                  route="/profile/history"
+                                />
+                              </div>
 
-                          <div
-                            className="profile-modal-option"
-                            onClick={() => setProfileModal(false)}
-                          >
-                            <ChromaticText
-                              text="Direcciones"
-                              route="/profile/address"
-                            />
-                          </div>
+                              <div
+                                className="profile-modal-option"
+                                onClick={() => setProfileModal(false)}
+                              >
+                                <ChromaticText
+                                  text="Órdenes"
+                                  route="/profile/orders"
+                                />
+                              </div>
 
-                          {role === "admin" && (
-                            <div
-                              className="profile-modal-option"
-                              onClick={() => setProfileModal(false)}
-                            >
-                              <ChromaticText text={"ADMIN"} route={"admin"} />
-                            </div>
-                          )}
+                              <div
+                                className="profile-modal-option"
+                                onClick={() => setProfileModal(false)}
+                              >
+                                <ChromaticText
+                                  text="Direcciones"
+                                  route="/profile/address"
+                                />
+                              </div>
 
-                          <div className="logout">
-                            <div
-                              className="profile-modal-option"
-                              onClick={() => [
-                                setProfileModal(false),
-                                signOut(),
-                              ]}
-                            >
-                              <ChromaticText text="Salir" />
+                              {role === "admin" && (
+                                <div
+                                  className="profile-modal-option"
+                                  onClick={() => setProfileModal(false)}
+                                >
+                                  <ChromaticText
+                                    text={"ADMIN"}
+                                    route={"admin"}
+                                  />
+                                </div>
+                              )}
+
+                              <div className="logout">
+                                <div
+                                  className="profile-modal-option"
+                                  onClick={() => [
+                                    setProfileModal(false),
+                                    signOut(),
+                                  ]}
+                                >
+                                  <ChromaticText text="Salir" />
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
 
-                  <div
-                    className="navbar-wishlist-button navbar-hide-mobile"
-                    onMouseEnter={() => setWishModal(true)}
-                    onMouseLeave={() => setWishModal(false)}
-                    onClick={() => navigate("/profile/wishlist")}
-                  >
-                    <Fav className="wishlist-icon" />
-                    <div className="navbar-modal-container-w">
                       <div
-                        className={`navbar-modal-w ${
-                          wishModal ? "visible" : "navbar-modal-hide"
-                        }`}
+                        className="navbar-wishlist-button navbar-hide-mobile"
+                        onMouseEnter={() => setWishModal(true)}
+                        onMouseLeave={() => setWishModal(false)}
+                        onClick={() => navigate("/profile/wishlist")}
                       >
-                        {wishModal && <WishlistModal close={setWishModal} />}
+                        <Fav className="wishlist-icon" />
+                        <div className="navbar-modal-container-w">
+                          <div
+                            className={`navbar-modal-w ${
+                              wishModal ? "visible" : "navbar-modal-hide"
+                            }`}
+                          >
+                            {wishModal && (
+                              <WishlistModal close={setWishModal} />
+                            )}
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
 
-                  <NavLink to={"cart"} className="cart-icon-container">
-                    <Cart className="cart-icon" />
-                    <div className="cart-number">
-                      {cart.length > 0
-                        ? cart.length < 10
-                          ? cart.length
-                          : "9+"
-                        : ""}
-                    </div>
-                  </NavLink>
-                </>
-              )}
-            </div>
-          </div>
-          <div
-            className={`navbar-central-subsection ${
-              showSubsectionBar ? "hidden-box" : ""
-            } ${
-              !session
-                ? "navbar-subsection-signin-padding"
-                : "navbar-subsection-profile-padding"
-            }`}
-          >
-            <div className="navbar-central-options">
-              <ChromaticText
-                text={"Provider Store"}
-                route={"products"}
-                size={"1rem"}
-                movementAfter={"0 0 1rem 0"}
-              />
-            </div>
+                      <NavLink to={"cart"} className="cart-icon-container">
+                        <Cart className="cart-icon" />
+                        <div className="cart-number">
+                          {cart.length > 0
+                            ? cart.length < 10
+                              ? cart.length
+                              : "9+"
+                            : ""}
+                        </div>
+                      </NavLink>
+                    </>
+                  )}
+                </div>
+              </div>
 
-            <div className="navbar-central-options">
-              <ChromaticText
-                text={"Provider Deluxe"}
-                route={"products"}
-                size={"1rem"}
-                movementAfter={"0 0 1rem 0"}
-              />
-            </div>
+              <div
+                className={`navbar-central-subsection ${
+                  showSubsectionBar ? "hidden-box" : ""
+                } ${
+                  !session
+                    ? "navbar-subsection-signin-padding"
+                    : "navbar-subsection-profile-padding"
+                }`}
+              >
+                <div className="navbar-central-options">
+                  <ChromaticText
+                    text={"Provider Store"}
+                    route={"products"}
+                    size={"1rem"}
+                    movementAfter={"0 0 1rem 0"}
+                  />
+                </div>
 
-            <div className="navbar-central-options">
-              <ChromaticText
-                text={"About Us"}
-                route={"about"}
-                size={"1rem"}
-                movementAfter={"0 0 1rem 0"}
-              />
+                <div className="navbar-central-options">
+                  <ChromaticText
+                    text={"Provider Deluxe"}
+                    route={"products"}
+                    size={"1rem"}
+                    movementAfter={"0 0 1rem 0"}
+                  />
+                </div>
+
+                <div className="navbar-central-options">
+                  <ChromaticText
+                    text={"About Us"}
+                    route={"about"}
+                    size={"1rem"}
+                    movementAfter={"0 0 1rem 0"}
+                  />
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          )}
       </div>
       <div className="navbar-menu-mobile-button">
         <BurgerButton setShowMenu={setShowMenu} showMenu={showMenu} />
