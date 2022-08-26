@@ -342,10 +342,6 @@
   text-align: left;
   overflow: visible;
 }
-.navbar-modal-hide {
-  display: none;
-  height: 2px;
-}
 
 .navbar-wishlist-button {
   flex-direction: row;
@@ -413,15 +409,29 @@
   cursor: default;
   transition: opacity 0.3s ease;
 }
-.navbar-modal-profile div {
-  display: none;
-}
 .navbar-modal-visible {
-  /* visibility: visible; */
-  height: fit-content;
+  visibility: visible;
+  opacity: 1;
+  height: 300px;
+  transition: height 0.1s ease;
+}
+.navbar-modal-hide {
+  height: 2px;
+  transition: height 0.1s ease;
+}
+.navbar-modal-visible .profile-modal-option,
+.navbar-modal-visible .logout {
   opacity: 1;
   transition: opacity 0.3s ease;
-  z-index: 12;
+}
+.navbar-modal-hide .profile-modal-option,
+.navbar-modal-hide .logout {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.navbar-modal-profile div {
+  display: none;
 }
 
 .navbar-modal-w {

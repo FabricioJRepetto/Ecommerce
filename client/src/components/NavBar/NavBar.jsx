@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
@@ -35,64 +35,48 @@ const NavBar = () => {
   const [showSubsectionBar, setShowSubsectionBar] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const signOut = useSignout();
-  const glitchMobile = useRef(null);
-  const glitchDesktop = useRef(null);
 
   useEffect(() => {
-    glitchMobile.current = document.querySelector("#little-glitch-mobile");
-    PowerGlitch.glitch(glitchMobile.current, {
-      imageUrl:
-        "https://res.cloudinary.com/dsyjj0sch/image/upload/v1659650791/PROVIDER_LOGO_glitch_aberration_kt2hyv.png",
-      backgroundColor: "transparent",
-      hideOverflow: false,
-      timing: {
-        duration: 10000,
-        iterations: "Infinity",
-      },
-      glitchTimeSpan: {
-        start: 0.6,
-        end: 0.7,
-      },
-      shake: {
-        velocity: 15,
-        amplitudeX: 0.1,
-        amplitudeY: 0.2,
-      },
-      slice: {
-        count: 3,
-        velocity: 15,
-        minHeight: 0.03,
-        maxHeight: 0.15,
-        hueRotate: true,
-      },
-    });
-    glitchDesktop.current = document.querySelector("#little-glitch-desktop");
-    PowerGlitch.glitch(glitchDesktop.current, {
-      imageUrl:
-        "https://res.cloudinary.com/dsyjj0sch/image/upload/v1659650791/PROVIDER_LOGO_glitch_aberration_kt2hyv.png",
-      backgroundColor: "transparent",
-      hideOverflow: false,
-      timing: {
-        duration: 10000,
-        iterations: "Infinity",
-      },
-      glitchTimeSpan: {
-        start: 0.6,
-        end: 0.7,
-      },
-      shake: {
-        velocity: 15,
-        amplitudeX: 0.1,
-        amplitudeY: 0.2,
-      },
-      slice: {
-        count: 3,
-        velocity: 15,
-        minHeight: 0.03,
-        maxHeight: 0.15,
-        hueRotate: true,
-      },
-    });
+    const glitchLogos = document.querySelectorAll(".little-glitch");
+    glitchLogos.forEach((logo) =>
+      PowerGlitch.glitch(logo, {
+        imageUrl:
+          "https://res.cloudinary.com/dsyjj0sch/image/upload/v1659650791/PROVIDER_LOGO_glitch_aberration_kt2hyv.png",
+        backgroundColor: "transparent",
+        hideOverflow: false,
+        timing: {
+          duration: 10000,
+          iterations: "Infinity",
+        },
+        glitchTimeSpan: {
+          start: 0.6,
+          end: 0.7,
+        },
+        shake: {
+          velocity: 15,
+          amplitudeX: 0.1,
+          amplitudeY: 0.2,
+        },
+        slice: {
+          count: 3,
+          velocity: 15,
+          minHeight: 0.03,
+          maxHeight: 0.15,
+          hueRotate: true,
+        },
+      })
+    );
+
+    const controlSubsectionBar = () => {
+      window.scrollY > 80 && setShowSubsectionBar(true);
+      window.scrollY < 80 && setShowSubsectionBar(false);
+    };
+
+    window.addEventListener("scroll", controlSubsectionBar);
+
+    return () => {
+      window.removeEventListener("scroll", controlSubsectionBar);
+    };
   }, []);
 
   const handleSearch = async (e) => {
@@ -118,20 +102,6 @@ const NavBar = () => {
     navigate("/");
   };
 
-  useEffect(() => {
-    const controlSubsectionBar = () => {
-      window.scrollY > 80 && setShowSubsectionBar(true);
-      window.scrollY < 80 && setShowSubsectionBar(false);
-    };
-
-    window.addEventListener("scroll", controlSubsectionBar);
-
-    return () => {
-      window.removeEventListener("scroll", controlSubsectionBar);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   return (
     <>
       <div className="navbar-dumb-hidden"></div>
@@ -139,18 +109,13 @@ const NavBar = () => {
       <div className="glitch-mobile-container">
         <div
           className="little-glitch glitch-mobile"
-          id="little-glitch-mobile"
           onClick={() => [logoClick(), setShowMenu(false)]}
         ></div>
       </div>
 
       <div className="navbar">
         <div className="glitch-mobile-placeholder"></div>
-        <div
-          className="little-glitch glitch-desktop"
-          id="little-glitch-desktop"
-          onClick={logoClick}
-        ></div>
+        <div className="little-glitch glitch-desktop" onClick={logoClick}></div>
 
         <div className="navbar-sections">
           <div className="navbar-main-sections">
@@ -218,7 +183,9 @@ const NavBar = () => {
                     <div className="navbar-modal-container">
                       <div
                         className={`navbar-modal ${
-                          profileModal ? "visible" : "navbar-modal-hide"
+                          profileModal
+                            ? "navbar-modal-visible"
+                            : "navbar-modal-hide"
                         }`}
                       >
                         <div className="navbar-modal-menu-container">
