@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ReactComponent as Spinner } from "../../assets/svg/spinner.svg";
 import ModalCard from "../Products/ModalCard";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import ChromaticText from "../common/ChromaticText";
 import "./WishlistModal.css";
 
 const WishlistModal = ({ close }) => {
@@ -47,9 +48,9 @@ const WishlistModal = ({ close }) => {
           )}
           <div
             onClick={() => [navigate("/profile/wishlist"), close()]}
-            className="modal-card-all-favs pointer"
+            className="modal-card-all-favs pointer all-favs-text-container"
           >
-            Ver todos los favoritos
+            <ChromaticText text="Ver todos los favoritos" />
           </div>
         </div>
       )}
