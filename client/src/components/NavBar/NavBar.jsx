@@ -156,7 +156,7 @@ const NavBar = () => {
                   <NavLink to={"signin"}>
                     <Avatar className="navbar-avatar-svg" />
                     <span className="navbar-signin-text navbar-hide-mobile">
-                      <ChromaticText text="Iniciar Sesión" />
+                      <ChromaticText text="Iniciar sesión" />
                     </span>
                   </NavLink>
                 </span>
@@ -358,7 +358,7 @@ const NavBar = () => {
           {!session && (
             <li onClick={() => setShowMenu(false)}>
               <ChromaticText
-                text={"Iniciar Sesión"}
+                text={"Iniciar sesión"}
                 route={"signin"}
                 size={"1.1rem"}
               />

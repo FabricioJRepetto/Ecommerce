@@ -491,10 +491,18 @@
   display: flex;
   justify-content: center;
 }
+.navbar-signin-button svg {
+  transform: scale(0.9);
+  position: absolute;
+  left: 0.6rem;
+}
 .navbar-signin-button a {
+  cursor: pointer;
   display: flex;
   align-items: center;
+  position: relative;
+  margin-right: 2.5rem;
 }
-.navbar-signin-text {
-  padding-left: 1rem;
+.navbar-signin-button span div {
+  padding: 0.5rem 1rem 0.5rem 1.5rem;
 }
