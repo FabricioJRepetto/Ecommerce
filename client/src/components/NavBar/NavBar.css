@@ -125,6 +125,9 @@
     width: 150px;
     height: 3rem;
   }
+  .navbar-profile-section {
+    width: 2rem;
+  }
 }
 /*//! DESKTOP */
 @media (min-width: 1024px) {
@@ -169,6 +172,9 @@
   }
   .glitch-desktop {
     margin-right: 1rem;
+  }
+  .navbar-profile-section {
+    width: 248px;
   }
 }
 
@@ -227,6 +233,9 @@
   .navbar-signin-button {
     width: 18rem;
     padding-right: 3rem;
+  }
+  .navbar-profile-section {
+    width: 328px;
   }
 }
 @media (max-width: 1239px) {
