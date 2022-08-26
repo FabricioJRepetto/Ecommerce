@@ -82,6 +82,9 @@
   .navbar-hide-mobile {
     display: none;
   }
+  .navbar-signin-button {
+    width: 40px;
+  }
   .navbar-central-section {
     width: 55vw;
   }
@@ -122,6 +125,9 @@
     width: 150px;
     height: 3rem;
   }
+  .navbar-profile-section {
+    width: 2rem;
+  }
 }
 /*//! DESKTOP */
 @media (min-width: 1024px) {
@@ -130,6 +136,9 @@
   }
   .navbar-wishlist-button {
     display: flex;
+  }
+  .navbar-signin-button {
+    width: 250px;
   }
   .navbar input[type="text"] {
     width: 35vw;
@@ -163,6 +172,9 @@
   }
   .glitch-desktop {
     margin-right: 1rem;
+  }
+  .navbar-profile-section {
+    width: 248px;
   }
 }
 
@@ -222,22 +234,19 @@
     width: 18rem;
     padding-right: 3rem;
   }
+  .navbar-profile-section {
+    width: 328px;
+  }
 }
 @media (max-width: 1239px) {
   .navbar-username {
     display: none;
   }
-  /* .navbar input[type="text"] {
-    width: 400px;
-  } */
   .navbar-central-subsection {
     padding-right: 3.5rem;
   }
   .navbar-central-options {
     padding: 0 0.9rem;
-  }
-  .navbar-signin-button {
-    width: 13rem;
   }
   .navbar-modal-container {
     width: 3rem;
@@ -287,6 +296,9 @@
   padding-left: 1rem;
   /*  cursor: pointer; */
 }
+.navbar-profile-button svg {
+  transform: scale(0.9);
+}
 .navbar-avatar {
   height: 1.5rem;
   width: 1.5rem;
@@ -300,10 +312,6 @@
 }
 .navbar-avatar-svg path {
   fill: white;
-}
-
-.wishlist-icon {
-  transform: scale(0.7);
 }
 .wishlist-icon path {
   fill: white;
@@ -343,9 +351,6 @@
   text-align: left;
   overflow: visible;
 }
-.navbar-modal-hide {
-  display: none;
-}
 
 .navbar-wishlist-button {
   flex-direction: row;
@@ -357,7 +362,7 @@
   /*  cursor: pointer; */
 }
 .navbar-wishlist-button svg {
-  transform: scale(1);
+  transform: scale(0.9);
 }
 .navbar-modal-container-w {
   position: absolute;
@@ -406,13 +411,38 @@
   position: relative;
   left: calc(50% - 75px);
   bottom: -50px;
-  height: fit-content;
   width: 10rem;
   border: 1px solid rgb(115, 115, 115);
   background: #111111;
   z-index: 12;
   cursor: default;
+  transition: opacity 0.3s ease;
 }
+.navbar-modal-visible {
+  visibility: visible;
+  opacity: 1;
+  height: 300px;
+  transition: height 0.1s ease;
+}
+.navbar-modal-hide {
+  height: 2px;
+  transition: height 0.1s ease;
+}
+.navbar-modal-visible .profile-modal-option,
+.navbar-modal-visible .logout {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+.navbar-modal-hide .profile-modal-option,
+.navbar-modal-hide .logout {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.navbar-modal-profile div {
+  display: none;
+}
+
 .navbar-modal-w {
   visibility: hidden;
   position: relative;
@@ -457,16 +487,22 @@
   transform: translateY(2px);
   z-index: 6;
 }
-
 .navbar-signin-button {
   display: flex;
   justify-content: center;
-  width: 300px;
+}
+.navbar-signin-button svg {
+  transform: scale(0.9);
+  position: absolute;
+  left: 0.6rem;
 }
 .navbar-signin-button a {
+  cursor: pointer;
   display: flex;
   align-items: center;
+  position: relative;
+  margin-right: 2.5rem;
 }
-.navbar-signin-text {
-  padding-left: 1rem;
+.navbar-signin-button span div {
+  padding: 0.5rem 1rem 0.5rem 1.5rem;
 }
