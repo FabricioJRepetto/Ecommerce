@@ -6,6 +6,7 @@ import { CloseIcon } from "@chakra-ui/icons";
 import { useNotification } from "../../hooks/useNotification";
 import { avoidEnterSubmit } from "../../helpers/AvoidEnterSubmit";
 import "../../App.css";
+import "./AddAddress.css";
 
 const AddAddress = ({
   prop,
@@ -87,6 +88,7 @@ const AddAddress = ({
       <form
         onSubmit={handleSubmit((data) => handleAddress(data, prop))}
         onKeyDown={avoidEnterSubmit}
+        className="addaddress-form"
       >
         <>
           {errors.state ? (
@@ -233,12 +235,14 @@ const AddAddress = ({
           )}
         </span>
 
-        <button className="g-white-button">
-          {prop ? "Agregar dirección" : "Editar dirección"}
-        </button>
-        <button onClick={() => closeAddForm(true)} className="g-white-button">
-          Cancelar
-        </button>
+        <div className="add-address-buttons-container">
+          <button className="g-white-button">
+            {prop ? "Agregar dirección" : "Editar dirección"}
+          </button>
+          <button onClick={() => closeAddForm(true)} className="g-white-button">
+            Cancelar
+          </button>
+        </div>
       </form>
     </div>
   );
