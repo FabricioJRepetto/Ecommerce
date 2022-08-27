@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { CloseIcon } from "@chakra-ui/icons";
@@ -7,12 +8,14 @@ import { avoidEnterSubmit } from "../../helpers/AvoidEnterSubmit";
 import "../../App.css";
 
 const AddAddress = ({
+  prop,
   setAddressToEdit,
   addressToEdit,
+  addressToEditId,
   setAddress,
   closeAddForm,
-  prop,
-  addressToEditId,
+  setSelectedAdd,
+  getAddress,
 }) => {
   const {
     register,
@@ -23,6 +26,7 @@ const AddAddress = ({
     watch,
   } = useForm();
   const [notification] = useNotification();
+  const location = useLocation();
 
   useEffect(() => {
     if (addressToEdit) {
@@ -32,18 +36,17 @@ const AddAddress = ({
       setValue("street_name", addressToEdit.street_name);
       setValue("street_number", addressToEdit.street_number);
       setValue("isDefault", addressToEdit.isDefault);
+      setAddressToEdit(null);
     }
-    setAddressToEdit(null);
+    console.log(prop);
+    // eslint-disable-next-line
   }, []);
 
   // handle submit
-  const handleAddress = async (addressData, n = false) => {
-    if (n) {
-      const { data: updated, statusText } = await axios.post(
-        `/address/`,
-        addressData
-      );
-      setAddress(updated.address);
+  const handleAddress = async (addressData, prop) => {
+    if (prop === undefined) {
+      const { data, statusText } = await axios.post(`/address/`, addressData);
+      setAddress(data.address);
       notification(
         `${
           statusText === "OK"
@@ -53,13 +56,17 @@ const AddAddress = ({
         "",
         `${statusText === "OK" ? "success" : "warning"}`
       );
+
+      if (location.pathname !== "/profile/address") {
+        setSelectedAdd(data.address.pop());
+        getAddress();
+      }
     } else {
-      console.log(addressData);
-      const { data: updated, statusText } = await axios.put(
+      const { data, statusText } = await axios.put(
         `/address/${addressToEditId}`,
         addressData
       );
-      setAddress(updated.address);
+      setAddress(data.address);
       notification(
         `${
           statusText === "OK"
@@ -76,7 +83,7 @@ const AddAddress = ({
 
   return (
     <>
-      <h1>{prop ? "Agregar dirección" : "Editar dirección"}</h1>
+      <h1>{prop === undefined ? "Agregar dirección" : "Editar dirección"}</h1>
       <form
         onSubmit={handleSubmit((data) => handleAddress(data, prop))}
         onKeyDown={avoidEnterSubmit}
@@ -227,7 +234,7 @@ const AddAddress = ({
         </span>
 
         <button className="g-white-button">
-          {prop ? "Agregar dirección" : "Editar dirección"}
+          {prop === undefined ? "Agregar dirección" : "Editar dirección"}
         </button>
         <button onClick={() => closeAddForm(true)} className="g-white-button">
           Cancelar

@@ -18,6 +18,7 @@ import { ReactComponent as Spinner } from "../../assets/svg/spinner.svg";
 import LoaderBars from "../common/LoaderBars";
 import Checkbox from "../common/Checkbox";
 import { WarningIcon } from "@chakra-ui/icons";
+import AddAddress from "../Profile/AddAddress";
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -30,7 +31,6 @@ const Cart = () => {
   const [flash_shipping, setflash_shipping] = useState(false);
   const [orderId, setOrderId] = useState(false);
   const [address, setAddress] = useState(null);
-  const [newAdd, setNewAdd] = useState({});
   const [selectedAdd, setSelectedAdd] = useState(null);
   const [loadingPayment, setLoadingPayment] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -71,43 +71,10 @@ const Cart = () => {
   const getAddress = async () => {
     const { data } = await axios("/address");
     if (data.address) {
-      setAddress(data.address);
       if (!selectedAdd) {
         const def = data.address.find((e) => e.isDefault === true);
         setSelectedAdd(def);
       }
-    }
-  };
-
-  const handleChange = ({ target }) => {
-    const { name, value, validity } = target;
-    let validatedValue;
-
-    if (!validity.valid) {
-      validatedValue = newAdd[name];
-    } else {
-      validatedValue = value;
-    }
-    setNewAdd({
-      ...newAdd,
-      [name]: validatedValue,
-    });
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (
-      newAdd.state &&
-      newAdd.city &&
-      newAdd.zip_code &&
-      newAdd.street_name &&
-      newAdd.street_number
-    ) {
-      closeAddForm();
-      const { data } = await axios.post(`/address`, newAdd);
-      notification("Nueva dirección registrada.", "", "success");
-      setSelectedAdd(data.address.pop());
-      getAddress();
     }
   };
 
@@ -477,71 +444,12 @@ const Cart = () => {
       ></form>
 
       <Modal isOpen={isOpenAddForm} closeModal={closeAddForm}>
-        <h1>New shipping address</h1>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="state"
-            onChange={(e) =>
-              setNewAdd({
-                ...newAdd,
-                [e.target.name]: e.target.value,
-              })
-            }
-            placeholder="state"
-            value={newAdd.state ? newAdd.state : ""}
-          />
-
-          <input
-            type="text"
-            name="city"
-            onChange={(e) =>
-              setNewAdd({
-                ...newAdd,
-                [e.target.name]: e.target.value,
-              })
-            }
-            placeholder="city"
-            value={newAdd.city ? newAdd.city : ""}
-          />
-
-          <input
-            type="text"
-            name="zip_code"
-            onChange={(e) =>
-              setNewAdd({
-                ...newAdd,
-                [e.target.name]: e.target.value,
-              })
-            }
-            placeholder="zip code"
-            value={newAdd.zip_code ? newAdd.zip_code : ""}
-          />
-
-          <input
-            type="text"
-            name="street_name"
-            onChange={(e) =>
-              setNewAdd({
-                ...newAdd,
-                [e.target.name]: e.target.value,
-              })
-            }
-            placeholder="street name"
-            value={newAdd.street_name ? newAdd.street_name : ""}
-          />
-
-          <input
-            type="number"
-            name="street_number"
-            pattern="[1-9]"
-            placeholder="street number"
-            value={newAdd.street_number ? newAdd.street_number : ""}
-            onChange={handleChange}
-          />
-
-          <button>Create</button>
-        </form>
+        <AddAddress
+          setAddress={setAddress}
+          closeAddForm={closeAddForm}
+          setSelectedAdd={setSelectedAdd}
+          getAddress={getAddress}
+        />
       </Modal>
 
       <Modal isOpen={isOpenAddList} closeModal={closeAddList}>

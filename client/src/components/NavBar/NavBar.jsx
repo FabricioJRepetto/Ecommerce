@@ -37,8 +37,6 @@ const NavBar = () => {
   const location = useLocation();
   const signOut = useSignout();
 
-  /* location.pathname === "/orders/post-sale"; */
-
   useEffect(() => {
     const glitchLogos = document.querySelectorAll(".little-glitch");
     glitchLogos.forEach((logo) =>

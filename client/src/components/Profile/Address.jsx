@@ -99,12 +99,12 @@ const Address = ({ loading, setLoading, address, setAddress }) => {
       <Modal isOpen={isOpenAddForm} closeModal={closeAddForm}>
         {isOpenAddForm && (
           <AddAddress
+            prop={prop}
             setAddressToEdit={setAddressToEdit}
             addressToEdit={addressToEdit}
+            addressToEditId={addressToEditId}
             setAddress={setAddress}
             closeAddForm={closeAddForm}
-            prop={prop}
-            addressToEditId={addressToEditId}
           />
         )}
       </Modal>
