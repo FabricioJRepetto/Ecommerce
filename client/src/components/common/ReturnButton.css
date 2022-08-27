@@ -1,0 +1,8 @@
+.return-button-container {
+  margin-top: 1rem;
+}
+.return-button {
+  color: white;
+  cursor: pointer;
+  font-weight: 400;
+}

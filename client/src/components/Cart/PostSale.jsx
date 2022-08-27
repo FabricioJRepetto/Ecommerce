@@ -1,14 +1,14 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate, useSearchParams, NavLink } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { loadCart } from "../../Redux/reducer/cartSlice";
 import "./PostSale.css";
 import Carousel from "../Home/Carousel/Carousel";
 import LoaderBars from "../common/LoaderBars";
 import DeliveryProgress from "../common/DeliveryProgress";
-import { ArrowBackIcon } from "@chakra-ui/icons";
 import { ReactComponent as Spinner } from "../../assets/svg/spinner.svg";
+import ReturnButton from "../common/ReturnButton";
 
 const PostSale = () => {
   const [order, setOrder] = useState(false);
@@ -184,12 +184,7 @@ const PostSale = () => {
               Id de orden: <i>{order?.id}</i>
             </p>
             <div className="postsale-back-container">
-              <NavLink to={"/cart"}>
-                <span className="g-back-button g-text-button">
-                  <ArrowBackIcon />
-                  {"   regresar"}
-                </span>
-              </NavLink>
+              <ReturnButton to={"/cart"} />
             </div>
           </div>
         </div>
