@@ -36,7 +36,7 @@ const BuyNow = () => {
   const [loading, setLoading] = useState(true);
   const [loaded, setLoaded] = useState(false);
 
-  const [isOpenAddForm, openAddForm, closeAddForm] = useModal();
+  const [isOpenAddForm, openAddForm, closeAddForm, prop] = useModal();
   const [isOpenAddList, openAddList, closeAddList] = useModal();
   const [isOpenCheckout, openCheckout, closeCheckout] = useModal();
 
@@ -228,7 +228,10 @@ const BuyNow = () => {
                     <Arrow className="arrow-address-selector" />
                   </div>
                 ) : (
-                  <div onClick={openAddForm} className="cart-address-selector">
+                  <div
+                    onClick={() => openAddForm(true)}
+                    className="cart-address-selector"
+                  >
                     <b>
                       <u>Agrega una dirección para continuar la compra.</u>
                     </b>
@@ -374,7 +377,7 @@ const BuyNow = () => {
 
             {!selectedAdd && (
               <div className="cart-warning-message">
-                <span onClick={openAddForm}>
+                <span onClick={() => openAddForm(true)}>
                   <WarningIcon style={{ margin: "0 .5rem 0 0" }} />
                   Necesitas especificar una dirección de envío antes de realizar
                   el pago.
@@ -397,6 +400,7 @@ const BuyNow = () => {
 
       <Modal isOpen={isOpenAddForm} closeModal={closeAddForm}>
         <AddAddress
+          prop={prop}
           setAddress={setAddress}
           closeAddForm={closeAddForm}
           setSelectedAdd={setSelectedAdd}
@@ -419,7 +423,7 @@ const BuyNow = () => {
             ))}
             <button
               onClick={() => {
-                openAddForm();
+                openAddForm(true);
                 closeAddList();
               }}
             >

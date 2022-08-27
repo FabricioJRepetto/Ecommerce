@@ -44,7 +44,7 @@ const AddAddress = ({
 
   // handle submit
   const handleAddress = async (addressData, prop) => {
-    if (prop === undefined) {
+    if (prop) {
       const { data, statusText } = await axios.post(`/address/`, addressData);
       setAddress(data.address);
       notification(
@@ -82,8 +82,8 @@ const AddAddress = ({
   };
 
   return (
-    <>
-      <h1>{prop === undefined ? "Agregar dirección" : "Editar dirección"}</h1>
+    <div>
+      <h1>{prop ? "Agregar dirección" : "Editar dirección"}</h1>
       <form
         onSubmit={handleSubmit((data) => handleAddress(data, prop))}
         onKeyDown={avoidEnterSubmit}
@@ -234,13 +234,13 @@ const AddAddress = ({
         </span>
 
         <button className="g-white-button">
-          {prop === undefined ? "Agregar dirección" : "Editar dirección"}
+          {prop ? "Agregar dirección" : "Editar dirección"}
         </button>
         <button onClick={() => closeAddForm(true)} className="g-white-button">
           Cancelar
         </button>
       </form>
-    </>
+    </div>
   );
 };
 
