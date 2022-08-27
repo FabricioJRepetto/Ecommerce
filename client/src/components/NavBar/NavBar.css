@@ -16,8 +16,12 @@
   background-color: #00000075;
   position: fixed;
   z-index: 5;
-  transition: 0.2s ease-in-out;
+  transition: opacity 0.2s ease-in-out;
   top: 0;
+}
+.hide-menu-mobile-background {
+  opacity: 0;
+  z-index: -1;
 }
 .navbar-menu-mobile {
   padding-top: 3.5rem;
@@ -64,10 +68,7 @@
 .show-menu-mobile {
   left: 0;
 }
-.hide-menu-mobile-background {
-  opacity: 0;
-  z-index: 0;
-}
+
 .navbar-menu-mobile-button {
   z-index: 6;
   display: flex;
@@ -99,7 +100,7 @@
     display: none;
   }
   .navbar-dumb-hidden {
-    height: 3rem;
+    height: 3.1rem;
   }
   .navbar-menu-mobile {
     display: flex;
@@ -113,6 +114,9 @@
   }
   .glitch-desktop {
     display: none;
+  }
+  .glitch-mobile {
+    margin-left: 1vw;
   }
   .glitch-mobile-container {
     position: fixed;
@@ -398,7 +402,7 @@
   );
 }
 .logout {
-  margin-top: 0.75rem;
+  margin-top: 0.6rem;
   height: 3.5rem;
   border-top: 1px solid rgb(115, 115, 115);
 }
@@ -425,7 +429,7 @@
   transition: height 0.1s ease;
 }
 .navbar-modal-hide {
-  height: 2px;
+  height: 1px;
   transition: height 0.1s ease;
 }
 .navbar-modal-visible .profile-modal-option,
@@ -487,6 +491,9 @@
   transform: translateY(2px);
   z-index: 6;
 }
+/* .little-glitch-postsale {
+  cursor: default;
+} */
 .navbar-signin-button {
   display: flex;
   justify-content: center;

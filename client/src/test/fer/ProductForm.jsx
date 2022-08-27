@@ -23,9 +23,10 @@ import {
   DeleteIcon,
   ArrowBackIcon,
 } from "@chakra-ui/icons";
+import { ReactComponent as Spinner } from "../../assets/svg/spinner.svg";
+import Checkbox from "../../components/common/Checkbox";
 import "./ProductForm.css";
 import "../../App.css";
-import Checkbox from "../../components/common/Checkbox";
 
 const ProductForm = () => {
   const [featuresQuantity, setFeaturesQuantity] = useState(1);
@@ -733,10 +734,10 @@ const ProductForm = () => {
         <>
           <label
             htmlFor="filesButton"
-            className={`g-white-button ${
+            className={`g-white-button upload-images ${
               productImg?.length + imgsToEdit?.length >= 8 || waitingResponse
                 ? "upload-images-disabled"
-                : "upload-images"
+                : ""
             }`}
           >
             Subir imágenes
@@ -869,12 +870,19 @@ const ProductForm = () => {
 
         {/* FORM BUTTONS */}
         <div className="product-form-width form-buttons-container">
-          <input
+          <button
             type="submit"
-            value={productToEdit ? "Actualizar" : "Publicar"}
             className="g-white-button"
             disabled={waitingResponse}
-          />
+          >
+            {waitingResponse ? (
+              <Spinner className="cho-svg" />
+            ) : productToEdit ? (
+              "Actualizar"
+            ) : (
+              "Publicar"
+            )}
+          </button>
           <input
             type="button"
             value="Resetear"
