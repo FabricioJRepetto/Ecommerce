@@ -301,7 +301,7 @@ const NavBar = () => {
                         className="navbar-wishlist-button navbar-hide-mobile"
                         onMouseEnter={() => setWishModal(true)}
                         onMouseLeave={() => setWishModal(false)}
-                        onClick={() => navigate("/profile/wishlist")}
+                        /* onClick={() => navigate("/profile/wishlist")} */
                       >
                         <Fav className="wishlist-icon" />
                         <div className="navbar-modal-container-w">

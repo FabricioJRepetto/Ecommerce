@@ -1,6 +1,9 @@
 .return-button-container {
   margin-top: 1rem;
 }
+.return-button-container:hover .return-button {
+  color: #888888;
+}
 .return-button {
   color: white;
   cursor: pointer;

@@ -18,6 +18,7 @@ import UpdatePassword from "../Session/UpdatePassword";
 import { useSignout } from "../../hooks/useSignout";
 import "../../App.css";
 import "./Profile.css";
+import ChromaticText from "../common/ChromaticText";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -171,16 +172,48 @@ const Profile = () => {
 
   return (
     <div className="profile-container">
-      <div className="profile-menu-container">
-        <p onClick={() => navigate("/profile/details")}>Detalles</p>
-        <p onClick={() => navigate("/profile/orders")}>Ordenes</p>
-        <p onClick={() => navigate("/profile/wishlist")}>Favoritos</p>
-        <p onClick={() => navigate("/profile/history")}>Historial</p>
-        <p onClick={() => signOut()}>Salir</p>
+      <div className="profile-menu-container profile-menu-container-placeholder"></div>
+      <div className="profile-menu-container profile-menu-container-fixed">
+        <ul>
+          <li>
+            <ChromaticText
+              text={"Detalles"}
+              route={"/profile/details"}
+              size={"1.1rem"}
+            />
+          </li>
+          <li>
+            <ChromaticText
+              text={"Órdenes"}
+              route={"/profile/orders"}
+              size={"1.1rem"}
+            />
+          </li>
+          <li>
+            <ChromaticText
+              text={"Favoritos"}
+              route={"/profile/wishlist"}
+              size={"1.1rem"}
+            />
+          </li>
+          <li>
+            <ChromaticText
+              text={"Historial"}
+              route={"/profile/history"}
+              size={"1.1rem"}
+            />
+          </li>
+          <li onClick={() => signOut()}>
+            <ChromaticText
+              text={"Salir"}
+              route={"/profile/details"}
+              size={"1.1rem"}
+            />
+          </li>
+        </ul>
       </div>
 
-      <hr />
-      <div>
+      <div className="profile-option-selected-container">
         {render === "details" && (
           <div className="profile-details-container">
             <div className="profile-avatar-container">
