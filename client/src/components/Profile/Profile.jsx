@@ -9,7 +9,10 @@ import { avatarResizer } from "../../helpers/resizer";
 import { avoidEnterSubmit } from "../../helpers/AvoidEnterSubmit";
 import { useNotification } from "../../hooks/useNotification";
 import { loadUserData } from "../../Redux/reducer/sessionSlice";
-import { CloseIcon } from "@chakra-ui/icons";
+import { ReactComponent as Avatar } from "../../assets/svg/avatar.svg";
+import { ReactComponent as Location } from "../../assets/svg/location.svg";
+import { ReactComponent as Fav } from "../../assets/svg/fav.svg";
+import { CloseIcon, RepeatClockIcon, CalendarIcon } from "@chakra-ui/icons";
 import Orders from "./Orders";
 import Address from "./Address";
 import Wishlist from "./Wishlist";
@@ -19,6 +22,7 @@ import { useSignout } from "../../hooks/useSignout";
 import "../../App.css";
 import "./Profile.css";
 import ChromaticText from "../common/ChromaticText";
+import BurgerButton from "../common/BurgerButton";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -49,12 +53,7 @@ const Profile = () => {
 
   const [newAvatar, setNewAvatar] = useState();
   const [avatarPreview, setAvatarPreview] = useState();
-
-  //   const {
-  //     register: registerForgot,
-  //     handleSubmit: handleSubmitForgot,
-  //     formState: { errors: errorsForgot },
-  //   } = useForm();
+  const [showMenu, setShowMenu] = useState(false);
 
   const {
     register: registerEditDetails,
@@ -172,50 +171,139 @@ const Profile = () => {
 
   return (
     <div className="profile-container">
-      <div className="profile-menu-container profile-menu-container-placeholder"></div>
-      <div className="profile-menu-container profile-menu-container-fixed">
+      <div
+        className={`profile-menu-container profile-menu-container-placeholder profile-menu-container-placeholder-mobile ${
+          showMenu
+            ? "profile-menu-container-show"
+            : "profile-menu-container-hide"
+        }`}
+      ></div>
+      <div
+        className={`profile-menu-container profile-menu-container-fixed profile-menu-container-mobile ${
+          showMenu
+            ? "profile-menu-container-show"
+            : "profile-menu-container-hide"
+        }`}
+      >
         <ul>
-          <li>
-            <ChromaticText
-              text={"Detalles"}
-              route={"/profile/details"}
-              size={"1.1rem"}
-            />
-          </li>
-          <li>
-            <ChromaticText
-              text={"Órdenes"}
-              route={"/profile/orders"}
-              size={"1.1rem"}
-            />
-          </li>
-          <li>
-            <ChromaticText
-              text={"Favoritos"}
-              route={"/profile/wishlist"}
-              size={"1.1rem"}
-            />
-          </li>
-          <li>
-            <ChromaticText
-              text={"Historial"}
-              route={"/profile/history"}
-              size={"1.1rem"}
-            />
-          </li>
-          <li onClick={() => signOut()}>
-            <ChromaticText
-              text={"Salir"}
-              route={"/profile/details"}
-              size={"1.1rem"}
-            />
-          </li>
+          <div
+            className="profile-burger-container"
+            onClick={() => setShowMenu(!showMenu)}
+          >
+            <BurgerButton setShowMenu={setShowMenu} showMenu={showMenu} />
+          </div>
+          <>
+            <li onClick={() => navigate("/profile/details")}>
+              <span className="profile-svg-container">
+                <Avatar />
+              </span>
+              <span className="profile-chromatic-container">
+                <ChromaticText text={"Detalles"} size={"1.1rem"} />
+              </span>
+            </li>
+            <li onClick={() => navigate("/profile/address")}>
+              <span className="profile-svg-container">
+                <Location />
+              </span>
+              <span className="profile-chromatic-container">
+                <ChromaticText text={"Direcciones"} size={"1.1rem"} />
+              </span>
+            </li>
+            <li onClick={() => navigate("/profile/orders")}>
+              <CalendarIcon />
+              <span className="profile-chromatic-container">
+                <ChromaticText text={"Órdenes"} size={"1.1rem"} />
+              </span>
+            </li>
+            <li onClick={() => navigate("/profile/wishlist")}>
+              <span className="profile-svg-container">
+                <Fav />
+              </span>
+              <span className="profile-chromatic-container">
+                <ChromaticText text={"Favoritos"} size={"1.1rem"} />
+              </span>
+            </li>
+            <li onClick={() => navigate("/profile/history")}>
+              <RepeatClockIcon />
+              <span className="profile-chromatic-container">
+                <ChromaticText text={"Historial"} size={"1.1rem"} />
+              </span>
+            </li>
+            <li
+              onClick={() => {
+                signOut();
+                navigate("/");
+              }}
+            >
+              <span className="profile-chromatic-container">
+                <ChromaticText text={"Salir"} size={"1.1rem"} />
+              </span>
+            </li>
+          </>
+        </ul>
+      </div>
+
+      <div className="profile-menu-container profile-menu-container-placeholder-desktop"></div>
+      <div className="profile-menu-container profile-menu-container-fixed profile-menu-container-desktop">
+        <ul>
+          <div className="profile-burger-container">
+            <BurgerButton setShowMenu={setShowMenu} showMenu={showMenu} />
+          </div>
+          <>
+            <li onClick={() => navigate("/profile/details")}>
+              <span className="profile-svg-container">
+                <Avatar />
+              </span>
+              <span className="profile-chromatic-container">
+                <ChromaticText text={"Detalles"} size={"1.1rem"} />
+              </span>
+            </li>
+            <li onClick={() => navigate("/profile/address")}>
+              <span className="profile-svg-container">
+                <Location />
+              </span>
+              <span className="profile-chromatic-container">
+                <ChromaticText text={"Direcciones"} size={"1.1rem"} />
+              </span>
+            </li>
+            <li onClick={() => navigate("/profile/orders")}>
+              <CalendarIcon />
+              <span className="profile-chromatic-container">
+                <ChromaticText text={"Órdenes"} size={"1.1rem"} />
+              </span>
+            </li>
+            <li onClick={() => navigate("/profile/wishlist")}>
+              <span className="profile-svg-container">
+                <Fav />
+              </span>
+              <span className="profile-chromatic-container">
+                <ChromaticText text={"Favoritos"} size={"1.1rem"} />
+              </span>
+            </li>
+            <li onClick={() => navigate("/profile/history")}>
+              <RepeatClockIcon />
+              <span className="profile-chromatic-container">
+                <ChromaticText text={"Historial"} size={"1.1rem"} />
+              </span>
+            </li>
+            <li
+              onClick={() => {
+                signOut();
+                navigate("/");
+              }}
+            >
+              <span className="profile-chromatic-container">
+                <ChromaticText text={"Salir"} size={"1.1rem"} />
+              </span>
+            </li>
+          </>
         </ul>
       </div>
 
       <div className="profile-option-selected-container">
         {render === "details" && (
           <div className="profile-details-container">
+            <h1>Detalles</h1>
             <div className="profile-avatar-container">
               <img
                 src={
@@ -264,12 +352,6 @@ const Profile = () => {
                   )
                 : "Aún no tienes una dirección predeterminada seleccionada"}
             </div>
-            <button
-              onClick={() => navigate("/profile/address")}
-              className="g-white-button"
-            >
-              Direcciones
-            </button>
           </div>
         )}
 

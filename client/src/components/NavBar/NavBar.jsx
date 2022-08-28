@@ -20,7 +20,7 @@ import "./NavBar.css";
 import "../../App.css";
 import { useSignout } from "../../hooks/useSignout";
 import ChromaticText from "../common/ChromaticText";
-import BurgerButton from "./BurgerButton";
+import BurgerButton from "../common/BurgerButton";
 
 const NavBar = () => {
   const { session, username, avatar, role } = useSelector(

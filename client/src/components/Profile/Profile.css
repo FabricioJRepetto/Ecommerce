@@ -6,7 +6,52 @@
 }
 .profile-menu-container-placeholder {
 }
-@media (max-width: 720px) {
+@media (max-width: 899px) {
+  .profile-menu-container-show {
+    width: 170px;
+  }
+}
+@media (min-width: 900px) {
+  .profile-menu-container-show {
+    width: 20vw;
+    max-width: 250px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .profile-burger-container {
+    display: none;
+  }
+  .profile-menu-container-mobile {
+    display: none;
+  }
+  .profile-menu-container-placeholder-mobile {
+    display: none;
+  }
+  .profile-menu-container-desktop {
+    display: flex;
+    width: 10vw;
+    min-width: 170px;
+  }
+  .profile-menu-container-placeholder-desktop {
+    display: flex;
+    width: 10vw;
+    min-width: 170px;
+  }
+}
+@media (max-width: 1023px) {
+  .profile-menu-container-desktop {
+    display: none;
+  }
+  .profile-menu-container-placeholder-desktop {
+    display: none;
+  }
+  .profile-menu-container-mobile {
+    display: flex;
+  }
+  .profile-menu-container-placeholder-mobile {
+    display: flex;
+  }
 }
 
 .profile-menu-container-fixed {
@@ -17,21 +62,67 @@
   top: 0;
 }
 .profile-menu-container {
-  display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: flex-start;
-  width: 20vw;
+  transition: 0.2s ease-in-out;
+  background-color: #111;
 }
+.profile-menu-container-hide {
+  width: 3.2rem;
+}
+
+.profile-menu-container-hide .chromatic-text {
+  display: none;
+}
+.profile-menu-container-show .profile-chromatic-container {
+  opacity: 1;
+  transition: opacity 0.2s ease-in-out;
+}
+.profile-menu-container-hide .profile-chromatic-container {
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.profile-chromatic-container {
+  width: 100%;
+}
+.profile-chromatic-container > div {
+  padding-left: 3rem;
+}
+
 .profile-menu-container > ul {
   width: 100%;
 }
+.profile-burger-container {
+  width: 3rem;
+  height: 3rem;
+  position: relative;
+  /* right: 0.5rem; */
+}
 .profile-menu-container > ul > li {
   height: 3rem;
+  display: flex;
+  position: relative;
+  cursor: pointer;
 }
-.profile-menu-container > ul > li > div {
-  padding-left: 1rem;
+.profile-svg-container {
+  position: absolute;
 }
+.profile-svg-container svg {
+  position: absolute;
+  left: 0.6rem;
+  top: 0.5rem;
+  transform: scale(0.9);
+  color: white;
+}
+.profile-menu-container > ul > li > svg {
+  position: absolute;
+  left: 0.8rem;
+  top: 0.8rem;
+  font-size: 1.5rem;
+}
+
 .profile-menu-container > ul > li:hover {
   background: linear-gradient(
     90deg,
@@ -53,6 +144,7 @@
   height: fit-content;
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 .profile-wishlistcard-container {
