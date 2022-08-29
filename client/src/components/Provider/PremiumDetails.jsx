@@ -24,6 +24,7 @@ const PremiumDetails = () => {
         const { data } = await axios(`/product/${id}`);
         if (data) {
             setProduct(data);
+            console.log(data);
 
             let aux = data.images.map(e => ({
                 img: e.imgURL,
@@ -48,8 +49,13 @@ const PremiumDetails = () => {
 
                         <div className='premiumdetails-details'>
                             <p className='provider-text'>Provider Premium</p>
+                            {product.premiumData.logo 
+                                ? <div className='premiumdetails-logo-container'>
+                                    <img src={product.premiumData.logo} alt="" />
+                                  </div>
+                                : <h1>{product.name}</h1> }
+                            
                             <h2>"Creamos Playdate solo por diversión."</h2>
-                            <h1>{product.name}</h1>
                             <div>
                                 <span>${priceFormat(product.price).int}</span>
                                 <span>{priceFormat(product.price).cents}</span>

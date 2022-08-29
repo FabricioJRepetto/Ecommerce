@@ -67,6 +67,7 @@ const productSchema = new Schema(
         premiumData: {
             miniDescription: String,
             color: String,
+            logo: String,
             extraText: [{}]
         }
     },
