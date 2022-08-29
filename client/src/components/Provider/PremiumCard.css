@@ -1,8 +1,8 @@
 .premiumcard-container {
     display: flex;
     justify-content: space-between;    
-    height: 50vh;
-    width: 150vh;
+    height: 40vh;
+    width: 120vh;
     margin: 2rem 0;
     cursor: pointer;
 }
@@ -34,7 +34,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 6rem;
+    justify-content: center;
+    padding: 0 3rem;
     font-family: HelveticaNeueLTPro-Hv;
     width: 66%;
     height: 100%;

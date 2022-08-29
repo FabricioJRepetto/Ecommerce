@@ -35,6 +35,7 @@ import UsersAdmin from "./test/fer/UsersAdmin";
 import AboutUs from "./components/common/AboutUs";
 import LoaderBars from "./components/common/LoaderBars";
 import ForgotPassword from "./components/Session/ForgotPassword";
+import PremiumDetails from "./components/Provider/PremiumDetails";
 
 function App() {
     const dispatch = useDispatch();
@@ -118,6 +119,7 @@ function App() {
                         <Route path="/details/:id" element={<Details />} />
                         <Route path="/orders/post-sale" element={<PostSale />} />
                         <Route path="/premium" element={<ProviderPremium />} />
+                        <Route path="/premium/:id" element={<PremiumDetails />} />
                         <Route path="/productForm" element={<ProductForm />} />
                         <Route path="/products" element={<Products />} />
                         <Route path="/provider" element={<ProviderStore />} />
@@ -126,7 +128,6 @@ function App() {
                         <Route path="/results" element={<Results />} />
                         <Route path="/sales" element={<SalesResults />} />
                         <Route path="/signin" element={<Signupin />} />
-                        {/* <Route path="/signout" element={<Signout />} /> */}
                         <Route path="/forgotPassword" element={<ForgotPassword />} />
                         <Route
                             path="/reset/:userId/:resetToken"

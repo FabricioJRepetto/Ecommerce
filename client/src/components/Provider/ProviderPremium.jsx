@@ -17,7 +17,7 @@ const ProviderPremium = () => {
 
         setLoading(false);
       })();
-    }, []);    
+    }, []);
 
   return (
     <div>

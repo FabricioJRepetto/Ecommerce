@@ -64,7 +64,11 @@ const productSchema = new Schema(
             },
         ],
         premium: Boolean,
-        premiumData: {}
+        premiumData: {
+            miniDescription: String,
+            color: String,
+            extraText: [{}]
+        }
     },
     {
         versionKey: false,
@@ -85,14 +89,10 @@ module.exports = model("Product", productSchema);
 /* 
 
 {
-    "premiumData": {
-        "miniDescription": "String",
-        "extraText": [{
-            "color": "String",
-            "title": "String",
-            "text": "String",
-            "img": "String"
-        }]
+    premiumData: {
+        miniDescription: String,
+        color: String,
+        extraText: [{}]
     }
 }
 

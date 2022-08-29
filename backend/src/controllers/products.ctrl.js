@@ -206,19 +206,39 @@ const getPremium = async (req, res, next) => {
 const putPremium = async (req, res, next) => {
     try {
         const { id } = req.params;
-        const { premiumData } = req.body;
+        const { premiumData, overwrite } = req.body;
 
-        const prod = await Product.findByIdAndUpdate(id,
-            {
-                $set: {
-                    premium: true,
-                    premiumData
-                }
-            },
-            { new: true }
-        )
+        const prod = await Product.findById(id);
+        /*
+            const prod = await Product.findByIdAndUpdate(id,
+                {
+                    $set: {
+                        premium: true,
+                        premiumData
+                    }
+                }, 
+                {new: true}
+            );
+        */
+        if (!prod.premium) {
+            prod.premium = true;
+            prod.premiumData = premiumData;
+            await prod.save();
+            return res.json('Premium created')
+        } else {
+            if (overwrite) {
+                prod.premiumData.extraText = premiumData.extraText;
+                // await prod.markModified('premiumData');
+                await prod.save();
+                return res.json('Extras replaced')
+            } else {
+                prod.premiumData.extraText.push(...premiumData.extraText);
+                // await prod.markModified('premiumData');
+                await prod.save();
+                return res.json({ prod, message: 'Extras updated' })
+            }
+        }
 
-        return res.json({ prod, message: 'Premium crated' })
     } catch (error) {
         next(error)
     }
