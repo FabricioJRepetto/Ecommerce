@@ -64,37 +64,21 @@ const ProviderStore = () => {
         <div className='providerstore-container'>
             
             <div className='providerstore-echo-inner'>
-                <p>PROVIDER</p>
-                <p>PROVIDER</p>
-                <p>PROVIDER</p>
+                <span>PROVIDER</span><br/>
+                PROVIDER <br/>
+                PROVIDER 
             </div>
             <p className='providerstore-title'>STORE</p>
-            <p className='providerstore-title-text'>/ORIGINALES<br/>/UNICOS<br/>/TUYOS</p>
+            <p className='providerstore-title-text'>/ORIGINALES<br/>/EXCLUSIVOS<br/>/TUYOS</p>
+            <button className='providerstore-title-button g-white-button'
+                onClick={()=> navigate('/products')}>Ver todos los productos</button>
 
-            <div className='providerstore-header'>
-                <img src="https://res.cloudinary.com/dsyjj0sch/image/upload/v1661210139/defe786a-5490-425a-b98d-3b8c2d1b7463_desktop_header-copy_algg64.jpg" alt="header"/>
-            </div>
+            <div className='providerstore-header'></div>
 
             <div className='providerstore-background'></div>
 
             <div className='storecards-container'>
-                <div className='store-premium'>                
-                    <Carousel images={images}
-                        pausable
-                        pointer
-                        indicators
-                        width='40vw'
-                        height='100%' />
-                    <div className='store-premium-text'>
-                        <div>
-                            <h1>Provider Premium</h1>
-                            <p>Una selección exclusiva de los mejores productos original Provider store.</p>
-                        </div>
-                        <button className='g-white-button'
-                            onClick={()=> navigate('/')}>Ver los productos Premium</button>
-                    </div>
-                </div>
-
+                
                 <div className='storecards-inner'>
 
                     <div className="storecard"
@@ -131,7 +115,7 @@ const ProviderStore = () => {
                         <p>Monitores</p>
                         <p className={`storecard-subtitle ${hover === 'display' && 'subtitle-visible1'}`}>Monitores</p>
                         <p className={`storecard-subtitle ${hover === 'display' && 'subtitle-visible2'}`}>Monitores</p>
-                        <img src='https://katech.com.ar/wp-content/uploads/MON351-1.jpg' alt="img" />
+                        <img src='https://static.bhphoto.com/images/images500x500/1643045763_1683182.jpg' alt="img" />
                     </div>
 
                 </div>
@@ -157,6 +141,23 @@ const ProviderStore = () => {
                 </div>
 
                 <div className='providerstore-premiumbrand'></div>
+
+                <div className='store-premium'>                
+                    <Carousel images={images}
+                        pausable
+                        pointer
+                        indicators
+                        width='40vw'
+                        height='100%' />
+                    <div className='store-premium-text'>
+                        <div>
+                            <h1>Provider Premium</h1>
+                            <p>Una selección exclusiva de los mejores productos original Provider store.</p>
+                        </div>
+                        <button className='g-white-button'
+                            onClick={()=> navigate('/premium')}>Ver los productos Premium</button>
+                    </div>
+                </div>
 
             </div>
 
