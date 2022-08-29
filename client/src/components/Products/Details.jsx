@@ -2,26 +2,25 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { useNotification } from "../../hooks/useNotification";
-import { addCart } from "../../Redux/reducer/cartSlice";
 import Galery from "./Galery";
 import { WishlistButton as Fav } from "./WishlistButton";
-import "./Details.css";
-
 import Footer from "../common/Footer";
 import { ReactComponent as Spinner } from "../../assets/svg/spinner.svg";
 import { loadQuerys } from "../../Redux/reducer/productsSlice";
 import { priceFormat } from "../../helpers/priceFormat";
 
+import "./Details.css";
+
+import { useCheckout } from "../../hooks/useCheckout";
+
 const Details = () => {
   let { id } = useParams();
-  const cart = useSelector((state) => state.cartReducer.onCart);
   const { wishlist } = useSelector((state) => state.cartReducer);
   const { session } = useSelector((state) => state.sessionReducer);
   const querys = useSelector((state) => state.productsReducer.searchQuerys);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [notification] = useNotification();
+  const { addToCart, buyNow} = useCheckout();
 
   const [data, setData] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -102,30 +101,7 @@ const Details = () => {
     })();
     // eslint-disable-next-line
   }, [id]);
-
-  const addToCart = async (id) => {
-    if (session) {
-      const { statusText, data } = await axios.post(`/cart/${id}`);
-      statusText === "OK" && !cart.includes(id) && dispatch(addCart(id));
-      notification(
-        data.message,
-        "/cart",
-        `${statusText === "OK" ? "success" : "warning"}`
-      );
-    } else {
-      notification("Necesitas iniciar sesión primero.", "/signin", "warning");
-    }
-  };
-
-  const buyNow = async (id) => {
-    if (session) {
-      await axios.post(`/cart/`, { product_id: id });
-      navigate("/buyNow");
-    } else {
-      notification("Necesitas iniciar sesión primero.", "/signin", "warning");
-    }
-  };
-
+  
   const addFilter = async (obj) => {
     let aux = { ...querys };
     delete aux.q;

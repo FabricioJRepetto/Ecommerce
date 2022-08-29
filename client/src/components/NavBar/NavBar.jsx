@@ -344,7 +344,7 @@ const NavBar = () => {
                 <div className="navbar-central-options">
                   <ChromaticText
                     text={"Provider Store"}
-                    route={"products"}
+                    route={"provider"}
                     size={"1rem"}
                     movementAfter={"0 0 1rem 0"}
                   />
@@ -352,8 +352,8 @@ const NavBar = () => {
 
                 <div className="navbar-central-options">
                   <ChromaticText
-                    text={"Provider Deluxe"}
-                    route={"products"}
+                    text={"Provider Premium"}
+                    route={"premium"}
                     size={"1rem"}
                     movementAfter={"0 0 1rem 0"}
                   />
@@ -397,14 +397,14 @@ const NavBar = () => {
           <li onClick={() => setShowMenu(false)}>
             <ChromaticText
               text={"Provider Store"}
-              route={"products"}
+              route={"provider"}
               size={"1.1rem"}
             />
           </li>
           <li onClick={() => setShowMenu(false)}>
             <ChromaticText
-              text={"Provider Deluxe"}
-              route={"products"}
+              text={"Provider Premium"}
+              route={"premium"}
               size={"1.1rem"}
             />
           </li>
