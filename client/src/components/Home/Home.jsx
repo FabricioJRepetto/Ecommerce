@@ -110,6 +110,7 @@ const Home = () => {
               key={`specials ${index}`}
               img={products[index]?.thumbnail}
               name={products[index]?.name}
+              premium={products[index]?.premium}
               price={products[index]?.price}
               sale_price={products[index]?.sale_price}
               discount={products[index]?.discount}
@@ -131,6 +132,7 @@ const Home = () => {
               <MiniCard
                 key={`recom ${index}`}
                 prodId={suggestion[index]?._id}
+                premium={suggestion[index]?.premium}
                 name={suggestion[index]?.name}
                 img={suggestion[index]?.thumbnail}
                 price={suggestion[index]?.price}

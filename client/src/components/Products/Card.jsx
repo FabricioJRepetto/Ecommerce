@@ -33,6 +33,7 @@ const Card = ({
     _id: prodId,
     free_shipping,
     on_sale,
+    premium
   } = productData;
   const special = !/MLA/g.test(prodId);
 
@@ -56,7 +57,7 @@ const Card = ({
 
         <div className="card-main-container">
           <div
-            onClick={() => navigate(`/details/${prodId}`)}
+            onClick={() => navigate(premium ? `/premium/${prodId}` : `/details/${prodId}`)}
             className="card-img-container pointer"
           >
             <img src={resizer(img, 180)} alt="product" />

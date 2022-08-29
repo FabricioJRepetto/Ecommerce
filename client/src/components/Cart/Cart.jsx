@@ -224,6 +224,7 @@ const Cart = () => {
                         {cart.products.map((p) => (
                           <CartCard
                             key={p._id}
+                            premium={p.premium}
                             on_cart={true}
                             on_sale={p.on_sale}
                             img={p.thumbnail}
@@ -410,6 +411,7 @@ const Cart = () => {
                       {cart.buyLater.map((p) => (
                         <CartCard
                           key={p._id}
+                          premium={p.premium}
                           on_cart={false}
                           on_sale={p.on_sale}
                           img={p.thumbnail}

@@ -15,6 +15,7 @@ const History = ({ loading, history, wl_id }) => {
                     img={e.thumbnail}
                     name={e.name}
                     price={e.price}
+                    premium={e.premium}
                     sale_price={e.sale_price}
                     discount={e.discount}
                     prodId={e._id}
