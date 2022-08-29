@@ -11,8 +11,10 @@ import { useNotification } from "../../hooks/useNotification";
 import { loadUserData } from "../../Redux/reducer/sessionSlice";
 import { ReactComponent as Avatar } from "../../assets/svg/avatar.svg";
 import { ReactComponent as Location } from "../../assets/svg/location.svg";
+import { ReactComponent as Bag } from "../../assets/svg/bag.svg";
 import { ReactComponent as Fav } from "../../assets/svg/fav.svg";
-import { CloseIcon, RepeatClockIcon, CalendarIcon } from "@chakra-ui/icons";
+import { ReactComponent as Logout } from "../../assets/svg/logout.svg";
+import { CloseIcon, RepeatClockIcon } from "@chakra-ui/icons";
 import Orders from "./Orders";
 import Address from "./Address";
 import Wishlist from "./Wishlist";
@@ -171,6 +173,12 @@ const Profile = () => {
 
   return (
     <div className="profile-container">
+      {/* <div
+        className={`navbar-menu-mobile-background ${
+          !showMenu ? "hide-menu-mobile-background" : ""
+        }`}
+        onClick={() => setShowMenu(false)}
+      ></div> */}
       <div
         className={`profile-menu-container profile-menu-container-placeholder profile-menu-container-placeholder-mobile ${
           showMenu
@@ -210,7 +218,9 @@ const Profile = () => {
               </span>
             </li>
             <li onClick={() => navigate("/profile/orders")}>
-              <CalendarIcon />
+              <span className="profile-svg-container profile-svg-rescale">
+                <Bag />
+              </span>
               <span className="profile-chromatic-container">
                 <ChromaticText text={"Órdenes"} size={"1.1rem"} />
               </span>
@@ -231,10 +241,13 @@ const Profile = () => {
             </li>
             <li
               onClick={() => {
-                signOut();
                 navigate("/");
+                signOut();
               }}
             >
+              <span className="profile-svg-container profile-svg-rescale">
+                <Logout />
+              </span>
               <span className="profile-chromatic-container">
                 <ChromaticText text={"Salir"} size={"1.1rem"} />
               </span>
@@ -267,7 +280,9 @@ const Profile = () => {
               </span>
             </li>
             <li onClick={() => navigate("/profile/orders")}>
-              <CalendarIcon />
+              <span className="profile-svg-container profile-svg-rescale">
+                <Bag />
+              </span>
               <span className="profile-chromatic-container">
                 <ChromaticText text={"Órdenes"} size={"1.1rem"} />
               </span>
@@ -288,10 +303,13 @@ const Profile = () => {
             </li>
             <li
               onClick={() => {
-                signOut();
                 navigate("/");
+                signOut();
               }}
             >
+              <span className="profile-svg-container profile-svg-rescale">
+                <Logout />
+              </span>
               <span className="profile-chromatic-container">
                 <ChromaticText text={"Salir"} size={"1.1rem"} />
               </span>

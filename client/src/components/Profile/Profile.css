@@ -65,7 +65,7 @@
   justify-content: center;
   flex-direction: column;
   align-items: flex-start;
-  transition: 0.2s ease-in-out;
+  transition: 0.1s ease-in-out;
   background-color: #111;
 }
 .profile-menu-container-hide {
@@ -113,8 +113,14 @@
   position: absolute;
   left: 0.6rem;
   top: 0.5rem;
-  transform: scale(0.9);
   color: white;
+  /* border: 1px solid red; */
+  transform: scale(0.8);
+}
+.profile-svg-container.profile-svg-rescale svg {
+  transform: scale(1.2);
+  left: 0.9rem;
+  top: 0.7rem;
 }
 .profile-menu-container > ul > li > svg {
   position: absolute;
@@ -131,15 +137,9 @@
     rgba(34, 34, 34, 1) 100%
   );
 }
-/* .profile-menu-container p {
-  font-size: 1.3rem;
-  font-weight: 400;
-  margin: 0 1vw;
-  cursor: pointer;
-} */
 
 .profile-option-selected-container {
-  width: 80vw;
+  width: 90vw;
   min-height: 80vh;
   height: fit-content;
   display: flex;
