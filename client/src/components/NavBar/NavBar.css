@@ -9,27 +9,22 @@
   background-color: #000000;
 }
 
-/* :hover {
-  background: linear-gradient(
-    90deg,
-    rgba(34, 34, 34, 1) 0%,
-    rgba(17, 17, 17, 1) 24%,
-    rgba(34, 34, 34, 1) 100%
-  );
-} */
-
-/* MOBILE */
+/*//! MOBILE */
 .navbar-menu-mobile-background {
   height: 100%;
   width: 100%;
   background-color: #00000075;
   position: fixed;
   z-index: 5;
-  transition: 0.2s ease-in-out;
+  transition: opacity 0.2s ease-in-out;
   top: 0;
 }
+.hide-menu-mobile-background {
+  opacity: 0;
+  z-index: -1;
+}
 .navbar-menu-mobile {
-  padding-top: 1rem;
+  padding-top: 3.5rem;
   height: 100%;
   width: 80vw;
   position: fixed;
@@ -73,23 +68,26 @@
 .show-menu-mobile {
   left: 0;
 }
-.hide-menu-mobile-background {
-  opacity: 0;
-  z-index: 1;
-}
+
 .navbar-menu-mobile-button {
-  z-index: 7;
+  z-index: 6;
+  display: flex;
+  height: 50px;
+  width: 45px;
+  position: fixed;
+  top: 0;
+  right: 0;
 }
 
 @media (max-width: 1023px) {
   .navbar-hide-mobile {
     display: none;
   }
-  /* .navbar-profile-section {
-    width: 70vw;
-  } */
+  .navbar-signin-button {
+    width: 40px;
+  }
   .navbar-central-section {
-    width: 60vw;
+    width: 55vw;
   }
   .navbar-central-section > form {
     width: 100%;
@@ -102,29 +100,49 @@
     display: none;
   }
   .navbar-dumb-hidden {
-    height: 3rem;
+    height: 3.1rem;
   }
   .navbar-menu-mobile {
     display: flex;
+  }
+  .cart-icon-container {
+    margin: 0;
   }
   .little-glitch {
     width: 145px;
     margin-right: 2rem;
   }
-  .cart-icon-container {
-    margin: 0;
+  .glitch-desktop {
+    display: none;
+  }
+  .glitch-mobile {
+    margin-left: 1vw;
+  }
+  .glitch-mobile-container {
+    position: fixed;
+    width: 150px;
+    top: 0;
+    left: 2rem;
+    z-index: 6;
+  }
+  .glitch-mobile-placeholder {
+    width: 150px;
+    height: 3rem;
+  }
+  .navbar-profile-section {
+    width: 2rem;
   }
 }
-/* DESKTOP */
+/*//! DESKTOP */
 @media (min-width: 1024px) {
-  .navbar-profile-section {
-    width: 300px;
-  }
   .navbar-profile-button {
     display: flex;
   }
   .navbar-wishlist-button {
     display: flex;
+  }
+  .navbar-signin-button {
+    width: 250px;
   }
   .navbar input[type="text"] {
     width: 35vw;
@@ -136,20 +154,31 @@
     display: none;
   }
   .navbar-dumb-hidden {
-    height: 5.5rem;
+    height: 5.3rem;
   }
   .navbar-menu-mobile-background {
     display: none;
   }
   .navbar-menu-mobile-button {
-    margin-left: 2rem;
     display: none;
+  }
+  .cart-icon-container {
+    margin: 0 1rem;
   }
   .little-glitch {
     width: 210px;
   }
-  .cart-icon-container {
-    margin: 0 1rem;
+  .glitch-mobile {
+    display: none;
+  }
+  .glitch-mobile-placeholder {
+    display: none;
+  }
+  .glitch-desktop {
+    margin-right: 1rem;
+  }
+  .navbar-profile-section {
+    width: 248px;
   }
 }
 
@@ -190,11 +219,18 @@
   margin-top: 0.2rem;
   align-items: flex-start;
 }
+.navbar-sections {
+  display: flex;
+  margin-right: 2rem;
+}
 
 @media (min-width: 1240px) {
   /* .navbar input[type="text"] {
     width: 35vw;
   } */
+  .navbar-central-subsection {
+    padding-right: 8.5rem;
+  }
   .navbar-central-subsection > .navbar-central-options {
     padding: 0 2rem;
   }
@@ -202,19 +238,22 @@
     width: 18rem;
     padding-right: 3rem;
   }
+  .navbar-profile-section {
+    width: 328px;
+  }
 }
 @media (max-width: 1239px) {
   .navbar-username {
     display: none;
   }
-  /* .navbar input[type="text"] {
-    width: 400px;
-  } */
+  .navbar-central-subsection {
+    padding-right: 3.5rem;
+  }
   .navbar-central-options {
     padding: 0 0.9rem;
   }
-  .navbar-signin-button {
-    width: 13rem;
+  .navbar-modal-container {
+    width: 3rem;
   }
 }
 
@@ -224,18 +263,17 @@
   position: fixed;
   top: 2.8rem;
   left: 0;
-  transition: 0.3s ease-in-out;
+  transition: 0.1s ease-in-out;
   background-color: black;
   justify-content: center;
-  padding-right: 6rem;
   align-items: center;
 }
 
 .hidden-box {
   height: 2rem;
-  width: 100vw;
+  width: 100%;
   top: -1rem;
-  transition: 0.3s ease-in-out;
+  transition: 0.1s ease-in-out;
 }
 
 .navbar-central-options {
@@ -243,7 +281,7 @@
   white-space: nowrap;
   align-content: center;
   height: 2rem;
-  transition: 0.3s ease-in-out;
+  transition: 0.1s ease-in-out;
 }
 
 .navbar input[type="text"] {
@@ -258,7 +296,12 @@
 .navbar-profile-button {
   flex-direction: row;
   align-items: center;
-  margin: 0 1rem;
+  margin: 0 1rem 0 2rem;
+  padding-left: 1rem;
+  /*  cursor: pointer; */
+}
+.navbar-profile-button svg {
+  transform: scale(0.9);
 }
 .navbar-avatar {
   height: 1.5rem;
@@ -271,15 +314,8 @@
   height: 100%;
   width: 100%;
 }
-.navbar-avatar-svg {
-  margin-left: 1rem;
-}
 .navbar-avatar-svg path {
   fill: white;
-}
-
-.wishlist-icon {
-  transform: scale(0.7);
 }
 .wishlist-icon path {
   fill: white;
@@ -324,12 +360,13 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  width: 2rem;
+  width: 3rem;
   position: relative;
   margin: 0 1rem;
+  /*  cursor: pointer; */
 }
 .navbar-wishlist-button svg {
-  transform: scale(1);
+  transform: scale(0.9);
 }
 .navbar-modal-container-w {
   position: absolute;
@@ -365,8 +402,12 @@
   );
 }
 .logout {
-  margin-top: 2rem;
+  margin-top: 0.6rem;
+  height: 3.5rem;
   border-top: 1px solid rgb(115, 115, 115);
+}
+.logout .profile-modal-option {
+  margin-top: 0.75rem;
 }
 
 .navbar-modal {
@@ -374,12 +415,38 @@
   position: relative;
   left: calc(50% - 75px);
   bottom: -50px;
-  height: fit-content;
   width: 10rem;
   border: 1px solid rgb(115, 115, 115);
   background: #111111;
   z-index: 12;
+  cursor: default;
+  transition: opacity 0.3s ease;
 }
+.navbar-modal-visible {
+  visibility: visible;
+  opacity: 1;
+  height: 300px;
+  transition: height 0.1s ease;
+}
+.navbar-modal-hide {
+  height: 1px;
+  transition: height 0.1s ease;
+}
+.navbar-modal-visible .profile-modal-option,
+.navbar-modal-visible .logout {
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+.navbar-modal-hide .profile-modal-option,
+.navbar-modal-hide .logout {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.navbar-modal-profile div {
+  display: none;
+}
+
 .navbar-modal-w {
   visibility: hidden;
   position: relative;
@@ -424,16 +491,25 @@
   transform: translateY(2px);
   z-index: 6;
 }
-
+/* .little-glitch-postsale {
+  cursor: default;
+} */
 .navbar-signin-button {
   display: flex;
   justify-content: center;
-  width: 300px;
+}
+.navbar-signin-button svg {
+  transform: scale(0.9);
+  position: absolute;
+  left: 0.6rem;
 }
 .navbar-signin-button a {
+  cursor: pointer;
   display: flex;
   align-items: center;
+  position: relative;
+  margin-right: 2.5rem;
 }
-.navbar-signin-text {
-  padding-left: 1rem;
+.navbar-signin-button span div {
+  padding: 0.5rem 1rem 0.5rem 1.5rem;
 }

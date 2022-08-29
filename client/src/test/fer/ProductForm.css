@@ -228,8 +228,10 @@
   display: flex;
   justify-content: space-around;
 }
-.form-buttons-container > input {
+.form-buttons-container > input,
+.form-buttons-container > button {
   width: 45%;
+  height: 2.5rem;
 }
 .create-another-container {
   display: flex;
@@ -243,4 +245,8 @@
 }
 .form-add-input {
   margin-top: 0.5rem;
+}
+
+.form-buttons-container > button[type="submit"]:disabled {
+  padding-top: 0.2rem;
 }

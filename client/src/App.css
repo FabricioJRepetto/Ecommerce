@@ -52,7 +52,7 @@ a:active {
 }
 .g-navlink-white-button > a {
   font-weight: 200;
-  border: none;
+  border: transparent 1px solid;
   padding: 0.5rem 3rem;
   margin: 1rem 0 1rem 0;
   cursor: pointer;
@@ -166,7 +166,7 @@ input.g-input-two-icons {
 /* form  */
 .g-white-button {
   font-weight: 200;
-  border: none;
+  border: transparent 1px solid;
   padding: 0.5rem 3rem;
   margin: 1rem 0 1rem 0;
   cursor: pointer;
