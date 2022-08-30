@@ -33,7 +33,6 @@ const PremiumDetails = () => {
         if (reference.current) observer.observe(reference.current)
     
       return () => {
-        // eslint-disable-next-line
         if (reference.current) observer.unobserve(reference.current)
       }
     }, [reference])
@@ -170,12 +169,3 @@ const PremiumDetails = () => {
 }
 
 export default PremiumDetails
-
-/*
-
-KARA, our newest 60% keyboard offering, with MUTE mounting technology, is an accessible design derived from the M60-A. Injection moulded in high quality ABS, KARA embodies a retro-modern aesthetic and an infusion of tasteful nostalgia into any setup.
-KARA has been engineered with considered attention to detail, improving on design and standing as our most significant release to date. Featuring the distinctive RAMA WORKS® form factor, every component has been created from scratch and refined through iteration to create a completely unique product.
-
-KARA, nuestro nuevo teclado 60%
-
-*/
