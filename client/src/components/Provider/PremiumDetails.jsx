@@ -48,34 +48,36 @@ const PremiumDetails = () => {
                     <div className='premiumdetails-head'>
 
                         <div className='premiumdetails-details'>
-                            <p className='provider-text'>Provider Premium</p>
+                            <p className='provider-text'>{`[PREMIUM LOGO PLACEHOLDER]`}</p>
                             {product.premiumData.logo 
                                 ? <div className='premiumdetails-logo-container'>
                                     <img src={product.premiumData.logo} alt="" />
                                   </div>
                                 : <h1>{product.name}</h1> }
                             
-                            <h2>"Creamos Playdate solo por diversión."</h2>
-                            <div>
+                            <h2>{product.premiumData.miniDescription}</h2>
+                            <div className='premiumdetails-price'>
                                 <span>${priceFormat(product.price).int}</span>
                                 <span>{priceFormat(product.price).cents}</span>
+                                {product.free_shipping && <p className='provider-text'> Envío flash gratis!</p>}                                
                             </div>
                             
-                            <button
-                                className="g-white-button details-button"
-                                disabled={product.available_quantity < 1}
-                                onClick={() => addToCart(id)}
-                            >
-                                Agregar al carrito
-                            </button>
-                            <br />
-                            <button
-                                className="g-white-button details-button"
-                                disabled={product.available_quantity < 1}
-                                onClick={() => buyNow(id)}
-                            >
-                                Comprar ahora
-                            </button>
+                            <div className='premiumdetails-buttons'>
+                                <button
+                                    className="g-white-button details-button"
+                                    disabled={product.available_quantity < 1}
+                                    onClick={() => addToCart(id)}
+                                >
+                                    Agregar al carrito
+                                </button>
+                                <button
+                                    className="g-white-button details-button"
+                                    disabled={product.available_quantity < 1}
+                                    onClick={() => buyNow(id)}
+                                >
+                                    Comprar ahora
+                                </button>
+                            </div>
 
                             {product.main_features && (
                                 <div className="details-mainfeatures">

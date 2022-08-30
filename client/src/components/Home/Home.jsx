@@ -45,7 +45,10 @@ const Home = () => {
         const salesData = axios('/sales');
         const suggestionData = axios(`/history/suggestion`)
 
-        salesData.then(r => setProducts(r.data));
+        salesData.then(r => {
+            console.log(r.data);
+            setProducts(r.data)
+        });
         session && suggestionData?.then(r => {
             if (r.data.length > 4 ) {
                 setSuggestion(r.data);

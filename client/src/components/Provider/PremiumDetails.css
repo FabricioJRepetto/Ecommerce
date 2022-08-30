@@ -29,6 +29,18 @@
     height: 100%;
     max-width: 100%;
 }
+.premiumdetails-price {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-top: 2rem;
+}
+.premiumdetails-price p {
+    font-size: 1rem;
+}
+.premiumdetails-buttons {
+    display: flex;
+}
+
 .premiumdetails-images {
     z-index: 1;
 }
