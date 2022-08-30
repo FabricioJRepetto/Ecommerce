@@ -70,10 +70,10 @@ const Cart = () => {
 
   const getAddress = async () => {
     const { data } = await axios("/address");
-    console.log(data);
     if (data.address) {
+      setAddress(data.address)
       if (!selectedAdd) {
-        const def = data.address.find((e) => e.isDefault === true);
+        const def = data.address.find((e) => e.isDefault);
         setSelectedAdd(def);
       }
     }
