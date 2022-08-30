@@ -19,9 +19,10 @@ const PremiumDetails = () => {
     const { addToCart, buyNow } = useCheckout();
 
     const reference = useRef(null)
-    const [isVisible, setIsVisible] = useState(false) 
+    const [isVisible, setIsVisible] = useState(true)
 
     useEffect(() => {
+        console.log(reference.current);
       const observer = new IntersectionObserver((entries) => {
             const [ entry ] = entries
             setIsVisible(entry.isIntersecting)
@@ -35,7 +36,7 @@ const PremiumDetails = () => {
       return () => {
         if (reference.current) observer.unobserve(reference.current)
       }
-    }, [reference])
+    }, [reference, loading])
     
 
     useEffect(() => {
@@ -81,7 +82,8 @@ const PremiumDetails = () => {
                                 {product.free_shipping && <p className='provider-text'> Envío gratis!</p>}                                
                             </div>
                             
-                            <div ref={reference} className='premiumdetails-buttons'>                                    
+                            <div ref={reference} 
+                                className='premiumdetails-buttons'>                                    
                                 {product.available_quantity < 1 && <p className='premiumdetails-nostock'>Fuera de stock</p>}
                                 <button
                                     className="g-white-button details-button"
@@ -125,7 +127,7 @@ const PremiumDetails = () => {
                     {React.Children.toArray(product.premiumData.extraText.map(e => (
                         <div className='premiumdetails-section'
                             style={{ backgroundColor: e.bgColor }} >
-                            <div style={e.textPos}>
+                            <div style={{...e.textPos, color: product.premiumData.textColor ? product.premiumData.textColor : 'white'}}>
                                 <h2>{e.title}</h2>
                                 <p>{e.text}</p>
                             </div>

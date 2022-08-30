@@ -20,7 +20,7 @@ const PremiumCard = ({productData, direction}) => {
     // eslint-disable-next-line
     }, [])
     
-    const gradient = `linear-gradient(-135deg, ${premiumData.color} 0%, rgba(${color}, 0.8) 80%)`
+    const gradient = `linear-gradient(-135deg, ${premiumData.color} 0%, ${premiumData.color} 40%, rgba(${color}, 0.8) 100%)`
 
     return (
         <div className={`premiumcard-container ${direction ? 'premiumcard-direct-normal' : 'premiumcard-direct-reverse'}`}
@@ -33,7 +33,7 @@ const PremiumCard = ({productData, direction}) => {
             </div>
 
             <div className='premiumcard-lateral-container'
-                style={{background: gradient}}>
+                style={{background: gradient, color: premiumData.textColor ? premiumData.textColor : 'white'}}>
                 <p className='premiumcard-name'>{name}</p>
                 <p className='premiumcard-description'>{premiumData.miniDescription}</p>
             </div>
