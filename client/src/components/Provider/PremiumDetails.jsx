@@ -7,6 +7,7 @@ import { priceFormat } from '../../helpers/priceFormat';
 import LoaderBars from '../common/LoaderBars';
 import Carousel from '../Home/Carousel/Carousel';
 import Footer from '../common/Footer'
+import { ReactComponent as Premium } from '../../assets/svg/PremiumSign.svg';
 
 import './PremiumDetails.css'
 
@@ -34,6 +35,7 @@ const PremiumDetails = () => {
         if (reference.current) observer.observe(reference.current)
     
       return () => {
+        // eslint-disable-next-line
         if (reference.current) observer.unobserve(reference.current)
       }
     }, [reference, loading])
@@ -67,13 +69,15 @@ const PremiumDetails = () => {
                 : <div className='premiumdetails-content'>
                     <div className='premiumdetails-head'>
 
-                        <div className='premiumdetails-details'>
-                            <p className='provider-text'>{`[PREMIUM LOGO PLACEHOLDER]`}</p>
+                        <div className='provider-premium-sign'></div>
+                        
+                        <div className='premiumdetails-details'
+                            style={{color: product.premiumData.textColor ? product.premiumData.textColor : 'white'}}>
                             {product.premiumData.logo 
                                 ? <div className='premiumdetails-logo'>
                                     <img src={product.premiumData.logo} alt="" />
                                   </div>
-                                : <h1 className='premiumdetails-name'>{product.name}</h1> }
+                                : <h1 className='premiumdetails-name' >{product.name}</h1> }
                             
                             <h2>{product.premiumData.miniDescription}</h2>
                             <div className='premiumdetails-price'>
