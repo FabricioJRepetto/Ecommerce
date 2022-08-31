@@ -6,10 +6,11 @@ import { useCheckout } from '../../hooks/useCheckout';
 import { priceFormat } from '../../helpers/priceFormat';
 import LoaderBars from '../common/LoaderBars';
 import Carousel from '../Home/Carousel/Carousel';
-import Footer from '../common/Footer'
-import { ReactComponent as Premium } from '../../assets/svg/PremiumSign.svg';
+import Footer from '../common/Footer';
+import { ArrowDownIcon } from '@chakra-ui/icons';
 
 import './PremiumDetails.css'
+import { resizer } from '../../helpers/resizer';
 
 const PremiumDetails = () => {
     const { id } = useParams();
@@ -21,6 +22,13 @@ const PremiumDetails = () => {
 
     const reference = useRef(null)
     const [isVisible, setIsVisible] = useState(true)
+
+    const attributesSection = useRef(null)
+    const scrollTo = () => { 
+        if (attributesSection.current) {
+            attributesSection.current.scrollIntoView({behavior: "smooth", block: "center", inline: "nearest"});
+        }
+     }     
 
     useEffect(() => {
         console.log(reference.current);
@@ -58,7 +66,7 @@ const PremiumDetails = () => {
         } else notification('Producto no encontrado.', '', 'error');        
       })();
       // eslint-disable-next-line
-    }, [])
+    }, [])    
 
     return (
         <div className='premiumdetails-container'>
@@ -114,6 +122,11 @@ const PremiumDetails = () => {
                                     </ul>
                                 </div>
                             )}
+                            <div className='premiumdetails-toAttributesButton' 
+                                onClick={scrollTo}>
+                                    Ver especificaciones
+                                    <ArrowDownIcon/>
+                            </div>
                         </div>
 
                         <div className='premiumdetails-images'>
@@ -141,6 +154,33 @@ const PremiumDetails = () => {
                         </div>
                         ))
                     )}
+                    
+                    <div ref={attributesSection} className="tab-container">
+                        <div className="tab-button-container">                           
+                            <button className='tab-button tab-button-active'>
+                                Atributos
+                            </button>
+                        </div>
+                        <div className='premiumdetails-attributes'>
+                            {React.Children.toArray(
+                                product.attributes?.map(
+                                (e) =>
+                                    e.value_name && (
+                                    <div className="pd-attribute-container">
+                                        <div>{e.name}</div>
+                                        <div>{e.value_name}</div>
+                                    </div>
+                                    )
+                                )
+                            )}
+                        </div>                            
+                    </div>
+
+                    <div className='pd-logo-footer'>
+                        <div  style={{ WebkitMaskImage: `url('${resizer(product.premiumData.logo, 310)}')`,
+                            maskImage: `url('${resizer(product.premiumData.logo, 310)}')`}}>
+                        </div>
+                    </div>
 
                     <div className={`premiumdetails-fixed ${isVisible ? '' : 'premiumdetails-fixed-on'}`}>
                         <div className='premiumdetails-fixed-content'>
@@ -166,8 +206,7 @@ const PremiumDetails = () => {
                         </div>
                     </div>
 
-                  <Footer />
-
+                    <Footer />
                   </div>
             }
         </div>
