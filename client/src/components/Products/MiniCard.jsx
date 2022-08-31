@@ -6,12 +6,12 @@ import "./MiniCard.css";
 import { ReactComponent as Sale } from "../../assets/svg/sale.svg";
 import { WishlistButton as Fav } from "./WishlistButton";
 import LoadingPlaceHolder from "../common/LoadingPlaceHolder";
-import { useEffect } from "react";
 import { priceFormat } from "../../helpers/priceFormat";
 
 const MiniCard = ({
   img,
   name,
+  premium,
   price,
   sale_price,
   discount,
@@ -27,13 +27,6 @@ const MiniCard = ({
     const [visible, setVisible] = useState(false);
     const [ready, setReady] = useState(!fadeIn);
     const { session } = useSelector((state) => state.sessionReducer);
-
-    // const [loaded, setLoaded] = useState(false);
-    // useEffect(() => {
-    //     if (!loading) {
-    //     setLoaded(true);
-    //     }
-    // }, [loading]);
 
     const readySetter = () => {
         setReady(true);
@@ -74,7 +67,7 @@ const MiniCard = ({
         >
           {session && <Fav visible={visible} fav={fav} prodId={prodId} />}
 
-          <div onClick={() => navigate(`/details/${prodId}`)}>
+          <div onClick={() => navigate(premium ? `/premium/${prodId}` : `/details/${prodId}`)}>
             <div className="minicard-img-section">
               <img src={resizer(img, 180)} alt="product" onLoad={readySetter} />
             </div>

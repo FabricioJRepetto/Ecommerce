@@ -45,7 +45,10 @@ const Home = () => {
         const salesData = axios('/sales');
         const suggestionData = axios(`/history/suggestion`)
 
-        salesData.then(r => setProducts(r.data));
+        salesData.then(r => {
+            console.log(r.data);
+            setProducts(r.data)
+        });
         session && suggestionData?.then(r => {
             if (r.data.length > 4 ) {
                 setSuggestion(r.data);
@@ -110,6 +113,7 @@ const Home = () => {
               key={`specials ${index}`}
               img={products[index]?.thumbnail}
               name={products[index]?.name}
+              premium={products[index]?.premium}
               price={products[index]?.price}
               sale_price={products[index]?.sale_price}
               discount={products[index]?.discount}
@@ -131,6 +135,7 @@ const Home = () => {
               <MiniCard
                 key={`recom ${index}`}
                 prodId={suggestion[index]?._id}
+                premium={suggestion[index]?.premium}
                 name={suggestion[index]?.name}
                 img={suggestion[index]?.thumbnail}
                 price={suggestion[index]?.price}

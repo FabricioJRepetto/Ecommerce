@@ -129,6 +129,7 @@ const ProviderStore = () => {
                                 img={products[index]?.thumbnail}
                                 name={products[index]?.name}
                                 price={products[index]?.price}
+                                premium={products[index]?.premium}
                                 sale_price={products[index]?.sale_price}
                                 discount={products[index]?.discount}
                                 prodId={products[index]?._id}

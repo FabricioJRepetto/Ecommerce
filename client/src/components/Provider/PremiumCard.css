@@ -1,8 +1,8 @@
 .premiumcard-container {
     display: flex;
     justify-content: space-between;    
-    height: 40vh;
-    width: 120vh;
+    height: 26.6vw;
+    width: 80vw;
     margin: 2rem 0;
     cursor: pointer;
 }

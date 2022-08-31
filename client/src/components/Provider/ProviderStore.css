@@ -5,7 +5,7 @@
     margin-top: 2.4rem;
     margin-left: 1rem;
     font-size: 15vh;
-    font-family: HelveticaNeueLTPro-BdOu;
+    font-family: HelveticaNeueLTPro-BdOu, Poppins;
     letter-spacing: -0.3rem;
     color: #151515;
     pointer-events: none;
@@ -14,11 +14,11 @@
     line-height: 75%;
 }
 .providerstore-echo-inner span {
-    font-family: HelveticaNeueLTPro-Bd;    
+    font-family: HelveticaNeueLTPro-Bd, Poppins;    
 }
 .providerstore-title {
     font-size: 15vh;
-    font-family: HelveticaNeueLTPro-Bd;
+    font-family: HelveticaNeueLTPro-Bd, Poppins;
     letter-spacing: -0.3rem;
     color: white;
     top: 9.8%;
@@ -28,7 +28,7 @@
     z-index: 1;
 }
 .providerstore-title-text {
-    font-family: HelveticaNeueLTPro-Bd;
+    font-family: HelveticaNeueLTPro-Bd, Poppins;
     font-size: 2.2rem;
     text-align: left;   
     top: 12.6%;

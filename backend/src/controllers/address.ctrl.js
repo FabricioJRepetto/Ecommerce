@@ -9,7 +9,7 @@ const getAddress = async (req, res, next) => {
             user: _id,
         });
 
-        if (!address) return res.json({ message: "Address not found" });
+        if (!address) return res.json("Address not found");
         return res.json(address);
     } catch (error) {
         next(error);
@@ -82,10 +82,10 @@ const updateAddress = async (req, res, next) => {
 };
 
 const removeAddress = async (req, res, next) => {
-    const { _id } = req.user;
-
     try {
-        const { address } = await Address.findOneAndUpdate(
+        const { _id } = req.user;
+
+        const list = await Address.findOneAndUpdate(
             {
                 user: _id,
             },
@@ -97,7 +97,16 @@ const removeAddress = async (req, res, next) => {
             { new: true }
         );
 
-        return res.json({ message: "Address removed", address });
+        if (!list.address.some(e => e.isDefault) && list.address.length > 0) {
+            console.log('setea nuevo default ?');
+
+            list.address[0].isDefault = true;
+            await list.save();
+
+            return res.json({ message: "Address removed, new default setted.", address: list.address });
+        }
+
+        return res.json({ message: "Address removed.", address: list.address });
     } catch (error) {
         next(error);
     }
