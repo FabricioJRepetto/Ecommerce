@@ -8,7 +8,6 @@ import { ReactComponent as Verified } from "../../assets/svg/verified.svg";
 import { ReactComponent as Location } from "../../assets/svg/location.svg";
 import { ReactComponent as Spinner } from "../../assets/svg/spinner.svg";
 import { loadUserData } from "../../Redux/reducer/sessionSlice";
-import { useModal } from "../../hooks/useModal";
 import { useNotification } from "../../hooks/useNotification";
 import { avatarResizer } from "../../helpers/resizer";
 import "../../App.css";
@@ -213,6 +212,11 @@ const ProfileDetails = ({ address }) => {
       <h1>Detalles</h1>
 
       <span className="profile-avatar-container">
+        {!loadingAvatar && (
+          <label className="profile-edit-svg-container" htmlFor="filesButton">
+            <Edit />
+          </label>
+        )}
         <label className="profile-avatar-container-label" htmlFor="filesButton">
           {loadingAvatar ? (
             <Spinner className="cho-svg" />
@@ -231,11 +235,6 @@ const ProfileDetails = ({ address }) => {
             </>
           )}
         </label>
-        {!loadingAvatar && (
-          <label className="profile-edit-svg-container" htmlFor="filesButton">
-            <Edit />
-          </label>
-        )}
       </span>
 
       {avatarError === null ? (

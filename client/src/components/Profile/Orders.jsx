@@ -11,17 +11,23 @@ const Orders = () => {
   const { data: orders, loading } = useAxios("GET", `/order/userall/`);
 
   const cancelOrder = async (id) => {
-    const { statusText } = await axios.put(`/order/${id}`, { status: "cancelled" });
+    const { statusText } = await axios.put(`/order/${id}`, {
+      status: "cancelled",
+    });
     notification(
-        `${statusText === "OK" ? "Dirección actualizada correctamente." : "Algo salió mal."}`,
-        "",
-        "warning"
-      );
-  };  
+      `${
+        statusText === "OK"
+          ? "Dirección actualizada correctamente."
+          : "Algo salió mal."
+      }`,
+      "",
+      "warning"
+    );
+  };
 
   return (
     <div>
-      <h2>Orders</h2>
+      <h1>Orders</h1>
       {!loading ? (
         <div className="profile-orders-container">
           {orders?.length ? (
@@ -63,9 +69,7 @@ const Orders = () => {
                   <p>
                     order id: <i>{e.id}</i>
                   </p>
-                  {e.delivery_date && (
-                    <DeliveryProgress order={e}/>
-                  )}
+                  {e.delivery_date && <DeliveryProgress order={e} />}
                   <p>- - -</p>
                   <p>
                     shipping address:{" "}

@@ -3,7 +3,9 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 500px;
+  width: 70%;
+  min-width: 350px;
+  max-width: 900px;
 }
 .profile-avatar-container {
   position: relative;
@@ -31,9 +33,13 @@
 .profile-avatar-background {
   display: none;
 }
-.profile-avatar-container:hover .profile-avatar-background {
+.profile-avatar-container-label:hover .profile-avatar-background,
+.profile-avatar-container
+  > .profile-edit-svg-container:hover
+  + .profile-avatar-container-label
+  > .profile-avatar-background {
   position: absolute;
-  background-color: #ff000075;
+  background-color: #ff000095; /* //! VOLVER A VER cambiar color de fondo de avatar */
   border-radius: 50%;
   height: 100px;
   width: 100px;
