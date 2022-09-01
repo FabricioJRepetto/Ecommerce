@@ -94,7 +94,9 @@ const Profile = () => {
       >
         <ul>
           <div
-            className="profile-burger-container"
+            className={`profile-burger-container ${
+              !showMenu ? "profile-burger-container-hide" : ""
+            }`}
             onClick={() => setShowMenu(!showMenu)}
           >
             <BurgerButton setShowMenu={setShowMenu} showMenu={showMenu} />

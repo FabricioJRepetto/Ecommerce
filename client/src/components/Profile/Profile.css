@@ -128,7 +128,8 @@
   font-size: 1.5rem;
 }
 
-.profile-menu-container > ul > li:hover {
+.profile-menu-container > ul > li:hover,
+.profile-menu-container > ul > .profile-burger-container-hide:hover {
   background: linear-gradient(
     90deg,
     rgba(34, 34, 34, 1) 0%,
@@ -144,6 +145,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 2rem;
 }
 .profile-option-selected-container h1 {
   margin-bottom: 2rem;
