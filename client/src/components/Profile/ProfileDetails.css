@@ -163,6 +163,11 @@
   transform: scale(0.8);
 }
 
+.profile-detail-container .profile-password-button {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
 @media (max-width: 719px) {
   .profile-detail-container {
     flex-direction: column;

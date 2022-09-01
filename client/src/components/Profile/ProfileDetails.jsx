@@ -444,14 +444,17 @@ const ProfileDetails = ({ address }) => {
           : "Aún no tienes una dirección predeterminada"}
       </div>
 
-      {!isGoogleUser && (
-        <button
-          onClick={() => navigate("/profile/password")}
-          className="g-white-button"
-        >
-          Cambiar contraseña
-        </button>
-      )}
+      <div className="profile-detail-container">
+        <h3>Seguridad</h3>
+        {!isGoogleUser && (
+          <button
+            onClick={() => navigate("/profile/password")}
+            className="g-white-button profile-password-button"
+          >
+            Cambiar contraseña
+          </button>
+        )}
+      </div>
     </div>
   );
 };
