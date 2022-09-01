@@ -68,6 +68,36 @@ const NavBar = () => {
       })
     );
 
+    const miniLogo = document.querySelectorAll(".mini-glitch");
+    miniLogo.forEach((logo) =>
+      PowerGlitch.glitch(logo, {
+        imageUrl:
+          "https://res.cloudinary.com/dsyjj0sch/image/upload/v1662061287/minilogo-01_ax91ep.png",
+        backgroundColor: "transparent",
+        hideOverflow: false,
+        timing: {
+          duration: 10000,
+          iterations: "Infinity",
+        },
+        glitchTimeSpan: {
+          start: 0.6,
+          end: 0.7,
+        },
+        shake: {
+          velocity: 15,
+          amplitudeX: 0.1,
+          amplitudeY: 0.2,
+        },
+        slice: {
+          count: 3,
+          velocity: 15,
+          minHeight: 0.03,
+          maxHeight: 0.15,
+          hueRotate: true,
+        },
+      })
+    );
+
     const controlSubsectionBar = () => {
       window.scrollY > 80 && setShowSubsectionBar(true);
       window.scrollY < 80 && setShowSubsectionBar(false);
@@ -107,9 +137,26 @@ const NavBar = () => {
     <>
       <div className="navbar-dumb-hidden"></div>
 
-      <div className="glitch-mobile-container">
+      <div
+        className={`glitch-mobile-container ${
+          showMenu ? "glitch-mobile-container-show-menu" : ""
+        }`}
+      >
         <div
-          className="little-glitch glitch-mobile"
+          className={`little-glitch glitch-mobile ${
+            showMenu ? "little-glitch-show-menu" : ""
+          }`}
+          onClick={
+            location.pathname === "/orders/post-sale" ||
+            location.pathname === "/orders/post-sale/"
+              ? () => navigate("/")
+              : () => [logoClick(), setShowMenu(false)]
+          }
+        ></div>
+        <div
+          className={`mini-glitch glitch-mobile ${
+            showMenu ? "mini-glitch-show-menu" : ""
+          }`}
           onClick={
             location.pathname === "/orders/post-sale" ||
             location.pathname === "/orders/post-sale/"
@@ -118,6 +165,8 @@ const NavBar = () => {
           }
         ></div>
       </div>
+
+      <div className="glitch-mobile-container"></div>
 
       <div className="navbar">
         <div className="glitch-mobile-placeholder"></div>
