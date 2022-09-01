@@ -1,8 +1,9 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { resizer } from '../../helpers/resizer'
+import { loadQuerys } from '../../Redux/reducer/productsSlice'
 import Footer from '../common/Footer'
 import Carousel from '../Home/Carousel/Carousel'
 import MiniCard from '../Products/MiniCard'
@@ -29,6 +30,7 @@ const ProviderStore = () => {
     ];    
 
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [countdown, setCountdown] = useState('');
     const [products, setProducts] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -60,6 +62,11 @@ const ProviderStore = () => {
         // eslint-disable-next-line
     }, []);
 
+    const goProducts = (code) => { 
+        dispatch(loadQuerys({category: code}))
+        navigate(`/results/?category=${code}`)
+     }
+
     return (
         <div className='providerstore-container'>
             
@@ -82,7 +89,7 @@ const ProviderStore = () => {
                 <div className='storecards-inner'>
 
                     <div className="storecard"
-                    onClick={()=> navigate('/')}
+                    onClick={()=> goProducts(`MLA1144`)}
                         onMouseEnter={()=> setHover('console')}
                         onMouseLeave={()=> setHover('')}>
                         <p>Consolas</p>
@@ -91,7 +98,7 @@ const ProviderStore = () => {
                         <img src={resizer('https://res.cloudinary.com/dsyjj0sch/image/upload/v1661328214/Playdate-photo_hxdnpj.png', 200)} alt="img" />
                     </div>
                     <div className="storecard"
-                    onClick={()=> navigate('/')}
+                    onClick={()=> goProducts(`MLA454379`)}
                         onMouseEnter={()=> setHover('periph')}
                         onMouseLeave={()=> setHover('')}>
                         <p>Perifericos</p>
@@ -100,7 +107,7 @@ const ProviderStore = () => {
                         <img src={resizer('https://res.cloudinary.com/dsyjj0sch/image/upload/v1661328896/RW-ZENITH-01.2020_1400x_j4iupn.webp', 200)} alt="img" />
                     </div>
                     <div className="storecard"
-                    onClick={()=> navigate('/')}
+                    onClick={()=> goProducts(`MLA409810`)}
                         onMouseEnter={()=> setHover('audio')}
                         onMouseLeave={()=> setHover('')}>
                         <p>Audio</p>
@@ -109,7 +116,7 @@ const ProviderStore = () => {
                         <img src='https://www.tradeinn.com/f/13756/137567598/skullcandy-auriculares-inalambricos-crusher.jpg' alt="img" />
                     </div>
                     <div className="storecard"
-                    onClick={()=> navigate('/')}
+                    onClick={()=> goProducts(`MLA409810`)}
                         onMouseEnter={()=> setHover('display')}
                         onMouseLeave={()=> setHover('')}>
                         <p>Monitores</p>

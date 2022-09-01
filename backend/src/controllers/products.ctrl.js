@@ -20,11 +20,26 @@ cloudinary.config({
 const getAll = async (req, res, next) => {
     try {
         const products = await Product.find();
-        res.json(products);
+        return res.json(products);
     } catch (error) {
         next(error);
     }
 };
+
+const getProds = async (req, res, next) => {
+    try {
+        const products = await Product.find();
+        console.log(req.query.category)
+
+        let response = products.filter((e) =>
+            e.path_from_root.find(e => e.id === req.query.category)
+        );
+
+        return res.json(response);
+    } catch (error) {
+        next(error)
+    }
+}
 
 const getByQuery = async (req, res, next) => {
     try {
@@ -32,7 +47,6 @@ const getByQuery = async (req, res, next) => {
         Object.entries(req.query).forEach(([key, value]) => {
             searchQuery += "&" + key + "=" + value;
         });
-        console.log(req.query);
 
         const L = "50";
         const meli = `https://api.mercadolibre.com/sites/MLA/search?&official_store=all&limit=${L}${searchQuery}`;
@@ -50,8 +64,8 @@ const getByQuery = async (req, res, next) => {
             allowedFilters.includes(e.id)
         );
 
-        const applied = data.filters.filter(
-            (e) => e.id !== "official_store" && e.id !== "category"
+        const applied = data.filters.filter(e =>
+            e.id !== "official_store"
         );
 
         const breadCrumbs = data.filters.find((e) => e.id === "category")?.values[0]
@@ -77,7 +91,9 @@ const getByQuery = async (req, res, next) => {
         }
 
         const filterDBResults = async (filters, products) => {
+
             let response = [...products];
+
             if (filters.BRAND) {
                 response = response.filter(
                     (e) => e.brand.toLowerCase() === filters.BRAND.toLowerCase()
@@ -92,7 +108,7 @@ const getByQuery = async (req, res, next) => {
             }
             if (filters.category) {
                 response = response.filter((e) =>
-                    e?.path_from_root.includes(filters.category)
+                    e.path_from_root.find(e => e.id === filters.category)
                 );
             }
             if (filters.free_shipping) {
@@ -246,6 +262,7 @@ const putPremium = async (req, res, next) => {
 
 module.exports = {
     getAll,
+    getProds,
     getByQuery,
     getById,
     stock,

@@ -5,7 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNotification } from "../../hooks/useNotification";
 import "./WishlistButton.css";
 
-import { DeleteIcon, StarIcon } from "@chakra-ui/icons";
+import { DeleteIcon } from "@chakra-ui/icons";
+import { ReactComponent as Heart } from "../../assets/svg/fav.svg";
 
 export const WishlistButton = ({ prodId: id, size = 30, fav, visible, position = true, modal = false }) => {
   const dispatch = useDispatch();
@@ -38,8 +39,9 @@ export const WishlistButton = ({ prodId: id, size = 30, fav, visible, position =
     <div className={`fav-button-container ${(fav || visible) && "visible"}`} 
         style={position ? {position: 'absolute', top: '1rem', right: '1rem'} : {}}>
       <button style={{ height: size, width: size }}
-        onClick={(e) => addToWish(e,id)}>            
-            {!modal && <StarIcon color={fav ? '#ffd000' : '#7d7d7d'}/>}
+        onClick={(e) => addToWish(e,id)}>
+            {!modal && <Heart className={`heart-svg ${fav && 'heart-svg-faved'}`} />}
+            {/*!modal && <StarIcon color={fav ? '#ffd000' : '#7d7d7d'}/>*/}
             {modal && <DeleteIcon color='#ffffff'/>}        
       </button>
     </div>

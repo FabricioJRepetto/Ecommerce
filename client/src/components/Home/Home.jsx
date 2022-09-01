@@ -46,7 +46,6 @@ const Home = () => {
         const suggestionData = axios(`/history/suggestion`)
 
         salesData.then(r => {
-            console.log(r.data);
             setProducts(r.data)
         });
         session && suggestionData?.then(r => {
