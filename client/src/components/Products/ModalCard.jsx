@@ -17,6 +17,7 @@ const ModalCard = ({ productData, fav, close }) => {
     thumbnail: img,
     name,
     price,
+    premium,
     sale_price,
     discount,
     _id: prodId,
@@ -25,7 +26,7 @@ const ModalCard = ({ productData, fav, close }) => {
   } = productData;
 
   const openProduct = (id) => { 
-        navigate(`/details/${id}`);
+        navigate(premium ? `/premium/${id}` : `/details/${id}`);
         close(false);
    }
 

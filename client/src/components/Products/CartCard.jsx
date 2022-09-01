@@ -5,7 +5,7 @@ import { resizer } from '../../helpers/resizer';
 import QuantityInput from '../Cart/QuantityInput';
 import './CartCard.css'
 
-const CartCard = ({ img, name, price, sale_price, on_sale, discount, brand, prodId, free_shipping, on_cart, stock, prodQuantity, deleteP, buyLater, buyNow, source, loading}) => {
+const CartCard = ({ img, premium, name, price, sale_price, on_sale, discount, brand, prodId, free_shipping, on_cart, stock, prodQuantity, deleteP, buyLater, buyNow, source, loading}) => {
     const navigate = useNavigate();
 
   return (
@@ -13,7 +13,7 @@ const CartCard = ({ img, name, price, sale_price, on_sale, discount, brand, prod
         className='cart-card-container'>
         <div className='product-cart-card-head'>
 
-            <div onClick={() => navigate(`/details/${prodId}`)} 
+            <div onClick={() => navigate(premium ? `/premium/${prodId}` : `/details/${prodId}`)} 
                 className='product-cart-image-container pointer'>                   
                 <img src={resizer(img, 130)} alt="product" />
                 <div className='card-image-back-style'></div>

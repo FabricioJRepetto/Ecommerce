@@ -71,8 +71,9 @@ const Cart = () => {
   const getAddress = async () => {
     const { data } = await axios("/address");
     if (data.address) {
+      setAddress(data.address)
       if (!selectedAdd) {
-        const def = data.address.find((e) => e.isDefault === true);
+        const def = data.address.find((e) => e.isDefault);
         setSelectedAdd(def);
       }
     }
@@ -224,6 +225,7 @@ const Cart = () => {
                         {cart.products.map((p) => (
                           <CartCard
                             key={p._id}
+                            premium={p.premium}
                             on_cart={true}
                             on_sale={p.on_sale}
                             img={p.thumbnail}
@@ -336,12 +338,7 @@ const Cart = () => {
                             <div style={{ height: "2.4rem" }}>
                               {cart.free_ship_cart && (
                                 <del className="grey">
-                                  $
-                                  {
-                                    priceFormat(
-                                      cart.products.length * SHIP_COST
-                                    ).int
-                                  }
+                                  ${priceFormat(cart.products.length * SHIP_COST).int}
                                 </del>
                               )}
                               {cart.shipping_cost === 0 ? (
@@ -410,6 +407,7 @@ const Cart = () => {
                       {cart.buyLater.map((p) => (
                         <CartCard
                           key={p._id}
+                          premium={p.premium}
                           on_cart={false}
                           on_sale={p.on_sale}
                           img={p.thumbnail}
