@@ -217,7 +217,6 @@ const ProductForm = () => {
   }, [focusFlag]);
 
   const handleAddImg = (e) => {
-    console.log("entra");
     const fileListArrayImg = Array.from(e.target.files);
     validateImgs(fileListArrayImg, warnTimer, productImg);
     setProductImg([...productImg, ...fileListArrayImg]);

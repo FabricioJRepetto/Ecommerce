@@ -6,21 +6,26 @@ import { useForm } from "react-hook-form";
 import { ReactComponent as Edit } from "../../assets/svg/edit.svg";
 import { ReactComponent as Verified } from "../../assets/svg/verified.svg";
 import { ReactComponent as Location } from "../../assets/svg/location.svg";
+import { ReactComponent as Spinner } from "../../assets/svg/spinner.svg";
 import { loadUserData } from "../../Redux/reducer/sessionSlice";
-import Modal from "../common/Modal";
 import { useModal } from "../../hooks/useModal";
 import { useNotification } from "../../hooks/useNotification";
 import { avatarResizer } from "../../helpers/resizer";
+import "../../App.css";
 import "./ProfileDetails.css";
 
 const ProfileDetails = ({ address }) => {
   const [newAvatar, setNewAvatar] = useState();
-  const [avatarPreview, setAvatarPreview] = useState();
   const [verifyLoading, setVerifyLoading] = useState(false);
+  const [verifyResponse, setVerifyResponse] = useState(false);
   const [openInput, setOpenInput] = useState({
     username: false,
     full_name: false,
   });
+  const [focusFlag, setFocusFlag] = useState(false);
+  const [loadingAvatar, setLoadingAvatar] = useState(false);
+  const [avatarFlag, setAvatarFlag] = useState(false);
+  const [avatarError, setAvatarError] = useState(null);
   const {
     username,
     full_name,
@@ -33,39 +38,60 @@ const ProfileDetails = ({ address }) => {
   } = useSelector((state) => state.sessionReducer);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [isOpenAvatar, openAvatar, closeAvatar] = useModal();
   const [notification] = useNotification();
 
   const onlyLettersRegex = /^([a-zñ .]){2,}$/gi; //! VOLVER A VER cambiar regex
 
-  const avatarHandler = (e) => {
+  const handleAvatar = (e) => {
+    if (e.target.files.length === 0) return;
+    setLoadingAvatar(true);
+    const fileListArrayImg = Array.from(e.target.files);
+    if (fileListArrayImg[0].size > 2405442) {
+      setAvatarError("La imágen debe pesar 2mb como máximo");
+      setTimeout(() => setAvatarError(null), 7000);
+      return setLoadingAvatar(false);
+    }
     setNewAvatar(e.target.files);
-    setAvatarPreview(URL.createObjectURL(e.target.files[0]));
+    setAvatarFlag(true);
   };
 
-  const uploadAvatar = async (e) => {
-    e.target.disabled = true;
-    let formData = new FormData();
+  useEffect(() => {
+    if (avatarFlag) {
+      uploadAvatar();
+      setAvatarFlag(false);
+    }
+    // eslint-disable-next-line
+  }, [avatarFlag]);
 
-    const fileListArrayImg = Array.from(newAvatar);
+  const uploadAvatar = async () => {
+    setAvatarError(null);
 
-    fileListArrayImg.forEach((pic) => {
-      formData.append("images", pic);
-    });
+    try {
+      let formData = new FormData();
 
-    const { data, statusText } = await axios.post("/user/avatar", formData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    });
-    notification(
-      data.message,
-      "",
-      `${statusText === "OK" ? "success" : "warning"}`
-    );
-    // dispatch(loadAvatar(data.avatar));
-    dispatch(loadUserData({ avatar: data.avatar }));
-    closeAvatar();
+      const fileListArrayImg = Array.from(newAvatar);
+
+      fileListArrayImg.forEach((pic) => {
+        formData.append("images", pic);
+      });
+
+      const { data, statusText } = await axios.post("/user/avatar", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      notification(
+        data.message,
+        "",
+        `${statusText === "OK" ? "success" : "warning"}`
+      );
+
+      dispatch(loadUserData({ avatar: data.avatar }));
+    } catch (error) {
+      console.log(error); //! VOLVER A VER manejo de errores
+    } finally {
+      setLoadingAvatar(false);
+    }
   };
 
   const updateDetails = async (updateData) => {
@@ -130,18 +156,12 @@ const ProfileDetails = ({ address }) => {
     }
   };
 
-  const handleOpenInputs = (input) => {
-    setOpenInput({
-      ...openInput,
-      [input]: true,
-    });
-  };
-
   const handleVerifyEmail = async () => {
     setVerifyLoading(true);
     try {
       await axios.put("/user/sendVerifyEmail");
       notification("Revisa tu email para verificar tu cuenta", "", "");
+      setVerifyResponse(true);
     } catch (error) {
       setVerifyLoading(false);
       console.log(error);
@@ -154,15 +174,32 @@ const ProfileDetails = ({ address }) => {
     handleSubmit: handleSubmitUsername,
     formState: { errors: errorsUsername },
     setValue: setValueUsername,
-    watch: watchUsername,
+    setFocus: setFocusUsername,
   } = useForm();
   const {
     register: registerFullname,
     handleSubmit: handleSubmitFullname,
     formState: { errors: errorsFullname },
     setValue: setValueFullname,
-    watch: watchFullname,
+    setFocus: setFocusFullname,
   } = useForm();
+
+  const handleOpenInputs = (input) => {
+    setOpenInput({
+      ...openInput,
+      [input]: true,
+    });
+
+    setFocusFlag(input);
+  };
+  useEffect(() => {
+    if (focusFlag) {
+      if (focusFlag === "username") setFocusUsername("username");
+      if (focusFlag === "full_name") setFocusFullname("firstname");
+      setFocusFlag(false);
+    }
+    // eslint-disable-next-line
+  }, [focusFlag]);
 
   useEffect(() => {
     setValueUsername("username", username);
@@ -175,19 +212,46 @@ const ProfileDetails = ({ address }) => {
     <div className="profile-details-container">
       <h1>Detalles</h1>
 
-      <div className="profile-avatar-container">
-        <img
-          src={
-            avatar
-              ? avatarResizer(avatar)
-              : require("../../assets/avatardefault.png")
-          }
-          referrerPolicy="no-referrer"
-          alt="avatar"
-          onClick={openAvatar}
-          style={{ cursor: "pointer" }}
-        />
-      </div>
+      <span className="profile-avatar-container">
+        <label className="profile-avatar-container-label" htmlFor="filesButton">
+          {loadingAvatar ? (
+            <Spinner className="cho-svg" />
+          ) : (
+            <>
+              <img
+                src={
+                  avatar
+                    ? avatarResizer(avatar)
+                    : require("../../assets/avatardefault.png")
+                }
+                referrerPolicy="no-referrer"
+                alt="avatar"
+              />
+              <span className="profile-avatar-background">Cambiar avatar</span>
+            </>
+          )}
+        </label>
+        {!loadingAvatar && (
+          <label className="profile-edit-svg-container" htmlFor="filesButton">
+            <Edit />
+          </label>
+        )}
+      </span>
+
+      {avatarError === null ? (
+        <p className="g-hidden-placeholder">hidden</p>
+      ) : (
+        <p className="g-error-input">{avatarError}</p>
+      )}
+
+      <input
+        type="file"
+        name="image"
+        accept="image/png, image/jpeg, image/gif"
+        onChange={handleAvatar}
+        id="filesButton"
+        className="profile-avatar-input"
+      />
 
       <div className="profile-detail-container">
         <h3>Usuario</h3>
@@ -353,7 +417,7 @@ const ProfileDetails = ({ address }) => {
             >
               {email}
               <span className="profile-verify-email">
-                {verifyLoading ? "Revisa tu email" : "Verifica tu email"}
+                {verifyResponse ? "Revisa tu email" : "Verifica tu email"}
               </span>
             </button>
           )}
@@ -369,6 +433,7 @@ const ProfileDetails = ({ address }) => {
                   <div
                     className="profile-address-container"
                     onClick={() => navigate("/profile/address")}
+                    key={e.street_number}
                   >
                     <p>{`${e.street_name} ${e.street_number}, ${e.city}`}</p>
                     <span className="profile-email-container">
@@ -388,34 +453,6 @@ const ProfileDetails = ({ address }) => {
           Cambiar contraseña
         </button>
       )}
-
-      <Modal isOpen={isOpenAvatar} closeModal={closeAvatar}>
-        {isOpenAvatar && (
-          <div>
-            <h1>editar avatar</h1>
-            <div className="avatar-preview">
-              <img
-                src={
-                  avatarPreview
-                    ? avatarPreview
-                    : avatar
-                    ? avatarResizer(avatar)
-                    : require("../../assets/avatardefault.png")
-                }
-                alt="avatar-preview"
-              />
-            </div>
-            <input
-              type="file"
-              name="image"
-              accept="image/png, image/jpeg, image/gif"
-              onChange={avatarHandler}
-              id="filesButton"
-            />
-            <button onClick={uploadAvatar}>actualizar avatar</button>
-          </div>
-        )}
-      </Modal>
     </div>
   );
 };

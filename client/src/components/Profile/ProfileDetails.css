@@ -6,16 +6,50 @@
   width: 500px;
 }
 .profile-avatar-container {
+  position: relative;
+}
+.profile-avatar-container .profile-edit-svg-container {
+  top: 4.8rem;
+  right: -0.5rem;
+}
+.profile-avatar-container-label {
   height: 100px;
   width: 100px;
   border-radius: 50%;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
-.profile-avatar-container img {
+.profile-avatar-container-label svg {
+  transform: scale(2);
+}
+.profile-avatar-container-label img {
   height: 100%;
   width: 100%;
 }
+.profile-avatar-background {
+  display: none;
+}
+.profile-avatar-container:hover .profile-avatar-background {
+  position: absolute;
+  background-color: #ff000075;
+  border-radius: 50%;
+  height: 100px;
+  width: 100px;
+  display: flex;
+  align-items: center;
+}
 
+.profile-avatar-input {
+  display: none;
+}
+
+/* .profile-edit-avatar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 .avatar-preview {
   max-width: 100px;
   max-height: 100px;
@@ -23,7 +57,7 @@
 .avatar-preview img {
   max-width: 100%;
   max-height: 100%;
-}
+} */
 
 .profile-detail-container {
   /* border: 1px solid #555555; */
@@ -101,6 +135,7 @@
   flex-direction: column;
   align-items: center;
   margin: 0;
+  padding: 0.3rem 1rem;
 }
 .profile-verify-email {
   color: red;
