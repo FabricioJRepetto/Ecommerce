@@ -15,10 +15,17 @@
     width: 100vw;
     height: 95vh;
     position: relative;
-    overflow: hidden;
-
+    /* overflow: hidden; */
 }
+.pd-favButton-container {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 2;
+}
+
 .premiumdetails-details {
+    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;

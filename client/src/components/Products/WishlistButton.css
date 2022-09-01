@@ -22,13 +22,15 @@
     top: 0px;
 }
 
-.fav-heart {
-    transform: scale(.5);    
+.heart-svg {
+    transform: scale(.7);
 }
-.fav-button-svg path {
-    fill:rgba(72, 72, 72, 1)   
+.heart-svg path {
+    stroke: #505050;
+    stroke-width: 2px;    
+    fill: none;
 }
-.faved path {
-    opacity: 1;
-    fill: rgb(192, 108, 108);
+.heart-svg-faved path {
+    stroke: none;
+    fill: #f27979;
 }

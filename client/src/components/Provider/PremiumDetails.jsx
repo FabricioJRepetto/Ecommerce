@@ -1,16 +1,18 @@
 import React, { useEffect, useState, useRef } from 'react'
 import axios from 'axios'
 import { useParams } from 'react-router-dom'
+import { useSelector } from 'react-redux';
 import { useNotification } from '../../hooks/useNotification';
 import { useCheckout } from '../../hooks/useCheckout';
 import { priceFormat } from '../../helpers/priceFormat';
+import { resizer } from '../../helpers/resizer';
 import LoaderBars from '../common/LoaderBars';
 import Carousel from '../Home/Carousel/Carousel';
 import Footer from '../common/Footer';
 import { ArrowDownIcon } from '@chakra-ui/icons';
+import { WishlistButton } from '../Products/WishlistButton';
 
 import './PremiumDetails.css'
-import { resizer } from '../../helpers/resizer';
 
 const PremiumDetails = () => {
     const { id } = useParams();
@@ -19,6 +21,8 @@ const PremiumDetails = () => {
     const [loading, setLoading] = useState(true);
     const [notification] = useNotification();
     const { addToCart, buyNow } = useCheckout();
+    const { wishlist } = useSelector((state) => state.cartReducer);
+
 
     const reference = useRef(null)
     const [isVisible, setIsVisible] = useState(true)
@@ -81,6 +85,11 @@ const PremiumDetails = () => {
                         
                         <div className='premiumdetails-details'
                             style={{color: product.premiumData.textColor ? product.premiumData.textColor : 'white'}}>
+                                
+                            <span className='pd-favButton-container'>
+                                <WishlistButton prodId={product.id} visible fav={wishlist.includes(product.id)} position={false}/>
+                            </span>
+
                             {product.premiumData.logo 
                                 ? <div className='premiumdetails-logo'>
                                     <img src={product.premiumData.logo} alt="" />
