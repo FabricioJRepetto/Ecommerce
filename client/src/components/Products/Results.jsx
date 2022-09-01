@@ -15,6 +15,7 @@ import {ReactComponent as Arrow } from '../../assets/svg/arrow-right.svg';
 
 import './Results.css';
 import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
 const Results = () => {
     const {wishlist} = useSelector((state) => state.cartReducer);    
@@ -25,22 +26,30 @@ const Results = () => {
     const {productsFilters} = useSelector((state) => state.productsReducer);
     const {breadCrumbs} = useSelector((state) => state.productsReducer);
     
+    const [params] = useSearchParams();
     const [open, setOpen] = useState('category');
     const dispatch = useDispatch();
 
     useEffect(() => {
         (async () => {
+            
+            const category = params.get("category");
+            console.log(category);
+            
             let newQuery = "";
             Object.entries(querys).forEach(([key, value]) => {
                 newQuery += key + "=" + value + "&";
             });
 
-            const { data } = await axios(`/product/search/?${newQuery}`)
+            const { data } = await axios(`/product/search/?${newQuery}`)                
+            
+            // const { data } = await axios(`/product/provider/?category=${category}`)
+            // aux = data;
+                        
             // const { data } = await axios(`/product/promos`)
-            console.log(data.filters);
             
             dispatch(loadProductsOwn(data.db));
-            dispatch(loadProductsFound(data.meli));
+            !category && dispatch(loadProductsFound(data.meli));
             dispatch(loadFilters(data.filters));
             dispatch(loadApplied(data.applied));
             dispatch(loadBreadCrumbs(data.breadCrumbs));
