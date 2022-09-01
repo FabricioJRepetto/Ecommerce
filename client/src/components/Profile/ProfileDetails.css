@@ -1,0 +1,142 @@
+.profile-details-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 500px;
+}
+.profile-avatar-container {
+  height: 100px;
+  width: 100px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.profile-avatar-container img {
+  height: 100%;
+  width: 100%;
+}
+
+.avatar-preview {
+  max-width: 100px;
+  max-height: 100px;
+}
+.avatar-preview img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.profile-detail-container {
+  /* border: 1px solid #555555; */
+  background-color: #111111;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 4rem;
+  margin-top: 0.8rem;
+  padding: 0 1rem;
+}
+.profile-detail-container form {
+  align-self: flex-start;
+}
+.profile-detail-container form .g-input-with-button {
+  width: 7rem;
+}
+.profile-detail-container form input {
+  padding-right: 0.2rem;
+  padding-left: 0.2rem;
+}
+.profile-detail-name-container {
+  display: flex;
+  flex-direction: row;
+}
+.profile-detail-name-container span:first-child span input {
+  margin-right: 1rem;
+}
+
+.profile-detail-button-container {
+  position: relative;
+  cursor: pointer;
+}
+.profile-detail-button-data {
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  padding-right: 2rem;
+  color: white;
+  height: 100%;
+  font-size: 1.1rem;
+  align-items: center;
+}
+.profile-edit-svg-container {
+  position: absolute;
+  right: 0.1rem;
+  top: -0.1rem;
+}
+.profile-edit-svg-container svg {
+  color: white;
+}
+.profile-hide-submit {
+  display: none;
+}
+
+.profile-email-container {
+  display: flex;
+  align-items: center;
+}
+.profile-email-container svg {
+  color: white;
+}
+.profile-email {
+  font-size: 1.1rem;
+  font-weight: 100;
+  padding-right: 0.4rem;
+}
+
+.profile-email-not-verified-container {
+  flex-direction: column;
+}
+.profile-email-not-verified-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+}
+.profile-verify-email {
+  color: red;
+  cursor: pointer;
+}
+.profile-detail-container-address {
+  padding-right: 0.7rem;
+}
+
+.profile-address-container {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.profile-address-container p {
+  padding-right: 0.1rem;
+}
+.profile-address-container span {
+  transform: scale(0.8);
+}
+
+@media (max-width: 719px) {
+  .profile-detail-container {
+    flex-direction: column;
+    justify-content: space-evenly;
+    width: 75%;
+    height: 6rem;
+  }
+  .profile-detail-button-data {
+    display: flex;
+    flex-direction: column;
+  }
+  .profile-detail-name .profile-edit-svg-container {
+    top: 0.3rem;
+  }
+  .profile-detail-container form {
+    align-self: auto;
+  }
+}

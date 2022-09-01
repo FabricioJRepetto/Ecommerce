@@ -9,7 +9,7 @@ const passport = require("passport");
 const {
   signin,
   signinGoogle,
-  signup,
+  sendVerifyEmail,
   profile,
   verifyEmail,
   forgotPassword,
@@ -80,12 +80,17 @@ router.post(
     passwordValidationSignup,
     passport.authenticate("signup", { session: false }),
   ],
-  signup
+  sendVerifyEmail
 );
 router.post("/signin", [emailValidation, passwordValidation], signin);
 router.post("/signinGoogle", signinGoogle);
 router.post("/avatar", verifyToken, setAvatar);
 router.get("/profile/:token", verifyToken, profile);
+router.put(
+  "/sendVerifyEmail",
+  [verifyToken, googleUserShallNotPass],
+  sendVerifyEmail
+);
 router.put("/verifyEmail", [verifyToken, googleUserShallNotPass], verifyEmail);
 router.put("/forgotPassword", emailValidation, forgotPassword);
 router.put("/resetPassword", resetPassword);

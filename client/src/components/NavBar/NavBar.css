@@ -420,22 +420,24 @@
   background: #111111;
   z-index: 12;
   cursor: default;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.2s ease;
 }
 .navbar-modal-visible {
   visibility: visible;
   opacity: 1;
-  height: 300px;
-  transition: height 0.1s ease;
+  max-height: 300px;
+  /* height: fit-content; */
+  transition: max-height 0.2s ease;
+  overflow-y: hidden;
 }
 .navbar-modal-hide {
-  height: 1px;
-  transition: height 0.1s ease;
+  max-height: 1px;
+  transition: max-height 0.2s ease;
 }
 .navbar-modal-visible .profile-modal-option,
 .navbar-modal-visible .logout {
   opacity: 1;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.2s ease;
 }
 .navbar-modal-hide .profile-modal-option,
 .navbar-modal-hide .logout {

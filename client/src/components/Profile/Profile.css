@@ -4,8 +4,6 @@
   overflow: -moz-hidden-unscrollable;
   display: flex;
 }
-.profile-menu-container-placeholder {
-}
 @media (max-width: 899px) {
   .profile-menu-container-show {
     width: 170px;
@@ -66,7 +64,8 @@
   flex-direction: column;
   align-items: flex-start;
   transition: 0.1s ease-in-out;
-  background-color: #111;
+  background-color: #000000;
+  z-index: 4;
 }
 .profile-menu-container-hide {
   width: 3.2rem;
@@ -152,24 +151,6 @@
   padding: 20px;
 }
 
-.profile-details-container {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 40px;
-}
-.profile-avatar-container {
-  height: 100px;
-  width: 100px;
-  border-radius: 50%;
-  overflow: hidden;
-}
-.profile-avatar-container img {
-  height: 100%;
-  width: 100%;
-}
-
 .profile-history-container {
   display: flex;
   justify-content: center;
@@ -189,15 +170,6 @@
 .profile-img-orders-container img {
   max-width: 96px;
   max-height: 96px;
-}
-
-.avatar-preview {
-  max-width: 100px;
-  max-height: 100px;
-}
-.avatar-preview img {
-  max-width: 100%;
-  max-height: 100%;
 }
 
 /* COMPONENTE DELIVERY !mover */

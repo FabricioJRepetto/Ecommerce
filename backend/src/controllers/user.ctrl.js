@@ -17,8 +17,8 @@ cloudinary.config({
   secure: true,
 });
 
-const signup = async (req, res, next) => {
-  if (req.authInfo.error) return res.json(req.authInfo);
+const sendVerifyEmail = async (req, res, next) => {
+  if (req.authInfo && req.authInfo.error) return res.json(req.authInfo);
 
   const { _id, email } = req.user;
   const body = { _id, email };
@@ -119,7 +119,7 @@ const profile = async (req, res, next) => {
   }
 };
 
-const verifyEmail = async (req, res, next) => {
+/* const sendVerifyEmail = async (req, res, next) => {
   const { _id } = req.user;
   if (!_id) return res.status(401).send({ message: "ID de cuenta no enviado" });
 
@@ -130,6 +130,25 @@ const verifyEmail = async (req, res, next) => {
       return res.status(404).json({ message: "Cuenta no encontrada" });
     if (userFound.emailVerified)
       return res.status(400).json({ message: "Email ya verificado" });
+
+    userFound.emailVerified = true;
+    await userFound.save();
+
+    return res.json({ message: "Email verificado con éxito" });
+  } catch (error) {
+    next(error);
+  }
+}; */
+
+const verifyEmail = async (req, res, next) => {
+  const { _id } = req.user;
+  if (!_id) return res.status(401).send({ message: "ID de cuenta no enviado" });
+
+  try {
+    const userFound = await User.findById(_id);
+
+    if (!userFound)
+      return res.status(404).json({ message: "Cuenta no encontrada" });
 
     userFound.emailVerified = true;
     await userFound.save();
@@ -254,20 +273,32 @@ const updatePassword = async (req, res, next) => {
 
 const editProfile = async (req, res, next) => {
   try {
-    const { username, name, lastname } = req.body;
+    const { username, firstname, lastname } = req.body;
 
-    const user = await User.findByIdAndUpdate(
+    /* const userFound = await User.findByIdAndUpdate(
       req.user._id,
       {
-        username: username || user.username,
-        firstName: name || user.name,
-        lastName: lastname || user.lastname,
+        username: username || userFound.username,
+        firstName: firstname || userFound.firstName,
+        lastName: lastname || userFound.lastName,
       },
       { new: true }
-    );
-    console.log("user", user);
+    ); */
+    const userFound = await User.findById(req.user._id);
 
-    return res.json({ message: "Editado con éxito", user });
+    (userFound.username = username || userFound.username),
+      (userFound.firstName = firstname || userFound.firstName),
+      (userFound.lastName = lastname || userFound.lastName),
+      await userFound.save();
+
+    return res.json({
+      message: "Editado con éxito",
+      user: {
+        firstname: userFound.firstName,
+        lastname: userFound.lastName,
+        username: userFound.username,
+      },
+    });
   } catch (error) {
     next(error);
   }
@@ -295,7 +326,7 @@ const setAvatar = async (req, res, next) => {
 module.exports = {
   signin,
   signinGoogle,
-  signup,
+  sendVerifyEmail,
   profile,
   verifyEmail,
   forgotPassword,
