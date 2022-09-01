@@ -92,7 +92,7 @@ const Galery = ({ imgs, ripple = false }) => {
                         style={{ left: coords.x, top: coords.y }}>
                     </span>
                 </div>                        
-                {loading && <LoadingPlaceHolder extraStyles={{ height: "100%" }}/>}
+                {loading && <LoadingPlaceHolder extraStyles={{ height: "100%", position: 'absolute' }}/>}
                 {imgs?.map((e, index) =>                     
                     <img key={e.imgURL}
                         onClick={open}

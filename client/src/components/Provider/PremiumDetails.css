@@ -2,6 +2,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    position: relative;
 }
 .premiumdetails-content * {
     user-select: none;
@@ -14,16 +15,34 @@
     width: 100vw;
     height: 95vh;
     position: relative;
-    overflow: hidden;
-
+    /* overflow: hidden; */
 }
+.pd-favButton-container {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    z-index: 2;
+}
+
 .premiumdetails-details {
+    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     width: 30rem;
     z-index: 1;
+}
+.premiumdetails-details h2 {
+    font-size: 2rem;
+}
+.premiumdetails-toAttributesButton {
+    margin-top: 1rem;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+.premiumdetails-toAttributesButton * {
+    margin-left: 1rem;
 }
 .premiumdetails-logo {
     height: 16rem;
@@ -37,7 +56,6 @@
     margin: 2rem;
 }
 
-
 .premiumdetails-price {
     font-size: 1.8rem;
     font-weight: 600;
@@ -49,7 +67,7 @@
 
 .premiumdetails-nostock {
     font-size: 1.2rem;
-    font-size: 600;
+    font-weight: 600;
     color: black;
 }
 .premiumdetails-buttons {
@@ -89,6 +107,7 @@
     width: 100%;
     height: 80vh;
     position: relative;
+    font-size: 1rem;
 }
 .premiumdetails-section div {
     position: absolute;
@@ -110,34 +129,6 @@
     height: auto;
 }
 
-.premiumdetails-fixed {
-    position: fixed;
-    display: flex;
-    justify-content: center;
-    bottom: -4rem;
-    height: 4rem;
-    width: 100%;
-    background-color: rgb(0, 0, 0);
-    z-index: 4;
-    transition: bottom .4s ease;
-}
-.premiumdetails-fixed-content {
-    width: 50%;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-}
-.premiumdetails-fixed p {
-    font-weight: 600;
-    font-size: 1.2rem;
-}
-.premiumdetails-fixed span {
-    margin: 0 .5rem;
-}
-.premiumdetails-fixed-on {
-    bottom: 0;
-}
-
 .provider-premium-sign {
     position: absolute;
     top: 2%;
@@ -156,4 +147,64 @@
     mask-image: url('../../assets/svg/PremiumSign.svg');
     background-size: 400%;
     animation: gradientTextAnim 15s infinite;
+}
+
+.premiumdetails-attributes {
+    margin: 3rem;
+    font-size: 1.2rem;
+    width: 35vw;
+    min-width: 400px;
+}
+.pd-attribute-container {
+    display: flex;
+    border-bottom: 1px solid #ffffff10;
+}
+.pd-attribute-container > div:first-child {
+    width: 45%;
+    text-align: left;
+}
+.pd-attribute-container > div:last-child {
+    padding-left: 1rem;
+    width: 55%;
+    text-align: center;
+}
+
+.pd-logo-footer {
+    display: flex;
+    justify-content: center;
+    margin: 5rem;
+}
+.pd-logo-footer div {
+    height: 310px;
+    width: 310px;
+    background: #151515;    
+}
+
+.premiumdetails-fixed {
+    position: sticky;
+    /* position: fixed; */
+    bottom: -4rem;   
+    display: flex;
+    justify-content: center;
+    height: 4rem;
+    width: 100%;
+    background-color: rgb(0, 0, 0);
+    z-index: 1;
+    transition: bottom .4s ease;
+}
+.premiumdetails-fixed-content {
+    width: 50%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+.premiumdetails-fixed p {
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+.premiumdetails-fixed span {
+    margin: 0 .5rem;
+}
+.premiumdetails-fixed-on {
+    bottom: 0;
 }

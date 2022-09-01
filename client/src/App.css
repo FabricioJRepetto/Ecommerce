@@ -5,7 +5,8 @@
   color: rgb(255, 255, 255);
   width: 100;
   min-height: 100vh;
-  overflow: hidden;
+  /* overflow: hidden; */
+  /*! Volver a ver: este overflow quizas sea necesario/triga problemas */
 }
 * {
   margin: 0;
@@ -260,3 +261,4 @@ input.g-input-two-icons {
   /* outline-offset: 5px;
     outline: 1px solid rgb(255, 255, 255); */
 }
+
