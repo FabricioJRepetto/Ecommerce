@@ -6,9 +6,9 @@ import { useNotification } from "../../hooks/useNotification";
 import { avoidEnterSubmit } from "../../helpers/AvoidEnterSubmit";
 import LoaderBars from "../common/LoaderBars";
 import { CloseIcon, ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import ReturnButton from "../common/ReturnButton";
 import "../../App.css";
 import "./UpdatePassword.css";
-import ReturnButton from "../common/ReturnButton";
 
 const UpdatePassword = () => {
   const [viewPassword, setViewPassword] = useState({
@@ -146,7 +146,10 @@ const UpdatePassword = () => {
               )}
             </span>
             <div className="title-text">
-              <span className="input-bottom-text" onClick={forgotPassword}>
+              <span
+                className="input-bottom-text g-text-button"
+                onClick={forgotPassword}
+              >
                 Olvidé mi contraseña
               </span>
             </div>

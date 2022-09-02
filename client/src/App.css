@@ -215,6 +215,20 @@ input.g-input-two-icons {
   cursor: pointer;
   font-weight: 400;
 }
+.g-text-button:hover {
+  background: linear-gradient(
+    45deg,
+    #35a7ff 0%,
+    #7e54de 20%,
+    #f40259 60%,
+    #fea30d 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  background-size: 400%;
+  animation: gradientTextAnim 10s infinite;
+}
 
 /* PLACEHOLDER ERROR OCULTO */
 .g-hidden-placeholder {
@@ -256,4 +270,3 @@ input.g-input-two-icons {
   /* outline-offset: 5px;
     outline: 1px solid rgb(255, 255, 255); */
 }
-
