@@ -56,6 +56,10 @@ const Address = ({ loading, setLoading, address, setAddress }) => {
       <h1>Direcciones</h1>
       {!loading ? (
         <div>
+          {!address ||
+            (address.length === 0 && (
+              <p>Todavía no has agregado alguna dirección</p>
+            ))}
           {React.Children.toArray(
             address?.map(
               (e) =>
