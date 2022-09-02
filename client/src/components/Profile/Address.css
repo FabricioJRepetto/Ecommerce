@@ -13,7 +13,7 @@ div.profile-all-address-container > h1 {
   justify-content: space-between;
   padding: 1rem;
   background-color: #111111;
-  margin-top: 1rem;
+  margin-top: 0.8rem;
 }
 .address-with-pin {
   display: flex;

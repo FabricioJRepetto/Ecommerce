@@ -124,13 +124,13 @@ const PostSale = () => {
   const messageQuantity = () => {
     if (order.products.length === 1) {
       if (order.products[0].quantity > 1) {
-        return "Los productos ya son tuyos!";
+        return "¡Los productos ya son tuyos!";
       } else {
-        return "El producto ya es tuyo!";
+        return "¡El producto ya es tuyo!";
       }
     }
 
-    return "Los productos ya son tuyos!";
+    return "¡Los productos ya son tuyos!";
   };
 
   return (
@@ -154,9 +154,9 @@ const PostSale = () => {
           <div className="postsale-details-container">
             {status === "approved" && (
               <div>
-                <h1>YA CASI!</h1>
+                <h1>¡YA CASI!</h1>
                 <h3>{messageQuantity()}</h3>
-                <h3>Ahora estamos preparando el envío.</h3>
+                <h3>Ahora estamos preparando el envío</h3>
 
                 {order?.delivery_date ? (
                   <DeliveryProgress order={order} />
@@ -167,14 +167,14 @@ const PostSale = () => {
             )}
             {status !== "approved" && (
               <div>
-                <h1>HUBO ALGÚN ERROR...</h1>
-                <h3>Pero puedes retomar el pago!</h3>
+                <h1>HUBO UN ERROR...</h1>
+                <h3>¡Pero puedes retomar el pago!</h3>
                 <button className="g-white-button">
                   <a href={order?.payment_link}>Voy a intentarlo de nuevo</a>
                 </button>
                 <p className="postsale-text-margin">
                   También puedes encontrar el link de pago en tu perfil para
-                  realizarlo más tarde.
+                  realizarlo más tarde
                 </p>
               </div>
             )}

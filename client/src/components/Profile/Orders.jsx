@@ -27,7 +27,7 @@ const Orders = () => {
 
   return (
     <div>
-      <h1>Orders</h1>
+      <h1>Órdenes</h1>
       {!loading ? (
         <div className="profile-orders-container">
           {orders?.length ? (
@@ -49,7 +49,7 @@ const Orders = () => {
                   {e.status === "pending" && e.payment_link && (
                     <div>
                       <a style={{ color: "#3483fa" }} href={e.payment_link}>
-                        Continue payment.
+                        Continue payment
                       </a>
                     </div>
                   )}
@@ -61,7 +61,7 @@ const Orders = () => {
                       onClick={() => cancelOrder(e._id)}
                       className="g-white-button"
                     >
-                      Cancel order
+                      Cancelar orden
                     </button>
                   )}
 
@@ -88,7 +88,7 @@ const Orders = () => {
               ))
             )
           ) : (
-            <p>No orders yet</p>
+            <p>Aún no tienes órdenes</p>
           )}
         </div>
       ) : (
