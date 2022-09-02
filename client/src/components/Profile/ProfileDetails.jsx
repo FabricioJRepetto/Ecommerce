@@ -42,6 +42,12 @@ const ProfileDetails = ({ address }) => {
   const onlyLettersRegex = /^([a-zñ .]){2,}$/gi; //! VOLVER A VER cambiar regex
 
   const handleAvatar = (e) => {
+    if (emailVerified === false)
+      return notification(
+        "Verifica tu email para poder editar tus detalles",
+        "",
+        "warning"
+      );
     if (e.target.files.length === 0) return;
     setLoadingAvatar(true);
     const fileListArrayImg = Array.from(e.target.files);
@@ -94,8 +100,6 @@ const ProfileDetails = ({ address }) => {
   };
 
   const updateDetails = async (updateData) => {
-    console.log("updateData", updateData);
-
     try {
       const { data, statusText } = await axios.put(
         "/user/editProfile",
@@ -184,6 +188,12 @@ const ProfileDetails = ({ address }) => {
   } = useForm();
 
   const handleOpenInputs = (input) => {
+    if (emailVerified === false)
+      return notification(
+        "Verifica tu email para poder editar tus detalles",
+        "",
+        "warning"
+      );
     setOpenInput({
       ...openInput,
       [input]: true,
@@ -214,7 +224,11 @@ const ProfileDetails = ({ address }) => {
       <span className="profile-avatar-container">
         {!loadingAvatar && (
           <label className="profile-edit-svg-container" htmlFor="filesButton">
-            <Edit />
+            {emailVerified === true ? (
+              <div className="edit-gradient"></div>
+            ) : (
+              <Edit />
+            )}
           </label>
         )}
         <label className="profile-avatar-container-label" htmlFor="filesButton">
@@ -231,7 +245,11 @@ const ProfileDetails = ({ address }) => {
                 referrerPolicy="no-referrer"
                 alt="avatar"
               />
-              <span className="profile-avatar-background">Cambiar avatar</span>
+              {emailVerified === true && (
+                <span className="profile-avatar-background">
+                  Cambiar avatar
+                </span>
+              )}
             </>
           )}
         </label>
@@ -243,14 +261,28 @@ const ProfileDetails = ({ address }) => {
         <p className="g-error-input">{avatarError}</p>
       )}
 
-      <input
-        type="file"
-        name="image"
-        accept="image/png, image/jpeg, image/gif"
-        onChange={handleAvatar}
-        id="filesButton"
-        className="profile-avatar-input"
-      />
+      {emailVerified === false ? (
+        <input
+          id="filesButton"
+          className="profile-avatar-input"
+          onClick={() =>
+            notification(
+              "Verifica tu email para poder cambiar tu avatar",
+              "",
+              "warning"
+            )
+          }
+        ></input>
+      ) : (
+        <input
+          type="file"
+          name="image"
+          accept="image/png, image/jpeg, image/gif"
+          onChange={handleAvatar}
+          id="filesButton"
+          className="profile-avatar-input"
+        />
+      )}
 
       <div className="profile-detail-container">
         <h3>Usuario</h3>
@@ -266,7 +298,11 @@ const ProfileDetails = ({ address }) => {
               className="profile-edit-svg-container"
               onClick={() => handleOpenInputs("username")}
             >
-              <Edit />
+              {emailVerified === true ? (
+                <div className="edit-gradient"></div>
+              ) : (
+                <Edit />
+              )}
             </span>
           </span>
         ) : (
@@ -315,7 +351,11 @@ const ProfileDetails = ({ address }) => {
               className="profile-edit-svg-container"
               onClick={() => handleOpenInputs("full_name")}
             >
-              <Edit />
+              {emailVerified === true ? (
+                <div className="edit-gradient"></div>
+              ) : (
+                <Edit />
+              )}
             </span>
           </span>
         ) : (
@@ -406,7 +446,8 @@ const ProfileDetails = ({ address }) => {
           {emailVerified === true ? (
             <>
               <p className="profile-email">{email}</p>
-              <Verified />
+              <div className="verified-gradient"></div>
+              {/* <Verified /> */}
             </>
           ) : (
             <button
@@ -415,7 +456,7 @@ const ProfileDetails = ({ address }) => {
               disabled={verifyLoading}
             >
               {email}
-              <span className="profile-verify-email">
+              <span className="provider-text">
                 {verifyResponse ? "Revisa tu email" : "Verifica tu email"}
               </span>
             </button>
@@ -425,23 +466,28 @@ const ProfileDetails = ({ address }) => {
 
       <div className="profile-detail-container profile-detail-container-address">
         <h3>Dirección</h3>
-        {address.length
-          ? address.map(
-              (e) =>
-                e.isDefault && (
-                  <div
-                    className="profile-address-container"
-                    onClick={() => navigate("/profile/address")}
-                    key={e.street_number}
-                  >
-                    <p>{`${e.street_name} ${e.street_number}, ${e.city}`}</p>
-                    <span className="profile-email-container">
-                      <Location />
-                    </span>
-                  </div>
-                )
-            )
-          : "Aún no tienes una dirección predeterminada"}
+        {address.length ? (
+          address.map(
+            (e) =>
+              e.isDefault && (
+                <div
+                  className="profile-address-container"
+                  onClick={() => navigate("/profile/address")}
+                  key={e.street_number}
+                >
+                  <p>{`${e.street_name} ${e.street_number}, ${e.city}`}</p>
+                  <span className="profile-email-container">
+                    <div className="location-gradient"></div>
+                    {/* <Location /> */}
+                  </span>
+                </div>
+              )
+          )
+        ) : (
+          <p className="profile-not-default-address-message">
+            Aún no tienes una dirección predeterminada
+          </p>
+        )}
       </div>
 
       <div className="profile-detail-container">

@@ -21,7 +21,7 @@
   min-width: 20vw;
   max-width: 60vw;
   min-height: 20vh;
-  max-height: 60vh;
+  max-height: 90vh;
   border: 1px solid rgba(255, 255, 255, 0.3);
   overflow-y: auto;
   overflow-x: hidden;

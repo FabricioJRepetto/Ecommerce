@@ -83,95 +83,13 @@ const AddAddress = ({
   };
 
   return (
-    <div>
+    <div className="add-address-container">
       <h1>{prop ? "Agregar dirección" : "Editar dirección"}</h1>
       <form
         onSubmit={handleSubmit((data) => handleAddress(data, prop))}
         onKeyDown={avoidEnterSubmit}
         className="addaddress-form"
       >
-        <>
-          {errors.state ? (
-            <p className="g-error-input">Ingresa la provincia</p>
-          ) : (
-            <p className="g-hidden-placeholder">hidden</p>
-          )}
-        </>
-
-        <span className="g-input-with-button">
-          <input
-            type="text"
-            name="state"
-            placeholder="Provincia"
-            {...register("state", {
-              required: true,
-            })}
-          />
-          {watch("state") === "" || watch("state") === undefined ? null : (
-            <div
-              className="g-input-icon-container g-input-x-button"
-              onClick={() => setValue("state", "")}
-            >
-              <CloseIcon />
-            </div>
-          )}
-        </span>
-
-        <>
-          {errors.city ? (
-            <p className="g-error-input">Ingresa la ciudad</p>
-          ) : (
-            <p className="g-hidden-placeholder">hidden</p>
-          )}
-        </>
-
-        <span className="g-input-with-button">
-          <input
-            type="text"
-            name="city"
-            placeholder="Ciudad"
-            {...register("city", {
-              required: true,
-            })}
-          />
-          {watch("city") === "" || watch("city") === undefined ? null : (
-            <div
-              className="g-input-icon-container g-input-x-button"
-              onClick={() => setValue("city", "")}
-            >
-              <CloseIcon />
-            </div>
-          )}
-        </span>
-
-        <>
-          {errors.zip_code ? (
-            <p className="g-error-input">Ingresa el código postal</p>
-          ) : (
-            <p className="g-hidden-placeholder">hidden</p>
-          )}
-        </>
-
-        <span className="g-input-with-button">
-          <input
-            type="text"
-            name="zip_code"
-            placeholder="Código postal"
-            {...register("zip_code", {
-              required: true,
-            })}
-          />
-          {watch("zip_code") === "" ||
-          watch("zip_code") === undefined ? null : (
-            <div
-              className="g-input-icon-container g-input-x-button"
-              onClick={() => setValue("zip_code", "")}
-            >
-              <CloseIcon />
-            </div>
-          )}
-        </span>
-
         <>
           {errors.street_name ? (
             <p className="g-error-input">Ingresa la calle</p>
@@ -229,6 +147,93 @@ const AddAddress = ({
             <div
               className="g-input-icon-container g-input-x-button"
               onClick={() => setValue("street_number", "")}
+            >
+              <CloseIcon />
+            </div>
+          )}
+        </span>
+
+        <>
+          {errors.city ? (
+            <p className="g-error-input">Ingresa la ciudad</p>
+          ) : (
+            <p className="g-hidden-placeholder">hidden</p>
+          )}
+        </>
+
+        <span className="g-input-with-button">
+          <input
+            type="text"
+            name="city"
+            placeholder="Ciudad"
+            {...register("city", {
+              required: true,
+            })}
+          />
+          {watch("city") === "" || watch("city") === undefined ? null : (
+            <div
+              className="g-input-icon-container g-input-x-button"
+              onClick={() => setValue("city", "")}
+            >
+              <CloseIcon />
+            </div>
+          )}
+        </span>
+
+        <>
+          {!errors.zip_code && <p className="g-hidden-placeholder">hidden</p>}
+          {errors.zip_code?.type === "required" && (
+            <p className="g-error-input">Ingresa el código postal</p>
+          )}
+          {errors.zip_code?.type === "pattern" && (
+            <p className="g-error-input">Ingresa un número válido</p>
+          )}
+        </>
+
+        <span className="g-input-with-button">
+          <input
+            type="text"
+            name="zip_code"
+            placeholder="Código postal"
+            {...register("zip_code", {
+              required: true,
+              pattern: {
+                value: /^(0|[1-9]\d*)(\.\d+)?$/,
+              },
+            })}
+          />
+          {watch("zip_code") === "" ||
+          watch("zip_code") === undefined ? null : (
+            <div
+              className="g-input-icon-container g-input-x-button"
+              onClick={() => setValue("zip_code", "")}
+            >
+              <CloseIcon />
+            </div>
+          )}
+        </span>
+
+        <>
+          {errors.state ? (
+            <p className="g-error-input">Ingresa la provincia</p>
+          ) : (
+            <p className="g-hidden-placeholder">hidden</p>
+          )}
+        </>
+
+        <span className="g-input-with-button">
+          <input
+            type="text"
+            name="state"
+            placeholder="Provincia"
+            {...register("state", {
+              required: true,
+            })}
+          />
+          {watch("state") === "" || watch("state") === undefined ? null : (
+            <div
+              className="g-input-icon-container g-input-x-button"
+              onClick={() => setValue("state", "")}
             >
               <CloseIcon />
             </div>

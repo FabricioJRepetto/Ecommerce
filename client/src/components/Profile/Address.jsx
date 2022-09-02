@@ -1,10 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
+import AddAddress from "./AddAddress";
+import AddressCard from "../../test/fer/AddressCard";
 import { useNotification } from "../../hooks/useNotification";
 import Modal from "../common/Modal";
 import { useModal } from "../../hooks/useModal";
+import { ReactComponent as PinBold } from "../../assets/svg/pin-bold.svg";
 import "../../App.css";
-import AddAddress from "./AddAddress";
+import "./Address.css";
 
 const Address = ({ loading, setLoading, address, setAddress }) => {
   const [addressToEditId, setAddressToEditId] = useState(null);
@@ -19,11 +22,7 @@ const Address = ({ loading, setLoading, address, setAddress }) => {
     data.address ? setAddress(data.address) : setAddress([]);
     setLoading(false);
     notification(
-      `${
-        statusText === "OK"
-          ? "Dirección eliminada correctamente."
-          : "Algo salió mal."
-      }`,
+      `${statusText === "OK" ? "Dirección eliminada" : "Algo salió mal"}`,
       "",
       `${statusText === "OK" ? "success" : "warning"}`
     );
@@ -36,10 +35,10 @@ const Address = ({ loading, setLoading, address, setAddress }) => {
     notification(
       `${
         statusText === "OK"
-          ? "Dirección predeterminada establecida correctamente."
-          : "Algo salió mal."
+          ? "Dirección predeterminada establecida"
+          : "Algo salió mal"
       }`,
-      "/cart",
+      "",
       `${statusText === "OK" ? "success" : "warning"}`
     );
   };
@@ -53,36 +52,68 @@ const Address = ({ loading, setLoading, address, setAddress }) => {
   };
 
   return (
-    <div>
-      <h1>Dirección</h1>
+    <div className="profile-all-address-container">
+      <h1>Direcciones</h1>
       {!loading ? (
         <div>
           {React.Children.toArray(
-            address?.map((e) => (
-              <div key={e.id}>
-                <p>{`${e.street_name} ${e.street_number}, ${e.zip_code}, ${e.city}, ${e.state}.`}</p>
-                <button
-                  onClick={() => getAddressToEdit(e._id)}
-                  className="g-white-button"
-                >
-                  Editar
-                </button>
-                <button
-                  onClick={() => deleteAddress(e._id)}
-                  className="g-white-button"
-                >
-                  Eliminar
-                </button>
-                {e.isDefault ? (
-                  <p>⭐</p>
-                ) : (
-                  <button onClick={() => setDefault(e._id)}>
-                    Establecer como predeterminada
-                  </button>
-                )}
-                <p>- - -</p>
-              </div>
-            ))
+            address?.map(
+              (e) =>
+                e.isDefault && (
+                  <div key={e.id} className="address-with-options-container">
+                    <div className="address-with-pin">
+                      <div
+                        className="address-pin-gradient"
+                        onClick={() => setDefault(e._id)}
+                      ></div>
+                      <AddressCard address={e} />
+                    </div>
+
+                    <div className="address-buttons-container">
+                      <div
+                        className="address-edit-gradient"
+                        onClick={() => getAddressToEdit(e._id)}
+                      ></div>
+
+                      <div
+                        className="address-trash-gradient"
+                        onClick={() => deleteAddress(e._id)}
+                      ></div>
+                    </div>
+                  </div>
+                )
+            )
+          )}
+          {React.Children.toArray(
+            address?.map(
+              (e) =>
+                !e.isDefault && (
+                  <div key={e.id} className="address-with-options-container">
+                    <div className="address-with-pin">
+                      <div
+                        onClick={() => setDefault(e._id)}
+                        className="address-pin-set-default"
+                      >
+                        {" "}
+                        <PinBold />
+                      </div>
+                      <AddressCard address={e} />
+                    </div>
+
+                    <div className="address-buttons-container">
+                      <div
+                        className="address-edit-gradient"
+                        onClick={() => getAddressToEdit(e._id)}
+                      ></div>
+
+                      <div
+                        className="address-trash-gradient"
+                        onClick={() => deleteAddress(e._id)}
+                      ></div>
+                    </div>
+                  </div>
+                )
+            )
           )}
           <button
             default={loading || true}
