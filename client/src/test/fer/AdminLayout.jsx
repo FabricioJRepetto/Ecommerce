@@ -4,14 +4,24 @@ import { useNotification } from "../../hooks/useNotification";
 import { useVerifyAdmin } from "../../hooks/useVerifyAdmin";
 
 const AdminLayout = () => {
-    const [notification] = useNotification();
+  const [notification] = useNotification();
   useVerifyAdmin();
   return (
     <div>
-        <button onClick={()=> notification('test notif standard', '', '')}>Standard</button>
-        <button onClick={()=> notification('test notif success', '', 'success')}>Success</button>
-        <button onClick={()=> notification('test notif error', '/admin', 'error')}>Error</button>
-        <button onClick={()=> notification('test notif warning', '', 'warning')}>Warning</button>
+      <button onClick={() => notification("test notif standard", "", "")}>
+        Standard
+      </button>
+      <button onClick={() => notification("test notif success", "", "success")}>
+        Success
+      </button>
+      <button
+        onClick={() => notification("test notif error", "/admin", "error")}
+      >
+        Error
+      </button>
+      <button onClick={() => notification("test notif warning", "", "warning")}>
+        Warning
+      </button>
       <nav>
         <Link to="/admin/metrics">
           <h3>Métricas</h3>
@@ -26,7 +36,7 @@ const AdminLayout = () => {
           <h3>Usuarios</h3>
         </Link>
         <Link to="/admin/orders">
-          <h3>Órdenes</h3>
+          <h3>Compras</h3>
         </Link>
       </nav>
       <Outlet />

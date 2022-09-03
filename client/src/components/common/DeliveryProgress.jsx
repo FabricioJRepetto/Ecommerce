@@ -1,14 +1,17 @@
-import React from "react";
+import { useLocation } from "react-router-dom";
 import { correctStyle } from "../../helpers/correctStyle";
 import { deliveryPercent } from "../../helpers/deliveryPercent";
 import { formatDate } from "../../helpers/formatDate";
 import { ReactComponent as Gift } from "../../assets/svg/gift.svg";
 
 const DeliveryProgress = ({ order }) => {
+  const location = useLocation();
+  let actualDate = new Date().getTime();
+
   return (
     <div className="delivery-progress-container">
       <p>{deliveryPercent(order.delivery_date, order.payment_date).state}</p>
-      <p>{deliveryPercent(order.delivery_date, order.payment_date).percent}%</p>
+      {/* <p>{deliveryPercent(order.delivery_date, order.payment_date).percent}%</p> */}
       <div className="delivery-container">
         <div className="delivery-inner">
           <div
@@ -29,11 +32,15 @@ const DeliveryProgress = ({ order }) => {
           </div>
         </div>
       </div>
-      <p>Dirección de envío:</p>
-      <b>{`${order?.shipping_address.street_name} ${order?.shipping_address.street_number}, ${order?.shipping_address.city}, ${order?.shipping_address.state}`}</b>
+      {location.pathname !== "/profile/orders" && (
+        <>
+          <p>Dirección de envío:</p>
+          <b>{`${order?.shipping_address.street_name} ${order?.shipping_address.street_number}, ${order?.shipping_address.city}, ${order?.shipping_address.state}`}</b>
+        </>
+      )}
 
-      <p>Fecha estimada de llegada:</p>
-      <b>{formatDate(order.delivery_date)}</b>
+      {actualDate < order.delivery_date ? <p>Llega el</p> : <p>Llegó el</p>}
+      <b>{formatDate(order.delivery_date).slice(0, -6)}</b>
     </div>
   );
 };

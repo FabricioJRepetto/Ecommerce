@@ -278,7 +278,7 @@ const BuyNow = () => {
                         }}
                       />
                       <div>
-                        <p>Envío standard</p>
+                        <p>Envío estándar</p>
                         <p>{`llega ${deliverDate()}`}</p>
                       </div>
                     </div>

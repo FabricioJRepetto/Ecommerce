@@ -123,7 +123,7 @@ const Profile = () => {
                 <Bag />
               </span>
               <span className="profile-chromatic-container">
-                <ChromaticText text={"Órdenes"} size={"1.1rem"} />
+                <ChromaticText text={"Compras"} size={"1.1rem"} />
               </span>
             </li>
             <li onClick={() => navigate("/profile/wishlist")}>
@@ -185,7 +185,7 @@ const Profile = () => {
                 <Bag />
               </span>
               <span className="profile-chromatic-container">
-                <ChromaticText text={"Órdenes"} size={"1.1rem"} />
+                <ChromaticText text={"Compras"} size={"1.1rem"} />
               </span>
             </li>
             <li onClick={() => navigate("/profile/wishlist")}>

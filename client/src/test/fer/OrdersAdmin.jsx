@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import OrderCard from "./OrderCard";
+import OrderCardAdmin from "./OrderCardAdmin";
 
 const ordersCheckboxesInitial = {
   approved: false,
@@ -87,7 +87,7 @@ const OrdersAdmin = () => {
           <h2>No hubieron coincidencias</h2>
         ) : (
           React.Children.toArray(
-            ordersToShow.map((order) => <OrderCard order={order} />)
+            ordersToShow.map((order) => <OrderCardAdmin order={order} />)
           )
         )
       ) : (

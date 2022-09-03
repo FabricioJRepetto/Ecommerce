@@ -303,7 +303,7 @@ const NavBar = () => {
                                 onClick={() => setProfileModal(false)}
                               >
                                 <ChromaticText
-                                  text="Órdenes"
+                                  text="Compras"
                                   route="/profile/orders"
                                 />
                               </div>
@@ -486,7 +486,7 @@ const NavBar = () => {
               </li>
               <li onClick={() => setShowMenu(false)}>
                 <ChromaticText
-                  text="Órdenes"
+                  text="Compras"
                   route="/profile/orders"
                   size={"1.1rem"}
                 />

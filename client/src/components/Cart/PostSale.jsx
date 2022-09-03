@@ -3,12 +3,12 @@ import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { loadCart } from "../../Redux/reducer/cartSlice";
-import "./PostSale.css";
+import { ReactComponent as Spinner } from "../../assets/svg/spinner.svg";
+import ReturnButton from "../common/ReturnButton";
 import Carousel from "../Home/Carousel/Carousel";
 import LoaderBars from "../common/LoaderBars";
 import DeliveryProgress from "../common/DeliveryProgress";
-import { ReactComponent as Spinner } from "../../assets/svg/spinner.svg";
-import ReturnButton from "../common/ReturnButton";
+import "./PostSale.css";
 
 const PostSale = () => {
   const [order, setOrder] = useState(false);
@@ -184,7 +184,7 @@ const PostSale = () => {
               Id de orden: <i>{order?.id}</i>
             </p>
             <div className="postsale-back-container">
-              <ReturnButton to={"/cart"} />
+              <ReturnButton to={status === "approved" ? "/" : "/cart"} />
             </div>
           </div>
         </div>

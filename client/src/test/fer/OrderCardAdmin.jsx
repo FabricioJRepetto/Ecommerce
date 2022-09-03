@@ -2,7 +2,7 @@ import { resizer } from "../../helpers/resizer";
 import { formatDate } from "../../helpers/formatDate";
 import { useLocation, Link } from "react-router-dom";
 
-const OrderCard = ({ order }) => {
+const OrderCardAdmin = ({ order }) => {
   //! VOLVER A VER agregar ordenamiento y filtros
   const location = useLocation();
   const {
@@ -53,9 +53,8 @@ const OrderCard = ({ order }) => {
       )}
       <p>Cost de envío: {free_shipping ? "Gratis" : shipping_cost}</p>
       <p>Total: ${total}</p>
-      <p>- - -</p>
     </div>
   );
 };
 
-export default OrderCard;
+export default OrderCardAdmin;
