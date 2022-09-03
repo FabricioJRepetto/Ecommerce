@@ -22,7 +22,7 @@ div.profile-all-address-container > h1 {
   cursor: pointer;
 }
 .address-with-pin svg {
-  color: white;
+  color: #777777;
 }
 .address-buttons-container {
   display: flex;

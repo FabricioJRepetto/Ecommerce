@@ -184,7 +184,8 @@
 
 @media (max-width: 800px) {
   .navbar-profile-section {
-    display: none;
+    /* display: none; */
+    display: flex;
   }
 }
 @media (min-width: 801px) {
@@ -338,11 +339,11 @@
   transform: scale(0.9);
 }
 .navbar-avatar {
-  height: 1.5rem;
-  width: 1.5rem;
+  height: 1.7rem;
+  width: 1.7rem;
   border-radius: 50%;
   overflow: hidden;
-  margin: 0 1rem;
+  margin: 0 0.2rem;
 }
 .navbar-avatar img {
   height: 100%;

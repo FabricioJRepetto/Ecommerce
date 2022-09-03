@@ -6,11 +6,11 @@ import { resizer } from "../../helpers/resizer";
 import DeliveryProgress from "../common/DeliveryProgress";
 import Carousel from "../Home/Carousel/Carousel";
 import "./OrderCard.css";
+import { orderProducts } from "../../Redux/reducer/productsSlice";
 
 const OrderCard = ({ order }) => {
   const [productsImages, setProductsImages] = useState(false);
   const [notification] = useNotification();
-  const [productsExcessFlag, setProductsExcessFlag] = useState(false);
 
   useEffect(() => {
     let imagesArray = [];
@@ -86,8 +86,8 @@ const OrderCard = ({ order }) => {
                   {prod.product_name}
                   {prod.quantity > 1 && ` x${prod.quantity}`}
                 </p>
-              ) : i === 5 ? (
-                <p className="g-text-button">Ver más</p>
+              ) : i === order.products.length - 1 ? (
+                <p className="g-text-button">{`+${i - 4} productos...`}</p>
               ) : (
                 <></>
               )
@@ -113,7 +113,7 @@ const OrderCard = ({ order }) => {
         </div>
       )}
 
-      {order.status === "cancelled" && <p>Cancelada</p>}
+      {order.status === "cancelled" && <p>Compra cancelada</p>}
 
       {/* {order.status === "approved" && (
         <p>Pago: {formatDate(order.payment_date).slice(0, -6)}</p>
