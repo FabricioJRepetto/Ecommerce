@@ -1,14 +1,14 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate, useSearchParams, NavLink } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { loadCart } from "../../Redux/reducer/cartSlice";
-import "./PostSale.css";
+import { ReactComponent as Spinner } from "../../assets/svg/spinner.svg";
+import ReturnButton from "../common/ReturnButton";
 import Carousel from "../Home/Carousel/Carousel";
 import LoaderBars from "../common/LoaderBars";
 import DeliveryProgress from "../common/DeliveryProgress";
-import { ArrowBackIcon } from "@chakra-ui/icons";
-import { ReactComponent as Spinner } from "../../assets/svg/spinner.svg";
+import "./PostSale.css";
 
 const PostSale = () => {
   const [order, setOrder] = useState(false);
@@ -124,13 +124,13 @@ const PostSale = () => {
   const messageQuantity = () => {
     if (order.products.length === 1) {
       if (order.products[0].quantity > 1) {
-        return "Los productos ya son tuyos!";
+        return "¡Los productos ya son tuyos!";
       } else {
-        return "El producto ya es tuyo!";
+        return "¡El producto ya es tuyo!";
       }
     }
 
-    return "Los productos ya son tuyos!";
+    return "¡Los productos ya son tuyos!";
   };
 
   return (
@@ -154,9 +154,9 @@ const PostSale = () => {
           <div className="postsale-details-container">
             {status === "approved" && (
               <div>
-                <h1>YA CASI!</h1>
+                <h1>¡YA CASI!</h1>
                 <h3>{messageQuantity()}</h3>
-                <h3>Ahora estamos preparando el envío.</h3>
+                <h3>Ahora estamos preparando el envío</h3>
 
                 {order?.delivery_date ? (
                   <DeliveryProgress order={order} />
@@ -167,14 +167,14 @@ const PostSale = () => {
             )}
             {status !== "approved" && (
               <div>
-                <h1>HUBO ALGÚN ERROR...</h1>
-                <h3>Pero puedes retomar el pago!</h3>
+                <h1>HUBO UN ERROR...</h1>
+                <h3>¡Pero puedes retomar el pago!</h3>
                 <button className="g-white-button">
                   <a href={order?.payment_link}>Voy a intentarlo de nuevo</a>
                 </button>
                 <p className="postsale-text-margin">
                   También puedes encontrar el link de pago en tu perfil para
-                  realizarlo más tarde.
+                  realizarlo más tarde
                 </p>
               </div>
             )}
@@ -184,12 +184,7 @@ const PostSale = () => {
               Id de orden: <i>{order?.id}</i>
             </p>
             <div className="postsale-back-container">
-              <NavLink to={"/cart"}>
-                <span className="g-back-button g-text-button">
-                  <ArrowBackIcon />
-                  {"   regresar"}
-                </span>
-              </NavLink>
+              <ReturnButton to={status === "approved" ? "/" : "/cart"} />
             </div>
           </div>
         </div>

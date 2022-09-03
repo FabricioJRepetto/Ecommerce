@@ -1,0 +1,38 @@
+.profile-order-card-container {
+  background-color: #111111;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 10rem;
+  margin-top: 0.8rem;
+  padding: 0 1rem 0 2rem;
+}
+.profile-order-products-details {
+  display: flex;
+  align-items: center;
+}
+.profile-order-carousel-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: white;
+  position: relative;
+  overflow: visible clip;
+}
+.profile-order-img-container {
+  height: 8rem;
+  width: 8rem;
+}
+.profile-order-img-container img {
+  z-index: 1;
+  max-height: 100%;
+  max-width: 100%;
+}
+
+.profile-order-products-names-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-left: 2rem;
+}

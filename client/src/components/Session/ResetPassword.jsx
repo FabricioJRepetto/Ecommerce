@@ -1,20 +1,16 @@
 import { useState, useEffect } from "react";
-import { NavLink, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { useNotification } from "../../hooks/useNotification";
-import {
-  CloseIcon,
-  ArrowBackIcon,
-  ViewIcon,
-  ViewOffIcon,
-} from "@chakra-ui/icons";
+import { CloseIcon, ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import { useModal } from "../../hooks/useModal";
 import Modal from "../common/Modal";
 import LoaderBars from "../common/LoaderBars";
 import "./ResetPassword.css";
 import "../../App.css";
+import ReturnButton from "../common/ReturnButton";
 
 const ResetPassword = () => {
   const navigate = useNavigate();
@@ -103,13 +99,8 @@ const ResetPassword = () => {
         {response ? (
           <>
             <div className="reset-response">{response}</div>
-            <NavLink to={`${session ? "/" : "/signin"}`}>
-              <span className="g-back-button g-text-button">
-                <ArrowBackIcon />
-                {"   regresar"}
-              </span>
-              {/* //! VOLVER A VER que esto rediriga a la pagina anterior, no a home*/}
-            </NavLink>
+            <ReturnButton to={`${session ? "/" : "/signin"}`} />
+            {/* //! VOLVER A VER que esto rediriga a la pagina anterior, no a home*/}
           </>
         ) : (
           <form onSubmit={handleSubmit(changePassword)}>

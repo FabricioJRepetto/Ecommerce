@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate, NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useForm, useFieldArray } from "react-hook-form";
 import axios from "axios";
@@ -17,16 +17,12 @@ import { useNotification } from "../../hooks/useNotification";
 import { useModal } from "../../hooks/useModal";
 import Modal from "../../components/common/Modal";
 import SelectsNested from "./SelectsNested";
-import {
-  CloseIcon,
-  AddIcon,
-  DeleteIcon,
-  ArrowBackIcon,
-} from "@chakra-ui/icons";
+import { CloseIcon, AddIcon, DeleteIcon } from "@chakra-ui/icons";
 import { ReactComponent as Spinner } from "../../assets/svg/spinner.svg";
 import Checkbox from "../../components/common/Checkbox";
 import "./ProductForm.css";
 import "../../App.css";
+import ReturnButton from "../../components/common/ReturnButton";
 
 const ProductForm = () => {
   const [featuresQuantity, setFeaturesQuantity] = useState(1);
@@ -221,7 +217,6 @@ const ProductForm = () => {
   }, [focusFlag]);
 
   const handleAddImg = (e) => {
-    console.log("entra");
     const fileListArrayImg = Array.from(e.target.files);
     validateImgs(fileListArrayImg, warnTimer, productImg);
     setProductImg([...productImg, ...fileListArrayImg]);
@@ -893,13 +888,8 @@ const ProductForm = () => {
         </div>
       </form>
 
-      <NavLink to={"/profile/details"}>
-        {/* //! VOLVER A VER si está en CREAR enviar a /admin, en EDITAR a /admin/products */}
-        <span className="g-back-button g-text-button">
-          <ArrowBackIcon />
-          {"   regresar"}
-        </span>
-      </NavLink>
+      {/* //! VOLVER A VER si está en CREAR enviar a /admin, en EDITAR a /admin/products */}
+      <ReturnButton to={"/profile/details"} />
 
       <Modal
         isOpen={isOpenCreateProduct}

@@ -71,7 +71,7 @@ const Cart = () => {
   const getAddress = async () => {
     const { data } = await axios("/address");
     if (data.address) {
-      setAddress(data.address)
+      setAddress(data.address);
       if (!selectedAdd) {
         const def = data.address.find((e) => e.isDefault);
         setSelectedAdd(def);
@@ -121,7 +121,7 @@ const Cart = () => {
 
     //? crea session de stripe y redirige
     const { data } = await axios.post(`/stripe/${orderId || fastId}`);
-    notification("Serás redirigido a la plataforma de pago.", "", "warning");
+    notification("Serás redirigido a la plataforma de pago", "", "warning");
     setTimeout(() => {
       window.location.replace(data.url);
     }, 3000);
@@ -143,7 +143,7 @@ const Cart = () => {
 
     //? crea la preferencia para mp con la order y redirige
     const { data } = await axios.get(`/mercadopago/${orderId || fastId}`);
-    notification("Serás redirigido a la plataforma de pago.", "", "warning");
+    notification("Serás redirigido a la plataforma de pago", "", "warning");
     setTimeout(() => {
       window.location.replace(data.init_point);
     }, 3000);
@@ -316,7 +316,7 @@ const Cart = () => {
                                   }}
                                 />
                                 <div>
-                                  <p>Envío standard</p>
+                                  <p>Envío estándar</p>
                                   <p>{`llega ${deliverDate()}`}</p>
                                 </div>
                               </div>
@@ -338,7 +338,12 @@ const Cart = () => {
                             <div style={{ height: "2.4rem" }}>
                               {cart.free_ship_cart && (
                                 <del className="grey">
-                                  ${priceFormat(cart.products.length * SHIP_COST).int}
+                                  $
+                                  {
+                                    priceFormat(
+                                      cart.products.length * SHIP_COST
+                                    ).int
+                                  }
                                 </del>
                               )}
                               {cart.shipping_cost === 0 ? (

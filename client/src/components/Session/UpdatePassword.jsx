@@ -1,17 +1,12 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { useNotification } from "../../hooks/useNotification";
 import { avoidEnterSubmit } from "../../helpers/AvoidEnterSubmit";
 import LoaderBars from "../common/LoaderBars";
-import {
-  CloseIcon,
-  ArrowBackIcon,
-  ViewIcon,
-  ViewOffIcon,
-} from "@chakra-ui/icons";
+import { CloseIcon, ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
+import ReturnButton from "../common/ReturnButton";
 import "../../App.css";
 import "./UpdatePassword.css";
 
@@ -82,15 +77,11 @@ const UpdatePassword = () => {
       ) : response ? (
         <>
           <div className="change-password-response">{response}</div>
-          <NavLink to={"/profile/details"}>
-            <span className="g-back-button g-text-button">
-              <ArrowBackIcon />
-              {"   regresar"}
-            </span>
-          </NavLink>
+          <ReturnButton to={"/profile/details"} />
         </>
       ) : (
         <>
+          <h1>Cambiar contraseña</h1>
           <form
             onSubmit={handleSubmit(updatePassword)}
             onKeyDown={avoidEnterSubmit}
@@ -155,7 +146,10 @@ const UpdatePassword = () => {
               )}
             </span>
             <div className="title-text">
-              <span className="input-bottom-text" onClick={forgotPassword}>
+              <span
+                className="input-bottom-text g-text-button"
+                onClick={forgotPassword}
+              >
                 Olvidé mi contraseña
               </span>
             </div>
@@ -301,12 +295,7 @@ const UpdatePassword = () => {
               disabled={waitingResponse}
             />
           </form>
-          <NavLink to={"/profile/details"}>
-            <span className="g-back-button g-text-button">
-              <ArrowBackIcon />
-              {"   regresar"}
-            </span>
-          </NavLink>
+          <ReturnButton to={"/profile/details"} />
         </>
       )}
     </div>

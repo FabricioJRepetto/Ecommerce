@@ -1,15 +1,16 @@
 import { useState, useEffect } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { CloseIcon, ArrowBackIcon } from "@chakra-ui/icons";
+import { CloseIcon } from "@chakra-ui/icons";
 import { useModal } from "../../hooks/useModal";
 import Modal from "../common/Modal";
 import LoaderBars from "../common/LoaderBars";
 import "../../App.css";
 import "./ForgotPassword.css";
 import { useNotification } from "../../hooks/useNotification";
+import ReturnButton from "../common/ReturnButton";
 
 const ForgotPassword = () => {
   const { session } = useSelector((state) => state.sessionReducer);
@@ -67,13 +68,8 @@ const ForgotPassword = () => {
         {response ? (
           <>
             <div className="forgot-response">{response}</div>
-            <NavLink to={"/"}>
-              <span className="g-back-button g-text-button">
-                <ArrowBackIcon />
-                {"   regresar"}
-              </span>
-              {/* //! VOLVER A VER que esto rediriga a la pagina anterior, no a home*/}
-            </NavLink>
+            <ReturnButton to={"/"} />
+            {/* //! VOLVER A VER que esto rediriga a la pagina anterior, no a home*/}
           </>
         ) : (
           <form onSubmit={handleSubmitForgot(forgotPassword)}>
@@ -120,12 +116,7 @@ const ForgotPassword = () => {
                 value="Enviar email"
                 className="g-white-button"
               />
-              <NavLink to={`${session ? "/" : "/signin"}`}>
-                <span className="g-back-button g-text-button">
-                  <ArrowBackIcon />
-                  {"   regresar"}
-                </span>
-              </NavLink>
+              <ReturnButton to={`${session ? "/" : "/signin"}`} />
             </div>
           </form>
         )}

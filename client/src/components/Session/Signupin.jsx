@@ -12,14 +12,10 @@ import { useNotification } from "../../hooks/useNotification";
 import { useModal } from "../../hooks/useModal";
 import Modal from "../common/Modal";
 import LoaderBars from "../common/LoaderBars";
-import {
-  CloseIcon,
-  ArrowBackIcon,
-  ViewIcon,
-  ViewOffIcon,
-} from "@chakra-ui/icons";
+import { CloseIcon, ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import "./Signupin.css";
 import "../../App.css";
+import ReturnButton from "../common/ReturnButton";
 const { REACT_APP_OAUTH_CLIENT_ID } = process.env;
 
 const Signupin = () => {
@@ -494,12 +490,7 @@ const Signupin = () => {
         <div className="google-container">
           <span>O ingresa con tu cuenta de Google</span>
           <span className="google-signin-container" id="signInDiv"></span>
-          <NavLink to={"/"}>
-            <span className="g-back-button g-text-button">
-              <ArrowBackIcon />
-              {"   regresar"}
-            </span>
-          </NavLink>
+          <ReturnButton to={"/"} />
         </div>
       </div>
 
