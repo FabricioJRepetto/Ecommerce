@@ -439,8 +439,8 @@ const ProfileDetails = ({ address }) => {
       <div className="profile-detail-container">
         <h3>Email</h3>
         <span
-          className={`profile-email-container ${
-            emailVerified ? "" : "profile-email-not-verified-container"
+          className={`profile-email-container${
+            emailVerified ? "" : " profile-email-not-verified-container"
           }`}
         >
           {emailVerified === true ? (

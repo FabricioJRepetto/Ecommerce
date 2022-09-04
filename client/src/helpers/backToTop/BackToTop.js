@@ -26,7 +26,7 @@ const BackToTop = () => {
 
   return (
     <div
-      className={`backtotop-button ${visible ? "visible-btt" : ""}`}
+      className={`backtotop-button${visible ? " visible-btt" : ""}`}
       onClick={backToTop}
     >
       <Arrow className="icon-up" />

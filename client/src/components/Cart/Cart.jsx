@@ -184,8 +184,8 @@ const Cart = () => {
           {
             <button
               onClick={() => navigate("/cart/")}
-              className={`tab-button ${
-                render === "cart" ? "tab-button-active" : ""
+              className={`tab-button${
+                render === "cart" ? " tab-button-active" : ""
               }`}
             >
               {`Carrito ${
@@ -197,8 +197,8 @@ const Cart = () => {
           {
             <button
               onClick={() => navigate("/cart/saved")}
-              className={`tab-button ${
-                !(render === "cart") ? "tab-button-active" : ""
+              className={`tab-button${
+                !(render === "cart") ? " tab-button-active" : ""
               }`}
             >
               {`Guardados ${

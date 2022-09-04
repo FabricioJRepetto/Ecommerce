@@ -79,23 +79,23 @@ const Profile = () => {
         onClick={() => setShowMenu(false)}
       ></div> */}
       <div
-        className={`profile-menu-container profile-menu-container-placeholder profile-menu-container-placeholder-mobile ${
+        className={`profile-menu-container profile-menu-container-placeholder profile-menu-container-placeholder-mobile${
           showMenu
-            ? "profile-menu-container-show"
-            : "profile-menu-container-hide"
+            ? " profile-menu-container-show"
+            : " profile-menu-container-hide"
         }`}
       ></div>
       <div
-        className={`profile-menu-container profile-menu-container-fixed profile-menu-container-mobile ${
+        className={`profile-menu-container profile-menu-container-fixed profile-menu-container-mobile${
           showMenu
-            ? "profile-menu-container-show"
-            : "profile-menu-container-hide"
+            ? " profile-menu-container-show"
+            : " profile-menu-container-hide"
         }`}
       >
         <ul>
           <div
-            className={`profile-burger-container ${
-              !showMenu ? "profile-burger-container-hide" : ""
+            className={`profile-burger-container${
+              !showMenu ? " profile-burger-container-hide" : ""
             }`}
             onClick={() => setShowMenu(!showMenu)}
           >
