@@ -180,7 +180,7 @@ const Signupin = () => {
 
   return (
     <div className="signin-container">
-      <div className={`signin-inner ${flag && "signin-visible"}`}>
+      <div className={`signin-inner${flag ? " signin-visible" : ""}`}>
         <img
           src={require("../../assets/provider-logo.png")}
           alt="logo"
@@ -237,13 +237,13 @@ const Signupin = () => {
                 type="text"
                 placeholder="Contraseña"
                 autoComplete="off"
-                className={`g-input-two-icons ${
+                className={`g-input-two-icons${
                   watchSignin("password") === undefined ||
                   watchSignin("password") === ""
                     ? ""
                     : viewPassword.signin
                     ? ""
-                    : "g-password"
+                    : " g-password"
                 }`}
                 {...registerSignin("password", {
                   required: true,
@@ -360,13 +360,13 @@ const Signupin = () => {
                 type="text"
                 placeholder="Contraseña"
                 autoComplete="off"
-                className={`g-input-two-icons ${
+                className={`g-input-two-icons${
                   watchSignup("password") === undefined ||
                   watchSignup("password") === ""
                     ? ""
                     : viewPassword.signup
                     ? ""
-                    : "g-password"
+                    : " g-password"
                 }`}
                 {...registerSignup("password", {
                   required: true,
@@ -422,13 +422,13 @@ const Signupin = () => {
                 type="text"
                 placeholder="Repite tu contraseña"
                 autoComplete="off"
-                className={`g-input-two-icons ${
+                className={`g-input-two-icons${
                   watchSignup("repPassword") === undefined ||
                   watchSignup("repPassword") === ""
                     ? ""
                     : viewPassword.signupRep
                     ? ""
-                    : "g-password"
+                    : " g-password"
                 }`}
                 {...registerSignup("repPassword", {
                   required: true,

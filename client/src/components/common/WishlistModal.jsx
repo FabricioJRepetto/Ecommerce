@@ -24,8 +24,8 @@ const WishlistModal = ({ close }) => {
 
   return (
     <div
-      className={`card-modal-container ${
-        !loading ? "wishlist-modal-loaded" : ""
+      className={`card-modal-container${
+        !loading ? " wishlist-modal-loaded" : ""
       }`}
     >
       {loading ? (

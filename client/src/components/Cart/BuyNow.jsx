@@ -192,7 +192,7 @@ const BuyNow = () => {
                     src={product && product.images[0].imgURL}
                     alt="prod"
                     onLoad={() => setLoaded(true)}
-                    className={`buynow-img ${loaded && "visible"}`}
+                    className={`buynow-img${loaded ? " visible" : ""}`}
                   />
                 }
                 <div className="card-image-back-style"></div>

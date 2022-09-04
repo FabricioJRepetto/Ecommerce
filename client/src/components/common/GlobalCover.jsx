@@ -16,7 +16,7 @@ const GlobalCover = () => {
     // eslint-disable-next-line
   }, []);
 
-  return <div className={`globalLoader ${aux && "globalLoaded"}`}></div>;
+  return <div className={`globalLoader${aux ? " globalLoaded" : ""}`}></div>;
 };
 
 export default GlobalCover;

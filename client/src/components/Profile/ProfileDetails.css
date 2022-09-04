@@ -236,4 +236,12 @@
   .profile-detail-container form {
     align-self: auto;
   }
+  .profile-details-container > div.profile-detail-container:last-child {
+    justify-content: flex-end;
+  }
+  .profile-details-container
+    > div.profile-detail-container:last-child
+    > .profile-password-button {
+    margin-top: 0.7rem;
+  }
 }

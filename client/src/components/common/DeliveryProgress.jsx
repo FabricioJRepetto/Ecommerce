@@ -3,6 +3,7 @@ import { correctStyle } from "../../helpers/correctStyle";
 import { deliveryPercent } from "../../helpers/deliveryPercent";
 import { formatDate } from "../../helpers/formatDate";
 import { ReactComponent as Gift } from "../../assets/svg/gift.svg";
+import "./DeliveryProgress.css";
 
 const DeliveryProgress = ({ order }) => {
   const location = useLocation();
@@ -10,7 +11,11 @@ const DeliveryProgress = ({ order }) => {
 
   return (
     <div className="delivery-progress-container">
-      <p>{deliveryPercent(order.delivery_date, order.payment_date).state}</p>
+      <p
+        className={actualDate < order.delivery_date ? "" : "delivery-finished"}
+      >
+        {deliveryPercent(order.delivery_date, order.payment_date).state}
+      </p>
       {/* <p>{deliveryPercent(order.delivery_date, order.payment_date).percent}%</p> */}
       <div className="delivery-container">
         <div className="delivery-inner">
@@ -39,8 +44,11 @@ const DeliveryProgress = ({ order }) => {
         </>
       )}
 
-      {actualDate < order.delivery_date ? <p>Llega el</p> : <p>Llegó el</p>}
-      <b>{formatDate(order.delivery_date).slice(0, -6)}</b>
+      <p>
+        {" "}
+        {actualDate < order.delivery_date ? "Llega el " : "Llegó el "}
+        <b>{formatDate(order.delivery_date).slice(0, -6)}</b>
+      </p>
     </div>
   );
 };

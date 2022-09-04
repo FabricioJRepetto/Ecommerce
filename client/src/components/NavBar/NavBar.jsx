@@ -138,13 +138,13 @@ const NavBar = () => {
       <div className="navbar-dumb-hidden"></div>
 
       <div
-        className={`glitch-mobile-container ${
-          showMenu ? "glitch-mobile-container-show-menu" : ""
+        className={`glitch-mobile-container${
+          showMenu ? " glitch-mobile-container-show-menu" : ""
         }`}
       >
         <div
-          className={`little-glitch glitch-mobile ${
-            showMenu ? "little-glitch-show-menu" : ""
+          className={`little-glitch glitch-mobile${
+            showMenu ? " little-glitch-show-menu" : ""
           }`}
           onClick={
             location.pathname === "/orders/post-sale" ||
@@ -154,8 +154,8 @@ const NavBar = () => {
           }
         ></div>
         <div
-          className={`mini-glitch glitch-mobile ${
-            showMenu ? "mini-glitch-show-menu" : ""
+          className={`mini-glitch glitch-mobile${
+            showMenu ? " mini-glitch-show-menu" : ""
           }`}
           onClick={
             location.pathname === "/orders/post-sale" ||
@@ -171,10 +171,10 @@ const NavBar = () => {
       <div className="navbar">
         <div className="glitch-mobile-placeholder"></div>
         <div
-          className={`little-glitch glitch-desktop ${
+          className={`little-glitch glitch-desktop${
             location.pathname === "/orders/post-sale" ||
             location.pathname === "/orders/post-sale/"
-              ? "little-glitch-postsale"
+              ? " little-glitch-postsale"
               : ""
           }`}
           onClick={
@@ -254,10 +254,10 @@ const NavBar = () => {
 
                         <div className="navbar-modal-container">
                           <div
-                            className={`navbar-modal ${
+                            className={`navbar-modal${
                               profileModal
-                                ? "navbar-modal-visible"
-                                : "navbar-modal-hide"
+                                ? " navbar-modal-visible"
+                                : " navbar-modal-hide"
                             }`}
                           >
                             <div className="navbar-modal-menu-container">
@@ -355,8 +355,8 @@ const NavBar = () => {
                         <Fav className="wishlist-icon" />
                         <div className="navbar-modal-container-w">
                           <div
-                            className={`navbar-modal-w ${
-                              wishModal ? "visible" : "navbar-modal-hide"
+                            className={`navbar-modal-w${
+                              wishModal ? " visible" : " navbar-modal-hide"
                             }`}
                           >
                             {wishModal && (
@@ -382,12 +382,12 @@ const NavBar = () => {
               </div>
 
               <div
-                className={`navbar-central-subsection ${
-                  showSubsectionBar ? "hidden-box" : ""
-                } ${
+                className={`navbar-central-subsection${
+                  showSubsectionBar ? " hidden-box" : ""
+                }${
                   !session
-                    ? "navbar-subsection-signin-padding"
-                    : "navbar-subsection-profile-padding"
+                    ? " navbar-subsection-signin-padding"
+                    : " navbar-subsection-profile-padding"
                 }`}
               >
                 <div className="navbar-central-options">
@@ -425,13 +425,13 @@ const NavBar = () => {
       </div>
 
       <div
-        className={`navbar-menu-mobile-background ${
-          !showMenu ? "hide-menu-mobile-background" : ""
+        className={`navbar-menu-mobile-background${
+          !showMenu ? " hide-menu-mobile-background" : ""
         }`}
         onClick={() => setShowMenu(false)}
       ></div>
       <div
-        className={`navbar-menu-mobile ${showMenu ? "show-menu-mobile" : ""}`}
+        className={`navbar-menu-mobile${showMenu ? " show-menu-mobile" : ""}`}
       >
         <ul>
           {!session && (

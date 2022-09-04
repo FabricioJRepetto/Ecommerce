@@ -67,25 +67,25 @@ const Notification = (props) => {
      };
 
     return (
-        <div className={`notification-card-area ${shrink ? 'notif-shrink' : ''}`} 
+        <div className={`notification-card-area${shrink ? ' notif-shrink' : ''}`} 
             style={{pointerEvents: isOpen ? 'all' : 'none'}}>
 
            <div className='chromatic-container'>
-                <div className={`notification-color-placeholder ${isOpen && `notification-border-${color}`}`}></div>
-                <div className={`notification-color ${isOpen && 'color-open'}`}
+                <div className={`notification-color-placeholder${isOpen ? ` notification-border-${color}`:''}`}></div>
+                <div className={`notification-color${isOpen ? ' color-open':''}`}
                     style={{transitionDelay: `${(.08 / 3) * 1}s`, background: `hsl(0, 100%, 50%)`}}></div>
-                <div className={`notification-color ${isOpen && 'color-open'}`}
+                <div className={`notification-color${isOpen ? ' color-open':''}`}
                     style={{transitionDelay: `${(.08 / 3) * 2}s`, background: `hsl(120, 100%, 50%)`}}></div>
-                <div className={`notification-color ${isOpen && 'color-open'}`}
+                <div className={`notification-color${isOpen ? ' color-open':''}`}
                     style={{transitionDelay: `${(.08 / 3) * 3}s`, background: `hsl(240, 100%, 50%)`}}></div>
            </div>            
 
-            <div className={`notification-container ${isOpen && 'notif-open'}`}
+            <div className={`notification-container${isOpen ? ' notif-open':''}`}
                 onClick={() => closeNotification(true)}>
-                <div className={`notification-inner`}>
-                    {type !== 'error' && <div className={`notification-timer ${isOpen && 'timer-active'}`}></div>}
+                <div className='notification-inner'>
+                    {type !== 'error' && <div className={`notification-timer${isOpen ? ' timer-active':''}`}></div>}
                     {/* {url && <LinkIcon className='link-svg' />} */}
-                    {url && <div onClick={()=>navigate(url)} className={`notification-seemore ${isOpen && 'seemore-visible'}`}><ExternalLinkIcon /></div>}
+                    {url && <div onClick={()=>navigate(url)} className={`notification-seemore${isOpen ? ' seemore-visible':''}`}><ExternalLinkIcon /></div>}
                     <div className='notification-message'>
                         <p>{message}</p>
                     </div>

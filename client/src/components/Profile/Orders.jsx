@@ -1,25 +1,30 @@
 import React from "react";
 import { useAxios } from "../../hooks/useAxios";
+import LoaderBars from "../common/LoaderBars";
 import OrderCard from "./OrderCard";
+import "./Orders.css";
 
 const Orders = () => {
   const { data: orders, loading } = useAxios("GET", `/order/userall/`);
 
   return (
-    <div>
-      <h1>Compras</h1>
+    <div className="profile-all-orders-container">
       {!loading ? (
-        <div className="profile-orders-container">
-          {orders?.length ? (
-            React.Children.toArray(orders?.map((e) => <OrderCard order={e} />))
-          ) : (
-            <p>Aún no tienes compras</p>
-          )}
-        </div>
+        <>
+          <h1>Compras</h1>
+          <div className="profile-orders-container">
+            {orders?.length ? (
+              React.Children.toArray(
+                orders?.map((e) => <OrderCard order={e} />)
+              )
+            ) : (
+              <p>Aún no tienes compras</p>
+            )}
+          </div>
+        </>
       ) : (
-        <p>LOADING</p>
+        <LoaderBars />
       )}
-      {/* //! VOLVER A VER agregar loader */}
     </div>
   );
 };

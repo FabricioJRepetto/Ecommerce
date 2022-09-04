@@ -101,13 +101,13 @@ const UpdatePassword = () => {
                 type="text"
                 placeholder="Contraseña"
                 autoComplete="off"
-                className={`g-input-two-icons ${
+                className={`g-input-two-icons${
                   watch("oldPassword") === undefined ||
                   watch("oldPassword") === ""
                     ? ""
                     : viewPassword.oldPassword
                     ? ""
-                    : "g-password"
+                    : " g-password"
                 }`}
                 {...register("oldPassword", {
                   required: true,
@@ -177,12 +177,12 @@ const UpdatePassword = () => {
                 type="text"
                 placeholder="Nueva contraseña"
                 autoComplete="off"
-                className={`g-input-two-icons ${
+                className={`g-input-two-icons${
                   watch("password") === undefined || watch("password") === ""
                     ? ""
                     : viewPassword.password
                     ? ""
-                    : "g-password"
+                    : " g-password"
                 }`}
                 {...register("password", {
                   required: true,
@@ -238,13 +238,13 @@ const UpdatePassword = () => {
                 type="text"
                 placeholder="Repite la contraseña"
                 autoComplete="off"
-                className={`g-input-two-icons ${
+                className={`g-input-two-icons${
                   watch("repPassword") === undefined ||
                   watch("repPassword") === ""
                     ? ""
                     : viewPassword.repPassword
                     ? ""
-                    : "g-password"
+                    : " g-password"
                 }`}
                 {...register("repPassword", {
                   required: true,

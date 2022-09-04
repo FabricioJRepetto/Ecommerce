@@ -729,9 +729,9 @@ const ProductForm = () => {
         <>
           <label
             htmlFor="filesButton"
-            className={`g-white-button upload-images ${
+            className={`g-white-button upload-images${
               productImg?.length + imgsToEdit?.length >= 8 || waitingResponse
-                ? "upload-images-disabled"
+                ? " upload-images-disabled"
                 : ""
             }`}
           >
@@ -768,7 +768,7 @@ const ProductForm = () => {
               React.Children.toArray(
                 imgsToEdit.map(({ imgURL, _id }, i) => (
                   <div
-                    className={`form-img-product-container  ${
+                    className={`form-img-product-container ${
                       mainImgIndex === i ? "main-image" : "not-main-image"
                     }`}
                   >

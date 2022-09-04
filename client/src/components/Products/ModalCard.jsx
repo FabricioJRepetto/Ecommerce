@@ -25,32 +25,38 @@ const ModalCard = ({ productData, fav, close }) => {
     on_sale,
   } = productData;
 
-  const openProduct = (id) => { 
-        navigate(premium ? `/premium/${id}` : `/details/${id}`);
-        close(false);
-   }
+  const openProduct = (id) => {
+    navigate(premium ? `/premium/${id}` : `/details/${id}`);
+    close(false);
+  };
 
   return (
-    <div key={prodId}
-        onClick={() => openProduct(prodId)}
-        onMouseEnter={() => setVisible(true)}
-        onMouseLeave={() => setVisible(false)}
-        className="product-modal-card pointer">
-        
-        {session && visible &&
-            <div className="modal-card-wishlist-button-container">
-                <Fav visible={visible} fav={fav} prodId={prodId} modal position={false}/>
-            </div>}
+    <div
+      key={prodId}
+      onClick={() => openProduct(prodId)}
+      onMouseEnter={() => setVisible(true)}
+      onMouseLeave={() => setVisible(false)}
+      className="product-modal-card pointer"
+    >
+      {session && visible && (
+        <div className="modal-card-wishlist-button-container">
+          <Fav
+            visible={visible}
+            fav={fav}
+            prodId={prodId}
+            modal
+            position={false}
+          />
+        </div>
+      )}
 
-      <div className={`card-main-container ${visible && 'card-hover'}`}>
-        <div 
-          className="modal-card-img-container">
-            <img src={resizer(img, 96)} alt="product" />
-            <div className="card-image-back-style"></div>
+      <div className={`card-main-container${visible ? " card-hover" : ""}`}>
+        <div className="modal-card-img-container">
+          <img src={resizer(img, 96)} alt="product" />
+          <div className="card-image-back-style"></div>
         </div>
 
         <div className="card-details-container">
-
           <p className="modal-card-name-container modalcard-mrgn">{name}</p>
 
           <div className="card-price-container modalcard-mrgn">
@@ -70,7 +76,7 @@ const ModalCard = ({ productData, fav, close }) => {
 
           <div className="free-shipping modalcard-mrgn">
             {free_shipping && "envío gratis"}
-          </div>         
+          </div>
         </div>
       </div>
     </div>
