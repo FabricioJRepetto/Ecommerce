@@ -114,7 +114,7 @@
   }
 }
 @media (max-width: 720px) {
-  .profile-order-products-names-container {
+  .profile-price-mobile {
     display: none;
   }
   .profile-order-products-details {
