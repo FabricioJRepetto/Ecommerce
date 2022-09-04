@@ -102,11 +102,12 @@
     align-items: center;
     justify-content: space-around;
     width: 100%;
-    height: 175px;
+    height: 140px;
   }
   .profile-details-price-mobile + .delivery-progress-container {
     height: 80px;
     margin-top: 0;
+    margin-bottom: 0.5rem;
   }
   .profile-order-cancelled-text {
     margin-bottom: 1rem;
