@@ -59,6 +59,9 @@
   padding-bottom: 0.1rem;
   border-bottom: 1px solid #ffffff10;
 }
+.order-details-address-shippingcost-total-container > p {
+  text-align: left;
+}
 
 .order-details-free-shipping-text {
   color: #39b54a;
@@ -73,6 +76,7 @@
 }
 .order-details-shippingcost-total-container p {
   margin-left: 1rem;
+  text-align: right;
 }
 .order-details-last-container {
   margin: 1.5rem 0;
