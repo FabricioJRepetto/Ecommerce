@@ -2,9 +2,9 @@ import { NavLink } from "react-router-dom";
 import { ReactComponent as ArrowBack } from "../../assets/svg/arrow-back.svg";
 import "./ReturnButton.css";
 
-const ReturnButton = ({ to }) => {
+const ReturnButton = ({ to, onClick }) => {
   return (
-    <span className="return-button-container">
+    <span className="return-button-container" onClick={onClick}>
       <NavLink to={to}>
         <span className="return-button">
           <ArrowBack />

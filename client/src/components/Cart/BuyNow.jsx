@@ -167,13 +167,13 @@ const BuyNow = () => {
     // 259200000 (3 dias)
     const today = new Date(Date.now() + 259200000).getDay();
     let days = [
-      "Domingo",
-      "Lunes",
-      "Martes",
-      "Miercoles",
-      "Jueves",
-      "Viernes",
-      "Sabado",
+      "domingo",
+      "lunes",
+      "martes",
+      "miércoles",
+      "jueves",
+      "viernes",
+      "sábado",
     ];
     return ` el ${days[today]}`;
   };
@@ -289,7 +289,7 @@ const BuyNow = () => {
 
               <div className="buynow-sumary-section">
                 <div className="buynow-total">
-                  <p>subtotal:</p>
+                  <p>Subtotal:</p>
                   <div>
                     {product.on_sale && (
                       <div className="buynow-price-discount">
@@ -301,7 +301,7 @@ const BuyNow = () => {
                       </div>
                     )}
                     <div>
-                      <h3>{`x${quantity} $${
+                      <h3>{`${quantity > 1 ? quantity + "x " : ""} $${
                         priceFormat(
                           product.on_sale ? product.sale_price : product.price
                         ).int
@@ -318,14 +318,14 @@ const BuyNow = () => {
                 </div>
 
                 <div className="buynow-total">
-                  <p>envío:</p>
+                  <p>Envío:</p>
                   <div style={{ height: "2.8rem" }}>
                     {product.free_shipping && (
                       <del className="grey">${priceFormat(SHIP_COST).int}</del>
                     )}
                     {product.free_shipping && !flash_shipping ? (
                       <div className="cart-ship-total green">
-                        <h3>Envío gratis!</h3>
+                        <h3>¡Envío gratis!</h3>
                       </div>
                     ) : (
                       <div className="cart-shipping-cost-container">

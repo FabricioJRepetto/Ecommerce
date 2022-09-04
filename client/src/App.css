@@ -231,6 +231,22 @@ input.g-input-two-icons {
   animation: gradientTextAnim 10s infinite;
 }
 
+/* TEXTO GRADIENT */
+.g-gradient-text {
+  background: linear-gradient(
+    45deg,
+    #35a7ff 0%,
+    #7e54de 20%,
+    #f40259 60%,
+    #fea30d 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  background-size: 400%;
+  animation: gradientTextAnim 10s infinite;
+}
+
 /* PLACEHOLDER ERROR OCULTO */
 .g-hidden-placeholder {
   visibility: hidden;
