@@ -18,120 +18,83 @@ import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 const Results = () => {
-  const { wishlist } = useSelector((state) => state.cartReducer);
-  const querys = useSelector((state) => state.productsReducer.searchQuerys);
-  const { productsOwn } = useSelector((state) => state.productsReducer);
-  const { productsFound } = useSelector((state) => state.productsReducer);
-  const applied = useSelector(
-    (state) => state.productsReducer.productsAppliedFilters
-  );
-  const { productsFilters } = useSelector((state) => state.productsReducer);
-  const { breadCrumbs } = useSelector((state) => state.productsReducer);
+    const {wishlist} = useSelector((state) => state.cartReducer);    
+    const querys = useSelector((state) => state.productsReducer.searchQuerys);
+    const {productsOwn} = useSelector((state) => state.productsReducer);
+    const {productsFound} = useSelector((state) => state.productsReducer);
+    const applied = useSelector((state) => state.productsReducer.productsAppliedFilters);
+    const {productsFilters} = useSelector((state) => state.productsReducer);
+    const {breadCrumbs} = useSelector((state) => state.productsReducer);
+    
+    const [params] = useSearchParams();
+    const [open, setOpen] = useState('category');
+    const dispatch = useDispatch();
 
-  const [params] = useSearchParams();
-  const [open, setOpen] = useState("category");
-  const dispatch = useDispatch();
+    useEffect(() => {
+        (async () => {
+            
+            const category = params.get("category");
+            
+            let newQuery = "";
+            Object.entries(querys).forEach(([key, value]) => {
+                newQuery += key + "=" + value + "&";
+            });
 
-  useEffect(() => {
-    (async () => {
-      const category = params.get("category");
-      console.log(category);
+            const { data } = await axios(`/product/search/?${newQuery}`)                
+            
+            // const { data } = await axios(`/product/provider/?category=${category}`)
+            // aux = data;
+                        
+            // const { data } = await axios(`/product/promos`)
+            
+            dispatch(loadProductsOwn(data.db));
+            !category && dispatch(loadProductsFound(data.meli));
+            dispatch(loadFilters(data.filters));
+            dispatch(loadApplied(data.applied));
+            dispatch(loadBreadCrumbs(data.breadCrumbs));
+        })();
 
-      let newQuery = "";
-      Object.entries(querys).forEach(([key, value]) => {
-        newQuery += key + "=" + value + "&";
-      });
+        // eslint-disable-next-line
+    }, [querys]);
 
-      const { data } = await axios(`/product/search/?${newQuery}`);
+    const addFilter = async (obj) => {
+        let filter = obj.filter;
+        let value = obj.value;
+        dispatch(loadQuerys({...querys, [filter]: value}));
+    }
 
-      // const { data } = await axios(`/product/provider/?category=${category}`)
-      // aux = data;
+    const removeFilter = async (filter) => {
+        let aux = { ...querys };
+        delete aux[filter];
+        dispatch(loadQuerys(aux));
+    };
 
-      // const { data } = await axios(`/product/promos`)
+    return (
+        <div className='results-container'>
 
-      dispatch(loadProductsOwn(data.db));
-      !category && dispatch(loadProductsFound(data.meli));
-      dispatch(loadFilters(data.filters));
-      dispatch(loadApplied(data.applied));
-      dispatch(loadBreadCrumbs(data.breadCrumbs));
-    })();
+            <div className='bread-crumbs'>
+                {breadCrumbs?.length > 0 && 
+                    <>
+                    <button onClick={()=> removeFilter('category')}>x</button>
+                    {React.Children.toArray(
+                        breadCrumbs.map((c, index) => (
+                            <span key={c.id} onClick={ () => addFilter({filter: 'category', value: c.id})}>{ (index > 0 ? ' > ' : '') + c.name }</span>
+                        ))
+                    )}
+                    </>
+                }
+            </div>
 
-    // eslint-disable-next-line
-  }, [querys]);
+            <div className='results-container-inner'>
 
-  const addFilter = async (obj) => {
-    let filter = obj.filter;
-    let value = obj.value;
-    dispatch(loadQuerys({ ...querys, [filter]: value }));
-  };
+                <div className="results-filters">
+                    <div>
+                        {applied !== 'loading' && applied?.length > 0 && 
+                            React.Children.toArray(applied.map(f => (
+                                <div onClick={()=>removeFilter(f.id)}>{f.values[0].name}</div>
+                            )))
+                        }
 
-  const removeFilter = async (filter) => {
-    let aux = { ...querys };
-    delete aux[filter];
-    dispatch(loadQuerys(aux));
-  };
-
-  return (
-    <div className="results-container">
-      <div className="bread-crumbs">
-        {breadCrumbs?.length > 0 && (
-          <>
-            <button onClick={() => removeFilter("category")}>x</button>
-            {React.Children.toArray(
-              breadCrumbs.map((c, index) => (
-                <span
-                  key={c.id}
-                  onClick={() => addFilter({ filter: "category", value: c.id })}
-                >
-                  {(index > 0 ? " > " : "") + c.name}
-                </span>
-              ))
-            )}
-          </>
-        )}
-      </div>
-
-      <div className="results-container-inner">
-        <div className="results-filters">
-          <div>
-            {applied !== "loading" &&
-              applied?.length > 0 &&
-              React.Children.toArray(
-                applied.map((f) => (
-                  <div onClick={() => removeFilter(f.id)}>
-                    {f.values[0].name}
-                  </div>
-                ))
-              )}
-          </div>
-          {productsFilters !== "loading" &&
-            productsFilters?.length > 0 &&
-            React.Children.toArray(
-              productsFilters?.map((f) => (
-                <div
-                  key={f.id}
-                  className={`results-filter-container${
-                    open === f.id ? " open-filter" : ""
-                  }`}
-                >
-                  <div
-                    onClick={() => setOpen(open === f.id ? "" : f.id)}
-                    className="filter-title"
-                  >
-                    <b>{f.name}</b>
-                    <Arrow
-                      className={`filters-arrow-svg${
-                        open === f.id ? " open-arrow" : ""
-                      }`}
-                    />
-                  </div>
-                  {f.values.map((v) => (
-                    <div
-                      key={v.id}
-                      onClick={() => addFilter({ filter: f.id, value: v.id })}
-                      className="results-filter-option"
-                    >
-                      <p>{`${v.name} (${v.results})`}</p>
                     </div>
                   ))}
                 </div>

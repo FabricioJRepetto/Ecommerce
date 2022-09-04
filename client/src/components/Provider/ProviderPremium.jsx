@@ -13,14 +13,13 @@ const ProviderPremium = () => {
       (async () => {
         const { data } = await axios('/product/premium')
         data && setProducts(data);
-        console.log(data);
 
         setLoading(false);
       })();
     }, []);
 
   return (
-    <div>
+    <div className='providerstore-container'>
         <div className='providerstore-echo-inner'>
             <span>PROVIDER</span><br/>
                 PROVIDER <br/>
@@ -39,11 +38,10 @@ const ProviderPremium = () => {
             : React.Children.toArray(products.map((e, index) =>
                 <PremiumCard productData={e} direction={index%2 === 0 ? true : false}/>
             ))}
+            
+            <Footer />
         </div>
         
-        <Footer />
-        {/* <div style={{display: 'block'}}>
-        </div> */}
     </div>
   )
 }
