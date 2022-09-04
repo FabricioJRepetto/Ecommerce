@@ -35,7 +35,6 @@ const PremiumDetails = () => {
      }     
 
     useEffect(() => {
-        console.log(reference.current);
       const observer = new IntersectionObserver((entries) => {
             const [ entry ] = entries
             setIsVisible(entry.isIntersecting)
@@ -58,7 +57,6 @@ const PremiumDetails = () => {
         const { data } = await axios(`/product/${id}`);
         if (data) {
             setProduct(data);
-            console.log(data);
 
             let aux = data.images.map(e => ({
                 img: e.imgURL,
@@ -150,6 +148,15 @@ const PremiumDetails = () => {
                             style={{backgroundColor: product.premiumData.color}}></div>
                     </div>
 
+                    {product.id === '62df1257d0bcaed708e4feb7' && 
+                    <div className='pd-video-container'>
+                        <div>
+                            <video autoPlay muted controls loop controlsList="nodownload">
+                                <source src="https://res.cloudinary.com/dsyjj0sch/video/upload/v1662173482/NAVE_Arcade_mp4.mp4" type="video/mp4"></source>
+                            </video>
+                        </div>
+                    </div>}
+
                     {React.Children.toArray(product.premiumData.extraText.map(e => (
                         <div className='premiumdetails-section'
                             style={{ backgroundColor: e.bgColor }} >
@@ -158,8 +165,8 @@ const PremiumDetails = () => {
                                 <p>{e.text}</p>
                             </div>
 
-                            <img src={e.img} alt="content img"
-                                style={e.imgPos}/>
+                            {e.img && <img src={e.img} alt="content img"
+                                style={e.imgPos}/>}
                         </div>
                         ))
                     )}
@@ -186,9 +193,11 @@ const PremiumDetails = () => {
                     </div>
 
                     <div className='pd-logo-footer'>
-                        <div  style={{ WebkitMaskImage: `url('${resizer(product.premiumData.logo, 310)}')`,
-                            maskImage: `url('${resizer(product.premiumData.logo, 310)}')`}}>
-                        </div>
+                        {product.id === '62df1257d0bcaed708e4feb7'
+                            ? <video src="https://res.cloudinary.com/dsyjj0sch/video/upload/v1662187563/2F5TPqZn_03sjNI4_nb7shw.mp4" muted autoPlay width={300} loop style={{filter: 'grayscale(1) contrast(1.2)'}}></video>
+                            : <div  style={{ WebkitMaskImage: `url('${resizer(product.premiumData.logo, 310)}')`,
+                                maskImage: `url('${resizer(product.premiumData.logo, 310)}')`}}>
+                            </div>}
                     </div>
 
                     <div className={`premiumdetails-fixed ${isVisible ? '' : 'premiumdetails-fixed-on'}`}>

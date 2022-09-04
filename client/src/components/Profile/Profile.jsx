@@ -133,7 +133,6 @@ const Profile = () => {
   };
 
   const updateDetails = async (updateData) => {
-    console.log("updateData", updateData);
     try {
       const { data, statusText } = await axios.put(
         "/user/editProfile",
@@ -145,8 +144,6 @@ const Profile = () => {
         setValueEditDetails("lastname", "");
         return notification(data.message, "", "warning");
       }
-
-      console.log("data", data);
 
       dispatch(
         loadUserData({

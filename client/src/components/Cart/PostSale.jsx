@@ -23,7 +23,8 @@ const PostSale = () => {
   let status = params.get("status") || "cancelled";
 
   useEffect(() => {
-    (async () => {
+    !order && (async () => {
+        console.log('ejecuta useEffect');
       const { data } = await axios(`/order/${id}`);
       if (!data.products) {
         console.error("no order");
@@ -43,16 +44,13 @@ const PostSale = () => {
       setImages(aux);
 
       if (data && status === "approved") {
-        console.log("llega aca approved #1");
         //? background effect
         setBackground("postsale-approved animation-start");
         setTimeout(() => {
           setBackground("postsale-approved animation-loop");
         }, 6000);
-        console.log("llega aca approved #2");
 
         if (data.order_type === "cart") {
-          console.log("llega aca approved #3");
           //? vaciar carrito
           await axios.delete(`/cart/empty`);
 
@@ -62,24 +60,20 @@ const PostSale = () => {
           //? Quitar last_order en el carrito de la db
           await axios.put(`/cart/order/`);
         } else {
-          console.log("llega aca approved #3b");
           //? vaciar el buynow
           axios.post(`/cart/`, { product_id: "" });
         }
-        console.log("llega aca approved #4");
         //? Cambiar el estado a 'processing'
         await axios.put(`/order/${id}`, {
           status: "processing",
         });
-
-        console.log("llega aca approved #5");
+        
         //? en el back (choNotif):
         // cambia orden a pagada
         // resta unidades de cada stock
       }
 
       if (data && status !== "approved" && data.status !== "approved") {
-        console.log("llega aca not approved");
 
         setBackground("postsale-pending animation-start");
         setTimeout(() => {
@@ -87,13 +81,11 @@ const PostSale = () => {
         }, 6000);
         //? si llega como null o cancelled cambiar estado a "pending"
         if (status === "null" || status === "cancelled") {
-          console.log("llega aca cambiar estado");
 
           await axios.put(`/order/${id}`, {
             status: "pending",
           });
         } else {
-          console.log("llega aca cambiar estado");
           //? cambiar estado de la orden si el status no es aprobado en ninguno de los casos
           await axios.put(`/order/${id}`, {
             status,
@@ -106,10 +98,10 @@ const PostSale = () => {
 
   const deliveryWaiter = async (id) => {
     try {
-      console.log("pidiendo orden nueva");
+      console.log("Esperando orden actualizada...");
       const { data } = await axios(`/order/${id}`);
       if (data.payment_date) {
-        console.log("orden nueva recibida");
+        console.log("...actualización recibida.");
         setOrder(data);
       } else {
         throw new Error("");

@@ -129,7 +129,6 @@ const BuyNow = () => {
     });
     // crea la preferencia para mp con la order y ridirige
     const { data } = await axios.get(`/mercadopago/${orderId}`);
-    console.log(data);
     notification("Serás redirigido a la plataforma de pago.", "", "warning");
     setTimeout(() => {
       window.location.replace(data.init_point);

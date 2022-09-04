@@ -39,7 +39,6 @@ const AddAddress = ({
       setValue("isDefault", addressToEdit.isDefault);
       setAddressToEdit(null);
     }
-    console.log(prop);
     // eslint-disable-next-line
   }, []);
 

@@ -171,13 +171,15 @@
 
 .pd-logo-footer {
     display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
     margin: 5rem;
 }
 .pd-logo-footer div {
     height: 310px;
     width: 310px;
-    background: #151515;    
+    background: #ffffff;    
 }
 
 .premiumdetails-fixed {
@@ -207,4 +209,19 @@
 }
 .premiumdetails-fixed-on {
     bottom: 0;
+}
+
+.pd-video-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 2rem;
+    background-color: black;
+    z-index: 3;
+}
+.pd-video-container div {
+    max-width: 60vw;
+}
+.pd-video-container video {
+    width: 100%;
 }

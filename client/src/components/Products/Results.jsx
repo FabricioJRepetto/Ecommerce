@@ -34,7 +34,6 @@ const Results = () => {
         (async () => {
             
             const category = params.get("category");
-            console.log(category);
             
             let newQuery = "";
             Object.entries(querys).forEach(([key, value]) => {
