@@ -34,11 +34,12 @@ const OrderCard = ({ order }) => {
 
   return (
     <div className="profile-order-card-container">
-      <div className="profile-order-products-details">
-        {/* {order.products?.map((pic) => (
+      <span className="profile-details-price-mobile">
+        <div className="profile-order-products-details">
+          {/* {order.products?.map((pic) => (
         <img key={pic.img} src={resizer(pic.img)} alt={"product"} />
       ))} */}
-        {/* {productsImages.length && (
+          {/* {productsImages.length && (
           <div className="profile-order-carousel-container">
             <Carousel
               images={productsImages}
@@ -51,50 +52,55 @@ const OrderCard = ({ order }) => {
             <div className="card-image-back-style"></div>
           </div>
         )} */}
-        {productsImages.length && productsImages.length > 1 ? (
-          <div className="profile-order-carousel-container">
-            <Carousel
-              images={productsImages}
-              interval={2500}
-              pausable={false}
-              width="8rem"
-              height="8rem"
-              id={order.id}
-            />
-            <div className="card-image-back-style"></div>
-          </div>
-        ) : (
-          productsImages.length &&
-          productsImages.length === 1 && (
-            <div className="profile-order-carousel-container profile-order-img-container">
-              <img
-                key={productsImages[0].img}
-                src={productsImages[0].img}
-                alt={"product"}
+          {productsImages.length && productsImages.length > 1 ? (
+            <div className="profile-order-carousel-container">
+              <Carousel
+                images={productsImages}
+                interval={2500}
+                pausable={false}
+                width="8rem"
+                height="8rem"
+                id={order.id}
               />
               <div className="card-image-back-style"></div>
             </div>
-          )
-        )}
-
-        {/* <p>{order.description}</p> */}
-        <div className="profile-order-products-names-container">
-          {React.Children.toArray(
-            order.products.map((prod, i) =>
-              i < 5 ? (
-                <p>
-                  {prod.product_name}
-                  {prod.quantity > 1 && ` x${prod.quantity}`}
-                </p>
-              ) : i === order.products.length - 1 ? (
-                <p className="g-text-button">{`+${i - 4} productos...`}</p>
-              ) : (
-                <></>
-              )
+          ) : (
+            productsImages.length &&
+            productsImages.length === 1 && (
+              <div className="profile-order-carousel-container profile-order-img-container">
+                <img
+                  key={productsImages[0].img}
+                  src={productsImages[0].img}
+                  alt={"product"}
+                />
+                <div className="card-image-back-style"></div>
+              </div>
             )
           )}
+
+          {/* <p>{order.description}</p> */}
+          <div className="profile-order-products-names-container">
+            {React.Children.toArray(
+              order.products.map((prod, i) =>
+                i < 5 ? (
+                  <p>
+                    {prod.quantity > 1 && `${prod.quantity}x `}
+                    {prod.product_name}
+                  </p>
+                ) : i === order.products.length - 1 ? (
+                  <p className="g-text-button">{`+${i - 4} productos...`}</p>
+                ) : (
+                  <></>
+                )
+              )
+            )}
+          </div>
         </div>
-      </div>
+
+        <h3 className="profile-price-mobile">
+          ${order.total + order.shipping_cost}
+        </h3>
+      </span>
 
       {/* {order.status !== "pending" && (
         <p>{formatDate(order.expiration_date_from).slice(0, -6)}</p>
@@ -105,7 +111,7 @@ const OrderCard = ({ order }) => {
           <p>Expira el {formatDate(order.expiration_date_to).slice(0, -6)}</p>
           {order.payment_link && (
             <div>
-              <a style={{ color: "#3483fa" }} href={order.payment_link}>
+              <a href={order.payment_link}>
                 <button className="g-white-button">Finalizar compra</button>
               </a>
             </div>
@@ -113,7 +119,9 @@ const OrderCard = ({ order }) => {
         </div>
       )}
 
-      {order.status === "cancelled" && <p>Compra cancelada</p>}
+      {order.status === "cancelled" && (
+        <p className="profile-order-cancelled-text">Compra cancelada</p>
+      )}
 
       {/* {order.status === "approved" && (
         <p>Pago: {formatDate(order.payment_date).slice(0, -6)}</p>
@@ -153,7 +161,9 @@ const OrderCard = ({ order }) => {
           : `Envío: $${order.shipping_cost}`}
       </p> */}
 
-      <h3>${order.total + order.shipping_cost}</h3>
+      <h3 className="profile-price-desktop">
+        ${order.total + order.shipping_cost}
+      </h3>
     </div>
   );
 };

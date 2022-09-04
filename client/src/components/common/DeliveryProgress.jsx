@@ -44,8 +44,11 @@ const DeliveryProgress = ({ order }) => {
         </>
       )}
 
-      {actualDate < order.delivery_date ? <p>Llega el</p> : <p>Llegó el</p>}
-      <b>{formatDate(order.delivery_date).slice(0, -6)}</b>
+      <p>
+        {" "}
+        {actualDate < order.delivery_date ? "Llega el " : "Llegó el "}
+        <b>{formatDate(order.delivery_date).slice(0, -6)}</b>
+      </p>
     </div>
   );
 };
