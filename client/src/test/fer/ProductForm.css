@@ -37,7 +37,7 @@
   z-index: 2;
 }
 .main-image {
-  border: 0.2rem solid red;
+  border: 0.2rem solid white;
 }
 .not-main-image {
   border: 0.2rem solid transparent;
@@ -45,8 +45,16 @@
 .main-image-text {
   position: absolute;
   width: 150px;
-  background-color: red;
-  color: black;
+  background: linear-gradient(
+    45deg,
+    #35a7ff 0%,
+    #7e54de 20%,
+    #f40259 60%,
+    #fea30d 100%
+  ); /* //! VOLVER A VER cambiar color de fondo de avatar */
+  background-size: 400%;
+  animation: gradientTextAnim 5s infinite;
+  color: white;
   top: -1rem;
   font-weight: 500;
 }
@@ -59,8 +67,16 @@
   z-index: 1;
 }
 .not-main-image-text-container:hover {
-  background-color: rgba(255, 0, 0, 0.8);
-  color: black;
+  background: linear-gradient(
+    45deg,
+    #35a7ffbb 0%,
+    #7e54debb 20%,
+    #f40259bb 60%,
+    #fea30dbb 100%
+  ); /* //! VOLVER A VER cambiar color de fondo de avatar */
+  background-size: 400%;
+  animation: gradientTextAnim 5s infinite;
+  color: white;
   font-weight: 500;
 }
 .not-main-image-text {

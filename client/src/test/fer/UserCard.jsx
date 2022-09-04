@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import Card from "../../components/Products/Card";
 import AddressCard from "./AddressCard";
-import OrderCard from "./OrderCard";
+import OrderCardAdmin from "./OrderCardAdmin";
 
 const UserCard = ({ user, openBanUser, openUnbanUser, openPromoteUser }) => {
   const [addresses, setAddresses] = useState([]);
@@ -98,14 +98,14 @@ const UserCard = ({ user, openBanUser, openUnbanUser, openPromoteUser }) => {
             <h4> No se encontraron órdenes</h4>
           ) : (
             <>
-              <h4>Órdenes</h4>
+              <h4>Compras</h4>
               {React.Children.toArray(
-                orders.map((order) => <OrderCard order={order} />)
+                orders.map((order) => <OrderCardAdmin order={order} />)
               )}
             </>
           )
         ) : (
-          <button onClick={() => getOrders(_id)}>Obtener Órdenes</button>
+          <button onClick={() => getOrders(_id)}>Obtener Compras</button>
         )}
         {showWishlist ? (
           !wishlist.length ? (

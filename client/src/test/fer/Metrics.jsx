@@ -34,9 +34,9 @@ const Metrics = () => {
       <h4>Productos vendidos: {metrics.productsSold}</h4>
       <h4>Ganancias totales: {metrics.totalProfits}</h4>
       <h4>Productos deseados: {metrics.productsWished}</h4>
-      <h4>Órdenes completadas: {metrics.ordersApproved}</h4>
-      <h4>Órdenes pendientes: {metrics.ordersPending}</h4>
-      <h4>Órdenes expiradas: {metrics.ordersExpired}</h4>
+      <h4>Compras completadas: {metrics.ordersApproved}</h4>
+      <h4>Compras pendientes: {metrics.ordersPending}</h4>
+      <h4>Compras expiradas: {metrics.ordersExpired}</h4>
     </div>
   );
 };

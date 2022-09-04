@@ -1,17 +1,14 @@
-import React from "react";
+import { useLocation } from "react-router-dom";
+import { ReactComponent as Pin } from "../../assets/svg/pin.svg";
+import "./AddressCard.css";
 
 const AddressCard = ({ address }) => {
+  const location = useLocation();
+
   return (
-    <div>
-      <p>{`${address.street_name} ${address.street_number}, ${address.zip_code}, ${address.city}, ${address.state}.`}</p>
-      {/* <button onClick={() => editAddress(address._id)}>edit</button>
-      <button onClick={() => deleteAddress(address._id)}>delete</button>
-      {address.isDefault ? (
-        <p>⭐</p>
-      ) : (
-        <button onClick={() => setDefault(address._id)}>set as default</button>
-      )} */}
-      <p>- - -</p>
+    <div className="address-card-container">
+      <p>{`${address.street_name} ${address.street_number}, ${address.zip_code}, ${address.city}, ${address.state}`}</p>
+      {location.pathname === "/admin/users" && address.isDefault && <Pin />}
     </div>
   );
 };

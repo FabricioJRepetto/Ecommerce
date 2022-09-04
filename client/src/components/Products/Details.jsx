@@ -20,7 +20,7 @@ const Details = () => {
   const querys = useSelector((state) => state.productsReducer.searchQuerys);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { addToCart, buyNow} = useCheckout();
+  const { addToCart, buyNow } = useCheckout();
 
   const [data, setData] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -101,7 +101,7 @@ const Details = () => {
     })();
     // eslint-disable-next-line
   }, [id]);
-  
+
   const addFilter = async (obj) => {
     let aux = { ...querys };
     delete aux.q;
@@ -170,7 +170,9 @@ const Details = () => {
                       priceFormat(data.on_sale ? data.sale_price : data.price)
                         .cents || ""
                     }`}</h2>
-                    <b className="green">{data.free_shipping && "Envío gratis"}</b>
+                    <b className="green">
+                      {data.free_shipping && "Envío gratis"}
+                    </b>
                   </div>
 
                   <button
@@ -211,8 +213,8 @@ const Details = () => {
               {data.description && (
                 <button
                   onClick={() => handleTabChange(true)}
-                  className={`tab-button ${
-                    description ? "tab-button-active" : ""
+                  className={`tab-button${
+                    description ? " tab-button-active" : ""
                   }`}
                 >
                   Descripción
@@ -222,8 +224,8 @@ const Details = () => {
               {data.attributes && (
                 <button
                   onClick={() => handleTabChange(false)}
-                  className={`tab-button ${
-                    !description ? "tab-button-active" : ""
+                  className={`tab-button${
+                    !description ? " tab-button-active" : ""
                   }`}
                 >
                   Atributos
@@ -237,11 +239,11 @@ const Details = () => {
               </div>
             ) : (
               <div className="details-attributes-container">
-                <div 
-                 className={`all-attributes-container ${
-                    attributesColumns ? "attributes-two-columns" : ""
+                <div
+                  className={`all-attributes-container${
+                    attributesColumns ? " attributes-two-columns" : ""
                   }`}
-                  style={{ height: attributesHeight, width: 'fit-content' }}
+                  style={{ height: attributesHeight, width: "fit-content" }}
                 >
                   {React.Children.toArray(
                     data.attributes?.map(

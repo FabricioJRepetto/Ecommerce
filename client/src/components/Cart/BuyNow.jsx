@@ -111,7 +111,7 @@ const BuyNow = () => {
     });
     // crea session de stripe y redirige
     const { data } = await axios.post(`/stripe/${orderId}`);
-    notification("Serás redirigido a la plataforma de pago.", "", "warning");
+    notification("Serás redirigido a la plataforma de pago", "", "warning");
     setTimeout(() => {
       window.location.replace(data.url);
     }, 4000);
@@ -129,7 +129,9 @@ const BuyNow = () => {
     });
     // crea la preferencia para mp con la order y ridirige
     const { data } = await axios.get(`/mercadopago/${orderId}`);
-    notification("Serás redirigido a la plataforma de pago.", "", "warning");
+
+    notification("Serás redirigido a la plataforma de pago", "", "warning");
+
     setTimeout(() => {
       window.location.replace(data.init_point);
     }, 3000);
@@ -191,7 +193,7 @@ const BuyNow = () => {
                     src={product && product.images[0].imgURL}
                     alt="prod"
                     onLoad={() => setLoaded(true)}
-                    className={`buynow-img ${loaded && "visible"}`}
+                    className={`buynow-img${loaded ? " visible" : ""}`}
                   />
                 }
                 <div className="card-image-back-style"></div>
@@ -277,7 +279,7 @@ const BuyNow = () => {
                         }}
                       />
                       <div>
-                        <p>Envío standard</p>
+                        <p>Envío estándar</p>
                         <p>{`llega ${deliverDate()}`}</p>
                       </div>
                     </div>

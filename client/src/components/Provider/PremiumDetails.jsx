@@ -1,18 +1,18 @@
-import React, { useEffect, useState, useRef } from 'react'
-import axios from 'axios'
-import { useParams } from 'react-router-dom'
-import { useSelector } from 'react-redux';
-import { useNotification } from '../../hooks/useNotification';
-import { useCheckout } from '../../hooks/useCheckout';
-import { priceFormat } from '../../helpers/priceFormat';
-import { resizer } from '../../helpers/resizer';
-import LoaderBars from '../common/LoaderBars';
-import Carousel from '../Home/Carousel/Carousel';
-import Footer from '../common/Footer';
-import { ArrowDownIcon } from '@chakra-ui/icons';
-import { WishlistButton } from '../Products/WishlistButton';
+import React, { useEffect, useState, useRef } from "react";
+import axios from "axios";
+import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { useNotification } from "../../hooks/useNotification";
+import { useCheckout } from "../../hooks/useCheckout";
+import { priceFormat } from "../../helpers/priceFormat";
+import { resizer } from "../../helpers/resizer";
+import LoaderBars from "../common/LoaderBars";
+import Carousel from "../Home/Carousel/Carousel";
+import Footer from "../common/Footer";
+import { ArrowDownIcon } from "@chakra-ui/icons";
+import { WishlistButton } from "../Products/WishlistButton";
 
-import './PremiumDetails.css'
+import "./PremiumDetails.css";
 
 const PremiumDetails = () => {
     const { id } = useParams();
@@ -227,8 +227,11 @@ const PremiumDetails = () => {
                     <Footer />
                   </div>
             }
-        </div>
-    )
-}
 
-export default PremiumDetails
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default PremiumDetails;

@@ -3,7 +3,7 @@
   background: #111111;
   position: relative;
   height: 100px;
-  transition: height 0.1s ease;
+  transition: height 0.2s ease;
   overflow: hidden;
 }
 .modal-card-loading {

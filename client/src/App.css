@@ -214,17 +214,27 @@ input.g-input-two-icons {
 .g-text-button {
   cursor: pointer;
   font-weight: 400;
+  color: rgba(255, 255, 255, 0.6);
+}
+.g-text-button:hover {
+  background: linear-gradient(
+    45deg,
+    #35a7ff 0%,
+    #7e54de 20%,
+    #f40259 60%,
+    #fea30d 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  background-size: 400%;
+  animation: gradientTextAnim 10s infinite;
 }
 
 /* PLACEHOLDER ERROR OCULTO */
 .g-hidden-placeholder {
   visibility: hidden;
   font-size: 0.8rem;
-}
-
-/* BOTON "REGRESAR" */
-.g-back-button {
-  color: white;
 }
 
 /* MENSAJE DE ERROR PARA INPUTS */
@@ -261,4 +271,3 @@ input.g-input-two-icons {
   /* outline-offset: 5px;
     outline: 1px solid rgb(255, 255, 255); */
 }
-
