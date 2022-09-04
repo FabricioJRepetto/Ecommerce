@@ -93,6 +93,7 @@
   } */
   .profile-order-card-container .delivery-progress-container {
     width: 100%;
+    margin-left: 0;
   }
   .profile-price-desktop {
     display: none;
