@@ -28,18 +28,22 @@ export const WishlistButton = ({
         const { data } = await axios.post(`/wishlist/${id}`);
         dispatch(loadWishlist(data.list?.products));
         notification(
-          "Producto agregado a favoritos.",
+          "Producto agregado a la lista de deseados",
           "/profile/wishlist",
           "success"
         );
       } else {
         const { data } = await axios.delete(`/wishlist/${id}`);
         dispatch(loadWishlist(data.list?.products));
-        notification("Producto eliminado de favoritos.", "", "warning");
+        notification(
+          "Producto eliminado de la lista de deseados",
+          "",
+          "warning"
+        );
       }
     } else {
       notification(
-        "Inicia sesión para agregar favoritos.",
+        "Inicia sesión para agregar productos a la lista de deseados",
         "/signin",
         "warning"
       );

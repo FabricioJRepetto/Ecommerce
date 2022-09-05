@@ -139,22 +139,20 @@
 }
 
 .profile-option-selected-container {
-  width: 90vw;
+  width: 100%;
   min-height: 80vh;
   height: fit-content;
   display: flex;
   justify-content: center;
   align-items: center;
   margin-top: 2rem;
+  position: relative;
 }
 .profile-option-selected-container h1 {
   margin-bottom: 2rem;
 }
 
-.profile-wishlistcard-container {
-  background: white;
-  padding: 20px;
-}
+/* VOLVER A VER quitar estilos de abajo */
 
 .profile-history-container {
   display: flex;

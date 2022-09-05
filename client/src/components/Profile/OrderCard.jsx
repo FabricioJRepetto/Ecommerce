@@ -1,16 +1,12 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { useNotification } from "../../hooks/useNotification";
 import { formatDate } from "../../helpers/formatDate";
-import { resizer } from "../../helpers/resizer";
+import { priceFormat } from "../../helpers/priceFormat";
 import DeliveryProgress from "../common/DeliveryProgress";
 import Carousel from "../Home/Carousel/Carousel";
 import "./OrderCard.css";
-import { orderProducts } from "../../Redux/reducer/productsSlice";
 
 const OrderCard = ({ order, setOrderDetails }) => {
   const [productsImages, setProductsImages] = useState(false);
-  const [notification] = useNotification();
 
   useEffect(() => {
     let imagesArray = [];
@@ -119,7 +115,7 @@ const OrderCard = ({ order, setOrderDetails }) => {
       {order.delivery_date && <DeliveryProgress order={order} />}
 
       <h3 className="profile-price-desktop">
-        ${order.total + order.shipping_cost}
+        ${priceFormat(order.total + order.shipping_cost).int}
       </h3>
     </div>
   );
