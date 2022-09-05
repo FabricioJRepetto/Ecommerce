@@ -34,7 +34,7 @@ const WishlistModal = ({ close }) => {
         </div>
       ) : (
         <div className="wishlist-modal-container">
-          <div className="modal-card-header">Favoritos</div>
+          <div className="modal-card-header">Lista de deseados</div>
           {data.products.length > 0 ? (
             <div className="wishlist-modal-card-container">
               {React.Children.toArray(
@@ -44,13 +44,15 @@ const WishlistModal = ({ close }) => {
               )}
             </div>
           ) : (
-            <p className="modal-wishlist-empty">Aún no tienes favoritos</p>
+            <p className="modal-wishlist-empty">
+              Aún no tienes productos deseados
+            </p>
           )}
           <div
             onClick={() => [navigate("/profile/wishlist"), close()]}
             className="modal-card-all-favs pointer all-favs-text-container"
           >
-            <ChromaticText text="Ver todos los favoritos" />
+            <ChromaticText text="Ver todos los productos deseados" />
           </div>
         </div>
       )}

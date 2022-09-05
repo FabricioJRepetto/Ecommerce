@@ -1,30 +1,34 @@
-import React from 'react';
-import Card from '../Products/Card';
+import React from "react";
+import LoaderBars from "../common/LoaderBars";
+import Card from "../Products/Card";
+import "./Wishlist.css";
 
-const Wishlist = ({ loading, wishlist, wl_id}) => {
+const Wishlist = ({ loading, wishlist, wl_id }) => {
   return (
     <div>
-        <h1>Wishlist</h1>
-        {!loading ? (
-        <div className="profile-wishlistcard-container">
-            {wishlist.length ? (
-            React.Children.toArray(
+      {!loading ? (
+        <>
+          <h1>Lista de deseados</h1>
+          <div className="profile-wishlistcard-container">
+            {wishlist?.length ? (
+              React.Children.toArray(
                 wishlist?.map((product) => (
-                <Card
+                  <Card
                     productData={product}
                     fav={wl_id.includes(product._id)}
-                />
+                  />
                 ))
-            )
+              )
             ) : (
-            <p>Wishlist empty</p>
+              <p>Aún no has agregado productos a tu lista de deseados</p>
             )}
-        </div>
-        ) : (
-        <div>LOADING</div>
-        )}
+          </div>
+        </>
+      ) : (
+        <LoaderBars />
+      )}
     </div>
-  )
-}
+  );
+};
 
-export default Wishlist
+export default Wishlist;
