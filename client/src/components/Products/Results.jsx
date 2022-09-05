@@ -61,8 +61,8 @@ const Results = () => {
   const addFilter = async (obj) => {
     let filter = obj.filter;
     let value = obj.value;
-    dispatch(loadQuerys({ ...querys, [filter]: value }));
-  };
+        dispatch(loadQuerys({...querys, [filter]: value}));
+    }
 
   const removeFilter = async (filter) => {
     let aux = { ...querys };
