@@ -8,7 +8,7 @@ import Carousel from "../Home/Carousel/Carousel";
 import "./OrderCard.css";
 import { orderProducts } from "../../Redux/reducer/productsSlice";
 
-const OrderCard = ({ order }) => {
+const OrderCard = ({ order, setOrderDetails }) => {
   const [productsImages, setProductsImages] = useState(false);
   const [notification] = useNotification();
 
@@ -21,7 +21,7 @@ const OrderCard = ({ order }) => {
     // eslint-disable-next-line
   }, []);
 
-  const cancelOrder = async (id) => {
+  /*   const cancelOrder = async (id) => {
     const { statusText } = await axios.put(`/order/${id}`, {
       status: "cancelled",
     });
@@ -30,28 +30,15 @@ const OrderCard = ({ order }) => {
       "",
       "warning"
     );
-  };
+  }; */
 
   return (
-    <div className="profile-order-card-container">
+    <div
+      className="profile-order-card-container"
+      onClick={() => setOrderDetails({ ...order, images: productsImages })}
+    >
       <span className="profile-details-price-mobile">
         <div className="profile-order-products-details">
-          {/* {order.products?.map((pic) => (
-        <img key={pic.img} src={resizer(pic.img)} alt={"product"} />
-      ))} */}
-          {/* {productsImages.length && (
-          <div className="profile-order-carousel-container">
-            <Carousel
-              images={productsImages}
-              interval={2500}
-              pausable={false}
-              width="8rem"
-              height="8rem"
-              id={order._id}
-            />
-            <div className="card-image-back-style"></div>
-          </div>
-        )} */}
           {productsImages.length && productsImages.length > 1 ? (
             <div className="profile-order-carousel-container">
               <Carousel
@@ -102,16 +89,12 @@ const OrderCard = ({ order }) => {
         </h3>
       </span>
 
-      {/* {order.status !== "pending" && (
-        <p>{formatDate(order.expiration_date_from).slice(0, -6)}</p>
-      )} */}
-
       {order.status === "pending" && (
         <div>
           <p>Expira el {formatDate(order.expiration_date_to).slice(0, -6)}</p>
           {order.payment_link && (
             <div>
-              <a href={order.payment_link}>
+              <a href={order.payment_link} onClick={(e) => e.stopPropagation()}>
                 <button className="g-white-button">Finalizar compra</button>
               </a>
             </div>
@@ -123,10 +106,6 @@ const OrderCard = ({ order }) => {
         <p className="profile-order-cancelled-text">Compra cancelada</p>
       )}
 
-      {/* {order.status === "approved" && (
-        <p>Pago: {formatDate(order.payment_date).slice(0, -6)}</p>
-      )} */}
-
       {/* //! volver a ver: Quitar este botón ? */}
       {/* {order.status === "pending" && (
         <button
@@ -137,29 +116,7 @@ const OrderCard = ({ order }) => {
         </button>
       )} */}
 
-      {/* <p>{order.payment_source}</p>
-      <p>
-        Número de orden: <i>{order.id}</i>
-      </p> */}
-
       {order.delivery_date && <DeliveryProgress order={order} />}
-
-      {/* {order.status === "pending" && (
-        <p>
-          Dirección de envío:{" "}
-          {`
-                            ${order.shipping_address?.street_name}
-                            ${order.shipping_address?.street_number},
-                            ${order.shipping_address?.city}
-                        `}
-        </p>
-      )} */}
-
-      {/* <p>
-        {order.free_shipping
-          ? "Envío gratis"
-          : `Envío: $${order.shipping_cost}`}
-      </p> */}
 
       <h3 className="profile-price-desktop">
         ${order.total + order.shipping_cost}

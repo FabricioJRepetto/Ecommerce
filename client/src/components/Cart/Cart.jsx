@@ -166,13 +166,13 @@ const Cart = () => {
     let hours = 24 - now.getHours() + 15;
     const target = new Date(Date.now() + hours * 3600000 + 172800000).getDay();
     let days = [
-      "Domingo",
-      "Lunes",
-      "Martes",
-      "Miercoles",
-      "Jueves",
-      "Viernes",
-      "Sábado",
+      "domingo",
+      "lunes",
+      "martes",
+      "miércoles",
+      "jueves",
+      "viernes",
+      "sábado",
     ];
     return ` el ${days[target]}`;
   };
@@ -326,7 +326,7 @@ const Cart = () => {
 
                         <div className="cart-sumary-section">
                           <div className="cart-total">
-                            <p>subtotal:</p>
+                            <p>Subtotal:</p>
                             <div>
                               <h3>${priceFormat(total).int}</h3>
                               <p>{priceFormat(total).cents}</p>
@@ -334,7 +334,7 @@ const Cart = () => {
                           </div>
 
                           <div className="cart-total">
-                            <p>envío:</p>
+                            <p>Envío:</p>
                             <div style={{ height: "2.4rem" }}>
                               {cart.free_ship_cart && (
                                 <del className="grey">
@@ -348,7 +348,7 @@ const Cart = () => {
                               )}
                               {cart.shipping_cost === 0 ? (
                                 <div className="green">
-                                  <h3>Envío gratis!</h3>
+                                  <h3>¡Envío gratis!</h3>
                                 </div>
                               ) : (
                                 <div className="cart-shipping-cost-container">
