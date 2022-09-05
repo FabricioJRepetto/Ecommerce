@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { formatDate } from "../../helpers/formatDate";
+import { priceFormat } from "../../helpers/priceFormat";
 import DeliveryProgress from "../common/DeliveryProgress";
 import ReturnButton from "../common/ReturnButton";
 import Carousel from "../Home/Carousel/Carousel";
@@ -101,8 +102,8 @@ const OrderDetails = ({ order, setOrderDetails }) => {
                   )}
                   {prod.quantity > 1 ? ` ${prod.quantity}x ` : ` `}$
                   {prod.sale_price !== prod.price && prod.sale_price !== 0
-                    ? `${prod.sale_price}`
-                    : `${prod.price}`}
+                    ? `${priceFormat(prod.sale_price).int}`
+                    : `${priceFormat(prod.price).int}`}
                 </p>
               </div>
             ))
@@ -126,13 +127,13 @@ const OrderDetails = ({ order, setOrderDetails }) => {
             ) : order.flash_shipping ? (
               <p>
                 <span className="g-gradient-text">Envío Flash</span> $
-                {order.shipping_cost}
+                {priceFormat(order.shipping_cost).int}
               </p>
             ) : (
-              <p>Envío estándar ${order.shipping_cost}</p>
+              <p>Envío estándar ${priceFormat(order.shipping_cost).int}</p>
             )}
 
-            <h2>${order.total + order.shipping_cost}</h2>
+            <h2>${priceFormat(order.total + order.shipping_cost).int}</h2>
           </span>
         </span>
       </span>

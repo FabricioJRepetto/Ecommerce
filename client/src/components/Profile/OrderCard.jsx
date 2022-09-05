@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { formatDate } from "../../helpers/formatDate";
+import { priceFormat } from "../../helpers/priceFormat";
 import DeliveryProgress from "../common/DeliveryProgress";
 import Carousel from "../Home/Carousel/Carousel";
 import "./OrderCard.css";
@@ -114,7 +115,7 @@ const OrderCard = ({ order, setOrderDetails }) => {
       {order.delivery_date && <DeliveryProgress order={order} />}
 
       <h3 className="profile-price-desktop">
-        ${order.total + order.shipping_cost}
+        ${priceFormat(order.total + order.shipping_cost).int}
       </h3>
     </div>
   );

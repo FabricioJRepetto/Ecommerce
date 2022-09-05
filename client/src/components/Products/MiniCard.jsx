@@ -97,11 +97,13 @@ const MiniCard = ({
               </div>
 
               <div className="free-shipping mc-mrgn">
-                {free_shipping && "envío gratis"}
+                {free_shipping && "Envío gratis"}
               </div>
 
-              <div className='minicard-prod-name-container mc-mrgn'>
-                <div className={`minicard-prod-name${visible ? " visible":''}`}>
+              <div className="minicard-prod-name-container mc-mrgn">
+                <div
+                  className={`minicard-prod-name${visible ? " visible" : ""}`}
+                >
                   {name}
                 </div>
               </div>

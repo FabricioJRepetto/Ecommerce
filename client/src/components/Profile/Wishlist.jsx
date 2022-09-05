@@ -1,19 +1,19 @@
 import React from "react";
 import LoaderBars from "../common/LoaderBars";
-import Card from "../Products/Card";
+import WishlistCard from "./WishlistCard";
 import "./Wishlist.css";
 
 const Wishlist = ({ loading, wishlist, wl_id }) => {
   return (
-    <div>
+    <>
       {!loading ? (
-        <>
+        <div className="profile-wishlist-container">
           <h1>Lista de deseados</h1>
-          <div className="profile-wishlistcard-container">
+          <div>
             {wishlist?.length ? (
               React.Children.toArray(
                 wishlist?.map((product) => (
-                  <Card
+                  <WishlistCard
                     productData={product}
                     fav={wl_id.includes(product._id)}
                   />
@@ -23,11 +23,11 @@ const Wishlist = ({ loading, wishlist, wl_id }) => {
               <p>Aún no has agregado productos a tu lista de deseados</p>
             )}
           </div>
-        </>
+        </div>
       ) : (
         <LoaderBars />
       )}
-    </div>
+    </>
   );
 };
 

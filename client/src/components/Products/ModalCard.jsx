@@ -75,7 +75,7 @@ const ModalCard = ({ productData, fav, close }) => {
           </div>
 
           <div className="free-shipping modalcard-mrgn">
-            {free_shipping && "envío gratis"}
+            {free_shipping && "Envío gratis"}
           </div>
         </div>
       </div>
