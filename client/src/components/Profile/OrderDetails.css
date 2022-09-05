@@ -20,15 +20,50 @@
   padding-bottom: 0.1rem;
   border-bottom: 1px solid #ffffff10;
 }
-.order-details-product-quantity {
-  display: block;
-  min-width: 195px;
-}
-.order-details-products-price-container > div .order-details-product-link {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+.order-details-product-link {
   text-align: left;
+}
+
+@media (min-width: 1024px) {
+  .order-details-product-quantity {
+    width: 75%;
+  }
+}
+@media (max-width: 799px) {
+  .order-details-products-price-container
+    > div
+    > .order-details-product-quantity
+    + p {
+    margin: auto 0;
+    /*  display: flex;
+    align-items: center;
+    justify-content: flex-end; */
+  }
+  .order-details-products-price-container > div svg {
+    left: -1.8rem;
+    top: -0.5rem;
+  }
+  .order-details-product-quantity {
+    min-width: 195px;
+    max-width: 50%;
+  }
+}
+@media (min-width: 800px) {
+  .order-details-products-price-container > div .order-details-product-link {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
+  }
+  .order-details-products-price-container > div svg {
+    bottom: -0.3rem;
+    left: -1.9rem;
+  }
+  .order-details-product-quantity {
+    display: block;
+    min-width: 195px;
+    max-width: 65%;
+  }
 }
 
 .order-details-products-price-container
@@ -36,20 +71,20 @@
   > .order-details-product-quantity
   + p {
   position: relative;
-  width: 7rem;
+  width: 9rem;
   text-align: right;
   white-space: nowrap;
 }
 .order-details-products-price-container > div svg {
   color: orangered;
   position: absolute;
-  bottom: -0.3rem;
   transform: scale(0.8);
-  left: -1.5rem;
 }
 
 .order-details-off {
   color: orangered;
+  position: absolute;
+  right: 5.5rem;
 }
 .order-details-address-shippingcost-total-container {
   display: flex;
@@ -73,6 +108,9 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
+}
+.order-details-shippingcost-total-container .g-gradient-text {
+  white-space: nowrap;
 }
 .order-details-shippingcost-total-container p {
   margin-left: 1rem;

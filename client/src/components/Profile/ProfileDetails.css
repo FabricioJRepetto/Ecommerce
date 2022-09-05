@@ -89,7 +89,7 @@
     #7e54de85 20%,
     #f4025985 60%,
     #fea30d85 100%
-  ); /* //! VOLVER A VER cambiar color de fondo de avatar */
+  );
   background-size: 400%;
   animation: gradientTextAnim 5s infinite;
   border-radius: 50%;

@@ -91,16 +91,20 @@ const OrderDetails = ({ order, setOrderDetails }) => {
                   </p>
                 </span>
                 <p>
-                  {prod.sale_price !== prod.price && (
+                  {prod.sale_price !== prod.price && prod.sale_price !== 0 && (
                     <>
-                      <Sale />
                       <span className="order-details-off">
-                        -{(prod.sale_price * 100) / prod.price}%{" "}
+                        <Sale />
+                        {`-${Math.round(
+                          100 - (prod.sale_price * 100) / prod.price
+                        )}% `}
                       </span>
                     </>
                   )}
-                  {prod.quantity > 1 && `${prod.quantity}x `}$
-                  {prod.quantity * prod.sale_price}
+                  {prod.quantity > 1 ? ` ${prod.quantity}x ` : ` `}$
+                  {prod.sale_price !== prod.price && prod.sale_price !== 0
+                    ? `${prod.sale_price}`
+                    : `${prod.price}`}
                 </p>
               </div>
             ))
@@ -122,8 +126,9 @@ const OrderDetails = ({ order, setOrderDetails }) => {
             {!order.shipping_cost ? (
               <p className="order-details-free-shipping-text">Envío gratis</p>
             ) : order.flash_shipping ? (
-              <p className="g-gradient-text">
-                Envío Flash ${order.shipping_cost}
+              <p>
+                <span className="g-gradient-text">Envío Flash</span> $
+                {order.shipping_cost}
               </p>
             ) : (
               <p>Envío estándar ${order.shipping_cost}</p>
