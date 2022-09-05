@@ -11,8 +11,6 @@ const OrderDetails = ({ order, setOrderDetails }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    //!order && navigate("/profile/orders");
-
     return () => {
       setOrderDetails(null);
     };

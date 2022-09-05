@@ -8,10 +8,8 @@ import Footer from "../common/Footer";
 import { ReactComponent as Spinner } from "../../assets/svg/spinner.svg";
 import { loadQuerys } from "../../Redux/reducer/productsSlice";
 import { priceFormat } from "../../helpers/priceFormat";
-
-import "./Details.css";
-
 import { useCheckout } from "../../hooks/useCheckout";
+import "./Details.css";
 
 const Details = () => {
   let { id } = useParams();

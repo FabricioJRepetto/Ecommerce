@@ -1,16 +1,11 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { useNotification } from "../../hooks/useNotification";
 import { formatDate } from "../../helpers/formatDate";
-import { resizer } from "../../helpers/resizer";
 import DeliveryProgress from "../common/DeliveryProgress";
 import Carousel from "../Home/Carousel/Carousel";
 import "./OrderCard.css";
-import { orderProducts } from "../../Redux/reducer/productsSlice";
 
 const OrderCard = ({ order, setOrderDetails }) => {
   const [productsImages, setProductsImages] = useState(false);
-  const [notification] = useNotification();
 
   useEffect(() => {
     let imagesArray = [];
