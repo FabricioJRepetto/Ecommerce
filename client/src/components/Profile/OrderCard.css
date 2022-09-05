@@ -4,7 +4,7 @@
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  min-width: 375px;
+  min-width: 350px;
   height: 10rem;
   margin-top: 0.8rem;
   padding: 0 1rem 0 2rem;
@@ -93,6 +93,7 @@
   } */
   .profile-order-card-container .delivery-progress-container {
     width: 100%;
+    margin-left: 0;
   }
   .profile-price-desktop {
     display: none;
