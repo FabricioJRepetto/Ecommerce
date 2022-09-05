@@ -98,12 +98,12 @@ const PremiumDetails = () => {
                             <div className='premiumdetails-price'>
                                 <span>${priceFormat(product.price).int}</span>
                                 <span>{priceFormat(product.price).cents}</span>
-                                {product.free_shipping && <p className='provider-text'> Envío gratis!</p>}                                
+                                {product.free_shipping && <p className='provider-text'> Envío gratis!</p>}
+                                {product.available_quantity < 1 && <div className='premiumdetails-nostock' title="Fuera de stock">Fuera de stock</div>}
                             </div>
                             
                             <div ref={reference} 
                                 className='premiumdetails-buttons'>                                    
-                                {product.available_quantity < 1 && <p className='premiumdetails-nostock'>Fuera de stock</p>}
                                 <button
                                     className="g-white-button details-button"
                                     disabled={product.available_quantity < 1}
@@ -148,11 +148,11 @@ const PremiumDetails = () => {
                             style={{backgroundColor: product.premiumData.color}}></div>
                     </div>
 
-                    {product.id === '62df1257d0bcaed708e4feb7' && 
+                    {product.premiumData.video && 
                     <div className='pd-video-container'>
                         <div>
                             <video autoPlay muted controls loop controlsList="nodownload">
-                                <source src="https://res.cloudinary.com/dsyjj0sch/video/upload/v1662173482/NAVE_Arcade_mp4.mp4" type="video/mp4"></source>
+                                <source src={product.premiumData.video} type="video/mp4"></source>
                             </video>
                         </div>
                     </div>}
@@ -230,8 +230,6 @@ const PremiumDetails = () => {
 
         </div>
       )}
-    </div>
-  );
-};
+    
 
 export default PremiumDetails;

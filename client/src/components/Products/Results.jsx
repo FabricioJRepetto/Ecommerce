@@ -96,10 +96,8 @@ const Results = () => {
                         }
 
                     </div>
-                  ))}
                 </div>
-              ))
-            )}
+              
         </div>
 
         <div className="results-inner">
@@ -144,7 +142,6 @@ const Results = () => {
           )}
         </div>
       </div>
-    </div>
   );
 };
 
