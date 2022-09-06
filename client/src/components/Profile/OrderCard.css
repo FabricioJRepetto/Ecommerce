@@ -66,12 +66,19 @@
   width: 6rem;
   text-align: right;
 }
-.profile-order-cancelled-text {
-  font-size: 1.3rem;
+.profile-order-cancelled-text.premiumdetails-nostock {
   color: red;
   height: 80px;
   display: flex;
   align-items: center;
+  font-size: 1.5rem;
+}
+.profile-order-expired-text.premiumdetails-nostock {
+  color: red;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
 }
 
 @media (min-width: 1240px) {
@@ -110,9 +117,9 @@
     margin-top: 0;
     margin-bottom: 0.5rem;
   }
-  .profile-order-cancelled-text {
+  /*   .profile-order-cancelled-text {
     margin-bottom: 1rem;
-  }
+  } */
 }
 @media (max-width: 720px) {
   .profile-price-mobile {
