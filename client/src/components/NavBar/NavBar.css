@@ -543,7 +543,7 @@
 .navbar-signin-button svg {
   transform: scale(0.9);
   position: absolute;
-  left: 0.6rem;
+  left: -.5rem;
 }
 .navbar-signin-button a {
   cursor: pointer;
