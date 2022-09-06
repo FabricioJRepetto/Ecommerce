@@ -70,6 +70,7 @@ const productSchema = new Schema(
             video: String,
             textColor: String,
             logo: String,
+            carouselImg: [{}],
             extraText: [{}]
         }
     },

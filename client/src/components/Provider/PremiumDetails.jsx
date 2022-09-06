@@ -9,7 +9,7 @@ import { resizer } from "../../helpers/resizer";
 import LoaderBars from "../common/LoaderBars";
 import Carousel from "../Home/Carousel/Carousel";
 import Footer from "../common/Footer";
-import { ArrowDownIcon } from "@chakra-ui/icons";
+import { ArrowDownIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import { WishlistButton } from "../Products/WishlistButton";
 
 import "./PremiumDetails.css";
@@ -23,18 +23,7 @@ const PremiumDetails = () => {
     const [notification] = useNotification();
     const { addToCart, buyNow } = useCheckout();
     const { wishlist } = useSelector((state) => state.cartReducer);
-
-    const polaroidImages = [
-        {img: "https://res.cloudinary.com/dsyjj0sch/image/upload/v1662420012/1_tjlbux.png"},
-        {img: "https://res.cloudinary.com/dsyjj0sch/image/upload/v1662420012/2_drc3z5.png"},
-        {img: "https://res.cloudinary.com/dsyjj0sch/image/upload/v1662420012/3_xa2fc2.png"},
-        {img: "https://res.cloudinary.com/dsyjj0sch/image/upload/v1662420012/4_ozppbd.png"},
-        {img: "https://res.cloudinary.com/dsyjj0sch/image/upload/v1662420012/5_yl2jr5.png"},
-        {img: "https://res.cloudinary.com/dsyjj0sch/image/upload/v1662420012/6_i6tfdj.png"},
-        {img: "https://res.cloudinary.com/dsyjj0sch/image/upload/v1662420013/7_u4scro.png"},
-        {img: "https://res.cloudinary.com/dsyjj0sch/image/upload/v1662420013/8_qhnpsp.png"},
-        {img: "https://res.cloudinary.com/dsyjj0sch/image/upload/v1662420013/9_ujedwi.png"},
-    ]    
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
     const reference = useRef(null)
     const [isVisible, setIsVisible] = useState(true)
@@ -46,6 +35,18 @@ const PremiumDetails = () => {
             attributesSection.current.scrollIntoView({behavior: "smooth", block: "center", inline: "nearest"});
         }
      }
+
+
+    const handleWindowWidth = () => {
+        setWindowWidth(window.innerWidth);
+    };
+
+    useEffect(() => {
+        window.addEventListener("resize", handleWindowWidth);
+        return () => {
+        window.removeEventListener("resize", handleWindowWidth);
+        };
+    }, []);
 
     useEffect(() => {
       const observer = new IntersectionObserver((entries) => {
@@ -95,57 +96,62 @@ const PremiumDetails = () => {
                         <div className='provider-premium-sign'></div>
                         
                         <div className='premiumdetails-details'
-                            style={{color: product.premiumData.textColor ? product.premiumData.textColor : 'white'}}>
+                            style={{color: product.premiumData.textColor ? product.premiumData.textColor : 'white', backgroundColor: windowWidth <= 1240 && product.premiumData.color }}>
                                 
                             <span className='pd-favButton-container'>
                                 <WishlistButton prodId={product.id} visible fav={wishlist.includes(product.id)} position={false}/>
                             </span>
-
+                            
                             {product.premiumData.logo 
                                 ? <div className='premiumdetails-logo'>
                                     <img src={product.premiumData.logo} alt="" />
-                                  </div>
-                                : <h1 className='premiumdetails-name' >{product.name}</h1> }
-                            
-                            <h2>{product.premiumData.miniDescription}</h2>
-                            <div className='premiumdetails-price'>
-                                <span>${priceFormat(product.price).int}</span>
-                                <span>{priceFormat(product.price).cents}</span>
-                                {product.free_shipping && <p className='provider-text'> Envío gratis!</p>}
-                                {product.available_quantity < 1 && <div className='premiumdetails-nostock' title="Fuera de stock">Fuera de stock</div>}
-                            </div>
-                            
-                            <div ref={reference} 
-                                className='premiumdetails-buttons'>                                    
-                                <button
-                                    className="g-white-button details-button"
-                                    disabled={product.available_quantity < 1}
-                                    onClick={() => addToCart(id)}
-                                >
-                                    Agregar al carrito
-                                </button>
-                                <button
-                                    className="g-white-button details-button"
-                                    disabled={product.available_quantity < 1}
-                                    onClick={() => buyNow(id)}
-                                >
-                                    Comprar ahora
-                                </button>
-                            </div>
-
-                            {product.main_features && (
-                                <div className="premiumdetails-mainfeatures">           
-                                    <ul>
-                                        {product.main_features.map((e) => (
-                                        <li key={e}>· {e}</li>
-                                        ))}
-                                    </ul>
                                 </div>
-                            )}
-                            <div className='premiumdetails-toAttributesButton' 
-                                onClick={scrollTo}>
-                                    Ver especificaciones
-                                    <ArrowDownIcon/>
+                                : <h1 className='premiumdetails-name' >{product.name}</h1> }
+
+                            <div className="pd-head-price">
+                                <h2>{product.premiumData.miniDescription}</h2>
+
+                                <div className='premiumdetails-price'>
+                                    <span>${priceFormat(product.price).int}</span>
+                                    <span>{priceFormat(product.price).cents}</span>
+                                    {product.free_shipping && <p className='provider-text'> Envío gratis!</p>}
+                                    {product.available_quantity < 1 && <div className="pd-stock-container">
+                                            <div className='premiumdetails-nostock' title="Fuera de stock">Fuera de stock</div>
+                                        </div>}
+                                </div>
+                                
+                                <div ref={reference} 
+                                    className='premiumdetails-buttons'>                                    
+                                    <button
+                                        className="g-white-button details-button"
+                                        disabled={product.available_quantity < 1}
+                                        onClick={() => addToCart(id)}
+                                    >
+                                        Agregar al carrito
+                                    </button>
+                                    <button
+                                        className="g-white-button details-button"
+                                        disabled={product.available_quantity < 1}
+                                        onClick={() => buyNow(id)}
+                                    >
+                                        Comprar ahora
+                                    </button>
+                                </div>
+
+                                {product.main_features && (
+                                    <div className="premiumdetails-mainfeatures">           
+                                        <ul>
+                                            {product.main_features.map((e) => (
+                                            <li key={e}>· {e}</li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
+                                <div className='premiumdetails-toAttributesButton' 
+                                    onClick={scrollTo}>
+                                        Ver especificaciones
+                                        <ArrowDownIcon/>
+                                </div>
                             </div>
                         </div>
 
@@ -178,7 +184,7 @@ const PremiumDetails = () => {
                                 <p>{e.text}</p>
                             </div>
 
-                            {e.img && <img src={e.img} alt="content img"
+                            {e.img && <img src={e.img} alt="section img"
                                 style={e.imgPos}/>}
                             {e.video && <div className="pd-section-video-container" style={e.vidPos}>
                                     <video autoPlay playsInline muted disablePictureInPicture loop >
@@ -190,7 +196,7 @@ const PremiumDetails = () => {
                     )}
 
                     {product.id === '6316471837c51526ec170292' && <div className="pd-second-carousel-container">
-                            <Carousel images={polaroidImages}
+                            <Carousel images={product.premiumData.carouselImg}
                                 indicators
                                 pausable={false}
                                 width={'50vw'}
@@ -201,10 +207,10 @@ const PremiumDetails = () => {
                     <div ref={attributesSection} 
                     className={`tab-container pd-tab`} 
                     onClick={()=>setTabOpen(!tabOpen)}
-                    style={{height: tabOpen ? `${product.attributes.length * 2.2 +'rem'}` : '2.5rem'}}>
+                    style={{height: tabOpen ? `${(product.attributes.length * 2) + 5 +'rem'}` : '2.5rem'}}>
                         <div className="tab-button-container">                           
                             <button className='tab-button tab-button-active'>
-                                Atributos
+                                Atributos <ChevronDownIcon className={`pd-tab-icon ${tabOpen && 'pd-tab-icon-close'}`}/>
                             </button>
                         </div>
                         <div className='premiumdetails-attributes'>
