@@ -128,6 +128,13 @@
     max-height: 100%;
     height: auto;
 }
+.pd-section-video-container {
+    position: absolute;
+    max-width: 60vw;
+}
+.pd-section-video-container video {    
+    width: 100%;
+}
 
 .provider-premium-sign {
     position: absolute;
@@ -181,6 +188,9 @@
     width: 310px;
     background: #ffffff;    
 }
+.pd-logo-footer video {
+    pointer-events: none;
+}
 
 .premiumdetails-fixed {
     position: sticky;
@@ -224,6 +234,30 @@
 }
 .pd-video-container video {
     width: 100%;
+}
+
+.pd-second-carousel-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    text-align: left;
+    color: #202020;
+    background: linear-gradient(-45deg, rgba(239,56,39,1) 0%, rgba(239,56,39,1) 1%, rgba(255,130,0,1) 1%, rgba(255,130,0,1) 2%, rgba(255,181,0,1) 2%, rgba(255,181,0,1) 3%, rgba(120,190,32,1) 3%, rgba(120,190,32,1) 4%, rgba(25,140,217,1) 4%, rgba(25,140,217,1) 5%, rgba(239,233,218,1) 5%);
+    background-size: 100% 105%;
+    background-position: right 0 bottom 0;
+}
+.pd-second-carousel-container h1 {
+    margin-left: 1rem;
+}
+
+.attributes-outter {
+    height: fit-content;
+}
+.pd-tab {
+    overflow: hidden;
+    height: 2.5rem;
+    transition: height .5s ease;
 }
 
 /* !EFECTO GLITCH PARA TEXTO! */
