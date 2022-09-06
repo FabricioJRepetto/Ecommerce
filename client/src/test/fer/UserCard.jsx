@@ -109,19 +109,17 @@ const UserCard = ({ user, openBanUser, openUnbanUser, openPromoteUser }) => {
         )}
         {showWishlist ? (
           !wishlist.length ? (
-            <h4> No se encontró Lista de Deseados</h4>
+            <h4> No se encontraron Favoritos</h4>
           ) : (
             <>
-              <h4>Lista de Deseados</h4>
+              <h4>Favoritos</h4>
               {React.Children.toArray(
                 wishlist.map((product) => <Card productData={product} />)
               )}
             </>
           )
         ) : (
-          <button onClick={() => getWishlist(_id)}>
-            Obtener Lista de Deseados
-          </button>
+          <button onClick={() => getWishlist(_id)}>Obtener Favoritos</button>
         )}
       </div>
       <hr />

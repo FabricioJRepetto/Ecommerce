@@ -276,7 +276,7 @@ const NavBar = () => {
                                 onClick={() => setProfileModal(false)}
                               >
                                 <ChromaticText
-                                  text="Deseados"
+                                  text="Favoritos"
                                   route="/profile/wishlist"
                                 />
                               </div>
@@ -469,7 +469,7 @@ const NavBar = () => {
               </li>
               <li onClick={() => setShowMenu(false)}>
                 <ChromaticText
-                  text="Lista de deseados"
+                  text="Favoritos"
                   route="/profile/wishlist"
                   size={"1.1rem"}
                 />

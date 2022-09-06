@@ -131,7 +131,7 @@ const Profile = () => {
                 <Fav />
               </span>
               <span className="profile-chromatic-container">
-                <ChromaticText text={"Deseados"} size={"1.1rem"} />
+                <ChromaticText text={"Favoritos"} size={"1.1rem"} />
               </span>
             </li>
             <li onClick={() => navigate("/profile/history")}>
@@ -193,7 +193,7 @@ const Profile = () => {
                 <Fav />
               </span>
               <span className="profile-chromatic-container">
-                <ChromaticText text={"Deseados"} size={"1.1rem"} />
+                <ChromaticText text={"Favoritos"} size={"1.1rem"} />
               </span>
             </li>
             <li onClick={() => navigate("/profile/history")}>

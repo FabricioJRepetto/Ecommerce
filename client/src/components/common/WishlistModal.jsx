@@ -34,7 +34,7 @@ const WishlistModal = ({ close }) => {
         </div>
       ) : (
         <div className="wishlist-modal-container">
-          <div className="modal-card-header">Lista de deseados</div>
+          <div className="modal-card-header">Favoritos</div>
           {data.products.length > 0 ? (
             <div className="wishlist-modal-card-container">
               {React.Children.toArray(
