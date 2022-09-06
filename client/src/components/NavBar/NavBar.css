@@ -38,6 +38,11 @@
   align-items: flex-start;
   border-right: 1px solid rgb(115, 115, 115);
 }
+@media (max-height: 549px) {
+  .navbar-mobile-option-hide {
+    display: none;
+  }
+}
 .navbar-menu-mobile ul {
   width: 100%;
 }

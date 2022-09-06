@@ -93,6 +93,7 @@ const Profile = () => {
         }`}
       >
         <ul>
+          <div style={{ height: "1rem" }}></div>
           <div
             className={`profile-burger-container${
               !showMenu ? " profile-burger-container-hide" : ""

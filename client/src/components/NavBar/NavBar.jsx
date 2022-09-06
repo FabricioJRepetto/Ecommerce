@@ -474,24 +474,36 @@ const NavBar = () => {
                   size={"1.1rem"}
                 />
               </li>
-              <li onClick={() => setShowMenu(false)}>
+              <li
+                onClick={() => setShowMenu(false)}
+                className="navbar-mobile-option-hide"
+              >
                 <ChromaticText text="Carrito" route="/cart" size={"1.1rem"} />
               </li>
-              <li onClick={() => setShowMenu(false)}>
+              <li
+                onClick={() => setShowMenu(false)}
+                className="navbar-mobile-option-hide"
+              >
                 <ChromaticText
                   text="Historial"
                   route="/profile/history"
                   size={"1.1rem"}
                 />
               </li>
-              <li onClick={() => setShowMenu(false)}>
+              <li
+                onClick={() => setShowMenu(false)}
+                className="navbar-mobile-option-hide"
+              >
                 <ChromaticText
                   text="Compras"
                   route="/profile/orders"
                   size={"1.1rem"}
                 />
               </li>
-              <li onClick={() => setShowMenu(false)}>
+              <li
+                onClick={() => setShowMenu(false)}
+                className="navbar-mobile-option-hide"
+              >
                 <ChromaticText
                   text="Direcciones"
                   route="/profile/address"
@@ -505,8 +517,11 @@ const NavBar = () => {
               <ChromaticText text={"ADMIN"} route={"admin"} size={"1.1rem"} />
             </li>
           )}
-          <div></div>
-          <li onClick={() => setShowMenu(false)}>
+          <div className="navbar-mobile-option-hide"></div>
+          <li
+            onClick={() => setShowMenu(false)}
+            className="navbar-mobile-option-hide"
+          >
             <ChromaticText text={"About Us"} route={"about"} size={"1.1rem"} />
           </li>
           <div></div>
