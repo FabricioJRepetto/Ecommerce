@@ -253,6 +253,10 @@
   .wishlist-product-card {
     height: 9rem;
   }
+
+  .wishlist-card-container {
+    padding-bottom: .5rem;
+  }
 }
 
 @media (max-width: 449px) {

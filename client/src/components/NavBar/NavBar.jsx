@@ -422,7 +422,7 @@ const NavBar = () => {
 
                 <div className="navbar-central-options">
                   <ChromaticText
-                    text={"About Us"}
+                    text={"Nosotros"}
                     route={"about"}
                     size={"1rem"}
                     movementAfter={"0 0 1rem 0"}
@@ -566,7 +566,11 @@ const NavBar = () => {
             onClick={() => setShowMenu(false)}
             className="navbar-mobile-option-hide"
           >
-            <ChromaticText text={"About Us"} route={"about"} size={"1.1rem"} />
+            <ChromaticText
+              text={"¿Quiénes somos?"}
+              route={"about"}
+              size={"1.1rem"}
+            />
           </li>
           <div></div>
           <li onClick={() => [signOut(), setShowMenu(false)]}>
