@@ -166,8 +166,6 @@ const NavBar = () => {
         ></div>
       </div>
 
-      <div className="glitch-mobile-container"></div>
-
       <div className="navbar">
         <div className="glitch-mobile-placeholder"></div>
         <div

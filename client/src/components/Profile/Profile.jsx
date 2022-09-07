@@ -142,6 +142,7 @@ const Profile = () => {
               </span>
             </li>
             <li
+              className="profile-mobile-option-hide"
               onClick={() => {
                 navigate("/");
                 signOut();
