@@ -108,6 +108,44 @@
   z-index: 2;
 }
 
+.wishlist-addcart-container {
+  position: absolute;
+  top: 6rem;
+  right: 1.2rem;
+  scale: 1.2;
+}
+
+.wishlist-addcart-container svg {
+  color: white;
+  transition: color 100ms ease;
+  display: none;
+}
+
+/* .wishlist-addcart-container:hover svg {
+  color: red;
+} */
+
+.wishlist-addcart-gradient {
+  height: 1.5rem;
+  width: 1.5rem;
+  background: linear-gradient(45deg,
+      #35a7ff 0%,
+      #7e54de 20%,
+      #f40259 60%,
+      #fea30d 100%);
+  mask-image: url("../../assets/svg/addcart.svg");
+  background-size: 400%;
+  animation: gradientTextAnim 5s infinite;
+}
+
+.wishlist-addcart-container:hover .wishlist-addcart-gradient {
+  display: none;
+}
+
+.wishlist-addcart-container:hover svg {
+  display: inline;
+}
+
 @media (min-width: 1240px) {
   .wishlist-product-price-mobile {
     display: none;
@@ -129,6 +167,10 @@
 
   .wishlist-product-name-mobile {
     margin-right: 3rem;
+  }
+
+  .wishlist-product-price-section {
+    align-items: center;
   }
 }
 
@@ -175,4 +217,85 @@
   }
 }
 
-@media (max-width: 550px) {}
+@media (min-width: 700px) {
+  .wishlist-product-header>p {
+    display: none;
+  }
+
+  .wishlist-product-price-tinymobile {
+    display: none;
+  }
+}
+
+@media (max-width: 699px) {
+  .wishlist-product-header>p {
+    display: flex;
+    margin-right: 3rem;
+  }
+
+  .wishlist-product-header>h3 {
+    display: none;
+  }
+
+  .wishlist-product-original-price>del {
+    display: none;
+  }
+
+  .wishlist-product-price-section h3 {
+    display: none;
+  }
+
+  .wishlist-product-img-container {
+    width: 7rem;
+    height: 7rem;
+  }
+
+  .wishlist-product-card {
+    height: 9rem;
+  }
+}
+
+@media (max-width: 449px) {
+  .wishlist-product-img-container {
+    width: 5rem;
+    height: 5rem;
+  }
+
+  .wishlist-product-card {
+    height: 10.5rem;
+    padding-left: 2rem;
+  }
+
+  .wishlist-card-container .special-card {
+    top: 0.2rem;
+    left: 4rem;
+  }
+
+  .wishlist-buy-buttons-container button:last-child {
+    display: none;
+  }
+
+  .wishlist-product-price-container>.premiumdetails-nostock {
+    font-size: .9rem;
+  }
+
+  .wishlist-product-price-container>.g-gradient-text {
+    font-size: .8rem;
+  }
+
+  .wishlist-product-data-container>.free-shipping {
+    font-size: .9rem;
+  }
+
+  .wishlist-product-original-price {
+    display: none;
+  }
+
+  .wishlist-product-price-section .onsale-svg {
+    transform: scale(.5);
+  }
+
+  .wishlist-product-price-section>.minicard-sale-section>p {
+    font-size: .9rem;
+  }
+}

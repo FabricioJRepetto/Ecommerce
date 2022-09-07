@@ -1,9 +1,9 @@
-import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { resizer } from "../../helpers/resizer";
 import { priceFormat } from "../../helpers/priceFormat";
 import { ReactComponent as Sale } from "../../assets/svg/sale.svg";
+import { ReactComponent as AddCart } from "../../assets/svg/addcart.svg";
 import { WishlistButton as Fav } from "../Products/WishlistButton";
 import { useCheckout } from "../../hooks/useCheckout";
 import "./WishlistCard.css";
@@ -46,6 +46,19 @@ const Card = ({ productData, fav }) => {
       >
         {session && <Fav fav={fav} prodId={prodId} />}
 
+        {session && !onCart.includes(prodId) && (
+          <div
+            className="wishlist-addcart-container"
+            onClick={(e) => {
+              e.stopPropagation();
+              addToCart(prodId);
+            }}
+          >
+            <AddCart />
+            <div className="wishlist-addcart-gradient"></div>
+          </div>
+        )}
+
         <div className="wishlist-images-data-container">
           <div className="wishlist-product-img-container">
             <img src={resizer(img, 160)} alt="product" />
@@ -57,6 +70,7 @@ const Card = ({ productData, fav }) => {
               {/* {brand && (
                 <p className="wishlist-product-brand">{brand.toUpperCase()}</p>
               )} */}
+              <p>{name}</p>
               <h3 className="wishlist-product-name-mobile">{name}</h3>
               <h2 className="wishlist-product-name-desktop">{name}</h2>
             </div>
@@ -70,6 +84,9 @@ const Card = ({ productData, fav }) => {
 
               <div className="wishlist-product-price-section">
                 <div>
+                  <p className="wishlist-product-price-tinymobile">
+                    ${priceFormat(on_sale ? sale_price : price).int}
+                  </p>
                   <h3 className="wishlist-product-price-mobile">
                     ${priceFormat(on_sale ? sale_price : price).int}
                   </h3>
@@ -99,12 +116,12 @@ const Card = ({ productData, fav }) => {
             </div>
 
             <div className="free-shipping">
-              {free_shipping && "Envío gratis"}
+              {available_quantity > 0 && free_shipping && "Envío gratis"}
             </div>
           </div>
         </div>
 
-        <div className="wishlist-buy-buttons-container">
+        {/* <div className="wishlist-buy-buttons-container">
           <>
             <button
               className="g-white-button "
@@ -127,7 +144,7 @@ const Card = ({ productData, fav }) => {
               Comprar ahora
             </button>
           </>
-        </div>
+        </div> */}
       </div>
     </div>
   );
