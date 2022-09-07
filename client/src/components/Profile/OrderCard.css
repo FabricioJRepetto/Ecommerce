@@ -52,12 +52,19 @@
     margin-left: .5rem;
   }
 
-  .profile-order-card-container {
-    padding: 0 0 0 .5rem
-  }
-
   .profile-orders-container .profile-order-card-container .delivery-progress-container {
     width: 90%
+  }
+
+  .profile-order-card-container .delivery-progress-container {
+    margin: 0;
+  }
+}
+
+@media (min-width:401px) and (max-width:450px) {
+  .profile-orders-container .profile-order-card-container {
+    padding: 0 0 .5rem 1rem;
+    height: 14rem;
   }
 }
 
