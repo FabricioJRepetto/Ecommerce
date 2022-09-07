@@ -131,10 +131,12 @@
 .premiumdetails-section h2 {
     font-size: 4rem;
     width: 30vw;
+    min-width: 400px;
 }
 .premiumdetails-section p {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     width: 30vw;
+    min-width: 400px;
     margin-top: 1rem;
 }
 .premiumdetails-section img {
@@ -159,6 +161,26 @@
     z-index: 2;
     height: 7rem;
     width: 18.5rem;
+    margin: 0 1rem;
+    background: linear-gradient(
+        45deg,
+        #35a7ff 0%,
+        #7e54de 20%,
+        #f40259 60%,
+        #fea30d 100%
+    );
+    mask-image: url('../../assets/svg/PremiumSign.svg');
+    background-size: 400%;
+    animation: gradientTextAnim 15s infinite;
+}
+.pp-sign-mobile {
+    display: none;
+    top: 2%;
+    left: 2%;
+    position: absolute;
+    z-index: 2;
+    height: 4rem;
+    width: 11rem;
     margin: 0 1rem;
     background: linear-gradient(
         45deg,
@@ -240,13 +262,14 @@
 .pd-video-container {
     display: flex;
     justify-content: center;
-    width: 100%;
+    width: 100%;    
     padding: 2rem;
     background-color: black;
     z-index: 3;
 }
 .pd-video-container div {
     max-width: 60vw;
+    min-width: 400px;
 }
 .pd-video-container video {
     width: 100%;
@@ -342,7 +365,7 @@
   }
 }
 
-/* RESPONSIVE */
+/*? RESPONSIVE ?*/
 @media (max-width: 1240px) {
     .premiumdetails-background {
         display: none;
@@ -364,5 +387,66 @@
     }
     .premiumdetails-mainfeatures {
         display: none;
+    }
+
+
+}
+@media (max-width: 1000px) {
+    .pd-head-price h2 {
+        font-size: 1.5rem
+    }
+}
+@media (max-width: 750px) {
+    .pd-head-price h2 {
+        font-size: 1.2rem
+    }
+}
+@media (max-width: 650px) {
+    .provider-premium-sign {
+        display: none;
+    }
+    .pp-sign-mobile {
+        display: block;
+    }
+    .premiumdetails-details {
+        flex-direction: column;
+        padding-bottom: 2rem;        
+    }
+    .premiumdetails-details > div {
+        padding: 0;
+    }
+    .pd-head-price h2 {
+        min-width: 350px;
+        font-size: 1.5rem;
+    }
+    .premiumdetails-section {
+        /* flex-direction: row; */
+        height: 100vh;
+    }
+    .premiumdetails-section div {
+        top: 5% !important;
+        left: 10%;
+    }
+    .premiumdetails-section h2 {
+        font-size: 2.5rem;
+    }
+    .premiumdetails-section img {
+        /* top: 45% !important; */
+        left: 10%;
+        min-width: 400px;
+        max-height: 50%;
+    }
+    .premiumdetails-attributes {
+        min-width: 450px;
+    }
+    .pd-attribute-container {
+        font-size: 1rem;
+    }
+    .pd-text-container-mobile {
+        width: 100%;
+        height: 40%;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
     }
 }

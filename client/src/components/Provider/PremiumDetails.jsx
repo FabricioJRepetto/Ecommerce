@@ -101,6 +101,8 @@ const PremiumDetails = () => {
                             <span className='pd-favButton-container'>
                                 <WishlistButton prodId={product.id} visible fav={wishlist.includes(product.id)} position={false}/>
                             </span>
+
+                            <div className='pp-sign-mobile'></div>
                             
                             {product.premiumData.logo 
                                 ? <div className='premiumdetails-logo'>
@@ -179,13 +181,14 @@ const PremiumDetails = () => {
                     {React.Children.toArray(product.premiumData.extraText.map(e => (
                         <div className='premiumdetails-section'
                             style={{ backgroundColor: e.bgColor }} >
-                            <div style={{color: product.premiumData.textColor ? product.premiumData.textColor : 'white', ...e.textPos}}>
+                            <div className="pd-text-container-mobile" style={{color: product.premiumData.textColor ? product.premiumData.textColor : 'white', ...e.textPos}}>
                                 <h2>{e.title}</h2>
                                 <p>{e.text}</p>
                             </div>
 
                             {e.img && <img src={e.img} alt="section img"
-                                style={e.imgPos}/>}
+                                style={{...e.imgPos, top:(windowWidth <= 650 && !e.soloImg) ? '46%' : e.imgPos.top }}/>}
+
                             {e.video && <div className="pd-section-video-container" style={e.vidPos}>
                                     <video autoPlay playsInline muted disablePictureInPicture loop >
                                         <source src={e.video} type="video/mp4"></source>
