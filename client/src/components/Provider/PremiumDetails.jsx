@@ -24,9 +24,10 @@ const PremiumDetails = () => {
     const { addToCart, buyNow } = useCheckout();
     const { wishlist } = useSelector((state) => state.cartReducer);
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+    const [scroll, setScroll] = useState(false)
 
     const reference = useRef(null)
-    const [isVisible, setIsVisible] = useState(true)
+    const [isVisible, setIsVisible] = useState(false)
 
     const attributesSection = useRef(null)
     const scrollTo = () => { 
@@ -36,22 +37,33 @@ const PremiumDetails = () => {
         }
      }
 
-
     const handleWindowWidth = () => {
         setWindowWidth(window.innerWidth);
     };
 
+    const scrollPercent = () => { 
+        let scrollTop = window.scrollY;
+        let docHeight = document.body.offsetHeight;
+        let winHeight = window.innerHeight;
+        let scrollPercent = scrollTop / (docHeight - winHeight);
+        let scrollPercentRounded = Math.round(scrollPercent * 100);
+        setScroll(scrollPercentRounded > 14)
+     }
+
     useEffect(() => {
         window.addEventListener("resize", handleWindowWidth);
+        window.addEventListener("scroll", scrollPercent);
         return () => {
         window.removeEventListener("resize", handleWindowWidth);
+        window.addEventListener("scroll", scrollPercent);
         };
     }, []);
 
     useEffect(() => {
       const observer = new IntersectionObserver((entries) => {
             const [ entry ] = entries
-            setIsVisible(entry.isIntersecting)
+            setIsVisible(!entry.isIntersecting)
+            console.log(!entry.isIntersecting);
         }, {
             root: null,
             rootMargin: "0px",
@@ -181,13 +193,13 @@ const PremiumDetails = () => {
                     {React.Children.toArray(product.premiumData.extraText.map(e => (
                         <div className='premiumdetails-section'
                             style={{ backgroundColor: e.bgColor }} >
-                            <div className="pd-text-container-mobile" style={{color: product.premiumData.textColor ? product.premiumData.textColor : 'white', ...e.textPos}}>
+                            <div className="pd-text-container-mobile" style={{color: product.premiumData.textColor ? product.premiumData.textColor : 'white', ...e.textPos, justifyContent: 'center'}}>
                                 <h2>{e.title}</h2>
                                 <p>{e.text}</p>
                             </div>
 
                             {e.img && <img src={e.img} alt="section img"
-                                style={{...e.imgPos, top:(windowWidth <= 650 && !e.soloImg) ? '46%' : e.imgPos.top }}/>}
+                                style={{...e.imgPos, top:(windowWidth <= 1100 && !e.soloImg) ? '40%' : e.imgPos.top }}/>}
 
                             {e.video && <div className="pd-section-video-container" style={e.vidPos}>
                                     <video autoPlay playsInline muted disablePictureInPicture loop >
@@ -202,7 +214,7 @@ const PremiumDetails = () => {
                             <Carousel images={product.premiumData.carouselImg}
                                 indicators
                                 pausable={false}
-                                width={'50vw'}
+                                width={windowWidth < 1100 ? '100%' : '50vw'}
                                 id='instructions'/>
                                 <h1>Cómo usar <br/> Polaroid Go.</h1>
                         </div>}
@@ -228,36 +240,36 @@ const PremiumDetails = () => {
                                     )
                                 )
                             )}
-                        </div>                            
+                        </div>
                     </div>                    
 
                     <div className='pd-logo-footer'>
                         {product.id === '62df1257d0bcaed708e4feb7'
-                            ? <video src="https://res.cloudinary.com/dsyjj0sch/video/upload/v1662187563/2F5TPqZn_03sjNI4_nb7shw.mp4" muted autoPlay playsinline disablePictureInPicture width={300} loop style={{filter: 'grayscale(1) contrast(1.2)'}}></video>
+                            ? <video src="https://res.cloudinary.com/dsyjj0sch/video/upload/v1662187563/2F5TPqZn_03sjNI4_nb7shw.mp4" muted autoPlay playsInline disablePictureInPicture width={300} loop style={{filter: 'grayscale(1) contrast(1.2)'}}></video>
                             : <div  style={{ WebkitMaskImage: `url('${resizer(product.premiumData.logo, 310)}')`,
                                 maskImage: `url('${resizer(product.premiumData.logo, 310)}')`}}>
                             </div>}
                     </div>
 
-                    <div className={`premiumdetails-fixed ${isVisible ? '' : 'premiumdetails-fixed-on'}`}>
+                    <div className={`premiumdetails-fixed ${(isVisible && scroll) && 'premiumdetails-fixed-on'}`}>
                         <div className='premiumdetails-fixed-content'>
-                            <p>{product.name}</p>
-                            <span>
-                                <span>${priceFormat(product.price).int}</span>
-                                <span>{priceFormat(product.price).cents}</span>   
-                            </span>
+                            <div className="pd-fixed-name">
+                                <p>{product.name}</p>
+                                <span>
+                                    <span>${priceFormat(product.price).int}</span>
+                                    <span>{priceFormat(product.price).cents}</span>   
+                                </span>
+                            </div>
                             <button
                                 className="g-white-button details-button"
                                 disabled={product.available_quantity < 1}
-                                onClick={() => addToCart(id)}
-                            >
+                                onClick={() => addToCart(id)}>
                                 Agregar al carrito
                             </button>
                             <button
                                 className="g-white-button details-button"
                                 disabled={product.available_quantity < 1}
-                                onClick={() => buyNow(id)}
-                            >
+                                onClick={() => buyNow(id)}>
                                 Comprar ahora
                             </button>
                         </div>
