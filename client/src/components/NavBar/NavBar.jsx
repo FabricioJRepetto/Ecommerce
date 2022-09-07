@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
@@ -16,11 +16,11 @@ import { ReactComponent as Avatar } from "../../assets/svg/avatar.svg";
 import WishlistModal from "../common/WishlistModal";
 import { avatarResizer } from "../../helpers/resizer";
 import { PowerGlitch } from "powerglitch";
-import "./NavBar.css";
-import "../../App.css";
 import { useSignout } from "../../hooks/useSignout";
 import ChromaticText from "../common/ChromaticText";
 import BurgerButton from "../common/BurgerButton";
+import "./NavBar.css";
+import "../../App.css";
 
 const NavBar = () => {
   const { session, username, avatar, role } = useSelector(
@@ -29,10 +29,12 @@ const NavBar = () => {
   const cart = useSelector((state) => state.cartReducer.onCart);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const searchInput = useRef(null);
   const [profileModal, setProfileModal] = useState(false);
   const [wishModal, setWishModal] = useState(false);
   const [productToSearch, setProductToSearch] = useState("");
   const [showSubsectionBar, setShowSubsectionBar] = useState(false);
+  const [showSearchBar, setShowSearchBar] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const location = useLocation();
   const signOut = useSignout();
@@ -133,6 +135,11 @@ const NavBar = () => {
     navigate("/");
   };
 
+  const handleSearchBar = () => {
+    setShowSearchBar(!showSearchBar);
+    !showSearchBar && searchInput.current.focus();
+  };
+
   return (
     <>
       <div className="navbar-dumb-hidden"></div>
@@ -230,6 +237,13 @@ const NavBar = () => {
                     </span>
                   ) : (
                     <>
+                      <div
+                        className="navbar-search-mobile-button"
+                        onClick={handleSearchBar}
+                      >
+                        <SearchIcon />
+                      </div>
+
                       <div
                         className="navbar-profile-button navbar-hide-mobile"
                         onMouseEnter={() => setProfileModal(true)}
@@ -417,7 +431,39 @@ const NavBar = () => {
               </div>
             </div>
           )}
+
+        <div
+          className={`navbar-search-bar-mobile ${
+            showSearchBar
+              ? "navbar-search-bar-mobile-show"
+              : "navbar-search-bar-mobile-hide"
+          }`}
+        >
+          <form onSubmit={handleSearch}>
+            <span className="g-input-with-button">
+              <input
+                type="text"
+                placeholder="Busca un producto"
+                className="g-input-two-icons"
+                id="navbar-searchbar"
+                ref={searchInput}
+                onChange={(e) => setProductToSearch(e.target.value)}
+                onBlur={() => setShowSearchBar(false)}
+                value={productToSearch}
+              />
+              <>
+                <div
+                  className="g-input-icon-container g-input-x-button"
+                  onClick={() => setShowSearchBar(false)}
+                >
+                  <CloseIcon />
+                </div>
+              </>
+            </span>
+          </form>
+        </div>
       </div>
+
       <div className="navbar-menu-mobile-button">
         <BurgerButton setShowMenu={setShowMenu} showMenu={showMenu} />
       </div>
