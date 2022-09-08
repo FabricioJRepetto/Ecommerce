@@ -282,6 +282,10 @@
     top: 8.9rem;
     right: 8rem;
   }
+
+  div.wishlist-product-card {
+    height: 10.5rem;
+  }
 }
 
 @media (max-width: 409px) {
@@ -317,7 +321,7 @@
   }
 
   .wishlist-product-card {
-    height: 10.5rem;
+    height: 9rem;
     /* padding-left: 2rem; */
   }
 
