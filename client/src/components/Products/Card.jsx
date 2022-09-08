@@ -33,6 +33,7 @@ const Card = ({
     _id: prodId,
     free_shipping,
     on_sale,
+    premium,
   } = productData;
   const special = !/MLA/g.test(prodId);
 
@@ -43,14 +44,7 @@ const Card = ({
 
   return (
     <div style={{ position: "relative" }}>
-      {/* <div
-            className={` ${special && "special-frame-right"}`}
-        ></div>
-        <div
-            className={` ${special && "special-frame-left"}`}
-        ></div> */}
-
-      {special && <i className="provider-store special-card">PROVIDER</i>}
+      {special && <i className="provider-text special-card">PROVIDER</i>}
 
       <div
         key={prodId}
@@ -62,7 +56,9 @@ const Card = ({
 
         <div className="card-main-container">
           <div
-            onClick={() => navigate(`/details/${prodId}`)}
+            onClick={() =>
+              navigate(premium ? `/premium/${prodId}` : `/details/${prodId}`)
+            }
             className="card-img-container pointer"
           >
             <img src={resizer(img, 180)} alt="product" />
@@ -104,7 +100,7 @@ const Card = ({
             </div>
 
             <div className="free-shipping c-mrgn">
-              {free_shipping && "envío gratis"}
+              {free_shipping && "Envío gratis"}
             </div>
             {location.pathname === "/admin/products" && (
               <>

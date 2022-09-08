@@ -42,12 +42,20 @@ const Home = () => {
     }, 100);
 
     (async () => {
-      const data = await Promise.allSettled([
-        axios(`/sales/`),
-        session && axios(`/history/suggestion`),
-      ]);
-      setProducts(data[0]?.value.data);
-      setSuggestion(data[1]?.value.data || false);
+        const salesData = axios('/sales');
+        const suggestionData = axios(`/history/suggestion`)
+
+        salesData.then(r => {
+            setProducts(r.data)
+        });
+        session && suggestionData?.then(r => {
+            if (r.data.length > 4 ) {
+                setSuggestion(r.data);
+            } else {
+                setSuggestion(false);                
+            }            
+        });
+
       setLoading(false);
     })();
 
@@ -68,7 +76,7 @@ const Home = () => {
   return (
     <div className="home-container">
       <div>
-        <Carousel images={IMAGES} controls indicators pointer width="100%" />
+        <Carousel images={IMAGES} controls indicators pointer width="100vw" />
       </div>
       <div className="categories">
         <div onClick={() => categorySearch("MLA1051")}>
@@ -104,6 +112,7 @@ const Home = () => {
               key={`specials ${index}`}
               img={products[index]?.thumbnail}
               name={products[index]?.name}
+              premium={products[index]?.premium}
               price={products[index]?.price}
               sale_price={products[index]?.sale_price}
               discount={products[index]?.discount}
@@ -116,7 +125,7 @@ const Home = () => {
           ))}
         </div>
       </div>
-      <br />
+      
       {suggestion.length > 4 && (
         <div>
           <h2>Quizás te interese...</h2>
@@ -125,6 +134,7 @@ const Home = () => {
               <MiniCard
                 key={`recom ${index}`}
                 prodId={suggestion[index]?._id}
+                premium={suggestion[index]?.premium}
                 name={suggestion[index]?.name}
                 img={suggestion[index]?.thumbnail}
                 price={suggestion[index]?.price}

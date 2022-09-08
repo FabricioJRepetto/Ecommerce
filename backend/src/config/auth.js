@@ -18,7 +18,7 @@ passport.use(
 
         if (!errors.isEmpty()) {
           const message = errors.errors.map((err) => err.msg);
-          return done(null, email, { message });
+          return done(null, email, { error: true, message });
         }
 
         const user = await User.exists({ email });
@@ -26,14 +26,18 @@ passport.use(
           const newUser = await User.create({
             email,
             password,
+            username: email.split("@")[0],
             isGoogleUser: false,
           });
           return done(null, newUser, {
             message:
-              "Signup successfully, check your email to verify your account",
+              "Cuenta creada con éxito, revisa tu email para verificar tu cuenta",
           });
         } else {
-          return done(null, user, { message: "Email already registered" });
+          return done(null, user, {
+            message: "Email ya registrado",
+            error: true,
+          });
         }
       } catch (e) {
         done(e);
@@ -53,15 +57,19 @@ passport.use(
       try {
         const user = await User.findOne({ email });
         if (!user) {
-          return done(null, false, { message: "User not found" });
+          return done(null, false, {
+            message: "Email o contraseña incorrectos",
+          });
         }
 
         const validity = await user.comparePassword(password);
         if (!validity) {
-          return done(null, false, { message: "Wrong password" });
+          return done(null, false, {
+            message: "Email o contraseña incorrectos",
+          });
         }
 
-        return done(null, user, { message: "Sign in successfully" });
+        return done(null, user, { message: "Sesión iniciada con éxito" });
       } catch (e) {
         return done(e);
       }

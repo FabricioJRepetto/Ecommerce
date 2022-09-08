@@ -4,16 +4,25 @@ import { useDispatch, useSelector } from "react-redux";
 import { useForm, useFieldArray } from "react-hook-form";
 import axios from "axios";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { loadIdProductToEdit } from "../../Redux/reducer/productsSlice";
-import "./ProductForm.css";
+import {
+  loadIdProductToEdit,
+  changeReloadFlag,
+} from "../../Redux/reducer/productsSlice";
 import {
   validateImgs,
   validationProductFormSchema,
 } from "../../helpers/validators";
+import { avoidEnterSubmit } from "../../helpers/AvoidEnterSubmit";
 import { useNotification } from "../../hooks/useNotification";
 import { useModal } from "../../hooks/useModal";
 import Modal from "../../components/common/Modal";
 import SelectsNested from "./SelectsNested";
+import { CloseIcon, AddIcon, DeleteIcon } from "@chakra-ui/icons";
+import { ReactComponent as Spinner } from "../../assets/svg/spinner.svg";
+import Checkbox from "../../components/common/Checkbox";
+import "./ProductForm.css";
+import "../../App.css";
+import ReturnButton from "../../components/common/ReturnButton";
 
 const ProductForm = () => {
   const [featuresQuantity, setFeaturesQuantity] = useState(1);
@@ -35,6 +44,8 @@ const ProductForm = () => {
   const [imagesError, setImagesError] = useState(null);
   const [categoryError, setCategoryError] = useState(null);
   const [showCustomErrors, setShowCustomErrors] = useState(false);
+  const [focusFlag, setFocusFlag] = useState(false);
+  const [waitingResponse, setWaitingResponse] = useState(false);
   let timeoutId = useRef();
   const navigate = useNavigate();
   const [notification] = useNotification();
@@ -59,6 +70,8 @@ const ProductForm = () => {
     reset,
     setValue,
     formState: { errors },
+    watch,
+    setFocus,
   } = useForm(formOptions);
 
   const {
@@ -73,10 +86,11 @@ const ProductForm = () => {
 
   const handleAddFeature = () => {
     const feature = document.getElementById(
-      `main_feature_${featuresQuantity - 1}`
+      `main_feature_value_${featuresQuantity - 1}`
     );
+
     if (feature.value !== "") {
-      appendFeature("");
+      appendFeature({ value: "" });
       setFeaturesQuantity(featuresQuantity + 1);
     } else {
       warnTimer(
@@ -134,6 +148,7 @@ const ProductForm = () => {
   };
 
   const loadInputs = (data) => {
+    console.log(data);
     setValue("name", data.name);
     setValue("price", data.price);
     setValue("brand", data.brand);
@@ -142,14 +157,22 @@ const ProductForm = () => {
     setValue("free_shipping", data.free_shipping);
     setValue("category", data.category);
     setCategoryPath(data.path_from_root);
-    replaceFeature([...data.main_features]);
+    //replaceFeature([...data.main_features]);
+    let featuresToEdit = [];
+    for (const feature of data.main_features) {
+      featuresToEdit.push({ value: feature });
+    }
+    replaceFeature(featuresToEdit);
     replaceAttribute([...data.attributes]);
     setImgsToEdit(data.images);
   };
 
   useEffect(() => {
-    //! VOLVER A VER eliminar hasta linea 169
-    setValue("brand", "1marcaa");
+    setValue("brand", "marcaa1");
+    setValue("name", "nombre1");
+    setValue("price", 100);
+    setValue("available_quantity", 10);
+    setValue("description", "descripcion");
     setCategoryPath([
       {
         _id: "62e58e4177ee611ae1369fe6",
@@ -176,33 +199,41 @@ const ProductForm = () => {
         })
         .catch((err) => console.log(err)); //!VOLVER A VER manejo de errores
     } else {
-      appendAttribute({ name: "", value_name: "" });
-      appendFeature("");
+      appendAttribute({ name: "color", value_name: "amarillo" });
+      appendFeature({ value: "piola" });
+      /* appendAttribute({ name: "", value_name: "" });
+      appendFeature({ value: "" }); */
     }
+    setFocusFlag(true);
     // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    if (focusFlag === true) {
+      setFocus("name");
+      setFocusFlag(false);
+    }
+    // eslint-disable-next-line
+  }, [focusFlag]);
 
   const handleAddImg = (e) => {
     const fileListArrayImg = Array.from(e.target.files);
     validateImgs(fileListArrayImg, warnTimer, productImg);
     setProductImg([...productImg, ...fileListArrayImg]);
   };
-
   const handleRemoveImg = (i) => {
-    console.log("entra");
-    console.log("mainImgIndex:", mainImgIndex);
-    console.log("i:", i);
     setProductImg(productImg.filter((_, index) => index !== i));
-    mainImgIndex === i && setMainImgIndex(0);
-    mainImgIndex >= productImg.length + imgsToEdit.length - 1 &&
+    if (mainImgIndex === i) {
+      setMainImgIndex(0);
+    } else if (mainImgIndex >= productImg.length + imgsToEdit.length - 1) {
       setMainImgIndex(mainImgIndex - 1);
+    }
   };
   const handleRemoveImgToEdit = (_id, i) => {
-    /*     console.log("mainImgIndex:", mainImgIndex);
-    console.log("i:", i);
- */ setImgsToEdit(imgsToEdit.filter((img) => img._id !== _id));
-    mainImgIndex === i && setMainImgIndex(0);
-    mainImgIndex >= productImg.length + imgsToEdit.length - 1 &&
+    setImgsToEdit(imgsToEdit.filter((img) => img._id !== _id));
+    if (mainImgIndex === i) {
+      setMainImgIndex(0);
+    } else if (mainImgIndex >= productImg.length + imgsToEdit.length - 1)
       setMainImgIndex(mainImgIndex - 1);
   };
 
@@ -234,6 +265,7 @@ const ProductForm = () => {
 
     //! VOLVER A VER poner disabled el boton de submit al hacer la petición
     try {
+      setWaitingResponse(true);
       if (productToEdit) {
         let data = { ...productData, imgsToEdit, mainImgIndex };
         formData.append("data", JSON.stringify(data));
@@ -243,17 +275,18 @@ const ProductForm = () => {
             "Content-Type": "multipart/form-data",
           },
         });
+        dispatch(changeReloadFlag(true));
         notification("Producto editado exitosamente", "", "success");
         navigate("/admin/products");
       } else {
         formData.append("data", JSON.stringify(productData));
 
-        await axios.post(`/admin/product/`, formData, {
+        await axios.post("/admin/product/", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
-        notification("Producto creado exitosamente", "", "success");
+        dispatch(changeReloadFlag(true));
         openCreateProduct();
       }
       clearInputs();
@@ -261,6 +294,8 @@ const ProductForm = () => {
       notification("Hubo un error, vuelve a intentar", "", "error");
       //!VOLVER A VER manejo de errores
       console.log(error);
+    } finally {
+      setWaitingResponse(false);
     }
   };
 
@@ -275,11 +310,11 @@ const ProductForm = () => {
     setAttributesQuantity(1);
     appendAttribute({ name: "", value_name: "" });
     setFeaturesQuantity(1);
-    appendFeature("");
+    appendFeature({ value: "" });
+    setFocusFlag(true);
   };
 
   const handleModalCreateProduct = (value) => {
-    //! VOLVER A VER poner notif por encima de modal
     if (value) {
       clearInputs();
       closeCreateProduct();
@@ -310,7 +345,7 @@ const ProductForm = () => {
   const isCategoryEmpty = () => {
     let errorFlag = 0;
     if (!category) {
-      setCategoryError("Debes seleccionar la categoría");
+      setCategoryError("Selecciona la categoría");
       errorFlag = 1;
     }
     return errorFlag;
@@ -337,208 +372,549 @@ const ProductForm = () => {
   };
 
   return (
-    <div>
-      <hr />
-      <h2>{productToEdit ? "EDITAR" : "CREAR"} producto</h2>
-      <br />
-      <form encType="multipart/form-data" onSubmit={customSubmit}>
-        <>
-          <div>
-            <input
-              type="text"
-              placeholder="Título/Nombre"
-              autoComplete="off"
-              {...register("name")}
-            />
-            <div>{errors.name?.message}</div>
+    <div className="form-width-test">
+      <h2>{productToEdit ? "Editar" : "Publicar"} producto</h2>
 
-            <SelectsNested
-              setCategory={setCategory}
-              category={category}
-              setCategoryPath={setCategoryPath}
-              categoryPath={categoryPath}
-            />
-            {showCustomErrors && categoryError && (
-              <h3>ESTADO {categoryError}</h3>
+      <form
+        encType="multipart/form-data"
+        onSubmit={customSubmit}
+        onKeyDown={avoidEnterSubmit}
+        className="form-width-test"
+      >
+        <div className="product-form-width">
+          {/* TÍTULO */}
+          <>
+            <div className="input-title">Título</div>
+            <span className="g-input-with-button">
+              <input type="text" autoComplete="off" {...register("name")} />
+              {watch("name") === "" || watch("name") === undefined ? null : (
+                <div
+                  className="g-input-icon-container g-input-x-button"
+                  onClick={() => setValue("name", "")}
+                >
+                  <CloseIcon />
+                </div>
+              )}
+            </span>
+            <>
+              {!errors.name && <p className="g-hidden-placeholder">hidden</p>}
+              <p className="g-error-input">{errors.name?.message}</p>
+            </>
+          </>
+        </div>
+
+        {/* CATEGORÍA */}
+        <div className="form-categorypath-container">
+          <SelectsNested
+            setCategory={setCategory}
+            category={category}
+            setCategoryPath={setCategoryPath}
+            categoryPath={categoryPath}
+          />
+          <>
+            {showCustomErrors && categoryError ? (
+              <p className="g-error-input form-category-error">
+                {categoryError}
+              </p>
+            ) : (
+              <p className="g-hidden-placeholder">hidden</p>
             )}
+          </>
+        </div>
 
-            <input
-              type="text"
-              placeholder="Precio"
-              autoComplete="off"
-              {...register("price")}
-            />
-            <div>{errors.price?.message}</div>
+        <div className="product-form-width">
+          <div className="two-inputs-container">
+            {/* MARCA */}
+            <div>
+              <div className="input-title">Marca</div>
+              <span className="g-input-with-button">
+                <input type="text" autoComplete="off" {...register("brand")} />
+                {watch("brand") === "" ||
+                watch("brand") === undefined ? null : (
+                  <div
+                    className="g-input-icon-container g-input-x-button"
+                    onClick={() => setValue("brand", "")}
+                  >
+                    <CloseIcon />
+                  </div>
+                )}
+              </span>
+              <>
+                {!errors.brand && (
+                  <p className="g-hidden-placeholder">hidden</p>
+                )}
+                <p className="g-error-input">{errors.brand?.message}</p>
+              </>
+            </div>
 
-            <input
-              type="text"
-              placeholder="Marca"
-              autoComplete="off"
-              {...register("brand")}
-            />
-            <div>{errors.brand?.message}</div>
-
-            <input
-              type="text"
-              placeholder="Stock"
-              autoComplete="off"
-              {...register("available_quantity", {
-                required: true,
-                pattern: /^[0-9]*$/,
-              })}
-            />
-            <div>{errors.available_quantity?.message}</div>
-
-            <label>
-              <input type="checkbox" {...register("free_shipping")} />
-              Envío gratis
-            </label>
-            <div>{errors.free_shipping?.message}</div>
+            {/* PRECIO */}
+            <div>
+              <div className="input-title input-title-price">Precio</div>
+              <span className="price-input-container">
+                <span className="dollar-sign-input">$</span>
+                <span className="g-input-with-button">
+                  <input
+                    type="text"
+                    autoComplete="off"
+                    {...register("price")}
+                  />
+                  {watch("price") === "" ||
+                  watch("price") === undefined ? null : (
+                    <div
+                      className="g-input-icon-container g-input-x-button"
+                      onClick={() => setValue("price", "")}
+                    >
+                      <CloseIcon />
+                    </div>
+                  )}
+                </span>
+              </span>
+              <>
+                {!errors.price && (
+                  <p className="g-hidden-placeholder">hidden</p>
+                )}
+                <p className="g-error-input form-price-error">
+                  {errors.price?.message}
+                </p>
+              </>
+            </div>
           </div>
-          <br />
-          <hr />
-          <br />
 
-          <div>
+          <div className="two-inputs-container">
+            {/* STOCK */}
+            <div>
+              <div className="input-title">Stock</div>
+              <span className="g-input-with-button">
+                <input
+                  type="text"
+                  autoComplete="off"
+                  {...register("available_quantity", {
+                    required: true,
+                    pattern: /^[0-9]*$/,
+                  })}
+                />
+                {watch("available_quantity") === "" ||
+                watch("available_quantity") === undefined ? null : (
+                  <div
+                    className="g-input-icon-container g-input-x-button"
+                    onClick={() => setValue("available_quantity", "")}
+                  >
+                    <CloseIcon />
+                  </div>
+                )}
+              </span>
+              <>
+                {!errors.available_quantity && (
+                  <p className="g-hidden-placeholder">hidden</p>
+                )}
+                <p className="g-error-input">
+                  {errors.available_quantity?.message}
+                </p>
+              </>
+            </div>
+
+            {/* ENVÍO GRATIS */}
+            <div className="form-shipping-container">
+              <div className="form-shipping-input-container">
+                <label className="form-shipping-input">
+                  <Checkbox
+                    isChecked={watch("free_shipping")}
+                    extraStyles={{
+                      border: true,
+                      rounded: true,
+                      innerBorder: true,
+                      margin: ".05rem",
+                      size: "1.2",
+                    }}
+                  />
+                  <input type="checkbox" {...register("free_shipping")} />
+                  <span className="shipping-title">Envío gratis</span>
+                </label>
+              </div>
+              <>
+                {!errors.free_shipping && (
+                  <p className="g-hidden-placeholder">hidden</p>
+                )}
+                <p className="g-error-input">{errors.free_shipping?.message}</p>
+              </>
+            </div>
+          </div>
+
+          {/* MAIN FEATURES */}
+          <div className="form-container-border">
+            <div className="input-title">Características principales</div>
             {React.Children.toArray(
               fieldsFeatures.map((_, i) => (
                 <>
-                  <input
-                    type="text"
-                    placeholder="Característica principal"
-                    autoComplete="off"
-                    id={`main_feature_${i}`}
-                    {...register(`main_features.${i}`)}
-                  />
-                  <span onClick={() => handleRemoveFeature(i)}> X</span>
-                  <p>{errors.main_features?.[i]?.message}</p>
+                  <div className="input-with-trash">
+                    <div className="g-input-with-button">
+                      <input
+                        type="text"
+                        autoComplete="off"
+                        id={`main_feature_value_${i}`}
+                        {...register(`main_features.${i}.value`)}
+                      />
+                      {watch(`main_features.${i}.value`) === "" ||
+                      watch(`main_features.${i}.value`) === undefined ? null : (
+                        <div
+                          className="g-input-icon-container g-input-x-button"
+                          onClick={() =>
+                            setValue(`main_features.${i}.value`, "")
+                          }
+                        >
+                          <CloseIcon />
+                        </div>
+                      )}
+                    </div>
+
+                    {featuresQuantity > 1 && (
+                      <span
+                        onClick={() => handleRemoveFeature(i)}
+                        className="g-icon-button trash-button"
+                      >
+                        <DeleteIcon />
+                      </span>
+                    )}
+                  </div>
+                  <>
+                    {!errors.main_features?.[i] && (
+                      <p className="g-hidden-placeholder">hidden</p>
+                    )}
+                    <p className="g-error-input">
+                      {errors.main_features?.[i]?.value.message}
+                    </p>
+                  </>
                 </>
               ))
             )}
-            {warn.main_features && <p>{warn.main_features}</p>}
-            <h3 onClick={() => handleAddFeature()}>+</h3>
+            <>
+              {!warn.main_features && (
+                <p className="g-hidden-placeholder">hidden</p>
+              )}
+              {warn.main_features && (
+                <p className="g-warn-input">{warn.main_features}</p>
+              )}
+              <div
+                onClick={() => handleAddFeature()}
+                className="g-icon-button form-add-input"
+              >
+                <AddIcon /> Agregar característica
+              </div>
+            </>
+          </div>
 
-            <br />
-            <hr />
-            <br />
-
+          {/* ATRIBUTOS */}
+          <div className="form-container-border">
+            <div className="input-title">Atributos</div>
             {React.Children.toArray(
               fieldsAttributes.map((_, i) => (
-                <>
-                  <input
-                    type="text"
-                    placeholder="Nombre del atributo"
-                    autoComplete="off"
-                    id={`attribute_name_${i}`}
-                    {...register(`attributes.${i}.name`)}
-                  />
-                  <p>{errors.attributes?.[i]?.name?.message}</p>
-                  <input
-                    type="text"
-                    placeholder="Valor del atributo"
-                    autoComplete="off"
-                    id={`attribute_value_${i}`}
-                    {...register(`attributes.${i}.value_name`)}
-                  />
-                  <span onClick={() => handleRemoveAttribute(i)}> X</span>
-                  <p>{errors.attributes?.[i]?.value_name?.message}</p>
-                </>
+                <div className="form-attribute-container">
+                  <div className="form-attributename-with-error">
+                    <div className="g-input-with-button">
+                      <input
+                        type="text"
+                        placeholder="Nombre del atributo"
+                        autoComplete="off"
+                        id={`attribute_name_${i}`}
+                        {...register(`attributes.${i}.name`)}
+                      />
+                      {watch(`attributes.${i}.name`) === "" ||
+                      watch(`attributes.${i}.name`) === undefined ? null : (
+                        <div
+                          className="g-input-icon-container g-input-x-button"
+                          onClick={() => setValue(`attributes.${i}.name`, "")}
+                        >
+                          <CloseIcon />
+                        </div>
+                      )}
+                    </div>
+                    <>
+                      {!errors.attributes?.[i]?.name && (
+                        <p className="g-hidden-placeholder">
+                          Ingresa el nombre del atributo
+                        </p>
+                      )}
+                      <p className="g-error-input">
+                        {errors.attributes?.[i]?.name?.message}
+                      </p>
+                    </>
+                  </div>
+
+                  <div className="form-attributevalue-with-error">
+                    <div className="g-input-with-button">
+                      <input
+                        type="text"
+                        placeholder="Valor del atributo"
+                        autoComplete="off"
+                        id={`attribute_value_${i}`}
+                        {...register(`attributes.${i}.value_name`)}
+                      />
+                      {watch(`attributes.${i}.value_name`) === "" ||
+                      watch(`attributes.${i}.value_name`) ===
+                        undefined ? null : (
+                        <div
+                          className="g-input-icon-container g-input-x-button"
+                          onClick={() =>
+                            setValue(`attributes.${i}.value_name`, "")
+                          }
+                        >
+                          <CloseIcon />
+                        </div>
+                      )}
+                    </div>
+                    <>
+                      {!errors.attributes?.[i]?.value_name && (
+                        <p className="g-hidden-placeholder">
+                          Ingresa la descripción del atributo
+                        </p>
+                      )}
+                      <p className="g-error-input">
+                        {errors.attributes?.[i]?.value_name?.message}
+                      </p>
+                    </>
+                  </div>
+
+                  {attributesQuantity > 1 && (
+                    <span
+                      onClick={() => handleRemoveAttribute(i)}
+                      className="g-icon-button trash-button"
+                    >
+                      <DeleteIcon />
+                    </span>
+                  )}
+                </div>
               ))
             )}
-            {warn.attributes && <p>{warn.attributes}</p>}
-            <h3 onClick={() => handleAddAttribute()}>+</h3>
+            <>
+              {!warn.attributes && (
+                <p className="g-hidden-placeholder">hidden</p>
+              )}
+              {warn.attributes && (
+                <p className="g-warn-input">{warn.attributes}</p>
+              )}
+              <div
+                onClick={() => handleAddAttribute()}
+                className="g-icon-button form-add-input"
+              >
+                <AddIcon /> Agregar atributo
+              </div>
+            </>
           </div>
-          <br />
-          <hr />
-          <br />
-          <div>
-            <textarea placeholder="Descripción" {...register("description")} />
-            <div>{errors.description?.message}</div>
-          </div>
-          <br />
-          <hr />
-          <br />
-        </>
 
-        <div>
-          <label htmlFor="filesButton">BOTON PARA IMAGENES</label>
+          {/* DESCRIPCIÓN */}
+          <div className="form-container-border">
+            <div className="input-title">Descripción</div>
+            <div className="description-container">
+              <textarea {...register("description")} />
+              {watch("description") === "" ||
+              watch("description") === undefined ? null : (
+                <div
+                  className="g-input-icon-container g-input-x-button"
+                  onClick={() => setValue("description", "")}
+                >
+                  <CloseIcon />
+                </div>
+              )}
+              <>
+                {!errors.description && (
+                  <p className="g-hidden-placeholder">hidden</p>
+                )}
+                <p className="g-error-input">{errors.description?.message}</p>
+              </>
+            </div>
+          </div>
+        </div>
+
+        {/* IMÁGENES */}
+        <>
+          <label
+            htmlFor="filesButton"
+            className={`g-white-button upload-images${
+              productImg?.length + imgsToEdit?.length >= 8 || waitingResponse
+                ? " upload-images-disabled"
+                : ""
+            }`}
+          >
+            Subir imágenes
+          </label>
           <input
             type="file"
             name="image"
             multiple
             accept="image/png, image/jpeg"
             onChange={handleAddImg}
-            style={{ visibility: "hidden" }}
             id="filesButton"
+            disabled={
+              productImg?.length + imgsToEdit?.length >= 8 || waitingResponse
+            }
+            className="hidden-button"
+          />
+
+          <>
+            {showCustomErrors && imagesError ? (
+              <p className="g-error-input">{imagesError}</p>
+            ) : (
+              <p className="g-hidden-placeholder">hidden</p>
+            )}
+          </>
+
+          {!warn.image && <p className="g-hidden-placeholder">hidden</p>}
+          {warn.image && (
+            <p className="g-warn-input warn-block">{warn.image}</p>
+          )}
+
+          <div className="form-all-images-container">
+            {imgsToEdit &&
+              React.Children.toArray(
+                imgsToEdit.map(({ imgURL, _id }, i) => (
+                  <div
+                    className={`form-img-product-container ${
+                      mainImgIndex === i ? "main-image" : "not-main-image"
+                    }`}
+                  >
+                    {mainImgIndex === i ? (
+                      <span className="main-image-text">PORTADA</span>
+                    ) : (
+                      <span
+                        className="not-main-image-text-container"
+                        onClick={() => handleMainImg(i)}
+                      >
+                        <span className="not-main-image-text">
+                          Seleccionar portada
+                        </span>
+                      </span>
+                    )}
+                    <img
+                      src={imgURL}
+                      alt={`img_${_id}`}
+                      className="form-img-product"
+                    />
+                    <span className="form-delete-image">
+                      <DeleteIcon
+                        onClick={() => handleRemoveImgToEdit(_id, i)}
+                      />
+                    </span>
+                  </div>
+                ))
+              )}
+            {React.Children.toArray(
+              productImgUrls.map((imageURL, i) => (
+                <>
+                  {imgsToEdit ? (
+                    <div
+                      className={`form-img-product-container ${
+                        mainImgIndex - imgsToEdit.length === i
+                          ? "main-image"
+                          : "not-main-image"
+                      }`}
+                    >
+                      {mainImgIndex - imgsToEdit.length === i ? (
+                        <span className="main-image-text">PORTADA</span>
+                      ) : (
+                        <span
+                          className="not-main-image-text-container"
+                          onClick={() => handleMainImg(imgsToEdit.length + i)}
+                        >
+                          <span className="not-main-image-text">
+                            Seleccionar portada
+                          </span>
+                        </span>
+                      )}
+                      <img
+                        src={imageURL}
+                        alt={`img_${i}`}
+                        className="form-img-product"
+                      />
+                      <span className="form-delete-image">
+                        <DeleteIcon onClick={() => handleRemoveImg(i)} />
+                      </span>
+                    </div>
+                  ) : (
+                    <div
+                      className={`form-img-product-container ${
+                        mainImgIndex === i ? "main-image" : "not-main-image"
+                      }`}
+                    >
+                      {mainImgIndex === i ? (
+                        <span className="main-image-text">PORTADA</span>
+                      ) : (
+                        <span
+                          className="not-main-image-text-container"
+                          onClick={() => handleMainImg(i)}
+                        >
+                          <span className="not-main-image-text">
+                            Seleccionar portada
+                          </span>
+                        </span>
+                      )}
+                      <img
+                        src={imageURL}
+                        alt={`img_${i}`}
+                        className="form-img-product"
+                      />
+                      <span className="form-delete-image">
+                        <DeleteIcon onClick={() => handleRemoveImg(i)} />
+                      </span>
+                    </div>
+                  )}
+                </>
+              ))
+            )}
+          </div>
+        </>
+
+        {/* FORM BUTTONS */}
+        <div className="product-form-width form-buttons-container">
+          <button
+            type="submit"
+            className="g-white-button"
+            disabled={waitingResponse}
+          >
+            {waitingResponse ? (
+              <Spinner className="cho-svg" />
+            ) : productToEdit ? (
+              "Actualizar"
+            ) : (
+              "Publicar"
+            )}
+          </button>
+          <input
+            type="button"
+            value="Resetear"
+            onClick={clearInputs}
+            className="g-white-button"
+            disabled={waitingResponse}
           />
         </div>
-        {showCustomErrors && imagesError && <h3>{imagesError}</h3>}
-
-        {imgsToEdit &&
-          React.Children.toArray(
-            imgsToEdit.map(({ imgURL, _id }, i) => (
-              <>
-                {mainImgIndex === i && <span>PORTADA</span>}
-                <img
-                  src={imgURL}
-                  alt={`img_${_id}`}
-                  className="imgs-product"
-                  onClick={() => handleMainImg(i)}
-                />
-                <span onClick={() => handleRemoveImgToEdit(_id, i)}> X</span>
-              </>
-            ))
-          )}
-        {React.Children.toArray(
-          productImgUrls.map((imageURL, i) => (
-            <>
-              {imgsToEdit ? (
-                <>
-                  {mainImgIndex - imgsToEdit.length === i && (
-                    <span>PORTADA</span>
-                  )}
-                  <img
-                    src={imageURL}
-                    alt={`img_${i}`}
-                    className="imgs-product"
-                    onClick={() => handleMainImg(imgsToEdit.length + i)}
-                  />
-                  <span onClick={() => handleRemoveImg(i)}> X</span>
-                </>
-              ) : (
-                <>
-                  {mainImgIndex === i && <span>PORTADA</span>}
-                  <img
-                    src={imageURL}
-                    alt={`img_${i}`}
-                    className="imgs-product"
-                    onClick={() => handleMainImg(i)}
-                  />
-                  <span onClick={() => handleRemoveImg(i)}> X</span>
-                </>
-              )}
-            </>
-          ))
-        )}
-
-        <input
-          type="submit"
-          value={productToEdit ? "Actualizar producto" : "Crear producto"}
-        />
       </form>
-      <button onClick={clearInputs}>RESETEAR</button>
+
+      {/* //! VOLVER A VER si está en CREAR enviar a /admin, en EDITAR a /admin/products */}
+      <ReturnButton to={"/profile/details"} />
+
       <Modal
         isOpen={isOpenCreateProduct}
         closeModal={closeCreateProduct}
         type="warn"
       >
-        <p>¿Crear otro producto?</p>
-        <button type="button" onClick={() => handleModalCreateProduct(true)}>
-          Aceptar
-        </button>
-        <button type="button" onClick={() => handleModalCreateProduct(false)}>
-          Cancelar
-        </button>
+        <div className="create-another-container">
+          <p>Producto creado exitosamente ¿Crear otro producto?</p>
+          <div className="create-another-buttons-container">
+            <button
+              type="button"
+              onClick={() => handleModalCreateProduct(true)}
+              className="g-white-button"
+            >
+              Aceptar
+            </button>
+            <button
+              type="button"
+              onClick={() => handleModalCreateProduct(false)}
+              className="g-white-button"
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
       </Modal>
     </div>
   );

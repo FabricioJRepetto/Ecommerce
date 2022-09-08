@@ -20,7 +20,7 @@ const salesMaker = async () => {
         );
 
         const products = await Product.find();
-        const available = products.filter(e => !e.on_sale && e.available_quantity > 0);
+        const available = products.filter(e => !e.on_sale && e.available_quantity > 0 && !e.premium);
 
         const indx = random(available.length - 1, 5);
 
@@ -39,7 +39,8 @@ const salesMaker = async () => {
                 '$set': {
                     'on_sale': true,
                     'discount': discounts[i],
-                    'free_shipping': true
+                    'free_shipping': true,
+                    'available_quantity': 50,
                 }
             }))()
         };

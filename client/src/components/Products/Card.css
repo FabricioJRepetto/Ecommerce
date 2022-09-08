@@ -1,86 +1,84 @@
-/* !! SACAR ESTO DE ACA*/
+/* !! volver a ver SACAR ESTO DE ACA*/
 .products-container {
-    display: flex;
-    flex-direction: row-reverse;
-    justify-content: center;
-    height: fit-content;
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: center;
+  height: fit-content;
 }
 .products-results-container {
-    padding: 20px;
-    border-radius: 4px;
-    background: white;
+  padding: 20px;
+  border-radius: 4px;
+  background: white;
 }
 .products-results-inner {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 .products-filters {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 .filter-brand-checkbox-container {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    max-width: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 100px;
 }
-
-
 
 .c-mrgn {
-    margin-top: 6px;
+  margin-top: 0.37rem;
 }
 .product-card {
-    width: 50vw;
-    padding: 10px;
-    position: relative;
-    border-bottom: 1px solid rgb(211, 211, 211);
-    color: black;
-    background-color: white;
+  width: 50vw;
+  padding: 10px;
+  position: relative;
+  border-bottom: 1px solid rgb(211, 211, 211);
+  color: black;
+  background-color: white;
 }
 .card-name {
-    text-align: left;
+  text-align: left;
 }
 .card-img-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 180px;
-    min-width: 180px;
-    overflow: hidden;    
-    margin: 0 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 180px;
+  min-width: 180px;
+  overflow: hidden;
+  margin: 0 24px;
 }
 .card-img-container img {
-    max-height: 180px; 
-    max-width: 180px;
+  max-height: 180px;
+  max-width: 180px;
 }
 
 .card-main-container {
-    display: flex;    
+  display: flex;
 }
 .card-details-container {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 .card-price-container {
-    text-align: left;
+  text-align: left;
 }
 .card-original-price {
-    text-align: left;
-    height: 15px;
+  text-align: left;
+  height: 15px;
 }
 .card-price-section {
-    display: flex;
+  display: flex;
 }
 
 .special-card {
-    pointer-events: none;
-    position: absolute;
-    top: 1rem;
-    left: 1rem;
-    z-index: 2;
+  pointer-events: none;
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 2;
 }

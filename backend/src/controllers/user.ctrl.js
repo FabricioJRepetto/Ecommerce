@@ -1,14 +1,10 @@
 require("dotenv").config();
-const {
-    CLOUDINARY_CLOUD,
-    CLOUDINARY_API_KEY,
-    CLOUDINARY_API_SECRET,
-} = process.env;
+const { CLOUDINARY_CLOUD, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } =
+    process.env;
 const cloudinary = require("cloudinary").v2;
 const User = require("../models/user");
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
-const axios = require("axios");
 const fs = require("fs-extra");
 const { JWT_SECRET_CODE } = process.env;
 const { validationResult } = require("express-validator");
@@ -21,18 +17,26 @@ cloudinary.config({
     secure: true,
 });
 
-const signup = async (req, res, next) => {
+console.log(CLOUDINARY_CLOUD);
+console.log(CLOUDINARY_API_KEY);
+console.log(CLOUDINARY_API_SECRET);
+
+const sendVerifyEmail = async (req, res, next) => {
+    if (req.authInfo && req.authInfo.error) return res.json(req.authInfo);
+
     const { _id, email } = req.user;
-
     const body = { _id, email };
-    const verifyToken = jwt.sign({ user: body }, JWT_SECRET_CODE);
 
-    const link = `http://localhost:3000/verify/${verifyToken}`;
-    // await sendEmail(email, "Verify Email", link); //!VOLVER A VER crashea la app al intentar enviar email
+    try {
+        const verifyToken = jwt.sign({ user: body }, JWT_SECRET_CODE);
 
-    return res.status(201).json({
-        message: req.authInfo,
-    });
+        const link = `http://localhost:3000/verify/${verifyToken}`;
+        await sendEmail(email, "Verificar email", link); //!VOLVER A VER modificar url de localhost
+
+        return res.json({ ...req.authInfo, ok: true });
+    } catch (error) {
+        next(error);
+    }
 };
 
 const signin = async (req, res, next) => {
@@ -40,7 +44,7 @@ const signin = async (req, res, next) => {
 
     if (!errors.isEmpty()) {
         const message = errors.errors.map((err) => err.msg);
-        return res.json({ message });
+        return res.json({ message, error: true });
     }
 
     passport.authenticate("signin", async (err, user, info) => {
@@ -53,8 +57,8 @@ const signin = async (req, res, next) => {
                 if (err) return next(err);
                 const { _id, email, name, role, avatar, isGoogleUser } = user;
 
-                if (role === "deleted")
-                    return res.status(401).json({ message: "User deleted" });
+                if (role === "banned")
+                    return res.status(401).json({ message: "Cuenta suspendida" });
 
                 const body = { _id, email, role, isGoogleUser };
 
@@ -75,7 +79,6 @@ const signin = async (req, res, next) => {
 
 const signinGoogle = async (req, res, next) => {
     const { sub, email, emailVerified, avatar, firstName, lastName } = req.body;
-    console.log(email);
     try {
         const userFound = await User.findOne({ email: sub });
         if (!userFound) {
@@ -87,6 +90,7 @@ const signinGoogle = async (req, res, next) => {
                 avatar,
                 firstName,
                 lastName,
+                username: firstName || email.split("@")[0],
                 isGoogleUser: true,
             });
             return res.json(newGoogleUser);
@@ -95,7 +99,7 @@ const signinGoogle = async (req, res, next) => {
                 userFound.emailVerified = emailVerified;
                 await userFound.save();
             }
-            return res.json({ name: userFound.name })
+            return res.json({ name: userFound.name });
         }
     } catch (error) {
         next(error);
@@ -107,11 +111,11 @@ const profile = async (req, res, next) => {
     try {
         const userFound = await User.findById(userId);
         if (!userFound) {
-            return res.status(404).json({ message: "User not Found" });
+            return res.status(404).json({ message: "Cuenta no encontrada" });
         }
 
-        let aux = userFound
-        delete aux.password
+        let aux = userFound;
+        delete aux.password;
 
         return res.json(aux);
     } catch (error) {
@@ -119,31 +123,62 @@ const profile = async (req, res, next) => {
     }
 };
 
+/* const sendVerifyEmail = async (req, res, next) => {
+  const { _id } = req.user;
+  if (!_id) return res.status(401).send({ message: "ID de cuenta no enviado" });
+
+  try {
+    const userFound = await User.findById(_id);
+
+    if (!userFound)
+      return res.status(404).json({ message: "Cuenta no encontrada" });
+    if (userFound.emailVerified)
+      return res.status(400).json({ message: "Email ya verificado" });
+
+    userFound.emailVerified = true;
+    await userFound.save();
+
+    return res.json({ message: "Email verificado con éxito" });
+  } catch (error) {
+    next(error);
+  }
+}; */
+
 const verifyEmail = async (req, res, next) => {
     const { _id } = req.user;
-    if (!_id) return res.status(401).send({ message: "No user ID provided" });
+    if (!_id) return res.status(401).send({ message: "ID de cuenta no enviado" });
 
     try {
         const userFound = await User.findById(_id);
-        if (!userFound) return res.status(404).json({ message: "User not found" });
+
+        if (!userFound)
+            return res.status(404).json({ message: "Cuenta no encontrada" });
+
         userFound.emailVerified = true;
         await userFound.save();
 
-        return res.status(204).json({ message: "Email verified successfully" });
+        return res.json({ message: "Email verificado con éxito" });
     } catch (error) {
         next(error);
     }
 };
 
 const forgotPassword = async (req, res, next) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        const message = errors.errors.map((err) => err.msg);
+        return res.json({ message, error: true });
+    }
+
     const { email } = req.body;
-    if (!email) return res.status(401).send({ message: "Email is required" });
 
     try {
         let userFound = await User.findOne({ email });
-        if (!userFound) return res.status(404).send({ message: "User not found" });
+        if (!userFound)
+            return res.json({ message: "Cuenta no encontrada", error: true });
         if (userFound.isGoogleUser) {
-            return res.status(401).json({ message: "Google user unauthorized" });
+            return res.json({ message: "Cuenta no autorizada", error: true });
         }
 
         const body = { _id: userFound._id, email: userFound.email };
@@ -154,9 +189,11 @@ const forgotPassword = async (req, res, next) => {
         );
 
         const link = `http://localhost:3000/reset/${body._id}/${resetToken}`;
-        await sendEmail(userFound.email, "Reset Password", link);
+        await sendEmail(userFound.email, "Reestablecer contraseña", link);
 
-        return res.json({ message: "Check your email to reset your password" });
+        return res.json({
+            message: "Revisa tu email para reestablecer la contraseña",
+        });
     } catch (error) {
         next(error);
     }
@@ -166,18 +203,19 @@ const resetPassword = async (req, res, next) => {
     const { _id } = req.body;
     const authHeader = req.headers.authorization;
 
-    if (!_id) return res.status(403).json({ message: "No id provided" });
-    if (!authHeader)
-        return res.status(403).json({ message: "No token provided" });
+    if (!_id) return res.status(403).json({ message: "ID de cuenta no enviado" });
+    if (!authHeader) return res.status(403).json({ message: "Token no enviado" });
     let resetToken = authHeader.split(" ")[1];
 
     try {
         const userFound = await User.findById(_id);
-        if (!userFound) return res.status(404).json({ message: "User not found" });
+        if (!userFound)
+            return res.status(404).json({ message: "Cuenta no encontrada" });
         if (userFound.isGoogleUser)
-            return res.status(401).json({ message: "Google user unauthorized" });
+            return res.status(401).json({ message: "Cuenta no autorizada" });
 
         await jwt.verify(resetToken, JWT_SECRET_CODE + userFound.password);
+        return res.send("ok");
     } catch (error) {
         next(error);
     }
@@ -187,27 +225,51 @@ const changePassword = async (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
         const message = errors.errors.map((err) => err.msg);
-        return res.json({ message });
+        return res.json({ message, error: true });
     }
 
     const { password, _id } = req.body;
     const authHeader = req.headers.authorization;
 
-    if (!authHeader)
-        return res.status(403).json({ message: "No token provided" });
+    if (!authHeader) return res.status(403).json({ message: "Token no enviado" });
     let resetToken = authHeader.split(" ")[1];
 
     try {
         const userFound = await User.findById(_id);
-        if (!userFound) return res.status(404).json({ message: "User not found" });
+        if (!userFound)
+            return res.status(404).json({ message: "Cuenta no encontrada" });
         if (userFound.isGoogleUser)
-            return res.status(401).json({ message: "Google user unauthorized" });
+            return res.status(401).json({ message: "Cuenta no autorizada" });
 
         await jwt.verify(resetToken, JWT_SECRET_CODE + userFound.password);
 
         userFound.password = password;
         await userFound.save();
-        return res.json({ message: "Password changed successfully" });
+        return res.json({ message: "Contraseña modificada con éxito" });
+    } catch (error) {
+        next(error);
+    }
+};
+
+const updatePassword = async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        const message = errors.errors.map((err) => err.msg);
+        return res.json({ message, error: true });
+    }
+
+    try {
+        const { password, oldPassword } = req.body;
+
+        const userFound = await User.findById(req.user._id);
+        const validity = await userFound.comparePassword(oldPassword);
+        if (!validity) {
+            return res.json({ message: "Contraseña incorrecta", error: true });
+        }
+
+        userFound.password = password;
+        await userFound.save();
+        return res.json({ message: "Contraseña modificada con éxito" });
     } catch (error) {
         next(error);
     }
@@ -215,18 +277,32 @@ const changePassword = async (req, res, next) => {
 
 const editProfile = async (req, res, next) => {
     try {
-        const { username, first, last } = req.body;
+        const { username, firstname, lastname } = req.body;
 
-        const user = await User.findByIdAndUpdate(req.user._id,
-            {
-                username: username || '',
-                firstName: first || '',
-                lastName: last || ''
+        /* const userFound = await User.findByIdAndUpdate(
+          req.user._id,
+          {
+            username: username || userFound.username,
+            firstName: firstname || userFound.firstName,
+            lastName: lastname || userFound.lastName,
+          },
+          { new: true }
+        ); */
+        const userFound = await User.findById(req.user._id);
+
+        (userFound.username = username || userFound.username),
+            (userFound.firstName = firstname || userFound.firstName),
+            (userFound.lastName = lastname || userFound.lastName),
+            await userFound.save();
+
+        return res.json({
+            message: "Editado con éxito",
+            user: {
+                firstname: userFound.firstName,
+                lastname: userFound.lastName,
+                username: userFound.username,
             },
-            { new: true }
-        );
-
-        return res.json({ message: "Edited successfully", user });
+        });
     } catch (error) {
         next(error);
     }
@@ -234,34 +310,33 @@ const editProfile = async (req, res, next) => {
 
 const setAvatar = async (req, res, next) => {
     try {
-        const { avatar } = await User.findById(req.user._id)
-        avatar && cloudinary.api.delete_resources([avatar.split('/').pop().split('.')[0]]);
+        const { avatar } = await User.findById(req.user._id);
+        avatar &&
+            cloudinary.api.delete_resources([avatar.split("/").pop().split(".")[0]]);
 
         const data = await cloudinary.uploader.upload(req.files[0].path);
 
         await fs.unlink(req.files[0].path);
 
         //: actualizar y enviar link de nueva imagen
-        await User.findByIdAndUpdate(
-            req.user._id,
-            { avatar: data.url }
-        );
+        await User.findByIdAndUpdate(req.user._id, { avatar: data.url });
 
-        return res.json({ message: 'Avatar actualizado', avatar: data.url });
+        return res.json({ message: "Avatar actualizado", avatar: data.url });
     } catch (error) {
-        next(error)
+        next(error);
     }
 };
 
 module.exports = {
     signin,
     signinGoogle,
-    signup,
+    sendVerifyEmail,
     profile,
     verifyEmail,
     forgotPassword,
     resetPassword,
     changePassword,
+    updatePassword,
     editProfile,
     setAvatar,
 };

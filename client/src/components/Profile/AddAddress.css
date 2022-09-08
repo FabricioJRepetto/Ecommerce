@@ -1,0 +1,57 @@
+div.add-address-container h1 {
+  margin-bottom: 0.5rem;
+}
+.add-address-buttons-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.add-address-buttons-container button {
+  width: 47%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.addaddress-form .g-input-with-button {
+  width: 100%;
+}
+@media (max-width: 700px) {
+  .addaddress-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+@media (max-width: 600px) {
+  .add-address-buttons-container {
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+  }
+  .add-address-buttons-container button {
+    width: 100%;
+  }
+  .add-address-buttons-container button:last-child {
+    margin: 0;
+  }
+  .add-address-buttons-container button:first-child {
+    padding-right: 0;
+    padding-left: 0;
+  }
+  .add-address-container {
+    width: 90%;
+  }
+}
+@media (max-width: 500px) {
+  .addaddress-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .add-address-buttons-container button:last-child {
+    border-left: 1px solid gray;
+  }
+}

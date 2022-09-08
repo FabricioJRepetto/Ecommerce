@@ -1,4 +1,268 @@
-.imgs-product {
+.form-all-images-container {
+  display: flex;
+  flex-wrap: wrap;
+  width: 90vw;
+  justify-content: center;
+}
+.form-img-product-container {
+  margin: 1rem 0.5rem;
   height: 150px;
   width: 150px;
+  position: relative;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.form-img-product {
+  max-width: 100%;
+  max-height: 100%;
+  /* border: 2px solid black; */
+}
+.form-delete-image {
+  background-color: transparent;
+  position: absolute;
+  bottom: -0.2rem;
+  right: -0.2rem;
+  border-top: 2.2rem solid transparent;
+  border-bottom: 2.2rem solid red;
+  border-left: 2.2rem solid transparent;
+}
+.form-delete-image > svg {
+  cursor: pointer;
+  position: absolute;
+  top: 1rem;
+  right: 0.1rem;
+  /* color: black; */
+  z-index: 2;
+}
+.main-image {
+  border: 0.2rem solid white;
+}
+.not-main-image {
+  border: 0.2rem solid transparent;
+}
+.main-image-text {
+  position: absolute;
+  width: 150px;
+  background: linear-gradient(
+    45deg,
+    #35a7ff 0%,
+    #7e54de 20%,
+    #f40259 60%,
+    #fea30d 100%
+  ); /* //! VOLVER A VER cambiar color de fondo de avatar */
+  background-size: 400%;
+  animation: gradientTextAnim 5s infinite;
+  color: white;
+  top: -1rem;
+  font-weight: 500;
+}
+.not-main-image-text-container {
+  height: 150px;
+  width: 150px;
+  position: absolute;
+  color: transparent;
+  cursor: pointer;
+  z-index: 1;
+}
+.not-main-image-text-container:hover {
+  background: linear-gradient(
+    45deg,
+    #35a7ffbb 0%,
+    #7e54debb 20%,
+    #f40259bb 60%,
+    #fea30dbb 100%
+  ); /* //! VOLVER A VER cambiar color de fondo de avatar */
+  background-size: 400%;
+  animation: gradientTextAnim 5s infinite;
+  color: white;
+  font-weight: 500;
+}
+.not-main-image-text {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form-categorypath-container {
+  width: 90vw;
+}
+.form-category-error {
+  text-align: center;
+}
+
+.input-with-trash {
+  display: flex;
+  align-items: center;
+}
+.input-with-trash > div {
+  width: 100%;
+}
+
+.trash-button {
+  margin: 0.3rem 0 0 0.5rem;
+  font-size: 1.2rem;
+}
+
+.form-width-test {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.form-width-test > form {
+  width: 600px;
+}
+
+.description-container > textarea {
+  width: 100%;
+  height: 5rem;
+  resize: vertical;
+  margin: 0.1rem 0 0.3rem 0;
+  padding-bottom: 2rem;
+  padding-left: 0.5rem;
+  padding-top: 0.2rem;
+}
+
+.upload-images {
+  margin-bottom: 0.3rem;
+}
+.upload-images:hover {
+  background-color: rgb(228, 228, 228);
+  mask-position: 0%;
+  -webkit-mask-position: 0%;
+  transition: mask-position 0.5s ease, -webkit-mask-position 0.5s ease;
+}
+.upload-images-disabled {
+  background: rgb(0, 0, 0);
+  color: white;
+  border: white 1px solid;
+  cursor: default;
+}
+.upload-images-disabled:active {
+  background: rgb(0, 0, 0);
+}
+.hidden-button {
+  display: none;
+}
+.input-title {
+  text-align: left;
+  font-weight: 300;
+  margin-top: 1rem;
+}
+.input-title-price {
+  margin-left: 2rem;
+}
+.warn-block {
+  display: block;
+  width: 75%;
+}
+
+.two-inputs-container {
+  display: flex;
+  width: 100%;
+}
+
+.price-input-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+.two-inputs-container input {
+  width: 100%;
+}
+.two-inputs-container > div {
+  width: 95%;
+}
+
+.dollar-sign-input {
+  font-weight: 300;
+  margin: 0 0.3rem 0 1rem;
+}
+
+.form-price-error {
+  margin-left: 2rem;
+}
+
+.product-form-width {
+  width: 75%;
+}
+@media (max-width: 520px) {
+  .product-form-width {
+    width: 350px;
+  }
+  .warn-block {
+    width: 350px;
+  }
+}
+
+.shipping-title {
+  font-weight: 300;
+  margin-left: 0.5rem;
+}
+
+.form-shipping-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-top: 1.2rem;
+}
+.form-shipping-input {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+.form-shipping-input-container {
+  display: flex;
+  width: 100%;
+  margin-top: 1rem;
+}
+.form-shipping-input > input {
+  display: none;
+}
+.form-shipping-input > span {
+  width: fit-content;
+}
+.form-container-border {
+  border-top: 2px solid white;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+}
+.form-attribute-container {
+  display: flex;
+  width: 100%;
+}
+
+.form-attributevalue-with-error {
+  margin-left: 1rem;
+}
+
+.form-buttons-container {
+  display: flex;
+  justify-content: space-around;
+}
+.form-buttons-container > input,
+.form-buttons-container > button {
+  width: 45%;
+  height: 2.5rem;
+}
+.create-another-container {
+  display: flex;
+  flex-direction: column;
+}
+.create-another-buttons-container {
+  display: flex;
+}
+.create-another-buttons-container > button {
+  margin: 1rem;
+}
+.form-add-input {
+  margin-top: 0.5rem;
+}
+
+.form-buttons-container > button[type="submit"]:disabled {
+  padding-top: 0.2rem;
 }

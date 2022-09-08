@@ -1,0 +1,60 @@
+.postsale-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.postsale-inner {
+  width: 80vw;
+  height: 50vh;
+}
+
+.postsale-header {
+  height: 25vh;
+  padding-top: 5vh;
+  display: flex;
+  justify-content: center;
+}
+.postsale-img-container {
+  height: 25vh;
+  width: 25vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: white;
+  position: relative;
+  overflow: visible clip;
+}
+
+.postsale-details-container {
+  display: flex;
+  flex-direction: column;
+  height: fit-content;
+  padding: 6rem 6rem 3rem 6rem;
+  border-top: 1px solid white;
+  border-bottom: 1px solid white;
+}
+.postsale-text-margin {
+  margin-bottom: 2rem;
+}
+
+.postsale-approved {
+  background: linear-gradient(15deg, #64d500 0%, rgba(255, 255, 255, 0) 80%);
+  background-size: 100% 500%;
+  background-position: 0% 100%;
+}
+.postsale-pending {
+  background: linear-gradient(15deg, #eb7711 0%, rgba(255, 255, 255, 0) 80%);
+  background-size: 100% 400%;
+  background-position: 0% 100%;
+}
+
+.animation-start {
+  animation: background-start 5s;
+}
+.animation-loop {
+  animation: background-loop 10s infinite;
+}
+.postsale-back-container {
+  margin-top: 2.5rem;
+}

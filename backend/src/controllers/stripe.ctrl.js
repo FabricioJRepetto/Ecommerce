@@ -9,6 +9,7 @@ const create = async (req, res, next) => {
     try {
         const orderId = req.params.id;
 
+        //! Volver a ver: cambiar URL del front
         const YOUR_DOMAIN = `http://localhost:3000/orders/post-sale?external_reference=${orderId}`
 
         //? order
@@ -29,13 +30,11 @@ const create = async (req, res, next) => {
             })
         };
 
-        //: payment_method_types: 'card';
         const session = await stripe.checkout.sessions.create({
             line_items: items,
             shipping_options: [{
                 shipping_rate_data: {
-                    // order.free_shipping ? 'con descuento' : 'normal'
-                    display_name: order.flash_shipping ? `Flash${order.free_shipping ? ' & free shipping applied.' : ' shipping.'}` : order.free_shipping ? 'Free shipping.' : 'Standard shipping.',
+                    display_name: order.flash_shipping ? `Flash${order.free_shipping ? ' & free shipping applied' : ' shipping'}` : order.free_shipping ? 'Free shipping' : 'Standard shipping',
                     type: 'fixed_amount',
                     fixed_amount: {
                         currency: 'ars',
@@ -55,14 +54,13 @@ const create = async (req, res, next) => {
                 "$set": {
                     payment_link: session.url,
                     expiration_date_to: expiration,
-                    payment_source: 'Stripe'
+                    payment_source: 'Stripe',
+                    payment_intent: session.payment_intent
                 }
             });
 
-        return res.json(session.url);
-        //return res.redirect(303, session.url);
+        return res.json(session);
     } catch (error) {
-        //return res.json(error.raw.message);
         next(error)
     }
 };

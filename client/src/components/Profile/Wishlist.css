@@ -1,0 +1,32 @@
+.profile-wishlist-container {
+  width: 85%;
+  min-width: 350px;
+  max-width: 900px;
+}
+
+@media (max-width:520px) {
+  .profile-details-container {
+    width: 100%;
+  }
+
+  .profile-detail-container {
+    width: 100%;
+  }
+
+  .profile-all-address-container {
+    width: 100%;
+  }
+
+  .profile-all-orders-container {
+    width: 100%;
+  }
+
+  .profile-wishlist-container {
+    width: 100%;
+
+  }
+}
+
+/* .wishlist-product-img-container {
+  scale: .8;
+} */

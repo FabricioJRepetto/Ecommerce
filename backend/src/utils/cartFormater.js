@@ -64,15 +64,12 @@ const cartFormater = async (cart) => {
                 free_ship_cart = true;
                 if (flash_shipping) {
                     shipping_cost = shipping_cost + (SHIP_COST / 2)
-                    console.log(` free + flash ${shipping_cost}`);
                 }
             } else {
                 if (flash_shipping) {
                     shipping_cost = shipping_cost + (SHIP_COST * 1.5)
-                    console.log(` only flash ${shipping_cost}`);
                 } else {
                     shipping_cost = shipping_cost + SHIP_COST
-                    console.log(` standard ${shipping_cost}`);
                 }
             };
         }

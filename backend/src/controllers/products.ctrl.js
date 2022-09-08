@@ -9,7 +9,6 @@ const Product = require("../models/product");
 const axios = require("axios");
 const { meliSearchParser } = require("../utils/meliParser");
 const { rawIdProductGetter } = require("../utils/rawIdProductGetter");
-const product = require("../models/product");
 
 cloudinary.config({
     cloud_name: CLOUDINARY_CLOUD,
@@ -21,11 +20,26 @@ cloudinary.config({
 const getAll = async (req, res, next) => {
     try {
         const products = await Product.find();
-        res.json(products);
+        return res.json(products);
     } catch (error) {
         next(error);
     }
 };
+
+const getProds = async (req, res, next) => {
+    try {
+        const products = await Product.find();
+        console.log(req.query.category)
+
+        let response = products.filter((e) =>
+            e.path_from_root.find(e => e.id === req.query.category)
+        );
+
+        return res.json(response);
+    } catch (error) {
+        next(error)
+    }
+}
 
 const getByQuery = async (req, res, next) => {
     try {
@@ -33,7 +47,6 @@ const getByQuery = async (req, res, next) => {
         Object.entries(req.query).forEach(([key, value]) => {
             searchQuery += "&" + key + "=" + value;
         });
-        console.log(req.query);
 
         const L = "50";
         const meli = `https://api.mercadolibre.com/sites/MLA/search?&official_store=all&limit=${L}${searchQuery}`;
@@ -51,8 +64,8 @@ const getByQuery = async (req, res, next) => {
             allowedFilters.includes(e.id)
         );
 
-        const applied = data.filters.filter(
-            (e) => e.id !== "official_store" && e.id !== "category"
+        const applied = data.filters.filter(e =>
+            e.id !== "official_store"
         );
 
         const breadCrumbs = data.filters.find((e) => e.id === "category")?.values[0]
@@ -78,7 +91,9 @@ const getByQuery = async (req, res, next) => {
         }
 
         const filterDBResults = async (filters, products) => {
+
             let response = [...products];
+
             if (filters.BRAND) {
                 response = response.filter(
                     (e) => e.brand.toLowerCase() === filters.BRAND.toLowerCase()
@@ -93,7 +108,7 @@ const getByQuery = async (req, res, next) => {
             }
             if (filters.category) {
                 response = response.filter((e) =>
-                    e?.path_from_root.includes(filters.category)
+                    e.path_from_root.find(e => e.id === filters.category)
                 );
             }
             if (filters.free_shipping) {
@@ -188,24 +203,60 @@ const getPromos = async (req, res, next) => {
 
         let allResults = [...dbResults, ...results];
 
-        // let filters = {
-        //     category: [],
-        //     brand: []
-        // }
-        // for (const porduct of allResults) {
-
-        // }
-
         return res.json(allResults);
     } catch (error) {
         next(error);
     }
 };
 
+const getPremium = async (req, res, next) => {
+    try {
+        const results = await Product.find({ premium: true });
+
+        return res.json(results)
+    } catch (error) {
+        next(error)
+    }
+}
+
+const putPremium = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const { premiumData, overwrite } = req.body;
+
+        const prod = await Product.findById(id);
+
+        if (!prod.premium) {
+            prod.premium = true;
+            prod.premiumData = premiumData;
+            await prod.save();
+            return res.json('Premium created')
+        } else {
+            if (overwrite) {
+                prod.premiumData.extraText = premiumData.extraText;
+                // await prod.markModified('premiumData');
+                await prod.save();
+                return res.json('Extras replaced')
+            } else {
+                prod.premiumData.extraText.push(...premiumData.extraText);
+                // await prod.markModified('premiumData');
+                await prod.save();
+                return res.json({ prod, message: 'Extras updated' })
+            }
+        }
+
+    } catch (error) {
+        next(error)
+    }
+}
+
 module.exports = {
     getAll,
+    getProds,
     getByQuery,
     getById,
     stock,
     getPromos,
+    getPremium,
+    putPremium
 };

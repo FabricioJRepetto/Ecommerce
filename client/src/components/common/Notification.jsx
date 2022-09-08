@@ -1,24 +1,33 @@
-import React, { useEffect } from 'react';
-import { useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useRef, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { close } from '../../Redux/reducer/notificationSlice';
+import { ExternalLinkIcon } from "@chakra-ui/icons";
+
 import './Notification.css';
 
-import { ReactComponent as LinkIcon } from "../../assets/svg/link.svg";
-
-const Notification = () => {
+const Notification = (props) => {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const isOpen = useSelector((state) => state.notificationSlice.open);
-    const { message, type, url } = useSelector((state) => state.notificationSlice.main);
+    const [isOpen, setIsOpen] = useState(false);
+    const [shrink, setShrink] = useState(false);
     const timeout = useRef(null);
+    const dispatch = useDispatch();    
+    
+    const {
+        message,
+        type,
+        url,
+        id
+    } = props;
 
     useEffect(() => {
         clearTimeout(timeout.current);
         startTimeout();
+        setTimeout(() => {
+            message && setIsOpen(true);            
+        }, 100);
         // eslint-disable-next-line
-    }, [isOpen]);
+    }, []);
 
     let color = '';
     switch (type) {
@@ -31,37 +40,59 @@ const Notification = () => {
         case 'success':
             color = 'green';
             break;
-        default: color = 'rgba(0, 0, 0, .3)';
+        default: color = 'blue';
             break;
     };
 
     const startTimeout = () => { 
-        timeout.current = setTimeout(() => {
+        if (type !== 'error') {
+            timeout.current = setTimeout(() => {
                 closeNotification();
-            }, 4000);
-     }
+            }, 6000);
+        }
+     };
 
-    const closeNotification = () => { 
-        dispatch(close());
+    const closeNotification = (click) => {
+        // url && click && navigate(url);
+        setIsOpen(false);
         clearTimeout(timeout.current);
+
+        setTimeout(() => {
+            setShrink(true);
+        }, 500);
+
+        setTimeout(() => {
+            dispatch(close(id));
+        }, 1000);
      };
 
     return (
-        <div 
-            style={{ borderLeft: `4px solid ${color}`}}
-            onClick={() => ( url
-                ? [navigate(url), closeNotification()]
-                : closeNotification())}
-            className={`notification-container ${isOpen && 'notif-open'}`}>
-            <div className={`notification-inner`}>
-                <div className={`notification-timer ${isOpen && 'timer-active'}`}></div>
-                {url && <LinkIcon className='link-svg' />}
-                <div className='notification-message'>
-                    <p>{message}</p>
+        <div className={`notification-card-area${shrink ? ' notif-shrink' : ''}`} 
+            style={{pointerEvents: isOpen ? 'all' : 'none'}}>
+
+           <div className='chromatic-container'>
+                <div className={`notification-color-placeholder${isOpen ? ` notification-border-${color}`:''}`}></div>
+                <div className={`notification-color${isOpen ? ' color-open':''}`}
+                    style={{transitionDelay: `${(.08 / 3) * 1}s`, background: `hsl(0, 100%, 50%)`}}></div>
+                <div className={`notification-color${isOpen ? ' color-open':''}`}
+                    style={{transitionDelay: `${(.08 / 3) * 2}s`, background: `hsl(120, 100%, 50%)`}}></div>
+                <div className={`notification-color${isOpen ? ' color-open':''}`}
+                    style={{transitionDelay: `${(.08 / 3) * 3}s`, background: `hsl(240, 100%, 50%)`}}></div>
+           </div>            
+
+            <div className={`notification-container${isOpen ? ' notif-open':''}`}
+                onClick={() => closeNotification(true)}>
+                <div className='notification-inner'>
+                    {type !== 'error' && <div className={`notification-timer${isOpen ? ' timer-active':''}`}></div>}
+                    {/* {url && <LinkIcon className='link-svg' />} */}
+                    {url && <div onClick={()=>navigate(url)} className={`notification-seemore${isOpen ? ' seemore-visible':''}`}><ExternalLinkIcon /></div>}
+                    <div className='notification-message'>
+                        <p>{message}</p>
+                    </div>
                 </div>
             </div>
         </div>
-    )
-}
+  );
+};
 
-export default Notification
+export default Notification;

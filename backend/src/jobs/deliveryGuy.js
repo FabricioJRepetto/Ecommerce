@@ -15,12 +15,13 @@ const deliveryGuy = async () => {
             })
         };
     };
-    console.log(`// ${deliveries || 'No'} packages delivered.`);
+    return `// ${deliveries || 'No'} packages delivered.`;
 };
 
-const deliveryUpdater = new CronJob('0 1 15 * * *', function () {
+const deliveryUpdater = new CronJob('0 1 15 * * *', async function () {
     console.log(`// Sending the delivery guy...`);
-    deliveryGuy();
+    let log = await deliveryGuy();
+    console.log(log);
 },
     null,
     false,

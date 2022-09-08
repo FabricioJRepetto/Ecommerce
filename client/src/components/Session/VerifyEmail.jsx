@@ -1,33 +1,36 @@
-import { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import axios from "axios";
+import ReturnButton from "../common/ReturnButton";
+import "./VerifyEmail.css";
 
 const VerifyEmail = () => {
-  const navigate = useNavigate();
   const { verifyToken } = useParams();
-  const session = useSelector((state) => state.sessionReducer.session);
+  const [response, setResponse] = useState(null);
 
   useEffect(() => {
-    axios
-      .put("/admin/verifyEmail", null, {
-        headers: {
-          Authorization: `Bearer ${verifyToken}`,
-        },
-      })
-      .then(({ data }) => {
-        //! VOLVER A VER agregar mensaje y timeout antes de redirigir
-        console.log("Email verified successfully");
-        if (!session) navigate("/signin");
-      })
-      .catch((err) => {
-        //! VOLVER A VER agregar mensaje y timeout antes de redirigir
-        console.log(err);
-        navigate("/home");
-      });
+    (async () => {
+      try {
+        const { data } = await axios.put("/user/verifyEmail", null, {
+          headers: {
+            Authorization: `Bearer ${verifyToken}`,
+          },
+        });
+        console.log("data", data);
+        setResponse(data.message);
+      } catch (error) {
+        setResponse(error.response.data.message); //! VOLVER A VER manejo de errores
+      }
+    })();
+    // eslint-disable-next-line
   }, []);
 
-  return <div>Verify Email</div>;
+  return (
+    <div className="verify-email-container">
+      <h1 className="">{response}</h1>
+      <ReturnButton to={"/"} />
+    </div>
+  );
 };
 
 export default VerifyEmail;

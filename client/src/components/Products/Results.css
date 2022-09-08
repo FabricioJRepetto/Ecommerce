@@ -11,6 +11,7 @@
     width: 65vw;
     height: 2rem;
     display: flex;
+    justify-content: space-between;
 }
 .bread-crumbs span {
     cursor: pointer;

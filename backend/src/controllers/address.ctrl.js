@@ -9,7 +9,7 @@ const getAddress = async (req, res, next) => {
             user: _id,
         });
 
-        if (!address) return res.json({ message: "Address not found" });
+        if (!address) return res.json("Address not found");
         return res.json(address);
     } catch (error) {
         next(error);
@@ -21,7 +21,7 @@ const addAddress = async (req, res, next) => {
 
     try {
         const addressFound = await Address.findOne({
-            'user': _id,
+            user: _id,
         });
 
         if (addressFound) {
@@ -48,7 +48,7 @@ const addAddress = async (req, res, next) => {
             await newAddress.save();
             return res.json({
                 message: "New address registered.",
-                address: [newAddress],
+                address: newAddress.address,
                 //! VOLVER A VER al crear la primer address se renderiza undefined undefined undefined undefined
             });
         }
@@ -82,22 +82,31 @@ const updateAddress = async (req, res, next) => {
 };
 
 const removeAddress = async (req, res, next) => {
-    const { _id } = req.user;
-
     try {
-        const { address } = await Address.findOneAndUpdate(
+        const { _id } = req.user;
+
+        const list = await Address.findOneAndUpdate(
             {
-                'user': _id,
+                user: _id,
             },
             {
                 $pull: {
-                    'address': { _id: req.params.id },
+                    address: { _id: req.params.id },
                 },
             },
             { new: true }
         );
 
-        return res.json({ message: "Address removed", address });
+        if (!list.address.some(e => e.isDefault) && list.address.length > 0) {
+            console.log('setea nuevo default ?');
+
+            list.address[0].isDefault = true;
+            await list.save();
+
+            return res.json({ message: "Address removed, new default setted.", address: list.address });
+        }
+
+        return res.json({ message: "Address removed.", address: list.address });
     } catch (error) {
         next(error);
     }

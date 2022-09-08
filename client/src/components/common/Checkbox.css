@@ -1,0 +1,34 @@
+.checkbox-container {
+    min-width: 1rem;
+    min-height: 1rem;
+    max-width: 1rem;
+    max-height: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;    
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.checkbox-inner {
+    height: 100%;
+    width: 200%;
+    background: rgba(102, 51, 153, 0);
+
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    
+    transition: all .3s ease;
+}
+
+.checkbox-on {   
+    width: 50%;
+    height: 100%;
+    opacity: 1;
+    transition: opacity .6s ease;
+}
+.checkbox-off {
+    opacity: 0;
+}

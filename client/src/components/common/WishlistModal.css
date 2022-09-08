@@ -1,40 +1,79 @@
 .card-modal-container {
-    background: white;
-    position: relative;
+  color: white;
+  background: #111111;
+  position: relative;
+  height: 100px;
+  transition: height 0.2s ease;
+  overflow: hidden;
 }
 .modal-card-loading {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
 }
+
+.wishlist-modal-loaded {
+  height: 50vh;
+}
+
+.modal-wishlist-empty {
+  padding: 1rem;
+}
+
 .wishlist-modal-container {
-    display: flex;
-    flex-direction: column;
-    height: 500px;
-    padding-top: 30px;
-    padding-bottom: 60px;
-    overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  height: 50vh;
+  padding: 2rem 0.3rem 4rem 0;
+  overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
+.wishlist-modal-container::-webkit-scrollbar {
+  display: none;
+}
+
 .wishlist-modal-card-container {
-    display: flex;
-    flex-direction: column-reverse;
+  display: flex;
+  flex-direction: column-reverse;
+  margin-left: 0.3rem;
 }
 
 .modal-card-header {
-    position: absolute;
-    z-index: 13;
-    width: 100%;
-    padding: 8px;
-    top: 0;
-    background-color: rgb(255, 255, 255);
+  position: absolute;
+  margin-left: 0.3rem;
+  z-index: 13;
+  width: 100%;
+  padding: 8px;
+  top: 0;
+  background-color: #111111;
 }
 .modal-card-all-favs {
-    position: absolute;
-    z-index: 13;
-    width: 100%;
-    padding: 20px;
-    bottom: 0;
-    background-color: rgb(255, 255, 255);
-    box-shadow: 0px -3px 3px rgba(0, 0, 0, 0.2);
+  font-weight: 300;
+  position: absolute;
+  z-index: 13;
+  width: 100%;
+  /* padding: 20px; */
+  bottom: 0;
+  background-color: #111111;
+  box-shadow: 0px -3px 3px rgba(0, 0, 0, 0.2);
+}
+.modal-card-all-favs:hover {
+  background: linear-gradient(
+    90deg,
+    rgba(34, 34, 34, 1) 0%,
+    rgba(17, 17, 17, 1) 24%,
+    rgba(34, 34, 34, 1) 100%
+  );
+}
+
+.modal-card-wishlist-button-container {
+  position: absolute;
+  top: 40%;
+  right: 5%;
+}
+
+.all-favs-text-container div {
+  padding: 1rem;
 }

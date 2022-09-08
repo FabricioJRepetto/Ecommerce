@@ -6,10 +6,14 @@ import {
   loadProductsOwn,
   filterProducts,
   searchProducts,
+  changeReloadFlag,
+  clearProducts,
 } from "../../Redux/reducer/productsSlice";
 import Card from "../../components/Products/Card";
 import { useModal } from "../../hooks/useModal";
 import ModalAdminProducts from "./ModalAdminProducts";
+import { CloseIcon } from "@chakra-ui/icons";
+import "../../App.css";
 
 const Products = () => {
   const [pricesFilter, setPricesFilter] = useState({
@@ -21,13 +25,19 @@ const Products = () => {
   const [loading, setLoading] = useState(true);
   const [brandsFilter, setBrandsFilter] = useState();
   const [brandsCheckboxes, setBrandsCheckboxes] = useState([]);
+  const [filtersApplied, setFiltersApplied] = useState({});
+  const [getProductsFlag, setGetProductsFlag] = useState(false);
   const dispatch = useDispatch();
+  const stateProductsReducer = useSelector((state) => state.productsReducer);
   const {
     productsOwn,
     productsFound,
-    productsFiltered,
     productsOwnFiltersApplied,
-  } = useSelector((state) => state.productsReducer);
+    productsOwnProductToSearch,
+    productsToShowReference,
+    reloadFlag,
+    brandsFlag,
+  } = stateProductsReducer;
   const { wishlist } = useSelector((state) => state.cartReducer);
   const location = useLocation();
   const [
@@ -50,47 +60,144 @@ const Products = () => {
   ] = useModal();
 
   useEffect(() => {
-    getProducts();
+    reloadFunction();
+
+    /* if (reloadFlag) {
+      if (Object.keys(productsOwnFiltersApplied).length > 0)
+        setFiltersApplied(productsOwnFiltersApplied);
+      dispatch(clearProducts());
+      getProducts();
+    } */
+    if (!reloadFlag) {
+      console.log("aca debe limpiar redux");
+      clearFilters();
+      handleClearSearch();
+      getProducts();
+    }
+    dispatch(changeReloadFlag(false));
     setLoading(false);
+
+    return () => {
+      //clearFilters();
+      dispatch(clearProducts());
+    };
     // eslint-disable-next-line
   }, []);
 
-  let productsToShow;
-  productsFound.length === 0 && productsFiltered.length === 0
-    ? (productsToShow = productsOwn)
-    : productsFiltered.length === 0
-    ? (productsToShow = productsFound)
-    : (productsToShow = productsFiltered);
-
-  let source;
-  productsFound.length === 0
-    ? (source = "productsOwn")
-    : (source = "productsFound");
-
   useEffect(() => {
-    //productToSearch && productsFound.length === 0 && setProductToSearch("");
-    if (productsToShow[0] === null) {
-      setBrandsCheckboxes([]);
-    } else if (productsToShow.length) {
-      setBrands(productsToShow);
-    } // eslint-disable-next-line
-  }, [
-    productsOwnFiltersApplied.free_shipping,
-    productsOwnFiltersApplied.price,
-    productToSearch,
-  ]);
+    productToSearch && productsFound.length === 0 && setProductToSearch("");
+    let source;
+    productsFound.length === 0
+      ? (source = "productsOwn")
+      : (source = "productsFound");
 
+    if (productsFound[0] === null) {
+      setBrandsCheckboxes([]);
+    } else if (stateProductsReducer[source].length) {
+      setBrands(stateProductsReducer[source]);
+    } // eslint-disable-next-line
+  }, [brandsFlag]);
+
+  //! 1.5
   const getProducts = () => {
+    console.log("1.5 getProducts");
     axios
       .get("/product")
-      .then(({ data }) => {
-        dispatch(loadProductsOwn(data));
-        setBrands(data);
+      .then((r) => {
+        dispatch(loadProductsOwn(r.data));
+        setBrands(r.data);
+        setGetProductsFlag(!getProductsFlag);
       })
       .catch((err) => console.log(err)); //! VOLVER A VER manejo de errores
   };
 
+  //! 4
+  const applyFilters = () => {
+    console.log("4 applyFilters");
+    console.log("filtersApplied", filtersApplied);
+    if (productsOwnProductToSearch) {
+      clearFilters();
+      setProductToSearch(productsOwnProductToSearch);
+      dispatch(searchProducts(productsOwnProductToSearch));
+    }
+
+    if (filtersApplied.brand) {
+      let oldBrandsFilter = {};
+      for (const brand of filtersApplied.brand) {
+        let brandCamelCase =
+          brand.charAt(0).toUpperCase() + brand.slice(1).toLowerCase();
+        oldBrandsFilter = {
+          ...oldBrandsFilter,
+          [brandCamelCase]: true,
+        };
+        dispatch(
+          filterProducts({
+            type: "brand",
+            value: [brand, true],
+          })
+        );
+      }
+      setBrandsFilter({
+        ...brandsFilter,
+        ...oldBrandsFilter,
+      });
+    }
+
+    if (filtersApplied.free_shipping) {
+      setShippingFilter(filtersApplied.free_shipping);
+      dispatch(
+        filterProducts({
+          type: "free_shipping",
+          value: filtersApplied.free_shipping,
+        })
+      );
+    }
+
+    if (filtersApplied.price) {
+      setPricesFilter({
+        min: filtersApplied.price.split("-")[0],
+        max: filtersApplied.price.split("-")[1],
+      });
+      dispatch(
+        filterProducts({
+          type: "price",
+          value: filtersApplied.price,
+        })
+      );
+    }
+
+    setFiltersApplied({});
+  };
+
+  //! 1
+  const reloadFunction = () => {
+    if (reloadFlag) {
+      console.log("1 reloadFlag ef");
+      if (Object.keys(productsOwnFiltersApplied).length > 0)
+        setFiltersApplied(productsOwnFiltersApplied);
+      dispatch(clearProducts());
+      getProducts();
+    }
+  };
+
+  useEffect(() => {
+    reloadFunction();
+    dispatch(changeReloadFlag(false));
+    setLoading(false);
+    // eslint-disable-next-line
+  }, [reloadFlag]);
+
+  //! 3
+  useEffect(() => {
+    if (productsOwn.length) {
+      console.log("3 getProductsFlag ef");
+      applyFilters();
+    } // eslint-disable-next-line
+  }, [getProductsFlag]);
+
+  //! 2
   const setBrands = (products) => {
+    console.log("2 setBrands");
     let brandsCheckbox = {};
     let newBrands = [];
     // newBrands => para cargar brandsCheckboxes
@@ -99,9 +206,11 @@ const Products = () => {
     //      => para cargar brandsFilter
     // brandsFilter => estado que maneja checkboxes
     for (const product of products) {
-      const brandCamelCase =
-        product.brand.charAt(0).toUpperCase() + product.brand.slice(1);
-      !newBrands.includes(brandCamelCase) && newBrands.push(brandCamelCase);
+      if (product.brand) {
+        const brandCamelCase =
+          product.brand.charAt(0).toUpperCase() + product.brand.slice(1);
+        !newBrands.includes(brandCamelCase) && newBrands.push(brandCamelCase);
+      }
     }
     newBrands.sort();
 
@@ -125,15 +234,14 @@ const Products = () => {
       parseInt(pricesFilter.min) < parseInt(pricesFilter.max) &&
       dispatch(
         filterProducts({
-          source,
           type: "price",
           value: `${pricesFilter.min}-${pricesFilter.max}`,
         })
       );
   };
 
-  const handlePrices = ({ target }) => {
-    const { name, value, validity } = target;
+  const handlePrices = (e) => {
+    const { name, value, validity } = e.target;
 
     let validatedValue = validity.valid ? value : pricesFilter[name];
 
@@ -147,7 +255,6 @@ const Products = () => {
     setShippingFilter(!shippingFilter);
     dispatch(
       filterProducts({
-        source,
         type: "free_shipping",
         value: !shippingFilter,
       })
@@ -162,7 +269,6 @@ const Products = () => {
 
     dispatch(
       filterProducts({
-        source,
         type: "brand",
         value: [target.name, !brandsFilter[target.name]],
       })
@@ -172,7 +278,6 @@ const Products = () => {
   const handleClearPrices = () => {
     dispatch(
       filterProducts({
-        source,
         type: "price",
         value: null,
       })
@@ -180,35 +285,59 @@ const Products = () => {
     setPricesFilter({ min: "", max: "" });
   };
 
-  const handleSearch = (e) => {
+  const clearFilters = () => {
     handleClearPrices();
     setShippingFilter(false);
     dispatch(
       filterProducts({
-        source,
         type: "free_shipping",
         value: null,
       })
     );
+    dispatch(
+      filterProducts({
+        type: "brand",
+        value: null,
+      })
+    );
+  };
+
+  const handleSearch = (e) => {
+    clearFilters();
     setProductToSearch(e.target.value);
     dispatch(searchProducts(e.target.value));
+  };
+  const handleClearSearch = () => {
+    setProductToSearch("");
+    dispatch(searchProducts(""));
   };
 
   return (
     <div className="products-container">
       <div className="products-results-container">
-        <input
-          type="text"
-          placeholder="Buscar por nombre"
-          onChange={handleSearch}
-          value={productToSearch}
-        />
-        {productsToShow[0] === null ? (
+        <span className="g-input-with-button">
+          <input
+            type="text"
+            placeholder="Busca un producto"
+            onChange={handleSearch}
+            value={productToSearch}
+          />
+          {productToSearch && (
+            <div
+              className="g-input-icon-container g-input-x-button"
+              onClick={handleClearSearch}
+            >
+              <CloseIcon />
+            </div>
+          )}
+        </span>
+        {stateProductsReducer[productsToShowReference] &&
+        stateProductsReducer[productsToShowReference][0] === null ? (
           <h1>NO HUBIERON COINCIDENCIAS</h1>
         ) : (
           <div className="products-results-inner">
             {React.Children.toArray(
-              productsToShow?.map(
+              stateProductsReducer[productsToShowReference]?.map(
                 (product) =>
                   (product.available_quantity > 0 ||
                     location.pathname === "/admin/products") && (
@@ -254,9 +383,6 @@ const Products = () => {
                   ))
                 )
               )}
-              <br />
-              <hr />
-              <br />
             </div>
 
             <h3>RANGO DE PRECIOS</h3>
@@ -293,7 +419,6 @@ const Products = () => {
               )}
             </>
 
-            <br />
             <label>
               <input
                 type="checkbox"

@@ -11,6 +11,7 @@ const stripeRouter = require("./stripe.router");
 const mpRouter = require("./mercadopago.router");
 const salesRouter = require("./sales.router");
 const adminRouter = require("./admin.router");
+const choNotif = require("./choNotif.router");
 const {
     verifyToken,
     verifyAdmin,
@@ -18,6 +19,7 @@ const {
 } = require("../middlewares/verify");
 
 router.use("/user", userRouter);
+router.use("/checkout-notification", choNotif);
 router.use("/cart", verifyToken, cartRouter);
 router.use("/wishlist", verifyToken, wishlistRouter);
 router.use("/order", verifyToken, orderRouter);

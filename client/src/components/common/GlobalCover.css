@@ -1,17 +1,17 @@
 .globalLoader {
-    opacity: 1;
-    position:fixed;
-    top: 0;
-    left: 0;
-    background: #222;
-    min-height: 100vh;
-    min-width: 100vw;
-    z-index: 10;
-    pointer-events: none;
-    transition: all .5s ease;
+  opacity: 1;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: #000000;
+  min-height: 100vh;
+  min-width: 100vw;
+  z-index: 11;
+  pointer-events: none;
+  transition: all 0.5s ease;
 }
 
 .globalLoaded {
-    opacity: 0;
-    transition: all .5s ease;
+  opacity: 0;
+  transition: all 0.5s ease;
 }

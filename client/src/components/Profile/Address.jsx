@@ -1,39 +1,29 @@
-import React, { useState } from 'react';
-import axios from 'axios'
-import { useForm } from "react-hook-form";
-import { useNotification } from '../../hooks/useNotification';
-import Modal from '../common/Modal';
-import { useModal } from '../../hooks/useModal';
+import React, { useState } from "react";
+import axios from "axios";
+import AddAddress from "./AddAddress";
+import AddressCard from "../../test/fer/AddressCard";
+import { useNotification } from "../../hooks/useNotification";
+import Modal from "../common/Modal";
+import { useModal } from "../../hooks/useModal";
+import { ReactComponent as PinBold } from "../../assets/svg/pin-bold.svg";
+import "../../App.css";
+import "./Address.css";
+import LoaderBars from "../common/LoaderBars";
 
 const Address = ({ loading, setLoading, address, setAddress }) => {
-    const [notification] = useNotification();
+  const [addressToEditId, setAddressToEditId] = useState(null);
+  const [addressToEdit, setAddressToEdit] = useState(null);
+  const [notification] = useNotification();
+  const [isOpenAddForm, openAddForm, closeAddForm, prop] = useModal();
 
-    const [addressToEditId, setaddressToEditId] = useState(null);
-    const [isOpenAddForm, openModalAddForm, closeAddForm, prop] = useModal();
-
-
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-        reset,
-        setValue,
-    } = useForm();
-
-    const {
-        register: registerForgot,
-        handleSubmit: handleSubmitForgot,
-        formState: { errors: errorsForgot },
-    } = useForm();
-
-    //? ADDRESS
+  //? ADDRESS
   const deleteAddress = async (id) => {
     setLoading(true);
     const { data, statusText } = await axios.delete(`/address/${id}`);
     data.address ? setAddress(data.address) : setAddress([]);
     setLoading(false);
     notification(
-      data.message,
+      `${statusText === "OK" ? "Dirección eliminada" : "Algo salió mal"}`,
       "",
       `${statusText === "OK" ? "success" : "warning"}`
     );
@@ -44,157 +34,120 @@ const Address = ({ loading, setLoading, address, setAddress }) => {
     const { data, statusText } = await axios.put(`/address/default/${id}`);
     setAddress(data.address);
     notification(
-      data.message,
-      "/cart",
+      `${
+        statusText === "OK"
+          ? "Dirección predeterminada establecida"
+          : "Algo salió mal"
+      }`,
+      "",
       `${statusText === "OK" ? "success" : "warning"}`
     );
   };
 
-  // edit/create address
-  // set and open modal
-  const editAddress = async (id) => {
+  const getAddressToEdit = async (id) => {
     const { data } = await axios(`/address/`);
-    const target = data.address?.find((e) => e._id === id);
-    openModalAddForm();
-    setaddressToEditId(id);
-    setValue("state", target.state);
-    setValue("city", target.city);
-    setValue("zip_code", target.zip_code);
-    setValue("street_name", target.street_name);
-    setValue("street_number", target.street_number);
-    setValue("isDefault", target.isDefault);
+    const addressFound = data.address?.find((e) => e._id === id);
+    setAddressToEdit(addressFound);
+    openAddForm();
+    setAddressToEditId(id);
   };
-    // handle submit
-  const handleAddress = async (addressData, n = false) => {
-    if (n) {
-      const { data: updated, statusText } = await axios.post(
-        `/address/`,
-        addressData
-      );
-      setAddress(updated.address);
-      notification(
-        updated.message,
-        "",
-        `${statusText === "OK" ? "success" : "warning"}`
-      );
-    } else {
-        console.log(addressData);
-        const { data: updated, statusText } = await axios.put(
-            `/address/${addressToEditId}`,
-            addressData
-        );
-        setAddress(updated.address);
-        notification(
-            updated.message,
-            "",
-            `${statusText === "OK" ? "success" : "warning"}`
-        );
-    }
-    reset();
-    closeAddForm();
-  };
+
   return (
-    <div>
-        <h1>Address</h1>
-        {!loading ? (
-        <div>
+    <div className="profile-all-address-container">
+      {!loading ? (
+        <>
+          <h1>Direcciones</h1>
+          <div>
+            {!address ||
+              (address.length === 0 && (
+                <p>Todavía no has agregado alguna dirección</p>
+              ))}
             {React.Children.toArray(
-                address?.map((e) => (
-                    <div key={e.id}>
-                    <p>{`${e.street_name} ${e.street_number}, ${e.zip_code}, ${e.city}, ${e.state}.`}</p>
-                    <button onClick={() => editAddress(e._id)}>edit</button>
-                    <button onClick={() => deleteAddress(e._id)}>
-                        delete
-                    </button>
-                    {e.isDefault ? (
-                        <p>⭐</p>
-                    ) : (
-                        <button onClick={() => setDefault(e._id)}>
-                        set as default
-                        </button>
-                    )}
-                    <p>- - -</p>
+              address?.map(
+                (e) =>
+                  e.isDefault && (
+                    <div key={e.id} className="address-with-options-container">
+                      <div className="address-with-pin">
+                        <div
+                          className="address-pin-gradient"
+                          onClick={() => setDefault(e._id)}
+                        ></div>
+                        <AddressCard address={e} />
+                      </div>
+
+                      <div className="address-buttons-container">
+                        <div
+                          className="address-edit-gradient"
+                          onClick={() => getAddressToEdit(e._id)}
+                        ></div>
+
+                        <div
+                          className="address-trash-gradient"
+                          onClick={() => deleteAddress(e._id)}
+                        ></div>
+                      </div>
                     </div>
-                ))
+                  )
+              )
+            )}
+            {React.Children.toArray(
+              address?.map(
+                (e) =>
+                  !e.isDefault && (
+                    <div key={e.id} className="address-with-options-container">
+                      <div className="address-with-pin">
+                        <div
+                          onClick={() => setDefault(e._id)}
+                          className="address-pin-set-default"
+                        >
+                          {" "}
+                          <PinBold />
+                        </div>
+                        <AddressCard address={e} />
+                      </div>
+
+                      <div className="address-buttons-container">
+                        <div
+                          className="address-edit-gradient"
+                          onClick={() => getAddressToEdit(e._id)}
+                        ></div>
+
+                        <div
+                          className="address-trash-gradient"
+                          onClick={() => deleteAddress(e._id)}
+                        ></div>
+                      </div>
+                    </div>
+                  )
+              )
             )}
             <button
-            default={loading || true}
-            onClick={() => openModalAddForm(true)}
+              default={loading || true}
+              onClick={() => openAddForm(true)}
+              className="g-white-button"
             >
-            Add new address
+              Agregar dirección
             </button>
-        </div>
-        ) : (
-        <p>LOADING</p>
+          </div>
+        </>
+      ) : (
+        <LoaderBars />
+      )}
+
+      <Modal isOpen={isOpenAddForm} closeModal={closeAddForm}>
+        {isOpenAddForm && (
+          <AddAddress
+            prop={prop}
+            setAddressToEdit={setAddressToEdit}
+            addressToEdit={addressToEdit}
+            addressToEditId={addressToEditId}
+            setAddress={setAddress}
+            closeAddForm={closeAddForm}
+          />
         )}
-
-        <Modal isOpen={isOpenAddForm} closeModal={closeAddForm}>
-            <h1>{prop ? 'New address' : 'Edit address'}</h1>
-            { isOpenAddForm && <form onSubmit={handleSubmit((data) => handleAddress(data, prop))}>
-            <input
-                type="text"
-                name="state"
-                placeholder="state"
-                {...register("state", {
-                required: true,
-                })}
-            />
-            {errors.state && <p>Enter your residence state</p>}
-
-            <input
-                type="text"
-                name="city"
-                placeholder="city"
-                {...register("city", {
-                required: true,
-                })}
-            />
-            {errors.city && <p>Enter your residence city</p>}
-
-            <input
-                type="text"
-                name="zip_code"
-                placeholder="zip code"
-                {...register("zip_code", {
-                required: true,
-                })}
-            />
-            {errors.zip_code && <p>Enter your residence zip code</p>}
-
-            <input
-                type="text"
-                name="street_name"
-                placeholder="street name"
-                {...register("street_name", {
-                required: true,
-                })}
-            />
-            {errors.street_name && <p>Enter your residence street</p>}
-
-            <input
-                type="string"
-                name="street_number"
-                placeholder="street number"
-                {...register("street_number", {
-                required: true,
-                pattern: {
-                    value: /^(0|[1-9]\d*)(\.\d+)?$/,
-                },
-                })}
-            />
-            {errors.street_number?.type === "required" && (
-                <p>Enter your residence street number</p>
-            )}
-            {errors.street_number?.type === "pattern" && (
-                <p>Enter a valid residence street number</p>
-            )}
-
-            <button>Done</button>
-            </form>}
-        </Modal>
-
+      </Modal>
     </div>
-  )
-}
+  );
+};
 
-export default Address
+export default Address;

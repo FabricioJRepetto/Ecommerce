@@ -2,9 +2,9 @@ import axios from "axios";
 import React, { useState } from "react";
 import Card from "../../components/Products/Card";
 import AddressCard from "./AddressCard";
-import OrderCard from "./OrderCard";
+import OrderCardAdmin from "./OrderCardAdmin";
 
-const UserCard = ({ user, openDeleteUser, openPromoteUser }) => {
+const UserCard = ({ user, openBanUser, openUnbanUser, openPromoteUser }) => {
   const [addresses, setAddresses] = useState([]);
   const [orders, setOrders] = useState([]);
   const [wishlist, setWishlist] = useState([]);
@@ -66,10 +66,17 @@ const UserCard = ({ user, openDeleteUser, openPromoteUser }) => {
             Promover a Administrador
           </button>
         )}
-        {avatar ? <img src={avatar} alt={`${name}`} /> : <h4>Sin avatar</h4>}
+        {avatar ? (
+          <img src={avatar} referrerPolicy="no-referrer" alt={`${name}`} />
+        ) : (
+          <h4>Sin avatar</h4>
+        )}
         {role === "client" && (
-          <button onClick={() => openDeleteUser({ _id, name })}>
-            Eliminar
+          <button onClick={() => openBanUser({ _id, name })}>Suspender</button>
+        )}
+        {role === "banned" && (
+          <button onClick={() => openUnbanUser({ _id, name })}>
+            Activar cuenta
           </button>
         )}
         {showAddresses ? (
@@ -91,30 +98,28 @@ const UserCard = ({ user, openDeleteUser, openPromoteUser }) => {
             <h4> No se encontraron órdenes</h4>
           ) : (
             <>
-              <h4>Órdenes</h4>
+              <h4>Compras</h4>
               {React.Children.toArray(
-                orders.map((order) => <OrderCard order={order} />)
+                orders.map((order) => <OrderCardAdmin order={order} />)
               )}
             </>
           )
         ) : (
-          <button onClick={() => getOrders(_id)}>Obtener Órdenes</button>
+          <button onClick={() => getOrders(_id)}>Obtener Compras</button>
         )}
         {showWishlist ? (
           !wishlist.length ? (
-            <h4> No se encontró Lista de Deseados</h4>
+            <h4> No se encontraron Favoritos</h4>
           ) : (
             <>
-              <h4>Lista de Deseados</h4>
+              <h4>Favoritos</h4>
               {React.Children.toArray(
                 wishlist.map((product) => <Card productData={product} />)
               )}
             </>
           )
         ) : (
-          <button onClick={() => getWishlist(_id)}>
-            Obtener Lista de Deseados
-          </button>
+          <button onClick={() => getWishlist(_id)}>Obtener Favoritos</button>
         )}
       </div>
       <hr />

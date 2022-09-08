@@ -1,104 +1,188 @@
-import axios from 'axios'
-import { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { useNavigate, useSearchParams } from 'react-router-dom'
-import { resizer } from '../../helpers/resizer';
-import { loadCart } from '../../Redux/reducer/cartSlice';
+import axios from "axios";
+import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { loadCart } from "../../Redux/reducer/cartSlice";
+import { ReactComponent as Spinner } from "../../assets/svg/spinner.svg";
+import ReturnButton from "../common/ReturnButton";
+import Carousel from "../Home/Carousel/Carousel";
+import LoaderBars from "../common/LoaderBars";
+import DeliveryProgress from "../common/DeliveryProgress";
+import "./PostSale.css";
 
 const PostSale = () => {
-    const [order, setOrder] = useState(false)
-    const [firstLoad, setFirstLoad] = useState(true)
-    const [loading, setLoading] = useState(true)
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    
-    const [params] = useSearchParams(),
-    id = params.get('external_reference');
-    let status = params.get('status') ?? 'cancelled'
-    
-    useEffect(() => {
-        //! CAMBIAR PARA EL DEPLOY
-        // solo pedir la order al back para mostrar detalles
-        // mp y stripe avisan el status del pago por query
-        // pero tienen que hacerlo notificando al back
+  const [order, setOrder] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [images, setImages] = useState(false);
+  const [background, setBackground] = useState("");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-        firstLoad && (async () => {
-            if (status === 'null' || status === 'cancelled') return navigate('/');
+  const [params] = useSearchParams(),
+    id = params.get("external_reference");
+  let status = params.get("status") || "cancelled";
 
-            const { data } = await axios(`/order/${id}`);
-            console.log(data);
-            setOrder(data);
-            
-            if (status === 'approved' && data.status !== 'approved') {
-                if (data.order_type === 'cart') {
-                    //? vaciar carrito
-                    const { data: cartEmpty } = await axios.delete(`/cart/empty`);
-                    console.log(cartEmpty.message);
-                    //? Vaciar el estado de redux onCart
-                    dispatch(loadCart([]));
-                    console.log('Estado actualizado');
-                    //? Quitar last_order en el carrito de la db
-                    const { data: cartOrder } = await axios.put(`/cart/order/`);
-                    console.log(cartOrder.message);
-                } else {
-                    //? vaciar el buynow
-                    axios.post(`/cart/`, {product_id: ''});
-                    console.log('buynow reseted');
-                }
+  useEffect(() => {
+    !order && (async () => {
+        console.log('ejecuta useEffect');
+      const { data } = await axios(`/order/${id}`);
+      if (!data.products) {
+        console.error("no order");
+        navigate("/");
+      }
+      console.log(data);
+      setOrder(data);
+      setLoading(false);
 
-                //? cambiar orden a pagada
-                const orderUpdt = await axios.put(`/order/${id}`,{
-                    status: 'approved',
-                    flash_shipping: data.flash_shipping
-                });
-                console.log(orderUpdt.data.message);    
-    
-                //? restar unidades de cada stock
-                let list = data.products.map(e => ({id: e.product_id, amount: e.quantity}));
-                const { data: stockUpdt } = await axios.put(`/product/stock/`, list);
-                console.log(stockUpdt);
+      if (data && !data?.payment_date && status === "approved")
+        deliveryWaiter(id);
 
-                //! first load solo sirve pre deploy
-                setFirstLoad(false);
-                setLoading(false);
-            };
-            if (status !== 'approved' && data.status !== 'approved') {
-                //? cambiar stado de la orden
-                const orderUpdt = await axios.put(`/order/${id}`,{
-                    status
-                });
-                console.log(orderUpdt.data.message);
+      let aux = [];
+      data.products.forEach((e) => {
+        aux.push({ img: e.img, url: "" });
+      });
+      setImages(aux);
 
-                //! first load solo sirve pre deploy
-                setFirstLoad(false);
-                setLoading(false);
-            }
-        })()
-      // eslint-disable-next-line
-    }, [])
-    
-    return (
-        <div>
-            <h1>Post Venta</h1>
-            { (loading && !order )
-                ? <p>LOADING · · ·</p>
-                : <>
-                    <div >
-                        {order?.products.map(e =>(
-                            <img src={resizer(e.img)} 
-                            alt="product"
-                            key={e.product_id}
-                            style={{ height: '96px'}}/>
-                        ))}
-                    </div>
-                    <p>{`Estado de la orden: ${status}`}</p>
-                    <p><i>{order?.id}</i></p>
-                    <p>{order?.description}</p>
-                    <p><i>shipping info</i></p>
-                    <p>{`${order?.shipping_address.street_name} ${order?.shipping_address.street_number}, ${order?.shipping_address.city}, ${order?.shipping_address.state}.`}</p>
-            </>}
+      if (data && status === "approved") {
+        //? background effect
+        setBackground("postsale-approved animation-start");
+        setTimeout(() => {
+          setBackground("postsale-approved animation-loop");
+        }, 6000);
+
+        if (data.order_type === "cart") {
+          //? vaciar carrito
+          await axios.delete(`/cart/empty`);
+
+          //? Vaciar el estado de redux onCart
+          dispatch(loadCart([]));
+
+          //? Quitar last_order en el carrito de la db
+          await axios.put(`/cart/order/`);
+        } else {
+          //? vaciar el buynow
+          axios.post(`/cart/`, { product_id: "" });
+        }
+        //? Cambiar el estado a 'processing'
+        await axios.put(`/order/${id}`, {
+          status: "processing",
+        });
+        
+        //? en el back (choNotif):
+        // cambia orden a pagada
+        // resta unidades de cada stock
+      }
+
+      if (data && status !== "approved" && data.status !== "approved") {
+
+        setBackground("postsale-pending animation-start");
+        setTimeout(() => {
+          setBackground("postsale-pending animation-loop");
+        }, 6000);
+        //? si llega como null o cancelled cambiar estado a "pending"
+        if (status === "null" || status === "cancelled") {
+
+          await axios.put(`/order/${id}`, {
+            status: "pending",
+          });
+        } else {
+          //? cambiar estado de la orden si el status no es aprobado en ninguno de los casos
+          await axios.put(`/order/${id}`, {
+            status,
+          });
+        }
+      }
+    })();
+    //eslint-disable-next-line
+  }, []);
+
+  const deliveryWaiter = async (id) => {
+    try {
+      console.log("Esperando orden actualizada...");
+      const { data } = await axios(`/order/${id}`);
+      if (data.payment_date) {
+        console.log("...actualización recibida.");
+        setOrder(data);
+      } else {
+        throw new Error("");
+      }
+    } catch (error) {
+      setTimeout(() => {
+        deliveryWaiter(id);
+      }, 2000);
+    }
+  };
+
+  const messageQuantity = () => {
+    if (order.products.length === 1) {
+      if (order.products[0].quantity > 1) {
+        return "¡Los productos ya son tuyos!";
+      } else {
+        return "¡El producto ya es tuyo!";
+      }
+    }
+
+    return "¡Los productos ya son tuyos!";
+  };
+
+  return (
+    <div className="postsale-container">
+      {loading && !order ? (
+        <LoaderBars />
+      ) : (
+        <div className="postsale-inner">
+          <div className={`postsale-header ${background}`}>
+            <div className="postsale-img-container">
+              <Carousel
+                images={images}
+                interval={2500}
+                pausable={false}
+                width="25vh"
+                height="25vh"
+              />
+              <div className="card-image-back-style"></div>
+            </div>
+          </div>
+          <div className="postsale-details-container">
+            {status === "approved" && (
+              <div>
+                <h1>¡YA CASI!</h1>
+                <h3>{messageQuantity()}</h3>
+                <h3>Ahora estamos preparando el envío</h3>
+
+                {order?.delivery_date ? (
+                  <DeliveryProgress order={order} />
+                ) : (
+                  <Spinner />
+                )}
+              </div>
+            )}
+            {status !== "approved" && (
+              <div>
+                <h1>HUBO UN ERROR...</h1>
+                <h3>¡Pero puedes retomar el pago!</h3>
+                <button className="g-white-button">
+                  <a href={order?.payment_link}>Voy a intentarlo de nuevo</a>
+                </button>
+                <p className="postsale-text-margin">
+                  También puedes encontrar el link de pago en tu perfil para
+                  realizarlo más tarde
+                </p>
+              </div>
+            )}
+            <p>{`Estado del pago: ${status}`}</p>
+            <p>Medio de pago: {order?.payment_source}</p>
+            <p>
+              Id de orden: <i>{order?.id}</i>
+            </p>
+            <div className="postsale-back-container">
+              <ReturnButton to={status === "approved" ? "/" : "/cart"} />
+            </div>
+          </div>
         </div>
-    )
-}
+      )}
+    </div>
+  );
+};
 
-export default PostSale
+export default PostSale;

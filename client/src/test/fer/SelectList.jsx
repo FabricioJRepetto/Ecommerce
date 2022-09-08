@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+const { REACT_APP_CATEGORY_LENGHT, REACT_APP_CATEGORY_NO_LENGHT } = process.env;
 
 const SelectList = ({
   categoryPath,
@@ -11,10 +12,10 @@ const SelectList = ({
 
   let url = "";
   categoryPath.length
-    ? (url = `https://api.mercadolibre.com/categories/${
+    ? (url = `${REACT_APP_CATEGORY_LENGHT}${
         categoryPath[categoryPath.length - 1].id
       }`)
-    : (url = "https://api.mercadolibre.com/sites/MLA/categories");
+    : (url = `${REACT_APP_CATEGORY_NO_LENGHT}`);
 
   useEffect(() => {
     axios(url)

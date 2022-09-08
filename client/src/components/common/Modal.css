@@ -1,26 +1,31 @@
 .modal {
-    color: black;
-    position: fixed;
-    z-index: 9;
-    top: 0;
-    left: 0;
-    width: 100%;
-    min-height: 100vh;
-    background-color: rgba(0, 0, 0, 0.75);
-    display: none;
-    justify-content: center;
-    align-items: center;
+  color: white;
+  position: fixed;
+  z-index: 9;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 100vh;
+  background-color: rgba(0, 0, 0, 0.75);
+  display: none;
+  justify-content: center;
+  align-items: center;
 }
 
 .modal-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: relative;
-  padding: 1rem;
-  min-width: 320px;
-  max-width: 480px;
-  min-height: 200px;
-  max-height: 600px;
+  padding: 2rem;
+  min-width: 20vw;
+  max-width: 90vw;
+  min-height: 20vh;
+  max-height: 90vh;
+  border: 1px solid rgba(255, 255, 255, 0.3);
   overflow-y: auto;
-  background-color: #fff;
+  overflow-x: hidden;
+  background-color: #000000;
 }
 
 .modal-close {

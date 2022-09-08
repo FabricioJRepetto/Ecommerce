@@ -1,0 +1,49 @@
+.premiumcard-container {
+    display: flex;
+    justify-content: space-between;    
+    height: 26.6vw;
+    width: 80vw;
+    margin: 2rem 0;
+    cursor: pointer;
+}
+.premiumcard-direct-normal {
+    flex-direction: row;
+}
+.premiumcard-direct-reverse {
+    flex-direction: row-reverse;
+}
+
+.premiumcard-img-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 33%;
+    height: 100%;
+    padding: 1rem;
+    transition: all .15s ease;
+}
+.premiumcard-img-container img {
+    max-width: 100%;
+    max-height: 100%;
+}
+.premiumcard-img-hover {
+    padding: 0.8rem;
+}
+
+.premiumcard-lateral-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 3rem;
+    font-family: HelveticaNeueLTPro-Hv;
+    width: 66%;
+    height: 100%;
+}
+.premiumcard-name {
+    font-size: 4rem;
+}
+.premiumcard-description {
+    font-size: 2rem;
+    padding: 2rem 0;
+}

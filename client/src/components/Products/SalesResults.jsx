@@ -15,7 +15,6 @@ const SalesResults = () => {
         const { data } = await axios(`/product/promos`);
         setProducts(data);
         setLoading(false);
-        console.log(data);
       })();
 
     }, [])
@@ -54,6 +53,7 @@ const SalesResults = () => {
                     img={e?.thumbnail}
                     name={e?.name}
                     price={e?.price}
+                    premium={e?.premium}
                     sale_price={e?.sale_price}
                     discount={e?.discount}
                     prodId={e?._id}
