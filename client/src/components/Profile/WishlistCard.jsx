@@ -103,7 +103,7 @@ const Card = ({ productData, fav }) => {
                 )}
               </div>
               {available_quantity < 10 && available_quantity > 1 && (
-                <p className="g-gradient-text"> QUEDAN POCAS UNIDADES</p>
+                <p className="g-gradient-text">POCAS UNIDADES</p>
               )}
               {available_quantity === 1 && (
                 <p className="g-gradient-text"> ÚLTIMO DISPONIBLE</p>

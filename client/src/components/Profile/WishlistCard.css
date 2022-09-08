@@ -40,10 +40,17 @@
   margin-top: 0.8rem;
   padding: 1rem 0 0 0;
   color: black;
-  height: 16rem;
+  height: 13rem;
+  flex-direction: row;
+  justify-content: space-between;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
+  /*  flex-direction: column;
+  justify-content: center; */
+}
+
+.wishlist-images-data-container {
+  height: 10rem;
+  margin-top: 0.5rem;
 }
 
 .wishlist-product-data-container {
@@ -209,7 +216,8 @@
   }
 
   .wishlist-product-card {
-    height: 19.5rem;
+    /* height: 19.5rem; */
+    height: 13rem;
   }
 
   .wishlist-buy-buttons-container {
@@ -237,7 +245,7 @@
     display: none;
   }
 
-  .wishlist-product-original-price>del {
+  .wishlist-product-original-price {
     display: none;
   }
 
@@ -257,6 +265,45 @@
   .wishlist-card-container {
     padding-bottom: .5rem;
   }
+
+  .wishlist-images-data-container {
+    height: 7rem;
+  }
+}
+
+@media (max-width: 399px) {
+  .wishlist-product-card .fav-button-container {
+    top: 8.7rem;
+    right: 15rem;
+    scale: 1.2;
+  }
+
+  .wishlist-addcart-container {
+    top: 8.9rem;
+    right: 8rem;
+  }
+}
+
+@media (max-width: 409px) {
+  div.profile-wishlist-container .wishlist-card-container {
+    padding-left: 4rem;
+  }
+
+  div.wishlist-card-container i.special-card {
+    top: 0.2rem;
+    left: 4rem;
+  }
+}
+
+@media (max-width: 434px) {
+  .profile-wishlist-container .wishlist-card-container {
+    padding-left: 3rem;
+  }
+
+  .wishlist-card-container i.special-card {
+    top: 0.2rem;
+    left: 3rem;
+  }
 }
 
 @media (max-width: 449px) {
@@ -265,14 +312,27 @@
     height: 5rem;
   }
 
-  .wishlist-product-card {
-    height: 10.5rem;
+  .wishlist-card-container {
     padding-left: 2rem;
   }
 
+  .wishlist-product-card {
+    height: 10.5rem;
+    /* padding-left: 2rem; */
+  }
+
   .wishlist-card-container .special-card {
+    scale: .8;
     top: 0.2rem;
-    left: 4rem;
+    left: 2rem;
+  }
+
+  .wishlist-images-data-container {
+    padding-left: 1rem;
+  }
+
+  .wishlist-product-data-container {
+    margin-left: 1rem;
   }
 
   .wishlist-buy-buttons-container button:last-child {
