@@ -177,7 +177,7 @@ const ResetPassword = () => {
                 <p className="g-error-input">Ingresa tu contraseña</p>
               )}
               {errors.repPassword?.type === "validate" && (
-                <p className="g-error-input">Las contraseñas no coinciden</p>
+                <p className="g-error-input">Las contraseñas deben coincidir</p>
               )}
             </>
 
@@ -198,7 +198,7 @@ const ResetPassword = () => {
                   required: true,
                   validate: (repPassword) => {
                     if (watch("repPassword") !== repPassword) {
-                      return "Las contraseñas no coinciden";
+                      return "Las contraseñas deben coincidir";
                     }
                   },
                 })}

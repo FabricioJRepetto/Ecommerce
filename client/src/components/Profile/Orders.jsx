@@ -34,7 +34,9 @@ const Orders = () => {
           </>
         )
       ) : (
-        <LoaderBars />
+        <div className="profile-loader-container">
+          <LoaderBars />
+        </div>
       )}
     </div>
   );

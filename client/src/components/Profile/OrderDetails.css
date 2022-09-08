@@ -118,7 +118,14 @@
 }
 .order-details-last-container {
   margin: 1.5rem 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+.order-details-last-container > .delivery-progress-container {
+  width: 100%;
+}
+
 .order-details-cancelled-text {
   font-size: 1.3rem;
   color: red;

@@ -43,7 +43,7 @@ const passwordValidationSignup = body(
   .escape()
   .custom((value, { req }) => {
     if (value !== req.body.repPassword) {
-      throw new Error("Las contraseñas no coinciden");
+      throw new Error("Las contraseñas deben coincidir");
     } else {
       return value;
     }
@@ -67,7 +67,7 @@ const passwordValidationChange = body(
   .escape()
   .custom((value, { req }) => {
     if (value !== req.body.repPassword) {
-      throw new Error("Las contraseñas no coinciden");
+      throw new Error("Las contraseñas deben coincidir");
     } else {
       return value;
     }

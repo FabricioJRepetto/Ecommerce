@@ -93,6 +93,7 @@ const Profile = () => {
         }`}
       >
         <ul>
+          <div style={{ height: "1rem" }}></div>
           <div
             className={`profile-burger-container${
               !showMenu ? " profile-burger-container-hide" : ""
@@ -131,7 +132,7 @@ const Profile = () => {
                 <Fav />
               </span>
               <span className="profile-chromatic-container">
-                <ChromaticText text={"Deseados"} size={"1.1rem"} />
+                <ChromaticText text={"Favoritos"} size={"1.1rem"} />
               </span>
             </li>
             <li onClick={() => navigate("/profile/history")}>
@@ -141,6 +142,7 @@ const Profile = () => {
               </span>
             </li>
             <li
+              className="profile-mobile-option-hide"
               onClick={() => {
                 navigate("/");
                 signOut();
@@ -193,7 +195,7 @@ const Profile = () => {
                 <Fav />
               </span>
               <span className="profile-chromatic-container">
-                <ChromaticText text={"Deseados"} size={"1.1rem"} />
+                <ChromaticText text={"Favoritos"} size={"1.1rem"} />
               </span>
             </li>
             <li onClick={() => navigate("/profile/history")}>
