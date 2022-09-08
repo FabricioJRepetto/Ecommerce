@@ -192,8 +192,16 @@ const PremiumDetails = () => {
 
                     {React.Children.toArray(product.premiumData.extraText.map(e => (
                         <div className='premiumdetails-section'
-                            style={{ backgroundColor: e.bgColor }} >
-                            <div className="pd-text-container-mobile" style={{color: product.premiumData.textColor ? product.premiumData.textColor : 'white', ...e.textPos, justifyContent: 'center'}}>
+                            style={{ backgroundColor: e.bgColor, justifyContent: 'center' }} >
+                            <div className="pd-text-container-mobile" 
+                                    style={{color: product.premiumData.textColor ? product.premiumData.textColor : 'white', 
+                                    ...e.textPos,
+                                    top: (windowWidth <= 1100) 
+                                        ? e.soloText 
+                                            ? 'unset' 
+                                            : '0%'
+                                        : e.textPos?.top || false
+                                }}>
                                 <h2>{e.title}</h2>
                                 <p>{e.text}</p>
                             </div>

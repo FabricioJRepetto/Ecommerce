@@ -406,7 +406,7 @@
         height: 100vh;
     }
     .pd-text-container-mobile {
-        top: 0% !important;
+        /* top: 0% !important; */
         left: 0% !important;
         transform: unset !important;
         display: flex;
