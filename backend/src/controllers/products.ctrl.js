@@ -225,17 +225,7 @@ const putPremium = async (req, res, next) => {
         const { premiumData, overwrite } = req.body;
 
         const prod = await Product.findById(id);
-        /*
-            const prod = await Product.findByIdAndUpdate(id,
-                {
-                    $set: {
-                        premium: true,
-                        premiumData
-                    }
-                }, 
-                {new: true}
-            );
-        */
+
         if (!prod.premium) {
             prod.premium = true;
             prod.premiumData = premiumData;

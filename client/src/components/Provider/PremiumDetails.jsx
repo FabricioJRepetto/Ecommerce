@@ -9,7 +9,7 @@ import { resizer } from "../../helpers/resizer";
 import LoaderBars from "../common/LoaderBars";
 import Carousel from "../Home/Carousel/Carousel";
 import Footer from "../common/Footer";
-import { ArrowDownIcon } from "@chakra-ui/icons";
+import { ArrowDownIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import { WishlistButton } from "../Products/WishlistButton";
 
 import "./PremiumDetails.css";
@@ -23,21 +23,11 @@ const PremiumDetails = () => {
     const [notification] = useNotification();
     const { addToCart, buyNow } = useCheckout();
     const { wishlist } = useSelector((state) => state.cartReducer);
-
-    const polaroidImages = [
-        {img: "https://res.cloudinary.com/dsyjj0sch/image/upload/v1662420012/1_tjlbux.png"},
-        {img: "https://res.cloudinary.com/dsyjj0sch/image/upload/v1662420012/2_drc3z5.png"},
-        {img: "https://res.cloudinary.com/dsyjj0sch/image/upload/v1662420012/3_xa2fc2.png"},
-        {img: "https://res.cloudinary.com/dsyjj0sch/image/upload/v1662420012/4_ozppbd.png"},
-        {img: "https://res.cloudinary.com/dsyjj0sch/image/upload/v1662420012/5_yl2jr5.png"},
-        {img: "https://res.cloudinary.com/dsyjj0sch/image/upload/v1662420012/6_i6tfdj.png"},
-        {img: "https://res.cloudinary.com/dsyjj0sch/image/upload/v1662420013/7_u4scro.png"},
-        {img: "https://res.cloudinary.com/dsyjj0sch/image/upload/v1662420013/8_qhnpsp.png"},
-        {img: "https://res.cloudinary.com/dsyjj0sch/image/upload/v1662420013/9_ujedwi.png"},
-    ]    
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+    const [scroll, setScroll] = useState(false)
 
     const reference = useRef(null)
-    const [isVisible, setIsVisible] = useState(true)
+    const [isVisible, setIsVisible] = useState(false)
 
     const attributesSection = useRef(null)
     const scrollTo = () => { 
@@ -47,10 +37,33 @@ const PremiumDetails = () => {
         }
      }
 
+    const handleWindowWidth = () => {
+        setWindowWidth(window.innerWidth);
+    };
+
+    const scrollPercent = () => { 
+        let scrollTop = window.scrollY;
+        let docHeight = document.body.offsetHeight;
+        let winHeight = window.innerHeight;
+        let scrollPercent = scrollTop / (docHeight - winHeight);
+        let scrollPercentRounded = Math.round(scrollPercent * 100);
+        setScroll(scrollPercentRounded > 14)
+     }
+
+    useEffect(() => {
+        window.addEventListener("resize", handleWindowWidth);
+        window.addEventListener("scroll", scrollPercent);
+        return () => {
+        window.removeEventListener("resize", handleWindowWidth);
+        window.addEventListener("scroll", scrollPercent);
+        };
+    }, []);
+
     useEffect(() => {
       const observer = new IntersectionObserver((entries) => {
             const [ entry ] = entries
-            setIsVisible(entry.isIntersecting)
+            setIsVisible(!entry.isIntersecting)
+            console.log(!entry.isIntersecting);
         }, {
             root: null,
             rootMargin: "0px",
@@ -95,57 +108,64 @@ const PremiumDetails = () => {
                         <div className='provider-premium-sign'></div>
                         
                         <div className='premiumdetails-details'
-                            style={{color: product.premiumData.textColor ? product.premiumData.textColor : 'white'}}>
+                            style={{color: product.premiumData.textColor ? product.premiumData.textColor : 'white', backgroundColor: windowWidth <= 1240 && product.premiumData.color }}>
                                 
                             <span className='pd-favButton-container'>
                                 <WishlistButton prodId={product.id} visible fav={wishlist.includes(product.id)} position={false}/>
                             </span>
 
+                            <div className='pp-sign-mobile'></div>
+                            
                             {product.premiumData.logo 
                                 ? <div className='premiumdetails-logo'>
                                     <img src={product.premiumData.logo} alt="" />
-                                  </div>
-                                : <h1 className='premiumdetails-name' >{product.name}</h1> }
-                            
-                            <h2>{product.premiumData.miniDescription}</h2>
-                            <div className='premiumdetails-price'>
-                                <span>${priceFormat(product.price).int}</span>
-                                <span>{priceFormat(product.price).cents}</span>
-                                {product.free_shipping && <p className='provider-text'> Envío gratis!</p>}
-                                {product.available_quantity < 1 && <div className='premiumdetails-nostock' title="Fuera de stock">Fuera de stock</div>}
-                            </div>
-                            
-                            <div ref={reference} 
-                                className='premiumdetails-buttons'>                                    
-                                <button
-                                    className="g-white-button details-button"
-                                    disabled={product.available_quantity < 1}
-                                    onClick={() => addToCart(id)}
-                                >
-                                    Agregar al carrito
-                                </button>
-                                <button
-                                    className="g-white-button details-button"
-                                    disabled={product.available_quantity < 1}
-                                    onClick={() => buyNow(id)}
-                                >
-                                    Comprar ahora
-                                </button>
-                            </div>
-
-                            {product.main_features && (
-                                <div className="premiumdetails-mainfeatures">           
-                                    <ul>
-                                        {product.main_features.map((e) => (
-                                        <li key={e}>· {e}</li>
-                                        ))}
-                                    </ul>
                                 </div>
-                            )}
-                            <div className='premiumdetails-toAttributesButton' 
-                                onClick={scrollTo}>
-                                    Ver especificaciones
-                                    <ArrowDownIcon/>
+                                : <h1 className='premiumdetails-name' >{product.name}</h1> }
+
+                            <div className="pd-head-price">
+                                <h2>{product.premiumData.miniDescription}</h2>
+
+                                <div className='premiumdetails-price'>
+                                    <span>${priceFormat(product.price).int}</span>
+                                    <span>{priceFormat(product.price).cents}</span>
+                                    {product.free_shipping && <p className='provider-text'> Envío gratis!</p>}
+                                    {product.available_quantity < 1 && <div className="pd-stock-container">
+                                            <div className='premiumdetails-nostock' title="Fuera de stock">Fuera de stock</div>
+                                        </div>}
+                                </div>
+                                
+                                <div ref={reference} 
+                                    className='premiumdetails-buttons'>                                    
+                                    <button
+                                        className="g-white-button details-button"
+                                        disabled={product.available_quantity < 1}
+                                        onClick={() => addToCart(id)}
+                                    >
+                                        Agregar al carrito
+                                    </button>
+                                    <button
+                                        className="g-white-button details-button"
+                                        disabled={product.available_quantity < 1}
+                                        onClick={() => buyNow(id)}
+                                    >
+                                        Comprar ahora
+                                    </button>
+                                </div>
+
+                                {product.main_features && (
+                                    <div className="premiumdetails-mainfeatures">           
+                                        <ul>
+                                            {product.main_features.map((e) => (
+                                            <li key={e}>· {e}</li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
+                                <div className='premiumdetails-toAttributesButton' 
+                                    onClick={scrollTo}>
+                                        Ver especificaciones
+                                        <ArrowDownIcon/>
+                                </div>
                             </div>
                         </div>
 
@@ -172,14 +192,23 @@ const PremiumDetails = () => {
 
                     {React.Children.toArray(product.premiumData.extraText.map(e => (
                         <div className='premiumdetails-section'
-                            style={{ backgroundColor: e.bgColor }} >
-                            <div style={{color: product.premiumData.textColor ? product.premiumData.textColor : 'white', ...e.textPos}}>
+                            style={{ backgroundColor: e.bgColor, justifyContent: 'center' }} >
+                            <div className="pd-text-container-mobile" 
+                                    style={{color: product.premiumData.textColor ? product.premiumData.textColor : 'white', 
+                                    ...e.textPos,
+                                    top: (windowWidth <= 1100) 
+                                        ? e.soloText 
+                                            ? 'unset' 
+                                            : '0%'
+                                        : e.textPos?.top || false
+                                }}>
                                 <h2>{e.title}</h2>
                                 <p>{e.text}</p>
                             </div>
 
-                            {e.img && <img src={e.img} alt="content img"
-                                style={e.imgPos}/>}
+                            {e.img && <img src={e.img} alt="section img"
+                                style={{...e.imgPos, top:(windowWidth <= 1100 && !e.soloImg) ? '40%' : e.imgPos.top }}/>}
+
                             {e.video && <div className="pd-section-video-container" style={e.vidPos}>
                                     <video autoPlay playsInline muted disablePictureInPicture loop >
                                         <source src={e.video} type="video/mp4"></source>
@@ -190,10 +219,10 @@ const PremiumDetails = () => {
                     )}
 
                     {product.id === '6316471837c51526ec170292' && <div className="pd-second-carousel-container">
-                            <Carousel images={polaroidImages}
+                            <Carousel images={product.premiumData.carouselImg}
                                 indicators
                                 pausable={false}
-                                width={'50vw'}
+                                width={windowWidth < 1100 ? '100%' : '50vw'}
                                 id='instructions'/>
                                 <h1>Cómo usar <br/> Polaroid Go.</h1>
                         </div>}
@@ -201,10 +230,10 @@ const PremiumDetails = () => {
                     <div ref={attributesSection} 
                     className={`tab-container pd-tab`} 
                     onClick={()=>setTabOpen(!tabOpen)}
-                    style={{height: tabOpen ? `${product.attributes.length * 2.2 +'rem'}` : '2.5rem'}}>
+                    style={{height: tabOpen ? `${(product.attributes.length * 2) + 5 +'rem'}` : '2.5rem'}}>
                         <div className="tab-button-container">                           
                             <button className='tab-button tab-button-active'>
-                                Atributos
+                                Atributos <ChevronDownIcon className={`pd-tab-icon ${tabOpen && 'pd-tab-icon-close'}`}/>
                             </button>
                         </div>
                         <div className='premiumdetails-attributes'>
@@ -219,36 +248,36 @@ const PremiumDetails = () => {
                                     )
                                 )
                             )}
-                        </div>                            
+                        </div>
                     </div>                    
 
                     <div className='pd-logo-footer'>
                         {product.id === '62df1257d0bcaed708e4feb7'
-                            ? <video src="https://res.cloudinary.com/dsyjj0sch/video/upload/v1662187563/2F5TPqZn_03sjNI4_nb7shw.mp4" muted autoPlay playsinline disablePictureInPicture width={300} loop style={{filter: 'grayscale(1) contrast(1.2)'}}></video>
+                            ? <video src="https://res.cloudinary.com/dsyjj0sch/video/upload/v1662187563/2F5TPqZn_03sjNI4_nb7shw.mp4" muted autoPlay playsInline disablePictureInPicture width={300} loop style={{filter: 'grayscale(1) contrast(1.2)'}}></video>
                             : <div  style={{ WebkitMaskImage: `url('${resizer(product.premiumData.logo, 310)}')`,
                                 maskImage: `url('${resizer(product.premiumData.logo, 310)}')`}}>
                             </div>}
                     </div>
 
-                    <div className={`premiumdetails-fixed ${isVisible ? '' : 'premiumdetails-fixed-on'}`}>
+                    <div className={`premiumdetails-fixed ${(isVisible && scroll) && 'premiumdetails-fixed-on'}`}>
                         <div className='premiumdetails-fixed-content'>
-                            <p>{product.name}</p>
-                            <span>
-                                <span>${priceFormat(product.price).int}</span>
-                                <span>{priceFormat(product.price).cents}</span>   
-                            </span>
+                            <div className="pd-fixed-name">
+                                <p>{product.name}</p>
+                                <span>
+                                    <span>${priceFormat(product.price).int}</span>
+                                    <span>{priceFormat(product.price).cents}</span>   
+                                </span>
+                            </div>
                             <button
                                 className="g-white-button details-button"
                                 disabled={product.available_quantity < 1}
-                                onClick={() => addToCart(id)}
-                            >
+                                onClick={() => addToCart(id)}>
                                 Agregar al carrito
                             </button>
                             <button
                                 className="g-white-button details-button"
                                 disabled={product.available_quantity < 1}
-                                onClick={() => buyNow(id)}
-                            >
+                                onClick={() => buyNow(id)}>
                                 Comprar ahora
                             </button>
                         </div>

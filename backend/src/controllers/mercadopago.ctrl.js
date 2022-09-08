@@ -3,7 +3,7 @@ const { MP_SKEY } = process.env;
 const Order = require('../models/order');
 const mercadopago = require("mercadopago");
 
-const NOTIF_BACK_URL = 'https://provider-backend.herokuapp.com/checkout-notification/mp/';
+const NOTIF_BACK_URL = 'https://provider-api.up.railway.app/checkout-notification/mp/';
 
 const mpCho = async (req, res, next) => {
     try {
@@ -58,6 +58,7 @@ const mpCho = async (req, res, next) => {
                 },
             },
             notification_url: `${NOTIF_BACK_URL}`,
+            //! volver a ver: front URL
             back_urls: {
                 success: `http://localhost:3000/orders/post-sale/`,
                 failure: `http://localhost:3000/orders/post-sale/`,
