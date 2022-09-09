@@ -87,7 +87,7 @@ const Signupin = () => {
         window.localStorage.setItem("loggedTokenEcommerce", data.token);
         dispatch(sessionActive(true));
 
-        notification(`Bienvenido, ${data.user.name}`, "", "success");
+        notification(`Bienvenido, ${data.user.name}`, "", "welcome");
       }
     } catch (error) {
       console.log(error);
@@ -130,7 +130,7 @@ const Signupin = () => {
         lastName,
       });
 
-      notification(`Bienvenido, ${data.name}`, "", "success");
+      notification(`Bienvenido, ${data.name}`, "", "welcome");
       dispatch(sessionActive(true));
     } catch (error) {
       dispatch(loadingUserData(false));

@@ -147,16 +147,34 @@
 }
 
 .notification-seemore {
+    display: flex;
+    align-content: flex-end;
     color: #4e4e4e;
     position: absolute;
     bottom: .6rem;
     left: .8rem;
     opacity: 0;
+    width: 100%;
     transition: opacity .5s ease;
     transition-delay: 1s;
 }
+.notification-seemore p {
+    font-size: .9rem;
+    transform: rotateX(90deg);
+    opacity: 0;
+    position: absolute;
+    left: 1.5rem;
+    bottom: -2px;
+}
+
 .notification-seemore:hover {
     color: rgb(255, 255, 255);
+    transition: color .15s ease;
+}
+.notification-seemore:hover p {
+    transform: rotateX(0deg);
+    opacity: 1;
+    transition: transform .15s ease;
 }
 .seemore-visible {
     opacity: 1;

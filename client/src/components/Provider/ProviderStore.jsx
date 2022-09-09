@@ -7,6 +7,8 @@ import { loadQuerys } from "../../Redux/reducer/productsSlice";
 import Footer from "../common/Footer";
 import Carousel from "../Home/Carousel/Carousel";
 import MiniCard from "../Products/MiniCard";
+import { SmallAddIcon } from "@chakra-ui/icons";
+
 import "./ProviderStore.css";
 
 const ProviderStore = () => {
@@ -35,8 +37,14 @@ const ProviderStore = () => {
   const [products, setProducts] = useState(false);
   const [loading, setLoading] = useState(true);
   const [hover, setHover] = useState("");
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   const { wishlist } = useSelector((state) => state.cartReducer);
+
+
+    const handleWindowWidth = () => {
+        setWindowWidth(window.innerWidth);
+    };
 
   useEffect(() => {
     let countdownInterv = null;
@@ -50,7 +58,9 @@ const ProviderStore = () => {
           s < 10 ? "0" + s : s
         }`
       );
-    }, 100);
+    }, 100);    
+
+    window.addEventListener("resize", handleWindowWidth);
 
     (async () => {
       const { data } = await axios("/sales");
@@ -58,7 +68,10 @@ const ProviderStore = () => {
       setLoading(false);
     })();
 
-    return () => clearInterval(countdownInterv);
+    return () => {
+        clearInterval(countdownInterv);
+        window.removeEventListener("resize", handleWindowWidth);
+    }
     // eslint-disable-next-line
   }, []);
 
@@ -69,25 +82,32 @@ const ProviderStore = () => {
 
   return (
     <div className="providerstore-container">
-      <div className="providerstore-echo-inner">
-        <span>PROVIDER</span>
-        <br />
-        PROVIDER <br />
-        PROVIDER
-      </div>
-      <p className="providerstore-title">STORE</p>
-      <p className="providerstore-title-text">
-        /ORIGINALES
-        <br />
-        /EXCLUSIVOS
-        <br />
-        /TUYOS
-      </p>
+        { windowWidth >= 1024 && 
+        <>
+            <div className='providerstore-echo-inner'>
+                <span>PROVIDER</span><br/>
+                    PROVIDER <br/>
+                    PROVIDER 
+            </div>
+            <span className='providerstore-title'>STORE</span>
+            <span className='providerstore-title-text'>/ORIGINALES<br/>/EXCLUSIVOS<br/>/TUYOS</span>
+        </>}
+        { windowWidth < 1023 && 
+        <>
+            <span className='providerstore-title-mobile'>PROVIER</span>
+            <span className='providerstore-title-text-mobile'>/DELUXE<br/>/UNICOS<br/>/TUYOS</span>
+            <div className='providerstore-echo-inner-mobile'>
+                <span>STORE</span><br/>
+                    STORE <br/>
+                    STORE 
+            </div>
+        </>}
+
       <button
         className="providerstore-title-button g-white-button"
         onClick={() => navigate("/products")}
       >
-        Ver todos los productos
+        <SmallAddIcon className="button-addicon"/>VER TODOS
       </button>
 
       <div className="providerstore-header"></div>

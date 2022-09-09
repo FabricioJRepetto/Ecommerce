@@ -42,14 +42,14 @@ const ProviderPremium = () => {
         <>
             <span className='providerstore-title-mobile'>PROVIER</span>
             <span className='providerstore-title-text-mobile'>/DELUXE<br/>/UNICOS<br/>/TUYOS</span>
-            <div className='providerstore-echo-inner-mobile'>
+            <div className='providerpremium-echo-inner-mobile'>
                 <span>PREMIUM</span><br/>
                     PREMIUM <br/>
                     PREMIUM 
             </div>
         </>}
 
-        <div className='providerstore-header'></div>
+        <div className='providerpremium-header'></div>
         
         <div className='providerpremium-background'></div>
         
