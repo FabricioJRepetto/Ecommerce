@@ -44,7 +44,7 @@ const meliSearchParser = (results) => {
 
 const meliProductParser = async (p) => {
     //?PRODUCT
-    if (p.status === 'inactive') return { message: 'PRODUCTO NO DISPONIBLE' };
+    if (p.status === 'inactive') return { error: true, message: 'PRODUCTO NO DISPONIBLE' };
     const { category, path_from_root } = await categoryMaker(p.buy_box_winner.category_id);
     let aux = {
         _id: p.id,

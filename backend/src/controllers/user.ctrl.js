@@ -17,10 +17,6 @@ cloudinary.config({
     secure: true,
 });
 
-console.log(CLOUDINARY_CLOUD);
-console.log(CLOUDINARY_API_KEY);
-console.log(CLOUDINARY_API_SECRET);
-
 const sendVerifyEmail = async (req, res, next) => {
     if (req.authInfo && req.authInfo.error) return res.json(req.authInfo);
 

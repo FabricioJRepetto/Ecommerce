@@ -19,10 +19,6 @@ cloudinary.config({
     secure: true,
 });
 
-console.log(CLOUDINARY_CLOUD);
-console.log(CLOUDINARY_API_KEY);
-console.log(CLOUDINARY_API_SECRET);
-
 const verifyAdminRoute = (req, res, next) => {
     return res.send("ok");
 };
@@ -223,8 +219,6 @@ const createProduct = async (req, res, next) => {
             free_shipping,
         } = JSON.parse(req.body.data);
         let images = [];
-
-        console.log(req.files);
 
         let aux = [];
         // creamos una promise por cada archivo.

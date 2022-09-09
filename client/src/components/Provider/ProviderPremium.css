@@ -3,11 +3,8 @@
     height: fit-content;
 }
 
-.providerpremium-header {
-    height: 42vh;
-    background: no-repeat center url("https://res.cloudinary.com/dsyjj0sch/image/upload/v1661380898/3d-abstract-wave-pattern-background_u4ght2.jpg");
-    background-size: 100% auto;
-    background-position: revert;
+.providerstore-header {    
+    background: no-repeat center url("https://res.cloudinary.com/dsyjj0sch/image/upload/v1661380898/3d-abstract-wave-pattern-background_u4ght2.jpg") !important;
 }
 .providerpremium-title-text {
     font-family: HelveticaNeueLTPro-Bd, Poppins;
@@ -22,11 +19,10 @@
 
 .providerpremium-background {
     background: black;
-    border: 2px dotted lime;
     position: absolute;
     display: block;
     z-index: 2;
-    height: 230vh;
+    height: 200vw;
     width: 100vw;
 }
 
@@ -39,4 +35,8 @@
     width: 100%;    
     position: absolute;
     z-index: 4;
+}
+
+@media (max-width: 1100px) {
+    
 }

@@ -1,4 +1,5 @@
 export const priceFormat = (price) => {
+    if (!price) return { int: 'xxx', cents: 'xx' }
     const p = price.toString();
     let cents = p.split('.')[1] || false;
     let int = p.split('.')[0];
