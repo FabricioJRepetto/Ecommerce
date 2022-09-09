@@ -98,6 +98,7 @@
 
   .navbar-signin-button {
     width: 40px;
+    height: 40px;
   }
 
   .navbar-central-section {
@@ -626,7 +627,7 @@
   display: flex;
   align-items: center;
   position: relative;
-  margin-right: 2.5rem;
+  margin-right: .8rem;
 }
 
 .navbar-signin-button span div {
@@ -644,6 +645,7 @@
   .navbar-sections {
     padding-right: 3.7rem;
     margin-right: 0;
+    height: 100%;
   }
 
   .navbar {
@@ -652,6 +654,7 @@
 
   .navbar-main-sections {
     padding: 0.3rem 0 .2rem 0;
+    height: 100%;
   }
 
   .glitch-mobile-placeholder {
