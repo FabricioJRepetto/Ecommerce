@@ -74,24 +74,27 @@ const signin = async (req, res, next) => {
 };
 
 const signinGoogle = async (req, res, next) => {
-  const { sub, email, avatar, firstName, lastName } = req.body;
-  try {
-    const userFound = await User.findOne({ email: sub });
-    if (!userFound) {
-      const newGoogleUser = await User.create({
-        email: sub,
-        password: sub,
-        googleEmail: email,
-        emailVerified: true,
-        avatar,
-        firstName,
-        lastName,
-        username: firstName || email.split("@")[0],
-        isGoogleUser: true,
-      });
-      return res.json(newGoogleUser);
-    } else {
-      return res.json({ name: userFound.name });
+    const { sub, email, avatar, firstName, lastName } = req.body;
+    try {
+        const userFound = await User.findOne({ email: sub });
+        if (!userFound) {
+            const newGoogleUser = await User.create({
+                email: sub,
+                password: sub,
+                googleEmail: email,
+                emailVerified: true,
+                avatar,
+                firstName,
+                lastName,
+                username: firstName || email.split("@")[0],
+                isGoogleUser: true,
+            });
+            return res.json(newGoogleUser);
+        } else {
+            return res.json({ name: userFound.name });
+        }
+    } catch (error) {
+        next(error);
     }
 };
 
@@ -266,37 +269,37 @@ const updatePassword = async (req, res, next) => {
 
 const editProfile = async (req, res, next) => {
 
-  try {
-    const { username, firstname, lastname } = req.body;
+    try {
+        const { username, firstname, lastname } = req.body;
 
-    /* const userFound = await User.findByIdAndUpdate(
-          req.user._id,
-          {
-            username: username || userFound.username,
-            firstName: firstname || userFound.firstName,
-            lastName: lastname || userFound.lastName,
-          },
-          { new: true }
-        ); */
+        /* const userFound = await User.findByIdAndUpdate(
+              req.user._id,
+              {
+                username: username || userFound.username,
+                firstName: firstname || userFound.firstName,
+                lastName: lastname || userFound.lastName,
+              },
+              { new: true }
+            ); */
 
-    const userFound = await User.findById(req.user._id);
+        const userFound = await User.findById(req.user._id);
 
-    (userFound.username = username || userFound.username),
-      (userFound.firstName = firstname || userFound.firstName),
-      (userFound.lastName = lastname || userFound.lastName),
-      await userFound.save();
+        (userFound.username = username || userFound.username),
+            (userFound.firstName = firstname || userFound.firstName),
+            (userFound.lastName = lastname || userFound.lastName),
+            await userFound.save();
 
-    return res.json({
-      message: "Editado con éxito",
-      user: {
-        firstname: userFound.firstName,
-        lastname: userFound.lastName,
-        username: userFound.username,
-      },
-    });
-  } catch (error) {
-    next(error);
-  }
+        return res.json({
+            message: "Editado con éxito",
+            user: {
+                firstname: userFound.firstName,
+                lastname: userFound.lastName,
+                username: userFound.username,
+            },
+        });
+    } catch (error) {
+        next(error);
+    }
 };
 
 const setAvatar = async (req, res, next) => {
