@@ -8,7 +8,7 @@ const Wishlist = ({ loading, wishlist, wl_id }) => {
     <>
       {!loading ? (
         <div className="profile-wishlist-container">
-          <h1>Lista de deseados</h1>
+          <h1>Favoritos</h1>
           <div>
             {wishlist?.length ? (
               React.Children.toArray(

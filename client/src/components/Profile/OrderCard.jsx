@@ -22,7 +22,7 @@ const OrderCard = ({ order, setOrderDetails }) => {
       status: "cancelled",
     });
     notification(
-      `${statusText === "OK" ? "Compra cancelada" : "Algo salió mal"}`,
+      `${statusText === "OK" ? "Orden cancelada" : "Algo salió mal"}`,
       "",
       "warning"
     );
@@ -99,7 +99,20 @@ const OrderCard = ({ order, setOrderDetails }) => {
       )}
 
       {order.status === "cancelled" && (
-        <p className="profile-order-cancelled-text">Compra cancelada</p>
+        <p
+          className="profile-order-cancelled-text premiumdetails-nostock"
+          title="Orden cancelada"
+        >
+          Orden cancelada
+        </p>
+      )}
+      {order.status === "expired" && (
+        <p
+          className="profile-order-expired-text premiumdetails-nostock"
+          title="Orden expirada"
+        >
+          Orden expirada
+        </p>
       )}
 
       {/* //! volver a ver: Quitar este botón ? */}

@@ -156,7 +156,20 @@ const OrderDetails = ({ order, setOrderDetails }) => {
         )}
 
         {order.status === "cancelled" && (
-          <p className="order-details-cancelled-text">Compra cancelada</p>
+          <p
+            className="profile-order-cancelled-text premiumdetails-nostock"
+            title="Orden cancelada"
+          >
+            Orden cancelada
+          </p>
+        )}
+        {order.status === "expired" && (
+          <p
+            className="profile-order-expired-text premiumdetails-nostock"
+            title="Orden expirada"
+          >
+            Orden expirada
+          </p>
         )}
 
         {order.delivery_date && <DeliveryProgress order={order} />}

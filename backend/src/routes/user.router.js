@@ -43,7 +43,7 @@ const passwordValidationSignup = body(
   .escape()
   .custom((value, { req }) => {
     if (value !== req.body.repPassword) {
-      throw new Error("Las contraseñas no coinciden");
+      throw new Error("Las contraseñas deben coincidir");
     } else {
       return value;
     }
@@ -67,7 +67,7 @@ const passwordValidationChange = body(
   .escape()
   .custom((value, { req }) => {
     if (value !== req.body.repPassword) {
-      throw new Error("Las contraseñas no coinciden");
+      throw new Error("Las contraseñas deben coincidir");
     } else {
       return value;
     }
@@ -86,12 +86,8 @@ router.post("/signin", [emailValidation, passwordValidation], signin);
 router.post("/signinGoogle", signinGoogle);
 router.post("/avatar", verifyToken, setAvatar);
 router.get("/profile/:token", verifyToken, profile);
-router.put(
-  "/sendVerifyEmail",
-  [verifyToken, googleUserShallNotPass],
-  sendVerifyEmail
-);
-router.put("/verifyEmail", [verifyToken, googleUserShallNotPass], verifyEmail);
+router.put("/sendVerifyEmail", verifyToken, sendVerifyEmail);
+router.put("/verifyEmail", verifyToken, verifyEmail);
 router.put("/forgotPassword", emailValidation, forgotPassword);
 router.put("/resetPassword", resetPassword);
 router.put("/changePassword", passwordValidationChange, changePassword);

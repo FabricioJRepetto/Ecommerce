@@ -1,5 +1,17 @@
 .profile-all-orders-container {
-  width: 70%;
+  width: 85%;
   min-width: 350px;
   max-width: 900px;
+}
+
+@media(max-width:400px) {
+  .profile-loader-container {
+    padding-left: 1rem;
+  }
+}
+
+@media(max-width:380px) {
+  .profile-loader-container {
+    padding-left: 2rem;
+  }
 }

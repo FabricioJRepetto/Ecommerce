@@ -413,7 +413,7 @@ const Signupin = () => {
                 <p className="g-error-input">Ingresa la contraseña</p>
               )}
               {errorsSignup.repPassword?.type === "validate" && (
-                <p className="g-error-input">Las contraseñas no coinciden</p>
+                <p className="g-error-input">Las contraseñas deben coincidir</p>
               )}
             </>
 
@@ -434,7 +434,7 @@ const Signupin = () => {
                   required: true,
                   validate: (repPassword) => {
                     if (watchSignup("password") !== repPassword) {
-                      return "Las contraseñas no coinciden";
+                      return "Las contraseñas deben coincidir";
                     }
                   },
                 })}
