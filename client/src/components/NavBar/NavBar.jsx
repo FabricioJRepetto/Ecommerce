@@ -226,6 +226,12 @@ const NavBar = () => {
                 </div>
 
                 <div className="navbar-profile-section">
+                  <div
+                    className="navbar-search-mobile-button"
+                    onClick={handleSearchBar}
+                  >
+                    <SearchIcon />
+                  </div>
                   {!session ? (
                     <span className="navbar-signin-button">
                       <NavLink to={"signin"}>
@@ -237,13 +243,6 @@ const NavBar = () => {
                     </span>
                   ) : (
                     <>
-                      <div
-                        className="navbar-search-mobile-button"
-                        onClick={handleSearchBar}
-                      >
-                        <SearchIcon />
-                      </div>
-
                       <div
                         className="navbar-profile-button navbar-hide-mobile"
                         onMouseEnter={() => setProfileModal(true)}
