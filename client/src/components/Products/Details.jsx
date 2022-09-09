@@ -9,6 +9,8 @@ import { ReactComponent as Spinner } from "../../assets/svg/spinner.svg";
 import { loadQuerys } from "../../Redux/reducer/productsSlice";
 import { priceFormat } from "../../helpers/priceFormat";
 import { useCheckout } from "../../hooks/useCheckout";
+import ReturnButton from "../common/ReturnButton";
+
 import "./Details.css";
 
 const Details = () => {
@@ -21,6 +23,7 @@ const Details = () => {
   const { addToCart, buyNow } = useCheckout();
 
   const [data, setData] = useState(false);
+  const [error, setError] = useState(false)
   const [loading, setLoading] = useState(true);
   const [attributesHeight, setAttributesHeight] = useState(null);
   const [attributesColumns, setAttributesColumns] = useState(false);
@@ -51,7 +54,7 @@ const Details = () => {
   }, []);
 
   const handleAttributesColumns = () => {
-    if (data.attributes) {
+    if (data && data.attributes) {
       if (data.attributes.length > 15 && windowWidth > 1200) {
         setAttributesColumns(true);
         if (windowWidth > 1640) {
@@ -92,9 +95,15 @@ const Details = () => {
     (async () => {
       setLoading(true);
       const { data } = await axios(`/product/${id}`);
-      setData(data);
-      setDescription(!!data.description);
-      handleAttributesColumns();
+      
+      if (data.error) {
+        setError({message: data.message})
+      } else {
+        setData(data);
+        setDescription(!!data.description);
+        handleAttributesColumns();
+      }
+
       setLoading(false);
     })();
     // eslint-disable-next-line
@@ -116,6 +125,10 @@ const Details = () => {
   return (
     <div>
       {loading && <Spinner className="details-spinner" />}
+      {error && <div className="product-details-error">
+            <h1>{error.message}</h1>
+            <ReturnButton to={-1}/>
+        </div>}
       {data && (
         <div>
           <div className="details-head-container">
@@ -144,7 +157,7 @@ const Details = () => {
               />
             </div>
             <div className="details-head-main">
-              <Galery imgs={data.images} ripple={true} />
+              {data && <Galery imgs={data.images} ripple={true} />}
               <div className="details-head-section">
                 <div>
                   <div className="details-title-container">
@@ -164,9 +177,6 @@ const Details = () => {
                     <h2>{`$ ${
                       priceFormat(data.on_sale ? data.sale_price : data.price)
                         .int
-                    }${
-                      priceFormat(data.on_sale ? data.sale_price : data.price)
-                        .cents || ""
                     }`}</h2>
                     <b className="green">
                       {data.free_shipping && "Envío gratis"}

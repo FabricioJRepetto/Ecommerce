@@ -23,7 +23,7 @@ const rawIdProductGetter = async (id) => {
             } else {
                 console.log('/// ERROR on rawIdProductGetter');
                 console.log('Wrong DB product ID');
-                return
+                return { error: true, message: 'Wrong DB product ID' }
             }
         };
 

@@ -9,7 +9,6 @@ import { IMAGES } from "../../constants";
 import Footer from "../common/Footer";
 import "./Home.css";
 
-import { ReactComponent as One } from "../../assets/svg/bloom-svgrepo-com.svg";
 import { ReactComponent as Two } from "../../assets/svg/build-svgrepo-com.svg";
 import { ReactComponent as Three } from "../../assets/svg/code-svgrepo-com.svg";
 import { ReactComponent as Four } from "../../assets/svg/crop-svgrepo-com.svg";
@@ -78,18 +77,14 @@ const Home = () => {
       <div>
         <Carousel images={IMAGES} controls indicators pointer width="100vw" />
       </div>
-      <div className="categories">
-        <div onClick={() => categorySearch("MLA1051")}>
-          <One className={"svg"} />
-          <p>Smartphones</p>
-        </div>
+      <div className="categories">        
         <div onClick={() => categorySearch("MLA1648")}>
           <Two className={"svg"} />
-          <p>Computers</p>
+          <p>Computación</p>
         </div>
         <div onClick={() => categorySearch("MLA1039")}>
           <Three className={"svg"} />
-          <p>Cameras</p>
+          <p>Cámaras</p>
         </div>
         <div onClick={() => categorySearch("MLA1000")}>
           <Four className={"svg"} />
@@ -97,7 +92,7 @@ const Home = () => {
         </div>
         <div onClick={() => categorySearch("MLA1144")}>
           <Five className={"svg"} />
-          <p>Videogames</p>
+          <p>Videojuegos</p>
         </div>
         <div onClick={()=> navigate('/sales')}>
           <Six className={"svg"} />

@@ -4,7 +4,7 @@
 }
 
 .providerpremium-header {
-    height: 42vh;
+    height: 22vw;
     background: no-repeat center url("https://res.cloudinary.com/dsyjj0sch/image/upload/v1661380898/3d-abstract-wave-pattern-background_u4ght2.jpg");
     background-size: 100% auto;
     background-position: revert;
@@ -22,11 +22,10 @@
 
 .providerpremium-background {
     background: black;
-    border: 2px dotted lime;
     position: absolute;
     display: block;
     z-index: 2;
-    height: 230vh;
+    height: 200vw;
     width: 100vw;
 }
 
@@ -39,4 +38,25 @@
     width: 100%;    
     position: absolute;
     z-index: 4;
+}
+
+.providerpremium-echo-inner-mobile {
+    text-align: left;
+    top: 7.5%;
+    left: 2.7%;
+    margin-top: 9.1vw;
+    font-size: 12vw;
+    font-family: HelveticaNeueLTPro-BdOu, Poppins;
+    line-height: 75%;
+    letter-spacing: -1.2vw;
+    color: #202020;
+    pointer-events: none;
+    position: fixed;
+    z-index: 3;
+}
+
+@media (max-width: 1024px) {
+    .providerpremium-header {
+        height: 43vw;
+    }
 }

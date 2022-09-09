@@ -3,6 +3,10 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { close } from '../../Redux/reducer/notificationSlice';
 import { ExternalLinkIcon } from "@chakra-ui/icons";
+import sfxS from '../../assets/notif0.mp3';
+import sfxW from '../../assets/notif1.mp3';
+import sfxE from '../../assets/notif2.mp3';
+import welcome from '../../assets/welcome.mp3';
 
 import './Notification.css';
 
@@ -13,36 +17,56 @@ const Notification = (props) => {
     const timeout = useRef(null);
     const dispatch = useDispatch();    
     
+    const soundType = {
+        soundSuccess: new Audio(sfxS),
+        soundWarning: new Audio(sfxW),
+        soundError: new Audio(sfxE),
+        soundWelcome: new Audio(welcome)
+    };
+
     const {
         message,
         type,
         url,
         id
-    } = props;
+    } = props;    
+
+    let color = '';
+    let sound = '';
+    switch (type) {
+        case 'error':
+            color = 'red';
+            sound = 'soundError'
+            break;
+        case 'warning':
+            color = 'orange';
+            sound = 'soundWarning'
+            break;
+        case 'success':
+            color = 'green';
+            sound = 'soundSuccess'
+            break;
+        case 'welcome':
+            sound = 'soundWelcome'
+            color = '#ffffff';
+            break;
+        default: color = 'blue';
+                 sound = 'soundSuccess';
+            break;
+    };
 
     useEffect(() => {
         clearTimeout(timeout.current);
         startTimeout();
+
+        soundType[sound].volume = type === 'welcome' ? 1 : 0.5;
+        soundType[sound].play();
+
         setTimeout(() => {
             message && setIsOpen(true);            
         }, 100);
         // eslint-disable-next-line
     }, []);
-
-    let color = '';
-    switch (type) {
-        case 'error':
-            color = 'red';
-            break;
-        case 'warning':
-            color = 'orange';
-            break;
-        case 'success':
-            color = 'green';
-            break;
-        default: color = 'blue';
-            break;
-    };
 
     const startTimeout = () => { 
         if (type !== 'error') {
@@ -84,8 +108,10 @@ const Notification = (props) => {
                 onClick={() => closeNotification(true)}>
                 <div className='notification-inner'>
                     {type !== 'error' && <div className={`notification-timer${isOpen ? ' timer-active':''}`}></div>}
-                    {/* {url && <LinkIcon className='link-svg' />} */}
-                    {url && <div onClick={()=>navigate(url)} className={`notification-seemore${isOpen ? ' seemore-visible':''}`}><ExternalLinkIcon /></div>}
+                    {url && <div onClick={()=>navigate(url)} className={`notification-seemore${isOpen ? ' seemore-visible':''}`}>
+                            <ExternalLinkIcon />
+                            <p>ir...</p>
+                        </div>}
                     <div className='notification-message'>
                         <p>{message}</p>
                     </div>

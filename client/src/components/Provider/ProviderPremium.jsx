@@ -8,6 +8,11 @@ import "./ProviderPremium.css"
 const ProviderPremium = () => {
     const [loading, setLoading] = useState(true)
     const [products, setProducts] = useState(false)
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+    const handleWindowWidth = () => {
+        setWindowWidth(window.innerWidth);
+    };
 
     useEffect(() => {
       (async () => {
@@ -16,17 +21,33 @@ const ProviderPremium = () => {
 
         setLoading(false);
       })();
+      window.addEventListener("resize", handleWindowWidth);
+
+      return () => window.removeEventListener("resize", handleWindowWidth);
     }, []);
 
   return (
     <div className='providerstore-container'>
-        <div className='providerstore-echo-inner'>
-            <span>PROVIDER</span><br/>
-                PROVIDER <br/>
-                PROVIDER 
-        </div>
-        <p className='providerstore-title'>PREMIUM</p>
-        <p className='providerpremium-title-text'>/DELUXE<br/>/UNICOS<br/>/TUYOS</p>
+        { windowWidth >= 1024 && 
+        <>
+            <div className='providerstore-echo-inner'>
+                <span>PROVIDER</span><br/>
+                    PROVIDER <br/>
+                    PROVIDER 
+            </div>
+            <span className='providerstore-title'>PREMIUM</span>
+            <span className='providerstore-title-text'>/DELUXE<br/>/UNICOS<br/>/TUYOS</span>
+        </>}
+        { windowWidth < 1023 && 
+        <>
+            <span className='providerstore-title-mobile'>PROVIER</span>
+            <span className='providerstore-title-text-mobile'>/DELUXE<br/>/UNICOS<br/>/TUYOS</span>
+            <div className='providerpremium-echo-inner-mobile'>
+                <span>PREMIUM</span><br/>
+                    PREMIUM <br/>
+                    PREMIUM 
+            </div>
+        </>}
 
         <div className='providerpremium-header'></div>
         
@@ -36,12 +57,11 @@ const ProviderPremium = () => {
             {loading || !products
             ? <LoaderBars/>
             : React.Children.toArray(products.map((e, index) =>
-                <PremiumCard productData={e} direction={index%2 === 0 ? true : false}/>
+                <PremiumCard productData={e} direction={index % 2 === 0 ? true : false}/>
             ))}
             
-            <Footer />
+            <Footer />        
         </div>
-        
     </div>
   )
 }

@@ -5,7 +5,9 @@
     width: 80vw;
     margin: 2rem 0;
     cursor: pointer;
+    transition: all .15s ease;
 }
+
 .premiumcard-direct-normal {
     flex-direction: row;
 }
@@ -19,15 +21,11 @@
     justify-content: center;
     width: 33%;
     height: 100%;
-    padding: 1rem;
     transition: all .15s ease;
 }
 .premiumcard-img-container img {
     max-width: 100%;
     max-height: 100%;
-}
-.premiumcard-img-hover {
-    padding: 0.8rem;
 }
 
 .premiumcard-lateral-container {
@@ -41,9 +39,25 @@
     height: 100%;
 }
 .premiumcard-name {
-    font-size: 4rem;
+    font-size: 5.5vw;
 }
 .premiumcard-description {
-    font-size: 2rem;
-    padding: 2rem 0;
+    font-size: 2.7vw;
+    width: 80%;
+    /* padding: 2rem 0; */
 }
+
+.premiumcard-container:hover .premiumcard-lateral-container {
+    background-position: 100% !important;
+    background-size: 200% !important;
+    transform: skewX(-1deg);
+    transition: all .3s ease !important;
+}
+.premiumcard-container:hover p {
+    background-position: -50% !important;
+    transition: all .5s ease !important;
+}
+/* .premiumcard-container:hover img {
+    transform: scale(1.01) !important;
+    transition: all .3s ease !important;
+} */
