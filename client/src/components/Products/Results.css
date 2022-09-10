@@ -12,11 +12,30 @@
     height: 2rem;
     display: flex;
     justify-content: space-between;
+    align-content: flex-end;
+}
+.bread-crumbs {
+    color: #bcbcbc
+}
+.bread-crumbs div span:last-child {
+    color: #ffffff
 }
 .bread-crumbs span {
     cursor: pointer;
     margin-left: 5px;
 }
+.bread-crumbs span:hover {
+    color: #ffffff;
+}
+.bread-crumbs-delete-icon {
+    margin: 0 .5rem .2rem 0;
+    cursor: pointer;
+    transform: scale(1.3);
+}
+.bread-crumbs-delete-icon:hover {
+    color: #ffffff;
+}
+
 .results-filters {
     width: 15vw;
 }
@@ -25,8 +44,17 @@
     width: 50vw;
 }
 
+.results-filters-applied {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0 0 2rem 0;
+    color: #bcbcbc;
+}
+
 .results-filter-container {
-    height: 1.2rem;
+    height: 1.3rem;
+    margin-bottom: .2rem;
     overflow: hidden;
     transition: all .3s ease;
 }
@@ -41,23 +69,21 @@
 .results-filter-option {
     margin: .2rem 0 .2rem 1rem;
 }
+.results-filter-option:hover {
+    background: linear-gradient(90deg, rgba(0,0,0,0) 0%, rgba(17,17,17,1) 24%, rgba(34,34,34,1) 100%);
+}
 
 .filter-title {
     display: flex;
     position: relative;
 }
-.filters-arrow-svg {
-    position: absolute;
-    top: -14px;
-    right: 0px;
-    transition: all .2s ease;
-    transform: scale(.4) rotate(90deg);
+.results-tab-icon {
+    margin: .1rem 0 0 .25rem;
+    transform: scale(1.3);
+    transition: all .3s ease;
 }
-.filters-arrow-svg path {
-    fill: white;
-}
-.open-arrow {
-    transform: scale(.4) rotate(-90deg);
+.results-tab-icon-close {
+    transform: rotateX(-180deg);
 }
 
 .own-products-container {

@@ -50,7 +50,7 @@ const ModalCard = ({ productData, fav, close }) => {
         </div>
       )}
 
-      <div className={`card-main-container${visible ? " card-hover" : ""}`}>
+      <div className='card-main-container'>
         <div className="modal-card-img-container">
           <img src={resizer(img, 96)} alt="product" />
           <div className="card-image-back-style"></div>
