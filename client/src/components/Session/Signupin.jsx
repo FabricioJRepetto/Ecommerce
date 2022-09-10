@@ -206,7 +206,6 @@ const Signupin = () => {
               <input
                 type="text"
                 placeholder="Email"
-                autoComplete="off"
                 {...registerSignin("email", {
                   required: true,
                   pattern: emailRegex,
@@ -234,9 +233,8 @@ const Signupin = () => {
 
             <span className="g-input-with-button">
               <input
-                type="text"
+                type="password"
                 placeholder="Contraseña"
-                autoComplete="off"
                 className={`g-input-two-icons${
                   watchSignin("password") === undefined ||
                   watchSignin("password") === ""
