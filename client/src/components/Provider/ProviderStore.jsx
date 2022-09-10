@@ -147,24 +147,24 @@ const ProviderStore = () => {
           </div>
           <div
             className="storecard"
-            onClick={() => goProducts(`MLA454379`)}
+            onClick={() => goProducts(`MLA1648`)}
             onMouseEnter={() => setHover("periph")}
             onMouseLeave={() => setHover("")}
           >
-            <p>Perifericos</p>
+            <p>Computación</p>
             <p
               className={`storecard-subtitle${
                 hover === "periph" ? " subtitle-visible1" : ""
               }`}
             >
-              Perifericos
+              Computación
             </p>
             <p
               className={`storecard-subtitle${
                 hover === "periph" ? " subtitle-visible2" : ""
               }`}
             >
-              Perifericos
+              Computación
             </p>
             <img
               src={resizer(
@@ -202,28 +202,28 @@ const ProviderStore = () => {
           </div>
           <div
             className="storecard"
-            onClick={() => goProducts(`MLA409810`)}
+            onClick={() => navigate("/products")}
             onMouseEnter={() => setHover("display")}
             onMouseLeave={() => setHover("")}
           >
-            <p>Monitores</p>
+            <p>Todos</p>
             <p
               className={`storecard-subtitle${
                 hover === "display" ? " subtitle-visible1" : ""
               }`}
             >
-              Monitores
+              Todos
             </p>
             <p
               className={`storecard-subtitle${
                 hover === "display" ? " subtitle-visible2" : ""
               }`}
             >
-              Monitores
+              Todos
             </p>
             <img
-              src="https://static.bhphoto.com/images/images500x500/1643045763_1683182.jpg"
-              alt="img"
+              src="https://res.cloudinary.com/dsyjj0sch/image/upload/v1659650791/PROVIDER_LOGO_glitch_aberration_kt2hyv.png"
+              alt="img" style={{height: '50%', width: 'auto'}}
             />
           </div>
         </div>
