@@ -138,47 +138,57 @@
 
 .storecards-inner {
     font-family: HelveticaNeueLTPro-Hv;
-    display: flex;
     margin-top: 2rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
 }
 .storecard {
     position: relative;
     display: flex;
     justify-content: space-between;
-    padding: 1rem;
     font-size: 1.5rem;
+    background-color: #ffffff;
     color: black;
+    padding: 1rem;
     margin: 2rem;
     z-index: 2;
     height: 10rem;
     width: 20rem;
-    background-color: white;
     cursor: pointer;
+    overflow: hidden;
+    mask-image: linear-gradient(
+        60deg,
+        rgb(118, 118, 118) 25%,
+        rgba(0, 0, 0, 0.5) 50%,
+        rgb(124, 124, 124) 75%
+    );
+    mask-size: 400%;
+    mask-position: 100%;
+    -webkit-mask-image: linear-gradient(
+        60deg,
+        rgb(118, 118, 118) 25%,
+        rgba(0, 0, 0, 0.7) 50%,
+        rgb(124, 124, 124) 75%
+    );
+    -webkit-mask-size: 400%;
+    -webkit-mask-position: 100%;
 }
-.storecard-subtitle {
-    font-family: HelveticaNeueLTPro-BdOu;
-    font-size: 1.5rem;
-    letter-spacing: .035rem;
-    opacity: 0;
-    position: absolute;
-    top: 0;
-    color: #202020;
+.storecard:hover {
+    margin-top: 1.9rem;
+    background-color: #efefef;
+    mask-position: 0%;
+    -webkit-mask-position: 0%;
+    transition: mask-position 0.5s ease, -webkit-mask-position 0.5s ease, margin-top .15s ease;
 }
-.subtitle-visible1 {
-    transition: top .2s ease, opacity .5s ease;
-    opacity: 1;
-    top: 20%;
-}
-.subtitle-visible2 {
-    transition: top .2s ease, opacity .5s ease;
-    opacity: 1;
-    top: 31%;
-}
-
 .storecard img {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 0;
     max-height: 100%;
     max-width: 100%;
 }
+
 
 .providerstore-flashsales {
     margin: 3rem;
@@ -208,5 +218,28 @@
         margin-top: 20vw;
         width: 32.5vw;
         padding: .5rem 0;
+    }
+}
+
+@media (max-width: 1550px) {
+    .storecards-inner {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+@media (max-width: 780px) {
+    .storecards-inner {
+        grid-template-columns: 50vw 50vw;
+    }
+    .storecard {
+        height: auto;
+        width: 40vw;
+    }
+}
+@media (max-width: 570px) {
+    .storecard {
+        justify-content: center;
+    }
+    .storecard img {
+        display: none;
     }
 }

@@ -7,7 +7,7 @@ import MiniCard from "../Products/MiniCard";
 import Carousel from "./Carousel/Carousel";
 import { IMAGES } from "../../constants";
 import Footer from "../common/Footer";
-import "./Home.css";
+import FlashSales from "../common/FlashSales";
 
 import { ReactComponent as Two } from "../../assets/svg/build-svgrepo-com.svg";
 import { ReactComponent as Three } from "../../assets/svg/code-svgrepo-com.svg";
@@ -15,9 +15,9 @@ import { ReactComponent as Four } from "../../assets/svg/crop-svgrepo-com.svg";
 import { ReactComponent as Five } from "../../assets/svg/explode-svgrepo-com.svg";
 import { ReactComponent as Six } from "../../assets/svg/perform-svgrepo-com.svg";
 
+import "./Home.css";
+
 const Home = () => {
-    const [products, setProducts] = useState(false);
-    const [countdown, setCountdown] = useState("");
     const [loading, setLoading] = useState(true);
     const [suggestion, setSuggestion] = useState(false);
     const {wishlist} = useSelector((state) => state.cartReducer);
@@ -27,38 +27,20 @@ const Home = () => {
     const navigate = useNavigate();
 
   useEffect(() => {
-    let countdownInterv = null;
-    countdownInterv = setInterval(() => {
-      let now = new Date();
-      let h = 23 - now.getHours();
-      let m = 59 - now.getMinutes();
-      let s = 59 - now.getSeconds();
-      setCountdown(
-        `${h < 10 ? "0" + h : h}:${m < 10 ? "0" + m : m}:${
-          s < 10 ? "0" + s : s
-        }`
-      );
-    }, 100);
+    session 
+        ? (async () => {        
+            const suggestionData = axios(`/history/suggestion`)            
+            suggestionData?.then(r => {
+                if (r.data.length > 4 ) {
+                    setSuggestion(r.data);
+                } else {
+                    setSuggestion(false);                
+                }            
+            });
+        setLoading(false);
+        })() 
+        : setLoading(false);
 
-    (async () => {
-        const salesData = axios('/sales');
-        const suggestionData = axios(`/history/suggestion`)
-
-        salesData.then(r => {
-            setProducts(r.data)
-        });
-        session && suggestionData?.then(r => {
-            if (r.data.length > 4 ) {
-                setSuggestion(r.data);
-            } else {
-                setSuggestion(false);                
-            }            
-        });
-
-      setLoading(false);
-    })();
-
-    return () => clearInterval(countdownInterv);
     // eslint-disable-next-line
   }, []);
 
@@ -99,27 +81,8 @@ const Home = () => {
           <p>Ofertas</p>
         </div>
       </div>
-      <div>
-        <h2>Flash sales! ⏱ {countdown}</h2>
-        <div className="random-container">
-          {Array.from(Array(5).keys()).map((_, index) => (
-            <MiniCard
-              key={`specials ${index}`}
-              img={products[index]?.thumbnail}
-              name={products[index]?.name}
-              premium={products[index]?.premium}
-              price={products[index]?.price}
-              sale_price={products[index]?.sale_price}
-              discount={products[index]?.discount}
-              prodId={products[index]?._id}
-              free_shipping={products[index]?.free_shipping}
-              on_sale={products[index]?.on_sale}
-              fav={wishlist.includes(products[index]?._id)}
-              loading={loading}
-            />
-          ))}
-        </div>
-      </div>
+
+        <FlashSales/>
       
       {suggestion.length > 4 && (
         <div>
