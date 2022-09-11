@@ -93,15 +93,6 @@ const HistoryCard = ({ product, free_shipping, fav }) => {
                 <h2>${priceFormat(on_sale ? sale_price : price).int}</h2>
               </div>
             </div>
-            {/* <div className="history-card-prod-name-container">
-                <div
-                  className={`history-card-prod-name${
-                    visible ? " visible" : ""
-                  }`}
-                >
-                  {name}
-                </div>
-              </div> */}
           </div>
         </div>
       </div>
