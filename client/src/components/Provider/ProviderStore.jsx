@@ -116,116 +116,31 @@ const ProviderStore = () => {
 
       <div className="storecards-container">
         <div className="storecards-inner">
-          <div
-            className="storecard"
-            onClick={() => goProducts(`MLA1144`)}
-            onMouseEnter={() => setHover("console")}
-            onMouseLeave={() => setHover("")}
-          >
-            <p>Consolas</p>
-            <p
-              className={`storecard-subtitle${
-                hover === "console" ? " subtitle-visible1" : ""
-              }`}
-            >
-              Consolas
-            </p>
-            <p
-              className={`storecard-subtitle${
-                hover === "console" ? " subtitle-visible2" : ""
-              }`}
-            >
-              Consolas
-            </p>
-            <img
-              src={resizer(
-                "https://res.cloudinary.com/dsyjj0sch/image/upload/v1661328214/Playdate-photo_hxdnpj.png",
-                200
-              )}
-              alt="img"
-            />
+
+          <div className='storecard'
+            onClick={() => goProducts(`MLA1144`)}>
+            <p>Consolas</p>            
+            <img src={resizer("https://res.cloudinary.com/dsyjj0sch/image/upload/v1661328214/Playdate-photo_hxdnpj.png",200)} alt="img" />
           </div>
-          <div
-            className="storecard"
-            onClick={() => goProducts(`MLA1648`)}
-            onMouseEnter={() => setHover("periph")}
-            onMouseLeave={() => setHover("")}
-          >
-            <p>Computación</p>
-            <p
-              className={`storecard-subtitle${
-                hover === "periph" ? " subtitle-visible1" : ""
-              }`}
-            >
-              Computación
-            </p>
-            <p
-              className={`storecard-subtitle${
-                hover === "periph" ? " subtitle-visible2" : ""
-              }`}
-            >
-              Computación
-            </p>
-            <img
-              src={resizer(
-                "https://res.cloudinary.com/dsyjj0sch/image/upload/v1661328896/RW-ZENITH-01.2020_1400x_j4iupn.webp",
-                200
-              )}
-              alt="img"
-            />
+
+          <div className="storecard"
+            onClick={() => goProducts(`MLA1648`)}>
+            <p>Computación</p>            
+            <img src={resizer("https://res.cloudinary.com/dsyjj0sch/image/upload/v1661328896/RW-ZENITH-01.2020_1400x_j4iupn.webp", 200)} alt="img" />
           </div>
-          <div
-            className="storecard"
-            onClick={() => goProducts(`MLA409810`)}
-            onMouseEnter={() => setHover("audio")}
-            onMouseLeave={() => setHover("")}
-          >
+
+          <div className="storecard"
+            onClick={() => goProducts(`MLA409810`)}>
             <p>Audio</p>
-            <p
-              className={`storecard-subtitle${
-                hover === "audio" ? " subtitle-visible1" : ""
-              }`}
-            >
-              Audio
-            </p>
-            <p
-              className={`storecard-subtitle${
-                hover === "audio" ? " subtitle-visible2" : ""
-              }`}
-            >
-              Audio
-            </p>
-            <img
-              src="https://www.tradeinn.com/f/13756/137567598/skullcandy-auriculares-inalambricos-crusher.jpg"
-              alt="img"
-            />
+            <img src="https://res.cloudinary.com/dsyjj0sch/image/upload/v1662349264/5165_12022_0002_5169_12026132_dmpole.png" alt="img" />
           </div>
-          <div
-            className="storecard"
-            onClick={() => navigate("/products")}
-            onMouseEnter={() => setHover("display")}
-            onMouseLeave={() => setHover("")}
-          >
-            <p>Todos</p>
-            <p
-              className={`storecard-subtitle${
-                hover === "display" ? " subtitle-visible1" : ""
-              }`}
-            >
-              Todos
-            </p>
-            <p
-              className={`storecard-subtitle${
-                hover === "display" ? " subtitle-visible2" : ""
-              }`}
-            >
-              Todos
-            </p>
-            <img
-              src="https://res.cloudinary.com/dsyjj0sch/image/upload/v1659650791/PROVIDER_LOGO_glitch_aberration_kt2hyv.png"
-              alt="img" style={{height: '50%', width: 'auto'}}
-            />
+
+          <div className="storecard" 
+            onClick={() => navigate("/products")}>
+            <p>Todos</p>            
+            <img src="https://res.cloudinary.com/dsyjj0sch/image/upload/v1659650791/PROVIDER_LOGO_glitch_aberration_kt2hyv.png" alt="img" style={{height: '50%', width: 'auto'}}/>
           </div>
+
         </div>
 
         <div className="providerstore-flashsales">
