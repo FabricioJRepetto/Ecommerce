@@ -1,0 +1,7 @@
+.profile-history-container {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+   flex-wrap: wrap;
+   height: fit-content;
+}

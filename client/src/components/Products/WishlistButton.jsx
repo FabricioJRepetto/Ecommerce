@@ -1,7 +1,7 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { loadWishlist } from "../../Redux/reducer/cartSlice";
-import { useDispatch, useSelector } from "react-redux";
 import { useNotification } from "../../hooks/useNotification";
 import "./WishlistButton.css";
 

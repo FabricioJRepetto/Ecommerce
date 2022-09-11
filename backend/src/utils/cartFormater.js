@@ -98,7 +98,7 @@ const cartFormater = async (cart) => {
     if (cart.products.length !== id_list.length) {
         cart.products = cart.products.filter(e => id_list.includes(e.product_id));
         await cart.save();
-        message = 'Some products are not available. Cart updated.';
+        message = 'Algunos productos no están disponibles';
     }
 
     return ({
