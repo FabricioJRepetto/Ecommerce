@@ -1,10 +1,11 @@
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { resizer } from "../../helpers/resizer";
 import { priceFormat } from "../../helpers/priceFormat";
 import { ReactComponent as Sale } from "../../assets/svg/sale.svg";
 import { ReactComponent as AddCart } from "../../assets/svg/addcart.svg";
-import { WishlistButton as Fav } from "../Products/WishlistButton";
+import { WishlistButton } from "../Products/WishlistButton";
 import { useCheckout } from "../../hooks/useCheckout";
 import "./WishlistCard.css";
 
@@ -13,6 +14,7 @@ const Card = ({ productData, fav }) => {
   const { session } = useSelector((state) => state.sessionReducer);
   const { onCart } = useSelector((state) => state.cartReducer);
   const { addToCart, buyNow } = useCheckout();
+  const [ready, setReady] = useState(false);
 
   const {
     thumbnail: img,
@@ -29,6 +31,10 @@ const Card = ({ productData, fav }) => {
   } = productData;
   const special = !/MLA/g.test(prodId);
 
+  const readySetter = () => {
+    setReady(true);
+  };
+
   return (
     <div
       className="wishlist-card-container"
@@ -42,9 +48,11 @@ const Card = ({ productData, fav }) => {
         /* key={prodId}
         onMouseEnter={() => setVisible(true)}
         onMouseLeave={() => setVisible(false)} */
-        className="wishlist-product-card"
+        className={`wishlist-product-card${
+          ready ? " wishlist-card-fade-in" : ""
+        }`}
       >
-        {session && <Fav fav={fav} prodId={prodId} />}
+        {session && <WishlistButton fav={fav} prodId={prodId} />}
 
         {session && !onCart.includes(prodId) && (
           <div
@@ -61,7 +69,7 @@ const Card = ({ productData, fav }) => {
 
         <div className="wishlist-images-data-container">
           <div className="wishlist-product-img-container">
-            <img src={resizer(img, 160)} alt="product" />
+            <img src={resizer(img, 160)} alt="product" onLoad={readySetter} />
             <div className="card-image-back-style"></div>
           </div>
 

@@ -1,13 +1,12 @@
 .wishlist-card-container {
   position: relative;
-  background-color: #111111;
   min-width: 400px;
   -webkit-transition: background-color 100ms linear;
   -ms-transition: background-color 100ms linear;
   transition: background-color 100ms linear;
 }
 
-.wishlist-card-container:hover {
+.wishlist-card-container:hover .wishlist-product-card {
   background-color: #333333;
   cursor: pointer;
 }
@@ -39,13 +38,20 @@
   position: relative;
   margin-top: 0.8rem;
   padding: 1rem 0 0 0;
+  background-color: #111111;
   color: black;
   height: 13rem;
   flex-direction: row;
   justify-content: space-between;
   display: flex;
-  /*  flex-direction: column;
-  justify-content: center; */
+  opacity: 0;
+  /* padding: 1rem; */
+}
+
+.wishlist-card-fade-in {
+  transition: all .3s ease;
+  opacity: 1;
+  padding-top: 0rem;
 }
 
 .wishlist-images-data-container {
@@ -86,8 +92,7 @@
 .wishlist-images-data-container {
   display: flex;
   padding-left: 2.5rem;
-
-  /* padding-top: 1rem; */
+  padding-top: 1rem;
 }
 
 .wishlist-product-name {
@@ -259,12 +264,11 @@
   }
 
   .wishlist-product-card {
-    height: 9rem;
+    height: 9.5rem;
+    padding-bottom: 1rem;
   }
 
-  .wishlist-card-container {
-    padding-bottom: .5rem;
-  }
+  .wishlist-card-container {}
 
   .wishlist-images-data-container {
     height: 7rem;
@@ -273,13 +277,13 @@
 
 @media (max-width: 399px) {
   .wishlist-product-card .fav-button-container {
-    top: 8.7rem;
+    top: 8.2rem;
     right: 15rem;
     scale: 1.2;
   }
 
   .wishlist-addcart-container {
-    top: 8.9rem;
+    top: 8.4rem;
     right: 8rem;
   }
 
@@ -289,7 +293,7 @@
 }
 
 @media (max-width: 409px) {
-  div.profile-wishlist-container .wishlist-card-container {
+  div.profile-wishlist-container .wishlist-product-card {
     padding-left: 4rem;
   }
 
@@ -300,7 +304,7 @@
 }
 
 @media (max-width: 434px) {
-  .profile-wishlist-container .wishlist-card-container {
+  .profile-wishlist-container .wishlist-product-card {
     padding-left: 3rem;
   }
 
@@ -316,11 +320,10 @@
     height: 5rem;
   }
 
-  .wishlist-card-container {
-    padding-left: 2rem;
-  }
+  .wishlist-card-container {}
 
   .wishlist-product-card {
+    padding-left: 2rem;
     height: 9rem;
     /* padding-left: 2rem; */
   }

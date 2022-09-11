@@ -329,7 +329,7 @@ const NavBar = () => {
                                 />
                               </div>
 
-                              {role === "admin" && (
+                              {(role === "admin" || role === "superadmin") && (
                                 <div
                                   className="profile-modal-option"
                                   onClick={() => setProfileModal(false)}
@@ -555,7 +555,7 @@ const NavBar = () => {
               </li>
             </>
           )}
-          {session && role === "admin" && (
+          {session && (role === "admin" || role === "superadmin") && (
             <li onClick={() => setShowMenu(false)}>
               <ChromaticText text={"ADMIN"} route={"admin"} size={"1.1rem"} />
             </li>

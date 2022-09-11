@@ -13,7 +13,7 @@ import { avatarResizer } from "../../helpers/resizer";
 import "../../App.css";
 import "./ProfileDetails.css";
 
-const ProfileDetails = ({ address }) => {
+const ProfileDetails = ({ address, loading }) => {
   const [newAvatar, setNewAvatar] = useState();
   const [verifyLoading, setVerifyLoading] = useState(false);
   const [verifyResponse, setVerifyResponse] = useState(false);
@@ -344,8 +344,14 @@ const ProfileDetails = ({ address }) => {
               className="profile-detail-button-data"
               onClick={() => handleOpenInputs("full_name")}
             >
-              <span>{full_name.first}</span>
-              <span> {full_name.last}</span>
+              {!full_name.first && !full_name.last ? (
+                <span>--- ---</span>
+              ) : (
+                <>
+                  <span>{full_name.first}</span>
+                  <span> {full_name.last}</span>
+                </>
+              )}
             </button>
             <span
               className="profile-edit-svg-container"
@@ -466,7 +472,9 @@ const ProfileDetails = ({ address }) => {
 
       <div className="profile-detail-container profile-detail-container-address">
         <h3>Dirección</h3>
-        {address.length ? (
+        {loading ? (
+          <p>...</p> /* //! VOLVER A VER agregar spinner */
+        ) : address && address.length ? (
           address.map(
             (e) =>
               e.isDefault && (
@@ -490,17 +498,17 @@ const ProfileDetails = ({ address }) => {
         )}
       </div>
 
-      <div className="profile-detail-container">
-        <h3>Seguridad</h3>
-        {!isGoogleUser && (
+      {!isGoogleUser && (
+        <div className="profile-detail-container">
+          <h3>Seguridad</h3>
           <button
             onClick={() => navigate("/profile/password")}
             className="g-white-button profile-password-button"
           >
             Cambiar contraseña
           </button>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };

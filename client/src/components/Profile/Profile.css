@@ -174,19 +174,6 @@
 
 /* VOLVER A VER quitar estilos de abajo */
 
-.profile-history-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  height: fit-content;
-  margin: 20px 0px;
-}
-
-.profile-history-container>div {
-  margin: 0px 15px 60px 0px;
-}
-
 .profile-orders-container {
   display: flex;
   flex-direction: column-reverse;

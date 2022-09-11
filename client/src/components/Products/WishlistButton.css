@@ -20,6 +20,18 @@
     border-radius: 50%; */
 }
 
+.fav-button-container button:hover>.heart-svg-faved {
+    display: none;
+}
+
+.fav-button-container button:hover>.heart-svg-no-faved path {
+    stroke: #f27979;
+}
+
+.fav-button-container button:hover>.brokenheart-svg {
+    display: inline;
+}
+
 .fav-button-svg {
     position: absolute;
     top: 0px;
@@ -27,6 +39,19 @@
 
 .heart-svg {
     transform: scale(.7);
+}
+
+.brokenheart-svg {
+    transform: scale(.7);
+    display: none;
+}
+
+.brokenheart-svg-no-faved {
+    display: none;
+}
+
+.brokenheart-svg path {
+    fill: #f27979;
 }
 
 .heart-svg path {

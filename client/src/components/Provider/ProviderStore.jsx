@@ -41,10 +41,9 @@ const ProviderStore = () => {
 
   const { wishlist } = useSelector((state) => state.cartReducer);
 
-
-    const handleWindowWidth = () => {
-        setWindowWidth(window.innerWidth);
-    };
+  const handleWindowWidth = () => {
+    setWindowWidth(window.innerWidth);
+  };
 
   useEffect(() => {
     let countdownInterv = null;
@@ -58,7 +57,7 @@ const ProviderStore = () => {
           s < 10 ? "0" + s : s
         }`
       );
-    }, 100);    
+    }, 100);
 
     window.addEventListener("resize", handleWindowWidth);
 
@@ -69,9 +68,9 @@ const ProviderStore = () => {
     })();
 
     return () => {
-        clearInterval(countdownInterv);
-        window.removeEventListener("resize", handleWindowWidth);
-    }
+      clearInterval(countdownInterv);
+      window.removeEventListener("resize", handleWindowWidth);
+    };
     // eslint-disable-next-line
   }, []);
 
@@ -82,32 +81,49 @@ const ProviderStore = () => {
 
   return (
     <div className="providerstore-container">
-        { windowWidth >= 1024 && 
+      {windowWidth >= 1024 && (
         <>
-            <div className='providerstore-echo-inner'>
-                <span>PROVIDER</span><br/>
-                    PROVIDER <br/>
-                    PROVIDER 
-            </div>
-            <span className='providerstore-title'>STORE</span>
-            <span className='providerstore-title-text'>/ORIGINALES<br/>/EXCLUSIVOS<br/>/TUYOS</span>
-        </>}
-        { windowWidth < 1023 && 
+          <div className="providerstore-echo-inner">
+            <span>PROVIDER</span>
+            <br />
+            PROVIDER <br />
+            PROVIDER
+          </div>
+          <span className="providerstore-title">STORE</span>
+          <span className="providerstore-title-text">
+            /ORIGINALES
+            <br />
+            /EXCLUSIVOS
+            <br />
+            /TUYOS
+          </span>
+        </>
+      )}
+      {windowWidth < 1023 && (
         <>
-            <span className='providerstore-title-mobile'>PROVIER</span>
-            <span className='providerstore-title-text-mobile'>/DELUXE<br/>/UNICOS<br/>/TUYOS</span>
-            <div className='providerstore-echo-inner-mobile'>
-                <span>STORE</span><br/>
-                    STORE <br/>
-                    STORE 
-            </div>
-        </>}
+          <span className="providerstore-title-mobile">PROVIDER</span>
+          <span className="providerstore-title-text-mobile">
+            /DELUXE
+            <br />
+            /UNICOS
+            <br />
+            /TUYOS
+          </span>
+          <div className="providerstore-echo-inner-mobile">
+            <span>STORE</span>
+            <br />
+            STORE <br />
+            STORE
+          </div>
+        </>
+      )}
 
       <button
         className="providerstore-title-button g-white-button"
         onClick={() => navigate("/products")}
       >
-        <SmallAddIcon className="button-addicon"/>VER TODOS
+        <SmallAddIcon className="button-addicon" />
+        VER TODOS
       </button>
 
       <div className="providerstore-header"></div>
@@ -223,7 +239,8 @@ const ProviderStore = () => {
             </p>
             <img
               src="https://res.cloudinary.com/dsyjj0sch/image/upload/v1659650791/PROVIDER_LOGO_glitch_aberration_kt2hyv.png"
-              alt="img" style={{height: '50%', width: 'auto'}}
+              alt="img"
+              style={{ height: "50%", width: "auto" }}
             />
           </div>
         </div>

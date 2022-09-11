@@ -222,7 +222,9 @@ const Profile = () => {
       </div>
 
       <div className="profile-option-selected-container">
-        {render === "details" && <ProfileDetails address={address} />}
+        {render === "details" && (
+          <ProfileDetails address={address} loading={loading} />
+        )}
 
         {render === "orders" && <Orders />}
 
