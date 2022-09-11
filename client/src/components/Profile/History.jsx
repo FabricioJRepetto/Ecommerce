@@ -14,18 +14,9 @@ const History = ({ loading, history, wl_id }) => {
               React.Children.toArray(
                 history?.map((e) => (
                   <HistoryCard
-                    key={e._id}
-                    img={e.thumbnail}
-                    name={e.name}
-                    price={e.price}
-                    premium={e.premium}
-                    sale_price={e.sale_price}
-                    discount={e.discount}
-                    prodId={e._id}
+                    product={e}
                     free_shipping={e.free_shipping ? true : false}
-                    on_sale={e.on_sale}
                     fav={wl_id.includes(e._id)}
-                    fadeIn={true}
                   />
                 ))
               )

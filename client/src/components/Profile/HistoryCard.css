@@ -2,6 +2,7 @@
    position: relative;
    /* height: 290px;
    width: 230px; */
+   height: 340px;
    padding: 0 .4rem .8rem .4rem;
 }
 
@@ -18,7 +19,7 @@
    padding: 1.5rem;
    padding-top: 2rem;
    position: relative;
-   height: 290px;
+   height: 17.5rem;
    overflow: hidden;
    opacity: 0;
 }
@@ -122,12 +123,14 @@
    -webkit-box-orient: vertical;
    overflow: hidden;
    text-align: left;
+   padding-top: .2rem;
 }
 
 .history-good-info-container {
    display: flex;
    align-items: center;
    justify-content: space-between;
+   height: 2rem;
 }
 
 /* .history-card-prod-name-container {
