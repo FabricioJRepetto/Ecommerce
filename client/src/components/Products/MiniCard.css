@@ -10,6 +10,7 @@
     position: relative;
     overflow: hidden;
 }
+
 .product-mini-card {
     background-color: white;
     color: black;
@@ -21,24 +22,28 @@
     overflow: hidden;
     opacity: 0;
 }
+
+.product-mini-card:hover p {
+    visibility: visible;
+}
+
 .fade-in {
     transition: all .3s ease;
     padding: 25px;
     opacity: 1;
 }
+
 .visible {
     visibility: hidden;
     color: black;
 }
+
 .mc-mrgn {
     margin-top: 5px;
 }
+
 .minicard-height {
     height: 20.6rem;
-}
-
-.product-mini-card:hover p {
-    visibility: visible;
 }
 
 .minicard-img-section {
@@ -49,31 +54,37 @@
     align-items: center;
     justify-content: center;
 }
+
 .minicard-img-section img {
     max-height: 180px;
     max-width: 180px;
 }
 
-.minicard-price-section{
+.minicard-price-section {
     display: flex;
 }
+
 .minicard-price-section-inner {
     display: flex;
 }
+
 .minicard-original-price {
     height: 15px;
     font-size: .9rem;
     text-align: left;
 }
+
 .minicard-sale-section {
     display: flex;
     align-items: center;
     color: orangered;
 }
+
 .onsale-svg {
     transform: scale(.6);
     padding: 0;
 }
+
 .onsale-svg path {
     fill: orangered;
 }
@@ -91,6 +102,7 @@
     align-content: center;
     height: 38px;
 }
+
 .minicard-prod-name {
     font-size: 1rem;
     font-weight: 600;
@@ -103,6 +115,7 @@
     opacity: 0;
     transition: opacity .4s ease;
 }
+
 .special-frame-right {
     /* border-left: 2px solid #139EF1;
     border-right: 2px solid #8251DE; */
@@ -120,6 +133,7 @@
     z-index: 2;
     transition: height .3s ease;
 }
+
 .special-frame-left {
     /* border-right: 2px solid #FFA310;
     border-left: 2px solid #F20057; */
@@ -137,6 +151,7 @@
     z-index: 2;
     transition: height .3s ease;
 }
+
 .mimic {
     height: 330px;
-} 
+}

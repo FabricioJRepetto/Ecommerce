@@ -81,7 +81,7 @@ const OrderCard = ({ order, setOrderDetails }) => {
         </div>
 
         <h3 className="profile-price-mobile">
-          ${order.total + order.shipping_cost}
+          ${priceFormat(order.total + order.shipping_cost).int}
         </h3>
       </span>
 
@@ -108,7 +108,7 @@ const OrderCard = ({ order, setOrderDetails }) => {
       )}
       {order.status === "expired" && (
         <p
-          className="profile-order-expired-text premiumdetails-nostock"
+          className="profile-order-cancelled-text premiumdetails-nostock"
           title="Orden expirada"
         >
           Orden expirada
