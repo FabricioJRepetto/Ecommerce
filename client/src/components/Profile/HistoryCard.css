@@ -34,6 +34,10 @@
    width: 6rem;
 }
 
+.history-card-container:hover .history-card {
+   background-color: #333333;
+}
+
 .history-card-container:hover .fav-button-container {
    opacity: 1;
 }
