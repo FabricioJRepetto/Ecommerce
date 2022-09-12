@@ -17,7 +17,7 @@
    padding: 1.5rem;
    padding-top: 2rem;
    position: relative;
-   height: 17.5rem;
+   height: 17.8rem;
    overflow: hidden;
    opacity: 0;
 }
@@ -34,6 +34,10 @@
    width: 6rem;
 }
 
+.history-card-container:hover .history-card {
+   background-color: #333333;
+}
+
 .history-card-container:hover .fav-button-container {
    opacity: 1;
 }
@@ -46,7 +50,7 @@
 }
 
 .history-card-height {
-   height: 20.6rem;
+   height: 20.3rem;
 }
 
 .history-card:hover p {
@@ -93,7 +97,7 @@
 .history-card-name-container {
    width: 11rem;
    display: flex;
-   height: 2.7rem;
+   height: 3rem;
 }
 
 .history-card-name-container h3 {

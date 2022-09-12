@@ -85,9 +85,9 @@ const HistoryCard = ({ product, free_shipping, fav }) => {
               )}
             </div>
 
-            <div className={`history-card-original-price`}>
+            {/* <div className={`history-card-original-price`}>
               {on_sale && <del>{"$" + priceFormat(price).int}</del>}
-            </div>
+            </div> */}
             <div className="history-card-price-section">
               <div className="history-card-price-section-inner">
                 <h2>${priceFormat(on_sale ? sale_price : price).int}</h2>
