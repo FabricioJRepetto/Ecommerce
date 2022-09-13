@@ -17,7 +17,7 @@
    padding: 1.5rem;
    padding-top: 2rem;
    position: relative;
-   height: 17.6rem;
+   height: 17.5rem;
    overflow: hidden;
    opacity: 0;
 }
@@ -38,7 +38,7 @@
    width: 6rem;
 }
 
-.history-card-container:hover .history-card {
+.history-card:hover {
    background-color: #333333;
 }
 

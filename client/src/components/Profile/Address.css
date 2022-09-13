@@ -29,6 +29,7 @@ div.profile-all-address-container>h1 {
 
 .address-with-pin .address-pin-set-default {
   cursor: pointer;
+
 }
 
 .address-pin-set-default:hover svg {
@@ -49,7 +50,7 @@ div.profile-all-address-container>h1 {
 
 .address-buttons-container svg {
   color: #888888;
-  transform: scale(1.3);
+  /* transform: scale(1.3); */
 }
 
 .address-buttons-container span {
@@ -73,9 +74,14 @@ div.profile-all-address-container>h1 {
   display: block;
 }
 
+.address-pin-gradient,
+.address-with-pin svg {
+  scale: .8;
+}
+
 .address-edit-gradient,
 .address-delete-gradient {
-  transform: scale(1.3);
+  /* transform: scale(1.3); */
 }
 
 .address-edit-gradient {

@@ -60,6 +60,7 @@
   mask-image: url("../../assets/svg/verified.svg");
   background-size: 400%;
   animation: gradientTextAnim 5s infinite;
+  scale: .9;
 }
 
 .location-gradient {
@@ -74,6 +75,7 @@
   mask-image: url("../../assets/svg/location.svg");
   background-size: 400%;
   animation: gradientTextAnim 5s infinite;
+  scale: .9;
 }
 
 .profile-avatar-container-label {
@@ -205,6 +207,7 @@
 
 .profile-email-container svg {
   color: white;
+  scale: .9;
 }
 
 .profile-email {
