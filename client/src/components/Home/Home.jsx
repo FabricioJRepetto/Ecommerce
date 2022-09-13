@@ -91,15 +91,18 @@ const Home = () => {
             {Array.from(Array(5).keys()).map((_, index) => (
               <MiniCard
                 key={`recom ${index}`}
-                prodId={suggestion[index]?._id}
-                premium={suggestion[index]?.premium}
-                name={suggestion[index]?.name}
-                img={suggestion[index]?.thumbnail}
-                price={suggestion[index]?.price}
-                sale_price={suggestion[index]?.sale_price}
-                discount={suggestion[index]?.discount}
-                free_shipping={suggestion[index]?.free_shipping}
-                on_sale={suggestion[index]?.on_sale}
+
+                // prodId={suggestion[index]?._id}
+                // premium={suggestion[index]?.premium}
+                // name={suggestion[index]?.name}
+                // img={suggestion[index]?.thumbnail}
+                // price={suggestion[index]?.price}
+                // sale_price={suggestion[index]?.sale_price}
+                // discount={suggestion[index]?.discount}
+                // free_shipping={suggestion[index]?.free_shipping}
+                // on_sale={suggestion[index]?.on_sale}
+
+                productData={suggestion[index]}
                 fav={wishlist.includes(suggestion[index]?._id)}
                 loading={loading}
               />

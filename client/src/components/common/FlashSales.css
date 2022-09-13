@@ -3,6 +3,9 @@
     display: flex;
     justify-content: center;
 }
+.flashsale-loading-container {
+    display: flex;
+}
 .flashsales-container {
     width: fit-content;
     background: #ffffff10;
@@ -33,12 +36,14 @@
 }
 
 .flashsales-products-container {
-    position: relative;
-    
     overflow: hidden;
-    padding: 1rem;
+    width: 73vw;
+    height: 350px;
+    position: relative;
+    padding: 1rem 1rem 3rem 1rem;
+    user-select: none;
 }
-.flashsales-products-inner {
+.flashsales-products-inner {    
     display: flex;
     justify-content: center;
     transition: all .3s ease;
@@ -62,10 +67,10 @@
 
 @media (max-width: 1350px) {
     .flashsales-products-container {
-        width: 100vw;   
+        width: 100vw;
     }
     .flashsales-products-inner {
-        justify-content: flex-start;        
+        justify-content: flex-start;
     }
     .flashsales-buton-left {
         display: block;

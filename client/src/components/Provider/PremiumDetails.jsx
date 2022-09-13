@@ -25,7 +25,7 @@ const PremiumDetails = () => {
     const { wishlist } = useSelector((state) => state.cartReducer);
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);
     const [scroll, setScroll] = useState(false)
-
+    const { session } = useSelector((state) => state.sessionReducer);
     const reference = useRef(null)
     const [isVisible, setIsVisible] = useState(false)
 
@@ -49,13 +49,26 @@ const PremiumDetails = () => {
         let scrollPercentRounded = Math.round(scrollPercent * 100);
         setScroll(scrollPercentRounded > 14)
      }
+     
+     //? agrega producto al historial
+     useEffect(() => {
+        if (session && product) {
+        // setear historial
+        const payload = {
+            product_id: product._id,
+            category: product.category.id || "",
+        };
+        axios.post(`/history/visited`, payload);
+        }
+        // eslint-disable-next-line
+    }, [product]);
 
     useEffect(() => {
         window.addEventListener("resize", handleWindowWidth);
         window.addEventListener("scroll", scrollPercent);
         return () => {
-        window.removeEventListener("resize", handleWindowWidth);
-        window.addEventListener("scroll", scrollPercent);
+            window.removeEventListener("resize", handleWindowWidth);
+            window.addEventListener("scroll", scrollPercent);
         };
     }, []);
 
