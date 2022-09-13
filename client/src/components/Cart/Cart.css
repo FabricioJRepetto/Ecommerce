@@ -164,9 +164,9 @@
         #f40259 60%,
         #fea30d 100%
     );
-  mask-image: url('../../assets/svg/ship.svg');
-  background-size: 400%;
-  animation: gradientTextAnim 5s infinite;
+    mask-image: url('../../assets/svg/ship.svg');
+    background-size: 400%;
+    animation: gradientTextAnim 5s infinite;
 }
 
 .cho-svg {

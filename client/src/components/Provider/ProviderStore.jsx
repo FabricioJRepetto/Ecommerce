@@ -136,7 +136,14 @@ const ProviderStore = () => {
 
         <FlashSales/>
 
-        <div className="providerstore-premiumbrand"></div>
+        <div className="providerstore-premiumbrand">
+            <div>
+                <h2>provider</h2>
+                {/* <div className="provider-store-sign"></div> */}
+                <img src="https://res.cloudinary.com/dsyjj0sch/image/upload/v1663041222/premium-02_ymsk9h.png" alt="" />
+                <p>Pasamos cientos de horas diseñando, probando y perfeccionando cada producto Premium en nuestra sede de Atalya City. Pero nuestros ingenieros no son los típicos técnicos corporativos que usan batas de laboratorio. Son personas con las mejores ideas para mejorar sus hobbies. Viven para la aventura. Y saben lo que es trabajar sobre la marcha. Probablemente muy parecido a ti.</p>
+            </div>
+        </div>
 
         <div className="store-premium">
           <Carousel

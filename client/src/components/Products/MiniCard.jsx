@@ -8,23 +8,25 @@ import { WishlistButton as Fav } from "./WishlistButton";
 import LoadingPlaceHolder from "../common/LoadingPlaceHolder";
 import { priceFormat } from "../../helpers/priceFormat";
 
-const MiniCard = ({
-  img,
-  name,
-  premium,
-  price,
-  sale_price,
-  discount,
-  prodId,
-  free_shipping,
-  fav,
-  on_sale,
-  loading,
-  fadeIn = true,
-}) => {
+const MiniCard = ({productData = false, fadeIn = true, fav, loading}) => {
+  
+    const {
+        thumbnail: img,
+        name,
+        premium,
+        price,
+        sale_price,
+        discount,
+        _id: prodId,
+        free_shipping,
+        on_sale    
+    } = productData;
+
+    console.log(on_sale);
+    console.log(name);
+
   const special = !/MLA/g.test(prodId);
   const navigate = useNavigate();
-  const [visible, setVisible] = useState(false);
   const [ready, setReady] = useState(!fadeIn);
   const { session } = useSelector((state) => state.sessionReducer);
 
@@ -35,14 +37,10 @@ const MiniCard = ({
   return (
     <div className="minicard-container">
       <div
-        className={`${special ? "special-frame-right" : ""} ${
-          special && visible && "mimic"
-        }`}
+        className={`${special ? "special-frame-right" : ""}`}
       ></div>
       <div
-        className={`${special ? "special-frame-left" : ""} ${
-          special && visible && "mimic"
-        }`}
+        className={`${special ? "special-frame-left" : ""}`}
       ></div>
       {loading || !name ? (
         <div className="loading-mini-card">
@@ -59,14 +57,13 @@ const MiniCard = ({
           </div>
         </div>
       ) : (
-        <div
-          onMouseEnter={() => setVisible(true)}
-          onMouseLeave={() => setVisible(false)}
-          className={`product-mini-card${visible ? " minicard-height" : ""}${
-            ready ? " fade-in" : ""
-          }${special ? " special-frame" : ""}`}
+        <div className={`product-mini-card ${
+            ready ? "fade-in" : ""
+          }`}
         >
-          {session && <Fav visible={visible} fav={fav} prodId={prodId} />}
+          {session && <span className={`minicard-wishlist-cotnainer ${fav &&'visible'}`}>
+                        <Fav fav={fav} prodId={prodId} />
+                    </span>}
 
           <div
             onClick={() =>
@@ -78,8 +75,8 @@ const MiniCard = ({
             </div>
 
             <div className="minicard-details-section">
-              <div className={`minicard-original-price ${visible && visible}`}>
-                {visible && on_sale && (
+              <div className={`minicard-original-price`}>
+                {on_sale && (
                   <del>{"$" + priceFormat(price).int}</del>
                 )}
               </div>
@@ -96,13 +93,13 @@ const MiniCard = ({
                 )}
               </div>
 
-              <div className="free-shipping mc-mrgn">
+              <div className="free-shipping mc-mrgn provider-text">
                 {free_shipping && "Envío gratis"}
               </div>
 
               <div className="minicard-prod-name-container mc-mrgn">
                 <div
-                  className={`minicard-prod-name${visible ? " visible" : ""}`}
+                  className='minicard-prod-name'
                 >
                   {name}
                 </div>

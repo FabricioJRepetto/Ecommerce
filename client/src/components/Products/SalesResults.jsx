@@ -49,16 +49,8 @@ const SalesResults = () => {
 
         <div className='sales-results'>
             {products && React.Children.toArray(products.map(e => (
-                <MiniCard 
-                    img={e?.thumbnail}
-                    name={e?.name}
-                    price={e?.price}
-                    premium={e?.premium}
-                    sale_price={e?.sale_price}
-                    discount={e?.discount}
-                    prodId={e?._id}
-                    free_shipping={e?.free_shipping}
-                    on_sale={e?.on_sale}
+                <MiniCard
+                    productData={e}
                     fav={wishlist.includes(e?._id)}
                     loading={loading}/>
             )))}
