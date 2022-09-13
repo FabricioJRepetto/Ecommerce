@@ -10,10 +10,13 @@ import {
   clearProducts,
 } from "../../Redux/reducer/productsSlice";
 import Card from "../../components/Products/Card";
-import { useModal } from "../../hooks/useModal";
+import Checkbox from "../../components/common/Checkbox";
 import ModalAdminProducts from "./ModalAdminProducts";
+import WishlistCard from "../../components/Profile/WishlistCard";
+import { useModal } from "../../hooks/useModal";
 import { CloseIcon } from "@chakra-ui/icons";
 import "../../App.css";
+import "./Products.css";
 
 const Products = () => {
   const [pricesFilter, setPricesFilter] = useState({
@@ -318,7 +321,7 @@ const Products = () => {
         <span className="g-input-with-button">
           <input
             type="text"
-            placeholder="Busca un producto"
+            placeholder="Filtra por nombre"
             onChange={handleSearch}
             value={productToSearch}
           />
@@ -333,7 +336,7 @@ const Products = () => {
         </span>
         {stateProductsReducer[productsToShowReference] &&
         stateProductsReducer[productsToShowReference][0] === null ? (
-          <h1>NO HUBIERON COINCIDENCIAS</h1>
+          <h2>NO HUBIERON COINCIDENCIAS</h2>
         ) : (
           <div className="products-results-inner">
             {React.Children.toArray(
@@ -341,13 +344,12 @@ const Products = () => {
                 (product) =>
                   (product.available_quantity > 0 ||
                     location.pathname === "/admin/products") && (
-                    <Card
+                    <WishlistCard
                       productData={product}
                       fav={wishlist.includes(product._id)}
                       openDeleteProduct={openDeleteProduct}
                       openDiscountProduct={openDiscountProduct}
                       openRemoveDiscount={openRemoveDiscount}
-                      outOfStock={product.available_quantity <= 0}
                     />
                   )
               )
@@ -364,28 +366,42 @@ const Products = () => {
           <>
             <h3>MARCAS</h3>
             <div className="filter-brand-checkbox-container">
-              {loading ? (
+              {
+                /* loading ? (
                 <h1>CARGANDO</h1>
               ) : (
+
+              ) */
                 brandsFilter &&
-                Object.keys(brandsFilter).length > 0 &&
-                React.Children.toArray(
-                  brandsCheckboxes?.map((brand) => (
-                    <label>
-                      <input
-                        type="checkbox"
-                        name={brand}
-                        checked={brandsFilter[brand]}
-                        onChange={handleBrands}
-                      />
-                      {brand}
-                    </label>
-                  ))
-                )
-              )}
+                  Object.keys(brandsFilter).length > 0 &&
+                  React.Children.toArray(
+                    brandsCheckboxes?.map((brand) => (
+                      <label>
+                        <Checkbox
+                          isChecked={brandsFilter[brand]}
+                          extraStyles={{
+                            border: true,
+                            rounded: false,
+                            innerBorder: true,
+                            margin: ".05rem",
+                            size: ".8",
+                          }}
+                        />
+                        <input
+                          type="checkbox"
+                          name={brand}
+                          checked={brandsFilter[brand]}
+                          onChange={handleBrands}
+                        />
+                        <span className="product-checkbox-brand">{brand}</span>
+                        <span className="g-gradient-text">{brand}</span>
+                      </label>
+                    ))
+                  )
+              }
             </div>
 
-            <h3>RANGO DE PRECIOS</h3>
+            <h3>PRECIO</h3>
             <>
               {productsOwnFiltersApplied.price ? (
                 <>
@@ -398,7 +414,7 @@ const Products = () => {
                     <input
                       type="text"
                       pattern="[0-9]*"
-                      placeholder="min"
+                      placeholder="Mínimo"
                       name="min"
                       onChange={handlePrices}
                       value={pricesFilter.min}
@@ -408,7 +424,7 @@ const Products = () => {
                     <input
                       type="text"
                       pattern="[0-9]*"
-                      placeholder="max"
+                      placeholder="Máximo"
                       name="max"
                       onChange={handlePrices}
                       value={pricesFilter.max}
@@ -419,14 +435,25 @@ const Products = () => {
               )}
             </>
 
-            <label>
+            <label className="products-shipping-label">
+              <Checkbox
+                isChecked={shippingFilter}
+                extraStyles={{
+                  border: true,
+                  rounded: false,
+                  innerBorder: true,
+                  margin: ".05rem",
+                  size: ".8",
+                }}
+              />
               <input
                 type="checkbox"
                 name="free_shipping"
                 checked={shippingFilter}
                 onChange={filterShipping}
               />
-              Envío gratis
+              <span className="products-shipping-text">Envío gratis</span>
+              <span className="g-gradient-text">Envío gratis</span>
             </label>
           </>
         )}

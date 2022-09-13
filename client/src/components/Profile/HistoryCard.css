@@ -1,6 +1,6 @@
 .history-card-container {
    position: relative;
-   height: 340px;
+   height: 335px;
    padding: 0 .4rem .8rem .4rem;
 }
 
@@ -17,9 +17,13 @@
    padding: 1.5rem;
    padding-top: 2rem;
    position: relative;
-   height: 17.8rem;
+   height: 17.6rem;
    overflow: hidden;
    opacity: 0;
+}
+
+.history-card:hover {
+   height: 20rem;
 }
 
 .history-card .fav-button-container {
@@ -47,10 +51,6 @@
    padding: 1rem;
    padding-top: 1.5rem;
    opacity: 1;
-}
-
-.history-card-height {
-   height: 20.3rem;
 }
 
 .history-card:hover p {
@@ -97,10 +97,10 @@
 .history-card-name-container {
    width: 11rem;
    display: flex;
-   height: 3rem;
+   height: 2.7rem;
 }
 
-.history-card-name-container h3 {
+.history-card-name-container h4 {
    display: -webkit-box;
    -webkit-line-clamp: 2;
    -webkit-box-orient: vertical;

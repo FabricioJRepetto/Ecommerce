@@ -23,7 +23,20 @@
   right: -0.5rem;
 }
 
+.profile-avatar-container .profile-edit-svg-container:hover .profile-svg-for-verified-email .edit-gradient,
+.profile-detail-button-container:hover .profile-svg-for-verified-email .edit-gradient,
+.profile-address-container:hover .location-gradient {
+  display: block;
+}
+
+.profile-avatar-container .profile-edit-svg-container:hover .profile-svg-for-verified-email svg,
+.profile-detail-button-container:hover .profile-svg-for-verified-email svg,
+.profile-address-container:hover svg {
+  display: none;
+}
+
 .edit-gradient {
+  display: none;
   height: 1.5rem;
   width: 1.5rem;
   background: linear-gradient(45deg,
@@ -50,6 +63,7 @@
 }
 
 .location-gradient {
+  display: none;
   height: 2rem;
   width: 2rem;
   background: linear-gradient(45deg,
@@ -177,7 +191,7 @@
 }
 
 .profile-edit-svg-container svg {
-  color: white;
+  color: #888888;
 }
 
 .profile-hide-submit {
@@ -219,6 +233,10 @@
   display: flex;
   align-items: center;
   cursor: pointer;
+}
+
+.profile-address-container svg {
+  color: #888888;
 }
 
 .profile-address-container p {

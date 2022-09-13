@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { loadIdProductToEdit } from "../../Redux/reducer/productsSlice";
 import { resizer } from "../../helpers/resizer";
 import { priceFormat } from "../../helpers/priceFormat";
 import { ReactComponent as Sale } from "../../assets/svg/sale.svg";
@@ -9,12 +10,20 @@ import { WishlistButton } from "../Products/WishlistButton";
 import { useCheckout } from "../../hooks/useCheckout";
 import "./WishlistCard.css";
 
-const Card = ({ productData, fav }) => {
+const Card = ({
+  openDeleteProduct,
+  openDiscountProduct,
+  openRemoveDiscount,
+  productData,
+  fav,
+}) => {
   const navigate = useNavigate();
   const { session } = useSelector((state) => state.sessionReducer);
   const { onCart } = useSelector((state) => state.cartReducer);
   const { addToCart, buyNow } = useCheckout();
   const [ready, setReady] = useState(false);
+  const dispatch = useDispatch();
+  const location = useLocation();
 
   const {
     thumbnail: img,
@@ -35,6 +44,11 @@ const Card = ({ productData, fav }) => {
     setReady(true);
   };
 
+  const editProduct = (prodId) => {
+    dispatch(loadIdProductToEdit(prodId));
+    navigate("/admin/productForm");
+  };
+
   return (
     <div
       className="wishlist-card-container"
@@ -42,7 +56,9 @@ const Card = ({ productData, fav }) => {
         navigate(premium ? `/premium/${prodId}` : `/details/${prodId}`)
       }
     >
-      {special && <i className="provider-text special-card">PROVIDER</i>}
+      {location.pathname !== "/products" && special && (
+        <i className="provider-text special-card">PROVIDER</i>
+      )}
 
       <div
         /* key={prodId}
@@ -126,6 +142,25 @@ const Card = ({ productData, fav }) => {
             <div className="free-shipping">
               {available_quantity > 0 && free_shipping && "Envío gratis"}
             </div>
+            {location.pathname === "/admin/products" && (
+              <>
+                <button type="button" onClick={() => editProduct(prodId)}>
+                  EDITAR
+                </button>
+                <button
+                  type="button"
+                  onClick={() => openDeleteProduct({ prodId, name })}
+                >
+                  ELIMINAR
+                </button>
+                <button
+                  type="button"
+                  onClick={() => openDiscountProduct({ prodId, name, price })}
+                >
+                  DESCUENTO
+                </button>
+              </>
+            )}
           </div>
         </div>
 

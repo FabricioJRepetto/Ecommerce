@@ -397,7 +397,7 @@
 
 .navbar-main-sections {
   display: flex;
-  padding: 0.3rem 0;
+  padding: 0.3rem 0 .2rem 0;
   z-index: 7;
   /* //! VOLVER A VER ver z-index */
   background-color: #000000;
@@ -413,6 +413,13 @@
 
 .navbar-sections {
   display: flex;
+}
+
+.navbar-sections {}
+
+.navbar-main-sections {
+  /*  background-color: red;
+ */
 }
 
 @media (min-width: 1240px) {

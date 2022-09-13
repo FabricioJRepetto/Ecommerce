@@ -1,0 +1,78 @@
+.products-container {
+   display: flex;
+   flex-direction: row-reverse;
+   justify-content: center;
+   height: fit-content;
+   position: relative;
+}
+
+.products-results-container {
+   width: 70%;
+}
+
+.products-results-container>h2 {
+   color: red;
+}
+
+/* .products-results-inner {
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+} */
+
+.products-filters {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   position: fixed;
+   left: 0;
+}
+
+.filter-brand-checkbox-container {
+   display: flex;
+   flex-direction: column;
+   align-items: flex-start;
+   max-width: 100px;
+   text-align: left;
+}
+
+.filter-brand-checkbox-container>label {
+   display: flex;
+}
+
+.filter-brand-checkbox-container>label>input {
+   display: none;
+}
+
+.products-shipping-label {
+   display: flex;
+}
+
+.products-shipping-label>input {
+   display: none;
+}
+
+.filter-brand-checkbox-container>label .g-gradient-text {
+   display: none;
+}
+
+.filter-brand-checkbox-container>label:hover .g-gradient-text {
+   display: inline;
+}
+
+.filter-brand-checkbox-container>label:hover .product-checkbox-brand {
+   display: none;
+}
+
+.products-shipping-label .g-gradient-text {
+   display: none;
+}
+
+.products-shipping-label:hover .g-gradient-text {
+   display: inline;
+}
+
+.products-shipping-label:hover .products-shipping-text {
+   display: none;
+}

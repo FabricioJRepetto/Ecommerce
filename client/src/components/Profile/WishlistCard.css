@@ -4,6 +4,7 @@
   -webkit-transition: background-color 100ms linear;
   -ms-transition: background-color 100ms linear;
   transition: background-color 100ms linear;
+  width: 100%;
 }
 
 .wishlist-card-container:hover .wishlist-product-card {
