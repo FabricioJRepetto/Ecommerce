@@ -8,7 +8,7 @@ import { WishlistButton as Fav } from "./WishlistButton";
 import LoadingPlaceHolder from "../common/LoadingPlaceHolder";
 import { priceFormat } from "../../helpers/priceFormat";
 
-const MiniCard = ({productData, fadeIn = true, fav, loading}) => {
+const MiniCard = ({productData = false, fadeIn = true, fav, loading}) => {
   
     const {
         thumbnail: img,
@@ -93,7 +93,7 @@ const MiniCard = ({productData, fadeIn = true, fav, loading}) => {
                 )}
               </div>
 
-              <div className="free-shipping mc-mrgn">
+              <div className="free-shipping mc-mrgn provider-text">
                 {free_shipping && "Envío gratis"}
               </div>
 

@@ -29,27 +29,21 @@ const FlashSales = () => {
 
             <div className='flashsales-header'>
                 <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
-                <p>Flash Sales!</p>
-                <Bolt className='bolt-svg'/>
+                <p>Flash Sales</p>
+                <span className='bolt-container'>
+                    <span className='bolt-svg'></span>
+                </span>
                 <CountDown />
-                <div></div>
-                <div></div>
-                <div></div>
-                <div></div>
                 <div></div>
             </div>
 
             {loading
                 ? <div className='flashsales-products-inner'>
-                    <MiniCard productData={false} loading={true}/>
-                    <MiniCard productData={false} loading={true}/>
-                    <MiniCard productData={false} loading={true}/>
-                    <MiniCard productData={false} loading={true}/>
-                    <MiniCard productData={false} loading={true}/>
+                    <MiniCard loading={true}/>
+                    <MiniCard loading={true}/>
+                    <MiniCard loading={true}/>
+                    <MiniCard loading={true}/>
+                    <MiniCard loading={true}/>
                 </div>
                 : products 
                     ? <div className='flashsales-products-container'>

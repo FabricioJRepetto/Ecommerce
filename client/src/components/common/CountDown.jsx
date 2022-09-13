@@ -23,7 +23,7 @@ const CountDown = () => {
     }, [])
     
   return (
-    <span>{countdown}</span>
+    <p>{countdown}</p>
   )
 }
 
