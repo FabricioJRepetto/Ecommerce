@@ -139,8 +139,8 @@ const Card = ({
               )}
             </div>
 
-            <div className="free-shipping">
-              {available_quantity > 0 && free_shipping && "Envío gratis"}
+            <div className="wishlist-free-shipping">
+              {available_quantity > 0 && free_shipping && <p>Envío gratis</p>}
             </div>
             {location.pathname === "/admin/products" && (
               <>

@@ -355,7 +355,12 @@
     font-size: .8rem;
   }
 
-  .wishlist-product-data-container>.free-shipping {
+  .wishlist-free-shipping {
+    color: #39b54a;
+  }
+
+  .wishlist-free-shipping>p {
+    color: #39b54a;
     font-size: .9rem;
   }
 

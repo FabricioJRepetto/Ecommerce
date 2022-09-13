@@ -201,11 +201,55 @@
 }
 
 .providerstore-premiumbrand {
-    margin: 3rem;
+    position: relative;
+    margin: 4rem;
     width: 100vw;
     height: 60vh;
-    background: no-repeat center url('https://cdn11.bigcommerce.com/s-k11cg5mzh9/content/pdp_images/8946_15882.jpg');
+    display: flex;
+    align-items: center;
+    text-align: left;
+    background: no-repeat center url('https://cdn11.bigcommerce.com/s-k11cg5mzh9/content/pdp_images/9471_16407.jpg');
     background-size: 100% auto;
+}
+.providerstore-premiumbrand > div {
+    margin: auto 5rem;
+    width: 700px;
+}
+.provider-store-sign {
+    position: absolute;
+    top: 32%;
+    left: 0%;
+    z-index: 5;
+    height: 5.2rem;
+    width: 14rem;
+    margin: 0 20rem;
+    filter: drop-shadow(2px 4px 6px black);
+    background: #ffffff;
+    /* background: linear-gradient(
+        45deg,
+        #35a7ff 0%,
+        #7e54de 20%,
+        #f40259 60%,
+        #fea30d 100%
+    ); */
+    mask-image: url('../../assets/svg/PremiumSign.svg');
+    background-size: 400%;
+    animation: gradientTextAnim 6s infinite;
+}
+.providerstore-premiumbrand div > img {
+    position: absolute;
+    top: 23%;
+    left: 12%;
+    transform: scale(.5);
+    filter: invert() drop-shadow(2px 4px 6px black);
+}
+.providerstore-premiumbrand div > p {
+    font-size: 1.5rem;
+}
+.providerstore-premiumbrand div > h2 {
+    color: #ededed;
+    font-size: 6rem;
+    margin-bottom: 2rem;
 }
 
 @media (max-width: 1024px) {

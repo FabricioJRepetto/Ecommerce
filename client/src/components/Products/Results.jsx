@@ -150,15 +150,15 @@ console.log(applied);
                     </div>
                     )}
                     {React.Children.toArray(
-                    productsFound?.map(
-                        (prod) =>
-                        prod.available_quantity > 0 && (
-                            <Card
-                            productData={prod}
-                            fav={wishlist.includes(prod._id)}
-                            />
+                        productsFound?.map(
+                            (prod) =>
+                            prod.available_quantity > 0 && (
+                                <Card
+                                productData={prod}
+                                fav={wishlist.includes(prod._id)}
+                                />
+                            )
                         )
-                    )
                     )}
                 </div>
                 ) : (

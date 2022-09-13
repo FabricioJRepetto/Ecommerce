@@ -69,7 +69,7 @@ const HistoryCard = ({ product, free_shipping, fav }) => {
             </div>
 
             <div className="history-good-info-container">
-              <div className="free-shipping">
+              <div className="history-free-shipping">
                 {free_shipping && "Envío gratis"}
               </div>
 
