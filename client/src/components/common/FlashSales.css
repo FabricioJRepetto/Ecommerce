@@ -2,6 +2,7 @@
     width: 100%;
     display: flex;
     justify-content: center;
+    margin: 2rem 0;
 }
 .flashsale-loading-container {
     display: flex;

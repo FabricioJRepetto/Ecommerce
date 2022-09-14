@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import Controls from "./Controls";
 import Indicators from "./Indicators";
 import "./Carousel.css";
+import { resetCarouselIndex, updateCarouselIndex } from "../../../Redux/reducer/extraSlice";
 
 const Slider = (prop) => {
   const {
@@ -16,12 +18,14 @@ const Slider = (prop) => {
     height = "none",
     autoplay = true,
     id = "slider",
+    shareIndex = false
   } = prop;
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [move, setMove] = useState(false);
-  const slideInterval = useRef(null);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const slideInterval = useRef(null);
   const slider = useRef(null);
 
   useEffect(() => {
@@ -51,7 +55,10 @@ const Slider = (prop) => {
     } else {
       stopSlideTimer();
     }
-    return () => stopSlideTimer();
+    return () => {
+        stopSlideTimer();
+        dispatch(resetCarouselIndex())
+    }
     // eslint-disable-next-line
   }, [document.visibilityState]);
 
@@ -75,6 +82,7 @@ const Slider = (prop) => {
     if (steps === 6) prev();
     else {
       setCurrentIndex(index);
+      shareIndex && dispatch(updateCarouselIndex(index));
       slider.current.style.transform = `translateX(${-steps * 100}%)`;
     }
   };
@@ -107,11 +115,13 @@ const Slider = (prop) => {
     if (move === "next") {
       let i = currentIndex < images.length - 1 ? currentIndex + 1 : 0;
       setCurrentIndex(i);
+      shareIndex && dispatch(updateCarouselIndex(i));
       slider.current.style.transform = "translateX(-100%)";
     } else if (move === "prev") {
       setMove(false);
       let i = currentIndex > 0 ? currentIndex - 1 : images.length - 1;
       setCurrentIndex(i);
+      shareIndex && dispatch(updateCarouselIndex(i));
       slider.current.prepend(slider.current.lastElementChild);
       slider.current.style.transition = "none";
       slider.current.style.transform = "translateX(-100%)";
