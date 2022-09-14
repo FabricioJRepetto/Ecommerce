@@ -1,0 +1,81 @@
+.store-premium {
+    margin: 2rem 0 3rem 0;
+    height: fit-content;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+}
+
+.premiumPreview-carousel-container {
+    width: 40vw;
+}
+
+.store-premium-text {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    padding: 0 2rem;
+    width: 30vw;
+}
+
+.store-premium-text p {
+    font-size: 1.5rem;
+    margin: 0 auto;
+    padding-top: 2rem;
+    width: 100%;
+    height: 100px;
+}
+.spt-text {
+    animation: fadeInText .3s;
+}
+.spt-textb {
+    animation: fadeInTextB .3s;
+}
+
+.store-premium-text div > div {
+    z-index: 5;
+    height: 5.2rem;
+    width: 14rem;
+    margin: 0 auto; 
+    background: linear-gradient(
+        45deg,
+        #35a7ff 0%,
+        #7e54de 20%,
+        #f40259 60%,
+        #fea30d 100%
+    );
+    mask-image: url('../../assets/svg/PremiumSign.svg');
+    background-size: 400%;
+    animation: gradientTextAnim 15s infinite;
+}
+.store-premium-text button {
+    width: max-content;
+    align-self: center;
+}
+
+@media (max-width: 1400px) {
+    .premiumPreview-carousel-container {
+        width: 564px;
+    }
+    .store-premium-text p {
+        font-size: 1.3rem;
+    }
+}   
+@media (max-width: 1024px) {
+    .store-premium {
+        flex-direction: column;
+        align-items: center;
+    }
+    .premiumPreview-carousel-container {
+        width: 80vw;
+    }
+    .store-premium-text {
+        width: 80vw;
+    }
+    .store-premium-text div > div {
+        margin-top: 2rem;
+    }
+    .store-premium-text p {
+        font-size: 1.5rem;
+    }
+}   

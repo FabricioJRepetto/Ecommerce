@@ -1,8 +1,6 @@
 import axios from 'axios'
-import { ReactComponent as Bolt } from '../../assets/svg/bolt.svg'
 import React, { useEffect, useState } from 'react'
 import MiniCard from '../Products/MiniCard'
-import { useRef } from 'react'
 import { useSelector } from 'react-redux'
 import CountDown from './CountDown'
 

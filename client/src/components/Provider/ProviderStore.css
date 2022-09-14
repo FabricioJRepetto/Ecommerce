@@ -51,7 +51,7 @@
     font-size: 8vw;
     letter-spacing: -0.5vw;
     top: 7.5%;
-    left: 60%;
+    left: 64%;
     text-align: left;
     pointer-events: none;
     position: fixed;
@@ -66,11 +66,15 @@
     font-size: 12vw;
     font-family: HelveticaNeueLTPro-BdOu, Poppins;
     line-height: 80%;
-    letter-spacing: 2.4vw;
+    letter-spacing: 4.4vw;
     color: #202020;
     pointer-events: none;
     position: fixed;
     z-index: 3;
+}
+
+.invisible {
+    opacity: 0;
 }
 
 .providerstore-title-button {
@@ -98,10 +102,10 @@
 }
 
 .providerstore-background {
-    background: black;
+    background: #000000;
     position: absolute;
     z-index: 2;
-    height: 200vh;
+    height: 45vh;
     width: 100vw;
 }
 
@@ -113,27 +117,6 @@
     justify-content: center;
     position: relative;
     z-index: 4;
-}
-.store-premium {
-    margin: 2rem 0 3rem 0;
-    height: 45vh;
-    width: 100vw;
-    display: flex;
-    justify-content: center;
-}
-.store-premium-text {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    padding: 0 2rem;
-    width: 30vw;
-}
-.store-premium-text p {
-    padding: 2rem;
-}
-.store-premium-text button {
-    width: fit-content;
-    align-self: center;
 }
 
 .storecards-inner {
@@ -189,7 +172,6 @@
     max-width: 100%;
 }
 
-
 .providerstore-flashsales {
     margin: 3rem;
 }
@@ -225,13 +207,6 @@
     margin: 0 20rem;
     filter: drop-shadow(2px 4px 6px black);
     background: #ffffff;
-    /* background: linear-gradient(
-        45deg,
-        #35a7ff 0%,
-        #7e54de 20%,
-        #f40259 60%,
-        #fea30d 100%
-    ); */
     mask-image: url('../../assets/svg/PremiumSign.svg');
     background-size: 400%;
     animation: gradientTextAnim 6s infinite;
@@ -257,7 +232,7 @@
         height: 43vw;
     }
     .providerstore-title-button {
-        left: 60%;
+        left: 64%;
         top: 7.5%;
         margin-top: 20vw;
         width: 32.5vw;
