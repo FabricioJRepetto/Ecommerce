@@ -43,26 +43,14 @@ const ProviderPremium = () => {
     }
   }, []);
 
-//???????????????????????????????????
-    console.log(windowWidth);
-    const displayMaker = (divisor, mode) => {
-        let num = mode === 'column' ? windowWidth / divisor : (windowWidth / divisor) * (windowWidth < 1024 ? 0.535 : 0.285)
-        let aux = Array.from(Array(Math.ceil(num)).keys()).map(() => ' 15px')
-        console.log(mode+aux.length);
-        return "".concat(aux)
-     }
-    const displayFiller = (param) => {
-        let amount = param || Math.ceil(windowWidth / 16) * Math.ceil((windowWidth / 16) * (windowWidth < 1024 ? 0.535 : 0.285));
+    const [caracter, setCaracter] = useState('· ')
+    
+    const displayFiller = (prop) => {        
+        let amount = prop || Math.ceil(windowWidth / 12) * Math.ceil((windowWidth / 12) * (windowWidth < 1024 ? 0.535 : 0.285));
         console.log('area: '+amount);
-        let aux = Array.from(Array(amount).keys()).map(() => '· ' )
+        let aux = Array.from(Array(amount).keys()).map(() => caracter )
         return aux
      }
-    let extraStyle = {
-        display: 'grid',
-        gridTemplateColumns: displayMaker(15, 'column'),
-        gridTemplateRows: displayMaker(15, 'r'),
-    }
-//????????????????????????????????????
 
   return (
     <div className="providerstore-container">
@@ -103,7 +91,7 @@ const ProviderPremium = () => {
         </>
       )}
         
-      <div className="providerpremium-header" style={extraStyle}>{displayFiller()}</div>
+      <div className="providerpremium-header" >{displayFiller()}</div>
      
       <div className="providerstore-background"></div>
 

@@ -52,9 +52,24 @@ const resetSales = async (req, res, next) => {
     }
 };
 
+const undeletable = async (req, res, next) => {
+    try {
+        // await Product.updateMany({}, {
+        //     '$set': {
+        //         'undeletable': true
+        //     }
+        // })
+
+        return res.send('Undeletable products update function unabled for production.')
+    } catch (error) {
+        next(error)
+    }
+}
+
 module.exports = {
     getSales,
     setNewSales,
-    resetSales
+    resetSales,
+    undeletable
 };
 
