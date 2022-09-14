@@ -1,11 +1,5 @@
 .home-container {
-    
-}
-.random-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    height: 330px;    
+  
 }
 
 .svg {

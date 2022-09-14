@@ -3,8 +3,10 @@
 }
 
 .providerpremium-header {    
-    font-size: .8rem;
-    letter-spacing: .2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.1rem;
+    line-height: 0.75rem;
     user-select: none;
     height: 22vw;
     background: radial-gradient(circle, rgb(40, 40, 40) 20%, rgba(53,167,255,1) 35%, rgba(126,84,222,1) 45%, rgba(244,2,89,1) 55%, rgba(254,163,13,1) 65%, rgb(40, 40, 40) 80%);
@@ -29,10 +31,7 @@
     padding: 5rem 0;
     width: 100%;    
     z-index: 4;
-    position: relative; 
-    /*! position: absolute ROMPE EL EVENTLISTENER wtf? 
-        body height y window innerheight pasan a ser iguales,
-        el calculo del scroll termina dividiendo por 0 y retorna Infinity o NaN*/
+    position: relative;
 }
 
 .providerpremium-echo-inner-mobile {

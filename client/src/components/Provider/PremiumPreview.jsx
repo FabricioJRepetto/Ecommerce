@@ -68,6 +68,7 @@ const PremiumPreview = () => {
                     width='100%'
                 />
           </div>
+          
           <div className="store-premium-text">
             <div>
               <div></div>              
@@ -80,7 +81,7 @@ const PremiumPreview = () => {
               Explorar Premium
             </button>
           </div>
-        </div>
+    </div>
   )
 }
 

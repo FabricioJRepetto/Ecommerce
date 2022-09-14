@@ -1,9 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { loadApplied, loadFilters, loadProductsFound, loadProductsOwn, loadQuerys } from "../../Redux/reducer/productsSlice";
-import axios from "axios";
-import MiniCard from "../Products/MiniCard";
 import Carousel from "./Carousel/Carousel";
 import { IMAGES } from "../../constants";
 import Footer from "../common/Footer";
@@ -16,33 +13,11 @@ import { ReactComponent as Five } from "../../assets/svg/explode-svgrepo-com.svg
 import { ReactComponent as Six } from "../../assets/svg/perform-svgrepo-com.svg";
 
 import "./Home.css";
+import Suggestions from "../common/Suggestions";
 
 const Home = () => {
-    const [loading, setLoading] = useState(true);
-    const [suggestion, setSuggestion] = useState(false);
-    const {wishlist} = useSelector((state) => state.cartReducer);
-    const {session} = useSelector((state) => state.sessionReducer);
-
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
-  useEffect(() => {
-    session 
-        ? (async () => {        
-            const suggestionData = axios(`/history/suggestion`)            
-            suggestionData?.then(r => {
-                if (r.data.length > 4 ) {
-                    setSuggestion(r.data);
-                } else {
-                    setSuggestion(false);                
-                }            
-            });
-        setLoading(false);
-        })() 
-        : setLoading(false);
-
-    // eslint-disable-next-line
-  }, []);
 
   const categorySearch = (category) => { 
         dispatch(loadProductsOwn("loading"));
@@ -83,34 +58,9 @@ const Home = () => {
       </div>
 
         <FlashSales/>
-      
-      {suggestion.length > 4 && (
-        <div>
-          <h2>Quizás te interese...</h2>
-          <div className="random-container">
-            {Array.from(Array(5).keys()).map((_, index) => (
-              <MiniCard
-                key={`recom ${index}`}
 
-                // prodId={suggestion[index]?._id}
-                // premium={suggestion[index]?.premium}
-                // name={suggestion[index]?.name}
-                // img={suggestion[index]?.thumbnail}
-                // price={suggestion[index]?.price}
-                // sale_price={suggestion[index]?.sale_price}
-                // discount={suggestion[index]?.discount}
-                // free_shipping={suggestion[index]?.free_shipping}
-                // on_sale={suggestion[index]?.on_sale}
-
-                productData={suggestion[index]}
-                fav={wishlist.includes(suggestion[index]?._id)}
-                loading={loading}
-              />
-            ))}
-          </div>
-        </div>
-      )}
-      <br />
+        <Suggestions/>
+        
       <Footer />
     </div>
   );
