@@ -19,6 +19,7 @@ const Suggestions = () => {
                 suggestionData?.then(r => {
                     if (r.data.length > 4 ) {
                         setProducts(r.data);
+                        console.log(r);
                     } else {
                         setProducts(false);                
                     }            
