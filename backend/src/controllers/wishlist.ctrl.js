@@ -26,7 +26,7 @@ const getUserList = async (req, res, next) => {
         let response = [];
         let new_id_list = [];
         rawProds.forEach((e) => {
-            if (e.value.id) {
+            if (e.value._id) {
                 response.push(e.value);
                 new_id_list.push(e.value._id.toString());
             }
