@@ -4,14 +4,15 @@
    justify-content: center;
    height: fit-content;
    position: relative;
+   padding-top: 3.5rem;
+}
+
+.products-no-coincidences {
+   padding-top: 2rem;
 }
 
 .products-results-container {
-   width: 70%;
-}
-
-.products-results-container>h2 {
-   color: red;
+   width: 60%;
 }
 
 /* .products-results-inner {
@@ -21,24 +22,186 @@
    align-items: center;
 } */
 
-.products-filters {
+.products-filters-middle {
+   position: relative;
+   display: block;
+   width: 15rem;
+   height: 100%;
+   min-height: 100vh;
+   /* border: 1px solid red; */
+}
+
+.products-filters-inner {
    display: flex;
    flex-direction: column;
+   align-items: flex-start;
+   padding: 1rem 0;
+   /*  border: 1px solid yellow; */
+}
+
+.products-filters-inner h3 {
+   padding-bottom: .5rem;
+}
+
+.products-filters-price-container {
+   margin-bottom: 18px;
+}
+
+.products-filters-shipping-container,
+.products-filters-brand-container {
+   margin-bottom: 3rem;
+}
+
+.products-filters-price-container,
+.products-filters-shipping-container,
+.products-filters-brand-container {
+   /* margin: 1rem 0; */
+   display: flex;
+   flex-direction: column;
+   align-items: flex-start;
+   width: 90%;
+}
+
+.products-filters-price-applied {
+   display: flex;
+}
+
+.products-filters-price-applied>div {
+   display: flex;
    align-items: center;
-   position: fixed;
-   left: 0;
+}
+
+.products-filters-price-applied span {
+   display: flex;
+   cursor: pointer;
+   align-items: center;
+   margin-left: .5rem;
+}
+
+.products-filters-price-applied svg {
+   color: #888888;
+}
+
+.products-filters-price-applied span:hover svg {
+   display: none;
+}
+
+.products-filters-price-applied span:hover .close-gradient {
+   display: inline;
+}
+
+.close-gradient {
+   height: 1.5rem;
+   width: 1.5rem;
+   background: linear-gradient(45deg,
+         #35a7ff 0%,
+         #7e54de 20%,
+         #f40259 60%,
+         #fea30d 100%);
+   mask-image: url("../../assets/svg/close.svg");
+   background-size: 400%;
+   animation: gradientTextAnim 5s infinite;
+   display: none;
+}
+
+
+
+.products-filters-price-container input:focus {
+   outline: none;
+}
+
+.products-filters-price-container form {
+   font-size: .9rem;
+   display: flex;
+}
+
+.products-filters-price-container form input[type="submit"] {
+   display: none;
+}
+
+.price-filter-submit {
+   padding-left: .5rem;
+   height: 24px;
+   cursor: default;
+}
+
+.price-filter-input-full {
+   cursor: pointer;
+}
+
+.price-filter-submit svg {
+   color: #222222;
+   scale: 1.5;
+   /* display: none; */
+}
+
+.price-filter-input-full svg {
+   color: white;
+}
+
+.price-filter-input-full:hover .chevron-right-gradient {
+   display: block;
+}
+
+.price-filter-input-full:hover svg {
+   display: none;
+}
+
+.chevron-right-gradient {
+   scale: 1.5;
+   height: 24px;
+   width: 24px;
+   background: linear-gradient(45deg,
+         #35a7ff 0%,
+         #7e54de 20%,
+         #f40259 60%,
+         #fea30d 100%);
+   mask-image: url("../../assets/svg/chevron-right.svg");
+   background-size: 400%;
+   animation: gradientTextAnim 5s infinite;
+   display: none;
+}
+
+.products-filters-price-container input {
+   padding: 0;
+   width: 5rem;
+   padding: .1rem;
+}
+
+.products-filters-price-container form>input {
+   margin-left: .5rem;
+   width: 2rem;
+}
+
+.products-filters-input-container {
+   width: 5rem;
+}
+
+.products-filters-price-separator {
+   width: 1rem;
+}
+
+.dumb-box {
+   height: 300px;
+   width: 100%;
+   background-color: #555555;
 }
 
 .filter-brand-checkbox-container {
    display: flex;
    flex-direction: column;
    align-items: flex-start;
-   max-width: 100px;
+   width: 100%;
    text-align: left;
 }
 
 .filter-brand-checkbox-container>label {
    display: flex;
+   margin-top: .2rem;
+}
+
+.filter-brand-checkbox-container>label span {
+   margin-left: .2rem;
 }
 
 .filter-brand-checkbox-container>label>input {
@@ -47,6 +210,7 @@
 
 .products-shipping-label {
    display: flex;
+   align-items: center;
 }
 
 .products-shipping-label>input {
@@ -69,10 +233,17 @@
    display: none;
 }
 
-.products-shipping-label:hover .g-gradient-text {
+h3.products-shipping-text,
+h3.g-gradient-text {
+   padding-bottom: 0;
+   padding-right: .5rem;
+
+}
+
+/* .products-shipping-label:hover .g-gradient-text {
    display: inline;
 }
 
 .products-shipping-label:hover .products-shipping-text {
    display: none;
-}
+} */

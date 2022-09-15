@@ -42,7 +42,7 @@
    background-color: #333333;
 }
 
-.history-card-container:hover .fav-button-container {
+.history-card:hover .fav-button-container {
    opacity: 1;
 }
 

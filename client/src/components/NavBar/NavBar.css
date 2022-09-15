@@ -3,11 +3,12 @@
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  position: fixed;
+  position: sticky;
   top: 0;
   z-index: 5;
   /* //! VOLVER A VER ver z-index */
   background-color: #000000;
+  height: 3.1rem;
 }
 
 /*//! MOBILE */
@@ -283,7 +284,7 @@
   .navbar-sections {
     padding-right: 3.7rem;
     margin-right: 0;
-    height: 100%;
+    height: 3rem;
   }
 
   .navbar {
@@ -348,7 +349,7 @@
   }
 
   .navbar-search-bar-mobile-show {
-    top: 3rem
+    top: 3.1rem
   }
 
   .navbar-search-bar-mobile-hide {

@@ -9,12 +9,13 @@ import {
   changeReloadFlag,
   clearProducts,
 } from "../../Redux/reducer/productsSlice";
-import Card from "../../components/Products/Card";
 import Checkbox from "../../components/common/Checkbox";
 import ModalAdminProducts from "./ModalAdminProducts";
 import WishlistCard from "../../components/Profile/WishlistCard";
 import { useModal } from "../../hooks/useModal";
 import { CloseIcon } from "@chakra-ui/icons";
+import { ReactComponent as Close } from "../../assets/svg/close.svg";
+import { ReactComponent as ChevronRight } from "../../assets/svg/chevron-right.svg";
 import "../../App.css";
 import "./Products.css";
 
@@ -30,6 +31,9 @@ const Products = () => {
   const [brandsCheckboxes, setBrandsCheckboxes] = useState([]);
   const [filtersApplied, setFiltersApplied] = useState({});
   const [getProductsFlag, setGetProductsFlag] = useState(false);
+  const [priceFilterRender, setPriceFilterRender] = useState("");
+  const [priceWarn, setPriceWarn] = useState(false);
+
   const dispatch = useDispatch();
   const stateProductsReducer = useSelector((state) => state.productsReducer);
   const {
@@ -43,6 +47,7 @@ const Products = () => {
   } = stateProductsReducer;
   const { wishlist } = useSelector((state) => state.cartReducer);
   const location = useLocation();
+
   const [
     isOpenDeleteProduct,
     openDeleteProduct,
@@ -100,6 +105,14 @@ const Products = () => {
       setBrands(stateProductsReducer[source]);
     } // eslint-disable-next-line
   }, [brandsFlag]);
+
+  useEffect(() => {
+    if (productsOwnFiltersApplied.price) {
+      let priceToRenderArray = productsOwnFiltersApplied.price.split("-");
+      let priceToRender = `$${priceToRenderArray[0]} - $${priceToRenderArray[1]}`;
+      setPriceFilterRender(priceToRender);
+    }
+  }, [productsOwnFiltersApplied.price]);
 
   //! 1.5
   const getProducts = () => {
@@ -254,6 +267,18 @@ const Products = () => {
     });
   };
 
+  useEffect(() => {
+    if (
+      pricesFilter.min &&
+      pricesFilter.max &&
+      pricesFilter.min >= pricesFilter.max
+    ) {
+      setPriceWarn(true);
+    } else {
+      setPriceWarn(false);
+    }
+  }, [pricesFilter.min, pricesFilter.max]);
+
   const filterShipping = () => {
     setShippingFilter(!shippingFilter);
     dispatch(
@@ -315,6 +340,41 @@ const Products = () => {
     dispatch(searchProducts(""));
   };
 
+  /*   const [windowScroll, setWindowScroll] = useState(0);
+  const [filtersContainerHeight, setFiltersContainerHeight] = useState(0);
+  const [relativeContainer, setRelativeContainer] = useState(false);
+  const filtersContainer = useRef(null);
+
+  useEffect(() => {
+    const controlWindowScroll = () => {
+      if (window.scrollY < windowScroll) {
+        setRelativeContainer(false);
+      } else {
+        setRelativeContainer(true);
+      }
+
+      setWindowScroll(window.scrollY);
+    };
+
+    window.addEventListener("scroll", controlWindowScroll);
+
+    return () => {
+      window.removeEventListener("scroll", controlWindowScroll);
+    };
+  }, []);
+
+  useEffect(() => {
+    filtersContainer.current &&
+      setFiltersContainerHeight(filtersContainer.current.offsetHeight);
+    // eslint-disable-next-line
+  }, [filtersContainer.current, filtersContainer?.current?.offsetHeight]);
+
+  console.log("container: filtersContainerHeight", filtersContainerHeight);
+  console.log("window: window.innerHeight", window.innerHeight);
+  console.log("scroll: windowScroll", windowScroll); */
+
+  //filtersContainerHeight - window.innerHeight === windowScroll
+
   return (
     <div className="products-container">
       <div className="products-results-container">
@@ -336,7 +396,9 @@ const Products = () => {
         </span>
         {stateProductsReducer[productsToShowReference] &&
         stateProductsReducer[productsToShowReference][0] === null ? (
-          <h2>NO HUBIERON COINCIDENCIAS</h2>
+          <h2 className="products-no-coincidences">
+            No hubieron coincidencias
+          </h2>
         ) : (
           <div className="products-results-inner">
             {React.Children.toArray(
@@ -359,104 +421,172 @@ const Products = () => {
       </div>
       {pricesFilter.min && pricesFilter.max && <></>}
 
-      <div className="products-filters">
-        {productsFound[0] === null ? (
-          <></>
-        ) : (
-          <>
-            <h3>MARCAS</h3>
-            <div className="filter-brand-checkbox-container">
-              {
-                /* loading ? (
+      <div className="products-filters-outer">
+        <div className="products-filters-middle">
+          <div
+            className="products-filters-inner"
+            /* ref={filtersContainer}
+            style={{
+              position: !relativeContainer ? "sticky" : "relative",
+              top:
+                windowScroll === 0 ||
+                filtersContainerHeight - window.innerHeight + 106 < windowScroll
+                  ? "-160px"
+                  : "0",
+              marginTop:
+                windowScroll === 0 ||
+                filtersContainerHeight - window.innerHeight + 106 < windowScroll
+                  ? "2px"
+                  : "5px",
+            }} */
+          >
+            {productsFound[0] === null ? (
+              <></>
+            ) : (
+              <>
+                <div className="products-filters-price-container">
+                  <h3>PRECIO</h3>
+                  <>
+                    {productsOwnFiltersApplied.price ? (
+                      <>
+                        <div className="products-filters-price-applied">
+                          <div>
+                            <p>{priceFilterRender}</p>
+                          </div>
+                          <span onClick={handleClearPrices}>
+                            <Close />
+                            <div className="close-gradient"></div>
+                          </span>
+                        </div>
+                        <p className="g-hidden-placeholder">hidden</p>
+                        <p className="g-hidden-placeholder">hidden</p>
+                      </>
+                    ) : (
+                      <>
+                        <form onSubmit={filterPrices}>
+                          <div className="products-filters-input-container">
+                            <input
+                              type="text"
+                              pattern="[0-9]*"
+                              placeholder="Mínimo"
+                              name="min"
+                              onChange={handlePrices}
+                              value={pricesFilter.min}
+                            />
+                          </div>
+                          <div className="products-filters-price-separator">
+                            _
+                          </div>
+                          <div className="products-filters-input-container">
+                            <input
+                              type="text"
+                              pattern="[0-9]*"
+                              placeholder="Máximo"
+                              name="max"
+                              onChange={handlePrices}
+                              value={pricesFilter.max}
+                            />
+                          </div>
+                          <label
+                            className={`price-filter-submit${
+                              pricesFilter.max && pricesFilter.min && !priceWarn
+                                ? " price-filter-input-full"
+                                : ""
+                            }`}
+                            htmlFor="price-filter-submit"
+                          >
+                            <ChevronRight />
+                            <div className="chevron-right-gradient"></div>
+                          </label>
+                          <input
+                            type="submit"
+                            value="filter"
+                            id="price-filter-submit"
+                          />
+                        </form>
+                        {priceWarn ? (
+                          <p className="g-error-input">
+                            El precio mínimo debe ser mayor al precio máximo
+                          </p>
+                        ) : (
+                          <>
+                            <p className="g-hidden-placeholder">hidden</p>
+                            <p className="g-hidden-placeholder">hidden</p>
+                          </>
+                        )}
+                      </>
+                    )}
+                  </>
+                </div>
+
+                <div className="products-filters-shipping-container">
+                  <label className="products-shipping-label">
+                    <h3 className="products-shipping-text">ENVÍO GRATIS</h3>
+                    {/* <h3 className="g-gradient-text">ENVÍO GRATIS</h3> */}
+                    <Checkbox
+                      isChecked={shippingFilter}
+                      extraStyles={{
+                        border: true,
+                        rounded: true,
+                        innerBorder: true,
+                        margin: ".05rem",
+                        size: "1.2",
+                      }}
+                    />
+                    <input
+                      type="checkbox"
+                      name="free_shipping"
+                      checked={shippingFilter}
+                      onChange={filterShipping}
+                    />
+                  </label>
+                </div>
+
+                <div className="products-filters-brand-container">
+                  <h3>MARCA</h3>
+                  <div className="filter-brand-checkbox-container">
+                    {
+                      /* loading ? (
                 <h1>CARGANDO</h1>
               ) : (
 
               ) */
-                brandsFilter &&
-                  Object.keys(brandsFilter).length > 0 &&
-                  React.Children.toArray(
-                    brandsCheckboxes?.map((brand) => (
-                      <label>
-                        <Checkbox
-                          isChecked={brandsFilter[brand]}
-                          extraStyles={{
-                            border: true,
-                            rounded: false,
-                            innerBorder: true,
-                            margin: ".05rem",
-                            size: ".8",
-                          }}
-                        />
-                        <input
-                          type="checkbox"
-                          name={brand}
-                          checked={brandsFilter[brand]}
-                          onChange={handleBrands}
-                        />
-                        <span className="product-checkbox-brand">{brand}</span>
-                        <span className="g-gradient-text">{brand}</span>
-                      </label>
-                    ))
-                  )
-              }
-            </div>
-
-            <h3>PRECIO</h3>
-            <>
-              {productsOwnFiltersApplied.price ? (
-                <>
-                  <h4>{productsOwnFiltersApplied.price}</h4>
-                  <button onClick={handleClearPrices}>limpiar</button>
-                </>
-              ) : (
-                <form onSubmit={filterPrices}>
-                  <div>
-                    <input
-                      type="text"
-                      pattern="[0-9]*"
-                      placeholder="Mínimo"
-                      name="min"
-                      onChange={handlePrices}
-                      value={pricesFilter.min}
-                    />
+                      brandsFilter &&
+                        Object.keys(brandsFilter).length > 0 &&
+                        React.Children.toArray(
+                          brandsCheckboxes?.map((brand) => (
+                            <label>
+                              <Checkbox
+                                isChecked={brandsFilter[brand]}
+                                extraStyles={{
+                                  border: true,
+                                  rounded: false,
+                                  innerBorder: true,
+                                  margin: ".05rem",
+                                  size: ".8",
+                                }}
+                              />
+                              <input
+                                type="checkbox"
+                                name={brand}
+                                checked={brandsFilter[brand]}
+                                onChange={handleBrands}
+                              />
+                              <span className="product-checkbox-brand">
+                                {brand}
+                              </span>
+                              <span className="g-gradient-text">{brand}</span>
+                            </label>
+                          ))
+                        )
+                    }
                   </div>
-                  <div>
-                    <input
-                      type="text"
-                      pattern="[0-9]*"
-                      placeholder="Máximo"
-                      name="max"
-                      onChange={handlePrices}
-                      value={pricesFilter.max}
-                    />
-                  </div>
-                  <input type="submit" value="filter" />
-                </form>
-              )}
-            </>
-
-            <label className="products-shipping-label">
-              <Checkbox
-                isChecked={shippingFilter}
-                extraStyles={{
-                  border: true,
-                  rounded: false,
-                  innerBorder: true,
-                  margin: ".05rem",
-                  size: ".8",
-                }}
-              />
-              <input
-                type="checkbox"
-                name="free_shipping"
-                checked={shippingFilter}
-                onChange={filterShipping}
-              />
-              <span className="products-shipping-text">Envío gratis</span>
-              <span className="g-gradient-text">Envío gratis</span>
-            </label>
-          </>
-        )}
+                </div>
+              </>
+            )}
+            {/* <div className="dumb-box"></div> */}
+          </div>
+        </div>
       </div>
       <ModalAdminProducts
         isOpenDeleteProduct={isOpenDeleteProduct}

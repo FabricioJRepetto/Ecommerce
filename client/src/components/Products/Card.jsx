@@ -110,18 +110,30 @@ const Card = ({
                     SIN STOCK{" "}
                   </b>
                 )}
-                <button type="button" onClick={() => editProduct(prodId)}>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    editProduct(prodId);
+                  }}
+                >
                   EDITAR
                 </button>
                 <button
                   type="button"
-                  onClick={() => openDeleteProduct({ prodId, name })}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    openDeleteProduct({ prodId, name });
+                  }}
                 >
                   ELIMINAR
                 </button>
                 <button
                   type="button"
-                  onClick={() => openDiscountProduct({ prodId, name, price })}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    openDiscountProduct({ prodId, name, price });
+                  }}
                 >
                   DESCUENTO
                 </button>
