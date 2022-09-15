@@ -1,5 +1,4 @@
 const History = require("../models/History");
-const Product = require("../models/product");
 const axios = require("axios");
 const { rawIdProductGetter } = require("../utils/rawIdProductGetter");
 const { meliSearchParser } = require("../utils/meliParser");

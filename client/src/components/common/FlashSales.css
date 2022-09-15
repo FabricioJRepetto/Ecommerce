@@ -53,12 +53,14 @@
     animation: gradientTextAnim 3s infinite;
 }
 
-.flashsales-products-container {
-    width: fit-content;
-    height: 350px;
+.flashsales-products-container {    
     position: relative;
-    padding: 0 1rem 3rem 1rem;
-    user-select: none;
+    overflow: hidden;
+    height: 350px;
+    padding: 0 1rem 3rem 1rem; 
+    margin: 0 auto;
+    user-select: none; 
+    touch-action: pan-y; /*?*/
 }
 .flashsales-products-inner {    
     display: flex;

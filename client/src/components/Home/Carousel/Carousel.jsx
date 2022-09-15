@@ -15,7 +15,7 @@ const Slider = (prop) => {
     indicators = false,
     pointer = false,
     width,
-    height = "none",
+    height = "unset",
     autoplay = true,
     id = "slider",
     shareIndex = false
@@ -151,7 +151,7 @@ const Slider = (prop) => {
             <div
               id={"img" + index}
               key={e.img}
-              style={pointer ? { cursor: "pointer" } : { cursor: "auto" }}
+              style={{ cursor:pointer ? "pointer" : "auto" }}
               onClick={() => navigate(e.url || "")}
               className="slide-item"
             >

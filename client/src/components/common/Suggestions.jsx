@@ -8,25 +8,17 @@ import './Suggestions.css'
 const Suggestions = () => {
     const [loading, setLoading] = useState(true)
     const [products, setProducts] = useState(false)
-    const {session} = useSelector((state) => state.sessionReducer)
     const {wishlist} = useSelector(state => state.cartReducer)
     
-    useEffect(() => {
-        session 
-            ? (async () => {
-                const suggestionData = axios(`/history/suggestion`) 
+    useEffect(() => {         
+        (async () => {
+            const { data } = await axios(`/history/suggestion`) 
 
-                suggestionData?.then(r => {
-                    if (r.data.length > 4 ) {
-                        setProducts(r.data);
-                        console.log(r);
-                    } else {
-                        setProducts(false);                
-                    }            
-                });
-                setLoading(false);
-            })() 
-            : setLoading(false);
+            if (data.length > 4 ) setProducts(data);
+            else setProducts(false);
+
+            setLoading(false);
+        })()
 
         // eslint-disable-next-line
     }, []);
@@ -36,9 +28,8 @@ const Suggestions = () => {
             <div className='suggestions-container'>
 
             <div className='suggestions-header'>
-                <div></div>
-                <p>Quizás te interese... 👀</p>
-                <div></div>
+                <p>Quizás te interese...</p>
+                <div className='siggestion-eye'></div>
             </div>
 
             {loading
@@ -60,7 +51,9 @@ const Suggestions = () => {
                             ))}
                         </div>
                     </div>
-                  : <h1>Parece que estás en el momento y lugar equivocados... 👀</h1>                    
+                  : <div className='suggestions-products-error'>
+                        <h2>Parece que estás en el momento y lugar equivocado... 👀</h2>
+                    </div>                    
                 }
 
             </div>

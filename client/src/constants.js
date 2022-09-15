@@ -3,33 +3,33 @@ const STRIPE_PKEY = 'pk_test_51L5zx4CyWZVtXgfrkpwfv0WgFKi326kk8x8U1D7xCKUAQ9pX67
 const MP_PKEY = 'TEST-a6a6f998-d3c4-48ce-a848-1f5b5bac4cec'
 const IMAGES = [
     {
-        img: "https://http2.mlstatic.com/D_NQ_703318-MLA50725627490_072022-OO.webp",
-        url: "/products",
+        img: "https://res.cloudinary.com/dsyjj0sch/image/upload/v1663210500/Slider%20Home/slider-0_gkzu23.jpg",
+        url: "",
     },
     {
-        img: "https://http2.mlstatic.com/D_NQ_900700-MLA50621579925_072022-OO.webp",
-        url: "/products",
+        img: "https://res.cloudinary.com/dsyjj0sch/image/upload/v1663210500/Slider%20Home/slider-1_lfops9.jpg",
+        url: "/provider",
     },
     {
-        img: "https://http2.mlstatic.com/D_NQ_794413-MLA50423210111_062022-OO.webp",
-        url: "/products",
+        img: "https://res.cloudinary.com/dsyjj0sch/image/upload/v1663213579/Slider%20Home/slider-2_bpsi5u.jpg",
+        url: "/premium",
     },
-    {
-        img: "https://http2.mlstatic.com/D_NQ_917752-MLA50446386694_062022-OO.webp",
-        url: "/products",
-    },
-    {
-        img: "https://http2.mlstatic.com/D_NQ_977617-MLA50409269868_062022-OO.webp",
-        url: "/products",
-    },
-    {
-        img: "https://http2.mlstatic.com/D_NQ_688045-MLA50608833957_072022-OO.webp",
-        url: "/products",
-    },
-    {
-        img: "https://http2.mlstatic.com/D_NQ_627971-MLA50423148467_062022-OO.webp",
-        url: "/products",
-    },
+    // {
+    //     img: "https://http2.mlstatic.com/D_NQ_917752-MLA50446386694_062022-OO.webp",
+    //     url: "/products",
+    // },
+    // {
+    //     img: "https://http2.mlstatic.com/D_NQ_977617-MLA50409269868_062022-OO.webp",
+    //     url: "/products",
+    // },
+    // {
+    //     img: "https://http2.mlstatic.com/D_NQ_688045-MLA50608833957_072022-OO.webp",
+    //     url: "/products",
+    // },
+    // {
+    //     img: "https://http2.mlstatic.com/D_NQ_627971-MLA50423148467_062022-OO.webp",
+    //     url: "/products",
+    // },
 ];
 
 export {
