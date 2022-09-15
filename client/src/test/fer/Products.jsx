@@ -13,7 +13,6 @@ import Checkbox from "../../components/common/Checkbox";
 import ModalAdminProducts from "./ModalAdminProducts";
 import WishlistCard from "../../components/Profile/WishlistCard";
 import { useModal } from "../../hooks/useModal";
-import { CloseIcon } from "@chakra-ui/icons";
 import { ReactComponent as Close } from "../../assets/svg/close.svg";
 import { ReactComponent as ChevronRight } from "../../assets/svg/chevron-right.svg";
 import "../../App.css";
