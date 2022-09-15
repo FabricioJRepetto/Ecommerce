@@ -1,50 +1,41 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { resizer } from "../../helpers/resizer";
 import { loadQuerys } from "../../Redux/reducer/productsSlice";
 import Footer from "../common/Footer";
-import Carousel from "../Home/Carousel/Carousel";
-import MiniCard from "../Products/MiniCard";
 import { SmallAddIcon } from "@chakra-ui/icons";
 
 import "./ProviderStore.css";
 import FlashSales from "../common/FlashSales";
+import PremiumPreview from "./PremiumPreview";
 
 const ProviderStore = () => {
-  const images = [
-    {
-      img: "https://res.cloudinary.com/dsyjj0sch/image/upload/v1661287509/9750_16688_wz1frg.jpg",
-      url: "",
-    },
-    {
-      img: "https://res.cloudinary.com/dsyjj0sch/image/upload/v1661287509/8322_15233_xanjft.jpg",
-      url: "",
-    },
-    {
-      img: "https://res.cloudinary.com/dsyjj0sch/image/upload/v1661290053/9679_16615_q7wl6f.jpg",
-      url: "",
-    },
-    {
-      img: "https://res.cloudinary.com/dsyjj0sch/image/upload/v1661287509/8552_15488_r0hefx.jpg",
-      url: "",
-    },
-  ];
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [scrollP, setScrollP] = useState(0)
 
-    const handleWindowWidth = () => {
-        setWindowWidth(window.innerWidth);
-    };
+  const handleWindowWidth = () => {
+    setWindowWidth(window.innerWidth)
+  };
+  
+    const scrollPercent = () => { 
+        let scrollTop = window.scrollY;
+        let docHeight = document.body.offsetHeight;
+        let winHeight = window.innerHeight;
+        let scrollPercent = scrollTop / (docHeight - winHeight);
+        let scrollPercentRounded = Math.round(scrollPercent * 100);
+        setScrollP(scrollPercentRounded);
+    }
 
   useEffect(() => {
     window.addEventListener("resize", handleWindowWidth);
+    window.addEventListener("scroll", scrollPercent);
 
-    return () => {        
+    return () => {
         window.removeEventListener("resize", handleWindowWidth);
+        window.removeEventListener("scroll", scrollPercent);
     }
     // eslint-disable-next-line
   }, []);
@@ -64,11 +55,11 @@ const ProviderStore = () => {
             PROVIDER <br />
             PROVIDER
           </div>
-          <span className="providerstore-title">STORE</span>
-          <span className="providerstore-title-text">
-            /ORIGINALES
+          <span className={`providerstore-title ${scrollP > 20 && 'invisible'}`}>STORE</span>
+          <span className={`providerstore-title-text ${scrollP > 20 && 'invisible'}`}>
+            /DELUXE
             <br />
-            /EXCLUSIVOS
+            /UNICOS
             <br />
             /TUYOS
           </span>
@@ -76,8 +67,8 @@ const ProviderStore = () => {
       )}
       {windowWidth < 1023 && (
         <>
-          <span className="providerstore-title-mobile">PROVIDER</span>
-          <span className="providerstore-title-text-mobile">
+          <span className={`providerstore-title-mobile ${scrollP > 20 && 'invisible'}`}>PROVIDER</span>
+          <span className={`providerstore-title-text-mobile ${scrollP > 20 && 'invisible'}`}>
             /DELUXE
             <br />
             /UNICOS
@@ -94,7 +85,7 @@ const ProviderStore = () => {
       )}
 
       <button
-        className="providerstore-title-button g-white-button"
+        className={`providerstore-title-button g-white-button ${scrollP > 20 && 'invisible'}`}
         onClick={() => navigate("/products")}
       >
         <SmallAddIcon className="button-addicon" />
@@ -139,37 +130,13 @@ const ProviderStore = () => {
         <div className="providerstore-premiumbrand">
             <div>
                 <h2>provider</h2>
-                {/* <div className="provider-store-sign"></div> */}
                 <img src="https://res.cloudinary.com/dsyjj0sch/image/upload/v1663041222/premium-02_ymsk9h.png" alt="" />
-                <p>Pasamos cientos de horas diseñando, probando y perfeccionando cada producto Premium en nuestra sede de Atalya City. Pero nuestros ingenieros no son los típicos técnicos corporativos que usan batas de laboratorio. Son personas con las mejores ideas para mejorar sus hobbies. Viven para la aventura. Y saben lo que es trabajar sobre la marcha. Probablemente muy parecido a ti.</p>
+                <p>Pasamos cientos de horas diseñando, probando y perfeccionando cada producto Premium en nuestra sede de Atalya City. Pero nuestros ingenieros no son los típicos técnicos corporativos que usan batas de laboratorio. Son personas con las mejores ideas para mejorar sus propios hobbies. Viven para la aventura. Y saben lo que es trabajar sobre la marcha. Probablemente muy parecido a ti.</p>
             </div>
         </div>
 
-        <div className="store-premium">
-          <Carousel
-            images={images}
-            pausable
-            pointer
-            indicators
-            width="40vw"
-            height="100%"
-          />
-          <div className="store-premium-text">
-            <div>
-              <h1>Provider Premium</h1>
-              <p>
-                Una selección exclusiva de los mejores productos original
-                Provider store.
-              </p>
-            </div>
-            <button
-              className="g-white-button"
-              onClick={() => navigate("/premium")}
-            >
-              Ver los productos Premium
-            </button>
-          </div>
-        </div>
+        <PremiumPreview />
+
       </div>
 
       <Footer />

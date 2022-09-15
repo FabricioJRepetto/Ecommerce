@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { resizer } from "../../helpers/resizer";
-import "./MiniCard.css";
 import { ReactComponent as Sale } from "../../assets/svg/sale.svg";
 import { WishlistButton as Fav } from "./WishlistButton";
 import LoadingPlaceHolder from "../common/LoadingPlaceHolder";
 import { priceFormat } from "../../helpers/priceFormat";
+
+import "./MiniCard.css";
 
 const MiniCard = ({productData = false, fadeIn = true, fav, loading}) => {
   
@@ -21,9 +22,6 @@ const MiniCard = ({productData = false, fadeIn = true, fav, loading}) => {
         free_shipping,
         on_sale    
     } = productData;
-
-    console.log(on_sale);
-    console.log(name);
 
   const special = !/MLA/g.test(prodId);
   const navigate = useNavigate();

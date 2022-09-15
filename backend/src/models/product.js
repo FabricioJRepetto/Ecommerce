@@ -72,7 +72,8 @@ const productSchema = new Schema(
             logo: String,
             carouselImg: [{}],
             extraText: [{}]
-        }
+        },
+        undeletable: Boolean
     },
     {
         versionKey: false,

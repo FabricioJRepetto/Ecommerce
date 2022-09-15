@@ -1,33 +1,27 @@
 .providerstore-container {
     position: relative;
-    height: fit-content;
 }
 
-.providerpremium-header {
+.providerpremium-header {    
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.1rem;
+    line-height: 0.75rem;
+    user-select: none;
+    height: 22vw;
+    background: radial-gradient(circle, rgb(40, 40, 40) 20%, rgba(53,167,255,1) 35%, rgba(126,84,222,1) 45%, rgba(244,2,89,1) 55%, rgba(254,163,13,1) 65%, rgb(40, 40, 40) 80%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    background-size: 400% 200%;
+    animation: gradientTextAnim 10s infinite;
+}
+/* .providerpremium-header {
     height: 22vw;
     background: no-repeat center url("https://res.cloudinary.com/dsyjj0sch/image/upload/v1661380898/3d-abstract-wave-pattern-background_u4ght2.jpg");
     background-size: 100% auto;
     background-position: revert;
-}
-.providerpremium-title-text {
-    font-family: HelveticaNeueLTPro-Bd, Poppins;
-    font-size: 2.2rem;
-    text-align: left;   
-    top: 12.6%;
-    left: 77%;
-    pointer-events: none;
-    position: fixed;
-    z-index: 1;
-}
-
-.providerpremium-background {
-    background: black;
-    position: absolute;
-    display: block;
-    z-index: 2;
-    height: 200vw;
-    width: 100vw;
-}
+} */
 
 .providerpremium-cardscontainer {
     display: flex;
@@ -36,8 +30,8 @@
     justify-content: center;
     padding: 5rem 0;
     width: 100%;    
-    position: absolute;
     z-index: 4;
+    position: relative;
 }
 
 .providerpremium-echo-inner-mobile {
@@ -48,7 +42,7 @@
     font-size: 12vw;
     font-family: HelveticaNeueLTPro-BdOu, Poppins;
     line-height: 75%;
-    letter-spacing: -1.2vw;
+    letter-spacing: .2vw;
     color: #202020;
     pointer-events: none;
     position: fixed;

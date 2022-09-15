@@ -449,12 +449,16 @@ const removeDiscount = async (req, res, next) => {
 const deleteProduct = async (req, res, next) => {
     try {
         const prod = await Product.findById(req.params.id);
-        let deleteList = [];
-        prod.images.forEach((img) => deleteList.push(img.public_id));
-        cloudinary.api.delete_resources(deleteList);
+        if (prod.undeletable) {
+            return res.json("Este producto está protegido. Imposible eliminar.");
+        } else {
+            let deleteList = [];
+            prod.images.forEach((img) => deleteList.push(img.public_id));
+            cloudinary.api.delete_resources(deleteList);
 
-        await Product.findByIdAndDelete(req.params.id);
-        res.json("Producto eliminado exitosamente");
+            await Product.findByIdAndDelete(req.params.id);
+            return res.json("Producto eliminado exitosamente");
+        }
     } catch (error) {
         next(error);
     }
@@ -462,11 +466,11 @@ const deleteProduct = async (req, res, next) => {
 
 const deleteAllProducts = async (req, res, next) => {
     try {
-        //? no borra nada
-        cloudinary.api.delete_resources(true);
-        //cloudinary.api.delete_folder("products", (error, result) => { console.log(result); });
-        const deleted = await Product.deleteMany();
-        return res.json(deleted);
+        // //? no borra nada
+        // cloudinary.api.delete_resources(true);
+        // //cloudinary.api.delete_folder("products", (error, result) => { console.log(result); });
+        // const deleted = await Product.deleteMany();
+        return res.send('Delete all products function unabled.');
     } catch (error) {
         next(error);
     }

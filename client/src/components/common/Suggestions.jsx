@@ -1,42 +1,47 @@
-import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import MiniCard from '../Products/MiniCard'
 import { useSelector } from 'react-redux'
-import CountDown from './CountDown'
+import axios from 'axios'
+import MiniCard from '../Products/MiniCard'
 
-import './FlashSales.css'
+import './Suggestions.css'
 
-const FlashSales = () => {
+const Suggestions = () => {
     const [loading, setLoading] = useState(true)
     const [products, setProducts] = useState(false)
+    const {session} = useSelector((state) => state.sessionReducer)
     const {wishlist} = useSelector(state => state.cartReducer)
     
     useEffect(() => {
-        (async () => {
-            const { data } = await axios("/sales");
-            if (data) {
-                setProducts(data);
+        session 
+            ? (async () => {
+                const suggestionData = axios(`/history/suggestion`) 
+
+                suggestionData?.then(r => {
+                    if (r.data.length > 4 ) {
+                        setProducts(r.data);
+                    } else {
+                        setProducts(false);                
+                    }            
+                });
                 setLoading(false);
-            }
-        })();
-    }, [])
+            })() 
+            : setLoading(false);
 
-    return (
-        <div className='flashsales-outter'>
-            <div className='flashsales-container'>
+        // eslint-disable-next-line
+    }, []);
 
-            <div className='flashsales-header'>
+  return (
+    <div className='suggestions-outter'>
+            <div className='suggestions-container'>
+
+            <div className='suggestions-header'>
                 <div></div>
-                <p>Flash Sales</p>
-                <span className='bolt-container'>
-                    <span className='bolt-svg'></span>
-                </span>
-                <CountDown />
+                <p>Quizás te interese... 👀</p>
                 <div></div>
             </div>
 
             {loading
-                ? <div className='flashsales-products-inner'>
+                ? <div className='suggestions-products-inner'>
                     <MiniCard loading={true}/>
                     <MiniCard loading={true}/>
                     <MiniCard loading={true}/>
@@ -44,8 +49,8 @@ const FlashSales = () => {
                     <MiniCard loading={true}/>
                 </div>
                 : products 
-                    ? <div className='flashsales-products-container'>
-                        <div className='flashsales-products-inner'>
+                    ? <div className='suggestions-products-container'>
+                        <div className='suggestions-products-inner'>
                             {React.Children.toArray(products.map(e => 
                                 <MiniCard
                                     productData={e}
@@ -59,7 +64,7 @@ const FlashSales = () => {
 
             </div>
         </div>
-    )
+  )
 }
 
-export default FlashSales
+export default Suggestions

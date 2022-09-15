@@ -8,7 +8,20 @@ import "./ProviderPremium.css";
 const ProviderPremium = () => {
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState(false);
+  const [scrollP, setScrollP] = useState(0)
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  
+    const scrollPercent = () => { 
+        let scrollTop = window.scrollY;
+        let docHeight = document.body.offsetHeight;
+        let winHeight = window.innerHeight;
+        let scrollPercent = scrollTop / (docHeight - winHeight);
+        let scrollPercentRounded = Math.round(scrollPercent * 100);
+        setScrollP(scrollPercentRounded);
+        console.log(scrollTop);
+        console.log(docHeight);
+        console.log(winHeight);
+    }
 
   const handleWindowWidth = () => {
     setWindowWidth(window.innerWidth);
@@ -22,9 +35,22 @@ const ProviderPremium = () => {
       setLoading(false);
     })();
     window.addEventListener("resize", handleWindowWidth);
+    window.addEventListener("scroll", scrollPercent);
 
-    return () => window.removeEventListener("resize", handleWindowWidth);
+    return () => {
+        window.removeEventListener("resize", handleWindowWidth);
+        window.removeEventListener("scroll", scrollPercent);
+    }
   }, []);
+
+    const [caracter, setCaracter] = useState('· ')
+    
+    const displayFiller = (prop) => {        
+        let amount = prop || Math.ceil(windowWidth / 12) * Math.ceil((windowWidth / 12) * (windowWidth < 1024 ? 0.535 : 0.285));
+        console.log('area: '+amount);
+        let aux = Array.from(Array(amount).keys()).map(() => caracter )
+        return aux
+     }
 
   return (
     <div className="providerstore-container">
@@ -36,8 +62,8 @@ const ProviderPremium = () => {
             PROVIDER <br />
             PROVIDER
           </div>
-          <span className="providerstore-title">PREMIUM</span>
-          <span className="providerstore-title-text">
+          <span className={`providerstore-title ${scrollP > 12 && 'invisible'}`}>PREMIUM</span>
+          <span className={`providerstore-title-text ${scrollP > 12 && 'invisible'}`}>
             /DELUXE
             <br />
             /UNICOS
@@ -48,8 +74,8 @@ const ProviderPremium = () => {
       )}
       {windowWidth < 1023 && (
         <>
-          <span className="providerstore-title-mobile">PROVIDER</span>
-          <span className="providerstore-title-text-mobile">
+          <span className={`providerstore-title-mobile ${scrollP > 20 && 'invisible'}`}>PROVIDER</span>
+          <span className={`providerstore-title-text-mobile ${scrollP > 20 && 'invisible'}`}>
             /DELUXE
             <br />
             /UNICOS
@@ -64,10 +90,10 @@ const ProviderPremium = () => {
           </div>
         </>
       )}
-
-      <div className="providerpremium-header"></div>
-
-      <div className="providerpremium-background"></div>
+        
+      <div className="providerpremium-header" >{displayFiller()}</div>
+     
+      <div className="providerstore-background"></div>
 
       <div className="providerpremium-cardscontainer">
         {loading || !products ? (
@@ -84,6 +110,7 @@ const ProviderPremium = () => {
         )}
 
         <Footer />
+
       </div>
     </div>
   );
