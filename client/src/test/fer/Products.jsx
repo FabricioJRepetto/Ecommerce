@@ -385,14 +385,14 @@ const Products = () => {
             onChange={handleSearch}
             value={productToSearch}
           />
-          {productToSearch && (
+          {/*  {productToSearch && (
             <div
               className="g-input-icon-container g-input-x-button"
               onClick={handleClearSearch}
             >
               <CloseIcon />
             </div>
-          )}
+          )} */}
         </span>
         {stateProductsReducer[productsToShowReference] &&
         stateProductsReducer[productsToShowReference][0] === null ? (

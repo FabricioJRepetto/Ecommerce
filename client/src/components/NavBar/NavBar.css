@@ -417,13 +417,6 @@
   display: flex;
 }
 
-.navbar-sections {}
-
-.navbar-main-sections {
-  /*  background-color: red;
- */
-}
-
 @media (min-width: 1240px) {
 
   /* .navbar input[type="text"] {
