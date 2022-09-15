@@ -9,7 +9,7 @@ export const containerStyles = {
 function LoadingPlaceHolder(props) {
 
     const loaderStyles = {
-        background: '#eee',
+        background: '#e2e2e2',
         width: '100%',
         overflow: 'hidden',
         position: props.container ? 'absolute' : 'relative',
@@ -22,7 +22,7 @@ function LoadingPlaceHolder(props) {
         left: '0',
         width: '100%',
         animation: 'loaderSwipeAnim 1s cubic-bezier(0.4, 0.0, 0.2, 1) infinite',
-        background: 'linear-gradient(to right, #eee 10%, #dddddd 50%, #eee 90%)',
+        background: 'linear-gradient(to right, #e2e2e2 10%, #ababab 50%, #e2e2e2 90%)',
         height: '100%'
     }
 

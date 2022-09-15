@@ -65,13 +65,14 @@ const PremiumPreview = () => {
                     pointer
                     indicators
                     shareIndex
+                    id='premiumPreview'
                     width='100%'
                 />
           </div>
           
           <div className="store-premium-text">
             <div>
-              <div></div>              
+              <div></div>
               <p className={ change ? 'spt-text' : 'spt-textb'}>{premiumDesc[carouselIndex]}</p>
             </div>
             <button
