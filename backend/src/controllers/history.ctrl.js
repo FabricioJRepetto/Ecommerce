@@ -1,5 +1,4 @@
 const History = require("../models/History");
-const Product = require("../models/product");
 const axios = require("axios");
 const { rawIdProductGetter } = require("../utils/rawIdProductGetter");
 const { meliSearchParser } = require("../utils/meliParser");
@@ -51,17 +50,17 @@ const getSuggestion = async (req, res, next) => {
         if (!history) {
             await History.create({
                 products: [],
-                last_search: "",
                 user: req.user._id,
             });
         }
 
         let searchParam = `category=${history.last_category}`;
+        let meliCates = ['MLA1051', 'MLA1648', 'MLA1276', 'MLA5726', 'MLA1039'];
 
-        if (!history.last_category) {
-            history.last_search
+        if (!history || !history.last_category) {
+            history?.last_search
                 ? (searchParam = `q=${history.last_search}`)
-                : (searchParam = "category = MLA1648");
+                : (searchParam = `category=${meliCates[Math.round(Math.random() * 5)]}`);
         }
 
         //? genero busqueda aplicando descuento
@@ -109,7 +108,7 @@ const getSuggestion = async (req, res, next) => {
                 }
             }
         }
-
+        console.log(response);
         return res.json(response);
     } catch (error) {
         next(error);

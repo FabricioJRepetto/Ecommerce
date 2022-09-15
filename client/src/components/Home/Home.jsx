@@ -14,6 +14,7 @@ import { ReactComponent as Six } from "../../assets/svg/perform-svgrepo-com.svg"
 
 import "./Home.css";
 import Suggestions from "../common/Suggestions";
+import PremiumPreview from "../Provider/PremiumPreview";
 
 const Home = () => {
     const dispatch = useDispatch();
@@ -32,7 +33,14 @@ const Home = () => {
   return (
     <div className="home-container">
       <div>
-        <Carousel images={IMAGES} controls indicators pointer width="100vw" />
+        <Carousel 
+            images={IMAGES} 
+            controls 
+            indicators 
+            pointer 
+            pausable
+            id='mainCarousel'
+            width="100%" />
       </div>
       <div className="categories">        
         <div onClick={() => categorySearch("MLA1648")}>
@@ -60,6 +68,8 @@ const Home = () => {
         <FlashSales/>
 
         <Suggestions/>
+
+        <PremiumPreview />
         
       <Footer />
     </div>

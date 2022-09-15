@@ -450,14 +450,14 @@ const deleteProduct = async (req, res, next) => {
     try {
         const prod = await Product.findById(req.params.id);
         if (prod.undeletable) {
-            return res.json("Este producto está protegido. Imposible eliminar.");
+            return res.json({ message: "Este producto está protegido. Imposible eliminar.", type: "warning" });
         } else {
             let deleteList = [];
             prod.images.forEach((img) => deleteList.push(img.public_id));
             cloudinary.api.delete_resources(deleteList);
 
             await Product.findByIdAndDelete(req.params.id);
-            return res.json("Producto eliminado exitosamente");
+            return res.json({ message: "Producto eliminado exitosamente", type: "success" });
         }
     } catch (error) {
         next(error);

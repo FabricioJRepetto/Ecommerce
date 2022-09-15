@@ -27,9 +27,10 @@ const ModalAdminProducts = ({
   const deleteProduct = () => {
     axios
       .delete(`/admin/product/${productToDelete.prodId}`)
-      .then((_) => {
-        dispatch(deleteProductFromState(productToDelete.prodId));
-        notification("Producto eliminado exitosamente", "", "success");
+      .then((r) => {
+        r.type === 'success' && dispatch(deleteProductFromState(productToDelete.prodId));
+        console.log(r);
+        notification(r.data.message, "", r.data.type);
       })
       .catch((err) => console.log(err)); //! VOLVER A VER manejo de errores
   };

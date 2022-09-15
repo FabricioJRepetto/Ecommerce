@@ -14,7 +14,7 @@ const MiniCard = ({productData = false, fadeIn = true, fav, loading}) => {
     const {
         thumbnail: img,
         name,
-        premium,
+        premium = false,
         price,
         sale_price,
         discount,
@@ -23,7 +23,7 @@ const MiniCard = ({productData = false, fadeIn = true, fav, loading}) => {
         on_sale    
     } = productData;
 
-  const special = !/MLA/g.test(prodId);
+  const special = prodId ? !/MLA/g.test(prodId) : false;
   const navigate = useNavigate();
   const [ready, setReady] = useState(!fadeIn);
   const { session } = useSelector((state) => state.sessionReducer);
@@ -91,7 +91,7 @@ const MiniCard = ({productData = false, fadeIn = true, fav, loading}) => {
                 )}
               </div>
 
-              <div className="free-shipping mc-mrgn provider-text">
+              <div className={`free-shipping mc-mrgn ${special ? 'provider-text' : 'green'}`}>
                 {free_shipping && "Envío gratis"}
               </div>
 

@@ -7,6 +7,7 @@
 
 .suggestions-container {
     width: fit-content;
+    background: #ffffff15;
 }
 
 .suggestions-header {
@@ -14,20 +15,28 @@
     justify-content: center;
     align-items: center;
     padding-top: 1rem;
-    font-family: "HelveticaNeueLTPro-BdIt";
-    font-size: 1.8rem;
-    font-weight: 600;
-    color: #FFFFFF;
 }
 .suggestions-header p {
+    font-family: "HelveticaNeueLTPro-BdIt";
+    font-size: 1.7rem;
+    font-weight: 200;
+    color: #FFFFFF;
     margin: 0 .7rem;
     inline-size: max-content;
 }
-.suggestions-header div {
-    width: 20rem;
-    height: 2px;
-    margin: 0 1.5rem;
-    background-color: #ffffff;
+.siggestion-eye {
+    height: 2.7rem;
+    width: 2.7rem;
+    background: linear-gradient(
+        45deg,
+        #35a7ff 0%,
+        #7e54de 20%,
+        #f40259 60%,
+        #fea30d 100%
+    );
+    mask-image: url('../../assets/svg/crystal_ball.svg');
+    background-size: 400%;
+    animation: gradientTextAnim 3s infinite;
 }
 .suggestions-header span {
     width: 1rem;
@@ -37,7 +46,8 @@
 
 .suggestions-products-container {
     width: fit-content;
-    height: 350px;
+    min-height: 350px;
+    min-width: 1342px;
     position: relative;
     padding: 0 1rem 3rem 1rem;
     user-select: none;
@@ -45,10 +55,16 @@
 .suggestions-products-inner {    
     display: flex;
     justify-content: center;
+    align-items: center;
     transition: all .3s ease;
 }
 .suggestions-products-inner > * {
     margin: 1rem;
+}
+.suggestions-products-error {
+    font-family: "HelveticaNeueLTPro-Roman";
+    font-weight: 100;
+    color: #505050;
 }
 
 .suggestions-buton-left {
