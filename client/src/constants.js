@@ -3,33 +3,25 @@ const STRIPE_PKEY = 'pk_test_51L5zx4CyWZVtXgfrkpwfv0WgFKi326kk8x8U1D7xCKUAQ9pX67
 const MP_PKEY = 'TEST-a6a6f998-d3c4-48ce-a848-1f5b5bac4cec'
 const IMAGES = [
     {
-        img: "https://res.cloudinary.com/dsyjj0sch/image/upload/v1663210500/Slider%20Home/slider-0_gkzu23.jpg",
+        img: "https://res.cloudinary.com/dsyjj0sch/image/upload/v1663266030/Slider%20Home/slider-0_1_f4vhnd.jpg",
         url: "",
     },
     {
-        img: "https://res.cloudinary.com/dsyjj0sch/image/upload/v1663210500/Slider%20Home/slider-1_lfops9.jpg",
+        img: "https://res.cloudinary.com/dsyjj0sch/image/upload/v1663266030/Slider%20Home/slider-1_1_xvtbfl.jpg",
         url: "/provider",
     },
     {
-        img: "https://res.cloudinary.com/dsyjj0sch/image/upload/v1663213579/Slider%20Home/slider-2_bpsi5u.jpg",
+        img: "https://res.cloudinary.com/dsyjj0sch/image/upload/v1663266029/Slider%20Home/slider-2_1_tmsaxd.jpg",
         url: "/premium",
     },
-    // {
-    //     img: "https://http2.mlstatic.com/D_NQ_917752-MLA50446386694_062022-OO.webp",
-    //     url: "/products",
-    // },
-    // {
-    //     img: "https://http2.mlstatic.com/D_NQ_977617-MLA50409269868_062022-OO.webp",
-    //     url: "/products",
-    // },
-    // {
-    //     img: "https://http2.mlstatic.com/D_NQ_688045-MLA50608833957_072022-OO.webp",
-    //     url: "/products",
-    // },
-    // {
-    //     img: "https://http2.mlstatic.com/D_NQ_627971-MLA50423148467_062022-OO.webp",
-    //     url: "/products",
-    // },
+    {
+        img: "https://res.cloudinary.com/dsyjj0sch/image/upload/v1663266030/Slider%20Home/slider-3_w55mo2.jpg",
+        url: "/sales",
+    },
+    {
+        img: "https://res.cloudinary.com/dsyjj0sch/image/upload/v1663266030/Slider%20Home/slider-4_k2bmkz.jpg",
+        url: "/premium/6316471837c51526ec170292",
+    }
 ];
 
 export {

@@ -40,7 +40,7 @@ const Home = () => {
             pointer 
             pausable
             id='mainCarousel'
-            width="100vw" />
+            width="100%" />
       </div>
       <div className="categories">        
         <div onClick={() => categorySearch("MLA1648")}>
