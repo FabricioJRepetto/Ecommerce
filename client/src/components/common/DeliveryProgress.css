@@ -1,11 +1,13 @@
 .delivery-progress-container {
   margin: 1rem;
 }
+
 .delivery-container {
   display: flex;
   justify-content: center;
   margin: 1rem 0;
 }
+
 .delivery-inner {
   margin: 10px;
   /* width: 300px; */
@@ -14,22 +16,26 @@
   border-radius: 4px;
   background: #222;
 }
+
 .delivery-bar {
   height: 100%;
   background: green;
   position: relative;
   border-radius: 5px;
 }
+
 .delivery-pointer {
   margin: 0 !important;
   position: absolute;
   right: -0.75rem;
   top: -85%;
-  z-index: 1;
+  z-index: 10;
 }
+
 .delivery-pointer path {
   fill: white;
 }
+
 .delivery-pointer-back {
   min-height: 2.2rem;
   min-width: 2.2rem;

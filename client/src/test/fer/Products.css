@@ -253,7 +253,7 @@ h3.g-gradient-text {
 }
 
 .products-filters-mobile .funnel {
-   z-index: 5;
+   z-index: 40;
 }
 
 .products-filters-menu {
@@ -261,7 +261,7 @@ h3.g-gradient-text {
    border: 1px solid rgb(115, 115, 115);
    padding: 1rem 1rem 0 1rem;
    /*    padding: 0rem; */
-   z-index: 4;
+   z-index: 30;
    width: 250px;
    position: absolute;
    right: -1rem;
@@ -285,7 +285,7 @@ h3.g-gradient-text {
    width: 100%;
    background-color: #00000075;
    position: fixed;
-   z-index: 4;
+   z-index: 30;
    transition: opacity 0.2s ease-in-out;
    top: 0;
 }

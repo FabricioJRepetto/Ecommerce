@@ -3,20 +3,22 @@
     flex-direction: column;
     align-items: center;
 }
+
 .buynow-inner {
     display: flex;
-    flex-direction: row;    
+    flex-direction: row;
     justify-content: space-between;
     min-width: 75vw;
     min-height: 54vh;
     width: fit-content;
     border-top: 1px solid white;
-    border-bottom: 1px solid white;    
+    border-bottom: 1px solid white;
     padding: 50px;
 }
+
 .buynow-loading {
     display: flex;
-    flex-direction: row;    
+    flex-direction: row;
     justify-content: center;
     align-items: center;
     min-width: 75vw;
@@ -29,6 +31,7 @@
     display: flex;
     flex-direction: column;
 }
+
 .buynow-product-details h2 {
     margin: 1rem 0;
 }
@@ -36,6 +39,7 @@
 .bn-quantity-container {
     align-self: center;
 }
+
 .buynow-img-container {
     height: 55vh;
     width: 55vh;
@@ -51,8 +55,9 @@
     max-height: 100%;
     max-width: 100%;
     visibility: hidden;
-    z-index: 1;
+    z-index: 10;
 }
+
 .visible {
     visibility: visible;
     transition: visibility .3s ease;
@@ -63,6 +68,7 @@
     flex-direction: column;
     justify-content: space-between;
 }
+
 .buynow-total-container {
     display: flex;
     height: 100%;
@@ -71,6 +77,7 @@
     align-items: center;
     justify-content: space-between;
 }
+
 .buynow-shipping-container {
     display: flex;
     justify-content: flex-start;
@@ -87,13 +94,19 @@
     justify-content: space-around;
     width: 100%;
 }
+
 .bn-shipping-mode-container div {
     text-align: left;
 }
-.bn-shipping-mode-container p:first-child /* 1-0-0 */ {
+
+.bn-shipping-mode-container p:first-child
+
+/* 1-0-0 */
+    {
     font-size: 1.2rem;
     font-weight: 400;
 }
+
 .bn-shipping-mode-card {
     margin-right: 2rem;
     display: flex;
@@ -107,6 +120,7 @@
     top: -0.55rem;
     left: -2rem;
 }
+
 .buynow-sumary-section {
     display: flex;
     flex-direction: column;
@@ -114,7 +128,7 @@
     margin-top: 4rem;
 }
 
-.buynow-total {    
+.buynow-total {
     display: flex;
     width: 100%;
     justify-content: space-between;
@@ -126,6 +140,7 @@
 .buynow-price-discount {
     display: flex;
 }
+
 .buynow-price-discount p {
     margin-right: .5rem;
 }
@@ -134,6 +149,7 @@
     font-size: 1.5rem;
     font-weight: 500;
 }
+
 .buynow-total p {
     align-self: flex-end;
     font-weight: 300;
