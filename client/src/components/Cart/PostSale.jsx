@@ -34,8 +34,7 @@ const PostSale = () => {
       setOrder(data);
       setLoading(false);
 
-      if (data && !data?.payment_date && status === "approved")
-        deliveryWaiter(id);
+      if (data && !data?.payment_date && status === "approved") deliveryWaiter(id);
 
       let aux = [];
       data.products.forEach((e) => {
@@ -93,7 +92,7 @@ const PostSale = () => {
         }
       }
     })();
-    
+
     return () => {
 
     }
@@ -101,20 +100,30 @@ const PostSale = () => {
   }, []);
 
   const deliveryWaiter = async (id) => {
-    try {
+
       console.log("Esperando orden actualizada...");
-      const { data } = await axios(`/order/${id}`);
-      if (data.payment_date) {
-        console.log("...actualización recibida.");
-        setOrder(data);
+      const response = axios(`/order/postsale/${id}`);
+      
+      response.then(r =>{
+        console.log("...respuesta recibida.");
+        if (r.data.status) {
+            setOrder(r.data);        
+        } else {
+            console.console.warn(r.data.message);
+        }
+      })
+
+    /*
+      console.log("Esperando orden actualizada...");
+      const { data } = await axios(`/order/postsale/${id}`);
+      
+      console.log("...respuesta recibida.");
+      if (data.status) {
+        setOrder(data);        
       } else {
-        throw new Error("");
+        console.console.warn(data.message);
       }
-    } catch (error) {
-      setTimeout(() => {
-        deliveryWaiter(id);
-      }, 2000);
-    }
+    */
   };
 
   const messageQuantity = () => {

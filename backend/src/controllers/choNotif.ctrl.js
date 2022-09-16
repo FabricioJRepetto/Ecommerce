@@ -48,6 +48,7 @@ const notificationStripe = async (req, res, next) => {
             //? cambiar orden a pagada
             //! volver a ver: checkear zona horaria del servidor ( Date.now() )
             const target = await order.findOne({ payment_intent: id });
+
             const newOrder = await order.findOneAndUpdate(
                 { payment_intent: id },
                 {
