@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import Card from "../../components/Products/Card";
-import AddressCard from "./AddressCard";
+import AddressCard from "../../components/Profile/AddressCard";
 import OrderCardAdmin from "./OrderCardAdmin";
 
 const UserCard = ({ user, openBanUser, openUnbanUser, openPromoteUser }) => {

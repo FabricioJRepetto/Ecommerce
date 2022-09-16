@@ -52,7 +52,9 @@ export const WishlistButton = ({
 
   return (
     <div
-      className={`visible fav-button-container ${position ? " fav-button-position" : ""}`}
+      className={`visible fav-button-container${
+        position ? " fav-button-position" : ""
+      }`}
     >
       <button
         style={{ height: size, width: size }}

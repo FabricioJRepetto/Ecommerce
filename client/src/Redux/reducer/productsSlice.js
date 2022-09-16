@@ -3,12 +3,18 @@ import { createSlice } from "@reduxjs/toolkit";
 const filterFunction = (state, source, type, value, firstIteration) => {
   let productsToFilter;
 
-  if (firstIteration) {
+  /*   if (firstIteration) {
     productsToFilter = state[source];
   } else {
     state.productsFiltered.length === 0
       ? (productsToFilter = state[source])
       : (productsToFilter = state.productsFiltered);
+  } */
+
+  if (firstIteration) {
+    productsToFilter = state[source];
+  } else {
+    productsToFilter = state.productsFiltered;
   }
 
   if (type === "price") {
@@ -45,6 +51,17 @@ const productsToShowFunction = (state) => {
     : state.productsFiltered.length === 0
     ? (state.productsToShowReference = "productsFound")
     : (state.productsToShowReference = "productsFiltered");
+
+  /* if (state.productsFound.length === 0 && state.productsFiltered.length === 0) {
+    console.log("a");
+    state.productsToShowReference = "productsOwn";
+  } else if (state.productsFiltered.length === 0) {
+    console.log("b");
+    state.productsToShowReference = "productsFound";
+  } else {
+    console.log("c");
+    state.productsToShowReference = "productsFiltered";
+  } */
 };
 
 export const productsSlice = createSlice({
@@ -221,6 +238,7 @@ export const productsSlice = createSlice({
         state.productsFiltered = [];
       } else {
         let firstIteration = true;
+
         for (const filterApplied in state.productsOwnFiltersApplied) {
           filterFunction(
             state,
@@ -229,8 +247,10 @@ export const productsSlice = createSlice({
             state.productsOwnFiltersApplied[filterApplied],
             firstIteration
           );
+
           firstIteration = false;
         }
+
         if (state.productsFiltered.length === 0)
           state.productsFiltered = [null];
       }

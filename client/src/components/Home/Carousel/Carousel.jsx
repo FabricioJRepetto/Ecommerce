@@ -4,7 +4,10 @@ import { useDispatch } from "react-redux";
 import Controls from "./Controls";
 import Indicators from "./Indicators";
 import "./Carousel.css";
-import { resetCarouselIndex, updateCarouselIndex } from "../../../Redux/reducer/extraSlice";
+import {
+  resetCarouselIndex,
+  updateCarouselIndex,
+} from "../../../Redux/reducer/extraSlice";
 
 const Slider = (prop) => {
   const {
@@ -18,7 +21,7 @@ const Slider = (prop) => {
     height = "unset",
     autoplay = true,
     id = "slider",
-    shareIndex = false
+    shareIndex = false,
   } = prop;
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -36,37 +39,29 @@ const Slider = (prop) => {
   // manejador del Intervalo
   const startSlideTimer = () => {
     if (autoplay && images.length > 1) {
-        console.log('reanuda');
       slideInterval.current = setInterval(() => {
-        console.log('autoplay')
         next(true);
       }, interval);
     }
   };
   const stopSlideTimer = () => {
     // importante preguntar si hay intervalo activo
-    if (pausable) {
-        console.log('pausa');
-      if (slideInterval.current) {
-        clearInterval(slideInterval.current);
-        slideInterval.current = null;
-        console.log(slideInterval.current);
-      }
+    if (pausable && slideInterval.current) {
+      clearInterval(slideInterval.current);
+      slideInterval.current = null;
     }
   };
 
-  useEffect(() => {    
+  useEffect(() => {
     if (document.visibilityState === "visible") {
-      if (!slideInterval.current) {    
-        startSlideTimer();
-      }
+      !slideInterval.current && startSlideTimer();
     } else {
       stopSlideTimer();
     }
     return () => {
-        stopSlideTimer();
-        shareIndex && dispatch(resetCarouselIndex())
-    }
+      stopSlideTimer();
+      shareIndex && dispatch(resetCarouselIndex());
+    };
     // eslint-disable-next-line
   }, [document.visibilityState]);
 
@@ -159,7 +154,7 @@ const Slider = (prop) => {
             <div
               id={"img" + index}
               key={e.img}
-              style={{ cursor:pointer ? "pointer" : "auto" }}
+              style={{ cursor: pointer ? "pointer" : "auto" }}
               onClick={() => navigate(e.url || "")}
               className="slide-item"
             >
@@ -174,15 +169,7 @@ const Slider = (prop) => {
             switchIndex={switchIndex}
           />
         )}
-        {controls && (
-          <Controls
-            prev={prev}
-            next={next}
-            start={startSlideTimer}
-            stop={stopSlideTimer}
-            pausable={pausable}
-          />
-        )}
+        {controls && <Controls prev={prev} next={next} pausable={pausable} />}
       </div>
     </div>
   );

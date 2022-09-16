@@ -142,7 +142,7 @@ const NavBar = () => {
 
   return (
     <>
-      <div className="navbar-dumb-hidden"></div>
+      {/* <div className="navbar-dumb-hidden"></div> */}
 
       <div
         className={`glitch-mobile-container${

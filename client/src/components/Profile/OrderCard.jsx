@@ -114,6 +114,7 @@ const OrderCard = ({ order, setOrderDetails }) => {
           Orden expirada
         </p>
       )}
+      {order.status === "processing" && <p>Procesando...</p>}
 
       {/* //! volver a ver: Quitar este botón ? */}
       {/* {order.status === "pending" && (
