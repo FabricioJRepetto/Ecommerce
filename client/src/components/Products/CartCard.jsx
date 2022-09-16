@@ -41,8 +41,7 @@ const CartCard = ({
     <div className="cart-card-container">
         
             <div className="product-cart-card-head">
-                <div
-                onClick={() =>
+                <div onClick={() =>
                     navigate(premium ? `/premium/${prodId}` : `/details/${prodId}`)
                 }
                 className="product-cart-image-container pointer"
@@ -60,7 +59,7 @@ const CartCard = ({
                     {name}
                     </div>
                     <div className="cart-card-brand">
-                    {brand && brand.toUpperCase()}
+                    {brand && brand}
                     </div>
                     {free_shipping && (
                     <div className="cart-free-shipping">Envío gratis</div>
@@ -81,41 +80,39 @@ const CartCard = ({
                         {source === "buyLater" ? "Mover al carrito" : "Guardar para después"}
                         </p>
                         <p className="pointer" onClick={() => buyNow(prodId, source)}>
-                        Comprar ahora
+                            Comprar ahora
                         </p>
                     </div>}
                 </div> 
             </div>
 
-
         {menuOptions && <div className="cartcard-optionscloser" onClick={first}></div>}
-
-        
-
       </div>
 
-      {on_cart && (
-        <QuantityInput
-          prodId={prodId}
-          price={on_sale ? sale_price : price}
-          stock={stock}
-          prodQuantity={prodQuantity}
-          loading={loading}
-        />
-      )}
-
-      <div className="cart-card-price">
-        {on_sale && (
-          <div className="cart-card-price-discount">
-            <div>-{discount}%</div>
-            <del>${priceFormat(price).int}</del>
-          </div>
+      <div className="cartcard-tail-section">
+        {on_cart && (
+            <QuantityInput
+                prodId={prodId}
+                price={on_sale ? sale_price : price}
+                stock={stock}
+                prodQuantity={prodQuantity}
+                loading={loading}
+                />
         )}
-        <div className="cart-card-price-inner">
-          <h2>${priceFormat(on_sale ? sale_price : price).int}</h2>
-          <p>{priceFormat(on_sale ? sale_price : price)?.cents}</p>
+
+        <div className="cart-card-price">
+            {on_sale && 
+            <div className="cart-card-price-discount">
+                <div>-{discount}%</div>
+                <del>${priceFormat(price).int}</del>
+            </div>}
+            <div className="cart-card-price-inner">
+                <h2>${priceFormat(on_sale ? sale_price : price).int}</h2>
+                <p>{priceFormat(on_sale ? sale_price : price)?.cents}</p>
+            </div>
         </div>
       </div>
+
     </div>
   );
 };
