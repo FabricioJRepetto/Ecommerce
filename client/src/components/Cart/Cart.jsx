@@ -335,32 +335,29 @@ const Cart = () => {
 
                           <div className="cart-total">
                             <p>Envío:</p>
-                            <div style={{ height: "2.4rem" }}>
-                              {cart.free_ship_cart && (
-                                <del className="grey">
-                                  $
-                                  {
-                                    priceFormat(
-                                      cart.products.length * SHIP_COST
-                                    ).int
-                                  }
-                                </del>
-                              )}
-                              {cart.shipping_cost === 0 ? (
-                                <div className="green">
-                                  <h3>¡Envío gratis!</h3>
+                            <div className="cart-total-shipping-cost">
+
+                              {cart.free_ship_cart && 
+                                <del className="grey">${priceFormat(cart.products.length * SHIP_COST).int}
+                                </del>}
+                            
+                                <div >
+                                {cart.shipping_cost === 0 ? (
+                                    <div className="green">
+                                    <h3>¡Envío gratis!</h3>
+                                    </div>
+                                ) : (
+                                    <div className="cart-shipping-cost-container">
+                                    {flash_shipping && (
+                                        <div className="ship-gradient"></div>
+                                    )}
+                                    <h3>
+                                        ${priceFormat(cart.shipping_cost).int}
+                                    </h3>
+                                    <p>{priceFormat(cart.shipping_cost).cents}</p>
+                                    </div>
+                                )}
                                 </div>
-                              ) : (
-                                <div className="cart-shipping-cost-container">
-                                  {flash_shipping && (
-                                    <div className="ship-gradient"></div>
-                                  )}
-                                  <h3>
-                                    ${priceFormat(cart.shipping_cost).int}
-                                  </h3>
-                                  <p>{priceFormat(cart.shipping_cost).cents}</p>
-                                </div>
-                              )}
                             </div>
                           </div>
 

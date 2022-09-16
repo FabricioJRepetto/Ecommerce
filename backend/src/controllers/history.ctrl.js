@@ -25,7 +25,7 @@ const getHistory = async (req, res, next) => {
         let response = [];
         let new_id_list = [];
         rawProds.forEach((e) => {
-            if (e.value) {
+            if (e.value._id) {
                 response.push(e.value);
                 new_id_list.push(e.value._id);
             }
@@ -108,7 +108,6 @@ const getSuggestion = async (req, res, next) => {
                 }
             }
         }
-        console.log(response);
         return res.json(response);
     } catch (error) {
         next(error);

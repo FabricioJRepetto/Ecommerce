@@ -1,7 +1,6 @@
 .home-container {
-  
-}
 
+}
 .svg {
     transform: scale(2);
     margin: 20px 50px;
@@ -10,9 +9,12 @@
 .svg path {
     fill: white;
 }
+.home-carousel {
+    margin: 0 0 1rem 0;
+}
 .categories {
     display: flex;
     flex-direction: row;
     justify-content: center;
-    margin-bottom: 20px;
+    margin: 1rem 0;
 }
