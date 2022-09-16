@@ -103,6 +103,7 @@ const Products = () => {
       //clearFilters();
       dispatch(clearProducts());
       window.removeEventListener("resize", handleWindowSize);
+      document.documentElement.style.overflow = "auto";
     };
     // eslint-disable-next-line
   }, []);
