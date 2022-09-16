@@ -7,16 +7,16 @@ const Controls = ({ prev, next, start, stop, pausable }) => {
       <button
         onClick={prev}
         className="carousel-control left"
-        onMouseEnter={pausable ? stop : undefined}
-        onMouseLeave={pausable ? start : undefined}
+        // onMouseEnter={pausable ? stop : undefined}
+        // onMouseLeave={pausable ? start : undefined}
       >
         <Arrow className="arrow left-arrow" />
       </button>
       <button
         onClick={next}
         className="carousel-control right"
-        onMouseEnter={pausable ? stop : undefined}
-        onMouseLeave={pausable ? start : undefined}
+        // onMouseEnter={pausable ? stop : undefined}
+        // onMouseLeave={pausable ? start : undefined}
       >
         <Arrow className="arrow" />
       </button>

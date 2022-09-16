@@ -64,7 +64,7 @@ const QuantityInput = ({prodId: id, prodQuantity, stock, price, bnMode = false, 
                 <button disabled={quantity >= stock  || loading} 
                     onClick={() => handleQuantity(id, 'add')}> + </button>
             </div>
-            <div>
+            <div className='q-input-stock'>
                 <p>{`stock ${stock}`}</p>
             </div>
         </div>

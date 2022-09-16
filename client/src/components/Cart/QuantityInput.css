@@ -22,6 +22,9 @@ input[type=number] {
     align-items: center;
     justify-content: space-evenly;
 }
+.q-input-stock {
+    display: block;
+}
 .q-input-inner  button{
     font-size: 1.5rem;
     height: 3rem;
@@ -38,4 +41,18 @@ input[type=number] {
 }
 .q-input-inner input:focus {
     outline: none;
+}
+
+@media (max-width: 700px) {
+    .q-input-container {
+        height: fit-content;
+        align-self: center;
+    }
+    .q-input-inner {
+        height: 2rem;
+        margin-bottom: 0;
+    }
+    .q-input-stock {
+        display: none;
+    }
 }

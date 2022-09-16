@@ -36,7 +36,9 @@ const Slider = (prop) => {
   // manejador del Intervalo
   const startSlideTimer = () => {
     if (autoplay && images.length > 1) {
+        console.log('reanuda');
       slideInterval.current = setInterval(() => {
+        console.log('autoplay')
         next(true);
       }, interval);
     }
@@ -44,20 +46,26 @@ const Slider = (prop) => {
   const stopSlideTimer = () => {
     // importante preguntar si hay intervalo activo
     if (pausable) {
-      slideInterval.current && clearInterval(slideInterval.current);
+        console.log('pausa');
+      if (slideInterval.current) {
+        clearInterval(slideInterval.current);
+        slideInterval.current = null;
+        console.log(slideInterval.current);
+      }
     }
   };
 
-  useEffect(() => {
+  useEffect(() => {    
     if (document.visibilityState === "visible") {
-      clearInterval(slideInterval.current);
-      startSlideTimer();
+      if (!slideInterval.current) {    
+        startSlideTimer();
+      }
     } else {
       stopSlideTimer();
     }
     return () => {
         stopSlideTimer();
-        dispatch(resetCarouselIndex())
+        shareIndex && dispatch(resetCarouselIndex())
     }
     // eslint-disable-next-line
   }, [document.visibilityState]);

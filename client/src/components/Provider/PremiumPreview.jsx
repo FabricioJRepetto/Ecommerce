@@ -61,7 +61,6 @@ const PremiumPreview = () => {
           <div className='premiumPreview-carousel-container'>
                 <Carousel
                     images={images}
-                    pausable
                     pointer
                     indicators
                     shareIndex

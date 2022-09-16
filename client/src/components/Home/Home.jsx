@@ -20,60 +20,60 @@ const Home = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-  const categorySearch = (category) => { 
-        dispatch(loadProductsOwn("loading"));
-        dispatch(loadProductsFound("loading"));
-        dispatch(loadFilters("loading"));
-        dispatch(loadApplied('loading'));
+    const categorySearch = (category) => { 
+            dispatch(loadProductsOwn("loading"));
+            dispatch(loadProductsFound("loading"));
+            dispatch(loadFilters("loading"));
+            dispatch(loadApplied('loading'));
 
-        navigate("/results");
-        dispatch(loadQuerys({category}))
-   }
+            navigate("/results");
+            dispatch(loadQuerys({category}))
+    }
 
-  return (
-    <div className="home-container">
-      <div>
-        <Carousel 
-            images={IMAGES} 
-            controls 
-            indicators 
-            pointer 
-            pausable
-            id='mainCarousel'
-            width="100%" />
-      </div>
-      <div className="categories">        
-        <div onClick={() => categorySearch("MLA1648")}>
-          <Two className={"svg"} />
-          <p>Computación</p>
-        </div>
-        <div onClick={() => categorySearch("MLA1039")}>
-          <Three className={"svg"} />
-          <p>Cámaras</p>
-        </div>
-        <div onClick={() => categorySearch("MLA1000")}>
-          <Four className={"svg"} />
-          <p>Audio & Video</p>
-        </div>
-        <div onClick={() => categorySearch("MLA1144")}>
-          <Five className={"svg"} />
-          <p>Videojuegos</p>
-        </div>
-        <div onClick={()=> navigate('/sales')}>
-          <Six className={"svg"} />
-          <p>Ofertas</p>
-        </div>
-      </div>
+    return (
+        <div className="home-container">
+            <div className="home-carousel">
+                <Carousel 
+                    images={IMAGES} 
+                    controls 
+                    indicators 
+                    pointer
+                    id='mainCarousel'
+                    width="100%" />
+            </div>
 
-        <FlashSales/>
+            <div className="categories">        
+                <div onClick={() => categorySearch("MLA1648")}>
+                <Two className={"svg"} />
+                <p>Computación</p>
+                </div>
+                <div onClick={() => categorySearch("MLA1039")}>
+                <Three className={"svg"} />
+                <p>Cámaras</p>
+                </div>
+                <div onClick={() => categorySearch("MLA1000")}>
+                <Four className={"svg"} />
+                <p>Audio & Video</p>
+                </div>
+                <div onClick={() => categorySearch("MLA1144")}>
+                <Five className={"svg"} />
+                <p>Videojuegos</p>
+                </div>
+                <div onClick={()=> navigate('/sales')}>
+                <Six className={"svg"} />
+                <p>Ofertas</p>
+                </div>
+            </div>
 
-        <Suggestions/>
+            <FlashSales/>
 
-        <PremiumPreview />
-        
-      <Footer />
-    </div>
-  );
+            <PremiumPreview />
+
+            <Suggestions/>
+                        
+            <Footer />
+        </div>
+    );
 };
 
 export default Home;
