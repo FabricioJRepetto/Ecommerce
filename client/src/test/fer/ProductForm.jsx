@@ -882,7 +882,7 @@ const ProductForm = () => {
             type="button"
             value="Resetear"
             onClick={clearInputs}
-            className="g-white-button"
+            className="g-white-button secondary-button"
             disabled={waitingResponse}
           />
         </div>
@@ -909,7 +909,7 @@ const ProductForm = () => {
             <button
               type="button"
               onClick={() => handleModalCreateProduct(false)}
-              className="g-white-button"
+              className="g-white-button secondary-button"
             >
               Cancelar
             </button>

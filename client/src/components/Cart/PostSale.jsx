@@ -93,6 +93,10 @@ const PostSale = () => {
         }
       }
     })();
+    
+    return () => {
+
+    }
     //eslint-disable-next-line
   }, []);
 
@@ -153,7 +157,9 @@ const PostSale = () => {
                 {order?.delivery_date ? (
                   <DeliveryProgress order={order} />
                 ) : (
-                  <Spinner />
+                    <div className="ps-delivery-spinner">
+                        <Spinner />
+                    </div>
                 )}
               </div>
             )}

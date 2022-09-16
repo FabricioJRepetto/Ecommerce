@@ -21,7 +21,7 @@ const Slider = (prop) => {
     shareIndex = false
   } = prop;
 
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);  
   const [move, setMove] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -36,9 +36,7 @@ const Slider = (prop) => {
   // manejador del Intervalo
   const startSlideTimer = () => {
     if (autoplay && images.length > 1) {
-        console.log('reanuda');
       slideInterval.current = setInterval(() => {
-        console.log('autoplay')
         next(true);
       }, interval);
     }
@@ -46,11 +44,9 @@ const Slider = (prop) => {
   const stopSlideTimer = () => {
     // importante preguntar si hay intervalo activo
     if (pausable) {
-        console.log('pausa');
       if (slideInterval.current) {
         clearInterval(slideInterval.current);
         slideInterval.current = null;
-        console.log(slideInterval.current);
       }
     }
   };

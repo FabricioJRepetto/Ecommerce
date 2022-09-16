@@ -3,11 +3,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Modal from "../common/Modal";
 import { useModal } from "../../hooks/useModal";
-// import { loadMercadoPago } from "../../helpers/loadMP";
 import { priceFormat } from "../../helpers/priceFormat";
 import { useNotification } from "../../hooks/useNotification";
-import "./BuyNow.css";
-
 import { ReactComponent as Arrow } from "../../assets/svg/arrow-right.svg";
 import { ReactComponent as Pin } from "../../assets/svg/location.svg";
 import { ReactComponent as Spinner } from "../../assets/svg/spinner.svg";
@@ -18,6 +15,10 @@ import LoadingPlaceHolder from "../common/LoadingPlaceHolder";
 import LoaderBars from "../common/LoaderBars";
 import { WarningIcon } from "@chakra-ui/icons";
 import AddAddress from "../Profile/AddAddress";
+import ReturnButton from "../common/ReturnButton";
+import Carousel from '../Home/Carousel/Carousel'
+
+import "./BuyNow.css";
 
 const BuyNow = () => {
   const navigate = useNavigate();
@@ -28,6 +29,7 @@ const BuyNow = () => {
 
   const [id, setId] = useState();
   const [product, setProduct] = useState();
+  const [productImg, setProductImg] = useState(false)
   const [address, setAddress] = useState(null);
   const [flash_shipping, setflash_shipping] = useState(false);
   const [selectedAdd, setSelectedAdd] = useState(null);
@@ -72,6 +74,11 @@ const BuyNow = () => {
     } else {
       const { data: p } = await axios(`/product/${data.buyNow}`);
       if (p) {
+        let aux = [];
+        for (const obj of p.images) {
+            aux.push({img: obj.imgURL})
+        }
+        setProductImg(aux)
         setProduct(p);
       }
     }
@@ -180,22 +187,26 @@ const BuyNow = () => {
 
   return (
     <div className="buynow-container">
+        
       {product && !loading ? (
         <div className="buynow-inner">
+            <span className="bn-return-container">            
+                <ReturnButton to={-1} />
+            </span>
           <div className="buynow-product-details">
+
+
             <div className="buynow-product-inner">
               <div className="buynow-img-container">
                 {!loaded && (
                   <LoadingPlaceHolder extraStyles={{ height: "100%" }} />
                 )}
-                {
-                  <img
-                    src={product && product.images[0].imgURL}
-                    alt="prod"
-                    onLoad={() => setLoaded(true)}
-                    className={`buynow-img${loaded ? " visible" : ""}`}
-                  />
-                }
+                {productImg && 
+                    <Carousel 
+                        images={productImg}
+                        pausable={false}
+                        interval={3000}
+                    />}
                 <div className="card-image-back-style"></div>
               </div>
               <h2>{product.name}</h2>

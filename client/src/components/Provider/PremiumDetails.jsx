@@ -29,6 +29,11 @@ const PremiumDetails = () => {
     const reference = useRef(null)
     const [isVisible, setIsVisible] = useState(false)
 
+    const whiteBgIds = [
+        '630805253f8827294d4b17b4',
+        '6316471837c51526ec170292',
+    ]
+
     const attributesSection = useRef(null)
     const scrollTo = () => { 
         if (attributesSection.current) {
@@ -150,14 +155,14 @@ const PremiumDetails = () => {
                                 <div ref={reference} 
                                     className='premiumdetails-buttons'>                                    
                                     <button
-                                        className="g-white-button details-button"
+                                        className={`g-white-button details-button ${whiteBgIds.includes(id) && 'secondary-button'}`}
                                         disabled={product.available_quantity < 1}
                                         onClick={() => addToCart(id)}
                                     >
                                         Agregar al carrito
                                     </button>
                                     <button
-                                        className="g-white-button details-button"
+                                        className={`g-white-button details-button ${whiteBgIds.includes(id) && 'secondary-button'}`}
                                         disabled={product.available_quantity < 1}
                                         onClick={() => buyNow(id)}
                                     >
