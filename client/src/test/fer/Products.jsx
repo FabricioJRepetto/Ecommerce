@@ -103,7 +103,9 @@ const Products = () => {
       //clearFilters();
       dispatch(clearProducts());
       window.removeEventListener("resize", handleWindowSize);
-      document.documentElement.style.overflow = "auto";
+      document.documentElement.style.overflowY = "auto";
+      /* document.documentElement.style.overflowX = "hidden"; */
+      console.log(document.documentElement.style.overflowY);
     };
     // eslint-disable-next-line
   }, []);
@@ -405,7 +407,7 @@ const Products = () => {
     if (filtersContainerDisplay === "inline" && showFiltersMenu) {
       document.documentElement.style.overflow = "hidden";
     } else {
-      document.documentElement.style.overflow = "auto";
+      document.documentElement.style.overflowY = "auto";
     }
   }, [filtersContainerDisplay, showFiltersMenu]);
 

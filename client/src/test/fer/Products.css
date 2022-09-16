@@ -30,8 +30,6 @@
    display: block;
    width: 15rem;
    height: 100%;
-   min-height: 100vh;
-   /* border: 1px solid red; */
 }
 
 .products-filters-inner {
@@ -255,7 +253,7 @@ h3.g-gradient-text {
 }
 
 .products-filters-mobile .funnel {
-   z-index: 4;
+   z-index: 5;
 }
 
 .products-filters-menu {
@@ -267,6 +265,7 @@ h3.g-gradient-text {
    width: 250px;
    position: absolute;
    right: -1rem;
+   top: 0rem;
    transition: right 0.2s ease;
    overflow-x: hidden;
    overflow-y: scroll;
@@ -296,9 +295,19 @@ h3.g-gradient-text {
    z-index: -1;
 }
 
+@media (min-width: 1024px) {
+   .products-filters-middle {
+      min-height: 100vh;
+   }
+}
+
 @media (max-width: 1023px) {
    .products-results-container {
       width: 85%;
+   }
+
+   .products-results-container .g-input-with-button {
+      margin: 0 3rem 0 1.5rem;
    }
 
    .products-filters-outer {

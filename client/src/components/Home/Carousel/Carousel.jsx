@@ -39,9 +39,7 @@ const Slider = (prop) => {
   // manejador del Intervalo
   const startSlideTimer = () => {
     if (autoplay && images.length > 1) {
-        console.log('reanuda');
       slideInterval.current = setInterval(() => {
-        console.log('autoplay')
         next(true);
       }, interval);
     }
@@ -54,16 +52,16 @@ const Slider = (prop) => {
     }
   };
 
-  useEffect(() => {    
+  useEffect(() => {
     if (document.visibilityState === "visible") {
       !slideInterval.current && startSlideTimer();
     } else {
       stopSlideTimer();
     }
     return () => {
-        stopSlideTimer();
-        shareIndex && dispatch(resetCarouselIndex())
-    }
+      stopSlideTimer();
+      shareIndex && dispatch(resetCarouselIndex());
+    };
     // eslint-disable-next-line
   }, [document.visibilityState]);
 

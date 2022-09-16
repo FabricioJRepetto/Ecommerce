@@ -8,36 +8,44 @@
   /* overflow: hidden; */
   /*! Volver a ver: este overflow quizas sea necesario/triga problemas */
 }
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
+
 html {
   overflow-x: hidden;
   box-sizing: border-box;
 }
+
 *,
 *:after,
 *::before {
   box-sizing: inherit;
 }
+
 ul {
   list-style-type: none;
 }
+
 
 /* LINKS */
 a:link {
   text-decoration: none;
   color: rgb(255, 255, 255);
 }
+
 a:visited {
   text-decoration: none;
   color: rgb(255, 255, 255);
 }
+
 a:hover {
   text-decoration: none;
 }
+
 a:active {
   text-decoration: none;
 }
@@ -46,12 +54,14 @@ a:active {
 .g-navlink-white-button {
   display: flex;
 }
-.g-navlink-white-button > a {
+
+.g-navlink-white-button>a {
   padding: 0.5rem 2rem;
   text-align: center;
   background-color: white;
 }
-.g-navlink-white-button > a {
+
+.g-navlink-white-button>a {
   font-weight: 200;
   border: transparent 1px solid;
   padding: 0.5rem 3rem;
@@ -60,30 +70,28 @@ a:active {
   font-weight: 300;
   background-color: white;
   color: black;
-  mask-image: linear-gradient(
-    60deg,
-    rgb(118, 118, 118) 25%,
-    rgba(0, 0, 0, 0.5) 50%,
-    rgb(124, 124, 124) 75%
-  );
+  mask-image: linear-gradient(60deg,
+      rgb(118, 118, 118) 25%,
+      rgba(0, 0, 0, 0.5) 50%,
+      rgb(124, 124, 124) 75%);
   mask-size: 400%;
   mask-position: 100%;
-  -webkit-mask-image: linear-gradient(
-    60deg,
-    rgb(118, 118, 118) 25%,
-    rgba(0, 0, 0, 0.7) 50%,
-    rgb(124, 124, 124) 75%
-  );
+  -webkit-mask-image: linear-gradient(60deg,
+      rgb(118, 118, 118) 25%,
+      rgba(0, 0, 0, 0.7) 50%,
+      rgb(124, 124, 124) 75%);
   -webkit-mask-size: 400%;
   -webkit-mask-position: 100%;
 }
-.g-navlink-white-button > a:hover {
+
+.g-navlink-white-button>a:hover {
   background-color: rgb(228, 228, 228);
   mask-position: 0%;
   -webkit-mask-position: 0%;
   transition: mask-position 0.5s ease, -webkit-mask-position 0.5s ease;
 }
-.g-navlink-white-button > a:active {
+
+.g-navlink-white-button>a:active {
   background-color: rgb(165, 165, 165);
 }
 
@@ -91,6 +99,7 @@ a:active {
 select {
   cursor: pointer;
 }
+
 /* LABEL */
 label {
   cursor: pointer;
@@ -108,7 +117,8 @@ input[type="checkbox"] {
   display: flex;
   justify-content: center;
 }
-.g-input-with-button > input {
+
+.g-input-with-button>input {
   width: 100%;
   font-weight: 300;
   margin: 0.1rem 0 0.3rem 0;
@@ -117,7 +127,8 @@ input[type="checkbox"] {
   padding-left: 0.5rem;
   border: none;
 }
-.g-input-with-button > input:focus {
+
+.g-input-with-button>input:focus {
   outline: none;
 }
 
@@ -137,6 +148,7 @@ input.g-input-two-icons {
   padding-left: 0;
   font-family: "HelveticaNeueLTPro-Hv";
 }
+
 .g-input-with-button .g-password::selection {
   text-shadow: 0 0 0.4rem black;
   background: rgb(204, 204, 204);
@@ -156,9 +168,11 @@ input.g-input-two-icons {
   cursor: pointer;
   padding: 0.2rem;
 }
+
 .g-input-x-button {
   margin-right: 0.5rem;
 }
+
 .g-input-view-button {
   margin-right: 2rem;
 }
@@ -174,38 +188,38 @@ input.g-input-two-icons {
   font-weight: 300;
   background-color: white;
   color: black;
-  mask-image: linear-gradient(
-    60deg,
-    rgb(118, 118, 118) 25%,
-    rgba(0, 0, 0, 0.5) 50%,
-    rgb(124, 124, 124) 75%
-  );
+  mask-image: linear-gradient(60deg,
+      rgb(118, 118, 118) 25%,
+      rgba(0, 0, 0, 0.5) 50%,
+      rgb(124, 124, 124) 75%);
   mask-size: 400%;
   mask-position: 100%;
-  -webkit-mask-image: linear-gradient(
-    60deg,
-    rgb(118, 118, 118) 25%,
-    rgba(0, 0, 0, 0.7) 50%,
-    rgb(124, 124, 124) 75%
-  );
+  -webkit-mask-image: linear-gradient(60deg,
+      rgb(118, 118, 118) 25%,
+      rgba(0, 0, 0, 0.7) 50%,
+      rgb(124, 124, 124) 75%);
   -webkit-mask-size: 400%;
   -webkit-mask-position: 100%;
 }
+
 .g-white-button:hover:enabled {
   background-color: rgb(228, 228, 228);
   mask-position: 0%;
   -webkit-mask-position: 0%;
   transition: mask-position 0.5s ease, -webkit-mask-position 0.5s ease;
 }
+
 .g-white-button:active {
   background-color: rgb(165, 165, 165);
 }
+
 .g-white-button:disabled {
   background: rgb(0, 0, 0);
   color: white;
   border: white 1px solid;
   cursor: default;
 }
+
 .g-white-button a {
   color: #000;
 }
@@ -216,14 +230,13 @@ input.g-input-two-icons {
   font-weight: 400;
   color: rgba(255, 255, 255, 0.6);
 }
+
 .g-text-button:hover {
-  background: linear-gradient(
-    45deg,
-    #35a7ff 0%,
-    #7e54de 20%,
-    #f40259 60%,
-    #fea30d 100%
-  );
+  background: linear-gradient(45deg,
+      #35a7ff 0%,
+      #7e54de 20%,
+      #f40259 60%,
+      #fea30d 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -233,13 +246,11 @@ input.g-input-two-icons {
 
 /* TEXTO GRADIENT */
 .g-gradient-text {
-  background: linear-gradient(
-    45deg,
-    #35a7ff 0%,
-    #7e54de 20%,
-    #f40259 60%,
-    #fea30d 100%
-  );
+  background: linear-gradient(45deg,
+      #35a7ff 0%,
+      #7e54de 20%,
+      #f40259 60%,
+      #fea30d 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -260,6 +271,7 @@ input.g-input-two-icons {
   font-weight: 300;
   font-size: 0.8rem;
 }
+
 .g-warn-input {
   text-align: left;
   color: rgb(255, 187, 0);
@@ -282,8 +294,10 @@ input.g-input-two-icons {
   position: absolute;
   background: rgb(255, 255, 255);
   height: 130%;
-  width: 110%; /* 50% */
-  transform: translateX(0%) rotate(5deg); /* 59 */
+  width: 110%;
+  /* 50% */
+  transform: translateX(0%) rotate(5deg);
+  /* 59 */
   /* outline-offset: 5px;
     outline: 1px solid rgb(255, 255, 255); */
 }
