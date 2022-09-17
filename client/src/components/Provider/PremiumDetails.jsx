@@ -20,7 +20,7 @@ const PremiumDetails = () => {
     const [images, setImages] = useState(false);
     const [loading, setLoading] = useState(true);
     const [tabOpen, setTabOpen] = useState(false)
-    const [notification] = useNotification();
+    const notification = useNotification();
     const { addToCart, buyNow } = useCheckout();
     const { wishlist } = useSelector((state) => state.cartReducer);
     const [windowWidth, setWindowWidth] = useState(window.innerWidth);

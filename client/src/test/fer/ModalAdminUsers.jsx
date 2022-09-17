@@ -22,7 +22,7 @@ const ModalAdminUsers = ({
 }) => {
   const dispatch = useDispatch();
 
-  const [notification] = useNotification();
+  const notification = useNotification();
 
   const handleBanUser = () => {
     banUser();

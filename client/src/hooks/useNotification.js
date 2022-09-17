@@ -15,5 +15,5 @@ export const useNotification = () => {
         }
     }
 
-    return [notification]
+    return notification
 }

@@ -23,7 +23,7 @@ import "./Profile.css";
 
 const Profile = () => {
   const navigate = useNavigate();
-  const [notification] = useNotification();
+  const notification = useNotification();
   const { section } = useParams();
   const signOut = useSignout();
 

@@ -37,7 +37,7 @@ const ProfileDetails = ({ address, loading }) => {
   } = useSelector((state) => state.sessionReducer);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [notification] = useNotification();
+  const notification = useNotification();
 
   const onlyLettersRegex = /^([a-zñ .]){2,}$/gi; //! VOLVER A VER cambiar regex
 

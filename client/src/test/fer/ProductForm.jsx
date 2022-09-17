@@ -48,7 +48,7 @@ const ProductForm = () => {
   const [waitingResponse, setWaitingResponse] = useState(false);
   let timeoutId = useRef();
   const navigate = useNavigate();
-  const [notification] = useNotification();
+  const notification = useNotification();
   const [isOpenCreateProduct, openCreateProduct, closeCreateProduct] =
     useModal();
 

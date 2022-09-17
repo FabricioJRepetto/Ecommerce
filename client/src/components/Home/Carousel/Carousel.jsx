@@ -3,8 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import Controls from "./Controls";
 import Indicators from "./Indicators";
-import "./Carousel.css";
 import { resetCarouselIndex, updateCarouselIndex } from "../../../Redux/reducer/extraSlice";
+
+import "./Carousel.css";
 
 const Slider = (prop) => {
   const {

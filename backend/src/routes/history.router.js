@@ -6,10 +6,13 @@ const {
     postVisited,
     postSearch,
 } = require("../controllers/history.ctrl.js");
+const {
+    verifyToken,
+} = require("../middlewares/verify");
 
-router.get("/", getHistory);
-router.get("/suggestion", getSuggestion);
-router.post("/search/:search", postSearch);
-router.post("/visited", postVisited);
+router.get("/", verifyToken, getHistory);
+router.post("/suggestion", getSuggestion);
+router.post("/search/:search", verifyToken, postSearch);
+router.post("/visited", verifyToken, postVisited);
 
 module.exports = router;

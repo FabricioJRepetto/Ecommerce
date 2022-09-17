@@ -25,7 +25,7 @@ const BuyNow = () => {
   const location = useLocation();
   const hasPreviousState = location.key !== "default";
   const session = useSelector((state) => state.sessionReducer.session);
-  const [notification] = useNotification();
+  const notification = useNotification();
 
   const [id, setId] = useState();
   const [product, setProduct] = useState();

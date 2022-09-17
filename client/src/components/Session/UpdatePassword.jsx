@@ -20,7 +20,7 @@ const UpdatePassword = () => {
   const [waitingResponse, setWaitingResponse] = useState(false);
   const [loading, setLoading] = useState(false);
   const { email } = useSelector((state) => state.sessionReducer);
-  const [notification] = useNotification();
+  const notification = useNotification();
   const {
     register,
     handleSubmit,

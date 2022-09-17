@@ -13,7 +13,7 @@ import LoaderBars from "../common/LoaderBars";
 const Address = ({ loading, setLoading, address, setAddress }) => {
   const [addressToEditId, setAddressToEditId] = useState(null);
   const [addressToEdit, setAddressToEdit] = useState(null);
-  const [notification] = useNotification();
+  const notification = useNotification();
   const [isOpenAddForm, openAddForm, closeAddForm, prop] = useModal();
 
   //? ADDRESS

@@ -1,9 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Routes, Route, useNavigate } from "react-router-dom";
-import { loadUserData, loadingUserData } from "./Redux/reducer/sessionSlice";
-import { loadCart, loadWishlist } from "./Redux/reducer/cartSlice";
-import axios from "axios";
+import { loadingUserData } from "./Redux/reducer/sessionSlice";
 import "./App.css";
 
 import GlobalCover from "../src/components/common/GlobalCover";
@@ -36,127 +34,80 @@ import AboutUs from "./components/common/AboutUs";
 import LoaderBars from "./components/common/LoaderBars";
 import ForgotPassword from "./components/Session/ForgotPassword";
 import PremiumDetails from "./components/Provider/PremiumDetails";
+import { useUserLogin } from "./hooks/useUserLogin";
 
 function App() {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const { session, isUserDataLoading } = useSelector(
-    (state) => state.sessionReducer
-  );
+    const dispatch = useDispatch();
+    const { userLogin } = useUserLogin();
+    const isUserDataLoading = useSelector((state) => state.sessionReducer.isUserDataLoading);
 
-  useEffect(() => {
-    const loggedUserToken = window.localStorage.getItem("loggedTokenEcommerce");
-    (async () => {
-      try {
-        if (loggedUserToken) {
-          dispatch(loadingUserData(true));
-          const { data } = await axios(`/user/profile/${loggedUserToken}`); //! VOLVER A VER fijarse con nuevos usuarios de google
-
-          const {
-            _id,
-            email,
-            googleEmail,
-            name,
-            firstName,
-            lastName,
-            emailVerified,
-            username,
-            role,
-            isGoogleUser,
-            avatar,
-          } = data;
-
-          dispatch(
-            loadUserData({
-              session: true,
-              username: username || name,
-              full_name: {
-                first: firstName || "",
-                last: lastName || "",
-              },
-              avatar: avatar ? avatar : false,
-              emailVerified,
-              email: googleEmail || email,
-              id: _id,
-              role,
-              isGoogleUser,
-            })
-          );
-
-          const { data: cart } = await axios(`/cart`);
-          dispatch(loadCart(cart.id_list || []));
-
-          const { data: wish } = await axios(`/wishlist`);
-          dispatch(loadWishlist(wish.id_list));
+    useEffect(() => {
+        if (window.localStorage.getItem("loggedTokenEcommerce")) {
+            userLogin(window.localStorage.getItem("loggedTokenEcommerce"), false);
+        } else {
+            dispatch(loadingUserData(false));
         }
-      } catch (error) {
-        window.localStorage.removeItem("loggedTokenEcommerce");
-        console.log("redirección desde app.js");
-        navigate("/");
-      } finally {
-        dispatch(loadingUserData(false));
-      }
-    })();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [session]);
 
-  return (
-    <div className="App" id="scroller">
-      <NotificationMaster />
-      {isUserDataLoading ? (
-        <div className="g-container-totalvh">
-          <LoaderBars />
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    return (
+        <div className="App" id="scroller">
+            <NotificationMaster />
+            {isUserDataLoading ? (
+                <div className="g-container-totalvh">
+                    <LoaderBars />
+                </div>
+            ) : (
+                <div>
+                    <GlobalCover />
+                    <NavBar />
+                    <BackToTop />
+                    <Routes>
+                        <Route path="/about" element={<AboutUs />} />
+                        <Route path="/buynow" element={<BuyNow />} />
+                        <Route path="/cart/" element={<Cart />} />
+                        <Route path="/cart/:section" element={<Cart />} />
+                        <Route path="/details/:id" element={<Details />} />
+                        <Route path="/orders/post-sale" element={<PostSale />} />
+                        <Route path="/premium" element={<ProviderPremium />} />
+                        <Route path="/premium/:id" element={<PremiumDetails />} />
+                        <Route path="/productForm" element={<ProductForm />} />
+                        <Route path="/products" element={<Products />} />
+                        <Route path="/provider" element={<ProviderStore />} />
+                        <Route path="/profile/" element={<Profile />} />
+                        <Route path="/profile/:section" element={<Profile />} />
+                        <Route path="/results" element={<Results />} />
+                        <Route path="/sales" element={<SalesResults />} />
+                        <Route path="/signin" element={<Signupin />} />
+                        <Route path="/forgotPassword" element={<ForgotPassword />} />
+                        <Route path="/" element={<Home />} />
+                        <Route
+                            path="/reset/:userId/:resetToken"
+                            element={<ResetPassword />}
+                        />
+                        <Route path="/verify/:verifyToken" element={<VerifyEmail />} />
+                        <Route
+                            element={<RequireRole allowedRoles={["admin", "superadmin"]} />}
+                        >
+                            <Route path="admin" element={<AdminLayout />}>
+                                <Route index element={<Metrics />} />
+                                <Route path="metrics" element={<Metrics />} />
+                                <Route path="products" element={<Products />} />
+                                <Route path="productForm" element={<ProductForm />} />
+                                <Route path="users" element={<UsersAdmin />} />
+                                <Route path="users/:id" element={<UsersAdmin />} />
+                                <Route path="orders" element={<OrdersAdmin />} />
+                                <Route path="*" element={<h1>404 ADMIN</h1>} />{" "}
+                                {/* //! VOLVER A VER darle estilos al 404 */}
+                            </Route>
+                        </Route>
+                        <Route path="/unauthorized" element={<h1>UNAUTHORIZED</h1>} />
+                    </Routes>
+                </div>
+            )}
         </div>
-      ) : (
-        <div>
-          <GlobalCover />
-          <NavBar />
-          <BackToTop />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<AboutUs />} />
-            <Route path="/buynow" element={<BuyNow />} />
-            <Route path="/cart/" element={<Cart />} />
-            <Route path="/cart/:section" element={<Cart />} />
-            <Route path="/details/:id" element={<Details />} />
-            <Route path="/orders/post-sale" element={<PostSale />} />
-            <Route path="/premium" element={<ProviderPremium />} />
-            <Route path="/premium/:id" element={<PremiumDetails />} />
-            <Route path="/productForm" element={<ProductForm />} />
-            <Route path="/products" element={<Products />} />
-            <Route path="/provider" element={<ProviderStore />} />
-            <Route path="/profile/" element={<Profile />} />
-            <Route path="/profile/:section" element={<Profile />} />
-            <Route path="/results" element={<Results />} />
-            <Route path="/sales" element={<SalesResults />} />
-            <Route path="/signin" element={<Signupin />} />
-            <Route path="/forgotPassword" element={<ForgotPassword />} />
-            <Route
-              path="/reset/:userId/:resetToken"
-              element={<ResetPassword />}
-            />
-            <Route path="/verify/:verifyToken" element={<VerifyEmail />} />
-            <Route
-              element={<RequireRole allowedRoles={["admin", "superadmin"]} />}
-            >
-              <Route path="admin" element={<AdminLayout />}>
-                <Route index element={<Metrics />} />
-                <Route path="metrics" element={<Metrics />} />
-                <Route path="products" element={<Products />} />
-                <Route path="productForm" element={<ProductForm />} />
-                <Route path="users" element={<UsersAdmin />} />
-                <Route path="users/:id" element={<UsersAdmin />} />
-                <Route path="orders" element={<OrdersAdmin />} />
-                <Route path="*" element={<h1>404 ADMIN</h1>} />{" "}
-                {/* //! VOLVER A VER darle estilos al 404 */}
-              </Route>
-            </Route>
-            <Route path="/unauthorized" element={<h1>UNAUTHORIZED</h1>} />
-          </Routes>
-        </div>
-      )}
-    </div>
-  );
+    );
 }
 
 export default App;
