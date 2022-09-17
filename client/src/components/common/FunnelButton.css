@@ -1,0 +1,66 @@
+.funnel {
+   position: absolute;
+   top: 0;
+   right: 0;
+   height: 50px;
+   width: 45px;
+   cursor: pointer;
+   display: flex;
+}
+
+.funnel-top {
+   width: 24px;
+   left: 11px;
+}
+
+.funnel-middle {
+   width: 16px;
+   left: 15px;
+}
+
+.funnel-bottom {
+   width: 8px;
+   left: 19px;
+}
+
+.funnel-bottom,
+.funnel-middle,
+.funnel-top {
+   position: absolute;
+   display: block;
+   height: 1px;
+   background-color: white;
+   top: 50%;
+   border-radius: 0;
+   -webkit-transition: all 0.2s ease-out;
+   transition: all 0.2s ease-out;
+}
+
+.funnel-top {
+   margin-top: -8px;
+}
+
+.funnel-middle {
+   margin-top: -0.6666666667px;
+}
+
+.funnel-bottom {
+   margin-top: 6px;
+}
+
+/* TRANSFORMACION A X */
+.funnel-top-open {
+   transform: translate(0, 8px) rotate(45deg);
+   width: 20px;
+   left: 12.5px;
+}
+
+.funnel-middle-open {
+   transform: scale(0, 0);
+}
+
+.funnel-bottom-open {
+   transform: translate(0, -6px) rotate(-45deg);
+   width: 20px;
+   left: 12.5px;
+}

@@ -225,7 +225,10 @@ const ProfileDetails = ({ address, loading }) => {
         {!loadingAvatar && (
           <label className="profile-edit-svg-container" htmlFor="filesButton">
             {emailVerified === true ? (
-              <div className="edit-gradient"></div>
+              <span className="profile-svg-for-verified-email">
+                <div className="edit-gradient"></div>
+                <Edit />
+              </span>
             ) : (
               <Edit />
             )}
@@ -299,7 +302,10 @@ const ProfileDetails = ({ address, loading }) => {
               onClick={() => handleOpenInputs("username")}
             >
               {emailVerified === true ? (
-                <div className="edit-gradient"></div>
+                <span className="profile-svg-for-verified-email">
+                  <div className="edit-gradient"></div>
+                  <Edit />
+                </span>
               ) : (
                 <Edit />
               )}
@@ -358,7 +364,10 @@ const ProfileDetails = ({ address, loading }) => {
               onClick={() => handleOpenInputs("full_name")}
             >
               {emailVerified === true ? (
-                <div className="edit-gradient"></div>
+                <span className="profile-svg-for-verified-email">
+                  <div className="edit-gradient"></div>
+                  <Edit />
+                </span>
               ) : (
                 <Edit />
               )}
@@ -486,7 +495,7 @@ const ProfileDetails = ({ address, loading }) => {
                   <p>{`${e.street_name} ${e.street_number}, ${e.city}`}</p>
                   <span className="profile-email-container">
                     <div className="location-gradient"></div>
-                    {/* <Location /> */}
+                    <Location />
                   </span>
                 </div>
               )

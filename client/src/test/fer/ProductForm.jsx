@@ -20,9 +20,9 @@ import SelectsNested from "./SelectsNested";
 import { CloseIcon, AddIcon, DeleteIcon } from "@chakra-ui/icons";
 import { ReactComponent as Spinner } from "../../assets/svg/spinner.svg";
 import Checkbox from "../../components/common/Checkbox";
+import ReturnButton from "../../components/common/ReturnButton";
 import "./ProductForm.css";
 import "../../App.css";
-import ReturnButton from "../../components/common/ReturnButton";
 
 const ProductForm = () => {
   const [featuresQuantity, setFeaturesQuantity] = useState(1);

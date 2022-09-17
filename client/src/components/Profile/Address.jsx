@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import axios from "axios";
 import AddAddress from "./AddAddress";
-import AddressCard from "../../test/fer/AddressCard";
+import AddressCard from "./AddressCard";
 import { useNotification } from "../../hooks/useNotification";
 import Modal from "../common/Modal";
 import { useModal } from "../../hooks/useModal";
+import { ReactComponent as Pin } from "../../assets/svg/pin.svg";
 import { ReactComponent as PinBold } from "../../assets/svg/pin-bold.svg";
+import { ReactComponent as Edit } from "../../assets/svg/edit.svg";
+import { ReactComponent as Delete } from "../../assets/svg/trash.svg";
 import "../../App.css";
 import "./Address.css";
 import LoaderBars from "../common/LoaderBars";
@@ -66,24 +69,27 @@ const Address = ({ loading, setLoading, address, setAddress }) => {
                 (e) =>
                   e.isDefault && (
                     <div key={e.id} className="address-with-options-container">
-                      <div className="address-with-pin">
-                        <div
-                          className="address-pin-gradient"
-                          onClick={() => setDefault(e._id)}
-                        ></div>
+                      <div className="address-with-pin address-with-pin-default">
+                        <div className="address-pin-gradient"></div>
                         <AddressCard address={e} />
                       </div>
 
                       <div className="address-buttons-container">
-                        <div
-                          className="address-edit-gradient"
+                        <span
+                          className="address-edit-button-container"
                           onClick={() => getAddressToEdit(e._id)}
-                        ></div>
+                        >
+                          <Edit />
+                          <div className="address-edit-gradient"></div>
+                        </span>
 
-                        <div
-                          className="address-trash-gradient"
+                        <span
+                          className="address-delete-button-container"
                           onClick={() => deleteAddress(e._id)}
-                        ></div>
+                        >
+                          <Delete />
+                          <div className="address-delete-gradient"></div>
+                        </span>
                       </div>
                     </div>
                   )
@@ -99,22 +105,28 @@ const Address = ({ loading, setLoading, address, setAddress }) => {
                           onClick={() => setDefault(e._id)}
                           className="address-pin-set-default"
                         >
-                          {" "}
-                          <PinBold />
+                          <Pin />
+                          <div className="address-pin-gradient"></div>
                         </div>
                         <AddressCard address={e} />
                       </div>
 
                       <div className="address-buttons-container">
-                        <div
-                          className="address-edit-gradient"
+                        <span
+                          className="address-edit-button-container"
                           onClick={() => getAddressToEdit(e._id)}
-                        ></div>
+                        >
+                          <Edit />
+                          <div className="address-edit-gradient"></div>
+                        </span>
 
-                        <div
-                          className="address-trash-gradient"
+                        <span
+                          className="address-delete-button-container"
                           onClick={() => deleteAddress(e._id)}
-                        ></div>
+                        >
+                          <Delete />
+                          <div className="address-delete-gradient"></div>
+                        </span>
                       </div>
                     </div>
                   )

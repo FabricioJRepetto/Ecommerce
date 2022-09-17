@@ -194,6 +194,10 @@ const ResetPassword = () => {
                     ? ""
                     : " g-password"
                 }`}
+                onPaste={(e) => {
+                  e.preventDefault();
+                  return false;
+                }}
                 {...register("repPassword", {
                   required: true,
                   validate: (repPassword) => {

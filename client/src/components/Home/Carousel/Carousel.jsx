@@ -3,7 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import Controls from "./Controls";
 import Indicators from "./Indicators";
-import { resetCarouselIndex, updateCarouselIndex } from "../../../Redux/reducer/extraSlice";
+import {
+  resetCarouselIndex,
+  updateCarouselIndex,
+} from "../../../Redux/reducer/extraSlice";
 
 import "./Carousel.css";
 
@@ -19,7 +22,7 @@ const Slider = (prop) => {
     height = "unset",
     autoplay = true,
     id = "slider",
-    shareIndex = false
+    shareIndex = false,
   } = prop;
 
   const [currentIndex, setCurrentIndex] = useState(0);  
@@ -44,26 +47,22 @@ const Slider = (prop) => {
   };
   const stopSlideTimer = () => {
     // importante preguntar si hay intervalo activo
-    if (pausable) {
-      if (slideInterval.current) {
-        clearInterval(slideInterval.current);
-        slideInterval.current = null;
-      }
+    if (pausable && slideInterval.current) {
+      clearInterval(slideInterval.current);
+      slideInterval.current = null;
     }
   };
 
-  useEffect(() => {    
+  useEffect(() => {
     if (document.visibilityState === "visible") {
-      if (!slideInterval.current) {    
-        startSlideTimer();
-      }
+      !slideInterval.current && startSlideTimer();
     } else {
       stopSlideTimer();
     }
     return () => {
-        stopSlideTimer();
-        shareIndex && dispatch(resetCarouselIndex())
-    }
+      stopSlideTimer();
+      shareIndex && dispatch(resetCarouselIndex());
+    };
     // eslint-disable-next-line
   }, [document.visibilityState]);
 
@@ -156,7 +155,7 @@ const Slider = (prop) => {
             <div
               id={"img" + index}
               key={e.img}
-              style={{ cursor:pointer ? "pointer" : "auto" }}
+              style={{ cursor: pointer ? "pointer" : "auto" }}
               onClick={() => navigate(e.url || "")}
               className="slide-item"
             >
@@ -171,15 +170,7 @@ const Slider = (prop) => {
             switchIndex={switchIndex}
           />
         )}
-        {controls && (
-          <Controls
-            prev={prev}
-            next={next}
-            start={startSlideTimer}
-            stop={stopSlideTimer}
-            pausable={pausable}
-          />
-        )}
+        {controls && <Controls prev={prev} next={next} pausable={pausable} />}
       </div>
     </div>
   );

@@ -1,0 +1,338 @@
+.products-container {
+   display: flex;
+   flex-direction: row-reverse;
+   justify-content: center;
+   height: fit-content;
+   position: relative;
+   padding-top: 3.5rem;
+   overflow: hidden;
+}
+
+.products-no-coincidences {
+   padding-top: 2rem;
+}
+
+.products-results-container {
+   width: 60%;
+   min-width: 350px;
+   max-width: 900px;
+}
+
+/* .products-results-inner {
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+} */
+
+.products-filters-middle {
+   position: relative;
+   display: block;
+   width: 15rem;
+   height: 100%;
+}
+
+.products-filters-inner {
+   display: flex;
+   flex-direction: column;
+   align-items: flex-start;
+   padding: 1rem 0;
+   /*  border: 1px solid yellow; */
+}
+
+.products-filters-inner h3 {
+   padding-bottom: .5rem;
+}
+
+.products-filters-price-container {
+   margin-bottom: 18px;
+}
+
+.products-filters-shipping-container,
+.products-filters-brand-container {
+   margin-bottom: 3rem;
+}
+
+.products-filters-price-container,
+.products-filters-shipping-container,
+.products-filters-brand-container {
+   /* margin: 1rem 0; */
+   display: flex;
+   flex-direction: column;
+   align-items: flex-start;
+   width: 90%;
+}
+
+.products-filters-price-applied {
+   display: flex;
+}
+
+.products-filters-price-applied>div {
+   display: flex;
+   align-items: center;
+}
+
+.products-filters-price-applied span {
+   display: flex;
+   cursor: pointer;
+   align-items: center;
+   margin-left: .5rem;
+}
+
+.products-filters-price-applied svg {
+   color: #888888;
+}
+
+.products-filters-price-applied span:hover svg {
+   display: none;
+}
+
+.products-filters-price-applied span:hover .close-gradient {
+   display: inline;
+}
+
+.close-gradient {
+   height: 1.5rem;
+   width: 1.5rem;
+   background: linear-gradient(45deg,
+         #35a7ff 0%,
+         #7e54de 20%,
+         #f40259 60%,
+         #fea30d 100%);
+   mask-image: url("../../assets/svg/close.svg");
+   background-size: 400%;
+   animation: gradientTextAnim 5s infinite;
+   display: none;
+}
+
+
+
+.products-filters-price-container input:focus {
+   outline: none;
+}
+
+.products-filters-price-container form {
+   font-size: .9rem;
+   display: flex;
+}
+
+.products-filters-price-container form input[type="submit"] {
+   display: none;
+}
+
+.price-filter-submit {
+   padding-left: .5rem;
+   height: 24px;
+   cursor: default;
+}
+
+.price-filter-input-full {
+   cursor: pointer;
+}
+
+.price-filter-submit svg {
+   color: #222222;
+   scale: 1.5;
+   /* display: none; */
+}
+
+.price-filter-input-full svg {
+   color: white;
+}
+
+.price-filter-input-full:hover .chevron-right-gradient {
+   display: block;
+}
+
+.price-filter-input-full:hover svg {
+   display: none;
+}
+
+.chevron-right-gradient {
+   scale: 1.5;
+   height: 24px;
+   width: 24px;
+   background: linear-gradient(45deg,
+         #35a7ff 0%,
+         #7e54de 20%,
+         #f40259 60%,
+         #fea30d 100%);
+   mask-image: url("../../assets/svg/chevron-right.svg");
+   background-size: 400%;
+   animation: gradientTextAnim 5s infinite;
+   display: none;
+}
+
+.products-filters-price-container input {
+   padding: 0;
+   width: 5rem;
+   padding: .1rem;
+}
+
+.products-filters-price-container form>input {
+   margin-left: .5rem;
+   width: 2rem;
+}
+
+.products-filters-input-container {
+   width: 5rem;
+}
+
+.products-filters-price-separator {
+   width: 1rem;
+}
+
+.dumb-box {
+   height: 300px;
+   width: 100%;
+   background-color: #555555;
+}
+
+.filter-brand-checkbox-container {
+   display: flex;
+   flex-direction: column;
+   align-items: flex-start;
+   width: 100%;
+   text-align: left;
+}
+
+.filter-brand-checkbox-container>label {
+   display: flex;
+   margin-top: .2rem;
+}
+
+.filter-brand-checkbox-container>label span {
+   margin-left: .2rem;
+}
+
+.filter-brand-checkbox-container>label>input {
+   display: none;
+}
+
+.products-shipping-label {
+   display: flex;
+   align-items: center;
+}
+
+.products-shipping-label>input {
+   display: none;
+}
+
+.filter-brand-checkbox-container>label .g-gradient-text {
+   display: none;
+}
+
+.filter-brand-checkbox-container>label:hover .g-gradient-text {
+   display: inline;
+}
+
+.filter-brand-checkbox-container>label:hover .product-checkbox-brand {
+   display: none;
+}
+
+.products-shipping-label .g-gradient-text {
+   display: none;
+}
+
+h3.products-shipping-text,
+h3.g-gradient-text {
+   padding-bottom: 0;
+   padding-right: .5rem;
+
+}
+
+/* .products-shipping-label:hover .g-gradient-text {
+   display: inline;
+}
+
+.products-shipping-label:hover .products-shipping-text {
+   display: none;
+} */
+.products-filters-mobile {
+   display: none;
+}
+
+.products-filters-mobile .funnel {
+   z-index: 5;
+}
+
+.products-filters-menu {
+   background-color: #111111;
+   border: 1px solid rgb(115, 115, 115);
+   padding: 1rem 1rem 0 1rem;
+   /*    padding: 0rem; */
+   z-index: 4;
+   width: 250px;
+   position: absolute;
+   right: -1rem;
+   top: 0rem;
+   transition: right 0.2s ease;
+   overflow-x: hidden;
+   overflow-y: scroll;
+   overscroll-behavior: contain;
+}
+
+.products-filters-menu-open {
+   opacity: 1;
+}
+
+.products-filters-menu-close {
+   right: -17rem;
+}
+
+.products-filters-mobile-background {
+   height: 100%;
+   width: 100%;
+   background-color: #00000075;
+   position: fixed;
+   z-index: 4;
+   transition: opacity 0.2s ease-in-out;
+   top: 0;
+}
+
+.products-filters-mobile-background-hide {
+   opacity: 0;
+   z-index: -1;
+}
+
+@media (min-width: 1024px) {
+   .products-filters-middle {
+      min-height: 100vh;
+   }
+}
+
+@media (max-width: 1023px) {
+   .products-results-container {
+      width: 85%;
+   }
+
+   .products-results-container .g-input-with-button {
+      margin: 0 3rem 0 1.5rem;
+   }
+
+   .products-filters-outer {
+      display: none;
+   }
+
+   .products-filters-mobile {
+      display: inline;
+   }
+
+   .products-filters-inner {
+      padding-bottom: 0;
+   }
+
+   .products-filters-inner>div:last-child {
+      margin-bottom: 2rem;
+   }
+
+   .products-container {
+      padding-top: .5rem;
+   }
+}
+
+@media (max-width: 500px) {
+   .products-results-container {
+      width: 100%;
+   }
+}

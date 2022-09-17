@@ -46,15 +46,11 @@ const HistoryCard = ({ product, free_shipping, fav }) => {
           </div>
         </div>
       ) : ( */}
-      <div
-        onMouseEnter={() => setVisible(true)}
-        onMouseLeave={() => setVisible(false)}
-        className={`history-card${visible ? " history-card-height" : ""}${
-          ready ? " history-card-fade-in" : ""
-        }`}
-      >
+      <div className={`history-card${ready ? " history-card-fade-in" : ""}`}>
         {session && (
-          <WishlistButton visible={visible} fav={fav} prodId={prodId} />
+          <span className="history-card-wishlist-cotnainer">
+            <WishlistButton visible={visible} fav={fav} prodId={prodId} />
+          </span>
         )}
         {special && <i className="provider-text special-card">PROVIDER</i>}
 
@@ -69,11 +65,11 @@ const HistoryCard = ({ product, free_shipping, fav }) => {
 
           <div className="history-card-details-section">
             <div className="history-card-name-container">
-              <h3>{name}</h3>
+              <h4>{name}</h4>
             </div>
 
             <div className="history-good-info-container">
-              <div className="free-shipping">
+              <div className="history-free-shipping">
                 {free_shipping && "Envío gratis"}
               </div>
 
