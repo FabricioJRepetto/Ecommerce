@@ -112,7 +112,7 @@ const profile = async (req, res, next) => {
         delete user.password;
 
         const cartFound = await Cart.findOne({ owner: userId });
-        let cart = cartFound?.products.map(e => e.product_id) || [];
+        let cart = cartFound.products.map(e => e.product_id) || [];
         //if (cartFound) cart = cartFound.products.map(e => e.product_id)
 
         const wishFound = await Wishlist.findOne({ user: userId });
