@@ -40,6 +40,7 @@ async function verifyToken(req, res, next) {
     } else {
       try {
         const userDecoded = await jwt.verify(token, JWT_SECRET_CODE);
+
         req.user = userDecoded.user;
         req.user.isGoogleUser = false;
 
@@ -48,6 +49,11 @@ async function verifyToken(req, res, next) {
           return res.status(404).json({ message: "Cuenta no encontrada" });
         }
       } catch (error) {
+        error.name === "TokenExpiredError" &&
+          res
+            .status(403)
+            .json({ message: "Token inválido", expiredToken: true });
+
         return res.status(403).json({ message: "Token inválido" });
       }
     }

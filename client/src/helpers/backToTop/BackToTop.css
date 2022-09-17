@@ -3,18 +3,21 @@
     width: 50px;
     background-color: rgba(0, 0, 0, .3);
     position: fixed;
-    z-index: 6;
+    z-index: 60;
     bottom: -50px;
     right: 10vw;
     cursor: pointer;
     transition: all .3s ease-out;
 }
+
 .icon-up {
     transform: rotate(-90deg);
 }
-.icon-up path{
+
+.icon-up path {
     fill: #fff;
 }
+
 .visible-btt {
     transition: all .3s ease;
     bottom: 0px;
