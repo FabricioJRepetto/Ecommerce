@@ -3,6 +3,8 @@ const { CLOUDINARY_CLOUD, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } =
   process.env;
 const cloudinary = require("cloudinary").v2;
 const User = require("../models/user");
+const Cart = require("../models/cart");
+const Wishlist = require("../models/wishlist");
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
 const fs = require("fs-extra");
@@ -102,9 +104,11 @@ const profile = async (req, res, next) => {
   const userId = req.user._id || req.body._id;
   try {
     const userFound = await User.findById(userId);
+
     if (!userFound) {
       return res.status(404).json({ message: "Cuenta no encontrada" });
     }
+
     let user = userFound;
     delete user.password;
 

@@ -150,7 +150,9 @@ const Signupin = () => {
     <div className="signin-container">
       <div className={`signin-inner${flag ? " signin-visible" : ""}`}>
         <img
-          src={require("../../assets/provider-logo.png")}
+          src={
+            "https://res.cloudinary.com/dsyjj0sch/image/upload/v1659650791/PROVIDER_LOGO_glitch_aberration_kt2hyv.png"
+          }
           alt="logo"
           onClick={() => navigate("/")}
           style={{ cursor: "pointer" }}
@@ -249,7 +251,7 @@ const Signupin = () => {
             </span>
 
             <NavLink to={"/forgotPassword"}>
-              <span className="g-text-button">
+              <span className="g-text-button signin-forgot-text">
                 ¿Has olvidado tu contraseña?
               </span>
             </NavLink>
@@ -442,11 +444,14 @@ const Signupin = () => {
               )}
             </span>
 
-            <input
-              type="submit"
-              value="Registrarse"
-              className="g-white-button"
-            />
+            <div>
+              <input
+                type="submit"
+                value="Registrarse"
+                className="g-white-button"
+              />
+            </div>
+
             <div>
               <span
                 onClick={() => handleSign("signin")}
