@@ -19,7 +19,7 @@ export const WishlistButton = ({
   const dispatch = useDispatch();
   const { wishlist } = useSelector((state) => state.cartReducer);
   const { session } = useSelector((state) => state.sessionReducer);
-  const [notification] = useNotification();
+  const notification = useNotification();
 
   const addToWish = async (e, id) => {
     e.stopPropagation();

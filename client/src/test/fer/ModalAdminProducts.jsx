@@ -22,7 +22,7 @@ const ModalAdminProducts = ({
   const [discount, setDiscount] = useState({ type: "", number: "" });
   const [priceOff, setPriceOff] = useState("");
   const dispatch = useDispatch();
-  const [notification] = useNotification();
+  const notification = useNotification();
 
   const deleteProduct = () => {
     axios

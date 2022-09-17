@@ -15,7 +15,7 @@ import ReturnButton from "../common/ReturnButton";
 const ResetPassword = () => {
   const navigate = useNavigate();
   const { resetToken, userId } = useParams();
-  const [notification] = useNotification();
+  const notification = useNotification();
   const { session } = useSelector((state) => state.sessionReducer);
   const {
     register,

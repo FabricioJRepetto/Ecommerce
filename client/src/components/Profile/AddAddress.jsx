@@ -26,7 +26,7 @@ const AddAddress = ({
     setValue,
     watch,
   } = useForm();
-  const [notification] = useNotification();
+  const notification = useNotification();
   const location = useLocation();
 
   useEffect(() => {

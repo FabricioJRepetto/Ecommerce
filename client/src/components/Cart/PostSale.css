@@ -35,9 +35,12 @@
   border-bottom: 1px solid white;
 }
 .postsale-text-margin {
-  margin-bottom: 2rem;
+    margin-bottom: 2rem;
 }
 
+.ps-delivery-spinner {
+    margin: 2rem;
+}
 .postsale-approved {
   background: linear-gradient(15deg, #64d500 0%, rgba(255, 255, 255, 0) 80%);
   background-size: 100% 500%;

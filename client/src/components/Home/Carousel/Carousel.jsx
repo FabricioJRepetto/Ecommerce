@@ -3,11 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import Controls from "./Controls";
 import Indicators from "./Indicators";
-import "./Carousel.css";
 import {
   resetCarouselIndex,
   updateCarouselIndex,
 } from "../../../Redux/reducer/extraSlice";
+
+import "./Carousel.css";
 
 const Slider = (prop) => {
   const {
@@ -24,7 +25,7 @@ const Slider = (prop) => {
     shareIndex = false,
   } = prop;
 
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);  
   const [move, setMove] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();

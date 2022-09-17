@@ -1,6 +1,9 @@
 require("dotenv").config();
 const { CLOUDINARY_CLOUD, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } =
     process.env;
+const Cart = require("../models/cart");
+const Wishlist = require("../models/wishlist");
+
 const cloudinary = require("cloudinary").v2;
 const User = require("../models/user");
 const passport = require("passport");
@@ -59,7 +62,7 @@ const signin = async (req, res, next) => {
                 const body = { _id, email, role, isGoogleUser };
 
                 const token = jwt.sign({ user: body }, JWT_SECRET_CODE, {
-                    expiresIn: 864000,
+                    expiresIn: 846000,
                 });
 
                 return res.json({
@@ -99,15 +102,28 @@ const signinGoogle = async (req, res, next) => {
 };
 
 const profile = async (req, res, next) => {
-    const userId = req.body._id || req.user._id;
+    const userId = req.user._id || req.body._id;
     try {
         const userFound = await User.findById(userId);
         if (!userFound) {
             return res.status(404).json({ message: "Cuenta no encontrada" });
         }
+        let user = userFound;
+        delete user.password;
 
-        let aux = userFound;
-        delete aux.password;
+        const cartFound = await Cart.findOne({ owner: userId });
+        let cart = cartFound?.products.map(e => e.product_id) || [];
+        //if (cartFound) cart = cartFound.products.map(e => e.product_id)
+
+        const wishFound = await Wishlist.findOne({ user: userId });
+        let wish = wishFound.products || [];
+        //if (cartFound) cart = cartFound.products.map(e => e.product_id)
+
+        let aux = {
+            user,
+            cart,
+            wish
+        }
 
         return res.json(aux);
     } catch (error) {

@@ -16,7 +16,7 @@ const ForgotPassword = () => {
   const { session } = useSelector((state) => state.sessionReducer);
   const [response, setResponse] = useState(null);
   const navigate = useNavigate();
-  const [notification] = useNotification();
+  const notification = useNotification();
   const {
     register: registerForgot,
     handleSubmit: handleSubmitForgot,

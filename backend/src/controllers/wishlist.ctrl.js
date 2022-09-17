@@ -35,7 +35,7 @@ const getUserList = async (req, res, next) => {
         if (wishlist.products.length !== new_id_list.length) {
             wishlist.products = new_id_list;
             wishlist.save();
-            message = "Algunos productos no están disponibles";
+            message = "Algunos de tus favoritos ya no están disponibles";
         }
 
         return res.json({ products: response, id_list: new_id_list, message });

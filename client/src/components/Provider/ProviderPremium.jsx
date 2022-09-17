@@ -18,9 +18,6 @@ const ProviderPremium = () => {
         let scrollPercent = scrollTop / (docHeight - winHeight);
         let scrollPercentRounded = Math.round(scrollPercent * 100);
         setScrollP(scrollPercentRounded);
-        console.log(scrollTop);
-        console.log(docHeight);
-        console.log(winHeight);
     }
 
   const handleWindowWidth = () => {
@@ -42,13 +39,10 @@ const ProviderPremium = () => {
         window.removeEventListener("scroll", scrollPercent);
     }
   }, []);
-
-    const [caracter, setCaracter] = useState('· ')
     
     const displayFiller = (prop) => {        
         let amount = prop || Math.ceil(windowWidth / 12) * Math.ceil((windowWidth / 12) * (windowWidth < 1024 ? 0.535 : 0.285));
-        console.log('area: '+amount);
-        let aux = Array.from(Array(amount).keys()).map(() => caracter )
+        let aux = Array.from(Array(amount).keys()).map(() => '· ' )
         return aux
      }
 

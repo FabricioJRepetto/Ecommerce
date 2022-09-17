@@ -13,6 +13,7 @@
     border-top: 1px solid white;
     border-bottom: 1px solid white;    
     padding: 50px;
+    position: relative;
 }
 .buynow-loading {
     display: flex;
@@ -37,8 +38,8 @@
     align-self: center;
 }
 .buynow-img-container {
-    height: 55vh;
-    width: 55vh;
+    height: 50vh;
+    width: 50vh;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -66,7 +67,7 @@
 .buynow-total-container {
     display: flex;
     height: 100%;
-    margin-top: 2rem;
+    margin: 2rem 0 0 2rem;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
@@ -137,4 +138,33 @@
 .buynow-total p {
     align-self: flex-end;
     font-weight: 300;
+}
+
+.bn-return-container {
+    position: absolute;
+    top: 2%;
+}
+
+@media (max-width: 1024px) {
+    .buynow-inner {
+        flex-direction: column;
+    }
+    .buynow-product-details {
+        flex-direction: row;
+        justify-content: space-evenly;
+    }
+    .buynow-img-container {
+        width: 40vw;
+        height: auto;
+    }
+    .buynow-total-container {
+        margin: 2rem 0 0 0;
+    }
+}
+
+@media (max-width: 560px) {
+    .buynow-inner {
+        padding: 50px 0;
+    }
+    
 }

@@ -7,7 +7,6 @@
   flex-direction: row;
   justify-content: space-between;
   padding: 1rem 0 1rem 2rem;
-  position: relative;
 }
 
 .pointer {
@@ -150,6 +149,7 @@
     z-index: 1;
     width: 100%;
     height: 100%;
+    background-color: rgba(0, 0, 0, 0.338);
 }
 .cartcard-modal-options {
     position: absolute;
@@ -161,10 +161,12 @@
     background-color: #000;
     border: 1px solid #303030;
     z-index: 2;
+    animation: cartCardModal .3s ease;
 }
 .cartcard-modal-options p {
-      color: rgba(255, 255, 255, 0.6);
-      padding: .5rem 0 .25rem .65rem;
+    text-overflow: clip;
+    color: rgba(255, 255, 255, 0.6);
+    padding: .5rem 0 .25rem .65rem;
 }
 
 @media (max-width: 1174px) {
@@ -180,4 +182,9 @@
         justify-content: space-around;
         min-width: 12rem;
     }
+}
+
+@keyframes cartCardModal {
+    0% {width: 0rem;}
+    100% {width: 10rem;}
 }
