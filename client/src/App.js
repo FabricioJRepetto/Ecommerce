@@ -50,7 +50,7 @@ function App() {
       try {
         if (loggedUserToken) {
           dispatch(loadingUserData(true));
-          const { data } = await axios(`/user/profile/${loggedUserToken}`); //! VOLVER A VER fijarse con nuevos usuarios de google
+          const { data } = await axios(`/user/profile/${loggedUserToken}`);
 
           const {
             _id,

@@ -118,7 +118,6 @@ const Signupin = () => {
       given_name: firstName,
       family_name: lastName,
     } = userDecoded;
-    console.log(userDecoded);
 
     try {
       const { data } = await axios.post(`/user/signinGoogle`, {
@@ -160,19 +159,12 @@ const Signupin = () => {
       size: "large",
       width: 240,
       text: "continue_with",
+      theme: "filled_black",
+      shape: "square",
     });
+    google.accounts.id.prompt();
     // eslint-disable-next-line
   }, [session]);
-
-  useEffect(() => {
-    //session && navigate("/");
-    // setValueSignin("email", "fer.eze.ram@gmail.com");
-    // setValueSignin("password", "fer.eze.ram@gmail.com");
-    // setValueSignup("email", "fer.eze.ram@gmail.com");
-    // setValueSignup("password", "fer.eze.ram@gmail.com");
-    // setValueSignup("repPassword", "fer.eze.ram@gmail.com");
-    // eslint-disable-next-line
-  }, []);
 
   const handleSign = (sign) => {
     setSignSelect(sign);
@@ -234,6 +226,7 @@ const Signupin = () => {
             <span className="g-input-with-button">
               <input
                 type="password"
+                autoComplete="on"
                 placeholder="Contraseña"
                 className={`g-input-two-icons${
                   watchSignin("password") === undefined ||

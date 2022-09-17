@@ -25,13 +25,13 @@ const PostSale = () => {
   useEffect(() => {
     !order &&
       (async () => {
-        console.log("ejecuta useEffect");
+        // console.log("ejecuta useEffect");
         const { data } = await axios(`/order/${id}`);
         if (!data.products) {
           console.error("no order");
           navigate("/");
         }
-        console.log(data);
+        //   console.log(data);
         setOrder(data);
         setLoading(false);
 
@@ -97,10 +97,10 @@ const PostSale = () => {
 
   const deliveryWaiter = async (id) => {
     try {
-      console.log("Esperando orden actualizada...");
+      // console.log("Esperando orden actualizada...");
       const { data } = await axios(`/order/${id}`);
       if (data.payment_date) {
-        console.log("...actualización recibida.");
+        //   console.log("...actualización recibida.");
         setOrder(data);
       } else {
         throw new Error("");

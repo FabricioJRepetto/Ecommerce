@@ -131,7 +131,7 @@ const NavBar = () => {
     dispatch(loadProductsOwn([]));
     dispatch(loadProductsFound([]));
     dispatch(loadFilters([]));
-    document.getElementById("navbar-searchbar").value = "";
+    document.querySelectorAll(".navbar-searchbar").value = "";
     navigate("/");
   };
 
@@ -200,8 +200,7 @@ const NavBar = () => {
                       <input
                         type="text"
                         placeholder="Busca un producto"
-                        className="g-input-two-icons"
-                        id="navbar-searchbar"
+                        className="g-input-two-icons navbar-searchbar"
                         onChange={(e) => setProductToSearch(e.target.value)}
                         value={productToSearch}
                       />
@@ -443,8 +442,7 @@ const NavBar = () => {
               <input
                 type="text"
                 placeholder="Busca un producto"
-                className="g-input-two-icons"
-                id="navbar-searchbar"
+                className="g-input-two-icons navbar-searchbar"
                 ref={searchInput}
                 onChange={(e) => setProductToSearch(e.target.value)}
                 onBlur={() => setShowSearchBar(false)}

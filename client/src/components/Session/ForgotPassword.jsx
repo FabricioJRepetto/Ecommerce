@@ -28,14 +28,6 @@ const ForgotPassword = () => {
 
   const emailRegex = /^[\w-.]+@([\w-])+[.\w-]*$/i;
 
-  useEffect(() => {
-    setValueForgot(
-      "email",
-      "fer.eze.ram@gmail.com"
-    ); /* //!VOLVER A VER eliminar esto */
-    // eslint-disable-next-line
-  }, []);
-
   const forgotPassword = async (email) => {
     openLoader();
     try {
