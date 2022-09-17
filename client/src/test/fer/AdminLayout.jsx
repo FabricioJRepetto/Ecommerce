@@ -4,7 +4,7 @@ import { useNotification } from "../../hooks/useNotification";
 import { useVerifyAdmin } from "../../hooks/useVerifyAdmin";
 
 const AdminLayout = () => {
-  const [notification] = useNotification();
+  const notification = useNotification();
   useVerifyAdmin();
   return (
     <div>

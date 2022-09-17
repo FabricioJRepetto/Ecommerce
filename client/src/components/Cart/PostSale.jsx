@@ -25,13 +25,13 @@ const PostSale = () => {
   useEffect(() => {
     !order &&
       (async () => {
-        // console.log("ejecuta useEffect");
+        console.log("ejecuta useEffect");
         const { data } = await axios(`/order/${id}`);
         if (!data.products) {
           console.error("no order");
           navigate("/");
         }
-        //   console.log(data);
+        console.log(data);
         setOrder(data);
         setLoading(false);
 
@@ -64,52 +64,77 @@ const PostSale = () => {
             //? vaciar el buynow
             axios.post(`/cart/`, { product_id: "" });
           }
-          //? Cambiar el estado a 'processing'
-          await axios.put(`/order/${id}`, {
-            status: "processing",
+          //   console.log(data);
+          setOrder(data);
+          setLoading(false);
+
+          if (data && !data?.payment_date && status === "approved")
+            deliveryWaiter(id);
+
+          let aux = [];
+          data.products.forEach((e) => {
+            aux.push({ img: e.img, url: "" });
           });
+          setImages(aux);
 
-          //? en el back (choNotif):
-          // cambia orden a pagada
-          // resta unidades de cada stock
-        }
+          if (data && status === "approved") {
+            //? background effect
+            setBackground("postsale-approved animation-start");
+            setTimeout(() => {
+              setBackground("postsale-approved animation-loop");
+            }, 6000);
 
-        if (data && status !== "approved" && data.status !== "approved") {
-          setBackground("postsale-pending animation-start");
-          setTimeout(() => {
-            setBackground("postsale-pending animation-loop");
-          }, 6000);
-          //? si llega como null o cancelled cambiar estado a "pending"
-          if (status === "null" || status === "cancelled") {
+            if (data.order_type === "cart") {
+              //? vaciar carrito
+              await axios.delete(`/cart/empty`);
+
+              //? Vaciar el estado de redux onCart
+              dispatch(loadCart([]));
+
+              //? Quitar last_order en el carrito de la db
+              await axios.put(`/cart/order/`);
+            } else {
+              //? vaciar el buynow
+              axios.post(`/cart/`, { product_id: "" });
+            }
+            //? Cambiar el estado a 'processing'
             await axios.put(`/order/${id}`, {
-              status: "pending",
+              status: "processing",
             });
-          } else {
-            //? cambiar estado de la orden si el status no es aprobado en ninguno de los casos
-            await axios.put(`/order/${id}`, {
-              status,
-            });
+
+            //? en el back (choNotif):
+            // cambia orden a pagada
+            // resta unidades de cada stock
           }
         }
       })();
+
+    return () => {};
     //eslint-disable-next-line
   }, []);
 
   const deliveryWaiter = async (id) => {
-    try {
-      // console.log("Esperando orden actualizada...");
-      const { data } = await axios(`/order/${id}`);
-      if (data.payment_date) {
-        //   console.log("...actualización recibida.");
-        setOrder(data);
+    const response = axios(`/order/postsale/${id}`);
+
+    response.then((r) => {
+      if (r.data.status) {
+        setOrder(r.data);
       } else {
-        throw new Error("");
+        console.console.warn(r.data.message);
       }
-    } catch (error) {
-      setTimeout(() => {
-        deliveryWaiter(id);
-      }, 2000);
-    }
+    });
+
+    /*
+      console.log("Esperando orden actualizada...");
+      const { data } = await axios(`/order/postsale/${id}`);
+      
+      console.log("...respuesta recibida.");
+      if (data.status) {
+        setOrder(data);        
+      } else {
+        console.console.warn(data.message);
+      }
+    */
   };
 
   const messageQuantity = () => {

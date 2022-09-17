@@ -217,14 +217,24 @@ input.g-input-two-icons {
 }
 
 .g-white-button:disabled {
-  background: rgb(0, 0, 0);
-  color: white;
-  border: white 1px solid;
-  cursor: default;
+  background: #202020;
+  color: #505050;
+  /* border: #c4c4c4 1px solid; */
+  cursor: not-allowed;
 }
 
 .g-white-button a {
-  color: #000;
+  color: #000000;
+}
+
+.secondary-button {
+    background-color: #000000;
+    border: 1px solid #404040;
+    color: #FFFFFF;
+}
+.secondary-button:hover:enabled {
+    background-color: #202020;
+    color: #FFFFFF;
 }
 
 /* BOTON DE TEXTO */

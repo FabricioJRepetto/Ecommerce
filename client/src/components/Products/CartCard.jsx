@@ -7,7 +7,6 @@ import { DeleteIcon } from '@chakra-ui/icons';
 import { ReactComponent as MenuDots } from "../../assets/svg/kebab.svg";
 
 import "./CartCard.css";
-import { addListener } from "@reduxjs/toolkit";
 
 const CartCard = ({
   img,

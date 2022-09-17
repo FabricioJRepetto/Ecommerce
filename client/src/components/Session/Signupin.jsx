@@ -1,10 +1,7 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
-import {
-  sessionActive,
-  loadingUserData,
-} from "../../Redux/reducer/sessionSlice";
+import { loadingUserData } from "../../Redux/reducer/sessionSlice";
 import jwt_decode from "jwt-decode";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
@@ -16,6 +13,7 @@ import { CloseIcon, ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import "./Signupin.css";
 import "../../App.css";
 import ReturnButton from "../common/ReturnButton";
+import { useUserLogin } from "../../hooks/useUserLogin";
 const { REACT_APP_OAUTH_CLIENT_ID } = process.env;
 
 const Signupin = () => {
@@ -29,6 +27,7 @@ const Signupin = () => {
     signup: false,
     signupRepeat: false,
   });
+  const { userLogin, googleLogin } = useUserLogin();
 
   const {
     register: registerSignin,
@@ -48,7 +47,7 @@ const Signupin = () => {
 
   const location = useLocation();
   const hasPreviousState = location.key !== "default";
-  const [notification] = useNotification();
+  const notification = useNotification();
   const [isOpenLoader, openLoader, closeLoader] = useModal();
 
   const emailRegex = /^[\w-.]+@([\w-])+[.\w-]*$/i;
@@ -85,9 +84,9 @@ const Signupin = () => {
 
       if (data.user) {
         window.localStorage.setItem("loggedTokenEcommerce", data.token);
-        dispatch(sessionActive(true));
 
-        notification(`Bienvenido, ${data.user.name}`, "", "welcome");
+        //? Login con el hook
+        userLogin(data.token);
       }
     } catch (error) {
       console.log(error);
@@ -97,6 +96,7 @@ const Signupin = () => {
       } else if (error.response.data) {
         notification(error.response.data, "", "error");
       }
+
       dispatch(loadingUserData(false));
     }
   };
@@ -106,35 +106,11 @@ const Signupin = () => {
     dispatch(loadingUserData(true));
     //response.credential = Google user token
     const googleToken = "google" + response.credential;
+    const userDecoded = jwt_decode(response.credential);
     window.localStorage.setItem("loggedTokenEcommerce", googleToken);
 
-    //userDecoded contains Google user data
-    const userDecoded = jwt_decode(response.credential);
-    const {
-      sub,
-      email,
-      email_verified: emailVerified,
-      picture: avatar,
-      given_name: firstName,
-      family_name: lastName,
-    } = userDecoded;
-
-    try {
-      const { data } = await axios.post(`/user/signinGoogle`, {
-        sub,
-        email,
-        emailVerified,
-        avatar,
-        firstName,
-        lastName,
-      });
-
-      notification(`Bienvenido, ${data.name}`, "", "welcome");
-      dispatch(sessionActive(true));
-    } catch (error) {
-      dispatch(loadingUserData(false));
-      console.log(error); //! VOLVER A VER manejo de errores
-    }
+    //? Login con el hook
+    googleLogin(googleToken, userDecoded);
   };
 
   useEffect(() => {

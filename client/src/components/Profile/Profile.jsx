@@ -23,7 +23,7 @@ import "./Profile.css";
 
 const Profile = () => {
   const navigate = useNavigate();
-  const [notification] = useNotification();
+  const notification = useNotification();
   const { section } = useParams();
   const signOut = useSignout();
 
@@ -58,12 +58,15 @@ const Profile = () => {
         p[1].value ? setWishlist(p[1].value.data.products) : setWishlist([]);
         p[2].value ? setHistory(p[2].value.data.products) : setHistory([]);
 
-        p[0].value.data.message &&
-          notification(p[0].value.data.message, "", "warning");
+        // p[0].value.data.message &&
+        //   notification(p[0].value.data.message, "", "warning");
+
         p[1].value.data.message &&
           notification(p[1].value.data.message, "", "warning");
-        p[2].value.data.message &&
-          notification(p[2].value.data.message, "", "warning");
+
+        // p[2].value.data.message &&
+        //   notification(p[2].value.data.message, "", "warning");
+
         setLoading(false);
       })();
     }

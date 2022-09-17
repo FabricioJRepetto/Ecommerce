@@ -129,13 +129,12 @@ const Galery = ({ imgs, ripple = false }) => {
 
       <div
         className={`galery-fullscreen${isOpen ? " fs-visible" : ""}`}
-        onClick={() => setIsOpen(false)}
+        onClick={(e) => setIsOpen(false)}
       >
         <div className="fs-galery-container">
           {imgs?.map((e, index) => (
             <img
               key={e.imgURL}
-              onClick={open}
               className={`fs-img${current === index ? " fs-visible" : ""}`}
               src={e.imgURL}
               alt="img"

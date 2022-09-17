@@ -13,9 +13,9 @@ const salesRouter = require("./sales.router");
 const adminRouter = require("./admin.router");
 const choNotif = require("./choNotif.router");
 const {
-  verifyToken,
-  verifyAdmin,
-  googleUserShallNotPass,
+    verifyToken,
+    verifyAdmin,
+    googleUserShallNotPass,
 } = require("../middlewares/verify");
 
 router.use("/user", userRouter);
@@ -24,7 +24,7 @@ router.use("/cart", verifyToken, cartRouter);
 router.use("/wishlist", verifyToken, wishlistRouter);
 router.use("/order", verifyToken, orderRouter);
 router.use("/address", verifyToken, addressRouter);
-router.use("/history", verifyToken, historyRouter);
+router.use("/history", historyRouter);
 router.use("/product", productsRouter);
 router.use("/sales", salesRouter);
 router.use("/stripe", verifyToken, stripeRouter);
@@ -32,9 +32,9 @@ router.use("/mercadopago", verifyToken, mpRouter);
 
 /* //! VOLVER A VER descomentar lo de abajo */
 router.use(
-  "/admin",
-  [verifyToken, /* googleUserShallNotPass,  */ verifyAdmin],
-  adminRouter
+    "/admin",
+    [verifyToken, /* googleUserShallNotPass,  */ verifyAdmin],
+    adminRouter
 );
 
 module.exports = router;

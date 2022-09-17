@@ -6,7 +6,7 @@ import { useNotification } from "./useNotification";
 
 export const useCheckout = (id) => {
   const dispatch = useDispatch();
-  const [notification] = useNotification();
+  const notification = useNotification();
   const navigate = useNavigate();
 
   const { session } = useSelector((state) => state.sessionReducer);

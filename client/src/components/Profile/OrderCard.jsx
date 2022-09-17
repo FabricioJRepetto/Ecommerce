@@ -115,7 +115,7 @@ const OrderCard = ({ order, setOrderDetails }) => {
         </p>
       )}
       {order.status === "processing" && <p>Procesando...</p>}
-
+      
       {/* //! volver a ver: Quitar este botón ? */}
       {/* {order.status === "pending" && (
         <button

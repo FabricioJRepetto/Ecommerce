@@ -45,22 +45,25 @@ const getHistory = async (req, res, next) => {
 
 const getSuggestion = async (req, res, next) => {
     try {
-        const history = await History.findOne({ user: req.user._id });
+        let meliCates = ['MLA1051', 'MLA1648', 'MLA1276', 'MLA5726', 'MLA1039'],
+            searchParam = `category=${meliCates[Math.round(Math.random() * 5)]}`;
+        const { userId } = req.body;
+        console.log(userId);
+        if (userId) {
+            const history = await History.findOne({ user: userId });
 
-        if (!history) {
-            await History.create({
-                products: [],
-                user: req.user._id,
-            });
-        }
-
-        let searchParam = `category=${history.last_category}`;
-        let meliCates = ['MLA1051', 'MLA1648', 'MLA1276', 'MLA5726', 'MLA1039'];
-
-        if (!history || !history.last_category) {
-            history?.last_search
-                ? (searchParam = `q=${history.last_search}`)
-                : (searchParam = `category=${meliCates[Math.round(Math.random() * 5)]}`);
+            if (!history) {
+                await History.create({
+                    products: [],
+                    user: userId,
+                });
+            } else {
+                if (history.last_category) {
+                    searchParam = `category=${history.last_category}`
+                } else if (history.last_search) {
+                    searchParam = `q=${history.last_search}`
+                }
+            }
         }
 
         //? genero busqueda aplicando descuento
@@ -108,6 +111,7 @@ const getSuggestion = async (req, res, next) => {
                 }
             }
         }
+
         return res.json(response);
     } catch (error) {
         next(error);

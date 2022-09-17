@@ -23,7 +23,7 @@ import AddAddress from "../Profile/AddAddress";
 const Cart = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [notification] = useNotification();
+  const notification = useNotification();
   const { section } = useParams();
 
   const [render, setRender] = useState(section);

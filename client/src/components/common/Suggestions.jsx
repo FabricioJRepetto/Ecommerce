@@ -8,18 +8,17 @@ import './Suggestions.css'
 const Suggestions = () => {
     const [loading, setLoading] = useState(true)
     const [products, setProducts] = useState(false)
-    const {wishlist} = useSelector(state => state.cartReducer)
+    //const {wishlist} = useSelector(state => state.cartReducer)
+    const {session, id} = useSelector(state => state.sessionReducer)
     
-    useEffect(() => {         
-        (async () => {
-            const { data } = await axios(`/history/suggestion`) 
-
+    useEffect(() => {
+        (async () => {        
+            const {data} = await axios.post(`/history/suggestion`, {userId: session ? id : false });
             if (data.length > 4 ) setProducts(data);
             else setProducts(false);
 
             setLoading(false);
         })()
-
         // eslint-disable-next-line
     }, []);
 
@@ -46,7 +45,8 @@ const Suggestions = () => {
                             {React.Children.toArray(products.map(e => 
                                 <MiniCard
                                     productData={e}
-                                    fav={wishlist.includes(e?._id)}
+                                    // fav={wishlist.includes(e?._id)}
+                                    fav={false}
                                     loading={false}/>
                             ))}
                         </div>
