@@ -29,15 +29,16 @@ const CartCard = ({
   loading,
 }) => {
   const navigate = useNavigate();
-  const [menuOptions, setMenuOptions] = useState(false)
+  const [menuOptions, setMenuOptions] = useState(false);
+  const [disable, setDisable] = useState(false)
 
-    const first = (e) => { 
+    const closeModal = (e) => { 
         e.stopPropagation(); 
         setMenuOptions(false);
      }
 
   return (
-    <div className="cart-card-container">
+    <div className="cart-card-container" style={disable ? {position: 'relative'} : {}}>
         
             <div className="product-cart-card-head">
                 <div onClick={() =>
@@ -56,10 +57,7 @@ const CartCard = ({
                     onClick={() => navigate(`/details/${prodId}`)}
                     >
                     {name}
-                    </div>
-                    <div className="cart-card-brand">
-                    {brand && brand}
-                    </div>
+                    </div>                    
                     {free_shipping && (
                     <div className="cart-free-shipping">Envío gratis</div>
                     )}
@@ -75,17 +73,18 @@ const CartCard = ({
                         </span>                
                     </div>
                     {menuOptions && <div className="cartcard-modal-options">                        
-                        <p className="pointer" onClick={() => buyLater(prodId)}>
+                        <p className="pointer" onClick={(e) => {closeModal(e); setDisable(true); buyLater(prodId)}}>
                         {source === "buyLater" ? "Mover al carrito" : "Guardar para después"}
                         </p>
-                        <p className="pointer" onClick={() => buyNow(prodId, source)}>
+                        <p className="pointer" onClick={(e) => {closeModal(e); setDisable(true); buyNow(prodId, source)}}>
                             Comprar ahora
                         </p>
                     </div>}
                 </div> 
             </div>
 
-        {menuOptions && <div className="cartcard-optionscloser" onClick={first}></div>}
+        {menuOptions && <div className="cartcard-optionscloser" onClick={closeModal}></div>}
+        {disable && <div className="cartcard-optionscloser cartcard-disabled" onClick={(e) => e.stopPropagation()}></div>}
       </div>
 
       <div className="cartcard-tail-section">

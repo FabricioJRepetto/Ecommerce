@@ -326,7 +326,7 @@ const BuyNow = () => {
 
                 <div className="buynow-total">
                   <p>Envío:</p>
-                  <div style={{ height: "2.8rem" }}>
+                  <div>
                     {product.free_shipping && (
                       <del className="grey">${priceFormat(SHIP_COST).int}</del>
                     )}

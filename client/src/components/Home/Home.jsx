@@ -20,8 +20,6 @@ const Home = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    console.log('HOME');
-
     const categorySearch = (category) => { 
             dispatch(loadProductsOwn("loading"));
             dispatch(loadProductsFound("loading"));
