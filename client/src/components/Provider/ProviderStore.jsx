@@ -47,54 +47,55 @@ const ProviderStore = () => {
 
   return (
     <div className="providerstore-container">
-      {windowWidth >= 1024 && (
-        <>
-          <div className="providerstore-echo-inner">
-            <span>PROVIDER</span>
-            <br />
-            PROVIDER <br />
-            PROVIDER
-          </div>
-          <span className={`providerstore-title ${scrollP > 20 && 'invisible'}`}>STORE</span>
-          <span className={`providerstore-title-text ${scrollP > 20 && 'invisible'}`}>
-            /DELUXE
-            <br />
-            /UNICOS
-            <br />
-            /TUYOS
-          </span>
-        </>
-      )}
-      {windowWidth < 1023 && (
-        <>
-          <span className={`providerstore-title-mobile ${scrollP > 20 && 'invisible'}`}>PROVIDER</span>
-          <span className={`providerstore-title-text-mobile ${scrollP > 20 && 'invisible'}`}>
-            /DELUXE
-            <br />
-            /UNICOS
-            <br />
-            /TUYOS
-          </span>
-          <div className="providerstore-echo-inner-mobile">
-            <span>STORE</span>
-            <br />
-            STORE <br />
-            STORE
-          </div>
-        </>
-      )}
 
-      <button
-        className={`providerstore-title-button g-white-button ${scrollP > 20 && 'invisible'}`}
-        onClick={() => navigate("/products")}
-      >
-        <SmallAddIcon className="button-addicon" />
-        VER TODOS
-      </button>
+      <div className="providerstore-header-desktop">
+            <div className="providerstore-echo-inner">
+                <span>PROVIDER</span>
+                <br />
+                PROVIDER <br />
+                PROVIDER
+            </div>
+            
+            <div className="pro-sticky">
+                <div className='providerstore-title'>
+                    <div>
+                        <span className="provider-store-title">STORE</span>                        
+                    </div>
+                </div>
+            </div>
+        </div>
+        
 
-      <div className="providerstore-header"></div>
+        <div className="providerstore-header-mobile">
+            <div className="pro-sticky">
+                <div className='providerstore-title-mobile'>
+                    <div>
+                        <span>PROVIDER</span>                
+                        <span className={`providerstore-title-text-mobile`}>
+                            /DELUXE
+                            <br />
+                            /UNICOS
+                            <br />
+                            /TUYOS
+                        </span>
+                        
+                    </div>
+                </div>
+            </div>
 
-      <div className="providerstore-background"></div>
+            <div className="providerstore-echo-inner-mobile">
+                <span>STORE</span>
+                <br />
+                STORE <br />
+                STORE
+            </div>
+        </div>
+
+      <div className="providerstore-header">
+        <video id="ps-header-bg-video" autoPlay loop muted>
+            <source src={'https://res.cloudinary.com/dsyjj0sch/video/upload/v1663453572/videos/production_ID_4990245_gcrvm2.mp4'} type="video/mp4"/>
+        </video>
+      </div>
 
       <div className="storecards-container">
         <div className="storecards-inner">

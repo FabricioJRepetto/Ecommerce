@@ -1,7 +1,8 @@
 .App {
   font-family: "HelveticaNeueLTPro-Roman";
   text-align: center;
-  background: #000000;
+  /* background: #000000; */
+  /*! Volver a ver: este baclgroudn evitaba el flashazo blanco cuando cargaba la página */
   color: rgb(255, 255, 255);
   width: 100;
   min-height: 100vh;

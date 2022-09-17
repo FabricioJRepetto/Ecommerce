@@ -75,7 +75,7 @@ const BuyNow = () => {
       if (p) {
         let aux = [];
         for (const obj of p.images) {
-            aux.push({img: resizer(obj.imgURL, 480)})
+            aux.push({img: resizer(obj.imgURL, 450)})
         }
         setProductImg(aux)
         setProduct(p);
@@ -202,6 +202,8 @@ const BuyNow = () => {
                         images={productImg}
                         pausable={false}
                         interval={3000}
+                        width={'100%'}
+                        height={'80%'}
                     />}
                 <div className="card-image-back-style"></div>
               </div>
