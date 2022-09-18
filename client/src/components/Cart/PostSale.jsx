@@ -114,27 +114,18 @@ const PostSale = () => {
   }, []);
 
   const deliveryWaiter = async (id) => {
-    const response = axios(`/order/postsale/${id}`);
-
-    response.then((r) => {
-      if (r.data.status) {
-        setOrder(r.data);
-      } else {
-        console.console.warn(r.data.message);
-      }
-    });
-
-    /*
       console.log("Esperando orden actualizada...");
-      const { data } = await axios(`/order/postsale/${id}`);
+      const response = axios(`/order/postsale/${id}`);
       
-      console.log("...respuesta recibida.");
-      if (data.status) {
-        setOrder(data);        
-      } else {
-        console.console.warn(data.message);
-      }
-    */
+      response.then(r =>{
+        console.log("...respuesta recibida.");
+        if (r.data.status) {
+            console.log(r.data);
+            setOrder(r.data);        
+        } else {
+            console.console.warn(r.data.message);
+        }
+      })
   };
 
   const messageQuantity = () => {

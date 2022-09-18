@@ -159,7 +159,7 @@ const Slider = (prop) => {
               onClick={() => navigate(e.url || "")}
               className="slide-item"
             >
-              <img src={e.img} alt="img" style={{ maxHeight: height }} />
+                <img src={e.img} alt="img"  style={{ maxHeight: height, maxWidth: width }}/>
             </div>
           ))}
         </div>

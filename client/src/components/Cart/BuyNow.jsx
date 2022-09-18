@@ -11,12 +11,12 @@ import { ReactComponent as Spinner } from "../../assets/svg/spinner.svg";
 import Checkbox from "../common/Checkbox";
 import QuantityInput from "./QuantityInput";
 import { useSelector } from "react-redux";
-import LoadingPlaceHolder from "../common/LoadingPlaceHolder";
 import LoaderBars from "../common/LoaderBars";
 import { WarningIcon } from "@chakra-ui/icons";
 import AddAddress from "../Profile/AddAddress";
 import ReturnButton from "../common/ReturnButton";
 import Carousel from '../Home/Carousel/Carousel'
+import { resizer } from "../../helpers/resizer";
 
 import "./BuyNow.css";
 
@@ -36,7 +36,6 @@ const BuyNow = () => {
   const [loadingPayment, setLoadingPayment] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
-  const [loaded, setLoaded] = useState(false);
 
   const [isOpenAddForm, openAddForm, closeAddForm, prop] = useModal();
   const [isOpenAddList, openAddList, closeAddList] = useModal();
@@ -76,7 +75,7 @@ const BuyNow = () => {
       if (p) {
         let aux = [];
         for (const obj of p.images) {
-            aux.push({img: obj.imgURL})
+            aux.push({img: resizer(obj.imgURL, 450)})
         }
         setProductImg(aux)
         setProduct(p);
@@ -197,15 +196,14 @@ const BuyNow = () => {
 
 
             <div className="buynow-product-inner">
-              <div className="buynow-img-container">
-                {!loaded && (
-                  <LoadingPlaceHolder extraStyles={{ height: "100%" }} />
-                )}
+              <div className="buynow-img-container">                
                 {productImg && 
                     <Carousel 
                         images={productImg}
                         pausable={false}
                         interval={3000}
+                        width={'100%'}
+                        height={'80%'}
                     />}
                 <div className="card-image-back-style"></div>
               </div>
@@ -330,7 +328,7 @@ const BuyNow = () => {
 
                 <div className="buynow-total">
                   <p>Envío:</p>
-                  <div style={{ height: "2.8rem" }}>
+                  <div>
                     {product.free_shipping && (
                       <del className="grey">${priceFormat(SHIP_COST).int}</del>
                     )}

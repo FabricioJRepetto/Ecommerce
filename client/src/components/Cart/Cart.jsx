@@ -180,6 +180,9 @@ const Cart = () => {
   return (
     <div>
       <div className="cart-container">
+
+        <div className="cart-card-optionscloser-container">
+
         <div className="tab-button-container" style={{ width: "70vw" }}>
           {
             <button
@@ -435,6 +438,9 @@ const Cart = () => {
             </div>
           )}
         </div>
+
+        </div>
+
       </div>
 
       <form
