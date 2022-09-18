@@ -18,10 +18,12 @@ passport.use(
 
         if (!errors.isEmpty()) {
           const message = errors.errors.map((err) => err.msg);
+
           return done(null, email, { error: true, message });
         }
 
         const user = await User.exists({ email });
+
         if (!user) {
           const newUser = await User.create({
             email,
@@ -29,10 +31,14 @@ passport.use(
             username: email.split("@")[0],
             isGoogleUser: false,
           });
-          return done(null, newUser, {
-            message:
-              "Cuenta creada con éxito, revisa tu email para verificar tu cuenta",
-          });
+
+          return done(
+            null,
+            { ...newUser, newUser: true },
+            {
+              message: "Revisa tu email para verificar tu cuenta",
+            }
+          );
         } else {
           return done(null, user, {
             message: "Email ya registrado",

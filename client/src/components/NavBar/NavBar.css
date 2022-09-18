@@ -265,10 +265,6 @@
     transform: translate(-15px, -6px);
   }
 
-  .glitch-mobile-placeholder {
-    width: 100px;
-  }
-
   .glitch-mobile-container>.little-glitch-show-menu {
     display: flex;
   }
@@ -303,7 +299,7 @@
   }
 
   .glitch-mobile-placeholder {
-    width: 500px;
+    width: 100%;
     height: 3rem;
   }
 

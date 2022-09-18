@@ -20,7 +20,7 @@ const Wishlist = ({ loading, wishlist, wl_id }) => {
                 ))
               )
             ) : (
-              <p>Aún no has agregado productos a tu lista de deseados</p>
+              <p>Aún no has agregado productos a Favoritos</p>
             )}
           </div>
         </div>

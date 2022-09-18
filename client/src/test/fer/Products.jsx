@@ -381,8 +381,9 @@ const Products = () => {
   useEffect(() => {
     filtersMenuMobile.current &&
       setFiltersContainerHeight(
-        widnowHeight - filtersMenuMobile.current.offsetTop - window.scrollY - 55
+        widnowHeight - filtersMenuMobile.current.offsetTop - window.scrollY - 70
       );
+
     // eslint-disable-next-line
   }, [
     filtersMenuMobile.current,

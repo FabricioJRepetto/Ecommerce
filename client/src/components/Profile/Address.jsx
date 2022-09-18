@@ -62,7 +62,7 @@ const Address = ({ loading, setLoading, address, setAddress }) => {
           <h1>Direcciones</h1>
           <div>
             {(!address || address.length === 0) && (
-              <p>Todavía no has agregado alguna dirección</p>
+              <p>Aún no has agregado ninguna dirección</p>
             )}
             {React.Children.toArray(
               address?.map(
