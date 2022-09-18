@@ -328,17 +328,28 @@ const getPostsale = async (req, res, next) => {
         let order = await Order.findById(req.params.id)
         if (!order) return res.json({ error: true, message: 'Order not found.' })
 
-        if (order.status !== 'approved') {
-            let flag = false;
-            while (!flag) {
+        if (order.status === 'approved') return res.json(order)
+
+        const waiter = async () => { //! volver a ver PROBLEMAAAAAAS                
+            console.log('@@@ preguntando...');
+            const aux = await Order.findById(req.params.id)
+
+            if (aux && aux.status === 'approved') {
+                console.log('@@@ encontrado');
+                console.log(aux);
+                return res.json(aux)
+            } else {
                 setTimeout(async () => {
-                    console.log('preguntando...');
-                    order = await Order.findById(req.params.id)
-                    order.status === 'approved' && (flag = true)
-                }, 5000);
+                    waiter();
+                }, 3000);
             }
         }
-        return res.json(order)
+
+        setTimeout(async () => {
+            waiter();
+        }, 3000);
+
+
     } catch (error) {
         next(error)
     }

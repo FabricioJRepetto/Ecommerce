@@ -1,0 +1,148 @@
+.categorycard-outer {
+    position: relative;
+}
+.categorycard-outer:hover .ccou-master {
+    opacity: 1;
+}
+
+.categorycard-container {
+    background-color: #000000;
+    height: 22rem;
+    width: 14rem;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+}
+.categorycard-container img {
+    height: auto;
+    width: 100%;
+    filter: grayscale(.5) ;
+    transition: all .2s ease;
+}
+.categorycard-special-bg {
+    height: 100%;
+    width: 100% ;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    position: absolute;
+    background: linear-gradient(45deg,
+        #35a7ff85 0%,
+        #7e54de85 20%,
+        #f4025985 60%,
+        #fea30d85 100%);
+    background-size: 400%;
+    animation: gradientTextAnim 2s infinite;
+    transition: all .15s ease;
+    background-blend-mode: hue;
+}
+.ccou-games {
+    height: 79%;
+    width: 94%;
+    background: linear-gradient(45deg,
+        #35a7ff 0%,
+        #7e54de 20%,
+        #f40259 60%,
+        #fea30d 100%);
+    mask-image: url("../../assets/svg/category-games.svg");
+    background-size: 400%;
+    animation: gradientTextAnim 5s infinite;
+    scale: 1.2;    
+    top: 2%;
+    left: 2%;
+}
+.ccou-pc {
+    height: 71%;
+    width: 100%;
+    background: linear-gradient(45deg,
+        #35a7ff 0%,
+        #7e54de 20%,
+        #f40259 60%,
+        #fea30d 100%);
+    mask-image: url("../../assets/svg/category-pc.svg");
+    background-size: 400%;
+    animation: gradientTextAnim 5s infinite;
+    scale: 1.2;
+    top: 4%;
+}
+.ccou-audio {
+    height: 76%;
+    width: 100%;
+    mask-image: url("../../assets/svg/category-audio.svg");
+    animation: gradientTextAnim 5s infinite;
+    scale: 1.2;background: linear-gradient(45deg,
+        #35a7ff 0%,
+        #7e54de 20%,
+        #f40259 60%,
+        #fea30d 100%);
+    background-size: 400%;
+    top: 2%;
+    left: -1%;
+}
+.ccou-cams {
+    height: 80%;
+    width: 100%;
+    mask-image: url("../../assets/svg/category-cams.svg");
+    animation: gradientTextAnim 5s infinite;
+    background: linear-gradient(45deg,
+        #35a7ff 0%,
+        #7e54de 20%,
+        #f40259 60%,
+        #fea30d 100%);
+    background-size: 400%;
+    scale: 1.15;
+    top: 3%;
+    left: 2%;
+}
+.ccou-master {
+    z-index: 5;
+    
+    position: absolute !important;
+    transition: opacity .1s ease;
+    pointer-events: none;
+    opacity: 0;
+}
+
+.categorycard-footer {
+    height: 17%;
+    width: 100%;
+    background-color: aliceblue;
+    position: absolute;
+    bottom: 0;
+    color: #202020;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 1.3rem;
+    z-index: 2;
+    transition: all .1s ease;
+}
+.categorycard-footer p {
+    font-size: 1.4rem;
+    font-family: 'HelveticaNeueLTPro-Bd';
+    font-weight: 400;
+}
+.categorycard-footer span {
+    height: 0px;
+    opacity: 0;
+    padding-left: .2rem;
+    font-size: 1.2rem;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    transition: all .2s ease;
+}
+
+
+.categorycard-container:hover .categorycard-special-bg {
+    opacity: .4;    
+}
+.categorycard-container:hover img {
+    filter: grayscale();
+}
+.categorycard-container:hover .categorycard-footer {
+    height: 25%;    
+}
+.categorycard-container:hover .categorycard-footer span {
+    height: 1.2rem;
+    opacity: 1;  
+}
