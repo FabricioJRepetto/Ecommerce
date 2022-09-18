@@ -1,49 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { resizer } from "../../helpers/resizer";
-import { loadQuerys } from "../../Redux/reducer/productsSlice";
 import Footer from "../common/Footer";
-import { SmallAddIcon } from "@chakra-ui/icons";
 
 import "./ProviderStore.css";
 import FlashSales from "../common/FlashSales";
 import PremiumPreview from "./PremiumPreview";
+import CategoryCard from "./CategoryCard";
 
 const ProviderStore = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-  const [scrollP, setScrollP] = useState(0)
-
-  const handleWindowWidth = () => {
-    setWindowWidth(window.innerWidth)
-  };
-  
-    const scrollPercent = () => { 
-        let scrollTop = window.scrollY;
-        let docHeight = document.body.offsetHeight;
-        let winHeight = window.innerHeight;
-        let scrollPercent = scrollTop / (docHeight - winHeight);
-        let scrollPercentRounded = Math.round(scrollPercent * 100);
-        setScrollP(scrollPercentRounded);
-    }
-
-  useEffect(() => {
-    window.addEventListener("resize", handleWindowWidth);
-    window.addEventListener("scroll", scrollPercent);
-
-    return () => {
-        window.removeEventListener("resize", handleWindowWidth);
-        window.removeEventListener("scroll", scrollPercent);
-    }
-    // eslint-disable-next-line
-  }, []);
-
-  const goProducts = (code) => {
-    dispatch(loadQuerys({ category: code }));
-    navigate(`/results/?category=${code}`);
-  };
 
   return (
     <div className="providerstore-container">
@@ -97,34 +61,30 @@ const ProviderStore = () => {
         </video>
       </div>
 
+
       <div className="storecards-container">
+        
+        {/* <div className="providerstore-disclaimer">
+            <h1>¿Qué es Provider Store?</h1>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt laboriosam repellat voluptate in, voluptatibus totam odio, natus ipsam velit nesciunt aperiam, beatae magni vitae reiciendis voluptatem repudiandae. Quas, temporibus blanditiis
+        </div> */}
+
         <div className="storecards-inner">
-
-          <div className='storecard'
-            onClick={() => goProducts(`MLA1144`)}>
-            <p>Consolas</p>            
-            <img src={resizer("https://res.cloudinary.com/dsyjj0sch/image/upload/v1661328214/Playdate-photo_hxdnpj.png",200)} alt="img" />
-          </div>
-
-          <div className="storecard"
-            onClick={() => goProducts(`MLA1648`)}>
-            <p>Computación</p>            
-            <img src={resizer("https://res.cloudinary.com/dsyjj0sch/image/upload/v1661328896/RW-ZENITH-01.2020_1400x_j4iupn.webp", 200)} alt="img" />
-          </div>
-
-          <div className="storecard"
-            onClick={() => goProducts(`MLA409810`)}>
-            <p>Audio</p>
-            <img src="https://res.cloudinary.com/dsyjj0sch/image/upload/v1662349264/5165_12022_0002_5169_12026132_dmpole.png" alt="img" />
-          </div>
-
-          <div className="storecard" 
-            onClick={() => navigate("/products")}>
-            <p>Todos</p>            
-            <img src="https://res.cloudinary.com/dsyjj0sch/image/upload/v1659650791/PROVIDER_LOGO_glitch_aberration_kt2hyv.png" alt="img" style={{height: '50%', width: 'auto'}}/>
-          </div>
-
+            <CategoryCard text='COMPUTACIÓN'
+                image='https://res.cloudinary.com/dsyjj0sch/image/upload/v1663464359/computacion_hds8ap.png' route='MLA1648'/>
+            <CategoryCard text='VIDEOJUEGOS'
+                image='https://res.cloudinary.com/dsyjj0sch/image/upload/v1663464359/videojuegos2_xfgxbc.png' route='MLA1144'/>
+            <CategoryCard text='AUDIO'
+                image='https://res.cloudinary.com/dsyjj0sch/image/upload/v1663464359/audio_bienyi.png' route='MLA409810'/>
+            <CategoryCard text='CÁMARAS'
+                image='https://res.cloudinary.com/dsyjj0sch/image/upload/v1663464359/camara_qhu2y4.png' route='MLA1039'/>
         </div>
+
+        <div className="providerstore-category-buttons">
+            <button className="g-white-button" onClick={() => navigate("/products")}>TODOS</button>
+
+            <button className="g-white-button" onClick={() => navigate("/sales")}>OFERTAS</button>
+        </div>               
 
         <FlashSales/>
 

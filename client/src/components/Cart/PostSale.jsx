@@ -107,6 +107,7 @@ const PostSale = () => {
       response.then(r =>{
         console.log("...respuesta recibida.");
         if (r.data.status) {
+            console.log(r.data);
             setOrder(r.data);        
         } else {
             console.console.warn(r.data.message);
