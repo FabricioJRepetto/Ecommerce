@@ -106,7 +106,7 @@
 .categorycard-footer {
     height: 17%;
     width: 100%;
-    background-color: aliceblue;
+    background-color: #FFFFFF;
     position: absolute;
     bottom: 0;
     color: #202020;
@@ -140,7 +140,7 @@
     filter: grayscale();
 }
 .categorycard-container:hover .categorycard-footer {
-    height: 25%;    
+    height: 25%;
 }
 .categorycard-container:hover .categorycard-footer span {
     height: 1.2rem;

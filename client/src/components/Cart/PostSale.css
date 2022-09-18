@@ -68,3 +68,15 @@
 .postsale-spinner-container {
   margin: 65px 0;
 }
+.postsale-delivery-container {
+    max-width: 700px;
+    margin: auto;
+}
+@media (max-width: 720px) {
+    .postsale-details-container {
+        padding: 5rem 1rem;
+    }
+    .postsale-delivery-container {
+        min-width: 400px;
+    }    
+}

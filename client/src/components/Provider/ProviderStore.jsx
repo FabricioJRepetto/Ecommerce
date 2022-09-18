@@ -81,9 +81,18 @@ const ProviderStore = () => {
         </div>
 
         <div className="providerstore-category-buttons">
-            <button className="g-white-button" onClick={() => navigate("/products")}>TODOS</button>
 
-            <button className="g-white-button" onClick={() => navigate("/sales")}>OFERTAS</button>
+            <div>
+                <div>
+                    <button className="g-white-button" onClick={() => navigate("/products")}>TODOS</button>
+                </div>
+            </div>
+
+            <div>
+                <div>                    
+                    <button className="g-white-button" onClick={() => navigate("/sales")}>OFERTAS</button>
+                </div>
+            </div>
         </div>               
 
         <FlashSales/>
