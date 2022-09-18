@@ -331,10 +331,12 @@ const getPostsale = async (req, res, next) => {
         if (order.status === 'approved') return res.json(order)
 
         const waiter = async () => { //! volver a ver PROBLEMAAAAAAS                
-            console.log('preguntando...');
+            console.log('@@@ preguntando...');
             const aux = await Order.findById(req.params.id)
 
-            if (aux && aux.status !== 'approved') {
+            if (aux && aux.status === 'approved') {
+                console.log('@@@ encontrado');
+                console.log(aux);
                 return res.json(aux)
             } else {
                 setTimeout(async () => {
