@@ -399,10 +399,10 @@ const Signupin = () => {
                     ? ""
                     : " g-password"
                 }`}
-                onPaste={(e) => {
+                /* onPaste={(e) => {
                   e.preventDefault();
                   return false;
-                }}
+                }} */
                 {...registerSignup("repPassword", {
                   required: true,
                   validate: (repPassword) => {

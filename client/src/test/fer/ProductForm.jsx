@@ -888,8 +888,7 @@ const ProductForm = () => {
         </div>
       </form>
 
-      {/* //! VOLVER A VER si está en CREAR enviar a /admin, en EDITAR a /admin/products */}
-      <ReturnButton to={"/profile/details"} />
+      <ReturnButton to={productToEdit ? "/admin/products" : "/admin"} />
 
       <Modal
         isOpen={isOpenCreateProduct}

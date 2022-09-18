@@ -102,6 +102,7 @@ const Card = ({
             <div className="free-shipping c-mrgn">
               {free_shipping && "Envío gratis"}
             </div>
+
             {location.pathname === "/admin/products" && (
               <>
                 {outOfStock && (
