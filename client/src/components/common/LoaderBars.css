@@ -10,7 +10,7 @@
   height: 100%;
   --n: 10;
   --p: 3;
-  z-index: 14;
+  z-index: 140;
 }
 
 @media(max-width:499px) {

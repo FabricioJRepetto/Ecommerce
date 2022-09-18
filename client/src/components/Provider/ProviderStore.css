@@ -11,7 +11,7 @@
     color: #202020;
     pointer-events: none;
     position: fixed;
-    z-index: 3;
+    z-index: 30;
     line-height: 75%;
     display: block;
 }
@@ -60,6 +60,7 @@
     z-index: 2;
     color: #000000;
 }
+
 .providerstore-title-text-mobile {
     font-size: 8vw;
     letter-spacing: -0.5vw;
@@ -69,6 +70,7 @@
     z-index: 2;
     line-height: 75%;
 }
+
 .providerstore-echo-inner-mobile {
     text-align: left;
     left: 2.7%;
@@ -81,7 +83,7 @@
     color: #202020;
     pointer-events: none;
     position: fixed;
-    z-index: 3;
+    z-index: 30;
 }
 .providerstore-echo-inner-mobile span {
     font-family: HelveticaNeueLTPro-Bd, Poppins;
@@ -98,7 +100,7 @@
     width: 14rem;
 }
 
-.providerstore-header {    
+.providerstore-header {
     height: 22vw;
 }
 #ps-header-bg-video {
@@ -123,7 +125,7 @@
     align-items: center;
     justify-content: center;
     position: relative;
-    z-index: 4;
+    z-index: 40;
 }
 
 .storecards-inner {
@@ -142,10 +144,12 @@
 .providerstore-flashsales {
     margin: 3rem;
 }
+
 .providerstore-flashsales-container {
     display: flex;
 }
-.providerstore-flashsales-container > * {
+
+.providerstore-flashsales-container>* {
     margin: 1rem;
 }
 
@@ -160,15 +164,17 @@
     background: no-repeat center url('https://cdn11.bigcommerce.com/s-k11cg5mzh9/content/pdp_images/9471_16407.jpg');
     background-size: 100% auto;
 }
-.providerstore-premiumbrand > div {
+
+.providerstore-premiumbrand>div {
     margin: auto 5rem;
     width: 700px;
 }
+
 .provider-store-sign {
     position: absolute;
     top: 32%;
     left: 0%;
-    z-index: 5;
+    z-index: 50;
     height: 5.2rem;
     width: 14rem;
     margin: 0 20rem;
@@ -178,17 +184,20 @@
     background-size: 400%;
     animation: gradientTextAnim 6s infinite;
 }
-.providerstore-premiumbrand div > img {
+
+.providerstore-premiumbrand div>img {
     position: absolute;
     top: 23%;
     left: 12%;
     transform: scale(.5);
     filter: invert() drop-shadow(2px 4px 6px black);
 }
-.providerstore-premiumbrand div > p {
+
+.providerstore-premiumbrand div>p {
     font-size: 1.5rem;
 }
-.providerstore-premiumbrand div > h2 {
+
+.providerstore-premiumbrand div>h2 {
     color: #ededed;
     font-size: 6rem;
     margin-bottom: 2rem;
@@ -204,6 +213,7 @@
     .providerstore-header {
         height: 43vw;
     }
+
     .providerstore-title-button {
         left: 64%;
         top: 7.5%;
@@ -228,15 +238,18 @@
     .storecards-inner {
         grid-template-columns: 50vw 50vw;
     }
+
     .storecard {
         height: auto;
         width: 40vw;
     }
 }
+
 @media (max-width: 570px) {
     .storecard {
         justify-content: center;
     }
+
     .storecard img {
         display: none;
     }

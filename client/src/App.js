@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { loadingUserData } from "./Redux/reducer/sessionSlice";
 import "./App.css";
 
@@ -39,7 +39,9 @@ import { useUserLogin } from "./hooks/useUserLogin";
 function App() {
     const dispatch = useDispatch();
     const { userLogin } = useUserLogin();
-    const isUserDataLoading = useSelector((state) => state.sessionReducer.isUserDataLoading);
+    const isUserDataLoading = useSelector(
+        (state) => state.sessionReducer.isUserDataLoading
+    );
 
     useEffect(() => {
         if (window.localStorage.getItem("loggedTokenEcommerce")) {
@@ -108,7 +110,7 @@ function App() {
                 </div>
             )}
         </div>
-    );
+    )
 }
 
 export default App;

@@ -1,14 +1,15 @@
 require("dotenv").config();
 const { CLOUDINARY_CLOUD, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } =
     process.env;
-const Cart = require("../models/cart");
-const Wishlist = require("../models/wishlist");
-
 const cloudinary = require("cloudinary").v2;
 const User = require("../models/user");
+const Cart = require("../models/cart");
+const Wishlist = require("../models/wishlist");
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
 const fs = require("fs-extra");
+const path = require("path");
+const handlebars = require("handlebars");
 const { JWT_SECRET_CODE } = process.env;
 const { validationResult } = require("express-validator");
 const sendEmail = require("../utils/sendEmail");
@@ -23,14 +24,37 @@ cloudinary.config({
 const sendVerifyEmail = async (req, res, next) => {
     if (req.authInfo && req.authInfo.error) return res.json(req.authInfo);
 
-    const { _id, email } = req.user;
+    let _id, email;
+    if (req.user._doc) {
+        email = req.user._doc.email;
+        _id = req.user._doc._id;
+    } else {
+        email = req.user.email;
+        _id = req.user._id;
+    }
+    const { newUser } = req.user;
+
     const body = { _id, email };
 
     try {
         const verifyToken = jwt.sign({ user: body }, JWT_SECRET_CODE);
 
-        const link = `http://localhost:3000/verify/${verifyToken}`;
-        await sendEmail(email, "Verificar email", link); //!VOLVER A VER modificar url de localhost
+        const filePath = path.join(
+            __dirname,
+            `../utils/templates/${newUser ? "signup" : "verifyEmail"}.html`
+        );
+        const source = fs.readFileSync(filePath, "utf-8").toString();
+        const template = handlebars.compile(source);
+        const replacements = {
+            link: `http://localhost:3000/verify/${verifyToken}`,
+        };
+        const htmlToSend = template(replacements);
+
+        await sendEmail(
+            email,
+            `${newUser ? "Bienvenido a Provider" : "Verifica tu email"}`,
+            htmlToSend
+        ); //!VOLVER A VER modificar url de localhost
 
         return res.json({ ...req.authInfo, ok: true });
     } catch (error) {
@@ -62,7 +86,7 @@ const signin = async (req, res, next) => {
                 const body = { _id, email, role, isGoogleUser };
 
                 const token = jwt.sign({ user: body }, JWT_SECRET_CODE, {
-                    expiresIn: 846000,
+                    expiresIn: 864000,
                 });
 
                 return res.json({
@@ -105,25 +129,25 @@ const profile = async (req, res, next) => {
     const userId = req.user._id || req.body._id;
     try {
         const userFound = await User.findById(userId);
+
         if (!userFound) {
             return res.status(404).json({ message: "Cuenta no encontrada" });
         }
+
         let user = userFound;
         delete user.password;
 
         const cartFound = await Cart.findOne({ owner: userId });
-        let cart = cartFound.products.map(e => e.product_id) || [];
-        //if (cartFound) cart = cartFound.products.map(e => e.product_id)
+        let cart = cartFound?.products?.map((e) => e.product_id) || [];
 
         const wishFound = await Wishlist.findOne({ user: userId });
-        let wish = wishFound.products || [];
-        //if (cartFound) cart = cartFound.products.map(e => e.product_id)
+        let wish = wishFound?.products || [];
 
         let aux = {
             user,
             cart,
-            wish
-        }
+            wish,
+        };
 
         return res.json(aux);
     } catch (error) {
@@ -284,19 +308,18 @@ const updatePassword = async (req, res, next) => {
 };
 
 const editProfile = async (req, res, next) => {
-
     try {
         const { username, firstname, lastname } = req.body;
 
         /* const userFound = await User.findByIdAndUpdate(
-              req.user._id,
-              {
-                username: username || userFound.username,
-                firstName: firstname || userFound.firstName,
-                lastName: lastname || userFound.lastName,
-              },
-              { new: true }
-            ); */
+                  req.user._id,
+                  {
+                    username: username || userFound.username,
+                    firstName: firstname || userFound.firstName,
+                    lastName: lastname || userFound.lastName,
+                  },
+                  { new: true }
+                ); */
 
         const userFound = await User.findById(req.user._id);
 

@@ -40,6 +40,7 @@ async function verifyToken(req, res, next) {
         } else {
             try {
                 const userDecoded = await jwt.verify(token, JWT_SECRET_CODE);
+
                 req.user = userDecoded.user;
                 req.user.isGoogleUser = false;
 

@@ -27,7 +27,7 @@ const Signupin = () => {
     signup: false,
     signupRepeat: false,
   });
-  const { userLogin, googleLogin } = useUserLogin()
+  const { userLogin, googleLogin } = useUserLogin();
 
   const {
     register: registerSignin,
@@ -84,7 +84,7 @@ const Signupin = () => {
 
       if (data.user) {
         window.localStorage.setItem("loggedTokenEcommerce", data.token);
-        
+
         //? Login con el hook
         userLogin(data.token);
       }
@@ -98,7 +98,7 @@ const Signupin = () => {
       }
 
       dispatch(loadingUserData(false));
-    }   
+    }
   };
 
   //? LOGIN CON GOOGLE
@@ -110,7 +110,7 @@ const Signupin = () => {
     window.localStorage.setItem("loggedTokenEcommerce", googleToken);
 
     //? Login con el hook
-    googleLogin(googleToken, userDecoded);    
+    googleLogin(googleToken, userDecoded);
   };
 
   useEffect(() => {
@@ -135,19 +135,12 @@ const Signupin = () => {
       size: "large",
       width: 240,
       text: "continue_with",
+      theme: "filled_black",
+      shape: "square",
     });
+    google.accounts.id.prompt();
     // eslint-disable-next-line
   }, [session]);
-
-  useEffect(() => {
-    //session && navigate("/");
-    // setValueSignin("email", "fer.eze.ram@gmail.com");
-    // setValueSignin("password", "fer.eze.ram@gmail.com");
-    // setValueSignup("email", "fer.eze.ram@gmail.com");
-    // setValueSignup("password", "fer.eze.ram@gmail.com");
-    // setValueSignup("repPassword", "fer.eze.ram@gmail.com");
-    // eslint-disable-next-line
-  }, []);
 
   const handleSign = (sign) => {
     setSignSelect(sign);
@@ -157,7 +150,9 @@ const Signupin = () => {
     <div className="signin-container">
       <div className={`signin-inner${flag ? " signin-visible" : ""}`}>
         <img
-          src={require("../../assets/provider-logo.png")}
+          src={
+            "https://res.cloudinary.com/dsyjj0sch/image/upload/v1659650791/PROVIDER_LOGO_glitch_aberration_kt2hyv.png"
+          }
           alt="logo"
           onClick={() => navigate("/")}
           style={{ cursor: "pointer" }}
@@ -209,6 +204,7 @@ const Signupin = () => {
             <span className="g-input-with-button">
               <input
                 type="password"
+                autoComplete="on"
                 placeholder="Contraseña"
                 className={`g-input-two-icons${
                   watchSignin("password") === undefined ||
@@ -255,7 +251,7 @@ const Signupin = () => {
             </span>
 
             <NavLink to={"/forgotPassword"}>
-              <span className="g-text-button">
+              <span className="g-text-button signin-forgot-text">
                 ¿Has olvidado tu contraseña?
               </span>
             </NavLink>
@@ -403,10 +399,10 @@ const Signupin = () => {
                     ? ""
                     : " g-password"
                 }`}
-                onPaste={(e) => {
+                /* onPaste={(e) => {
                   e.preventDefault();
                   return false;
-                }}
+                }} */
                 {...registerSignup("repPassword", {
                   required: true,
                   validate: (repPassword) => {
@@ -448,11 +444,14 @@ const Signupin = () => {
               )}
             </span>
 
-            <input
-              type="submit"
-              value="Registrarse"
-              className="g-white-button"
-            />
+            <div>
+              <input
+                type="submit"
+                value="Registrarse"
+                className="g-white-button"
+              />
+            </div>
+
             <div>
               <span
                 onClick={() => handleSign("signin")}

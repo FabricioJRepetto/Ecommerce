@@ -84,7 +84,7 @@ const Products = () => {
       getProducts();
     } */
     if (!reloadFlag) {
-      console.log("aca debe limpiar redux");
+      //console.log("aca debe limpiar redux");
       clearFilters();
       handleClearSearch();
       getProducts();
@@ -105,7 +105,6 @@ const Products = () => {
       window.removeEventListener("resize", handleWindowSize);
       document.documentElement.style.overflowY = "auto";
       /* document.documentElement.style.overflowX = "hidden"; */
-      console.log(document.documentElement.style.overflowY);
     };
     // eslint-disable-next-line
   }, []);
@@ -134,7 +133,7 @@ const Products = () => {
 
   //! 1.5
   const getProducts = () => {
-    console.log("1.5 getProducts");
+    //  console.log("1.5 getProducts");
     axios
       .get("/product")
       .then((r) => {
@@ -147,8 +146,8 @@ const Products = () => {
 
   //! 4
   const applyFilters = () => {
-    console.log("4 applyFilters");
-    console.log("filtersApplied", filtersApplied);
+    //  console.log("4 applyFilters");
+    // console.log("filtersApplied", filtersApplied);
     if (productsOwnProductToSearch) {
       clearFilters();
       setProductToSearch(productsOwnProductToSearch);
@@ -206,7 +205,7 @@ const Products = () => {
   //! 1
   const reloadFunction = () => {
     if (reloadFlag) {
-      console.log("1 reloadFlag ef");
+      //  console.log("1 reloadFlag ef");
       if (Object.keys(productsOwnFiltersApplied).length > 0)
         setFiltersApplied(productsOwnFiltersApplied);
       dispatch(clearProducts());
@@ -224,14 +223,14 @@ const Products = () => {
   //! 3
   useEffect(() => {
     if (productsOwn.length) {
-      console.log("3 getProductsFlag ef");
+      //  console.log("3 getProductsFlag ef");
       applyFilters();
     } // eslint-disable-next-line
   }, [getProductsFlag]);
 
   //! 2
   const setBrands = (products) => {
-    console.log("2 setBrands");
+    //  console.log("2 setBrands");
     let brandsCheckbox = {};
     let newBrands = [];
     // newBrands => para cargar brandsCheckboxes
@@ -382,8 +381,9 @@ const Products = () => {
   useEffect(() => {
     filtersMenuMobile.current &&
       setFiltersContainerHeight(
-        widnowHeight - filtersMenuMobile.current.offsetTop - window.scrollY - 55
+        widnowHeight - filtersMenuMobile.current.offsetTop - window.scrollY - 70
       );
+
     // eslint-disable-next-line
   }, [
     filtersMenuMobile.current,

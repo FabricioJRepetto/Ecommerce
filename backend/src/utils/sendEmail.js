@@ -16,7 +16,7 @@ const oAuth2Client = new google.auth.OAuth2(
 );
 oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
 
-const sendEmail = async (email, subject, link) => {
+const sendEmail = async (email, subject, html) => {
   try {
     const accessToken = await oAuth2Client.getAccessToken();
     const transport = nodemailer.createTransport({
@@ -32,16 +32,15 @@ const sendEmail = async (email, subject, link) => {
     });
 
     const mailOptions = {
-      from: `eProvider Store <${EMAIL_EPROVIDER}>`,
+      from: `Provider <${EMAIL_EPROVIDER}>`,
       to: email,
       subject,
-      html: `<h1>Prueba </h1><b>en html </b><a href=${link}>linkkkkk </a>`,
+      html,
     };
 
     const result = await transport.sendMail(mailOptions);
     return result;
   } catch (error) {
-    console.log(error);
     throw new Error(error);
   }
 };

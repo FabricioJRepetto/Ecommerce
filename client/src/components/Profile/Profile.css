@@ -76,7 +76,7 @@
   align-items: flex-start;
   transition: 0.1s ease-in-out;
   background-color: #000000;
-  z-index: 4;
+  z-index: 40;
 }
 
 .profile-menu-container-hide {

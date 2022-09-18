@@ -31,6 +31,9 @@ ul {
   list-style-type: none;
 }
 
+#credential_picker_container {
+  display: none;
+}
 
 /* LINKS */
 a:link {
@@ -226,20 +229,21 @@ input.g-input-two-icons {
 }
 
 .secondary-button {
-    background-color: #000000;
-    border: 1px solid #404040;
-    color: #FFFFFF;
+  background-color: #000000;
+  border: 1px solid #404040;
+  color: #FFFFFF;
 }
+
 .secondary-button:hover:enabled {
-    background-color: #202020;
-    color: #FFFFFF;
+  background-color: #202020;
+  color: #FFFFFF;
 }
 
 /* BOTON DE TEXTO */
 .g-text-button {
   cursor: pointer;
   font-weight: 400;
-  color: rgba(255, 255, 255, 0.6);
+  color: white;
 }
 
 .g-text-button:hover {
