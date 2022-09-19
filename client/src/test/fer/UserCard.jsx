@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Card from "../../components/Products/Card";
 import AddressCard from "../../components/Profile/AddressCard";
 import OrderCardAdmin from "./OrderCardAdmin";
+import "./UserCard.css";
 
 const UserCard = ({ user, openBanUser, openUnbanUser, openPromoteUser }) => {
   const [addresses, setAddresses] = useState([]);
@@ -67,7 +68,12 @@ const UserCard = ({ user, openBanUser, openUnbanUser, openPromoteUser }) => {
           </button>
         )}
         {avatar ? (
-          <img src={avatar} referrerPolicy="no-referrer" alt={`${name}`} />
+          <img
+            src={avatar}
+            className="admin-usercard-img"
+            referrerPolicy="no-referrer"
+            alt={`${name}`}
+          />
         ) : (
           <h4>Sin avatar</h4>
         )}

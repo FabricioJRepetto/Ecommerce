@@ -1,6 +1,9 @@
+require("dotenv").config();
 const nodemailer = require("nodemailer");
 const { google } = require("googleapis");
-require("dotenv").config();
+const fs = require("fs-extra");
+const path = require("path");
+const handlebars = require("handlebars");
 const {
   EMAIL_OAUTH_CLIENT_ID,
   EMAIL_CLIENT_SECRET,
@@ -16,8 +19,14 @@ const oAuth2Client = new google.auth.OAuth2(
 );
 oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
 
-const sendEmail = async (email, subject, html) => {
+const sendEmail = async (email, subject, templateUrl, variable) => {
   try {
+    const filePath = path.join(__dirname, templateUrl);
+    const source = fs.readFileSync(filePath, "utf-8").toString();
+    const template = handlebars.compile(source);
+    const replacements = variable;
+    const html = template(replacements);
+
     const accessToken = await oAuth2Client.getAccessToken();
     const transport = nodemailer.createTransport({
       service: "gmail",

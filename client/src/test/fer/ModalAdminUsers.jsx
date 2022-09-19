@@ -76,7 +76,7 @@ const ModalAdminUsers = ({
   return (
     <div>
       <Modal isOpen={isOpenBanUser} closeModal={closeBanUser} type="warn">
-        <p>{`¿Eliminar al usuario ${userToBan ? userToBan.name : null}?`}</p>
+        <p>{`¿Suspender al usuario ${userToBan ? userToBan.name : null}?`}</p>
         <button type="button" onClick={() => handleBanUser()}>
           Aceptar
         </button>
@@ -86,7 +86,7 @@ const ModalAdminUsers = ({
       </Modal>
 
       <Modal isOpen={isOpenUnbanUser} closeModal={closeUnbanUser} type="warn">
-        <p>{`Volver a activar al usuario ${
+        <p>{`¿Volver a activar al usuario ${
           userToUnban ? userToUnban.name : null
         }?`}</p>
         <button type="button" onClick={() => handleUnbanUser()}>
