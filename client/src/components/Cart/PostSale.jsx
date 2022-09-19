@@ -134,7 +134,6 @@ const PostSale = () => {
         return "¡El producto ya es tuyo!";
       }
     }
-
     return "¡Los productos ya son tuyos!";
   };
 
@@ -172,6 +171,7 @@ const PostSale = () => {
                     <Spinner />
                   </div>
                 )}
+                
               </div>
             )}
             {status !== "approved" && (

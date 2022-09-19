@@ -334,7 +334,7 @@ const getPostsale = async (req, res, next) => {
         console.log('@@@ Esperando notificación del chekout...');
         const waiter = async () => {
 
-            if (attempt < 6) {
+            if (attempt < 10) {
                 console.log('@@@ preguntando...' + tryCount);
                 attempt++;
                 const aux = await Order.findById(req.params.id)

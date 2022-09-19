@@ -6,7 +6,6 @@
     position: relative;
 }
 
-
 .providerpremium-header {    
     font-size: 1rem;
     font-weight: 600;
@@ -14,7 +13,7 @@
     line-height: 0.75rem;
     user-select: none;
     height: 22vw;
-    background: radial-gradient(circle, rgb(40, 40, 40) 20%, rgba(53, 167, 255, 1) 35%, rgba(126, 84, 222, 1) 45%, rgba(244, 2, 89, 1) 55%, rgba(254, 163, 13, 1) 65%, rgb(40, 40, 40) 80%);
+    background: radial-gradient(circle, #202020 10%, rgba(255,143,0,1) 25%, rgba(255,194,0,1) 41%, rgba(255,126,0,1) 48%, #202020 77%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -32,41 +31,62 @@
     z-index: 40;
     position: relative;
 }
+
+.providerpremium-echo-inner {
+    top:8rem;
+    margin-left: 1rem;
+    font-size: 6.2vw;
+    font-family: HelveticaNeueLTPro-BdOu, Poppins;
+    letter-spacing: -0.35rem;
+    color: #202020;
+    pointer-events: none;
+    position: fixed;
+    z-index: 30;
+    line-height: 78%;
+    display: block;
+}
+.providerpremium-echo-inner span {
+    font-family: HelveticaNeueLTPro-Bd, Poppins;    
+}
+
 .providerpremium-title {
     font-family: HelveticaNeueLTPro-Bd, Poppins;
-    top: 17.8%;
-    left: 40%;
+    top: 2.3rem;
+    left: 0;
+    height: 22vw;
+    width: 100%;
     pointer-events: none;
-    line-height: 75%;
+    position: absolute;
+    display: flex;
+    justify-content: end;
+}
+.provider-premium-title {
+    position: absolute;
     display: flex;
     flex-direction: column;
 }
-.provider-premium-title {
-    font-size: 13.5vw;
-    margin: 1.9% 0 0 38vw;
-    left: 35%;
+.provider-premium-title:first-child {
+    font-size: 15vw;
     letter-spacing: -1rem;
+    padding-right: 2rem;
+    height: fit-content;
+    line-height: 75%;
 }
-.providerstore-title-text{
-    font-family: HelveticaNeueLTPro-Bd, Poppins;
-    font-size: 4.04vw;
-    text-align: left;
+.providerpremium-title-text{
+    font-size: 4vw;
     letter-spacing: 0.3rem;
     line-height: 75%;
-    top: 300%;
-    left: 40%;
-    position: absolute;
+    margin: 1rem 0 0 .8rem;
 }
 
 .providerpremium-echo-inner-mobile {
-    text-align: left;
-    top: 7.5%;
-    left: 2.7%;
+    top: calc(12vw + 7.3%);
+    left: 1rem;
     margin-top: 9.1vw;
-    font-size: 12vw;
+    font-size: 20vw;
     font-family: HelveticaNeueLTPro-BdOu, Poppins;
     line-height: 75%;
-    letter-spacing: .2vw;
+    letter-spacing: -0.3vw;
     color: #202020;
     pointer-events: none;
     position: fixed;
@@ -75,6 +95,48 @@
 }
 .providerpremium-echo-inner-mobile span {
     font-family: HelveticaNeueLTPro-Bd, Poppins;
+    transition: all .15s ease;
+}
+.providerpremium-echo-head-mobile {
+    font-family: HelveticaNeueLTPro-Bd, Poppins;
+    top: calc(14.5vw);
+    left: 1rem;
+    margin-top: 9.1vw;
+    font-size: 20vw;
+    line-height: 75%;
+    letter-spacing: -0.3vw;
+    color: #FFFFFF;
+    pointer-events: none;
+    position: absolute;
+    z-index: 4;
+    display: block;
+}
+
+.providerpremium-title-mobile {
+    font-family: HelveticaNeueLTPro-Bd, Poppins;
+    font-size: 19.5vw;
+    letter-spacing: -0.9vw;
+    top: .5%;
+    left: 0%;
+    pointer-events: none;
+    line-height: 75%;
+    margin: 0 0 0 1rem;
+    display: unset;
+    z-index: 2;
+    position: absolute;
+}
+.providerpremium-title-text-mobile {
+    width: 100%;
+    position: absolute;
+    top: calc(17vw + .9%);
+    left: 3vw;
+    font-family: HelveticaNeueLTPro-Bd, Poppins;
+    font-size: 7vw;    
+    letter-spacing: 0.55vw;
+    pointer-events: none;
+    z-index: 2;
+    line-height: 75%;
+    white-space: nowrap;
 }
 
 @media (max-width: 1024px) {

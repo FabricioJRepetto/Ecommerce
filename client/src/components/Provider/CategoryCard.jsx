@@ -16,10 +16,22 @@ const CategoryCard = ({route, image, text}) => {
     };
 
     const correctOutline = {
-        COMPUTACIÓN: {class: 'ccou-pc', img: 'https://res.cloudinary.com/dsyjj0sch/image/upload/v1663477028/category-cards-03-02_hbtbyn.png'},
-        VIDEOJUEGOS: {class: 'ccou-games', img: 'https://res.cloudinary.com/dsyjj0sch/image/upload/v1663477849/category-cards-02-02_axpx3x.png'},
-        AUDIO: {class: 'ccou-audio', img: 'https://res.cloudinary.com/dsyjj0sch/image/upload/v1663477312/category-cards-04-02_ld5nkv.png'},
-        CÁMARAS: {class: 'ccou-cams', img: 'https://res.cloudinary.com/dsyjj0sch/image/upload/v1663477614/category-cards-04-05-02_y2sqmx.png'}
+        COMPUTACIÓN: {
+            class: 'ccou-pc', 
+            img: 'https://res.cloudinary.com/dsyjj0sch/image/upload/v1663477028/category-cards-03-02_hbtbyn.png'
+        },
+        VIDEOJUEGOS: {
+            class: 'ccou-games', 
+            img: 'https://res.cloudinary.com/dsyjj0sch/image/upload/v1663477849/category-cards-02-02_axpx3x.png'
+        },
+        AUDIO: {
+            class: 'ccou-audio', 
+            img: 'https://res.cloudinary.com/dsyjj0sch/image/upload/v1663477312/category-cards-04-02_ld5nkv.png'
+        },
+        CÁMARAS: {
+            class: 'ccou-cams', 
+            img: 'https://res.cloudinary.com/dsyjj0sch/image/upload/v1663477614/category-cards-04-05-02_y2sqmx.png'
+        }
     }
     
     useEffect(() => {
@@ -48,7 +60,8 @@ const CategoryCard = ({route, image, text}) => {
           maxHeight: 0.15,
           hueRotate: true,
         },
-      })  
+      })
+      // eslint-disable-next-line
     }, [])
     
 

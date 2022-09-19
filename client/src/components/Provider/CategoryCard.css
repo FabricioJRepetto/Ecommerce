@@ -6,7 +6,7 @@
 }
 
 .categorycard-container {
-    background-color: #000000;
+    background-color: #303030;
     height: 22rem;
     width: 14rem;
     overflow: hidden;
@@ -95,8 +95,7 @@
     left: 2%;
 }
 .ccou-master {
-    z-index: 5;
-    
+    z-index: 5;    
     position: absolute !important;
     transition: opacity .1s ease;
     pointer-events: none;

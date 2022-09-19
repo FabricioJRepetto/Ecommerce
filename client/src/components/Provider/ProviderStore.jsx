@@ -1,13 +1,48 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Footer from "../common/Footer";
-
-import "./ProviderStore.css";
 import FlashSales from "../common/FlashSales";
 import PremiumPreview from "./PremiumPreview";
 import CategoryCard from "./CategoryCard";
+import { PowerGlitch } from "powerglitch";
+
+import "./ProviderStore.css";
 
 const ProviderStore = () => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+      const buttons = document.getElementsByName('ps-button-hover');
+      console.log(buttons);
+      buttons.forEach( (b) =>
+        PowerGlitch.glitch(b, {
+            imageUrl: 'https://res.cloudinary.com/dsyjj0sch/image/upload/v1663602148/glitch-03_cplipt.png',
+            backgroundColor: "transparent",
+            hideOverflow: false,
+            timing: {
+            duration: 3000,
+            iterations: "Infinity",
+            },
+            glitchTimeSpan: {
+            start: 0,
+            end: 1,
+            },
+            shake: {
+            velocity: 50,
+            amplitudeX: 0.7,
+            amplitudeY: 0.7,
+            },
+            slice: {
+            count: 18,
+            velocity: 15,
+            minHeight: 0.03,
+            maxHeight: 0.15,
+            hueRotate: true,
+            },
+        })
+      )
+      // eslint-disable-next-line
+    }, [])
 
   return (
     <div className="providerstore-container">
@@ -17,15 +52,12 @@ const ProviderStore = () => {
                 <span>PROVIDER</span>
                 <br />
                 PROVIDER <br />
+                PROVIDER <br />
                 PROVIDER
             </div>
-            
-            <div className="pro-sticky">
-                <div className='providerstore-title'>
-                    <div>
-                        <span className="provider-store-title">STORE</span>                        
-                    </div>
-                </div>
+
+            <div className='providerstore-title'>
+                <span>STORE</span>
             </div>
         </div>
         
@@ -34,15 +66,7 @@ const ProviderStore = () => {
             <div className="pro-sticky">
                 <div className='providerstore-title-mobile'>
                     <div>
-                        <span>PROVIDER</span>                
-                        <span className={`providerstore-title-text-mobile`}>
-                            /DELUXE
-                            <br />
-                            /UNICOS
-                            <br />
-                            /TUYOS
-                        </span>
-                        
+                        <span>PROVIDER</span>                        
                     </div>
                 </div>
             </div>
@@ -65,34 +89,34 @@ const ProviderStore = () => {
       <div className="storecards-container">
         
         {/* <div className="providerstore-disclaimer">
-            <h1>¿Qué es Provider Store?</h1>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt laboriosam repellat voluptate in, voluptatibus totam odio, natus ipsam velit nesciunt aperiam, beatae magni vitae reiciendis voluptatem repudiandae. Quas, temporibus blanditiis
+            <h1>¿Qué es Provider?</h1>
+            <p>Encuentra los mejores productos de distintas tiendas especializadas en un solo lugar.</p>
+            <p>Explora Provider Store para ver nuestros seleccionados.</p>
         </div> */}
 
         <div className="storecards-inner">
             <CategoryCard text='COMPUTACIÓN'
-                image='https://res.cloudinary.com/dsyjj0sch/image/upload/v1663464359/computacion_hds8ap.png' route='MLA1648'/>
+                image='https://res.cloudinary.com/dsyjj0sch/image/upload/v1663598262/computacion_iczryv.png' route='MLA1648'/>
             <CategoryCard text='VIDEOJUEGOS'
-                image='https://res.cloudinary.com/dsyjj0sch/image/upload/v1663464359/videojuegos2_xfgxbc.png' route='MLA1144'/>
+                image='https://res.cloudinary.com/dsyjj0sch/image/upload/v1663598262/videojuegos2_hvufj4.png' route='MLA1144'/>
             <CategoryCard text='AUDIO'
-                image='https://res.cloudinary.com/dsyjj0sch/image/upload/v1663464359/audio_bienyi.png' route='MLA409810'/>
+                image='https://res.cloudinary.com/dsyjj0sch/image/upload/v1663598262/audio_bbrp2m.png' route='MLA409810'/>
             <CategoryCard text='CÁMARAS'
-                image='https://res.cloudinary.com/dsyjj0sch/image/upload/v1663464359/camara_qhu2y4.png' route='MLA1039'/>
+                image='https://res.cloudinary.com/dsyjj0sch/image/upload/v1663598262/camara_epkefy.png' route='MLA1039'/>
         </div>
 
         <div className="providerstore-category-buttons">
-
-            <div>
-                <div>
-                    <button className="g-white-button" onClick={() => navigate("/products")}>TODOS</button>
-                </div>
+                
+            <div className="ps-button-container">
+                <div name="ps-button-hover" id='ps-button01'></div>
+                <button className="g-white-button" onClick={() => navigate("/products")}>TODOS LOS PRODUCTOS</button>
             </div>
 
-            <div>
-                <div>                    
-                    <button className="g-white-button" onClick={() => navigate("/sales")}>OFERTAS</button>
-                </div>
+            <div className="ps-button-container">
+                <div name="ps-button-hover" id='ps-button02'></div>
+                <button className="g-white-button" onClick={() => navigate("/sales")}>BUSCADOR DE OFERTAS</button>
             </div>
+                
         </div>               
 
         <FlashSales/>
