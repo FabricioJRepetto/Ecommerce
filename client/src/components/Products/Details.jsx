@@ -5,13 +5,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import Galery from "./Galery";
 import { WishlistButton as Fav } from "./WishlistButton";
 import Footer from "../common/Footer";
-import { ReactComponent as Spinner } from "../../assets/svg/spinner.svg";
 import { loadQuerys } from "../../Redux/reducer/productsSlice";
 import { priceFormat } from "../../helpers/priceFormat";
 import { useCheckout } from "../../hooks/useCheckout";
 import ReturnButton from "../common/ReturnButton";
 
 import "./Details.css";
+import LoaderBars from "../common/LoaderBars";
 
 const Details = () => {
   let { id } = useParams();
@@ -124,7 +124,10 @@ const Details = () => {
 
   return (
     <div>
-      {loading && <Spinner className="details-spinner" />}
+      {loading && 
+        <div className="details-loader-container">
+            <LoaderBars />
+        </div>}
       {error && <div className="product-details-error">
             <h1>{error.message}</h1>
             <ReturnButton to={-1}/>

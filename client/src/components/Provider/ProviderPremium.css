@@ -58,7 +58,7 @@
     pointer-events: none;
     position: absolute;
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
 }
 .provider-premium-title {
     position: absolute;
@@ -130,13 +130,14 @@
     position: absolute;
     top: calc(17vw + .9%);
     left: 3vw;
-    font-family: HelveticaNeueLTPro-Bd, Poppins;
+    font-family: HelveticaNeueLTPro-BdOu, Poppins;
     font-size: 7vw;    
     letter-spacing: 0.55vw;
     pointer-events: none;
     z-index: 2;
     line-height: 75%;
     white-space: nowrap;
+    color: #ccc;
 }
 
 @media (max-width: 1024px) {
