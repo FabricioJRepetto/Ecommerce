@@ -4,6 +4,8 @@ const { CLOUDINARY_CLOUD, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET } =
 const cloudinary = require("cloudinary").v2;
 const User = require("../models/user");
 const Cart = require("../models/cart");
+const order = require("../models/order");
+
 const Wishlist = require("../models/wishlist");
 const passport = require("passport");
 const jwt = require("jsonwebtoken");
@@ -11,6 +13,7 @@ const fs = require("fs-extra");
 const { JWT_SECRET_CODE } = process.env;
 const { validationResult } = require("express-validator");
 const sendEmail = require("../utils/sendEmail");
+const { formatDate, formatPrice } = require("../utils/formatOrderData");
 
 cloudinary.config({
   cloud_name: CLOUDINARY_CLOUD,
@@ -42,8 +45,8 @@ const sendVerifyEmail = async (req, res, next) => {
 
     await sendEmail(
       email,
-      `${newUser ? "Bienvenido a Provider" : "Verifica tu email"}`,
-      `../utils/templates/${!newUser ? "signup" : "verifyEmail"}.html`,
+      `${newUser ? "Bienvenido a Provider" : "Verificación de email"}`,
+      `../utils/templates/${newUser ? "signup" : "verifyEmail"}.html`,
       { link }
     );
 
