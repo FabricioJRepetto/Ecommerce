@@ -7,7 +7,7 @@ import "./DeliveryProgress.css";
 
 const DeliveryProgress = ({ order }) => {
   const location = useLocation();
-  let actualDate = new Date().getTime();
+  let actualDate = new Date().getTime(-10800000);
 
   return (
     <div className="delivery-progress-container">
@@ -16,7 +16,6 @@ const DeliveryProgress = ({ order }) => {
       >
         {deliveryPercent(order.delivery_date, order.payment_date).state}
       </p>
-      {/* <p>{deliveryPercent(order.delivery_date, order.payment_date).percent}%</p> */}
       <div className="delivery-container">
         <div className="delivery-inner">
           <div
@@ -54,14 +53,3 @@ const DeliveryProgress = ({ order }) => {
 };
 
 export default DeliveryProgress;
-
-/* 
-    created_at:
-    new Date(1660608496901)
-
-    payment_date:
-    new Date(1660606724194)
-
-    delivery_date:
-    new Date(1660932000000)
-*/

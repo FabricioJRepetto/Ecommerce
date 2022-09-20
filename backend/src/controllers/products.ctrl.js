@@ -189,7 +189,7 @@ const getPromos = async (req, res, next) => {
         categories.forEach((c) => {
             promises.push(
                 axios(
-                    `http://api.mercadolibre.com/sites/MLA/search?promotion_type=deal_of_the_day&category=${c}`
+                    `http://api.mercadolibre.com/sites/MLA/search?promotion_type=deal_of_the_day&official_store=all&category=${c}`
                 )
             );
         });
@@ -200,6 +200,7 @@ const getPromos = async (req, res, next) => {
             results = results.concat(r.data.results);
         });
         results = meliSearchParser(results);
+        console.log('@@@@@' + results.length);
 
         let allResults = [...dbResults, ...results];
 

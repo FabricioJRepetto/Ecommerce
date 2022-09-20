@@ -202,60 +202,15 @@ const updateOrder = async (req, res, next) => {
         } = req.body;
 
         if (req.body.status) {
-            //! esto no debería estár en uso
-            // // cambiar estado a pagado y agregar fecha de pago y de entrega
-            // if (req.body.status === "approved") {
-            //     const flash = (flash) => {
-            //         // horas restantes hasta las 15hrs de mañana (flash_shipping true)
-            //         let now = new Date();
-
-            //         if (flash) {
-            //             now = now.setDate(now.getDate() + 1);
-            //         } else {
-            //             now = now.setDate(now.getDate() + 3);
-            //         }
-            //         now = new Date(now).toISOString();
-            //         //? ISO string
-            //         // let targetDate = `${now.split('T')[0]}T15:00:00.000Z`;
-            //         //? Milliseconds
-            //         let targetDate = new Date(`${now.split('T')[0]}T15:00:00.000Z`).getTime();
-
-            //         return targetDate;
-            //     };
-
-            //     const order = await Order.findByIdAndUpdate(
-            //         req.params.id,
-            //         {
-            //             $set: {
-            //                 status: req.body.status,
-            //                 payment_date: Date.now() - 10800000,
-            //                 delivery_date: flash_shipping ? flash(true) : flash(false),
-            //                 delivery_status: 'shipping'
-            //             },
-            //         },
-            //         { new: true }
-            //     );
-            //     return res.json({ message: `Order status: ${order.status}` });
-            // } else {
 
             const order = await Order.findById(req.params.id);
 
             if (order.status !== 'approved') {
-                // await Order.findByIdAndUpdate(
-                //     req.params.id,
-                //     {
-                //         $set: {
-                //             status: req.body.status,
-                //         },
-                //     },
-                //     { new: true }
-                // );
                 order.status = req.body.status;
                 await order.save()
                 return res.json({ message: `Order status: ${order.status}` });
             }
             return res.json({ message: `Order status: approved` });
-            //}
         }
 
         if (product_id) {
@@ -322,26 +277,33 @@ const updateOrder = async (req, res, next) => {
 };
 
 const getPostsale = async (req, res, next) => {
+    let attempt = 0;
     try {
         if (!req.params.id) return res.json({ error: true, message: 'Order ID not provided.' })
 
         let order = await Order.findById(req.params.id)
         if (!order) return res.json({ error: true, message: 'Order not found.' })
 
-        if (order.status === 'approved') return res.json(order)
+        if (order.status === 'approved') return res.json(order);
 
-        const waiter = async () => { //! volver a ver PROBLEMAAAAAAS                
-            console.log('@@@ preguntando...');
-            const aux = await Order.findById(req.params.id)
+        console.log('@@@ Esperando notificación del chekout...');
+        const waiter = async () => {
 
-            if (aux && aux.status === 'approved') {
-                console.log('@@@ encontrado');
-                console.log(aux);
-                return res.json(aux)
+            if (attempt < 10) {
+                console.log('@@@ preguntando...' + tryCount);
+                attempt++;
+                const aux = await Order.findById(req.params.id)
+
+                if (aux && aux.status === 'approved') {
+                    console.log('@@@ respuesta del checkout recibida');
+                    return res.json(aux)
+                } else {
+                    setTimeout(async () => {
+                        waiter();
+                    }, 3000);
+                }
             } else {
-                setTimeout(async () => {
-                    waiter();
-                }, 3000);
+                return res.json({ error: true, message: 'Límite de intentos alcanzado' })
             }
         }
 

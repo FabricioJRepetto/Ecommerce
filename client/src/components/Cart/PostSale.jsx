@@ -25,13 +25,12 @@ const PostSale = () => {
   useEffect(() => {
     !order &&
       (async () => {
-        console.log("ejecuta useEffect");
         const { data } = await axios(`/order/${id}`);
         if (!data.products) {
           console.error("no order");
           navigate("/");
         }
-        console.log(data);
+        
         setOrder(data);
         setLoading(false);
 
@@ -64,7 +63,7 @@ const PostSale = () => {
             //? vaciar el buynow
             axios.post(`/cart/`, { product_id: "" });
           }
-          //   console.log(data);
+          
           setOrder(data);
           setLoading(false);
 
@@ -120,7 +119,6 @@ const PostSale = () => {
       response.then(r =>{
         console.log("...respuesta recibida.");
         if (r.data.status) {
-            console.log(r.data);
             setOrder(r.data);        
         } else {
             console.console.warn(r.data.message);
@@ -136,7 +134,6 @@ const PostSale = () => {
         return "¡El producto ya es tuyo!";
       }
     }
-
     return "¡Los productos ya son tuyos!";
   };
 
@@ -166,12 +163,15 @@ const PostSale = () => {
                 <h3>Ahora estamos preparando el envío</h3>
 
                 {order?.delivery_date ? (
-                  <DeliveryProgress order={order} />
+                  <div className="postsale-delivery-container">
+                    <DeliveryProgress order={order} />
+                  </div>
                 ) : (
                   <div className="postsale-spinner-container">
                     <Spinner />
                   </div>
                 )}
+                
               </div>
             )}
             {status !== "approved" && (
