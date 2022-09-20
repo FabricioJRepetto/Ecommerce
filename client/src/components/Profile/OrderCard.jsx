@@ -87,7 +87,7 @@ const OrderCard = ({ order, setOrderDetails }) => {
 
       {order.status === "pending" && (
         <div>
-          <p>Expira el {formatDate(order.expiration_date_to).slice(0, -6)}</p>
+          <p>Expira el {formatDate(order.expiration_date_to)}</p>
           {order.payment_link && (
             <div>
               <a href={order.payment_link} onClick={(e) => e.stopPropagation()}>
@@ -115,7 +115,7 @@ const OrderCard = ({ order, setOrderDetails }) => {
         </p>
       )}
       {order.status === "processing" && <p>Procesando...</p>}
-      
+
       {/* //! volver a ver: Quitar este botón ? */}
       {/* {order.status === "pending" && (
         <button

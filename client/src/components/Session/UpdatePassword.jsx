@@ -82,10 +82,7 @@ const UpdatePassword = () => {
       ) : (
         <>
           <h1>Cambiar contraseña</h1>
-          <form
-            onSubmit={handleSubmit(updatePassword)}
-            onKeyDown={avoidEnterSubmit}
-          >
+          <form onSubmit={handleSubmit(updatePassword)}>
             <div className="title-text">Ingresa tu actual contraseña</div>
             <>
               {!errors.oldPassword && (

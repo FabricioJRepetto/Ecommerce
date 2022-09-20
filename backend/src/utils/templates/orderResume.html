@@ -73,7 +73,7 @@
       </a>
     </header>
 
-    <header
+    <div
       style="
         font-family: 'Poppins', sans-serif;
         box-sizing: border-box;
@@ -99,7 +99,6 @@
           margin: 0;
           padding: 0;
           overflow-x: hidden;
-          box-sizing: border-box;
           text-align: center;
           background-color: black;
           color: white;
@@ -115,74 +114,190 @@
           font-size: 1.5rem;
         "
       >
-        Verifica tu email
+        Resúmen de compra
       </h1>
-      <p
+
+      <div style="box-sizing: border-box; margin: 0; padding: 0; color: white">
+        Compra #{{order_id}}
+      </div>
+      <div style="box-sizing: border-box; margin: 0; padding: 0; color: white">
+        Pagado el {{date}}
+      </div>
+
+      <table
         style="
           font-family: 'Poppins', sans-serif;
-          box-sizing: border-box;
-          margin: 0;
-          padding: 0;
-          overflow-x: hidden;
-          box-sizing: border-box;
-          text-align: center;
-          background-color: black;
-          color: white;
-          max-width: 600px;
-          min-width: 400px;
           width: 100%;
-          padding-left: 5rem;
-          padding-right: 5rem;
-          margin: auto;
-
-          font-size: 1rem;
+          border-collapse: collapse;
+          margin-top: 1rem;
         "
       >
-        Clickea
-        <a
-          href="{{link}}"
+        <tbody
           style="
             font-family: 'Poppins', sans-serif;
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            overflow-x: hidden;
-            box-sizing: border-box;
-            text-align: center;
-            background-color: black;
-            color: white;
-
-            font-size: 1rem;
+            margin-top: 1.5rem;
           "
-          >AQUÍ</a
         >
-        para verificar tu email. Si tienes problemas accede con el siguiente
-        link:
-      </p>
-      <a
-        href="{{link}}"
-        target="_blank"
+          {{#each products}}
+          <tr
+            style="
+              font-family: 'Poppins', sans-serif;
+              box-sizing: border-box;
+              margin: 0;
+              padding: 0;
+              margin-top: 0.4rem;
+              padding-bottom: 0.1rem;
+              border-bottom: 1px solid #ffffff10;
+            "
+          >
+            <td
+              style="
+                font-family: 'Poppins', sans-serif;
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+                display: block;
+                min-width: 195px;
+                max-width: 65%;
+                width: 75%;
+              "
+            >
+              <p
+                style="
+                  font-family: 'Poppins', sans-serif;
+                  box-sizing: border-box;
+                  margin: 0;
+                  padding: 0;
+                  white-space: nowrap;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  text-align: left;
+                  padding-left: 1rem;
+                "
+              >
+                {{quantity quantity}} {{product_name}}
+              </p>
+            </td>
+            <td
+              style="
+                font-family: 'Poppins', sans-serif;
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+                color: white;
+                text-align: right;
+                white-space: nowrap;
+                padding-right: 1rem;
+              "
+            >
+              {{quantity quantity}} ${{finalPrice price sale_price}}
+            </td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+
+      <div
         style="
           font-family: 'Poppins', sans-serif;
           box-sizing: border-box;
           margin: 0;
           padding: 0;
-          overflow-x: hidden;
-          box-sizing: border-box;
-          text-align: center;
-          background-color: black;
-          max-width: 600px;
-          min-width: 400px;
-          width: 100%;
-          display: block;
-          margin: auto;
-
-          padding-top: 0.5rem;
-          font-size: 0.7rem;
+          margin: 1.5rem 0;
+          padding-bottom: 0.1rem;
+          border-bottom: 1px solid #ffffff10;
         "
-        >{{link}}</a
       >
-    </header>
+        <table
+          style="
+            font-family: 'Poppins', sans-serif;
+            width: 100%;
+            border-collapse: collapse;
+          "
+        >
+          <tbody
+            style="
+              font-family: 'Poppins', sans-serif;
+              box-sizing: border-box;
+              margin: 0;
+              padding: 0;
+              margin-top: 1.5rem;
+            "
+          >
+            <tr
+              style="
+                font-family: 'Poppins', sans-serif;
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+                margin-top: 0.4rem;
+                padding-bottom: 0.1rem;
+              "
+            >
+              <td
+                style="
+                  font-family: 'Poppins', sans-serif;
+                  box-sizing: border-box;
+                  margin: 0;
+                  padding: 0;
+                  color: white;
+                  text-align: left;
+                  padding-left: 1rem;
+                "
+              >
+                {{street_name}} {{street_number}}, {{city}}, {{zip_code}},
+                {{state}}
+              </td>
+              <td
+                style="
+                  font-family: 'Poppins', sans-serif;
+                  box-sizing: border-box;
+                  margin: 0;
+                  padding: 0;
+                  color: white;
+                  text-align: right;
+                  white-space: nowrap;
+                  padding-right: 1rem;
+                "
+              >
+                {{shipping_cost}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div
+          style="
+            font-family: 'Poppins', sans-serif;
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            color: white;
+            text-align: right;
+            font-size: 1.5rem;
+            margin-top: 1.5rem;
+            padding-right: 1rem;
+          "
+        >
+          ${{total}}
+        </div>
+      </div>
+
+      <span
+        style="
+          font-family: 'Poppins', sans-serif;
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+          color: white;
+          text-align: right;
+        "
+        >Llega el {{delivery_date}}</span
+      >
+    </div>
 
     <footer
       style="
@@ -219,7 +334,8 @@
           border-bottom: 1px solid white;
         "
       >
-        Si has recibido este email por error ponte en contacto con nosotros.
+        ¿No has sido tú? Asegúrate de cambiar la contraseña inmediatamente y
+        ponte en contacto con nosotros.
       </div>
       <div
         style="

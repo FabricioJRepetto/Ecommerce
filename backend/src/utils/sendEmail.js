@@ -1,6 +1,10 @@
+require("dotenv").config();
 const nodemailer = require("nodemailer");
 const { google } = require("googleapis");
-require("dotenv").config();
+const fs = require("fs-extra");
+const path = require("path");
+const Handlebars = require("handlebars");
+const { formatPrice } = require("./formatOrderData");
 const {
   EMAIL_OAUTH_CLIENT_ID,
   EMAIL_CLIENT_SECRET,
@@ -16,8 +20,37 @@ const oAuth2Client = new google.auth.OAuth2(
 );
 oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
 
-const sendEmail = async (email, subject, html) => {
+Handlebars.registerHelper("formatPrice", function (price) {
+  if (!price) return "---";
+  const p = price.toString();
+  let int = p.split(".")[0];
+  if (int.length > 3) {
+    int = int.slice(0, -3) + "." + int.slice(-3);
+  }
+  return int;
+});
+
+Handlebars.registerHelper("finalPrice", function (price, sale_price) {
+  if (sale_price !== price && sale_price !== 0) {
+    return formatPrice(sale_price).int.toString();
+  } else {
+    return formatPrice(price).int.toString();
+  }
+});
+
+Handlebars.registerHelper("quantity", function (quantity) {
+  if (quantity > 1) {
+    return quantity + "x";
+  }
+});
+
+const sendEmail = async (email, subject, templateUrl, variables) => {
   try {
+    const filePath = path.join(__dirname, templateUrl);
+    const source = fs.readFileSync(filePath, "utf-8").toString();
+    const template = Handlebars.compile(source);
+    const html = template(variables);
+
     const accessToken = await oAuth2Client.getAccessToken();
     const transport = nodemailer.createTransport({
       service: "gmail",

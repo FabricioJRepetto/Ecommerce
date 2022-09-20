@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import Carousel from '../Home/Carousel/Carousel'
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import Carousel from "../Home/Carousel/Carousel";
 
-import './PremiumPreview.css'
+import "./PremiumPreview.css";
 
 const PremiumPreview = () => {
-  const { carouselIndex } = useSelector(state => state.extraSlice);
+  const { carouselIndex } = useSelector((state) => state.extraSlice);
   const navigate = useNavigate();
 
-    const images = [
+  const images = [
     {
       // PLAYDATE
       img: "https://res.cloudinary.com/dsyjj0sch/image/upload/v1663096330/playdate_inagg3.jpg",
@@ -39,7 +39,7 @@ const PremiumPreview = () => {
       // KARA
       img: "https://res.cloudinary.com/dsyjj0sch/image/upload/v1663096330/kara_hc65fn.jpg",
       url: "/premium/6307fe2f59e9db1b1858060a",
-    }
+    },
   ];
   const premiumDesc = [
     "Una nueva y pequeña consola de mano llena de nuevos juegos originales.",
@@ -48,41 +48,40 @@ const PremiumPreview = () => {
     "Esta cámara es tu nueva compañera en la creatividad y te acompañará a cualquier parte.",
     "Libérate con la conexión inalámbrica y batería extendida de los Indy Evo",
     "Infunde una estética retro-moderna y dale una personalidad única a tu setup.",
-  ]
+  ];
 
-    const [change, setChange] = useState(false)
-    useEffect(() => {
-      setChange(!change)
-      // eslint-disable-next-line
-    }, [carouselIndex])
+  const [change, setChange] = useState(false);
+  useEffect(() => {
+    setChange(!change);
+    // eslint-disable-next-line
+  }, [carouselIndex]);
 
   return (
     <div className="store-premium">
-          <div className='premiumPreview-carousel-container'>
-                <Carousel
-                    images={images}
-                    pointer
-                    indicators
-                    shareIndex
-                    id='premiumPreview'
-                    width='100%'
-                />
-          </div>
-          
-          <div className="store-premium-text">
-            <div>
-              <div></div>
-              <p className={ change ? 'spt-text' : 'spt-textb'}>{premiumDesc[carouselIndex]}</p>
-            </div>
-            <button
-              className="g-white-button"
-              onClick={() => navigate("/premium")}
-            >
-              Explorar Premium
-            </button>
-          </div>
-    </div>
-  )
-}
+      <div className="premiumPreview-carousel-container">
+        <Carousel
+          images={images}
+          pointer
+          indicators
+          shareIndex
+          id="premiumPreview"
+          width="100%"
+        />
+      </div>
 
-export default PremiumPreview
+      <div className="store-premium-text">
+        <div>
+          <div></div>
+          <p className={change ? "spt-text" : "spt-textb"}>
+            {premiumDesc[carouselIndex]}
+          </p>
+        </div>
+        <button className="g-white-button" onClick={() => navigate("/premium")}>
+          Explorar Provider Premium
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default PremiumPreview;

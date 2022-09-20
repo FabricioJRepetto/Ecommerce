@@ -15,26 +15,23 @@ import { WishlistButton } from "../Products/WishlistButton";
 import "./PremiumDetails.css";
 
 const PremiumDetails = () => {
-    const { id } = useParams();
-    const [product, setProduct] = useState(false);
-    const [images, setImages] = useState(false);
-    const [loading, setLoading] = useState(true);
-    const [tabOpen, setTabOpen] = useState(false)
-    const notification = useNotification();
-    const { addToCart, buyNow } = useCheckout();
-    const { wishlist } = useSelector((state) => state.cartReducer);
-    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-    const [scroll, setScroll] = useState(false)
-    const { session } = useSelector((state) => state.sessionReducer);
-    const reference = useRef(null)
-    const [isVisible, setIsVisible] = useState(false)
+  const { id } = useParams();
+  const [product, setProduct] = useState(false);
+  const [images, setImages] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [tabOpen, setTabOpen] = useState(false);
+  const notification = useNotification();
+  const { addToCart, buyNow } = useCheckout();
+  const { wishlist } = useSelector((state) => state.cartReducer);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [scroll, setScroll] = useState(false);
+  const { session } = useSelector((state) => state.sessionReducer);
+  const reference = useRef(null);
+  const [isVisible, setIsVisible] = useState(false);
 
-    const whiteBgIds = [
-        '630805253f8827294d4b17b4',
-        '6316471837c51526ec170292',
-    ]
+  const whiteBgIds = ["630805253f8827294d4b17b4", "6316471837c51526ec170292"];
 
-    const attributesSection = useRef(null);
+  const attributesSection = useRef(null);
   const scrollTo = () => {
     if (attributesSection.current) {
       setTabOpen(true);
@@ -163,31 +160,44 @@ const PremiumDetails = () => {
               <div className="pd-head-price">
                 <h2>{product.premiumData.miniDescription}</h2>
 
-                <div className='premiumdetails-price'>
-                    <span>${priceFormat(product.price).int}</span>
-                    <span>{priceFormat(product.price).cents}</span>
-                    {product.free_shipping && <p className='provider-text'> Envío gratis!</p>}
-                    {product.available_quantity < 1 && <div className="pd-stock-container">
-                            <div className='premiumdetails-nostock' title="Fuera de stock">Fuera de stock</div>
-                        </div>}
+                <div className="premiumdetails-price">
+                  <span>${priceFormat(product.price).int}</span>
+                  <span>{priceFormat(product.price).cents}</span>
+                  {product.available_quantity < 1 ? (
+                    <div className="pd-stock-container">
+                      <div
+                        className="premiumdetails-nostock"
+                        title="Fuera de stock"
+                      >
+                        Fuera de stock
+                      </div>
+                    </div>
+                  ) : (
+                    product.free_shipping && (
+                      <p className="provider-text">¡Envío gratis!</p>
+                    )
+                  )}
                 </div>
-                
-                <div ref={reference} 
-                    className='premiumdetails-buttons'>                                    
-                    <button
-                        className={`g-white-button details-button ${whiteBgIds.includes(id) && 'secondary-button'}`}
-                        disabled={product.available_quantity < 1}
-                        onClick={() => addToCart(id)}
-                    >
-                        Agregar al carrito
-                    </button>
-                    <button
-                        className={`g-white-button details-button ${whiteBgIds.includes(id) && 'secondary-button'}`}
-                        disabled={product.available_quantity < 1}
-                        onClick={() => buyNow(id)}
-                    >
-                        Comprar ahora
-                    </button>
+
+                <div ref={reference} className="premiumdetails-buttons">
+                  <button
+                    className={`g-white-button details-button ${
+                      whiteBgIds.includes(id) && "secondary-button"
+                    }`}
+                    disabled={product.available_quantity < 1}
+                    onClick={() => addToCart(id)}
+                  >
+                    Agregar al carrito
+                  </button>
+                  <button
+                    className={`g-white-button details-button ${
+                      whiteBgIds.includes(id) && "secondary-button"
+                    }`}
+                    disabled={product.available_quantity < 1}
+                    onClick={() => buyNow(id)}
+                  >
+                    Comprar ahora
+                  </button>
                 </div>
 
                 {product.main_features && (
