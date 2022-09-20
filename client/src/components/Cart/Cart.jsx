@@ -162,17 +162,17 @@ const Cart = () => {
 
   const deliverDate = () => {
     // hasta las 15 de mañana + 172800000 (2 dias)
-    let now = new Date(Date.now() - 10800000);
+    let now = new Date(Date().toLocaleString("es-Ar", { timeZone: "America/Buenos_Aires" }));
     let hours = 24 - now.getHours() + 15;
     const target = new Date(Date.now() + hours * 3600000 + 172800000).getDay();
     let days = [
-      "domingo",
-      "lunes",
-      "martes",
-      "miércoles",
-      "jueves",
-      "viernes",
-      "sábado",
+        "domingo",
+        "lunes",
+        "martes",
+        "miércoles",
+        "jueves",
+        "viernes",
+        "sábado",
     ];
     return ` el ${days[target]}`;
   };

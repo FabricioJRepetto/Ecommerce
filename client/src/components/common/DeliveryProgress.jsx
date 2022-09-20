@@ -7,7 +7,7 @@ import "./DeliveryProgress.css";
 
 const DeliveryProgress = ({ order }) => {
   const location = useLocation();
-  let actualDate = new Date().getTime();
+  let actualDate = new Date().getTime(-10800000);
 
   return (
     <div className="delivery-progress-container">

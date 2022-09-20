@@ -170,8 +170,8 @@ const BuyNow = () => {
     if (flash) {
       return "mañana";
     }
-    // 259200000 (3 dias)
-    const today = new Date(Date.now() + 259200000).getDay();
+    // 259200000 (3 dias) - 1080000 (3 horas)
+    const today = new Date(Date.now() + 248400000).getDay();
     let days = [
       "domingo",
       "lunes",
