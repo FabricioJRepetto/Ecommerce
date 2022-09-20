@@ -249,6 +249,15 @@ code {
   }
 }
 
+@keyframes loaderSwipeAnim2 {
+  0% {
+    background-position: 100%;
+  }
+  100% {
+    background-position: 0%;
+  }
+}
+
 @keyframes gradientTextAnim {
   0% {
     background-position: 0% 50%;

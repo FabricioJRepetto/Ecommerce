@@ -36,12 +36,26 @@ import ForgotPassword from "./components/Session/ForgotPassword";
 import PremiumDetails from "./components/Provider/PremiumDetails";
 import { useUserLogin } from "./hooks/useUserLogin";
 
+import axios from 'axios'
+import { useNotification } from "./hooks/useNotification";
+import { useSignout } from "./hooks/useSignout";
+
 function App() {
     const dispatch = useDispatch();
     const { userLogin } = useUserLogin();
+    const notification = useNotification();
+    const signOut = useSignout()
     const isUserDataLoading = useSelector(
         (state) => state.sessionReducer.isUserDataLoading
     );
+
+    axios.interceptors.response.use((response) => response, (error) => {
+        if (error.response.status === 403 && error.response.data.message === 'reconnect') {
+            signOut();
+            notification('Sesión expirada, por favor vuelve a iniciar sesión', '/signin', 'error')
+        }
+        return Promise.reject(error.message);
+    });
 
     useEffect(() => {
         if (window.localStorage.getItem("loggedTokenEcommerce")) {
@@ -49,7 +63,6 @@ function App() {
         } else {
             dispatch(loadingUserData(false));
         }
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

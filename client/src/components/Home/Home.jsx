@@ -17,10 +17,10 @@ import { ReactComponent as Three } from "../../assets/svg/code-svgrepo-com.svg";
 import { ReactComponent as Four } from "../../assets/svg/crop-svgrepo-com.svg";
 import { ReactComponent as Five } from "../../assets/svg/explode-svgrepo-com.svg";
 import { ReactComponent as Six } from "../../assets/svg/perform-svgrepo-com.svg";
+import PremiumPreview from "../Provider/PremiumPreview";
+import Suggestions from "../common/Suggestions";
 
 import "./Home.css";
-import Suggestions from "../common/Suggestions";
-import PremiumPreview from "../Provider/PremiumPreview";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -48,6 +48,10 @@ const Home = () => {
           width="100%"
         />
       </div>
+      <div className="providerstore-disclaimer">            
+            <p>Encuentra los mejores productos de distintas tiendas especializadas en un solo lugar.</p>
+            <p>Explora Provider Store para ver nuestros productos seleccionados.</p>
+      </div>
 
       <div className="categories">
         <div onClick={() => categorySearch("MLA1648")}>
@@ -71,6 +75,8 @@ const Home = () => {
           <p>Ofertas</p>
         </div>
       </div>
+
+        
 
       <FlashSales />
 

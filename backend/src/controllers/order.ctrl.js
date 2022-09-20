@@ -12,14 +12,14 @@ const getOrder = async (req, res, next) => {
     if (!_id || !req.params.id)
       return res
         .status(400)
-        .json({ message: "User ID or Order ID not given." });
+        .json({ message: "ID de usuario o ID de orden no enviada" });
 
     let order = await Order.findOne({
       user: _id,
       _id: req.params.id,
     });
 
-    if (!order) return res.json({ message: "No orders." });
+    if (!order) return res.status(404).json({ message: "Orden no encontrada" });
 
     if (
       order.status === "pending" &&
@@ -179,7 +179,7 @@ const deleteOrder = async (req, res, next) => {
       user: _id,
       status: "pending",
     });
-    return res.json({ message: "Order deleted" });
+    return res.json({ message: "Orden eliminada" });
   } catch (error) {
     next(error);
   }
@@ -202,60 +202,14 @@ const updateOrder = async (req, res, next) => {
     } = req.body;
 
     if (req.body.status) {
-      //! esto no debería estár en uso
-      // // cambiar estado a pagado y agregar fecha de pago y de entrega
-      // if (req.body.status === "approved") {
-      //     const flash = (flash) => {
-      //         // horas restantes hasta las 15hrs de mañana (flash_shipping true)
-      //         let now = new Date();
-
-      //         if (flash) {
-      //             now = now.setDate(now.getDate() + 1);
-      //         } else {
-      //             now = now.setDate(now.getDate() + 3);
-      //         }
-      //         now = new Date(now).toISOString();
-      //         //? ISO string
-      //         // let targetDate = `${now.split('T')[0]}T15:00:00.000Z`;
-      //         //? Milliseconds
-      //         let targetDate = new Date(`${now.split('T')[0]}T15:00:00.000Z`).getTime();
-
-      //         return targetDate;
-      //     };
-
-      //     const order = await Order.findByIdAndUpdate(
-      //         req.params.id,
-      //         {
-      //             $set: {
-      //                 status: req.body.status,
-      //                 payment_date: Date.now() - 10800000,
-      //                 delivery_date: flash_shipping ? flash(true) : flash(false),
-      //                 delivery_status: 'shipping'
-      //             },
-      //         },
-      //         { new: true }
-      //     );
-      //     return res.json({ message: `Order status: ${order.status}` });
-      // } else {
-
       const order = await Order.findById(req.params.id);
 
       if (order.status !== "approved") {
-        // await Order.findByIdAndUpdate(
-        //     req.params.id,
-        //     {
-        //         $set: {
-        //             status: req.body.status,
-        //         },
-        //     },
-        //     { new: true }
-        // );
         order.status = req.body.status;
         await order.save();
         return res.json({ message: `Order status: ${order.status}` });
       }
-      return res.json({ message: `Order status: approved` });
-      //}
+      return res.json({ message: `Orden aprobada` });
     }
 
     if (product_id) {
@@ -315,35 +269,43 @@ const updateOrder = async (req, res, next) => {
       { new: true }
     );
 
-    return res.json({ message: `Order updated.` });
+    return res.json({ message: `Orden actualizada` });
   } catch (error) {
     next(error);
   }
 };
 
 const getPostsale = async (req, res, next) => {
+  let attempt = 0;
   try {
     if (!req.params.id)
-      return res.json({ error: true, message: "Order ID not provided." });
+      return res.json({ error: true, message: "ID de orden no enviada" });
 
     let order = await Order.findById(req.params.id);
-    if (!order) return res.json({ error: true, message: "Order not found." });
+    if (!order)
+      return res
+        .status(404)
+        .json({ error: true, message: "Orden no encontrada" });
 
     if (order.status === "approved") return res.json(order);
 
     const waiter = async () => {
-      //! volver a ver PROBLEMAAAAAAS
-      //console.log('@@@ preguntando...');
-      const aux = await Order.findById(req.params.id);
+      if (attempt < 10) {
+        attempt++;
+        const aux = await Order.findById(req.params.id);
 
-      if (aux && aux.status === "approved") {
-        /* console.log('@@@ encontrado');
-                console.log(aux); */
-        return res.json(aux);
+        if (aux && aux.status === "approved") {
+          return res.json(aux);
+        } else {
+          setTimeout(async () => {
+            waiter();
+          }, 3000);
+        }
       } else {
-        setTimeout(async () => {
-          waiter();
-        }, 3000);
+        return res.json({
+          error: true,
+          message: "Límite de intentos alcanzado",
+        });
       }
     };
 

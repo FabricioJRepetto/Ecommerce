@@ -5,6 +5,12 @@
   overflow: hidden;
   overflow: -moz-hidden-unscrollable;
 }
+.details-loader-container {
+    height: 80vh;    
+}
+.details-loader-container > *{
+    margin: auto;    
+}
 
 .details-head-main {
   display: flex;

@@ -1,25 +1,20 @@
 require("dotenv").config();
 const { default: axios } = require("axios");
 const order = require("../models/order");
-const user = require("../models/user");
 const product = require("../models/product");
-const { formatDate, formatPrice } = require("../utils/formatOrderData");
 const { MP_SKEY } = process.env;
 
 const deliveryDate = (flash) => {
   // horas restantes hasta las 15hrs de mañana (flash_shipping true)
-  let now = new Date();
-
-  //: saltear Domingos
-  if (flash) {
-    now = now.setDate(now.getDate() + 1);
-  } else {
-    now = now.setDate(now.getDate() + 3);
-  }
+  // iniciamos fecha en zona horaria Arg
+  let now = new Date(
+    Date().toLocaleString("es-Ar", { timeZone: "America/Buenos_Aires" })
+  );
+  // Agregamos 1 o 3 días, dependiendo el modo de envío
+  now = now.setDate(now.getDate() + (flash ? 1 : 3));
+  // convertimos a string
   now = new Date(now).toISOString();
-  //? ISO string
-  // return `${now.split('T')[0]}T15:00:00.000-03:00`;
-  //? Milliseconds
+  // agregamos las 15 hrs
   return new Date(`${now.split("T")[0]}T15:00:00.000-03:00`).getTime();
 };
 
@@ -48,7 +43,6 @@ const notificationStripe = async (req, res, next) => {
 
     if (status === "succeeded") {
       //? cambiar orden a pagada
-      //! volver a ver: checkear zona horaria del servidor ( Date.now() )
       const target = await order.findOne({ payment_intent: id });
 
       const newOrder = await order
@@ -58,7 +52,11 @@ const notificationStripe = async (req, res, next) => {
             $set: {
               status: "approved",
               delivery_status: "shipping",
-              payment_date: Date.now() - 10800000,
+              payment_date: Date.now(
+                new Date().toLocaleString("es-Ar", {
+                  timeZone: "America/Buenos_Aires",
+                })
+              ),
               delivery_date: target.flash_shipping
                 ? deliveryDate(true)
                 : deliveryDate(false),
@@ -113,7 +111,6 @@ const notificationStripe = async (req, res, next) => {
 
 const notificationMercadopago = async (req, res, next) => {
   try {
-    console.log(req.url);
     const { type } = req.query;
 
     if (type === "payment") {
@@ -131,7 +128,6 @@ const notificationMercadopago = async (req, res, next) => {
 
       if (data.status === "approved") {
         //? cambiar orden a pagada
-        //! volver a ver: checkear zona horaria del servidor ( Date.now() )
         const target = await order.findById(data.external_reference);
         const newOrder = await order
           .findByIdAndUpdate(
@@ -140,7 +136,11 @@ const notificationMercadopago = async (req, res, next) => {
               $set: {
                 status: "approved",
                 delivery_status: "shipping",
-                payment_date: Date.now() - 10800000,
+                payment_date: Date.now(
+                  new Date().toLocaleString("es-Ar", {
+                    timeZone: "America/Buenos_Aires",
+                  })
+                ),
                 delivery_date: target.flash_shipping
                   ? deliveryDate(true)
                   : deliveryDate(false),

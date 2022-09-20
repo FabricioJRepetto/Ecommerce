@@ -48,7 +48,12 @@ const create = async (req, res, next) => {
         });
 
         //? setea el link de pago y la expiración de 24hrs (max de stripe)
-        const expiration = new Date(Date.now() + 75600000).toISOString().slice(0, -1) + '-03:00';
+        const expiration = () => {
+            // ISO string en time zone 0
+            let date = new Date(Date().toLocaleString("es-Ar", { timeZone: "America/Buenos_Aires" }))
+            date = date.setDate(date.getDate() + 1)
+            return new Date(date).toISOString()
+        };
         await Order.findByIdAndUpdate(orderId,
             {
                 "$set": {

@@ -8,7 +8,7 @@ const CountDown = () => {
     useEffect(() => {
       let countdownInterv = null;
         countdownInterv = setInterval(() => {
-            let now = new Date(),
+            let now = new Date(Date().toLocaleString("es-Ar", { timeZone: "America/Buenos_Aires" })),
              h = 23 - now.getHours(),
              m = 59 - now.getMinutes(),
              s = 59 - now.getSeconds();
