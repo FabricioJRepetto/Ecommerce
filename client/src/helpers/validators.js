@@ -21,7 +21,7 @@ export const validateImgs = (imagesList, warnTimer, productImg) => {
       warnFlagFormat = true;
       imagesList.splice(i, 1);
       i--;
-    } else if (imagesList[i].size > 5263157) {
+    } else if (imagesList[i].size > 2105263) {
       warnFlagSize = true;
       imagesList.splice(i, 1);
       i--;
@@ -52,7 +52,7 @@ export const validateImgs = (imagesList, warnTimer, productImg) => {
       ${warnFlagExcess ? "Se permiten 8 imágenes como máximo" : ""}
       ${lineBreakSecond}
       ${lineBreakThird}
-      ${warnFlagSize ? "Las imágenes deben pesar menos de 5mb" : ""}`
+      ${warnFlagSize ? "Las imágenes deben pesar menos de 2mb" : ""}`
     );
     //! VOLVER A VER meter salto de linea
   }

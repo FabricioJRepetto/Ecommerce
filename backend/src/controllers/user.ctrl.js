@@ -13,7 +13,6 @@ const fs = require("fs-extra");
 const { JWT_SECRET_CODE } = process.env;
 const { validationResult } = require("express-validator");
 const sendEmail = require("../utils/sendEmail");
-const { formatDate, formatPrice } = require("../utils/formatOrderData");
 
 cloudinary.config({
   cloud_name: CLOUDINARY_CLOUD,

@@ -2,6 +2,7 @@ require("dotenv").config();
 const { default: axios } = require("axios");
 const order = require("../models/order");
 const product = require("../models/product");
+const { formatDate, formatPrice } = require("../utils/formatOrderData");
 const { MP_SKEY } = process.env;
 
 const deliveryDate = (flash) => {
@@ -87,7 +88,7 @@ const notificationStripe = async (req, res, next) => {
         `../utils/templates/orderResume.html`,
         {
           order_id: _id,
-          date: formatDate(payment_date).slice(0, -6),
+          date: formatDate(payment_date),
           products: products,
           street_name,
           street_number,
@@ -97,7 +98,7 @@ const notificationStripe = async (req, res, next) => {
           shipping_cost: shipping_cost
             ? `Envío $${formatPrice(shipping_cost).int}`
             : "Envío gratis",
-          delivery_date: formatDate(delivery_date).slice(0, -6),
+          delivery_date: formatDate(delivery_date),
           total: formatPrice(total + shipping_cost).int,
         }
       );
@@ -177,7 +178,7 @@ const notificationMercadopago = async (req, res, next) => {
           `../utils/templates/orderResume.html`,
           {
             order_id: _id,
-            date: formatDate(payment_date).slice(0, -6),
+            date: formatDate(payment_date),
             products: products,
             street_name,
             street_number,
@@ -187,7 +188,7 @@ const notificationMercadopago = async (req, res, next) => {
             shipping_cost: shipping_cost
               ? `Envío $${formatPrice(shipping_cost).int}`
               : "Envío gratis",
-            delivery_date: formatDate(delivery_date).slice(0, -6),
+            delivery_date: formatDate(delivery_date),
             total: formatPrice(total + shipping_cost).int,
           }
         );

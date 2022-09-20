@@ -1,4 +1,4 @@
-export const formatDate = (d) => {
+/* export const formatDate = (d) => {
     if (d === undefined) {
         return 'fecha invalida'
     }
@@ -7,4 +7,19 @@ export const formatDate = (d) => {
     } else {
         return new Date(d).toISOString().slice(0, -8).replace("T", " ");
     }
+}; */
+
+export const formatDate = (d) => {
+  if (d === undefined) {
+    return "fecha invalida";
+  }
+  if (typeof d === "string") {
+    return d.toString().slice(0, -13).replace("T", " ");
+  } else {
+    return new Date(d).toLocaleDateString("es-AR", {
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+    });
+  }
 };
