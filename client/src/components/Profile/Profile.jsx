@@ -74,7 +74,7 @@ const Profile = () => {
   }, [wl_id]);
 
   return (
-    <div className="profile-container">
+    <div className="profile-container component-fadeIn">
       {/* <div
         className={`navbar-menu-mobile-background ${
           !showMenu ? "hide-menu-mobile-background" : ""
@@ -249,6 +249,7 @@ const Profile = () => {
         )}
 
         {render === "password" && <UpdatePassword />}
+
       </div>
     </div>
   );

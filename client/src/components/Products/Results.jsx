@@ -74,12 +74,12 @@ console.log(applied);
   };
 
   return (
-    <div className="results-container">
+    <div className="results-container premiumdetails-loader">
       {loading 
       ? <div style={{height: '100vh'}}>
             <LoaderBars />
         </div>      
-      : <div className="results-container">
+      : <div className="results-container component-fadeIn">
         <div className="bread-crumbs">
             {breadCrumbs?.length > 0 && (
             <div>

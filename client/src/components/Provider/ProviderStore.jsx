@@ -45,7 +45,7 @@ const ProviderStore = () => {
   }, []);
 
   return (
-    <div className="providerstore-container">
+    <div className="providerstore-container component-fadeIn">
       <div className="providerstore-header-desktop">
         <div className="providerstore-echo-inner">
           <span>PROVIDER</span>

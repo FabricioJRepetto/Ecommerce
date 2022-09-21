@@ -4,6 +4,8 @@
     background-attachment: fixed;
     background-size: cover;
     position: relative;
+    flex-grow: 1;
+    min-height: 100vh;
 }
 
 .providerpremium-header {    

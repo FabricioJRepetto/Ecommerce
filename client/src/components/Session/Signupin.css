@@ -57,7 +57,7 @@
 .google-container {
   border-top: 1px solid lightgrey;
   padding-top: 1.5rem;
-  margin-top: 1rem;
+  margin-top: 17rem;
 }
 
 .google-container>span:first-child {
@@ -68,6 +68,15 @@
   font-size: .9rem;
 }
 
+.signin-signs-container {
+    position: relative;
+    height: 100%;
+    padding-top: 2rem;
+}
+.signin-signs-container > form {
+    position: absolute;
+    width: 100%;
+}
 
 .forgot-password-container {
     position: absolute;

@@ -117,10 +117,9 @@ const PremiumDetails = () => {
   }, []);
 
   return (
-    <div className="premiumdetails-container">
+    <div className="premiumdetails-container component-fadeIn">
       {loading ? (
         <div>
-          <LoaderBars />
         </div>
       ) : (
         <div className="premiumdetails-content">

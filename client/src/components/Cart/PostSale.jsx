@@ -138,7 +138,7 @@ const PostSale = () => {
   };
 
   return (
-    <div className="postsale-container">
+    <div className="postsale-container component-fadeIn">
       {loading && !order ? (
         <LoaderBars />
       ) : (

@@ -2,7 +2,7 @@ import "./About.css";
 
 const AboutUs = () => {
   return (
-    <div>
+    <div className="component-fadeIn">
       <h1>Nosotros</h1>
       <div>
         <div>

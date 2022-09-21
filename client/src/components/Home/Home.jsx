@@ -9,7 +9,6 @@ import {
 } from "../../Redux/reducer/productsSlice";
 import Carousel from "./Carousel/Carousel";
 import { IMAGES } from "../../constants";
-import Footer from "../common/Footer";
 import FlashSales from "../common/FlashSales";
 
 import { ReactComponent as Two } from "../../assets/svg/build-svgrepo-com.svg";
@@ -34,10 +33,10 @@ const Home = () => {
 
     navigate("/results");
     dispatch(loadQuerys({ category }));
-  };
+  };  
 
   return (
-    <div className="home-container">
+    <div className="component-fadeIn">
       <div className="home-carousel">
         <Carousel
           images={IMAGES}

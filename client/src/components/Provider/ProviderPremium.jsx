@@ -91,7 +91,7 @@ const ProviderPremium = () => {
   };
 
   return (
-    <div className="providerpremium-container">
+    <div className="providerpremium-container component-fadeIn">
       <div className="providerstore-header-desktop">
         <div
           className={`providerpremium-echo-inner ${
@@ -138,7 +138,7 @@ const ProviderPremium = () => {
 
       <div className="providerpremium-cardscontainer">
         {loading || !products ? (
-          <LoaderBars />
+          <></>
         ) : (
           React.Children.toArray(
             products.map((e, index) => (
