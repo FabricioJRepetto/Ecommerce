@@ -4,7 +4,7 @@ import "./Footer.css";
 
 const Footer = () => {
   return (
-    <div className="footer-container">
+    <span className="footer-container">
       {/* <img
         src={resizer(
           "https://res.cloudinary.com/dsyjj0sch/image/upload/v1659650791/PROVIDER_LOGO_glitch_aberration_kt2hyv.png",
@@ -45,7 +45,7 @@ const Footer = () => {
       <div className="footer-copyright-container">
         <p>© 2022 Provider S.R.L. Todos los derechos reservados</p>
       </div>
-    </div>
+    </span>
   );
 };
 
