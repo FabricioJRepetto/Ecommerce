@@ -85,6 +85,7 @@ function App() {
           <NavBar />
           <BackToTop />
           <Routes>
+            <Route path="/" element={<Home />} />
             <Route path="/about" element={<AboutUs />} />
             <Route path="/buynow" element={<BuyNow />} />
             <Route path="/cart/" element={<Cart />} />
@@ -102,7 +103,6 @@ function App() {
             <Route path="/sales" element={<SalesResults />} />
             <Route path="/signin" element={<Signupin />} />
             <Route path="/forgotPassword" element={<ForgotPassword />} />
-            <Route path="/" element={<Home />} />
             <Route path="*" element={<NotFound />} />
             <Route
               path="/reset/:userId/:resetToken"
@@ -125,7 +125,6 @@ function App() {
             </Route>
             <Route path="/unauthorized" element={<Unauthorized />} />
           </Routes>
-
           <Footer />
         </div>
       )}
