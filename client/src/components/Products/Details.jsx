@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import Galery from "./Galery";
 import { WishlistButton as Fav } from "./WishlistButton";
-import Footer from "../common/Footer";
 import { loadQuerys } from "../../Redux/reducer/productsSlice";
 import { priceFormat } from "../../helpers/priceFormat";
 import { useCheckout } from "../../hooks/useCheckout";
@@ -23,7 +22,7 @@ const Details = () => {
   const { addToCart, buyNow } = useCheckout();
 
   const [data, setData] = useState(false);
-  const [error, setError] = useState(false)
+  const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
   const [attributesHeight, setAttributesHeight] = useState(null);
   const [attributesColumns, setAttributesColumns] = useState(false);
@@ -95,9 +94,9 @@ const Details = () => {
     (async () => {
       setLoading(true);
       const { data } = await axios(`/product/${id}`);
-      
+
       if (data.error) {
-        setError({message: data.message})
+        setError({ message: data.message });
       } else {
         setData(data);
         setDescription(!!data.description);
@@ -124,14 +123,17 @@ const Details = () => {
 
   return (
     <div>
-      {loading && 
+      {loading && (
         <div className="details-loader-container">
-            <LoaderBars />
-        </div>}
-      {error && <div className="product-details-error">
-            <h1>{error.message}</h1>
-            <ReturnButton to={-1}/>
-        </div>}
+          <LoaderBars />
+        </div>
+      )}
+      {error && (
+        <div className="product-details-error">
+          <h1>{error.message}</h1>
+          <ReturnButton to={-1} />
+        </div>
+      )}
       {data && (
         <div>
           <div className="details-head-container">
@@ -273,7 +275,6 @@ const Details = () => {
           </div>
         </div>
       )}
-      <Footer />
     </div>
   );
 };

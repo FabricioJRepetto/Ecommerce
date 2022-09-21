@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import CartCard from "../Products/CartCard";
-import Footer from "../common/Footer";
 import Modal from "../common/Modal";
 import { useModal } from "../../hooks/useModal";
 import { useNotification } from "../../hooks/useNotification";
@@ -575,8 +574,6 @@ const Cart = () => {
           </p>
         </div>
       </Modal>
-
-      <Footer />
     </div>
   );
 };

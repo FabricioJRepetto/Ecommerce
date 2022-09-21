@@ -31,6 +31,7 @@ import BackToTop from "./helpers/backToTop/BackToTop";
 import RequireRole from "./test/fer/RequireRole";
 import UsersAdmin from "./test/fer/UsersAdmin";
 import AboutUs from "./components/common/AboutUs";
+import Footer from "./components/common/Footer";
 import LoaderBars from "./components/common/LoaderBars";
 import ForgotPassword from "./components/Session/ForgotPassword";
 import PremiumDetails from "./components/Provider/PremiumDetails";
@@ -123,6 +124,7 @@ function App() {
             </Route>
             <Route path="/unauthorized" element={<h1>UNAUTHORIZED</h1>} />
           </Routes>
+          <Footer />
         </div>
       )}
     </div>

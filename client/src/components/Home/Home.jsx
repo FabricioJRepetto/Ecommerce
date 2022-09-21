@@ -48,9 +48,12 @@ const Home = () => {
           width="100%"
         />
       </div>
-      <div className="providerstore-disclaimer">            
-            <p>Encuentra los mejores productos de distintas tiendas especializadas en un solo lugar.</p>
-            <p>Explora Provider Store para ver nuestros productos seleccionados.</p>
+      <div className="providerstore-disclaimer">
+        <p>
+          Encuentra los mejores productos de distintas tiendas especializadas en
+          un solo lugar.
+        </p>
+        <p>Explora Provider Store para ver nuestros productos seleccionados.</p>
       </div>
 
       <div className="categories">
@@ -76,15 +79,11 @@ const Home = () => {
         </div>
       </div>
 
-        
-
       <FlashSales />
 
       <PremiumPreview />
 
       <Suggestions />
-
-      <Footer />
     </div>
   );
 };
