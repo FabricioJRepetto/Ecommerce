@@ -15,7 +15,7 @@ const Footer = () => {
 
       <div className="footer-links-container">
         <div>
-          <p>Suscríbete</p>
+          <p className="footer-suscribe">Suscríbete</p>
           <input type="text" />
         </div>
 

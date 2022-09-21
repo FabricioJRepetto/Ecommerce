@@ -8,7 +8,6 @@ import { priceFormat } from "../../helpers/priceFormat";
 import { resizer } from "../../helpers/resizer";
 import LoaderBars from "../common/LoaderBars";
 import Carousel from "../Home/Carousel/Carousel";
-import Footer from "../common/Footer";
 import { ArrowDownIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import { WishlistButton } from "../Products/WishlistButton";
 
@@ -415,8 +414,6 @@ const PremiumDetails = () => {
               </button>
             </div>
           </div>
-
-          <Footer />
         </div>
       )}
     </div>
