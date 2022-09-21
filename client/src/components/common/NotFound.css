@@ -1,35 +1,17 @@
 .not-found-container {
-   width: 100%;
-   min-height: 100%;
-   flex-grow: 1;
    display: flex;
-   flex-direction: column;
    align-items: center;
    justify-content: center;
-   user-select: none;
+   background-image: url('https://res.cloudinary.com/dsyjj0sch/image/upload/v1663797565/static-noise_jrlwul.webp');
+   background-size: cover;
+   flex-grow: 1;
 }
 
 .not-found-container h1 {
    font-family: HelveticaNeueLTPro-Hv;
    color: black;
    letter-spacing: -6px;
-   font-size: 5rem;
+   font-size: 6rem;
    z-index: 50;
    width: 100%;
-}
-
-.not-found-section {
-   position: absolute;
-   top: -50px;
-   left: -50px;
-   width: calc(100% + 50px);
-   height: calc(100% + 50px);
-   background: repeating-linear-gradient(#111, #111 50%, white 50%, white);
-   background-size: 5px 5px;
-   filter: url(#noise);
-}
-
-.not-found-section svg {
-   width: 0;
-   height: 0;
 }
