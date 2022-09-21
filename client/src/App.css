@@ -2,9 +2,9 @@
   font-family: "HelveticaNeueLTPro-Roman";
   text-align: center;
   /* background: #000000; */
-  /*! Volver a ver: este baclgroudn evitaba el flashazo blanco cuando cargaba la página */
+  /*! Volver a ver: este background evitaba el flashazo blanco cuando cargaba la página */
   color: rgb(255, 255, 255);
-  width: 100;
+  width: 100%;
   min-height: 100vh;
   /* overflow: hidden; */
   /*! Volver a ver: este overflow quizas sea necesario/triga problemas */
@@ -31,6 +31,14 @@ ul {
   list-style-type: none;
 }
 
+.app-components-container {
+  min-height: 100vh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/*! VOLVER A VER esto es para el google one touch */
 #credential_picker_container {
   display: none;
 }
