@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
-import Card from "../../components/Products/Card";
-import AddressCard from "../../components/Profile/AddressCard";
+import Card from "../Products/Card";
+import AddressCard from "../Profile/AddressCard";
 import OrderCardAdmin from "./OrderCardAdmin";
 import "./UserCard.css";
 
