@@ -67,3 +67,24 @@
 .signin-forgot-text {
   font-size: .9rem;
 }
+
+
+.forgot-password-container {
+    position: absolute;
+    padding-left: 1rem;
+    top: 40%;
+    transform: translateY(-50%);
+    transition: all .2s ease;
+}
+
+.signin-fadein {
+    transform: translate(10%);
+    opacity: 0;
+    transition: all .2s ease-out;
+    pointer-events: none;
+}
+.signin-fadeout {
+    transform: translate(0%);
+    opacity: 1;
+    transition: all .2s ease-out;
+}

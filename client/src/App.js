@@ -33,7 +33,6 @@ import UsersAdmin from "./components/Admin/UsersAdmin";
 import AboutUs from "./components/common/AboutUs";
 import Footer from "./components/common/Footer";
 import LoaderBars from "./components/common/LoaderBars";
-import ForgotPassword from "./components/Session/ForgotPassword";
 import PremiumDetails from "./components/Provider/PremiumDetails";
 import { useUserLogin } from "./hooks/useUserLogin";
 
@@ -44,92 +43,92 @@ import NotFound from "./components/common/NotFound";
 import Unauthorized from "./components/common/Unauthorized";
 
 function App() {
-  const dispatch = useDispatch();
-  const { userLogin } = useUserLogin();
-  const notification = useNotification();
-  const signOut = useSignout();
-  const isUserDataLoading = useSelector(
-    (state) => state.sessionReducer.isUserDataLoading
-  );
+    const dispatch = useDispatch();
+    const { userLogin } = useUserLogin();
+    const notification = useNotification();
+    const signOut = useSignout();
+    const isUserDataLoading = useSelector(
+        (state) => state.sessionReducer.isUserDataLoading
+    );
 
-  axios.interceptors.response.use(
-    (response) => response,
-    (error) => {
-      if (error.response?.data?.expiredToken) {
-        signOut();
-        notification(error.response.data.message, "/signin", "error");
-      }
-      return Promise.reject(error.message);
-    }
-  );
+    axios.interceptors.response.use(
+        (response) => response,
+        (error) => {
+            if (error.response?.data?.expiredToken) {
+                signOut();
+                notification(error.response.data.message, "/signin", "error");
+            }
+            return Promise.reject(error.message);
+        }
+    );
 
-  useEffect(() => {
-    if (window.localStorage.getItem("loggedTokenEcommerce")) {
-      userLogin(window.localStorage.getItem("loggedTokenEcommerce"), false);
-    } else {
-      dispatch(loadingUserData(false));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    useEffect(() => {
+        if (window.localStorage.getItem("loggedTokenEcommerce")) {
+            userLogin(window.localStorage.getItem("loggedTokenEcommerce"), false);
+        } else {
+            dispatch(loadingUserData(false));
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
-  return (
-    <div className="App" id="scroller">
-      <NotificationMaster />
-      {isUserDataLoading ? (
-        <div className="g-container-totalvh">
-          <LoaderBars />
+    return (
+        <div className="App" id="scroller">
+            <NotificationMaster />
+            {isUserDataLoading ? (
+                <div className="g-container-totalvh">
+                    <LoaderBars />
+                </div>
+            ) : (
+                <div className="app-components-container">
+                    <GlobalCover />
+                    <NavBar />
+                    <BackToTop />
+                    <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/about" element={<AboutUs />} />
+                        <Route path="/buynow" element={<BuyNow />} />
+                        <Route path="/cart/" element={<Cart />} />
+                        <Route path="/cart/:section" element={<Cart />} />
+                        <Route path="/details/:id" element={<Details />} />
+                        <Route path="/orders/post-sale" element={<PostSale />} />
+                        <Route path="/premium" element={<ProviderPremium />} />
+                        <Route path="/premium/:id" element={<PremiumDetails />} />
+                        <Route path="/productForm" element={<ProductForm />} />
+                        <Route path="/products" element={<Products />} />
+                        <Route path="/provider" element={<ProviderStore />} />
+                        <Route path="/profile/" element={<Profile />} />
+                        <Route path="/profile/:section" element={<Profile />} />
+                        <Route path="/results" element={<Results />} />
+                        <Route path="/sales" element={<SalesResults />} />
+                        <Route path="/signin" element={<Signupin />} />
+                        <Route path="/signin/:section" element={<Signupin />} />
+                        <Route path="*" element={<NotFound />} />
+                        <Route
+                            path="/reset/:userId/:resetToken"
+                            element={<ResetPassword />}
+                        />
+                        <Route path="/verify/:verifyToken" element={<VerifyEmail />} />
+                        <Route
+                            element={<RequireRole allowedRoles={["admin", "superadmin"]} />}
+                        >
+                            <Route path="admin" element={<AdminLayout />}>
+                                <Route index element={<Metrics />} />
+                                <Route path="metrics" element={<Metrics />} />
+                                <Route path="products" element={<Products />} />
+                                <Route path="productForm" element={<ProductForm />} />
+                                <Route path="users" element={<UsersAdmin />} />
+                                <Route path="users/:id" element={<UsersAdmin />} />
+                                <Route path="orders" element={<OrdersAdmin />} />
+                                <Route path="*" element={<NotFound />} />
+                            </Route>
+                        </Route>
+                        <Route path="/unauthorized" element={<Unauthorized />} />
+                    </Routes>
+                    <Footer />
+                </div>
+            )}
         </div>
-      ) : (
-        <div className="app-components-container">
-          <GlobalCover />
-          <NavBar />
-          <BackToTop />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<AboutUs />} />
-            <Route path="/buynow" element={<BuyNow />} />
-            <Route path="/cart/" element={<Cart />} />
-            <Route path="/cart/:section" element={<Cart />} />
-            <Route path="/details/:id" element={<Details />} />
-            <Route path="/orders/post-sale" element={<PostSale />} />
-            <Route path="/premium" element={<ProviderPremium />} />
-            <Route path="/premium/:id" element={<PremiumDetails />} />
-            <Route path="/productForm" element={<ProductForm />} />
-            <Route path="/products" element={<Products />} />
-            <Route path="/provider" element={<ProviderStore />} />
-            <Route path="/profile/" element={<Profile />} />
-            <Route path="/profile/:section" element={<Profile />} />
-            <Route path="/results" element={<Results />} />
-            <Route path="/sales" element={<SalesResults />} />
-            <Route path="/signin" element={<Signupin />} />
-            <Route path="/forgotPassword" element={<ForgotPassword />} />
-            <Route path="*" element={<NotFound />} />
-            <Route
-              path="/reset/:userId/:resetToken"
-              element={<ResetPassword />}
-            />
-            <Route path="/verify/:verifyToken" element={<VerifyEmail />} />
-            <Route
-              element={<RequireRole allowedRoles={["admin", "superadmin"]} />}
-            >
-              <Route path="admin" element={<AdminLayout />}>
-                <Route index element={<Metrics />} />
-                <Route path="metrics" element={<Metrics />} />
-                <Route path="products" element={<Products />} />
-                <Route path="productForm" element={<ProductForm />} />
-                <Route path="users" element={<UsersAdmin />} />
-                <Route path="users/:id" element={<UsersAdmin />} />
-                <Route path="orders" element={<OrdersAdmin />} />
-                <Route path="*" element={<NotFound />} />
-              </Route>
-            </Route>
-            <Route path="/unauthorized" element={<Unauthorized />} />
-          </Routes>
-          <Footer />
-        </div>
-      )}
-    </div>
-  );
+    );
 }
 
 export default App;
