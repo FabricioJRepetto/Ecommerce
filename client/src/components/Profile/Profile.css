@@ -169,6 +169,11 @@
 }
 
 .profile-option-selected-container h1 {
+  font-family: HelveticaNeueLTPro-Bd, Poppins;
+
+}
+
+.profile-option-selected-container h1 {
   margin-bottom: 2rem;
 }
 
