@@ -40,6 +40,8 @@ import { useUserLogin } from "./hooks/useUserLogin";
 import axios from "axios";
 import { useNotification } from "./hooks/useNotification";
 import { useSignout } from "./hooks/useSignout";
+import NotFound from "./components/common/NotFound";
+import Unauthorized from "./components/common/Unauthorized";
 
 function App() {
   const dispatch = useDispatch();
@@ -78,7 +80,7 @@ function App() {
           <LoaderBars />
         </div>
       ) : (
-        <div>
+        <div className="app-components-container">
           <GlobalCover />
           <NavBar />
           <BackToTop />
@@ -101,7 +103,7 @@ function App() {
             <Route path="/signin" element={<Signupin />} />
             <Route path="/forgotPassword" element={<ForgotPassword />} />
             <Route path="/" element={<Home />} />
-            <Route path="*" element={<h1>404 USER</h1>} />{" "}
+            <Route path="*" element={<NotFound />} />
             <Route
               path="/reset/:userId/:resetToken"
               element={<ResetPassword />}
@@ -118,12 +120,12 @@ function App() {
                 <Route path="users" element={<UsersAdmin />} />
                 <Route path="users/:id" element={<UsersAdmin />} />
                 <Route path="orders" element={<OrdersAdmin />} />
-                <Route path="*" element={<h1>404 ADMIN</h1>} />{" "}
-                {/* //! VOLVER A VER darle estilos al 404 */}
+                <Route path="*" element={<NotFound />} />
               </Route>
             </Route>
-            <Route path="/unauthorized" element={<h1>UNAUTHORIZED</h1>} />
+            <Route path="/unauthorized" element={<Unauthorized />} />
           </Routes>
+
           <Footer />
         </div>
       )}

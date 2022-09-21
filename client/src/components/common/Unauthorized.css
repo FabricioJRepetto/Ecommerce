@@ -1,0 +1,17 @@
+.unauthorized-container {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   background-image: url('https://cldup.com/gn3s3Fg75t.gif');
+   background-size: cover;
+   flex-grow: 1;
+}
+
+.unauthorized-container h1 {
+   font-family: HelveticaNeueLTPro-Hv;
+   color: white;
+   letter-spacing: -6px;
+   font-size: 5rem;
+   z-index: 90;
+   width: 100%;
+}
