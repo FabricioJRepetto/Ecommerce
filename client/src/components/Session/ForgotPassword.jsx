@@ -7,10 +7,11 @@ import { CloseIcon } from "@chakra-ui/icons";
 import { useModal } from "../../hooks/useModal";
 import Modal from "../common/Modal";
 import LoaderBars from "../common/LoaderBars";
-import "../../App.css";
-import "./ForgotPassword.css";
 import { useNotification } from "../../hooks/useNotification";
 import ReturnButton from "../common/ReturnButton";
+
+import "./ForgotPassword.css";
+import "../../App.css";
 
 const ForgotPassword = () => {
   const { session } = useSelector((state) => state.sessionReducer);
@@ -51,17 +52,10 @@ const ForgotPassword = () => {
   return (
     <div className="forgot-outer-container">
       <div className="forgot-inner forgot-container">
-        <img
-          src={require("../../assets/provider-logo.png")}
-          alt="logo"
-          onClick={() => navigate("/")}
-          style={{ cursor: "pointer" }}
-        />
         {response ? (
           <>
             <div className="forgot-response">{response}</div>
             <ReturnButton to={"/"} />
-            {/* //! VOLVER A VER que esto rediriga a la pagina anterior, no a home*/}
           </>
         ) : (
           <form onSubmit={handleSubmitForgot(forgotPassword)}>
@@ -108,7 +102,6 @@ const ForgotPassword = () => {
                 value="Enviar email"
                 className="g-white-button"
               />
-              <ReturnButton to={`${session ? "/" : "/signin"}`} />
             </div>
           </form>
         )}
