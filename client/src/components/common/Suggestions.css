@@ -16,6 +16,7 @@
     align-items: center;
     padding-top: 1rem;
 }
+
 .suggestions-header p {
     font-family: "HelveticaNeueLTPro-BdIt";
     font-size: 1.7rem;
@@ -24,23 +25,23 @@
     margin: 0 .7rem;
     inline-size: max-content;
 }
+
 .siggestion-eye {
     height: 2.7rem;
     width: 2.7rem;
-    background: linear-gradient(
-        45deg,
-        #35a7ff 0%,
-        #7e54de 20%,
-        #f40259 60%,
-        #fea30d 100%
-    );
+    background: linear-gradient(45deg,
+            #35a7ff 0%,
+            #7e54de 20%,
+            #f40259 60%,
+            #fea30d 100%);
     mask-image: url('../../assets/svg/crystal_ball.svg');
     background-size: 400%;
     animation: gradientTextAnim 3s infinite;
 }
+
 .suggestions-header span {
     width: 1rem;
-    height: 1rem;    
+    height: 1rem;
     padding: 0 3rem 3rem 0;
 }
 
@@ -51,16 +52,20 @@
     position: relative;
     padding: 0 1rem 3rem 1rem;
     user-select: none;
+    overflow-x: auto;
 }
-.suggestions-products-inner {    
+
+.suggestions-products-inner {
     display: flex;
     justify-content: center;
     align-items: center;
     transition: all .3s ease;
 }
-.suggestions-products-inner > * {
+
+.suggestions-products-inner>* {
     margin: 1rem;
 }
+
 .suggestions-products-error {
     font-family: "HelveticaNeueLTPro-Roman";
     font-weight: 100;
@@ -73,6 +78,7 @@
     bottom: 0;
     left: 45%;
 }
+
 .suggestions-buton-right {
     position: absolute;
     display: none;
@@ -85,12 +91,15 @@
         width: 100vw;
         padding: 1rem 0 3rem 0;
     }
+
     .suggestions-products-inner {
         justify-content: flex-start;
     }
+
     .suggestions-buton-left {
         display: block;
     }
+
     .suggestions-buton-right {
         display: block;
     }

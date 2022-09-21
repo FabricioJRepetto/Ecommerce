@@ -9,10 +9,10 @@ import {
   changeReloadFlag,
   clearProducts,
 } from "../../Redux/reducer/productsSlice";
-import Checkbox from "../../components/common/Checkbox";
-import ModalAdminProducts from "./ModalAdminProducts";
-import WishlistCard from "../../components/Profile/WishlistCard";
-import FunnelButton from "../../components/common/FunnelButton";
+import Checkbox from "../common/Checkbox";
+import ModalAdminProducts from "../Admin/ModalAdminProducts";
+import WishlistCard from "../Profile/WishlistCard";
+import FunnelButton from "../common/FunnelButton";
 import { useModal } from "../../hooks/useModal";
 import { ReactComponent as Close } from "../../assets/svg/close.svg";
 import { ReactComponent as ChevronRight } from "../../assets/svg/chevron-right.svg";
