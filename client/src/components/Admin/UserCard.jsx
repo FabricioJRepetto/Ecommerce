@@ -55,7 +55,7 @@ const UserCard = ({ user, openBanUser, openUnbanUser, openPromoteUser }) => {
   };
 
   return (
-    <div>
+    <div className="component-fadeIn">
       <div>
         <h2>{name}</h2>
         <h4>Email: {isGoogleUser ? googleEmail : email}</h4>

@@ -49,10 +49,11 @@ const OrdersAdmin = () => {
         ? setOrdersFiltered([null])
         : setOrdersFiltered(ordersAfterFilter);
     }
+    
   }, [ordersCheckboxes]);
 
   return (
-    <div>
+    <div className="component-fadeIn">
       <h2>ÓRDENES</h2>
       <label>
         <input

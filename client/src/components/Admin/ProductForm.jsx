@@ -372,7 +372,7 @@ const ProductForm = () => {
   };
 
   return (
-    <div className="form-width-test">
+    <div className="form-width-test component-fadeIn">
       <h2>{productToEdit ? "Editar" : "Publicar"} producto</h2>
 
       <form

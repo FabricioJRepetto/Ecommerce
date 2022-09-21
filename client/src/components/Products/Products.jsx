@@ -412,7 +412,7 @@ const Products = () => {
   }, [filtersContainerDisplay, showFiltersMenu]);
 
   return (
-    <div className="products-container">
+    <div className="products-container component-fadeIn">
       <div className="products-results-container">
         <span className="g-input-with-button">
           <input

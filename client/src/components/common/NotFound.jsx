@@ -2,7 +2,7 @@ import "./NotFound.css";
 
 const NotFound = () => {
   return (
-    <div className="not-found-container">
+    <div className="not-found-container component-fadeIn">
       <h1>Sitio no encontrado</h1>
       <div className="not-found-section"></div>
       <svg>

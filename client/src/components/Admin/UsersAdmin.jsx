@@ -54,7 +54,7 @@ const UsersAdmin = () => {
   }, [nameSearch]);
 
   return (
-    <div>
+    <div className="component-fadeIn">
       <div>
         {location.pathname === "/admin/users" && (
           <input
