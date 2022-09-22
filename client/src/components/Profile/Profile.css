@@ -3,6 +3,8 @@
   overflow: hidden;
   overflow: -moz-hidden-unscrollable;
   display: flex;
+  flex-grow: 1;
+  min-height: 95vh;
 }
 
 @media (max-width: 899px) {
@@ -160,11 +162,10 @@
 .profile-option-selected-container {
   width: 100%;
   min-height: fit-content;
-  height: 90vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 2rem;
+  margin: 2rem 0;
   position: relative;
 }
 

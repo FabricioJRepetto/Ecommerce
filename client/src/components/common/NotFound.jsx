@@ -1,23 +1,18 @@
 import "./NotFound.css";
+import { useLocation, Link } from "react-router-dom";
+import { ReactComponent as ArrowBack } from "../../assets/svg/arrow-back.svg";
 
 const NotFound = () => {
+  const location = useLocation();
+  const hasPreviousState = location.key !== "default";
+
   return (
     <div className="not-found-container component-fadeIn">
       <h1>Sitio no encontrado</h1>
-      <div className="not-found-section"></div>
-      <svg>
-        <filter id="noise">
-          <feTurbulence id="turbulence">
-            <animate
-              attributeName="baseFrequency"
-              dur="50s"
-              values="0.9 0.9;0.8 0.8; 0.9 0.9"
-              repeatCount="indefinite"
-            ></animate>
-          </feTurbulence>
-          <feDisplacementMap in="SourceGraphic" scale="60"></feDisplacementMap>
-        </filter>
-      </svg>
+      <Link to={hasPreviousState ? -2 : "/"}>
+        <ArrowBack />
+        <h2>regresar</h2>
+      </Link>
     </div>
   );
 };

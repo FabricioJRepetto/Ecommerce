@@ -122,7 +122,7 @@ const Details = () => {
   };
 
   return (
-    <div>
+    <div className="product-details-outer-container">
       {loading && (
         <div className="details-loader-container">
           <LoaderBars />
