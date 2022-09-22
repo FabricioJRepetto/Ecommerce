@@ -3,11 +3,11 @@
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  flex-grow: 1;
 }
 
 .postsale-inner {
   width: 80vw;
-  height: 50vh;
 }
 
 .postsale-header {
@@ -34,7 +34,6 @@
   height: fit-content;
   padding: 6rem 6rem 3rem 6rem;
   border-top: 1px solid white;
-  border-bottom: 1px solid white;
 }
 
 .postsale-text-margin {
@@ -68,15 +67,18 @@
 .postsale-spinner-container {
   margin: 65px 0;
 }
+
 .postsale-delivery-container {
-    max-width: 700px;
-    margin: auto;
+  max-width: 700px;
+  margin: auto;
 }
+
 @media (max-width: 720px) {
-    .postsale-details-container {
-        padding: 5rem 1rem;
-    }
-    .postsale-delivery-container {
-        min-width: 400px;
-    }    
+  .postsale-details-container {
+    padding: 5rem 1rem;
+  }
+
+  .postsale-delivery-container {
+    min-width: 400px;
+  }
 }

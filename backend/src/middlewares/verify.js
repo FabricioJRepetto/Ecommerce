@@ -35,8 +35,8 @@ async function verifyToken(req, res, next) {
           isGoogleUser: true,
         };
       } catch (error) {
-        error.name === "TokenExpiredError" &&
-          res.status(403).json({
+        if (error.name === "TokenExpiredError")
+          return res.status(403).json({
             message: "Sesión expirada, vuelve a iniciar sesión",
             expiredToken: true,
           });
@@ -55,8 +55,8 @@ async function verifyToken(req, res, next) {
           return res.status(404).json({ message: "Cuenta no encontrada" });
         }
       } catch (error) {
-        error.name === "TokenExpiredError" &&
-          res.status(403).json({
+        if (error.name === "TokenExpiredError")
+          return res.status(403).json({
             message: "Sesión expirada, vuelve a iniciar sesión",
             expiredToken: true,
           });

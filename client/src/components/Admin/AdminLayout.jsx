@@ -2,12 +2,13 @@ import React from "react";
 import { Link, Outlet } from "react-router-dom";
 import { useNotification } from "../../hooks/useNotification";
 import { useVerifyAdmin } from "../../hooks/useVerifyAdmin";
+import "./AdminLayout.css";
 
 const AdminLayout = () => {
   const notification = useNotification();
   useVerifyAdmin();
   return (
-    <div>
+    <div className="admin-layout-container">
       <button onClick={() => notification("test notif standard", "", "")}>
         Standard
       </button>
