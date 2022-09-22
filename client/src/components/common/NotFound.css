@@ -1,5 +1,6 @@
 .not-found-container {
    display: flex;
+   flex-direction: column;
    align-items: center;
    justify-content: center;
    background-image: url('https://res.cloudinary.com/dsyjj0sch/image/upload/v1663797565/static-noise_jrlwul.webp');
@@ -14,4 +15,28 @@
    font-size: 6rem;
    z-index: 50;
    width: 100%;
+}
+
+.not-found-container h2 {
+   font-family: HelveticaNeueLTPro-Hv;
+   color: black;
+   letter-spacing: -6px;
+   font-size: 4rem;
+   z-index: 50;
+   width: 100%;
+   display: inline;
+}
+
+.not-found-container a {
+   display: flex;
+   align-items: center;
+}
+
+.not-found-container a:hover>* {
+   color: red;
+}
+
+.not-found-container a svg {
+   width: 4rem;
+   scale: 3;
 }
