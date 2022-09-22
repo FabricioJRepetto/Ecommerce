@@ -93,7 +93,7 @@ const ProfileDetails = ({ address, loading }) => {
 
       dispatch(loadUserData({ avatar: data.avatar }));
     } catch (error) {
-      console.log(error); //! VOLVER A VER manejo de errores
+      console.error(error); //! VOLVER A VER manejo de errores
     } finally {
       setLoadingAvatar(false);
     }
@@ -151,7 +151,7 @@ const ProfileDetails = ({ address, loading }) => {
         `${statusText === "OK" ? "success" : "warning"}`
       );
     } catch (error) {
-      console.log(error); //! VOLVER A VER manejo de errores
+      console.error(error); //! VOLVER A VER manejo de errores
       setOpenInput({
         username: false,
         full_name: false,
@@ -167,7 +167,7 @@ const ProfileDetails = ({ address, loading }) => {
       setVerifyResponse(true);
     } catch (error) {
       setVerifyLoading(false);
-      console.log(error);
+      console.error(error);
       //! VOLVER A VER manejo de errores
     }
   };

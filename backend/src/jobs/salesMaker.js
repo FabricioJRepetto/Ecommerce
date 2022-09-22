@@ -44,7 +44,6 @@ const salesMaker = async () => {
                 }
             }))()
         };
-        console.log(newList);
 
         // guarda las id nuevas
         sales.products = new_ids;

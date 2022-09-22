@@ -51,8 +51,8 @@ const Cart = () => {
     })();
     // eslint-disable-next-line
   }, []);
-  useEffect(() => {
-    setRender(section || "cart");
+  useEffect(() => { 
+    setRender(section || 'cart');
   }, [section]);
 
   const getCart = async () => {
@@ -102,7 +102,6 @@ const Cart = () => {
       flash_shipping: boolean,
     });
     setCart(data.cart);
-    console.log(data.cart);
   };
 
   const goCheckout = async () => {
@@ -179,15 +178,15 @@ const Cart = () => {
   };
 
   return (
-    <div className="cart-outer-container">
+    <div className="cart-outer-container component-fadeIn">
       <div className="cart-container">
         <div className="cart-card-optionscloser-container">
           <div className="tab-button-container" style={{ width: "70vw" }}>
             {
               <button
                 onClick={() => navigate("/cart/")}
-                className={`tab-button${
-                  render === "cart" ? " tab-button-active" : ""
+                className={`tab-button ${
+                  !(render === "saved") ? "tab-button-active" : ""
                 }`}
               >
                 {`Carrito ${
@@ -200,7 +199,7 @@ const Cart = () => {
               <button
                 onClick={() => navigate("/cart/saved")}
                 className={`tab-button${
-                  !(render === "cart") ? " tab-button-active" : ""
+                  (render === "saved") ? " tab-button-active" : ""
                 }`}
               >
                 {`Guardados ${
@@ -217,10 +216,41 @@ const Cart = () => {
               </div>
             ) : (
               <div>
-                {render === "cart" ? (
-                  <div className="cart-inner">
+                {render === "saved" ? (
+                  <div className="cart-buylater-inner">
+                    {!cart.buyLater || cart.buyLater.length < 1 ? (
+                      <h1>No tienes productos guradados</h1>
+                    ) : (
+                      <div>
+                        {cart.buyLater.map((p) => (
+                          <CartCard
+                            key={p._id}
+                            premium={p.premium}
+                            on_cart={false}
+                            on_sale={p.on_sale}
+                            img={p.thumbnail}
+                            name={p.name}
+                            prodId={p._id}
+                            price={p.price}
+                            sale_price={p.sale_price}
+                            free_shipping={p.free_shipping}
+                            discount={p.discount}
+                            brand={p.brand}
+                            prodQuantity={p.quantity}
+                            stock={p.stock}
+                            buyLater={buyLater}
+                            buyNow={buyNow}
+                            deleteP={deleteProduct}
+                            source={"buyLater"}
+                          />
+                        ))}
+                      </div>
+                    )}
+                  </div>                  
+                ) : (
+                    <div className="cart-inner">
                     {!cart.products || cart.products?.length < 1 ? (
-                      <h2>Tu carrito está vacío</h2>
+                      <h1>Tu carrito está vacío</h1>
                     ) : (
                       <div>
                         <div>
@@ -408,37 +438,6 @@ const Cart = () => {
                             </span>
                           </div>
                         )}
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  <div className="cart-buylater-inner">
-                    {!cart.buyLater || cart.buyLater.length < 1 ? (
-                      <h1>No tienes productos guradados</h1>
-                    ) : (
-                      <div>
-                        {cart.buyLater.map((p) => (
-                          <CartCard
-                            key={p._id}
-                            premium={p.premium}
-                            on_cart={false}
-                            on_sale={p.on_sale}
-                            img={p.thumbnail}
-                            name={p.name}
-                            prodId={p._id}
-                            price={p.price}
-                            sale_price={p.sale_price}
-                            free_shipping={p.free_shipping}
-                            discount={p.discount}
-                            brand={p.brand}
-                            prodQuantity={p.quantity}
-                            stock={p.stock}
-                            buyLater={buyLater}
-                            buyNow={buyNow}
-                            deleteP={deleteProduct}
-                            source={"buyLater"}
-                          />
-                        ))}
                       </div>
                     )}
                   </div>

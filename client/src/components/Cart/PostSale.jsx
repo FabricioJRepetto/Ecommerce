@@ -113,11 +113,9 @@ const PostSale = () => {
   }, []);
 
   const deliveryWaiter = async (id) => {
-      console.log("Esperando orden actualizada...");
       const response = axios(`/order/postsale/${id}`);
       
       response.then(r =>{
-        console.log("...respuesta recibida.");
         if (r.data.status) {
             setOrder(r.data);        
         } else {
@@ -138,7 +136,7 @@ const PostSale = () => {
   };
 
   return (
-    <div className="postsale-container">
+    <div className="postsale-container component-fadeIn">
       {loading && !order ? (
         <LoaderBars />
       ) : (

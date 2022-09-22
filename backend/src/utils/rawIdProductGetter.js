@@ -17,13 +17,16 @@ const rawIdProductGetter = async (id) => {
             return item;
 
         } else {
+            if (id.length !== 24) {
+                return { error: true, message: 'ID de producto incorrecta (solo se aceptan IDs de 24 caracteres)' }
+            }
             const product = await Product.findById(id);
             if (product) {
                 return product
             } else {
                 console.log('/// ERROR on rawIdProductGetter');
                 console.log('Wrong DB product ID');
-                return { message: 'Wrong DB product ID' }
+                return { message: 'ID de producto incorrecta', error: true }
             }
         };
 

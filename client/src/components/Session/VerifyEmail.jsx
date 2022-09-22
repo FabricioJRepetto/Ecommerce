@@ -16,7 +16,6 @@ const VerifyEmail = () => {
             Authorization: `Bearer ${verifyToken}`,
           },
         });
-        console.log("data", data);
         setResponse(data.message);
       } catch (error) {
         setResponse(error.response.data.message); //! VOLVER A VER manejo de errores

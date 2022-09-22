@@ -8,7 +8,7 @@ const AdminLayout = () => {
   const notification = useNotification();
   useVerifyAdmin();
   return (
-    <div className="admin-layout-container">
+    <div className="admin-layout-container component-fadeIn">
       <button onClick={() => notification("test notif standard", "", "")}>
         Standard
       </button>

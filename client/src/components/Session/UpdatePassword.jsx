@@ -42,7 +42,7 @@ const UpdatePassword = () => {
         data.message && setResponse(data.message);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       //! VOLVER A VER manejo de errores
     } finally {
       setLoading(false);
@@ -63,7 +63,7 @@ const UpdatePassword = () => {
         data.message && setResponse(data.message);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       //! VOLVER A VER manejo de errores
     } finally {
       setWaitingResponse(false);

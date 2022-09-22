@@ -22,11 +22,11 @@ const Metrics = () => {
       .then(({ data }) => {
         setMetrics(data);
       })
-      .catch((error) => console.log(error));
+      .catch((error) => console.error(error));
   }, []);
 
   return (
-    <div>
+    <div className="component-fadeIn">
       <h4>Usuarios registrados: {metrics.totalUsers}</h4>
       <h4>Usuarios de Google: {metrics.googleUsers}</h4>
       <h4>Productos publicados: {metrics.publishedProducts}</h4>

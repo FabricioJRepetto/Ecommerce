@@ -20,6 +20,7 @@ import ChromaticText from "../common/ChromaticText";
 import BurgerButton from "../common/BurgerButton";
 import "../../App.css";
 import "./Profile.css";
+import NotFound from "../common/NotFound";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -58,14 +59,9 @@ const Profile = () => {
         p[1].value ? setWishlist(p[1].value.data.products) : setWishlist([]);
         p[2].value ? setHistory(p[2].value.data.products) : setHistory([]);
 
-        // p[0].value.data.message &&
-        //   notification(p[0].value.data.message, "", "warning");
-
+        //? Notifica cuando se eliminaron productos que estaba en favoritos
         p[1].value.data.message &&
           notification(p[1].value.data.message, "", "warning");
-
-        // p[2].value.data.message &&
-        //   notification(p[2].value.data.message, "", "warning");
 
         setLoading(false);
       })();
@@ -73,8 +69,17 @@ const Profile = () => {
     // eslint-disable-next-line
   }, [wl_id]);
 
+  const sections = [
+    'details',
+    'address',
+    'orders',
+    'wishlist',
+    'history',
+    'password'
+  ];
+
   return (
-    <div className="profile-container">
+    <div className="profile-container component-fadeIn">
       {/* <div
         className={`navbar-menu-mobile-background ${
           !showMenu ? "hide-menu-mobile-background" : ""
@@ -225,6 +230,7 @@ const Profile = () => {
       </div>
 
       <div className="profile-option-selected-container">
+
         {render === "details" && (
           <ProfileDetails address={address} loading={loading} />
         )}
@@ -249,6 +255,9 @@ const Profile = () => {
         )}
 
         {render === "password" && <UpdatePassword />}
+
+        {!sections.includes(section) && <NotFound />}
+
       </div>
     </div>
   );

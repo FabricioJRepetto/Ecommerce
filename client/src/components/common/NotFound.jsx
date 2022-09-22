@@ -7,7 +7,7 @@ const NotFound = () => {
   const hasPreviousState = location.key !== "default";
 
   return (
-    <div className="not-found-container">
+    <div className="not-found-container component-fadeIn">
       <h1>Sitio no encontrado</h1>
       <Link to={hasPreviousState ? -2 : "/"}>
         <ArrowBack />

@@ -1,0 +1,51 @@
+.about-container {
+    height: 90vh;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+}
+
+.about-cards-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.about-card {
+    display: flex;
+    justify-content: flex-start;    
+    width: 40vw;
+    padding: 2rem 1.2rem;
+    margin: 1rem;
+}
+.about-card > div {
+    margin: 0 1rem;
+}
+.about-card h1 {
+    margin: 1rem;
+}
+.about-card a {
+    font-size: 1.4rem;
+    margin: .1rem;
+}
+.about-card p {
+    font-size: 1.2rem;
+    margin: .1rem;
+}
+.about-link {
+    margin: 0 .1rem;
+    scale: .8;
+    opacity: .5;
+    transition: opacity .25s ease;
+}
+
+.about-avatar-container {
+    height: 10rem;
+    width: 10rem;
+    border-radius: 50%;
+    overflow: hidden;
+}
+.about-avatar-container img {
+    height: 100%;
+    width: 100%;
+}

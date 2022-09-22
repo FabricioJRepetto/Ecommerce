@@ -1,5 +1,6 @@
-.home-container {
-
+.component-fadeIn {
+    opacity: 1;
+    animation: ComponentFadeIn .5s;
 }
 .svg {
     transform: scale(2);
@@ -18,3 +19,8 @@
     justify-content: center;
     margin: 1rem 0;
 }
+
+@keyframes ComponentFadeIn {
+    0% {opacity: 0;}
+    100% {opacity: 1;}
+} 

@@ -98,7 +98,6 @@ const removeAddress = async (req, res, next) => {
         );
 
         if (!list.address.some(e => e.isDefault) && list.address.length > 0) {
-            console.log('setea nuevo default ?');
 
             list.address[0].isDefault = true;
             await list.save();

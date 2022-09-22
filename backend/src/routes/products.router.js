@@ -8,7 +8,7 @@ const {
     stock,
     getPromos,
     getPremium,
-    putPremium
+    putPremium,
 } = require("../controllers/products.ctrl.js");
 
 router.get("/", getAll);

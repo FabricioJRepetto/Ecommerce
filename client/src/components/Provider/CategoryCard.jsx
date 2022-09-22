@@ -6,7 +6,7 @@ import { PowerGlitch } from "powerglitch";
 
 import './CategoryCard.css'
 
-const CategoryCard = ({route, image, text}) => {
+const CategoryCard = ({route, image, text, hover = false, onClick = false}) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -35,43 +35,44 @@ const CategoryCard = ({route, image, text}) => {
     }
     
     useEffect(() => {
-      const outline = document.getElementById(`test-${text}`);
-      PowerGlitch.glitch(outline, {
-        imageUrl: correctOutline[text].img,
-        backgroundColor: "transparent",
-        hideOverflow: false,
-        timing: {
-          duration: 3000,
-          iterations: "Infinity",
-        },
-        glitchTimeSpan: {
-          start: 0,
-          end: 1,
-        },
-        shake: {
-          velocity: 50,
-          amplitudeX: 0.7,
-          amplitudeY: 0.7,
-        },
-        slice: {
-          count: 8,
-          velocity: 15,
-          minHeight: 0.03,
-          maxHeight: 0.15,
-          hueRotate: true,
-        },
-      })
+      if (hover) {
+        const outline = document.getElementById(`test-${text}`);
+        PowerGlitch.glitch(outline, {
+          imageUrl: correctOutline[text].img,
+          backgroundColor: "transparent",
+          hideOverflow: false,
+          timing: {
+            duration: 3000,
+            iterations: "Infinity",
+          },
+          glitchTimeSpan: {
+            start: 0,
+            end: 1,
+          },
+          shake: {
+            velocity: 50,
+            amplitudeX: 0.7,
+            amplitudeY: 0.7,
+          },
+          slice: {
+            count: 8,
+            velocity: 15,
+            minHeight: 0.03,
+            maxHeight: 0.15,
+            hueRotate: true,
+          },
+        })
+      }
       // eslint-disable-next-line
     }, [])
     
 
     return (
-        <div className='categorycard-outer' onClick={() => goProducts(route)}>
-            <div id={`test-${text}`}
-            className={`ccou-master ${correctOutline[text].class}`}></div>
+        <div className='categorycard-outer' onClick={() => onClick ? onClick() : goProducts(route)}>
+            {hover && <div id={`test-${text}`} className={`ccou-master ${correctOutline[text].class}`}></div>}
 
             <div className='categorycard-container' >
-                <img src={image} alt="category img" className=''/>
+                <img src={image} alt="category img" />
                 <div className='categorycard-special-bg'></div>
                 <div className='categorycard-footer'>
                     <p>{text}</p>

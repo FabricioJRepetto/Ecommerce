@@ -9,16 +9,10 @@ import {
 } from "../../Redux/reducer/productsSlice";
 import Carousel from "./Carousel/Carousel";
 import { IMAGES } from "../../constants";
-import Footer from "../common/Footer";
 import FlashSales from "../common/FlashSales";
-
-import { ReactComponent as Two } from "../../assets/svg/build-svgrepo-com.svg";
-import { ReactComponent as Three } from "../../assets/svg/code-svgrepo-com.svg";
-import { ReactComponent as Four } from "../../assets/svg/crop-svgrepo-com.svg";
-import { ReactComponent as Five } from "../../assets/svg/explode-svgrepo-com.svg";
-import { ReactComponent as Six } from "../../assets/svg/perform-svgrepo-com.svg";
 import PremiumPreview from "../Provider/PremiumPreview";
 import Suggestions from "../common/Suggestions";
+import CategoryCard from "../Provider/CategoryCard";
 
 import "./Home.css";
 
@@ -37,7 +31,8 @@ const Home = () => {
   };
 
   return (
-    <div className="home-container">
+    <div className="component-fadeIn">
+
       <div className="home-carousel">
         <Carousel
           images={IMAGES}
@@ -48,36 +43,43 @@ const Home = () => {
           width="100%"
         />
       </div>
-      <div className="providerstore-disclaimer">
+
+      {/* <div className="providerstore-disclaimer">
         <p>
           Encuentra los mejores productos de distintas tiendas especializadas en
           un solo lugar.
         </p>
         <p>Explora Provider Store para ver nuestros productos seleccionados.</p>
-      </div>
+      </div> */}
 
-      <div className="categories">
-        <div onClick={() => categorySearch("MLA1648")}>
-          <Two className={"svg"} />
-          <p>Computación</p>
+        <div className="storecards-container">
+            <div className="storecards-inner">
+                <CategoryCard
+                    text="COMPUTACIÓN"
+                    image="https://res.cloudinary.com/dsyjj0sch/image/upload/v1663598262/computacion_iczryv.png"
+                    route="MLA1648"
+                    onClick={() => categorySearch("MLA1648")}
+                />
+                <CategoryCard
+                    text="VIDEOJUEGOS"
+                    image="https://res.cloudinary.com/dsyjj0sch/image/upload/v1663598262/videojuegos2_hvufj4.png"
+                    route="MLA1144"
+                    onClick={() => categorySearch("MLA1144")}
+                />
+                <CategoryCard
+                    text="AUDIO VIDEO"
+                    image="https://res.cloudinary.com/dsyjj0sch/image/upload/v1663598262/audio_bbrp2m.png"
+                    route="MLA409810"
+                    onClick={() => categorySearch("MLA1000")}
+                />
+                <CategoryCard
+                    text="CÁMARAS"
+                    image="https://res.cloudinary.com/dsyjj0sch/image/upload/v1663598262/camara_epkefy.png"
+                    route="MLA1039"
+                    onClick={() => categorySearch("MLA1039")}
+                />
+            </div>
         </div>
-        <div onClick={() => categorySearch("MLA1039")}>
-          <Three className={"svg"} />
-          <p>Cámaras</p>
-        </div>
-        <div onClick={() => categorySearch("MLA1000")}>
-          <Four className={"svg"} />
-          <p>Audio & Video</p>
-        </div>
-        <div onClick={() => categorySearch("MLA1144")}>
-          <Five className={"svg"} />
-          <p>Videojuegos</p>
-        </div>
-        <div onClick={() => navigate("/sales")}>
-          <Six className={"svg"} />
-          <p>Ofertas</p>
-        </div>
-      </div>
 
       <FlashSales />
 

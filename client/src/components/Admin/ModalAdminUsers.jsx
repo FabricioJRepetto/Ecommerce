@@ -36,7 +36,7 @@ const ModalAdminUsers = ({
         dispatch(adminBanUser(userToBan._id));
         notification("Cuenta suspendida exitosamente", "", "success");
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
   };
 
   const handleUnbanUser = () => {
@@ -51,7 +51,7 @@ const ModalAdminUsers = ({
         dispatch(adminUnbanUser(userToUnban._id));
         notification("Cuenta activada exitosamente", "", "success");
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
   };
 
   const handlePromoteUser = () => {
@@ -70,7 +70,7 @@ const ModalAdminUsers = ({
           "success"
         );
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.error(err));
   };
 
   return (

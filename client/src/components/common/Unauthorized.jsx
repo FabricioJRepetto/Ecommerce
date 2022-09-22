@@ -7,7 +7,7 @@ const Unauthorized = () => {
   const hasPreviousState = location.key !== "default";
 
   return (
-    <div className="unauthorized-container">
+    <div className="unauthorized-container component-fadeIn">
       <h1>Sin autorización</h1>
       <Link to={hasPreviousState ? -1 : "/"}>
         <ArrowBack />

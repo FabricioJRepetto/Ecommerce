@@ -25,7 +25,7 @@ const OrdersAdmin = () => {
       .then(({ data }) => {
         setOrders(data);
       })
-      .catch((err) => console.log(err)); //! VOLVER A VER manejo de errores
+      .catch((err) => console.error(err)); //! VOLVER A VER manejo de errores
   }, []);
 
   const handleOrders = (e) => {
@@ -49,10 +49,11 @@ const OrdersAdmin = () => {
         ? setOrdersFiltered([null])
         : setOrdersFiltered(ordersAfterFilter);
     }
+    
   }, [ordersCheckboxes]);
 
   return (
-    <div>
+    <div className="component-fadeIn">
       <h2>ÓRDENES</h2>
       <label>
         <input

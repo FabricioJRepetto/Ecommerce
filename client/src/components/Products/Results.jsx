@@ -9,7 +9,6 @@ import {
   loadApplied,
   loadBreadCrumbs,
 } from "../../Redux/reducer/productsSlice";
-import Card from "./Card";
 import WishlistCard from "../Profile/WishlistCard";
 import { ReactComponent as Spinner } from "../../assets/svg/spinner.svg";
 import { useState } from "react";
@@ -34,8 +33,6 @@ const Results = () => {
   const [params] = useSearchParams();
   const [open, setOpen] = useState("category");
   const dispatch = useDispatch();
-
-  console.log(applied);
 
   useEffect(() => {
     (async () => {
@@ -83,7 +80,7 @@ const Results = () => {
           <LoaderBars />
         </div>
       ) : (
-        <div className="results-container">
+        <div className="results-container component-fadeIn">
           <div className="bread-crumbs">
             {breadCrumbs?.length > 0 && (
               <div>

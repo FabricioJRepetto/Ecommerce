@@ -16,7 +16,6 @@ const Galery = ({ imgs, ripple = false }) => {
   useEffect(() => {
     if (coords.x !== -1 && coords.y !== -1) {
       setIsRippling(true);
-      console.log("ripple");
       setTimeout(() => setIsRippling(false), 300);
     } else setIsRippling(false);
   }, [coords]);

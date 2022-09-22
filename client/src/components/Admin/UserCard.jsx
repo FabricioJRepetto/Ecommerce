@@ -30,7 +30,7 @@ const UserCard = ({ user, openBanUser, openUnbanUser, openPromoteUser }) => {
         setAddresses(data);
         setShowAddresses(true);
       })
-      .catch((err) => console.log(err)); //! VOLVER A VER manejo de errores;
+      .catch((err) => console.error(err)); //! VOLVER A VER manejo de errores;
   };
 
   const getOrders = (_id) => {
@@ -40,22 +40,21 @@ const UserCard = ({ user, openBanUser, openUnbanUser, openPromoteUser }) => {
         setOrders(data);
         setShowOrders(true);
       })
-      .catch((err) => console.log(err)); //! VOLVER A VER manejo de errores;
+      .catch((err) => console.error(err)); //! VOLVER A VER manejo de errores;
   };
 
   const getWishlist = (_id) => {
     axios
       .post("/admin/user/getWishlist", { _id, isGoogleUser })
       .then(({ data }) => {
-        console.log(data);
         setWishlist(data);
         setShowWishlist(true);
       })
-      .catch((err) => console.log(err)); //! VOLVER A VER manejo de errores;
+      .catch((err) => console.error(err)); //! VOLVER A VER manejo de errores;
   };
 
   return (
-    <div>
+    <div className="component-fadeIn">
       <div>
         <h2>{name}</h2>
         <h4>Email: {isGoogleUser ? googleEmail : email}</h4>

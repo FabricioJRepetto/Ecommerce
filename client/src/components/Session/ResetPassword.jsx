@@ -47,7 +47,7 @@ const ResetPassword = () => {
         setLoading(false);
       } catch (error) {
         //! VOLVER A VER manejo de errores
-        console.log("error", error);
+        console.error("error", error);
         notification("Link de recuperación vencido", "", "error");
         session ? navigate("/") : navigate("/signin");
       }
@@ -74,7 +74,7 @@ const ResetPassword = () => {
         data.message && setResponse(data.message);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       setResponse(error.response.data.message); //! VOLVER A VER manejo de errores
       setTimeout(() => {
         navigate("/");

@@ -41,27 +41,36 @@ import { useNotification } from "./hooks/useNotification";
 import { useSignout } from "./hooks/useSignout";
 import NotFound from "./components/common/NotFound";
 import Unauthorized from "./components/common/Unauthorized";
+import { useLocation } from "react-router-dom";
 
 function App() {
     const dispatch = useDispatch();
     const { userLogin } = useUserLogin();
+    const { pathname } = useLocation();
     const notification = useNotification();
     const signOut = useSignout();
     const isUserDataLoading = useSelector(
         (state) => state.sessionReducer.isUserDataLoading
     );
 
+    //? Intercepta las respuestas de "token vencido" y cierra sesión
     axios.interceptors.response.use(
         (response) => response,
         (error) => {
             if (error.response?.data?.expiredToken) {
                 signOut();
-                notification(error.response.data.message, "/signin", "error");
+                notification('Por favor vuelve a iniciar sesión.', "/signin", "error");
             }
             return Promise.reject(error.message);
         }
     );
 
+    //? Evitar que el scroll quede desubicado al cambiar de página
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [pathname]);
+
+    //? Inicia sesión automaticamente si hay un token valido en el localStorage
     useEffect(() => {
         if (window.localStorage.getItem("loggedTokenEcommerce")) {
             userLogin(window.localStorage.getItem("loggedTokenEcommerce"), false);

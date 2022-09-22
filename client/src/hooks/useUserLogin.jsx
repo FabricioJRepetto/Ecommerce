@@ -83,7 +83,7 @@ export const useUserLogin = (token) => {
       if (data) userLogin(token);
       // else
     } catch (error) {
-      console.log("useUserLogin google: catch" + error); //! VOLVER A VER manejo de errores
+      console.error("useUserLogin google: catch" + error); //! VOLVER A VER manejo de errores
       dispatch(loadingUserData(false));
     }
   };

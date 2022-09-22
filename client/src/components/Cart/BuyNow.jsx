@@ -185,7 +185,7 @@ const BuyNow = () => {
   };
 
   return (
-    <div className="buynow-container">
+    <div className="buynow-container component-fadeIn">
       {product && !loading ? (
         <div className="buynow-inner">
           <span className="bn-return-container">

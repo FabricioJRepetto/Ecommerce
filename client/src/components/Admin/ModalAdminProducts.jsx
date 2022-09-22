@@ -29,10 +29,9 @@ const ModalAdminProducts = ({
       .delete(`/admin/product/${productToDelete.prodId}`)
       .then((r) => {
         r.type === 'success' && dispatch(deleteProductFromState(productToDelete.prodId));
-        console.log(r);
         notification(r.data.message, "", r.data.type);
       })
-      .catch((err) => console.log(err)); //! VOLVER A VER manejo de errores
+      .catch((err) => console.error(err)); //! VOLVER A VER manejo de errores
   };
 
   const handleDeleteProduct = () => {
@@ -48,7 +47,7 @@ const ModalAdminProducts = ({
         dispatch(changeReloadFlag(true));
         notification("Descuento aplicado exitosamente", "", "success");
       })
-      .catch((error) => console.log(error)); //! VOLVER A VER manejo de errores
+      .catch((error) => console.error(error)); //! VOLVER A VER manejo de errores
   };
 
   const handleAddDiscount = (e) => {
@@ -89,7 +88,7 @@ const ModalAdminProducts = ({
         dispatch(changeReloadFlag(true));
         notification("Descuento removido exitosamente", "", "success");
       })
-      .catch((error) => console.log(error)); //! VOLVER A VER manejo de errores
+      .catch((error) => console.error(error)); //! VOLVER A VER manejo de errores
   };
 
   const handleRadio = (e) => {
