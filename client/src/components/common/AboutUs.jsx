@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ExternalLinkIcon as LinkIcon } from '@chakra-ui/icons'
-import "./About.css";
+import "./about.css";
 
 const AboutUs = () => {
   const [order, setOrder] = useState(false)
