@@ -189,3 +189,14 @@
   max-width: 96px;
   max-height: 96px;
 }
+
+.profile-section-indicator {
+    position: fixed;
+    top: 5%;
+    left: 5%;
+    min-width: 450px;
+    width: 40vw;
+    font-family: HelveticaNeueLTPro-Hv, Poppins;
+    font-size: 15vw;
+    color: #151515;
+}
