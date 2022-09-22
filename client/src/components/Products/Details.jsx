@@ -96,7 +96,7 @@ const Details = () => {
       const { data } = await axios(`/product/${id}`);
 
       if (data.error) {
-        setError({ message: data.message });
+        setError(data.message);
       } else {
         setData(data);
         setDescription(!!data.description);
@@ -129,14 +129,14 @@ const Details = () => {
         </div>
       )}
       {error && (
-        <div className="product-details-error">
-          <h1>{error.message}</h1>
+        <div className="product-details-error component-fadeIn">
+          <h1>{error}</h1>
           <ReturnButton to={-1} />
         </div>
       )}
       {data && (
         <div>
-          <div className="details-head-container">
+          <div className="details-head-container component-fadeIn">
             <div className="bread-crumbs">
               <div>
                 {data.path_from_root?.length > 0 &&

@@ -15,6 +15,7 @@ const UsersAdmin = () => {
     (state) => state.sessionReducer
   );
   const [nameSearch, setNameSearch] = useState("");
+  const [error, setError] = useState(false)
   const location = useLocation();
   const { id } = useParams();
   const [isOpenBanUser, openBanUser, closeBanUser, userToBan] = useModal();
@@ -34,13 +35,17 @@ const UsersAdmin = () => {
         .then(({ data }) => {
           dispatch(adminLoadUsers(data));
         })
-        .catch((err) => console.log(err)); //! VOLVER A VER manejo de errores
+        .catch((err) => console.error(err)); //! VOLVER A VER manejo de errores
     } else {
       axios(`/admin/user/${id}`)
         .then(({ data }) => {
-          dispatch(adminLoadUsers(data));
+          if (data.error) {
+            setError(data.message)
+          } else {
+            dispatch(adminLoadUsers(data));
+          }          
         })
-        .catch((err) => console.log(err)); //! VOLVER A VER manejo de errores
+        .catch((err) => console.error(err)); //! VOLVER A VER manejo de errores
     } // eslint-disable-next-line
   }, [location.pathname]);
 
@@ -64,20 +69,23 @@ const UsersAdmin = () => {
             onChange={handleNameSearch}
           />
         )}
-        {usersToShow && usersToShow[0] === null ? (
-          <h4>No hubieron coincidencias</h4>
-        ) : (
-          React.Children.toArray(
-            usersToShow?.map((user) => (
-              <UserCard
-                user={user}
-                openBanUser={openBanUser}
-                openUnbanUser={openUnbanUser}
-                openPromoteUser={openPromoteUser}
-              />
-            ))
-          )
-        )}
+        {usersToShow && usersToShow[0] === null && <h4>No hubieron coincidencias</h4>}
+        
+        {error && <h1>{error}hola</h1>}
+
+        {usersToShow && usersToShow.length &&
+            <div>{
+                React.Children.toArray(
+                usersToShow?.map((user) => (
+                <UserCard
+                    user={user}
+                    openBanUser={openBanUser}
+                    openUnbanUser={openUnbanUser}
+                    openPromoteUser={openPromoteUser}
+                />
+                ))
+            )
+          }</div>}
       </div>
       <ModalAdminUsers
         isOpenBanUser={isOpenBanUser}

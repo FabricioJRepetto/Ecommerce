@@ -9,24 +9,15 @@ const mpCho = async (req, res, next) => {
     try {
         const id = req.params.id;
 
-        // SDK de Mercado Pago
         // Agrega credenciales
         mercadopago.configure({
             access_token: MP_SKEY,
         });
-        /* 
-        : por si no sirven las notificaciones de meli usar esto ?
-        tracks:     Array
-        Localización: Body
-        Tracks que se ejecutarán durante la interacción de los usuarios en el flujo de Pago. El usuario puede configurar sus propios tracks. Actualmente soportamos Google y Facebook. El collector debe enviar el pixel ID (de google o facebook), y cuando finalice el flujo de la transacción, el vendedor será notificado de la venta.
-        */
 
         // Crea un objeto de preferencia
         //? order
         let items = [];
         const order = await Order.findById(id);
-        console.log('### encontrar order');
-        console.log(order);
 
         for (const prod of order.products) {
             items.push({

@@ -6,7 +6,6 @@ import { useNotification } from "../../hooks/useNotification";
 import { useCheckout } from "../../hooks/useCheckout";
 import { priceFormat } from "../../helpers/priceFormat";
 import { resizer } from "../../helpers/resizer";
-import LoaderBars from "../common/LoaderBars";
 import Carousel from "../Home/Carousel/Carousel";
 import { ArrowDownIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import { WishlistButton } from "../Products/WishlistButton";
@@ -18,6 +17,7 @@ const PremiumDetails = () => {
   const [product, setProduct] = useState(false);
   const [images, setImages] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false)
   const [tabOpen, setTabOpen] = useState(false);
   const notification = useNotification();
   const { addToCart, buyNow } = useCheckout();
@@ -82,7 +82,6 @@ const PremiumDetails = () => {
       (entries) => {
         const [entry] = entries;
         setIsVisible(!entry.isIntersecting);
-        console.log(!entry.isIntersecting);
       },
       {
         root: null,
@@ -101,7 +100,11 @@ const PremiumDetails = () => {
   useEffect(() => {
     (async () => {
       const { data } = await axios(`/product/${id}`);
-      if (data) {
+      if (data.error) {
+        setError(data.message)
+      } else if (!data.premium) {
+        setError('ID de producto incorrecta')
+      } else {
         setProduct(data);
 
         let aux = data.images.map((e) => ({
@@ -111,18 +114,21 @@ const PremiumDetails = () => {
         setImages(aux);
 
         setLoading(false);
-      } else notification("Producto no encontrado.", "", "error");
+      }
     })();
     // eslint-disable-next-line
   }, []);
 
   return (
     <div className="premiumdetails-container component-fadeIn">
-      {loading ? (
-        <div>
+      {loading && <></>}
+      {error && 
+        <div className="premiumdetails-error component-fadeIn">
+            <h1>{error}</h1>
         </div>
-      ) : (
-        <div className="premiumdetails-content">
+      }
+       {product &&(
+        <div className="premiumdetails-content component-fadeIn">
           <div className="premiumdetails-head">
             <div className="provider-premium-sign"></div>
 

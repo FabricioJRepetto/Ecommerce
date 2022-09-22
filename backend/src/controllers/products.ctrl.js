@@ -29,7 +29,6 @@ const getAll = async (req, res, next) => {
 const getProds = async (req, res, next) => {
     try {
         const products = await Product.find();
-        console.log(req.query.category)
 
         let response = products.filter((e) =>
             e.path_from_root.find(e => e.id === req.query.category)
@@ -200,7 +199,6 @@ const getPromos = async (req, res, next) => {
             results = results.concat(r.data.results);
         });
         results = meliSearchParser(results);
-        console.log('@@@@@' + results.length);
 
         let allResults = [...dbResults, ...results];
 
@@ -259,5 +257,5 @@ module.exports = {
     stock,
     getPromos,
     getPremium,
-    putPremium
+    putPremium,
 };

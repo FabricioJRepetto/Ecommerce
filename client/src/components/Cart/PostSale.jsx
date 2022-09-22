@@ -113,11 +113,9 @@ const PostSale = () => {
   }, []);
 
   const deliveryWaiter = async (id) => {
-      console.log("Esperando orden actualizada...");
       const response = axios(`/order/postsale/${id}`);
       
       response.then(r =>{
-        console.log("...respuesta recibida.");
         if (r.data.status) {
             setOrder(r.data);        
         } else {

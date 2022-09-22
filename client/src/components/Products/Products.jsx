@@ -84,7 +84,6 @@ const Products = () => {
       getProducts();
     } */
     if (!reloadFlag) {
-      //console.log("aca debe limpiar redux");
       clearFilters();
       handleClearSearch();
       getProducts();
@@ -133,7 +132,6 @@ const Products = () => {
 
   //! 1.5
   const getProducts = () => {
-    //  console.log("1.5 getProducts");
     axios
       .get("/product")
       .then((r) => {
@@ -141,13 +139,11 @@ const Products = () => {
         setBrands(r.data);
         setGetProductsFlag(!getProductsFlag);
       })
-      .catch((err) => console.log(err)); //! VOLVER A VER manejo de errores
+      .catch((err) => console.error(err)); //! VOLVER A VER manejo de errores
   };
 
   //! 4
   const applyFilters = () => {
-    //  console.log("4 applyFilters");
-    // console.log("filtersApplied", filtersApplied);
     if (productsOwnProductToSearch) {
       clearFilters();
       setProductToSearch(productsOwnProductToSearch);
@@ -205,7 +201,6 @@ const Products = () => {
   //! 1
   const reloadFunction = () => {
     if (reloadFlag) {
-      //  console.log("1 reloadFlag ef");
       if (Object.keys(productsOwnFiltersApplied).length > 0)
         setFiltersApplied(productsOwnFiltersApplied);
       dispatch(clearProducts());
@@ -223,14 +218,12 @@ const Products = () => {
   //! 3
   useEffect(() => {
     if (productsOwn.length) {
-      //  console.log("3 getProductsFlag ef");
       applyFilters();
     } // eslint-disable-next-line
   }, [getProductsFlag]);
 
   //! 2
   const setBrands = (products) => {
-    //  console.log("2 setBrands");
     let brandsCheckbox = {};
     let newBrands = [];
     // newBrands => para cargar brandsCheckboxes

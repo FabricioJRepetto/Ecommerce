@@ -34,8 +34,6 @@ const Results = () => {
   const [open, setOpen] = useState("category");
   const dispatch = useDispatch();
 
-  console.log(applied);
-
   useEffect(() => {
     (async () => {
       const category = params.get("category");

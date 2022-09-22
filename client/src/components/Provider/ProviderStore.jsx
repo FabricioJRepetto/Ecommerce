@@ -12,7 +12,6 @@ const ProviderStore = () => {
 
   useEffect(() => {
     const buttons = document.getElementsByName("ps-button-hover");
-    console.log(buttons);
     buttons.forEach((b) =>
       PowerGlitch.glitch(b, {
         imageUrl:
@@ -88,33 +87,32 @@ const ProviderStore = () => {
         </video>
       </div>
 
-      <div className="storecards-container">
-        {/* <div className="providerstore-disclaimer">
-            <h1>¿Qué es Provider?</h1>
-            <p>Encuentra los mejores productos de distintas tiendas especializadas en un solo lugar.</p>
-            <p>Explora Provider Store para ver nuestros seleccionados.</p>
-        </div> */}
+      <div className="storecards-container">        
 
         <div className="storecards-inner">
           <CategoryCard
             text="COMPUTACIÓN"
             image="https://res.cloudinary.com/dsyjj0sch/image/upload/v1663598262/computacion_iczryv.png"
             route="MLA1648"
+            hover
           />
           <CategoryCard
             text="VIDEOJUEGOS"
             image="https://res.cloudinary.com/dsyjj0sch/image/upload/v1663598262/videojuegos2_hvufj4.png"
             route="MLA1144"
+            hover
           />
           <CategoryCard
             text="AUDIO"
             image="https://res.cloudinary.com/dsyjj0sch/image/upload/v1663598262/audio_bbrp2m.png"
             route="MLA409810"
+            hover
           />
           <CategoryCard
             text="CÁMARAS"
             image="https://res.cloudinary.com/dsyjj0sch/image/upload/v1663598262/camara_epkefy.png"
             route="MLA1039"
+            hover
           />
         </div>
 

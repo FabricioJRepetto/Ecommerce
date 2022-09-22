@@ -148,7 +148,6 @@ const ProductForm = () => {
   };
 
   const loadInputs = (data) => {
-    console.log(data);
     setValue("name", data.name);
     setValue("price", data.price);
     setValue("brand", data.brand);
@@ -197,7 +196,7 @@ const ProductForm = () => {
           dispatch(loadIdProductToEdit(null));
           loadInputs(data);
         })
-        .catch((err) => console.log(err)); //!VOLVER A VER manejo de errores
+        .catch((err) => console.error(err)); //!VOLVER A VER manejo de errores
     } else {
       appendAttribute({ name: "color", value_name: "amarillo" });
       appendFeature({ value: "piola" });
@@ -293,7 +292,7 @@ const ProductForm = () => {
     } catch (error) {
       notification("Hubo un error, vuelve a intentar", "", "error");
       //!VOLVER A VER manejo de errores
-      console.log(error);
+      console.error(error);
     } finally {
       setWaitingResponse(false);
     }

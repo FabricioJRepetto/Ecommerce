@@ -69,7 +69,7 @@ const Signupin = () => {
         notification(data.message, "", "");
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       //! VOLVER A VER manejo de errores
     } finally {
       closeLoader();
@@ -93,7 +93,7 @@ const Signupin = () => {
         userLogin(data.token);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       //! VOLVER A VER manejo de errores
       if (error.response.data.message) {
         notification(error.response.data.message, "", "error");

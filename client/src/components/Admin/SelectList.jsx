@@ -26,7 +26,7 @@ const SelectList = ({
         }
         categoryPath.length ? setData(data.children_categories) : setData(data);
       })
-      .catch((err) => console.log(err)); //! VOLVER A VER manejo de errores
+      .catch((err) => console.error(err)); //! VOLVER A VER manejo de errores
     // eslint-disable-next-line
   }, [categoryPath]);
 
