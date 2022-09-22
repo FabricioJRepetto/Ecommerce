@@ -71,6 +71,13 @@ const Signupin = () => {
     } catch (error) {
       console.error(error);
       //! VOLVER A VER manejo de errores
+      if (error?.response?.data?.message) {
+        notification(error.response.data.message, "", "error");
+      } else if (error?.response?.data) {
+        notification(error.response.data, "", "error");
+      } else {
+        notification('El servidor está fuera de línea', '', 'warning');
+      }
     } finally {
       closeLoader();
     }
@@ -81,6 +88,9 @@ const Signupin = () => {
     dispatch(loadingUserData(true));
     try {
       const { data } = await axios.post(`/user/signin`, signinData);
+
+      if (!data) {
+      }
 
       if (data.error && data.message && Array.isArray(data.message)) {
         data.message.forEach((error) => notification(error, "", "warning"));
@@ -93,12 +103,13 @@ const Signupin = () => {
         userLogin(data.token);
       }
     } catch (error) {
-      console.error(error);
       //! VOLVER A VER manejo de errores
-      if (error.response.data.message) {
+      if (error?.response?.data?.message) {
         notification(error.response.data.message, "", "error");
-      } else if (error.response.data) {
+      } else if (error?.response?.data) {
         notification(error.response.data, "", "error");
+      } else {
+        notification('El servidor está fuera de línea', '', 'warning');
       }
 
       dispatch(loadingUserData(false));

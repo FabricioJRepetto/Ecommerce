@@ -83,7 +83,16 @@ export const useUserLogin = (token) => {
       if (data) userLogin(token);
       // else
     } catch (error) {
-      console.error("useUserLogin google: catch" + error); //! VOLVER A VER manejo de errores
+      console.error("useUserLogin google: catch " + error);
+
+      if (error?.response?.data?.message) {
+        notification(error.response.data.message, "", "error");
+      } else if (error?.response?.data) {
+        notification(error.response.data, "", "error");
+      } else {
+        notification('El servidor está fuera de línea', '', 'warning');
+      }
+      
       dispatch(loadingUserData(false));
     }
   };
