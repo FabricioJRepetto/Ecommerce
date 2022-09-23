@@ -308,17 +308,15 @@ const updateProduct = async (req, res, next) => {
       free_shipping,
       imgsToEdit,
       mainImgIndex,
-      images,
+      newImages,
     } = req.body;
-    let imagesToKeep = [...imgsToEdit];
-    console.log("---------imagesToKeep inicio", imagesToKeep);
+
+    let images = [...imgsToEdit, ...newImages];
 
     if (mainImgIndex !== 0) {
-      const mainImg = imagesToKeep.splice(mainImgIndex, 1)[0];
-      imagesToKeep.splice(0, 0, mainImg);
+      const mainImg = images.splice(mainImgIndex, 1)[0];
+      images.splice(0, 0, mainImg);
     }
-
-    console.log("---------imagesToKeep medio", imagesToKeep);
 
     //? actualizar lista de imagenes
     const productFound = await Product.findById(req.params.id);
@@ -357,9 +355,6 @@ const updateProduct = async (req, res, next) => {
       mainFeaturesArray.push(feature.value);
     }
 
-    //console.log("---------images", images);
-    console.log("---------imagesToKeep final", imagesToKeep);
-
     const updatedProduct = await Product.findByIdAndUpdate(
       req.params.id,
       {
@@ -374,7 +369,7 @@ const updateProduct = async (req, res, next) => {
           path_from_root,
           available_quantity,
           free_shipping,
-          images: [...images, ...imagesToKeep],
+          images,
         },
       },
       { new: true }
@@ -382,7 +377,6 @@ const updateProduct = async (req, res, next) => {
 
     res.json(updatedProduct);
   } catch (error) {
-    console.log("---------error", error);
     next(error);
   }
 };

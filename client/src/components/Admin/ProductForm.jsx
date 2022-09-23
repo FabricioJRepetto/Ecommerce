@@ -24,6 +24,8 @@ import ReturnButton from "../../components/common/ReturnButton";
 import "./ProductForm.css";
 import "../../App.css";
 
+const { REACT_APP_UPLOAD_PRESET, REACT_APP_CLOUDINARY_URL } = process.env;
+
 const ProductForm = () => {
   const [featuresQuantity, setFeaturesQuantity] = useState(1);
   const [attributesQuantity, setAttributesQuantity] = useState(1);
@@ -263,12 +265,9 @@ const ProductForm = () => {
       fileListArrayImg.forEach((image) => {
         let imageFormData = new FormData();
         imageFormData.append("file", image);
-        imageFormData.append("upload_preset", "hkbhptt8");
+        imageFormData.append("upload_preset", REACT_APP_UPLOAD_PRESET);
         imagesRequests.push(
-          axios.post(
-            "https://api.cloudinary.com/v1_1/dsyjj0sch/image/upload",
-            imageFormData
-          )
+          axios.post(REACT_APP_CLOUDINARY_URL, imageFormData)
         );
       });
 
@@ -284,10 +283,12 @@ const ProductForm = () => {
       }
 
       if (productToEdit) {
-        console.log("imgsToEdit", imgsToEdit);
-        console.log("images", images);
-
-        let data = { ...productData, imgsToEdit, mainImgIndex, images };
+        let data = {
+          ...productData,
+          imgsToEdit,
+          mainImgIndex,
+          newImages: images,
+        };
         await axios.put(`/admin/product/${productToEdit}`, data);
 
         dispatch(changeReloadFlag(true));
