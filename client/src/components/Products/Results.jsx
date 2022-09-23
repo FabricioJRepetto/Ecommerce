@@ -64,7 +64,7 @@ const Results = () => {
   useEffect(() => {
     filtersMenuMobile.current &&
       setFiltersContainerHeight(
-        widnowHeight - filtersMenuMobile.current.offsetTop - window.scrollY - 70
+        widnowHeight - filtersMenuMobile.current.offsetTop - window.scrollY - 95
       );
 
     // eslint-disable-next-line
