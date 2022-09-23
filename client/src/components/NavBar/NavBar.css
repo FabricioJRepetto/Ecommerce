@@ -222,7 +222,7 @@
   }
 
   .glitch-desktop {
-    margin-right: 1rem;
+    /*  margin-right: 1rem; */
   }
 
   .navbar-profile-section {
@@ -400,7 +400,7 @@
 
 .navbar-main-sections {
   display: flex;
-  padding: 0.3rem 0 .2rem 0;
+  padding: 0.3rem 0 .2rem 1rem;
   z-index: 70;
   background-color: #000000;
   position: relative;
@@ -747,3 +747,21 @@
     display: none;
   }
 }
+
+
+.mal {
+
+
+
+
+
+  position: -webkit-sticky;
+
+
+  -ms-user-select: none;
+
+
+
+}
+
+.bien {}

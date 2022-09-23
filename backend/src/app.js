@@ -1,7 +1,6 @@
 require("dotenv").config();
 const morgan = require("morgan");
 const mongoSanitize = require("express-mongo-sanitize");
-const multer = require("multer");
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
@@ -27,35 +26,11 @@ let corsOptions = {
   credentials: true,
 };
 
-const fileFilters = (req, file, cb) => {
-  if (
-    file.mimetype === "image/jpeg" ||
-    file.mimetype === "image/png" ||
-    file.mimetype === "image/gif"
-  ) {
-    cb(null, true);
-  } else {
-    cb(null, false);
-  }
-};
-const StorageConfig = multer.diskStorage({
-  destination: path.join(__dirname, "public/uploads"),
-  filename: (req, file, cb) => {
-    cb(null, uuidv4() + path.extname(file.originalname));
-  },
-});
-const Multerupload = multer({
-  storage: StorageConfig,
-  fileFilter: fileFilters,
-});
-
 // ---------------- MIDDLEWARES
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 //app.use(csrf());
 app.use(morgan("dev"));
-
-app.use(Multerupload.any("images")); //? single/array/any tiene el nombre del objeto que viene en el req.
 
 app.use(cookieParser());
 

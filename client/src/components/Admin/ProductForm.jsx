@@ -24,6 +24,8 @@ import ReturnButton from "../../components/common/ReturnButton";
 import "./ProductForm.css";
 import "../../App.css";
 
+const { REACT_APP_UPLOAD_PRESET, REACT_APP_CLOUDINARY_URL } = process.env;
+
 const ProductForm = () => {
   const [featuresQuantity, setFeaturesQuantity] = useState(1);
   const [attributesQuantity, setAttributesQuantity] = useState(1);
@@ -248,8 +250,6 @@ const ProductForm = () => {
     if (errorFlag > 0) return;
     productData = { ...productData, category: category };
 
-    let formData = new FormData();
-
     const fileListArrayImg = Array.from(productImg);
     validateImgs(fileListArrayImg);
     if (!productToEdit && mainImgIndex !== 0) {
@@ -257,34 +257,46 @@ const ProductForm = () => {
       fileListArrayImg.splice(0, 0, mainImg);
     }
 
-    fileListArrayImg.forEach((pic) => {
-      formData.append("images", pic);
-    });
-    // formData.append("images", fileListArrayImg);
-
-    //! VOLVER A VER poner disabled el boton de submit al hacer la petición
     try {
       setWaitingResponse(true);
-      if (productToEdit) {
-        let data = { ...productData, imgsToEdit, mainImgIndex };
-        formData.append("data", JSON.stringify(data));
 
-        await axios.put(`/admin/product/${productToEdit}`, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
+      let imagesRequests = [];
+
+      fileListArrayImg.forEach((image) => {
+        let imageFormData = new FormData();
+        imageFormData.append("file", image);
+        imageFormData.append("upload_preset", REACT_APP_UPLOAD_PRESET);
+        imagesRequests.push(
+          axios.post(REACT_APP_CLOUDINARY_URL, imageFormData)
+        );
+      });
+
+      const imagesPromises = await Promise.all(imagesRequests);
+
+      let images = [];
+
+      for (const image of imagesPromises) {
+        images.push({
+          imgURL: image.data.url,
+          public_id: image.data.public_id,
         });
+      }
+
+      if (productToEdit) {
+        let data = {
+          ...productData,
+          imgsToEdit,
+          mainImgIndex,
+          newImages: images,
+        };
+        await axios.put(`/admin/product/${productToEdit}`, data);
+
         dispatch(changeReloadFlag(true));
         notification("Producto editado exitosamente", "", "success");
         navigate("/admin/products");
       } else {
-        formData.append("data", JSON.stringify(productData));
+        await axios.post("/admin/product/", { ...productData, images });
 
-        await axios.post("/admin/product/", formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
         dispatch(changeReloadFlag(true));
         openCreateProduct();
       }
@@ -292,7 +304,6 @@ const ProductForm = () => {
     } catch (error) {
       notification("Hubo un error, vuelve a intentar", "", "error");
       //!VOLVER A VER manejo de errores
-      console.error(error);
     } finally {
       setWaitingResponse(false);
     }
