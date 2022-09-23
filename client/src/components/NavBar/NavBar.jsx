@@ -427,6 +427,15 @@ const NavBar = () => {
                     movementAfter={"0 0 1rem 0"}
                   />
                 </div>
+
+                <div className="navbar-central-options">
+                  <ChromaticText
+                    text={"Preguntas Frecuentes"}
+                    route={"faqs"}
+                    size={"1rem"}
+                    movementAfter={"0 0 1rem 0"}
+                  />
+                </div>
               </div>
             </div>
           )}

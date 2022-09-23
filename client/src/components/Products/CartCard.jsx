@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { priceFormat } from "../../helpers/priceFormat";
 import { resizer } from "../../helpers/resizer";
@@ -8,29 +8,47 @@ import { ReactComponent as MenuDots } from "../../assets/svg/kebab.svg";
 
 import "./CartCard.css";
 
-const CartCard = ({
-  img,
-  premium,
-  name,
-  price,
-  sale_price,
-  on_sale,
-  discount,
-  brand,
-  prodId,
-  free_shipping,
-  on_cart,
-  stock,
-  prodQuantity,
-  deleteP,
-  buyLater,
-  buyNow,
-  source,
-  loading,
-}) => {
+const CartCard = ({ on_cart, productData, buyLater, deleteP, buyNow, source, loading }) => {
+  const {
+    thumbnail: img,
+    premium,
+    name,
+    price,
+    sale_price,
+    on_sale,
+    discount,
+    _id: prodId,
+    free_shipping,
+    stock,
+    quantity: prodQuantity
+  } = productData;
+
   const navigate = useNavigate();
   const [menuOptions, setMenuOptions] = useState(false);
   const [disable, setDisable] = useState(false)
+  const [mounted, setMounted] = useState(false)
+  const [moving, setMoving] = useState(false)
+
+    useEffect(() => {
+        setTimeout(() => {
+            setMounted(true)            
+        }, 100);
+    }, [])
+
+    const willUnmount = (del) => {
+        setMounted(false)
+        setTimeout(() => {
+            setMoving(true)            
+        }, 100);
+        del 
+        ? setTimeout(() => {
+            deleteP(prodId, source)            
+        }, 300)
+        : setTimeout(() => {
+            buyLater(prodId)            
+        }, 300)
+        
+     }
 
     const closeModal = (e) => { 
         e.stopPropagation(); 
@@ -38,7 +56,7 @@ const CartCard = ({
      }
 
   return (
-    <div className="cart-card-container" style={disable ? {position: 'relative'} : {}}>
+    <div className={`cart-card-container ${mounted ? 'card-fadeout' : 'card-fadein'} ${moving && 'card-shrink'}`}>
         
             <div className="product-cart-card-head">
                 <div onClick={() =>
@@ -64,7 +82,7 @@ const CartCard = ({
                 </div>
                 <div className="cart-product-options">
                     <div className="cart-option-mobile">
-                        <span onClick={() => deleteP(prodId, source)}
+                        <span onClick={()=>willUnmount(true)}
                             className='cart-option-delete-icon'>
                             <DeleteIcon />
                         </span>
@@ -73,10 +91,10 @@ const CartCard = ({
                         </span>                
                     </div>
                     {menuOptions && <div className="cartcard-modal-options">                        
-                        <p className="pointer" onClick={(e) => {closeModal(e); setDisable(true); buyLater(prodId)}}>
+                        <p className="pointer" onClick={(e) => {closeModal(e); setDisable(false); willUnmount(false)}}>
                         {source === "buyLater" ? "Mover al carrito" : "Guardar para después"}
                         </p>
-                        <p className="pointer" onClick={(e) => {closeModal(e); setDisable(true); buyNow(prodId, source)}}>
+                        <p className="pointer" onClick={(e) => {closeModal(e); setDisable(false); buyNow(prodId, source)}}>
                             Comprar ahora
                         </p>
                     </div>}

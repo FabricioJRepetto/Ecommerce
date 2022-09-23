@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useNotification } from "../../hooks/useNotification";
 import { useCheckout } from "../../hooks/useCheckout";
 import { priceFormat } from "../../helpers/priceFormat";
 import { resizer } from "../../helpers/resizer";
@@ -19,7 +18,6 @@ const PremiumDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false)
   const [tabOpen, setTabOpen] = useState(false);
-  const notification = useNotification();
   const { addToCart, buyNow } = useCheckout();
   const { wishlist } = useSelector((state) => state.cartReducer);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);

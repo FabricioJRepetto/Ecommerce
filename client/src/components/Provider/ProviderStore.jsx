@@ -123,7 +123,7 @@ const ProviderStore = () => {
               className="g-white-button"
               onClick={() => navigate("/products")}
             >
-              TODOS LOS PRODUCTOS
+              NUESTROS PRODUCTOS
             </button>
           </div>
 

@@ -46,6 +46,12 @@
     url("./assets/fonts/HelveticaNeueLTProRoman.otf") format("truetype");
   /* font-weight: bold; */
 }
+@font-face {
+  font-family: "HelveticaNeueLTPro-Th";
+  src: local("HelveticaNeueLTPro-Th"),
+    url("./assets/fonts/HelveticaNeueLTProTh.otf") format("truetype");
+  /* font-weight: bold; */
+}
 
 /* Normalize 8.0.1 */
 

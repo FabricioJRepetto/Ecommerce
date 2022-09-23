@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Modal from "../common/Modal";
 import { useModal } from "../../hooks/useModal";
@@ -17,6 +17,8 @@ import AddAddress from "../Profile/AddAddress";
 import ReturnButton from "../common/ReturnButton";
 import Carousel from "../Home/Carousel/Carousel";
 import { resizer } from "../../helpers/resizer";
+import CopiableText from "../common/CopiableText";
+import { ReactComponent as ArrowRight } from "../../assets/svg/arrow-right2.svg";
 
 import "./BuyNow.css";
 
@@ -39,6 +41,7 @@ const BuyNow = () => {
 
   const [isOpenAddForm, openAddForm, closeAddForm, prop] = useModal();
   const [isOpenAddList, openAddList, closeAddList] = useModal();
+  const [isOpenPreCheckout, openPreCheckout, closePreCheckout] = useModal();
   const [isOpenCheckout, openCheckout, closeCheckout] = useModal();
 
   const SHIP_COST = 500;
@@ -375,7 +378,7 @@ const BuyNow = () => {
                   <button
                     className="g-white-button details-button"
                     disabled={!product || !selectedAdd || loadingPayment}
-                    onClick={openCheckout}
+                    onClick={openPreCheckout}
                   >
                     Pagar
                   </button>
@@ -441,84 +444,113 @@ const BuyNow = () => {
         </div>
       </Modal>
 
-      <Modal isOpen={isOpenCheckout} closeModal={closeCheckout}>
+      <Modal isOpen={isOpenPreCheckout} closeModal={closePreCheckout}>
         <div>
-          <p>Pagar con:</p>
-
-          <div className="cart-checkout-modal-button-container">
-            <div>
-              <button
-                className="g-white-button details-button"
-                disabled={!product || !selectedAdd || loadingPayment}
-                onClick={goCheckout}
-              >
-                {loadingPayment === "S" ? (
-                  <Spinner className="cho-svg" />
-                ) : (
-                  "Stripe"
-                )}
-              </button>
-              <br />
-              <b>Stripe</b>
-
-              <ul>
-                <li>
-                  <b>card:</b> <i>4242 4242 4242 4242</i>
-                </li>
-                <li>
-                  <b>expiration:</b> <i>fecha mayor a la actual</i>
-                </li>
-                <li>
-                  <b>cvc:</b> <i>123</i>
-                </li>
-                <li>
-                  <b>mail:</b> <i>cualquiera</i>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <button
-                className="g-white-button details-button"
-                disabled={!product || !selectedAdd || loadingPayment}
-                onClick={openMP}
-              >
-                {loadingPayment === "MP" ? (
-                  <Spinner className="cho-svg" />
-                ) : (
-                  "MercadoPago"
-                )}
-              </button>
-              <br />
-              <b>Mercadopago</b>
-
-              <ul>
-                <li>
-                  <b>card:</b> <i>5416 7526 0258 2580</i>
-                </li>
-                <li>
-                  <b>expiration:</b> <i>11/25</i>
-                </li>
-                <li>
-                  <b>cvc:</b> <i>123</i>
-                </li>
-                <li>
-                  <b>nombre:</b> <i>apro</i>
-                </li>
-                <li>
-                  <b>dni:</b> <i>12345678</i>
-                </li>
-                <li>
-                  <b>mail:</b> <i>cualquiera argentino</i>
-                </li>
-              </ul>
-            </div>
-          </div>
           <p className="cart-warning-message">
-            <WarningIcon /> A continuación se simulará un pago. Seleccione un
-            Checkout y<br /> utilize los datos de prueba correspondientes a la
-            plataforma que se elija.
+            <WarningIcon /> A continuación se simulará un pago. Si es la primera vez que lo haces, lee esto antes. Es recomendable mantener esa ventana abierta para consultar los datos.
           </p>
+          <button className="g-white-button details-button" >
+            <Link to={`/faqs/4`} target="_blank" rel="noopener noreferrer">¿Cómo comprar?</Link>
+          </button>
+
+          <span onClick={() => {openCheckout(); closePreCheckout()}} 
+            className='g-text-button continue-button'>
+                Continuar 
+                <ArrowRight /> 
+                <div className="arrow-right-gradient"></div>
+            </span>
+
+        </div>
+      </Modal>
+
+      <Modal isOpen={isOpenCheckout} closeModal={closeCheckout}>
+        <div className="cart-modal-checkouts">            
+
+            <div>
+                <div className="cart-modal-logo">
+                    <img src="https://res.cloudinary.com/dsyjj0sch/image/upload/v1663894003/Stripe_Logo-2_otuyhn.png" alt="stripe logo" />
+                </div>
+                <div>
+                    <ul>
+                        <li>
+                            Número de tarjeta:<br/>
+                            <CopiableText text={'4242 4242 4242 4242'}/>
+                        </li>
+                        <li>
+                            Fecha de expiración:<br/><b>Cualquier fecha mayor a la actual</b>
+                        </li>
+                        <li>
+                            cvc:<br/>
+                            <CopiableText text={'123'}/>
+                        </li>
+                        <li>
+                            E-mail:<br/><b>Cualquiera</b>
+                        </li>
+                        <li>
+                            Nombre:<br/><b>Cualquiera</b>
+                        </li>
+                    </ul>
+
+                    <button
+                        className="g-white-button"
+                        disabled={!product || !selectedAdd || loadingPayment}
+                        onClick={goCheckout}
+                        >
+                        {loadingPayment === "S" ? (
+                            <Spinner className="cho-svg" />
+                        ) : (
+                            "Pagar con Stripe"
+                        )}
+                    </button>
+                </div>
+            </div>
+
+            <div>                
+                <div className='cart-modal-logo'>
+                    <img src="https://res.cloudinary.com/dsyjj0sch/image/upload/v1663894003/Mercadopago_Logo-2_anidpy.png" alt="Mercadopago logo" />
+                </div>
+                <div>
+                    <ul>
+                        <li>
+                            Número de tarjeta:<br/>
+                            <CopiableText text={'5416 7526 0258 2580'}/>
+                        </li>
+                        <li>
+                            Fecha de expiración:<br/>
+                            <CopiableText text={'11/25'}/>
+                        </li>
+                        <li>
+                            cvc:<br/>
+                            <CopiableText text={'123'}/>
+                        </li>
+                        <li>
+                            Nombre:<br/>
+                            <CopiableText text={'APRO'}/>
+                        </li>
+                        <li>
+                            dni:<br/>
+                            <CopiableText text={'12345678'}/>
+                        </li>
+                        <li>
+                            E-mail:<br/>
+                            <b>Cualquier email argentino (importante)</b>
+                        </li>
+                    </ul>
+                    
+                    <button
+                        className="g-white-button cart-checkout-modal-button-container"
+                        disabled={!product || !selectedAdd || loadingPayment}
+                        onClick={openMP}
+                        >
+                        {loadingPayment === "MP" ? (
+                            <Spinner className="cho-svg" />
+                        ) : (
+                            "Pagar con MercadoPago"
+                        )}
+                    </button>
+                </div>
+            </div>
+          
         </div>
       </Modal>
     </div>

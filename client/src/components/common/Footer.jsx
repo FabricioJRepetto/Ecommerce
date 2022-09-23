@@ -37,7 +37,7 @@ const Footer = () => {
           </li>
 
           <li>
-            <Link to="/">Preguntas frecuentes</Link>
+            <Link to="/faqs">Preguntas frecuentes</Link>
           </li>
         </ul>
       </div>

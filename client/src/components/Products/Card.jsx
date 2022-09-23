@@ -35,6 +35,7 @@ const Card = ({
     on_sale,
     premium,
   } = productData;
+
   const special = !/MLA/g.test(prodId);
 
   const editProduct = (prodId) => {
