@@ -50,7 +50,7 @@ const ModalCard = ({ productData, fav, close }) => {
         </div>
       )}
 
-      <div className='card-main-container'>
+      <div className="card-main-container">
         <div className="modal-card-img-container">
           <img src={resizer(img, 96)} alt="product" />
           <div className="card-image-back-style"></div>
@@ -74,7 +74,7 @@ const ModalCard = ({ productData, fav, close }) => {
             </div>
           </div>
 
-          <div className="free-shipping modalcard-mrgn">
+          <div className="free-shipping wishlist-modal-free-shipping modalcard-mrgn">
             {free_shipping && "Envío gratis"}
           </div>
         </div>
