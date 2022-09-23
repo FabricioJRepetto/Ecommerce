@@ -192,9 +192,9 @@ const Results = () => {
               ) : (
                 <div>
                   {productsFound === "loading" ? (
-                    <Spinner className="cho-svg" />
+                    <LoaderBars />
                   ) : (
-                    <h1>No results</h1>
+                    <h1>No hubieron resultados</h1>
                   )}
                 </div>
               )}

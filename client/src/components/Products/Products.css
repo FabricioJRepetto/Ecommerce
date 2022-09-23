@@ -6,6 +6,8 @@
    position: relative;
    padding-top: 3.5rem;
    overflow: hidden;
+   min-height: 100vh;
+   flex-grow: 1;
 }
 
 .products-no-coincidences {

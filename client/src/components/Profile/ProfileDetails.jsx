@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { ReactComponent as Edit } from "../../assets/svg/edit.svg";
-import { ReactComponent as Verified } from "../../assets/svg/verified.svg";
 import { ReactComponent as Location } from "../../assets/svg/location.svg";
 import { ReactComponent as Spinner } from "../../assets/svg/spinner.svg";
 import { loadUserData } from "../../Redux/reducer/sessionSlice";
@@ -39,24 +38,28 @@ const ProfileDetails = ({ address, loading }) => {
   const navigate = useNavigate();
   const notification = useNotification();
 
+  const { REACT_APP_UPLOAD_PRESET, REACT_APP_CLOUDINARY_URL } = process.env;
+
   const onlyLettersRegex = /^([a-zñ .]){2,}$/gi; //! VOLVER A VER cambiar regex
 
   const handleAvatar = (e) => {
     if (emailVerified === false)
       return notification(
-        "Verifica tu email para poder editar tus detalles",
+        "Verifica tu email para poder editar tu perfil",
         "",
         "warning"
       );
+
     if (e.target.files.length === 0) return;
     setLoadingAvatar(true);
     const fileListArrayImg = Array.from(e.target.files);
+
     if (fileListArrayImg[0].size > 2405442) {
       setAvatarError("La imágen debe pesar 2mb como máximo");
       setTimeout(() => setAvatarError(null), 7000);
       return setLoadingAvatar(false);
     }
-    setNewAvatar(e.target.files);
+    setNewAvatar(fileListArrayImg[0]);
     setAvatarFlag(true);
   };
 
@@ -73,18 +76,18 @@ const ProfileDetails = ({ address, loading }) => {
 
     try {
       let formData = new FormData();
+      formData.append("file", newAvatar);
+      formData.append("upload_preset", REACT_APP_UPLOAD_PRESET);
 
-      const fileListArrayImg = Array.from(newAvatar);
+      const { data: newAvatarData } = await axios.post(
+        REACT_APP_CLOUDINARY_URL,
+        formData
+      );
 
-      fileListArrayImg.forEach((pic) => {
-        formData.append("images", pic);
+      const { data, statusText } = await axios.post("/user/avatar", {
+        url: newAvatarData.url,
       });
 
-      const { data, statusText } = await axios.post("/user/avatar", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
       notification(
         data.message,
         "",
@@ -93,7 +96,8 @@ const ProfileDetails = ({ address, loading }) => {
 
       dispatch(loadUserData({ avatar: data.avatar }));
     } catch (error) {
-      console.error(error); //! VOLVER A VER manejo de errores
+      console.log("error", error);
+      //! VOLVER A VER manejo de errores
     } finally {
       setLoadingAvatar(false);
     }
@@ -462,7 +466,6 @@ const ProfileDetails = ({ address, loading }) => {
             <>
               <p className="profile-email">{email}</p>
               <div className="verified-gradient"></div>
-              {/* <Verified /> */}
             </>
           ) : (
             <button

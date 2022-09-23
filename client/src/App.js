@@ -46,42 +46,42 @@ import FAQ from "./components/common/FAQ";
 
 
 function App() {
-    const dispatch = useDispatch();
-    const { userLogin } = useUserLogin();
-    const { pathname } = useLocation();
-    const notification = useNotification();
-    const signOut = useSignout();
-    const isUserDataLoading = useSelector(
-        (state) => state.sessionReducer.isUserDataLoading
-    );
+  const dispatch = useDispatch();
+  const { userLogin } = useUserLogin();
+  const { pathname } = useLocation();
+  const notification = useNotification();
+  const signOut = useSignout();
+  const isUserDataLoading = useSelector(
+    (state) => state.sessionReducer.isUserDataLoading
+  );
 
-    //? Intercepta las respuestas de "token vencido" y cierra sesión
-    axios.interceptors.response.use(
-        (response) => response,
-        (error) => {
-            if (error.response?.data?.expiredToken) {
-                signOut();
-                notification('Por favor vuelve a iniciar sesión.', "/signin", "error");
-            }
-            return Promise.reject(error.message);
-        }
-    );
+  //? Intercepta las respuestas de "token vencido" y cierra sesión
+  axios.interceptors.response.use(
+    (response) => response,
+    (error) => {
+      if (error.response?.data?.expiredToken) {
+        signOut();
+        notification("Por favor vuelve a iniciar sesión.", "/signin", "error");
+      }
+      return Promise.reject(error.message);
+    }
+  );
 
-    //? Evitar que el scroll quede desubicado al cambiar de página
-    useEffect(() => {
-        window.scrollTo(0, 0);
-    }, [pathname]);
+  //? Evitar que el scroll quede desubicado al cambiar de página
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
 
-    //? Inicia sesión automaticamente si hay un token valido en el localStorage
-    useEffect(() => {
-        if (window.localStorage.getItem("loggedTokenEcommerce")) {
-            userLogin(window.localStorage.getItem("loggedTokenEcommerce"), false);
-        } else {
-            dispatch(loadingUserData(false));
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
-
+  //? Inicia sesión automaticamente si hay un token valido en el localStorage
+  useEffect(() => {
+    if (window.localStorage.getItem("loggedTokenEcommerce")) {
+      userLogin(window.localStorage.getItem("loggedTokenEcommerce"), false);
+    } else {
+      dispatch(loadingUserData(false));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  
     return (
         <div className="App" id="scroller">
             <NotificationMaster />
@@ -140,8 +140,8 @@ function App() {
                     <Footer />
                 </div>
             )}
-        </div>
-    );
+    </div>
+  );
 }
 
 export default App;
