@@ -21,7 +21,7 @@ const { REACT_APP_OAUTH_CLIENT_ID } = process.env;
 
 const Signupin = () => {
   const { section } = useParams();
-  const [signSelect, setSignSelect] = useState(section || 'signin');
+  const [signSelect, setSignSelect] = useState(section || "signin");
   const [flag, setFlag] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -161,11 +161,10 @@ const Signupin = () => {
   };
 
   const backtoHome = () => {
-
     setTimeout(() => {
-        navigate('/')
+      navigate("/");
     }, 300);
-  }
+  };
 
   return (
     <div className="signin-container">
@@ -179,330 +178,352 @@ const Signupin = () => {
           style={{ cursor: "pointer" }}
         />
 
-        <div className={`forgot-password-container ${signSelect === "forgotPassword" 
-                ? 'signin-fadeout' 
-                : 'signin-fadein'}`}>
-            <ForgotPassword />
-            <ReturnButton to={""} onClick={() => handleSign('signin')} />
+        <div
+          className={`forgot-password-container ${
+            signSelect === "forgotPassword" ? "signin-fadeout" : "signin-fadein"
+          }`}
+        >
+          <ForgotPassword />
+          <ReturnButton to={""} onClick={() => handleSign("signin")} />
         </div>
 
-        <div className={`signin-signs-container ${(signSelect === "signin" || signSelect === "signup") ? 'signin-fadeout' : 'signin-fadein'}`}>
-            
-            <form onSubmit={handleSubmitSignin(signin)} className={`${signSelect === "signin" ? 'signin-fadeout' : 'signin-fadein'}`}>
-                <>
-                {!errorsSignin.email && (
-                    <p className="g-hidden-placeholder">hidden</p>
-                )}
-                {errorsSignin.email?.type === "required" && (
-                    <p className="g-error-input">Ingresa tu email</p>
-                )}
-                {errorsSignin.email?.type === "pattern" && (
-                    <p className="g-error-input">Ingresa un email válido</p>
-                )}
-                </>
+        <div
+          className={`signin-signs-container ${
+            signSelect === "signin" || signSelect === "signup"
+              ? "signin-fadeout"
+              : "signin-fadein"
+          }`}
+        >
+          <form
+            onSubmit={handleSubmitSignin(signin)}
+            className={`${
+              signSelect === "signin" ? "signin-fadeout" : "signin-fadein"
+            }`}
+          >
+            <>
+              {!errorsSignin.email && (
+                <p className="g-hidden-placeholder">hidden</p>
+              )}
+              {errorsSignin.email?.type === "required" && (
+                <p className="g-error-input">Ingresa tu email</p>
+              )}
+              {errorsSignin.email?.type === "pattern" && (
+                <p className="g-error-input">Ingresa un email válido</p>
+              )}
+            </>
 
-                <span className="g-input-with-button">
-                <input
-                    type="text"
-                    placeholder="Email"
-                    {...registerSignin("email", {
-                    required: true,
-                    pattern: emailRegex,
-                    })}
-                />
-                {watchSignin("email") === "" ||
-                watchSignin("email") === undefined ? null : (
-                    <div
-                    className="g-input-icon-container g-input-x-button"
-                    onClick={() => setValueSignin("email", "")}
-                    >
-                    <CloseIcon />
-                    </div>
-                )}
-                </span>
-
-                <>
-                {!errorsSignin.password && (
-                    <p className="g-hidden-placeholder">hidden</p>
-                )}
-                {errorsSignin.password?.type === "required" && (
-                    <p className="g-error-input">Ingresa tu contraseña</p>
-                )}
-                </>
-
-                <span className="g-input-with-button">
-                <input
-                    type="password"
-                    autoComplete="on"
-                    placeholder="Contraseña"
-                    className={`g-input-two-icons${
-                    watchSignin("password") === undefined ||
-                    watchSignin("password") === ""
-                        ? ""
-                        : viewPassword.signin
-                        ? ""
-                        : " g-password"
-                    }`}
-                    {...registerSignin("password", {
-                    required: true,
-                    })}
-                />
-                {watchSignin("password") === "" ||
-                watchSignin("password") === undefined ? null : (
-                    <div
-                    className="g-input-icon-container g-input-x-button"
-                    onClick={() => setValueSignin("password", "")}
-                    >
-                    <CloseIcon />
-                    </div>
-                )}
-                {watchSignin("password") === "" ||
-                watchSignin("password") ===
-                    undefined ? null : viewPassword.signin ? (
-                    <div
-                    className="g-input-icon-container g-input-view-button"
-                    onClick={() =>
-                        setViewPassword({ ...viewPassword, signin: false })
-                    }
-                    >
-                    <ViewOffIcon />
-                    </div>
-                ) : (
-                    <div
-                    className="g-input-icon-container g-input-view-button"
-                    onClick={() =>
-                        setViewPassword({ ...viewPassword, signin: true })
-                    }
-                    >
-                    <ViewIcon />
-                    </div>
-                )}
-                </span>
-
-                <div>
-                <span
-                    onClick={() => handleSign("forgotPassword")} 
-                    className="g-text-button signin-forgot-text">
-                    ¿Has olvidado tu contraseña?
-                </span>
-                </div>
-
-                <div>
-                <input
-                    type="submit"
-                    value="Iniciar sesión"
-                    className="g-white-button"
-                />
-                </div>
-
-                <div>
-                <span
-                    onClick={() => handleSign("signup")}
-                    className="g-text-button"
+            <span className="g-input-with-button">
+              <input
+                type="text"
+                placeholder="Email"
+                {...registerSignin("email", {
+                  required: true,
+                  pattern: emailRegex,
+                })}
+              />
+              {watchSignin("email") === "" ||
+              watchSignin("email") === undefined ? null : (
+                <div
+                  className="g-input-icon-container g-input-x-button"
+                  onClick={() => setValueSignin("email", "")}
                 >
-                    ¿No tienes una cuenta? REGÍSTRATE
-                </span>
+                  <CloseIcon />
                 </div>
-            </form>
-            
-            <form onSubmit={handleSubmitSignup(signup)} className={`${signSelect === "signup" ? 'signin-fadeout' : 'signin-fadein'}`}>
-                <>
-                {!errorsSignup.email && (
-                    <p className="g-hidden-placeholder">hidden</p>
-                )}
-                {errorsSignup.email?.type === "required" && (
-                    <p className="g-error-input">Ingresa tu email</p>
-                )}
-                {errorsSignup.email?.type === "pattern" && (
-                    <p className="g-error-input">Ingresa un email válido</p>
-                )}
-                </>
+              )}
+            </span>
 
-                <span className="g-input-with-button">
-                <input
-                    type="text"
-                    placeholder="Email"
-                    autoComplete="off"
-                    {...registerSignup("email", {
-                    required: true,
-                    pattern: emailRegex,
-                    })}
-                />
-                {watchSignup("email") === "" ||
-                watchSignup("email") === undefined ? null : (
-                    <div
-                    className="g-input-icon-container g-input-x-button"
-                    onClick={() => setValueSignup("email", "")}
-                    >
-                    <CloseIcon />
-                    </div>
-                )}
-                </span>
+            <>
+              {!errorsSignin.password && (
+                <p className="g-hidden-placeholder">hidden</p>
+              )}
+              {errorsSignin.password?.type === "required" && (
+                <p className="g-error-input">Ingresa tu contraseña</p>
+              )}
+            </>
 
-                <>
-                {!errorsSignup.password && (
-                    <p className="g-hidden-placeholder">hidden</p>
-                )}
-                {errorsSignup.password?.type === "required" && (
-                    <p className="g-error-input">Ingresa una contraseña</p>
-                )}
-                {errorsSignup.password?.type === "minLength" && (
-                    <p className="g-error-input">
-                    La contraseña debe tener al menos 6 caracteres
-                    </p>
-                )}
-                </>
-
-                <span className="g-input-with-button">
-                <input
-                    type="text"
-                    placeholder="Contraseña"
-                    autoComplete="off"
-                    className={`g-input-two-icons${
-                    watchSignup("password") === undefined ||
-                    watchSignup("password") === ""
-                        ? ""
-                        : viewPassword.signup
-                        ? ""
-                        : " g-password"
-                    }`}
-                    {...registerSignup("password", {
-                    required: true,
-                    minLength: 6,
-                    })}
-                />
-                {watchSignup("password") === "" ||
-                watchSignup("password") === undefined ? null : (
-                    <div
-                    className="g-input-icon-container g-input-x-button"
-                    onClick={() => setValueSignup("password", "")}
-                    >
-                    <CloseIcon />
-                    </div>
-                )}
-                {watchSignup("password") === "" ||
-                watchSignup("password") ===
-                    undefined ? null : viewPassword.signup ? (
-                    <div
-                    className="g-input-icon-container g-input-view-button"
-                    onClick={() =>
-                        setViewPassword({ ...viewPassword, signup: false })
-                    }
-                    >
-                    <ViewOffIcon />
-                    </div>
-                ) : (
-                    <div
-                    className="g-input-icon-container g-input-view-button"
-                    onClick={() =>
-                        setViewPassword({ ...viewPassword, signup: true })
-                    }
-                    >
-                    <ViewIcon />
-                    </div>
-                )}
-                </span>
-
-                <>
-                {!errorsSignup.repPassword && (
-                    <p className="g-hidden-placeholder">hidden</p>
-                )}
-                {errorsSignup.repPassword?.type === "required" && (
-                    <p className="g-error-input">Ingresa la contraseña</p>
-                )}
-                {errorsSignup.repPassword?.type === "validate" && (
-                    <p className="g-error-input">Las contraseñas deben coincidir</p>
-                )}
-                </>
-
-                <span className="g-input-with-button">
-                <input
-                    type="text"
-                    placeholder="Repite tu contraseña"
-                    autoComplete="off"
-                    className={`g-input-two-icons${
-                    watchSignup("repPassword") === undefined ||
-                    watchSignup("repPassword") === ""
-                        ? ""
-                        : viewPassword.signupRep
-                        ? ""
-                        : " g-password"
-                    }`}
-                    /* onPaste={(e) => {
-                    e.preventDefault();
-                    return false;
-                    }} */
-                    {...registerSignup("repPassword", {
-                    required: true,
-                    validate: (repPassword) => {
-                        if (watchSignup("password") !== repPassword) {
-                        return "Las contraseñas deben coincidir";
-                        }
-                    },
-                    })}
-                />
-                {watchSignup("repPassword") === "" ||
-                watchSignup("repPassword") === undefined ? null : (
-                    <div
-                    className="g-input-icon-container g-input-x-button"
-                    onClick={() => setValueSignup("repPassword", "")}
-                    >
-                    <CloseIcon />
-                    </div>
-                )}
-                {watchSignup("repPassword") === "" ||
-                watchSignup("repPassword") ===
-                    undefined ? null : viewPassword.signupRep ? (
-                    <div
-                    className="g-input-icon-container g-input-view-button"
-                    onClick={() =>
-                        setViewPassword({ ...viewPassword, signupRep: false })
-                    }
-                    >
-                    <ViewOffIcon />
-                    </div>
-                ) : (
-                    <div
-                    className="g-input-icon-container g-input-view-button"
-                    onClick={() =>
-                        setViewPassword({ ...viewPassword, signupRep: true })
-                    }
-                    >
-                    <ViewIcon />
-                    </div>
-                )}
-                </span>
-
-                <div>
-                <input
-                    type="submit"
-                    value="Registrarse"
-                    className="g-white-button"
-                />
-                </div>
-
-                <div>
-                <span
-                    onClick={() => handleSign("signin")}
-                    className="g-text-button"
+            <span className="g-input-with-button">
+              <input
+                type="password"
+                autoComplete="on"
+                placeholder="Contraseña"
+                className={`g-input-two-icons${
+                  watchSignin("password") === undefined ||
+                  watchSignin("password") === ""
+                    ? ""
+                    : viewPassword.signin
+                    ? ""
+                    : " g-password"
+                }`}
+                {...registerSignin("password", {
+                  required: true,
+                })}
+              />
+              {watchSignin("password") === "" ||
+              watchSignin("password") === undefined ? null : (
+                <div
+                  className="g-input-icon-container g-input-x-button"
+                  onClick={() => setValueSignin("password", "")}
                 >
-                    ¿Ya tienes una cuenta? INICIA SESIÓN
-                </span>
+                  <CloseIcon />
                 </div>
-            </form>
-            
-            <div className={`${(signSelect === "signin" || signSelect === "signup") ? 'signin-fadeout' : 'signin-fadein'}`}>
-                <div className="google-container">
-                    <span>O ingresa con tu cuenta de Google</span>
-                    <span className="google-signin-container" id="signInDiv"></span>
+              )}
+              {watchSignin("password") === "" ||
+              watchSignin("password") ===
+                undefined ? null : viewPassword.signin ? (
+                <div
+                  className="g-input-icon-container g-input-view-button"
+                  onClick={() =>
+                    setViewPassword({ ...viewPassword, signin: false })
+                  }
+                >
+                  <ViewOffIcon />
                 </div>
+              ) : (
+                <div
+                  className="g-input-icon-container g-input-view-button"
+                  onClick={() =>
+                    setViewPassword({ ...viewPassword, signin: true })
+                  }
+                >
+                  <ViewIcon />
+                </div>
+              )}
+            </span>
 
-                <ReturnButton to={""} onClick={backtoHome} />
+            <div>
+              <span
+                onClick={() => handleSign("forgotPassword")}
+                className="g-text-button signin-forgot-text"
+              >
+                ¿Has olvidado tu contraseña?
+              </span>
             </div>
-            
-        </div>
 
-      </div>        
+            <div>
+              <input
+                type="submit"
+                value="Iniciar sesión"
+                className="g-white-button"
+              />
+            </div>
+
+            <div>
+              <span
+                onClick={() => handleSign("signup")}
+                className="g-text-button"
+              >
+                ¿No tienes una cuenta? REGÍSTRATE
+              </span>
+            </div>
+          </form>
+
+          <form
+            onSubmit={handleSubmitSignup(signup)}
+            className={`${
+              signSelect === "signup" ? "signin-fadeout" : "signin-fadein"
+            }`}
+          >
+            <>
+              {!errorsSignup.email && (
+                <p className="g-hidden-placeholder">hidden</p>
+              )}
+              {errorsSignup.email?.type === "required" && (
+                <p className="g-error-input">Ingresa tu email</p>
+              )}
+              {errorsSignup.email?.type === "pattern" && (
+                <p className="g-error-input">Ingresa un email válido</p>
+              )}
+            </>
+
+            <span className="g-input-with-button">
+              <input
+                type="text"
+                placeholder="Email"
+                autoComplete="off"
+                {...registerSignup("email", {
+                  required: true,
+                  pattern: emailRegex,
+                })}
+              />
+              {watchSignup("email") === "" ||
+              watchSignup("email") === undefined ? null : (
+                <div
+                  className="g-input-icon-container g-input-x-button"
+                  onClick={() => setValueSignup("email", "")}
+                >
+                  <CloseIcon />
+                </div>
+              )}
+            </span>
+
+            <>
+              {!errorsSignup.password && (
+                <p className="g-hidden-placeholder">hidden</p>
+              )}
+              {errorsSignup.password?.type === "required" && (
+                <p className="g-error-input">Ingresa una contraseña</p>
+              )}
+              {errorsSignup.password?.type === "minLength" && (
+                <p className="g-error-input">
+                  La contraseña debe tener al menos 6 caracteres
+                </p>
+              )}
+            </>
+
+            <span className="g-input-with-button">
+              <input
+                type="text"
+                placeholder="Contraseña"
+                autoComplete="off"
+                className={`g-input-two-icons${
+                  watchSignup("password") === undefined ||
+                  watchSignup("password") === ""
+                    ? ""
+                    : viewPassword.signup
+                    ? ""
+                    : " g-password"
+                }`}
+                {...registerSignup("password", {
+                  required: true,
+                  minLength: 6,
+                })}
+              />
+              {watchSignup("password") === "" ||
+              watchSignup("password") === undefined ? null : (
+                <div
+                  className="g-input-icon-container g-input-x-button"
+                  onClick={() => setValueSignup("password", "")}
+                >
+                  <CloseIcon />
+                </div>
+              )}
+              {watchSignup("password") === "" ||
+              watchSignup("password") ===
+                undefined ? null : viewPassword.signup ? (
+                <div
+                  className="g-input-icon-container g-input-view-button"
+                  onClick={() =>
+                    setViewPassword({ ...viewPassword, signup: false })
+                  }
+                >
+                  <ViewOffIcon />
+                </div>
+              ) : (
+                <div
+                  className="g-input-icon-container g-input-view-button"
+                  onClick={() =>
+                    setViewPassword({ ...viewPassword, signup: true })
+                  }
+                >
+                  <ViewIcon />
+                </div>
+              )}
+            </span>
+
+            <>
+              {!errorsSignup.repPassword && (
+                <p className="g-hidden-placeholder">hidden</p>
+              )}
+              {errorsSignup.repPassword?.type === "required" && (
+                <p className="g-error-input">Ingresa la contraseña</p>
+              )}
+              {errorsSignup.repPassword?.type === "validate" && (
+                <p className="g-error-input">Las contraseñas deben coincidir</p>
+              )}
+            </>
+
+            <span className="g-input-with-button">
+              <input
+                type="text"
+                placeholder="Repite tu contraseña"
+                autoComplete="off"
+                className={`g-input-two-icons${
+                  watchSignup("repPassword") === undefined ||
+                  watchSignup("repPassword") === ""
+                    ? ""
+                    : viewPassword.signupRep
+                    ? ""
+                    : " g-password"
+                }`}
+                onPaste={(e) => {
+                  e.preventDefault();
+                  return false;
+                }}
+                {...registerSignup("repPassword", {
+                  required: true,
+                  validate: (repPassword) => {
+                    if (watchSignup("password") !== repPassword) {
+                      return "Las contraseñas deben coincidir";
+                    }
+                  },
+                })}
+              />
+              {watchSignup("repPassword") === "" ||
+              watchSignup("repPassword") === undefined ? null : (
+                <div
+                  className="g-input-icon-container g-input-x-button"
+                  onClick={() => setValueSignup("repPassword", "")}
+                >
+                  <CloseIcon />
+                </div>
+              )}
+              {watchSignup("repPassword") === "" ||
+              watchSignup("repPassword") ===
+                undefined ? null : viewPassword.signupRep ? (
+                <div
+                  className="g-input-icon-container g-input-view-button"
+                  onClick={() =>
+                    setViewPassword({ ...viewPassword, signupRep: false })
+                  }
+                >
+                  <ViewOffIcon />
+                </div>
+              ) : (
+                <div
+                  className="g-input-icon-container g-input-view-button"
+                  onClick={() =>
+                    setViewPassword({ ...viewPassword, signupRep: true })
+                  }
+                >
+                  <ViewIcon />
+                </div>
+              )}
+            </span>
+
+            <div>
+              <input
+                type="submit"
+                value="Registrarse"
+                className="g-white-button"
+              />
+            </div>
+
+            <div>
+              <span
+                onClick={() => handleSign("signin")}
+                className="g-text-button"
+              >
+                ¿Ya tienes una cuenta? INICIA SESIÓN
+              </span>
+            </div>
+          </form>
+
+          <div
+            className={`${
+              signSelect === "signin" || signSelect === "signup"
+                ? "signin-fadeout"
+                : "signin-fadein"
+            }`}
+          >
+            <div className="google-container">
+              <span>O ingresa con tu cuenta de Google</span>
+              <span className="google-signin-container" id="signInDiv"></span>
+            </div>
+
+            <ReturnButton to={""} onClick={backtoHome} />
+          </div>
+        </div>
+      </div>
 
       <Modal isOpen={isOpenLoader}>
         <div className="signin-container">
