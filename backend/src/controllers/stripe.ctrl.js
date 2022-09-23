@@ -9,8 +9,8 @@ const create = async (req, res, next) => {
     try {
         const orderId = req.params.id;
 
-        //! Volver a ver: cambiar URL del front
-        const YOUR_DOMAIN = `http://localhost:3000/orders/post-sale?external_reference=${orderId}`
+        //! ESTE @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+        const YOUR_DOMAIN = `https://providerstore.vercel.app/orders/post-sale?external_reference=${orderId}`
 
         //? order
         let items = [];

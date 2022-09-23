@@ -40,6 +40,8 @@
 }
 
 .about-avatar-container {
+    min-height: 10rem;
+    min-width: 10rem;
     height: 10rem;
     width: 10rem;
     border-radius: 50%;
