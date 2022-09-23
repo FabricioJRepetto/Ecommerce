@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import CartCard from "../Products/CartCard";
 import Modal from "../common/Modal";
 import { useModal } from "../../hooks/useModal";
 import { useNotification } from "../../hooks/useNotification";
 import { cartTotal, loadCart } from "../../Redux/reducer/cartSlice";
-// import { loadMercadoPago } from "../../helpers/loadMP";
 import { priceFormat } from "../../helpers/priceFormat";
-import "./Cart.css";
 
 import { ReactComponent as Arrow } from "../../assets/svg/arrow-right.svg";
 import { ReactComponent as Pin } from "../../assets/svg/location.svg";
@@ -17,7 +15,11 @@ import { ReactComponent as Spinner } from "../../assets/svg/spinner.svg";
 import LoaderBars from "../common/LoaderBars";
 import Checkbox from "../common/Checkbox";
 import { WarningIcon } from "@chakra-ui/icons";
+import { ReactComponent as ArrowRight } from "../../assets/svg/arrow-right2.svg";
+
 import AddAddress from "../Profile/AddAddress";
+
+import "./Cart.css";
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -37,6 +39,7 @@ const Cart = () => {
 
   const [isOpenAddForm, openAddForm, closeAddForm, prop] = useModal();
   const [isOpenAddList, openAddList, closeAddList] = useModal();
+  const [isOpenPreCheckout, openPreCheckout, closePreCheckout] = useModal();
   const [isOpenCheckout, openCheckout, closeCheckout] = useModal();
 
   const SHIP_COST = 500;
@@ -421,7 +424,7 @@ const Cart = () => {
                                   !selectedAdd ||
                                   loadingPayment
                                 }
-                                onClick={openCheckout}
+                                onClick={openPreCheckout}
                               >
                                 Pagar
                               </button>
@@ -489,6 +492,25 @@ const Cart = () => {
         </div>
       </Modal>
 
+      <Modal isOpen={isOpenPreCheckout} closeModal={closePreCheckout}>
+        <div>
+          <p className="cart-warning-message">
+            <WarningIcon /> A continuación se simulará un pago. Si es la primera vez que lo haces, lee esto antes. Es recomendable mantener esa ventana abierta para consultar los datos.
+          </p>
+          <button className="g-white-button details-button" >
+            <Link to={`/faqs/4`} target="_blank" rel="noopener noreferrer">¿Cómo comprar?</Link>
+          </button>
+
+          <p onClick={() => {openCheckout(); closePreCheckout()}} 
+            className='g-text-button continue-button'>
+                Continuar 
+                <ArrowRight /> 
+                <div className="arrow-right-gradient"></div>
+            </p>
+
+        </div>
+      </Modal>
+
       <Modal isOpen={isOpenCheckout} closeModal={closeCheckout}>
         <div>
           <p>Pagar con:</p>
@@ -513,16 +535,19 @@ const Cart = () => {
 
               <ul>
                 <li>
-                  <b>card:</b> <i>4242 4242 4242 4242</i>
+                  <b>Card:</b> <i>4242 4242 4242 4242</i>
                 </li>
                 <li>
-                  <b>expiration:</b> <i>fecha mayor a la actual</i>
+                  <b>Expiration:</b> <i>fecha mayor a la actual</i>
                 </li>
                 <li>
-                  <b>cvc:</b> <i>123</i>
+                  <b>Cvc:</b> <i>123</i>
                 </li>
                 <li>
-                  <b>mail:</b> <i>cualquiera</i>
+                  <b>Email:</b> <i>cualquiera</i>
+                </li>
+                <li>
+                  <b>Nombre:</b> <i>cualquiera</i>
                 </li>
               </ul>
             </div>
@@ -566,11 +591,7 @@ const Cart = () => {
               </ul>
             </div>
           </div>
-          <p className="cart-warning-message">
-            <WarningIcon /> A continuación se simulará un pago. Seleccione un
-            Checkout y<br /> utilize los datos de prueba correspondientes a la
-            plataforma que se elija.
-          </p>
+          
         </div>
       </Modal>
     </div>

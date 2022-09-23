@@ -1,0 +1,131 @@
+.faq-outer-container {
+    min-height: 100vh;
+    flex-grow: 1;
+}
+.faq-outer-container * {
+    overflow-x: visible;
+}
+
+.faq-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 1.3rem;
+    letter-spacing: 0.07rem;
+} 
+.faq-content b {
+    font-weight: 600;
+} 
+
+.faq-content ul {    
+    list-style-type: disc;
+    margin: 1rem 0;
+    padding-left: 2rem;
+    max-width: 25rem;
+} 
+.faq-content li {   
+    margin-bottom: 1rem;
+} 
+
+.faq-title-btn {
+    background: linear-gradient(90deg, rgba(0,0,0,0) 0%, #101010 40%, #101010 60%, rgba(0,0,0,0) 100%);
+    background-size: 200%;
+    background-position: -200%;
+    border: none;
+    cursor: pointer;
+    color: #6e6e6e;
+    font-size: 2rem;
+    font-family: HelveticaNeueLTPro-Hv;
+    padding: 1rem;
+    transition: all .25s ease;
+}
+.faq-title-btn:hover {
+    background-position: -100%;
+}
+.faq-q-active {
+    background-position: -100%;
+    color: #FFFFFF;
+}
+
+.faq-text-container {
+    position: relative;
+    font-family: HelveticaNeueLTPro-Th;
+    padding: 2rem;
+}
+
+.faq-section {
+    width: 80%;
+    min-width: 500px;
+    text-align: left;
+    margin: 2rem 0;
+    padding: 2rem;
+}
+
+.faq-checkouts {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+.faq-checkouts > div {
+    background-color: #050505;
+    margin: 1rem;
+    min-width: 450px;
+    max-width: 70%;
+    padding: 0 1rem 1rem 1rem;
+}
+
+.faq-logo {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 6rem;
+    border-bottom: 1px solid #151515;
+}
+.faq-logo img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.faq-ponedordeonda {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(45deg,
+      #35a7ff 0%,
+      #7e54de 20%,
+      #f40259 60%,
+      #fea30d 100%);
+    background-size: 400%;
+    animation: gradientTextAnim 10s infinite;
+}
+.faq-link-to-payment {
+    font-size: 1rem;
+    cursor: pointer;
+    color: #BBBBBB;
+    border-bottom: 1px dashed #ffffff84;
+}
+.faq-link-to-about {
+    cursor: pointer;
+    border-bottom: 1px dashed #ffffff84;
+}
+
+.copiable {
+    cursor: pointer;
+}
+
+@media (min-width: 1650px) {
+    .faq-checkouts > div {
+        min-height: 32rem;
+    }
+    .faq-checkouts {
+        flex-direction: row;
+    }
+}
+@media (max-width: 900px) {
+    .faq-title-btn {
+        font-size: 1.8rem;
+    }
+}

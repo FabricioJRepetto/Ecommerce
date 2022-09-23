@@ -20,6 +20,7 @@ cloudinary.config({
 const getAll = async (req, res, next) => {
     try {
         const products = await Product.find();
+
         return res.json(products);
     } catch (error) {
         next(error);

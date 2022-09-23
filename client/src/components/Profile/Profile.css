@@ -199,4 +199,5 @@
     font-family: HelveticaNeueLTPro-Hv, Poppins;
     font-size: 15vw;
     color: #151515;
+    z-index: -1;
 }
