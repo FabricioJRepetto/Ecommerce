@@ -44,8 +44,8 @@
     #fea30d 100%
   );
   mask-image: url("../../assets/svg/arrow-back.svg");
-  background-size: 400%;
-  animation: gradientTextAnim 5s infinite;
+  background-size: 800%;
+  animation: gradientTextAnim 10s infinite;
   display: none;
 }
 .return-button:hover .arrow-back-gradient {

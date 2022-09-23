@@ -18,9 +18,10 @@ import UpdatePassword from "../Session/UpdatePassword";
 import { useSignout } from "../../hooks/useSignout";
 import ChromaticText from "../common/ChromaticText";
 import BurgerButton from "../common/BurgerButton";
+import NotFound from "../common/NotFound";
+
 import "../../App.css";
 import "./Profile.css";
-import NotFound from "../common/NotFound";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -33,6 +34,7 @@ const Profile = () => {
   const [wishlist, setWishlist] = useState([]);
   const [history, setHistory] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [change, setChange] = useState(true)
 
   const { wishlist: wl_id } = useSelector((state) => state.cartReducer);
   const { session } = useSelector((state) => state.sessionReducer);
@@ -40,7 +42,9 @@ const Profile = () => {
   const [showMenu, setShowMenu] = useState(false);
 
   useEffect(() => {
+    setChange(!change)
     setRender(section || "details");
+    // eslint-disable-next-line
   }, [section]);
 
   useEffect(() => {
@@ -77,6 +81,14 @@ const Profile = () => {
     'history',
     'password'
   ];
+  const sectionsEsp = {
+    details: 'PERFIL',
+    address: 'DIRECCIONES',
+    orders: 'COMPRAS',
+    wishlist: 'FAVORITOS',
+    history: 'HISTORIAL',
+    password: 'CONTRASEÑA'
+  };
 
   return (
     <div className="profile-container component-fadeIn">
@@ -86,6 +98,9 @@ const Profile = () => {
         }`}
         onClick={() => setShowMenu(false)}
       ></div> */}
+
+      <div className={`profile-section-indicator ${change ? "spt-text" : "spt-textb"}`}>{sectionsEsp[render]}</div>
+
       <div
         className={`profile-menu-container profile-menu-container-placeholder profile-menu-container-placeholder-mobile${
           showMenu

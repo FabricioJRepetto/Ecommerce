@@ -26,6 +26,7 @@ const PostSale = () => {
     !order &&
       (async () => {
         const { data } = await axios(`/order/${id}`);
+
         if (!data.products) {
           console.error("no order");
           navigate("/");
@@ -105,7 +106,12 @@ const PostSale = () => {
             // cambia orden a pagada
             // resta unidades de cada stock
           }
-        }
+        } else {
+          setBackground("postsale-pending animation-start");
+          setTimeout(() => {
+            setBackground("postsale-pending animation-loop");
+          }, 6000);
+        }        
       })();
 
     return () => {};
@@ -119,7 +125,7 @@ const PostSale = () => {
         if (r.data.status) {
             setOrder(r.data);        
         } else {
-            console.console.warn(r.data.message);
+            console.warn(r.data.message);
         }
       })
   };
@@ -196,7 +202,7 @@ const PostSale = () => {
               Id de orden: <i>{order?.id}</i>
             </p>
             <div className="postsale-back-container">
-              <ReturnButton to={status === "approved" ? "/" : "/cart"} />
+              <ReturnButton to={status === "approved" ? "/" : order.order_type === "buynow" ? `/details/${order.products[0].product_id}` : "/cart"} />
             </div>
           </div>
         </div>

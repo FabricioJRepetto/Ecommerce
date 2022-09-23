@@ -8,10 +8,7 @@ const Modal = ({ children, isOpen, closeModal }) => {
       className={`modal${isOpen ? " is-open" : ""}`}
       onClick={closeModal}
     >
-      <div className="modal-container" onClick={handleModalContainerClick}>
-        {/*         <button className="modal-close" onClick={closeModal}>
-          X
-        </button> */}
+      <div className={`modal-container ${isOpen && 'component-fadeIn'}`} onClick={handleModalContainerClick}>
         {children}
       </div>
     </article>
