@@ -181,8 +181,8 @@ const Cart = () => {
   };
 
   return (
-    <div className="cart-outer-container component-fadeIn">
-      <div className="cart-container">
+    <div className="cart-outer-container">
+      <div className="cart-container component-fadeIn">
         <div className="cart-card-optionscloser-container">
           <div className="tab-button-container" style={{ width: "70vw" }}>
             {
@@ -218,7 +218,7 @@ const Cart = () => {
                 {loading && <LoaderBars />}
               </div>
             ) : (
-              <div>
+              <div className="component-fadeIn">
                 {render === "saved" ? (
                   <div className="cart-buylater-inner">
                     {!cart.buyLater || cart.buyLater.length < 1 ? (

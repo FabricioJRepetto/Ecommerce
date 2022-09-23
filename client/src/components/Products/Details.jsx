@@ -98,6 +98,9 @@ const Details = () => {
       if (data.error) {
         setError(data.message);
       } else {
+        if (data.premium) {
+            return navigate(`/premium/${data.id}`)
+        }
         setData(data);
         setDescription(!!data.description);
         handleAttributesColumns();

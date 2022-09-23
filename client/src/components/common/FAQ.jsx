@@ -82,6 +82,7 @@ const FAQ = () => {
                                             <li>Pasarelas de pago de <b className='provider-text'>Stripe y Mercadopago</b>. <br/>
                                             <label htmlFor='accordion-button-:r4:' className='faq-link-to-payment'><i>Más detalles en esta sección.</i></label>
                                             </li>
+                                            <li><b className='provider-text'><i>Notificaciones vía e-mail</i></b> de los eventos más importantes en tu cuenta como cambios de contraseña o resumenes de compra.</li>
                                             <li>Las <b className='provider-text'><i>ofertas flash</i></b>, una selección de nuestros productos con descuentos especiales y que rotan cada 24 horas.</li>
                                             <li><b className='provider-text'>Recomendaciones</b> basadas en los ultimos productos que visitaste.</li>
                                             <li>Búsqueda basada en las <b className='provider-text'>categorías</b> principales. Estas muestran una combinación entre productos propios y productos de Mercadolibre.</li>
