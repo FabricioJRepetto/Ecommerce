@@ -1,5 +1,7 @@
 .category-arrow-icon {
   padding: 0 0.5rem;
+  display: inline;
+  font-size: 1.5rem;
 }
 
 .category-selected-button {

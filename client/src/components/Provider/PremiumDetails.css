@@ -1,10 +1,10 @@
 .premiumdetails-container {
     flex-grow: 1;
-    min-height: 100vh;
+    min-height: 95vh;
 }
 
 .premiumdetails-error {
-    min-height: 100vh;
+    min-height: 95vh;
     display: flex;
     align-items: center;
     justify-content: center;

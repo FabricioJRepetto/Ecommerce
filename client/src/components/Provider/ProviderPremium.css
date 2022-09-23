@@ -5,17 +5,17 @@
     background-size: cover;
     position: relative;
     flex-grow: 1;
-    min-height: 100vh;
+    min-height: 95vh;
 }
 
-.providerpremium-header {    
+.providerpremium-header {
     font-size: 1rem;
     font-weight: 600;
     letter-spacing: 0.1rem;
     line-height: 0.75rem;
     user-select: none;
     height: 22vw;
-    background: radial-gradient(circle, #202020 10%, rgba(255,143,0,1) 25%, rgba(255,194,0,1) 41%, rgba(255,126,0,1) 48%, #202020 77%);
+    background: radial-gradient(circle, #202020 10%, rgba(255, 143, 0, 1) 25%, rgba(255, 194, 0, 1) 41%, rgba(255, 126, 0, 1) 48%, #202020 77%);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -35,7 +35,7 @@
 }
 
 .providerpremium-echo-inner {
-    top:8rem;
+    top: 8rem;
     margin-left: 1rem;
     font-size: 6.2vw;
     font-family: HelveticaNeueLTPro-BdOu, Poppins;
@@ -47,8 +47,9 @@
     line-height: 78%;
     display: block;
 }
+
 .providerpremium-echo-inner span {
-    font-family: HelveticaNeueLTPro-Bd, Poppins;    
+    font-family: HelveticaNeueLTPro-Bd, Poppins;
 }
 
 .providerpremium-title {
@@ -62,11 +63,13 @@
     display: flex;
     justify-content: flex-end;
 }
+
 .provider-premium-title {
     position: absolute;
     display: flex;
     flex-direction: column;
 }
+
 .provider-premium-title:first-child {
     font-size: 15vw;
     letter-spacing: -1rem;
@@ -74,7 +77,8 @@
     height: fit-content;
     line-height: 75%;
 }
-.providerpremium-title-text{
+
+.providerpremium-title-text {
     font-size: 4vw;
     letter-spacing: 0.3rem;
     line-height: 75%;
@@ -95,10 +99,12 @@
     z-index: 3;
     display: block;
 }
+
 .providerpremium-echo-inner-mobile span {
     font-family: HelveticaNeueLTPro-Bd, Poppins;
     transition: all .15s ease;
 }
+
 .providerpremium-echo-head-mobile {
     font-family: HelveticaNeueLTPro-Bd, Poppins;
     top: calc(14.5vw);
@@ -127,13 +133,14 @@
     z-index: 2;
     position: absolute;
 }
+
 .providerpremium-title-text-mobile {
     width: 100%;
     position: absolute;
     top: calc(17vw + .9%);
     left: 3vw;
     font-family: HelveticaNeueLTPro-BdOu, Poppins;
-    font-size: 7vw;    
+    font-size: 7vw;
     letter-spacing: 0.55vw;
     pointer-events: none;
     z-index: 2;

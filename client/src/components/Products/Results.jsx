@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import {
@@ -9,12 +9,16 @@ import {
   loadApplied,
   loadBreadCrumbs,
 } from "../../Redux/reducer/productsSlice";
+
 import WishlistCard from "../Profile/WishlistCard";
-import { ReactComponent as Spinner } from "../../assets/svg/spinner.svg";
-import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { SmallCloseIcon, ChevronDownIcon } from "@chakra-ui/icons";
+import {
+  SmallCloseIcon,
+  ChevronDownIcon,
+  ChevronRightIcon,
+} from "@chakra-ui/icons";
 import LoaderBars from "../common/LoaderBars";
+import FunnelButton from "../common/FunnelButton";
 
 import "./Results.css";
 
@@ -33,6 +37,62 @@ const Results = () => {
   const [params] = useSearchParams();
   const [open, setOpen] = useState("category");
   const dispatch = useDispatch();
+
+  const [showFiltersMenu, setShowFiltersMenu] = useState(false);
+  const [filtersContainerHeight, setFiltersContainerHeight] = useState(0);
+  const [widnowHeight, setWindowHeight] = useState(window.innerHeight);
+  const [widnowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [filtersContainerDisplay, setFiltersContainerDisplay] = useState(null);
+  const resultsFiltersContainerMobile = useRef(null);
+  const filtersMenuMobile = useRef(null);
+
+  useEffect(() => {
+    const handleWindowSize = () => {
+      setWindowHeight(window.innerHeight);
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleWindowSize);
+
+    return () => {
+      window.removeEventListener("resize", handleWindowSize);
+      document.documentElement.style.overflowY = "auto";
+    };
+    // eslint-disable-next-line
+  }, []);
+
+  useEffect(() => {
+    filtersMenuMobile.current &&
+      setFiltersContainerHeight(
+        widnowHeight - filtersMenuMobile.current.offsetTop - window.scrollY - 70
+      );
+
+    // eslint-disable-next-line
+  }, [
+    filtersMenuMobile.current,
+    filtersMenuMobile?.current?.offsetTop,
+    widnowHeight,
+  ]);
+
+  useEffect(() => {
+    if (resultsFiltersContainerMobile.current) {
+      let menuContainerDisplay = window
+        .getComputedStyle(resultsFiltersContainerMobile.current)
+        .getPropertyValue("display");
+
+      filtersContainerDisplay !== menuContainerDisplay &&
+        setFiltersContainerDisplay(menuContainerDisplay);
+    }
+    // eslint-disable-next-line
+  }, [resultsFiltersContainerMobile.current, widnowWidth]);
+
+  useEffect(() => {
+    if (filtersContainerDisplay === "block" && showFiltersMenu) {
+      document.documentElement.style.overflow = "hidden";
+    } else {
+      document.documentElement.style.overflowY = "auto";
+    }
+  }, [filtersContainerDisplay, showFiltersMenu]);
 
   useEffect(() => {
     (async () => {
@@ -74,98 +134,208 @@ const Results = () => {
   };
 
   return (
-    <div className="results-container">
-      {loading ? (
-        <div style={{ height: "100vh" }}>
+    <div className="results-container component-fadeIn">
+      {loading || productsFound === "loading" ? (
+        <div className="component-fadeIn">
           <LoaderBars />
         </div>
       ) : (
-        <div className="results-container component-fadeIn">
-          <div className="bread-crumbs">
-            {breadCrumbs?.length > 0 && (
-              <div>
-                <SmallCloseIcon
-                  className="bread-crumbs-delete-icon"
-                  onClick={() => removeFilter("category")}
-                />
-                {React.Children.toArray(
-                  breadCrumbs.map((c, index) => (
-                    <span
-                      key={c.id}
-                      onClick={() =>
-                        addFilter({ filter: "category", value: c.id })
-                      }
-                    >
-                      {(index > 0 ? " > " : "") + c.name}
-                    </span>
-                  ))
-                )}
-              </div>
-            )}
-          </div>
+        <>
+          {productsFound?.length > 0 || productsOwn?.length > 0 ? (
+            <>
+              <FunnelButton
+                setShowMenu={setShowFiltersMenu}
+                showMenu={showFiltersMenu}
+              />
+              <div
+                className="products-filters-mobile"
+                ref={resultsFiltersContainerMobile}
+              >
+                <div
+                  onClick={() => setShowFiltersMenu(false)}
+                  className={`products-filters-mobile-background${
+                    !showFiltersMenu
+                      ? " products-filters-mobile-background-hide"
+                      : ""
+                  }`}
+                ></div>
 
-          <div className="results-container-inner">
-            <div className="results-filters">
-              {applied !== "loading" && (
-                <div className="results-filters-applied">
-                  {React.Children.toArray(
-                    applied.map(
-                      (f) =>
-                        f.id !== "category" && (
-                          <div onClick={() => removeFilter(f.id)}>
-                            <SmallCloseIcon className="bread-crumbs-delete-icon" />
-                            {f.values[0].name}
+                <div
+                  ref={filtersMenuMobile}
+                  className={`products-filters-menu${
+                    showFiltersMenu
+                      ? " products-filters-menu-open"
+                      : " products-filters-menu-close"
+                  }`}
+                  style={{
+                    height: filtersContainerHeight,
+                  }}
+                >
+                  <div className="products-filters-middle">
+                    <div className="products-filters-inner">
+                      <div className="results-filters-mobile">
+                        {applied !== "loading" && (
+                          <div className="results-filters-applied">
+                            {React.Children.toArray(
+                              applied.map(
+                                (f) =>
+                                  f.id !== "category" && (
+                                    <div onClick={() => removeFilter(f.id)}>
+                                      <SmallCloseIcon className="bread-crumbs-delete-icon" />
+                                      {f.values[0].name}
+                                    </div>
+                                  )
+                              )
+                            )}
                           </div>
-                        )
-                    )
+                        )}
+
+                        {productsFilters !== "loading" &&
+                          productsFilters?.length > 0 &&
+                          React.Children.toArray(
+                            productsFilters?.map((f) => (
+                              <div
+                                key={f.id}
+                                className={`results-filter-container ${
+                                  open === f.id && "open-filter"
+                                }`}
+                              >
+                                <div
+                                  className="filter-title"
+                                  onClick={() =>
+                                    setOpen(open === f.id ? "" : f.id)
+                                  }
+                                >
+                                  <h3>{f.name.toUpperCase()}</h3>
+                                  <ChevronDownIcon
+                                    className={`results-tab-icon ${
+                                      open === f.id && "results-tab-icon-close"
+                                    }`}
+                                  />
+                                </div>
+                                {f.values.map((v) => (
+                                  <div
+                                    key={v.id}
+                                    onClick={() =>
+                                      addFilter({ filter: f.id, value: v.id })
+                                    }
+                                    className="results-filter-option"
+                                  >
+                                    <p>{`${v.name} (${v.results})`}</p>
+                                  </div>
+                                ))}
+                              </div>
+                            ))
+                          )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="results-container-middle">
+                <div className="bread-crumbs">
+                  {breadCrumbs?.length > 0 && (
+                    <div>
+                      <SmallCloseIcon
+                        className="bread-crumbs-delete-icon"
+                        onClick={() => removeFilter("category")}
+                      />
+                      {React.Children.toArray(
+                        breadCrumbs.map((c, index) => (
+                          <>
+                            <div className="category-arrow-icon">
+                              {index > 0 ? <ChevronRightIcon /> : <></>}
+                            </div>
+                            <span
+                              key={c.id}
+                              onClick={() =>
+                                addFilter({ filter: "category", value: c.id })
+                              }
+                            >
+                              {c.name}
+                            </span>
+                          </>
+                        ))
+                      )}
+                    </div>
                   )}
                 </div>
-              )}
-              {productsFilters !== "loading" &&
-                productsFilters?.length > 0 &&
-                React.Children.toArray(
-                  productsFilters?.map((f) => (
-                    <div
-                      key={f.id}
-                      className={`results-filter-container ${
-                        open === f.id && "open-filter"
-                      }`}
-                    >
-                      <div
-                        className="filter-title"
-                        onClick={() => setOpen(open === f.id ? "" : f.id)}
-                      >
-                        <b>{f.name}</b>
-                        <ChevronDownIcon
-                          className={`results-tab-icon ${
-                            open === f.id && "results-tab-icon-close"
-                          }`}
-                        />
-                      </div>
-                      {f.values.map((v) => (
-                        <div
-                          key={v.id}
-                          onClick={() =>
-                            addFilter({ filter: f.id, value: v.id })
-                          }
-                          className="results-filter-option"
-                        >
-                          <p>{`${v.name} (${v.results})`}</p>
-                        </div>
-                      ))}
-                    </div>
-                  ))
-                )}
-            </div>
 
-            <div className="results-inner">
-              {productsFound !== "loading" &&
-              (productsFound?.length > 0 || productsOwn?.length > 0) ? (
-                <div>
-                  {productsOwn?.length > 0 && (
-                    <div className="own-products-container">
+                <div className="results-container-inner">
+                  <div className="results-filters">
+                    {applied !== "loading" && (
+                      <div className="results-filters-applied">
+                        {React.Children.toArray(
+                          applied.map(
+                            (f) =>
+                              f.id !== "category" && (
+                                <div onClick={() => removeFilter(f.id)}>
+                                  <SmallCloseIcon className="bread-crumbs-delete-icon" />
+                                  {f.values[0].name}
+                                </div>
+                              )
+                          )
+                        )}
+                      </div>
+                    )}
+
+                    {productsFilters !== "loading" &&
+                      productsFilters?.length > 0 &&
+                      React.Children.toArray(
+                        productsFilters?.map((f) => (
+                          <div
+                            key={f.id}
+                            className={`results-filter-container ${
+                              open === f.id && "open-filter"
+                            }`}
+                          >
+                            <div
+                              className="filter-title"
+                              onClick={() => setOpen(open === f.id ? "" : f.id)}
+                            >
+                              <h3>{f.name.toUpperCase()}</h3>
+                              <ChevronDownIcon
+                                className={`results-tab-icon ${
+                                  open === f.id && "results-tab-icon-close"
+                                }`}
+                              />
+                            </div>
+                            {f.values.map((v) => (
+                              <div
+                                key={v.id}
+                                onClick={() =>
+                                  addFilter({ filter: f.id, value: v.id })
+                                }
+                                className="results-filter-option"
+                              >
+                                <p>{`${v.name} (${v.results})`}</p>
+                              </div>
+                            ))}
+                          </div>
+                        ))
+                      )}
+                  </div>
+
+                  <div className="results-inner">
+                    <>
+                      {productsOwn?.length > 0 && (
+                        <div className="own-products-container">
+                          {React.Children.toArray(
+                            productsOwn?.map(
+                              (prod) =>
+                                prod.available_quantity > 0 && (
+                                  <WishlistCard
+                                    productData={prod}
+                                    fav={wishlist.includes(prod._id)}
+                                  />
+                                )
+                            )
+                          )}
+                        </div>
+                      )}
                       {React.Children.toArray(
-                        productsOwn?.map(
+                        productsFound?.map(
                           (prod) =>
                             prod.available_quantity > 0 && (
                               <WishlistCard
@@ -175,32 +345,17 @@ const Results = () => {
                             )
                         )
                       )}
-                    </div>
-                  )}
-                  {React.Children.toArray(
-                    productsFound?.map(
-                      (prod) =>
-                        prod.available_quantity > 0 && (
-                          <WishlistCard
-                            productData={prod}
-                            fav={wishlist.includes(prod._id)}
-                          />
-                        )
-                    )
-                  )}
+                    </>
+                  </div>
                 </div>
-              ) : (
-                <div>
-                  {productsFound === "loading" ? (
-                    <LoaderBars />
-                  ) : (
-                    <h1>No hubieron resultados</h1>
-                  )}
-                </div>
-              )}
+              </div>
+            </>
+          ) : (
+            <div>
+              <h1>No hubieron resultados</h1>
             </div>
-          </div>
-        </div>
+          )}
+        </>
       )}
     </div>
   );

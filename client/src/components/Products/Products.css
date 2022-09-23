@@ -6,7 +6,7 @@
    position: relative;
    padding-top: 3.5rem;
    overflow: hidden;
-   min-height: 100vh;
+   min-height: 95vh;
    flex-grow: 1;
 }
 
@@ -257,8 +257,9 @@ h3.g-gradient-text {
 
 .products-filters-mobile .funnel {
    z-index: 40;
-   /* right: 2.5rem; */
-   top: -.5rem;
+   right: 2.7rem;
+   /*    top: -.5rem;
+ */
 }
 
 .products-filters-menu {
@@ -273,11 +274,12 @@ h3.g-gradient-text {
    overflow-x: hidden;
    overflow-y: scroll;
    overscroll-behavior: contain;
+   top: 2.5rem
 }
 
 .products-filters-menu-open {
    opacity: 1;
-   right: -6rem;
+   right: -1rem;
 }
 
 .products-filters-menu-close {
@@ -286,12 +288,13 @@ h3.g-gradient-text {
 
 .products-filters-mobile-background {
    height: 100%;
-   width: 100%;
+   width: 100vw;
    background-color: #00000075;
    position: fixed;
    z-index: 30;
    transition: opacity 0.2s ease-in-out;
    top: 0;
+   left: 0;
 }
 
 .products-filters-mobile-background-hide {
@@ -301,7 +304,7 @@ h3.g-gradient-text {
 
 @media (min-width: 1024px) {
    .products-filters-middle {
-      min-height: 100vh;
+      min-height: 95vh;
    }
 }
 

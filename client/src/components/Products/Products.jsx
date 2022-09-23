@@ -13,6 +13,7 @@ import Checkbox from "../common/Checkbox";
 import ModalAdminProducts from "../Admin/ModalAdminProducts";
 import WishlistCard from "../Profile/WishlistCard";
 import FunnelButton from "../common/FunnelButton";
+import { priceFormat } from "../../helpers/priceFormat";
 import { useModal } from "../../hooks/useModal";
 import { ReactComponent as Close } from "../../assets/svg/close.svg";
 import { ReactComponent as ChevronRight } from "../../assets/svg/chevron-right.svg";
@@ -33,6 +34,7 @@ const Products = () => {
   const [getProductsFlag, setGetProductsFlag] = useState(false);
   const [priceFilterRender, setPriceFilterRender] = useState("");
   const [priceWarn, setPriceWarn] = useState(false);
+
   const [showFiltersMenu, setShowFiltersMenu] = useState(false);
   const [filtersContainerHeight, setFiltersContainerHeight] = useState(0);
   const [widnowHeight, setWindowHeight] = useState(window.innerHeight);
@@ -125,7 +127,9 @@ const Products = () => {
   useEffect(() => {
     if (productsOwnFiltersApplied.price) {
       let priceToRenderArray = productsOwnFiltersApplied.price.split("-");
-      let priceToRender = `$${priceToRenderArray[0]} - $${priceToRenderArray[1]}`;
+      let priceToRender = `$${priceFormat(priceToRenderArray[0]).int} - $${
+        priceFormat(priceToRenderArray[1]).int
+      }`;
       setPriceFilterRender(priceToRender);
     }
   }, [productsOwnFiltersApplied.price]);
@@ -273,7 +277,7 @@ const Products = () => {
 
     setPricesFilter({
       ...pricesFilter,
-      [name]: validatedValue,
+      [name]: Number(validatedValue),
     });
   };
 
@@ -406,6 +410,183 @@ const Products = () => {
 
   return (
     <div className="products-container component-fadeIn">
+      <div className="products-filters-mobile" ref={filtersContainerMobile}>
+        <div
+          onClick={() => setShowFiltersMenu(false)}
+          className={`products-filters-mobile-background${
+            !showFiltersMenu ? " products-filters-mobile-background-hide" : ""
+          }`}
+        ></div>
+
+        <FunnelButton
+          setShowMenu={setShowFiltersMenu}
+          showMenu={showFiltersMenu}
+        />
+
+        <div
+          ref={filtersMenuMobile}
+          className={`products-filters-menu${
+            showFiltersMenu
+              ? " products-filters-menu-open"
+              : " products-filters-menu-close"
+          }`}
+          style={{
+            height: filtersContainerHeight,
+          }}
+        >
+          <div className="products-filters-middle">
+            <div className="products-filters-inner">
+              {productsFound[0] === null ? (
+                <></>
+              ) : (
+                <>
+                  <div className="products-filters-price-container">
+                    <h3>PRECIO</h3>
+                    <>
+                      {productsOwnFiltersApplied.price ? (
+                        <>
+                          <div className="products-filters-price-applied">
+                            <div>
+                              <p>{priceFilterRender}</p>
+                            </div>
+                            <span onClick={handleClearPrices}>
+                              <Close />
+                              <div className="close-gradient"></div>
+                            </span>
+                          </div>
+                          <p className="g-hidden-placeholder">hidden</p>
+                          <p className="g-hidden-placeholder">hidden</p>
+                        </>
+                      ) : (
+                        <>
+                          <form onSubmit={filterPrices}>
+                            <div className="products-filters-input-container">
+                              <input
+                                type="text"
+                                pattern="[0-9]*"
+                                placeholder="Mínimo"
+                                name="min"
+                                onChange={handlePrices}
+                                value={pricesFilter.min}
+                              />
+                            </div>
+                            <div className="products-filters-price-separator">
+                              _
+                            </div>
+                            <div className="products-filters-input-container">
+                              <input
+                                type="text"
+                                pattern="[0-9]*"
+                                placeholder="Máximo"
+                                name="max"
+                                onChange={handlePrices}
+                                value={pricesFilter.max}
+                              />
+                            </div>
+                            <label
+                              className={`price-filter-submit${
+                                pricesFilter.max &&
+                                pricesFilter.min &&
+                                !priceWarn
+                                  ? " price-filter-input-full"
+                                  : ""
+                              }`}
+                              htmlFor="price-filter-submit"
+                            >
+                              <ChevronRight />
+                              <div className="chevron-right-gradient"></div>
+                            </label>
+                            <input
+                              type="submit"
+                              value="filter"
+                              id="price-filter-submit"
+                            />
+                          </form>
+                          {priceWarn ? (
+                            <p className="g-error-input">
+                              El precio mínimo debe ser mayor al precio máximo
+                            </p>
+                          ) : (
+                            <>
+                              <p className="g-hidden-placeholder">hidden</p>
+                              <p className="g-hidden-placeholder">hidden</p>
+                            </>
+                          )}
+                        </>
+                      )}
+                    </>
+                  </div>
+
+                  <div className="products-filters-shipping-container">
+                    <label className="products-shipping-label">
+                      <h3 className="products-shipping-text">ENVÍO GRATIS</h3>
+                      {/* <h3 className="g-gradient-text">ENVÍO GRATIS</h3> */}
+                      <Checkbox
+                        isChecked={shippingFilter}
+                        extraStyles={{
+                          border: true,
+                          rounded: true,
+                          innerBorder: true,
+                          margin: ".05rem",
+                          size: "1.2",
+                        }}
+                      />
+                      <input
+                        type="checkbox"
+                        name="free_shipping"
+                        checked={shippingFilter}
+                        onChange={filterShipping}
+                      />
+                    </label>
+                  </div>
+
+                  <div className="products-filters-brand-container">
+                    <h3>MARCA</h3>
+                    <div className="filter-brand-checkbox-container">
+                      {
+                        /* loading ? (
+                <h1>CARGANDO</h1>
+              ) : (
+
+              ) */
+                        brandsFilter &&
+                          Object.keys(brandsFilter).length > 0 &&
+                          React.Children.toArray(
+                            brandsCheckboxes?.map((brand) => (
+                              <label>
+                                <Checkbox
+                                  isChecked={brandsFilter[brand]}
+                                  extraStyles={{
+                                    border: true,
+                                    rounded: false,
+                                    innerBorder: true,
+                                    margin: ".05rem",
+                                    size: ".8",
+                                  }}
+                                />
+                                <input
+                                  type="checkbox"
+                                  name={brand}
+                                  checked={brandsFilter[brand]}
+                                  onChange={handleBrands}
+                                />
+                                <span className="product-checkbox-brand">
+                                  {brand}
+                                </span>
+                                <span className="g-gradient-text">{brand}</span>
+                              </label>
+                            ))
+                          )
+                      }
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="products-results-container">
         <span className="g-input-with-button">
           <input
@@ -423,185 +604,6 @@ const Products = () => {
             </div>
           )} */}
         </span>
-
-        <div className="products-filters-mobile" ref={filtersContainerMobile}>
-          <div
-            onClick={() => setShowFiltersMenu(false)}
-            className={`products-filters-mobile-background${
-              !showFiltersMenu ? " products-filters-mobile-background-hide" : ""
-            }`}
-          ></div>
-
-          <FunnelButton
-            setShowMenu={setShowFiltersMenu}
-            showMenu={showFiltersMenu}
-          />
-
-          <div
-            ref={filtersMenuMobile}
-            className={`products-filters-menu${
-              showFiltersMenu
-                ? " products-filters-menu-open"
-                : " products-filters-menu-close"
-            }`}
-            style={{
-              height: filtersContainerHeight,
-            }}
-          >
-            <div className="products-filters-middle">
-              <div className="products-filters-inner">
-                {productsFound[0] === null ? (
-                  <></>
-                ) : (
-                  <>
-                    <div className="products-filters-price-container">
-                      <h3>PRECIO</h3>
-                      <>
-                        {productsOwnFiltersApplied.price ? (
-                          <>
-                            <div className="products-filters-price-applied">
-                              <div>
-                                <p>{priceFilterRender}</p>
-                              </div>
-                              <span onClick={handleClearPrices}>
-                                <Close />
-                                <div className="close-gradient"></div>
-                              </span>
-                            </div>
-                            <p className="g-hidden-placeholder">hidden</p>
-                            <p className="g-hidden-placeholder">hidden</p>
-                          </>
-                        ) : (
-                          <>
-                            <form onSubmit={filterPrices}>
-                              <div className="products-filters-input-container">
-                                <input
-                                  type="text"
-                                  pattern="[0-9]*"
-                                  placeholder="Mínimo"
-                                  name="min"
-                                  onChange={handlePrices}
-                                  value={pricesFilter.min}
-                                />
-                              </div>
-                              <div className="products-filters-price-separator">
-                                _
-                              </div>
-                              <div className="products-filters-input-container">
-                                <input
-                                  type="text"
-                                  pattern="[0-9]*"
-                                  placeholder="Máximo"
-                                  name="max"
-                                  onChange={handlePrices}
-                                  value={pricesFilter.max}
-                                />
-                              </div>
-                              <label
-                                className={`price-filter-submit${
-                                  pricesFilter.max &&
-                                  pricesFilter.min &&
-                                  !priceWarn
-                                    ? " price-filter-input-full"
-                                    : ""
-                                }`}
-                                htmlFor="price-filter-submit"
-                              >
-                                <ChevronRight />
-                                <div className="chevron-right-gradient"></div>
-                              </label>
-                              <input
-                                type="submit"
-                                value="filter"
-                                id="price-filter-submit"
-                              />
-                            </form>
-                            {priceWarn ? (
-                              <p className="g-error-input">
-                                El precio mínimo debe ser mayor al precio máximo
-                              </p>
-                            ) : (
-                              <>
-                                <p className="g-hidden-placeholder">hidden</p>
-                                <p className="g-hidden-placeholder">hidden</p>
-                              </>
-                            )}
-                          </>
-                        )}
-                      </>
-                    </div>
-
-                    <div className="products-filters-shipping-container">
-                      <label className="products-shipping-label">
-                        <h3 className="products-shipping-text">ENVÍO GRATIS</h3>
-                        {/* <h3 className="g-gradient-text">ENVÍO GRATIS</h3> */}
-                        <Checkbox
-                          isChecked={shippingFilter}
-                          extraStyles={{
-                            border: true,
-                            rounded: true,
-                            innerBorder: true,
-                            margin: ".05rem",
-                            size: "1.2",
-                          }}
-                        />
-                        <input
-                          type="checkbox"
-                          name="free_shipping"
-                          checked={shippingFilter}
-                          onChange={filterShipping}
-                        />
-                      </label>
-                    </div>
-
-                    <div className="products-filters-brand-container">
-                      <h3>MARCA</h3>
-                      <div className="filter-brand-checkbox-container">
-                        {
-                          /* loading ? (
-                <h1>CARGANDO</h1>
-              ) : (
-
-              ) */
-                          brandsFilter &&
-                            Object.keys(brandsFilter).length > 0 &&
-                            React.Children.toArray(
-                              brandsCheckboxes?.map((brand) => (
-                                <label>
-                                  <Checkbox
-                                    isChecked={brandsFilter[brand]}
-                                    extraStyles={{
-                                      border: true,
-                                      rounded: false,
-                                      innerBorder: true,
-                                      margin: ".05rem",
-                                      size: ".8",
-                                    }}
-                                  />
-                                  <input
-                                    type="checkbox"
-                                    name={brand}
-                                    checked={brandsFilter[brand]}
-                                    onChange={handleBrands}
-                                  />
-                                  <span className="product-checkbox-brand">
-                                    {brand}
-                                  </span>
-                                  <span className="g-gradient-text">
-                                    {brand}
-                                  </span>
-                                </label>
-                              ))
-                            )
-                        }
-                      </div>
-                    </div>
-                  </>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
 
         {stateProductsReducer[productsToShowReference] &&
         stateProductsReducer[productsToShowReference][0] === null ? (
@@ -796,6 +798,7 @@ const Products = () => {
           </div>
         </div>
       </div>
+
       <ModalAdminProducts
         isOpenDeleteProduct={isOpenDeleteProduct}
         closeDeleteProduct={closeDeleteProduct}
