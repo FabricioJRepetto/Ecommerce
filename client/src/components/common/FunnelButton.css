@@ -6,6 +6,7 @@
    width: 45px;
    cursor: pointer;
    display: flex;
+   z-index: 40;
 }
 
 .funnel-top {

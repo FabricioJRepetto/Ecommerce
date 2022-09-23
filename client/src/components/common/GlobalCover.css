@@ -4,7 +4,7 @@
   top: 0;
   left: 0;
   background: #000000;
-  min-height: 100vh;
+  min-height: 95vh;
   min-width: 100vw;
   z-index: 110;
   pointer-events: none;

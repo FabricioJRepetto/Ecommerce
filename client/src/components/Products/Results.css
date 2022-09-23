@@ -1,22 +1,42 @@
 .results-container {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     flex-direction: column;
     align-items: center;
-    min-height: 100vh;
+    min-height: 95vh;
     flex-grow: 1;
+    width: 100%;
+    position: relative;
+    margin-top: 2rem;
+}
+
+.results-container-middle {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
 }
 
 .results-container-inner {
     display: flex;
+    width: 90%;
+    justify-content: center;
+}
+
+.results-inner {
+    flex-grow: 1;
+    min-width: 350px;
+    max-width: 900px;
 }
 
 .bread-crumbs {
-    width: 65vw;
+    width: 90%;
     height: 2rem;
     display: flex;
     justify-content: space-between;
     align-content: flex-end;
+    align-items: center;
 }
 
 .bread-crumbs {
@@ -29,7 +49,10 @@
 
 .bread-crumbs span {
     cursor: pointer;
-    margin-left: 5px;
+}
+
+.bread-crumbs div {
+    display: inline;
 }
 
 .bread-crumbs span:hover {
@@ -47,24 +70,30 @@
 }
 
 .results-filters {
-    width: 15vw;
+    width: 17rem;
+    margin-right: 1rem;
 }
 
-.results-inner {
-    width: 50vw;
+.results-filters>h3 {
+    text-align: left;
+    padding-bottom: .5rem;
 }
 
 .results-filters-applied {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    padding: 0 0 2rem 0;
     color: #bcbcbc;
+    margin-bottom: 1rem;
+}
+
+.results-filters-applied>div {
+    margin: .2rem 0;
 }
 
 .results-filter-container {
     height: 1.3rem;
-    margin-bottom: .2rem;
+    margin-bottom: 1rem;
     overflow: hidden;
     transition: all .3s ease;
 }
@@ -103,4 +132,46 @@
 
 .own-products-container {
     margin-bottom: 1rem;
+}
+
+@media (min-width: 1024px) {
+    .products-filters-middle {
+        min-height: 95vh;
+    }
+}
+
+@media (max-width: 1023px) {
+    .results-filters {
+        display: none;
+    }
+
+    .results-inner {
+        width: 85%;
+    }
+
+    .results-container .products-filters-mobile {
+        display: inline;
+    }
+
+    .results-container .products-filters-menu-open {
+        right: -1rem;
+    }
+
+    .results-container .products-filters-menu-open {
+        width: 282px;
+    }
+
+    .results-container .products-filters-menu {
+        top: 2.5rem;
+    }
+
+    .results-container .products-filters-inner {
+        padding: 0;
+    }
+}
+
+@media (max-width: 499px) {
+    .results-inner {
+        width: 100%;
+    }
 }
