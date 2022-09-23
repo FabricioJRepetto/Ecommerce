@@ -1,4 +1,5 @@
 .cart-card-container {
+  height: 10rem;
   min-width: 60vw;
   background: #101010;
   color: rgb(255, 255, 255);
@@ -7,6 +8,7 @@
   flex-direction: row;
   justify-content: space-between;
   padding: 1rem 0 1rem 2rem;
+  transition: all .2s ease-out;
 }
 .cart-card-container:hover {
   background: #181818;

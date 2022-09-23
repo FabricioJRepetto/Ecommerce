@@ -182,274 +182,250 @@ const Cart = () => {
 
   return (
     <div className="cart-outer-container">
-      <div className="cart-container component-fadeIn">
-        <div className="cart-card-optionscloser-container">
-          <div className="tab-button-container" style={{ width: "70vw" }}>
-            {
-              <button
-                onClick={() => navigate("/cart/")}
-                className={`tab-button ${
-                  !(render === "saved") ? "tab-button-active" : ""
-                }`}
-              >
-                {`Carrito ${
-                  cart.products?.length ? `(${cart?.products?.length})` : ""
-                }`}
-              </button>
-            }
-
-            {
-              <button
-                onClick={() => navigate("/cart/saved")}
-                className={`tab-button${
-                  (render === "saved") ? " tab-button-active" : ""
-                }`}
-              >
-                {`Guardados ${
-                  cart.buyLater?.length ? `(${cart?.buyLater?.length})` : ""
-                }`}
-              </button>
-            }
-          </div>
-
-          <div>
-            {loading && (!cart || cart.products?.length < 1) ? (
-              <div className="cart-loading-placeholder">
+            
+      {loading && (!cart || cart.products?.length < 1)
+        ? <div className="cart-loading-placeholder">
                 {loading && <LoaderBars />}
               </div>
-            ) : (
-              <div className="component-fadeIn">
+        : <div className="cart-container component-fadeIn">
+            <div className="cart-card-optionscloser-container">
+                <div className="tab-button-container" style={{ width: "70vw" }}>
+                    {
+                    <button
+                        onClick={() => navigate("/cart/")}
+                        className={`tab-button ${
+                        !(render === "saved") ? "tab-button-active" : ""
+                        }`}
+                    >
+                        {`Carrito ${
+                        cart.products?.length ? `(${cart?.products?.length})` : ""
+                        }`}
+                    </button>
+                    }
+
+                    {
+                    <button
+                        onClick={() => navigate("/cart/saved")}
+                        className={`tab-button${
+                        (render === "saved") ? " tab-button-active" : ""
+                        }`}
+                    >
+                        {`Guardados ${
+                        cart.buyLater?.length ? `(${cart?.buyLater?.length})` : ""
+                        }`}
+                    </button>
+                    }
+                </div>
+            
+                <div className="">
                 {render === "saved" ? (
-                  <div className="cart-buylater-inner">
+                    <div className="cart-buylater-inner">
                     {!cart.buyLater || cart.buyLater.length < 1 ? (
-                      <h1>No tienes productos guradados</h1>
+                        <h1>No tienes productos guradados</h1>
                     ) : (
-                      <div>
+                        <div>
                         {cart.buyLater.map((p) => (
-                          <CartCard
+                            <CartCard
                             key={p._id}
-                            premium={p.premium}
-                            on_cart={false}
-                            on_sale={p.on_sale}
-                            img={p.thumbnail}
-                            name={p.name}
-                            prodId={p._id}
-                            price={p.price}
-                            sale_price={p.sale_price}
-                            free_shipping={p.free_shipping}
-                            discount={p.discount}
-                            brand={p.brand}
-                            prodQuantity={p.quantity}
-                            stock={p.stock}
-                            buyLater={buyLater}
-                            buyNow={buyNow}
-                            deleteP={deleteProduct}
-                            source={"buyLater"}
-                          />
+                                on_cart={true}
+                                productData={p}
+                                buyLater={buyLater}
+                                deleteP={deleteProduct}
+                                buyNow={buyNow}
+                                loading={loadingPayment}
+                                source={"buyLater"}
+                            />
                         ))}
-                      </div>
+                        </div>
                     )}
-                  </div>                  
+                    </div>                  
                 ) : (
                     <div className="cart-inner">
                     {!cart.products || cart.products?.length < 1 ? (
-                      <h1>Tu carrito está vacío</h1>
+                        <h1>Tu carrito está vacío</h1>
                     ) : (
-                      <div>
                         <div>
-                          {cart.products.map((p) => (
+                        <div>
+                            {cart.products.map((p) => (
                             <CartCard
-                              key={p._id}
-                              premium={p.premium}
-                              on_cart={true}
-                              on_sale={p.on_sale}
-                              img={p.thumbnail}
-                              name={p.name}
-                              prodId={p._id}
-                              price={p.price}
-                              sale_price={p.sale_price}
-                              free_shipping={p.free_shipping}
-                              discount={p.discount}
-                              brand={p.brand}
-                              prodQuantity={p.quantity}
-                              stock={p.stock}
-                              buyLater={buyLater}
-                              deleteP={deleteProduct}
-                              buyNow={buyNow}
-                              source={"products"}
-                              loading={loadingPayment}
+                                key={p._id}
+                                on_cart={true}
+                                productData={p}
+                                buyLater={buyLater}
+                                deleteP={deleteProduct}
+                                buyNow={buyNow}
+                                source={"products"}
+                                loading={loadingPayment}
                             />
-                          ))}
+                            ))}
                         </div>
 
                         <div className="total-section-container">
-                          <div className="cart-shipping-container">
+                            <div className="cart-shipping-container">
                             {selectedAdd ? (
-                              <div
+                                <div
                                 onClick={openAddList}
                                 className="cart-address-selector"
                                 name={"address-container"}
-                              >
+                                >
                                 <Pin className="address-icon" />
                                 {selectedAdd.street_name +
-                                  " " +
-                                  selectedAdd.street_number +
-                                  ", " +
-                                  selectedAdd.city}
+                                    " " +
+                                    selectedAdd.street_number +
+                                    ", " +
+                                    selectedAdd.city}
                                 <Arrow className="arrow-address-selector" />
-                              </div>
+                                </div>
                             ) : (
-                              <div
+                                <div
                                 onClick={() => openAddForm(true)}
                                 className="cart-address-selector"
-                              >
+                                >
                                 <b>
-                                  <u>
+                                    <u>
                                     Agrega una dirección para continuar la
                                     compra.
-                                  </u>
+                                    </u>
                                 </b>
                                 <Arrow className="arrow-address-selector" />
-                              </div>
+                                </div>
                             )}
 
                             <div className="cart-shipping-mode-container">
-                              <div
+                                <div
                                 onClick={() => shippingMode(true)}
                                 style={{ cursor: "pointer" }}
-                              >
+                                >
                                 <div className="cart-shipping-mode-card">
-                                  <Checkbox
+                                    <Checkbox
                                     isChecked={flash_shipping}
                                     extraStyles={{
-                                      border: true,
-                                      rounded: true,
-                                      innerBorder: true,
-                                      margin: "1rem",
-                                      size: "1.2",
+                                        border: true,
+                                        rounded: true,
+                                        innerBorder: true,
+                                        margin: "1rem",
+                                        size: "1.2",
                                     }}
-                                  />
-                                  <div>
+                                    />
+                                    <div>
                                     <p className="provider-text">Envío Flash</p>
                                     <p>{`Llega mañana`}</p>
-                                  </div>
+                                    </div>
                                 </div>
-                              </div>
+                                </div>
 
-                              <div
+                                <div
                                 onClick={() => shippingMode(false)}
                                 style={{ cursor: "pointer" }}
-                              >
+                                >
                                 <div className="cart-shipping-mode-card">
-                                  <Checkbox
+                                    <Checkbox
                                     isChecked={!flash_shipping}
                                     extraStyles={{
-                                      border: true,
-                                      rounded: true,
-                                      innerBorder: true,
-                                      margin: "1rem",
-                                      size: "1.2",
+                                        border: true,
+                                        rounded: true,
+                                        innerBorder: true,
+                                        margin: "1rem",
+                                        size: "1.2",
                                     }}
-                                  />
-                                  <div>
+                                    />
+                                    <div>
                                     <p>Envío estándar</p>
                                     <p>{`Llega ${deliverDate()}`}</p>
-                                  </div>
+                                    </div>
                                 </div>
-                              </div>
+                                </div>
                             </div>
-                          </div>
+                            </div>
 
-                          <div className="cart-sumary-section">
+                            <div className="cart-sumary-section">
                             <div className="cart-total">
-                              <p>Subtotal:</p>
-                              <div>
+                                <p>Subtotal:</p>
+                                <div>
                                 <h3>${priceFormat(total).int}</h3>
                                 <p>{priceFormat(total).cents}</p>
-                              </div>
+                                </div>
                             </div>
 
                             <div className="cart-total">
-                              <p>Envío:</p>
-                              <div className="cart-total-shipping-cost">
+                                <p>Envío:</p>
+                                <div className="cart-total-shipping-cost">
                                 {cart.free_ship_cart && (
-                                  <del className="grey">
+                                    <del className="grey">
                                     $
                                     {
-                                      priceFormat(
+                                        priceFormat(
                                         cart.products.length * SHIP_COST
-                                      ).int
+                                        ).int
                                     }
-                                  </del>
+                                    </del>
                                 )}
 
                                 <div>
-                                  {cart.shipping_cost === 0 ? (
+                                    {cart.shipping_cost === 0 ? (
                                     <div className="green">
-                                      <h3>¡Envío gratis!</h3>
+                                        <h3>¡Envío gratis!</h3>
                                     </div>
-                                  ) : (
+                                    ) : (
                                     <div className="cart-shipping-cost-container">
-                                      {flash_shipping && (
+                                        {flash_shipping && (
                                         <div className="ship-gradient"></div>
-                                      )}
-                                      <h3>
+                                        )}
+                                        <h3>
                                         ${priceFormat(cart.shipping_cost).int}
-                                      </h3>
-                                      <p>
+                                        </h3>
+                                        <p>
                                         {priceFormat(cart.shipping_cost).cents}
-                                      </p>
+                                        </p>
                                     </div>
-                                  )}
+                                    )}
                                 </div>
-                              </div>
+                                </div>
                             </div>
 
                             <div className="total-section-inner">
-                              <h2>Total:</h2>
-                              <div>
+                                <h2>Total:</h2>
+                                <div>
                                 <h2>
-                                  ${priceFormat(total + cart.shipping_cost).int}
+                                    ${priceFormat(total + cart.shipping_cost).int}
                                 </h2>
                                 <p>{priceFormat(total).cents}</p>
-                              </div>
+                                </div>
                             </div>
 
                             <div className="cart-button-section">
-                              <button
+                                <button
                                 className="g-white-button details-button"
                                 disabled={
-                                  !cart ||
-                                  cart.length < 1 ||
-                                  !selectedAdd ||
-                                  loadingPayment
+                                    !cart ||
+                                    cart.length < 1 ||
+                                    !selectedAdd ||
+                                    loadingPayment
                                 }
                                 onClick={openPreCheckout}
-                              >
+                                >
                                 Pagar
-                              </button>
+                                </button>
                             </div>
-                          </div>
+                            </div>
                         </div>
 
                         {!selectedAdd && (
-                          <div className="cart-warning-message">
+                            <div className="cart-warning-message">
                             <span onClick={() => openAddForm(true)}>
-                              <WarningIcon style={{ margin: "0 .5rem 0 0" }} />
-                              Necesitas especificar una dirección de envío antes
-                              de realizar el pago.
+                                <WarningIcon style={{ margin: "0 .5rem 0 0" }} />
+                                Necesitas especificar una dirección de envío antes
+                                de realizar el pago.
                             </span>
-                          </div>
+                            </div>
                         )}
-                      </div>
+                        </div>
                     )}
-                  </div>
+                    </div>
                 )}
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
+                </div>            
+            </div>
+      </div>}
 
       <form
         id="checkout-container"

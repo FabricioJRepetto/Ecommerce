@@ -5,8 +5,10 @@
 .cart-container {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    /* justify-content: center; */
     align-items: center;
+    min-height: 100vh;
+    margin-top: 3rem;
 }
 
 .cart-card-optionscloser-container {
@@ -17,7 +19,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 30vh;
+    height: 95vh;
 }
 
 .cart-menu-container a {
@@ -349,6 +351,7 @@
 .continue-button:hover .arrow-right-gradient {
     display: inline;
 }
+
 
 @media (max-width: 1024px) {
     .cart-inner {
