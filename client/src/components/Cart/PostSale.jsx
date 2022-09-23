@@ -105,7 +105,12 @@ const PostSale = () => {
             // cambia orden a pagada
             // resta unidades de cada stock
           }
-        }
+        } else {
+            setBackground("postsale-pending animation-start");
+          setTimeout(() => {
+            setBackground("postsale-pending animation-loop");
+          }, 6000);
+        }        
       })();
 
     return () => {};

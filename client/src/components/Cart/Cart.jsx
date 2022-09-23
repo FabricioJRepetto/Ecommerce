@@ -8,7 +8,6 @@ import { useModal } from "../../hooks/useModal";
 import { useNotification } from "../../hooks/useNotification";
 import { cartTotal, loadCart } from "../../Redux/reducer/cartSlice";
 import { priceFormat } from "../../helpers/priceFormat";
-
 import { ReactComponent as Arrow } from "../../assets/svg/arrow-right.svg";
 import { ReactComponent as Pin } from "../../assets/svg/location.svg";
 import { ReactComponent as Spinner } from "../../assets/svg/spinner.svg";
@@ -16,7 +15,7 @@ import LoaderBars from "../common/LoaderBars";
 import Checkbox from "../common/Checkbox";
 import { WarningIcon } from "@chakra-ui/icons";
 import { ReactComponent as ArrowRight } from "../../assets/svg/arrow-right2.svg";
-
+import CopiableText from "../common/CopiableText";
 import AddAddress from "../Profile/AddAddress";
 
 import "./Cart.css";
@@ -54,6 +53,7 @@ const Cart = () => {
     })();
     // eslint-disable-next-line
   }, []);
+
   useEffect(() => { 
     setRender(section || 'cart');
   }, [section]);
@@ -501,99 +501,111 @@ const Cart = () => {
             <Link to={`/faqs/4`} target="_blank" rel="noopener noreferrer">¿Cómo comprar?</Link>
           </button>
 
-          <p onClick={() => {openCheckout(); closePreCheckout()}} 
+          <span onClick={() => {openCheckout(); closePreCheckout()}} 
             className='g-text-button continue-button'>
                 Continuar 
                 <ArrowRight /> 
                 <div className="arrow-right-gradient"></div>
-            </p>
+            </span>
 
         </div>
       </Modal>
 
       <Modal isOpen={isOpenCheckout} closeModal={closeCheckout}>
-        <div>
-          <p>Pagar con:</p>
-
-          <div className="cart-checkout-modal-button-container">
-            <div>
-              <button
-                className="g-white-button details-button"
-                disabled={
-                  !cart || cart.length < 1 || !selectedAdd || loadingPayment
-                }
-                onClick={goCheckout}
-              >
-                {loadingPayment === "S" ? (
-                  <Spinner className="cho-svg" />
-                ) : (
-                  "Stripe"
-                )}
-              </button>
-              <br />
-              <b>Stripe</b>
-
-              <ul>
-                <li>
-                  <b>Card:</b> <i>4242 4242 4242 4242</i>
-                </li>
-                <li>
-                  <b>Expiration:</b> <i>fecha mayor a la actual</i>
-                </li>
-                <li>
-                  <b>Cvc:</b> <i>123</i>
-                </li>
-                <li>
-                  <b>Email:</b> <i>cualquiera</i>
-                </li>
-                <li>
-                  <b>Nombre:</b> <i>cualquiera</i>
-                </li>
-              </ul>
-            </div>
+        <div className="cart-modal-checkouts">            
 
             <div>
-              <button
-                className="g-white-button details-button"
-                disabled={
-                  !cart || cart.length < 1 || !selectedAdd || loadingPayment
-                }
-                onClick={openMP}
-              >
-                {loadingPayment === "MP" ? (
-                  <Spinner className="cho-svg" />
-                ) : (
-                  "MercadoPago"
-                )}
-              </button>
-              <br />
-              <b>Mercadopago</b>
+                <div className="cart-modal-logo">
+                    <img src="https://res.cloudinary.com/dsyjj0sch/image/upload/v1663894003/Stripe_Logo-2_otuyhn.png" alt="stripe logo" />
+                </div>
+                <div>
+                    <ul>
+                        <li>
+                            Número de tarjeta:<br/>
+                            <CopiableText text={'4242 4242 4242 4242'}/>
+                        </li>
+                        <li>
+                            Fecha de expiración:<br/><b>Cualquier fecha mayor a la actual</b>
+                        </li>
+                        <li>
+                            cvc:<br/>
+                            <CopiableText text={'123'}/>
+                        </li>
+                        <li>
+                            E-mail:<br/><b>Cualquiera</b>
+                        </li>
+                        <li>
+                            Nombre:<br/><b>Cualquiera</b>
+                        </li>
+                    </ul>
 
-              <ul>
-                <li>
-                  <b>card:</b> <i>5416 7526 0258 2580</i>
-                </li>
-                <li>
-                  <b>expiration:</b> <i>11/25</i>
-                </li>
-                <li>
-                  <b>cvc:</b> <i>123</i>
-                </li>
-                <li>
-                  <b>nombre:</b> <i>apro</i>
-                </li>
-                <li>
-                  <b>dni:</b> <i>12345678</i>
-                </li>
-                <li>
-                  <b>mail:</b> <i>cualquiera argentino</i>
-                </li>
-              </ul>
+                    <button
+                        className="g-white-button"
+                        disabled={
+                            !cart || cart.length < 1 || !selectedAdd || loadingPayment
+                        }
+                        onClick={goCheckout}
+                        >
+                        {loadingPayment === "S" ? (
+                            <Spinner className="cho-svg" />
+                        ) : (
+                            "Pagar con Stripe"
+                        )}
+                    </button>
+                </div>
             </div>
-          </div>
+
+            <div>                
+                <div className='cart-modal-logo'>
+                    <img src="https://res.cloudinary.com/dsyjj0sch/image/upload/v1663894003/Mercadopago_Logo-2_anidpy.png" alt="Mercadopago logo" />
+                </div>
+                <div>
+                    <ul>
+                        <li>
+                            Número de tarjeta:<br/>
+                            <CopiableText text={'5416 7526 0258 2580'}/>
+                        </li>
+                        <li>
+                            Fecha de expiración:<br/>
+                            <CopiableText text={'11/25'}/>
+                        </li>
+                        <li>
+                            cvc:<br/>
+                            <CopiableText text={'123'}/>
+                        </li>
+                        <li>
+                            Nombre:<br/>
+                            <CopiableText text={'APRO'}/>
+                        </li>
+                        <li>
+                            dni:<br/>
+                            <CopiableText text={'12345678'}/>
+                        </li>
+                        <li>
+                            E-mail:<br/>
+                            <b>Cualquier email argentino (importante)</b>
+                        </li>
+                    </ul>
+                    
+                    <button
+                        className="g-white-button cart-checkout-modal-button-container"
+                        disabled={
+                            !cart || cart.length < 1 || !selectedAdd || loadingPayment
+                        }
+                        onClick={openMP}
+                        >
+                        {loadingPayment === "MP" ? (
+                            <Spinner className="cho-svg" />
+                        ) : (
+                            "Pagar con MercadoPago"
+                        )}
+                    </button>
+                </div>
+            </div>
           
         </div>
       </Modal>
+      
     </div>
   );
 };

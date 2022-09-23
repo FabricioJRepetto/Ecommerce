@@ -1,3 +1,4 @@
+import { useRef } from 'react'
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import {
@@ -8,36 +9,44 @@ import {
   AccordionIcon,
   Box,
 } from '@chakra-ui/react'
-import { CopyIcon } from '@chakra-ui/icons'
+import CopiableText from './CopiableText'
 import './FAQ.css'
 
 const FAQ = () => {
     const {question} = useParams();
     const navigate = useNavigate()
+    const questionRef = useRef(null);
 
     const [active, setActive] = useState()
 
     useEffect(() => {
       setActive(parseInt(question || 0))
+      question === '4' && setTimeout(() => {
+        scrollTo();
+      }, 100);
       // eslint-disable-next-line
     }, [question])
 
-    const copyToClipboard = (str) => {
-        if (navigator && navigator.clipboard && navigator.clipboard.writeText)
-            return navigator.clipboard.writeText(str);
-        return Promise.reject('The Clipboard API is not available.');
+    const scrollTo = () => {
+        if (questionRef.current) {
+            questionRef.current.scrollIntoView({
+                behavior: "smooth",
+                block: "center",
+                inline: "nearest",
+            });
+        }
     };
     
   return (
     <div className='faq-outer-container component-fadeIn'>
 
         <div className='profile-section-indicator'>FAQs</div>
-
+        
         <div className='faq-content'>
             <div className='faq-section'>
                 <div className='faq-content'>
                     <div className='faq-section'>
-                        {typeof active === 'number' && <Accordion defaultIndex={[active]}>
+                        {typeof active === 'number' && <Accordion defaultIndex={[active < 6 ? active : 0]}>
 
                             <AccordionItem>
                                 <h2>
@@ -124,7 +133,7 @@ const FAQ = () => {
                                 </AccordionPanel>
                             </AccordionItem>
 
-                            <AccordionItem>
+                            <AccordionItem ref={questionRef}>
                                 <h2>
                                     <AccordionButton className={`faq-title-btn ${active === 4 && 'faq-q-active'}`} 
                                         onClick={() => setActive(4)}>
@@ -147,13 +156,14 @@ const FAQ = () => {
                                                 <ul>
                                                     <li>
                                                         Número de tarjeta:<br/>
-                                                        <b className='copiable' onClick={()=>copyToClipboard('4242 4242 4242 4242')}>4242 4242 4242 4242</b>
+                                                        <CopiableText text={'4242 4242 4242 4242'}/>
                                                     </li>
                                                     <li>
                                                         Fecha de expiración:<br/><b>Cualquier fecha mayor a la actual</b>
                                                     </li>
                                                     <li>
-                                                        cvc:<br/><b className='copiable' onClick={()=>copyToClipboard('123')}>123</b>
+                                                        cvc:<br/>
+                                                        <CopiableText text={'123'}/>
                                                     </li>
                                                     <li>
                                                         E-mail:<br/><b>Cualquiera</b>
@@ -173,23 +183,27 @@ const FAQ = () => {
                                                 <ul>
                                                     <li>
                                                         Número de tarjeta:<br/>
-                                                        <b className='copiable' onClick={()=>copyToClipboard('5416 7526 0258 2580')}>5416 7526 0258 2580</b>
+                                                        <CopiableText text={'5416 7526 0258 2580'}/>
                                                     </li>
                                                     <li>
                                                         Fecha de expiración:<br/>
-                                                        <b className='copiable' onClick={()=>copyToClipboard('11/25')}>11/25</b>
+                                                        <CopiableText text={'11/25'}/>
                                                     </li>
                                                     <li>
-                                                        cvc:<br/><b className='copiable' onClick={()=>copyToClipboard('123')}>123</b>
+                                                        cvc:<br/>
+                                                        <CopiableText text={'123'}/>
                                                     </li>
                                                     <li>
-                                                        Nombre:<br/><b className='copiable' onClick={()=>copyToClipboard('APRO')}>APRO</b>
+                                                        Nombre:<br/>
+                                                        <CopiableText text={'APRO'}/>
                                                     </li>
                                                     <li>
-                                                        dni:<br/><b className='copiable' onClick={()=>copyToClipboard('12345678')}>12345678</b>
+                                                        dni:<br/>
+                                                        <CopiableText text={'12345678'}/>
                                                     </li>
                                                     <li>
-                                                        E-mail:<br/><b>Cualquier email argentino (importante)</b>
+                                                        E-mail:<br/>
+                                                        <b>Cualquier email argentino (importante)</b>
                                                     </li>
                                                 </ul>
                                             </div>

@@ -247,26 +247,62 @@
     font-weight: 400;
     font-size: 1.2rem;
     color: rgb(255, 187, 0);
-    width: 100%;
-    margin-top: 1rem;
+    width: 40vw;
+    min-width: 400px;
+    margin: 1rem auto;
     padding: .5rem .9rem;
 }
 .cart-warning-message svg {
     margin-right: .7rem;
 }
 
-.cart-checkout-modal-button-container {
-    display: flex;
-    justify-content: space-around;
-}
-
-.cart-checkout-modal-button-container div {
-    margin: 2rem;
+.cart-modal-checkouts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
     text-align: left;
+    margin: 2rem;
+}
+.cart-modal-checkouts > div {
+    background-color: #050505;
+    margin: 1rem;
+    min-width: 400px;
+    max-width: 60%;
+    height: 100%;
+    padding: 0 1rem 1rem 1rem;
+}
+.cart-modal-checkouts > div div + div {    
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
-.cart-checkout-modal-button-container button>svg {
-    margin-top: .2rem;
+.cart-modal-logo {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    height: 6rem;
+    border-bottom: 1px solid #151515;
+}
+.cart-modal-logo img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.cart-modal-checkouts ul {
+    list-style-type: disc;
+    margin: 1rem 0;
+    padding-left: 2rem;
+    max-width: 25rem;
+}
+.cart-modal-checkouts li {
+    margin-bottom: .3rem;
+    font-weight: 100;
+}
+.cart-modal-checkouts button {
+    display: block;
+    height: 3rem;
 }
 
 .cart-warning-message span {
@@ -317,6 +353,11 @@
 @media (max-width: 1024px) {
     .cart-inner {
         min-width: 100vw;
+    }
+}
+@media (max-width: 930px) {
+    .cart-modal-checkouts {
+        grid-template-columns: 1fr;
     }
 }
 
