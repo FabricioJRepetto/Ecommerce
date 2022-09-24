@@ -85,10 +85,10 @@ export const useUserLogin = (token) => {
     } catch (error) {
       console.error("useUserLogin google: catch " + error);
 
-      if (error?.response?.data?.message) {
-        notification(error.response.data.message, "", "error");
-      } else if (error?.response?.data) {
+      if (error?.response?.data) {
         notification(error.response.data, "", "error");
+      } else if (error.message) {
+        notification(error.message, '', 'warning');
       } else {
         notification('El servidor está fuera de línea', '', 'warning');
       }
