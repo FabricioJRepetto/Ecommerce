@@ -44,7 +44,6 @@ import Unauthorized from "./components/common/Unauthorized";
 import { useLocation } from "react-router-dom";
 import FAQ from "./components/common/FAQ";
 
-
 function App() {
     const dispatch = useDispatch();
     const { userLogin } = useUserLogin();
