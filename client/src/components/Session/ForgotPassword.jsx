@@ -42,7 +42,7 @@ const ForgotPassword = () => {
         setResponse(data.message);
       }
     } catch (error) {
-      console.error(error);
+      console.log(error);
       //! VOLVER A VER manejo de errores
     } finally {
       closeLoader();
