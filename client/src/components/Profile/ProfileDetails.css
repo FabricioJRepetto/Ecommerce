@@ -150,11 +150,11 @@
 }
 
 .profile-detail-container form {
-  align-self: flex-start;
+  /* align-self: flex-start; */
 }
 
 .profile-detail-container form .g-input-with-button {
-  width: 7rem;
+  /* width: 7rem; */
 }
 
 .profile-detail-container form input {
@@ -279,7 +279,8 @@
   }
 
   .profile-detail-container form {
-    align-self: auto;
+    display: flex;
+    /* align-self: auto; */
   }
 
   .profile-details-container>div.profile-detail-container:last-child {

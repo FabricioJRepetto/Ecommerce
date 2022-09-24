@@ -319,7 +319,7 @@ const ProfileDetails = ({ address, loading }) => {
           <form onSubmit={handleSubmitUsername(updateDetails)}>
             <>
               {!errorsUsername.username && (
-                <p className="g-hidden-placeholder">hidden</p>
+                <span className="g-info-input">Presiona Enter para guardar cambios</span>
               )}
               {errorsUsername.username?.type === "required" && (
                 <p className="g-error-input">Ingresa tu nombre de usuario</p>
@@ -385,7 +385,7 @@ const ProfileDetails = ({ address, loading }) => {
             <span>
               <>
                 {!errorsFullname.firstname && (
-                  <p className="g-hidden-placeholder">hidden</p>
+                  <span className="g-hidden-placeholder">Presiona Enter para guardar cambios</span>
                 )}
                 {errorsFullname.firstname?.type === "pattern" && (
                   <p className="g-error-input">Ingresa un nombre válido</p>
@@ -417,7 +417,7 @@ const ProfileDetails = ({ address, loading }) => {
             <span>
               <>
                 {!errorsFullname.lastname && (
-                  <p className="g-hidden-placeholder">hidden</p>
+                  <span className="g-info-input">Presiona Enter para guardar cambios</span>
                 )}
                 {errorsFullname.lastname?.type === "pattern" && (
                   <p className="g-error-input">Ingresa un apellido válido</p>
@@ -485,13 +485,15 @@ const ProfileDetails = ({ address, loading }) => {
       <div className="profile-detail-container profile-detail-container-address">
         <h3>Dirección</h3>
         {loading ? (
-          <p>...</p> /* //! VOLVER A VER agregar spinner */
+          <div>
+            <Spinner />
+          </div>
         ) : address && address.length ? (
           address.map(
             (e) =>
               e.isDefault && (
                 <div
-                  className="profile-address-container"
+                  className="profile-address-container component-fadeIn"
                   onClick={() => navigate("/profile/address")}
                   key={e.street_number}
                 >
