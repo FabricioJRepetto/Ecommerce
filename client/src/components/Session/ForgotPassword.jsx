@@ -55,7 +55,7 @@ const ForgotPassword = () => {
         {response ? (
           <>
             <div className="forgot-response">{response}</div>
-            <ReturnButton to={"/"} />
+            {/* <ReturnButton to={"/"} /> */}
           </>
         ) : (
           <form onSubmit={handleSubmitForgot(forgotPassword)}>
