@@ -11,8 +11,7 @@ const AboutUs = () => {
 
   return (
     <div className="about-container component-fadeIn">
-      <h1>Nosotros</h1>
-
+      <div className='profile-section-indicator'>NOSOTROS</div>
       <div
         className="about-cards-container"
         style={{ flexDirection: order ? "column-reverse" : "column" }}
@@ -24,7 +23,7 @@ const AboutUs = () => {
             borderRadius: order ? "0 7rem 7rem 0" : "7rem 0 0 7rem",
             background: `linear-gradient(${
               order ? "-90deg" : "90deg"
-            }, rgba(20,20,20,1) 29%, rgba(0,0,0,0) 100%)`,
+            }, rgba(10,10,10,1) 29%, rgba(0,0,0,0) 100%)`,
           }}
         >
           <div className="about-avatar-container">
@@ -71,7 +70,7 @@ const AboutUs = () => {
             borderRadius: order ? "7rem 0 0 7rem" : "0 7rem 7rem 0",
             background: `linear-gradient(${
               order ? "90deg" : "-90deg"
-            }, rgba(20,20,20,1) 29%, rgba(0,0,0,0) 100%)`,
+            }, rgba(10,10,10,1) 29%, rgba(0,0,0,0) 100%)`,
           }}
         >
           <div className="about-avatar-container">

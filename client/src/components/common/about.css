@@ -1,7 +1,8 @@
 .about-container {
     height: 90vh;
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
+    align-content: center;
     flex-direction: column;
 }
 
@@ -14,15 +15,18 @@
 .about-card {
     display: flex;
     justify-content: flex-start;    
-    width: 40vw;
+    max-width: 40vw;
+    width: fit-content;
+    min-width: 450px;
     padding: 2rem 1.2rem;
     margin: 1rem;
+    max-height: 14rem;
 }
 .about-card > div {
     margin: 0 1rem;
 }
 .about-card h1 {
-    margin: 1rem;
+    margin: 0 0 1rem 0;
 }
 .about-card a {
     font-size: 1.4rem;
@@ -50,4 +54,10 @@
 .about-avatar-container img {
     height: 100%;
     width: 100%;
+}
+
+@media (max-width: 560px) {
+    .about-card div + div {
+        margin: 0;
+    }
 }
