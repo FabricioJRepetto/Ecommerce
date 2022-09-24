@@ -19,6 +19,7 @@ import Carousel from "../Home/Carousel/Carousel";
 import { resizer } from "../../helpers/resizer";
 import CopiableText from "../common/CopiableText";
 import { ReactComponent as ArrowRight } from "../../assets/svg/arrow-right2.svg";
+import SelectAddress from "./SelectAddress";
 
 import "./BuyNow.css";
 
@@ -90,6 +91,7 @@ const BuyNow = () => {
   const getAddress = async () => {
     const { data } = await axios("/address");
     if (data.address) {
+        setAddress(data.address)
       if (!selectedAdd) {
         const def = data.address.find((e) => e.isDefault === true);
         setSelectedAdd(def);
@@ -419,29 +421,12 @@ const BuyNow = () => {
         />
       </Modal>
 
-      <Modal isOpen={isOpenAddList} closeModal={closeAddList}>
-        <div>
-          <h1>Select an address</h1>
-          <div>
-            {address?.map((e) => (
-              <div key={e._id}>
-                {`${e.street_name} ${e.street_number}, ${e.city}`}
-                <button onClick={() => handleSelect(e._id.toString())}>
-                  {" "}
-                  Select{" "}
-                </button>
-              </div>
-            ))}
-            <button
-              onClick={() => {
-                openAddForm(true);
-                closeAddList();
-              }}
-            >
-              Add new address
-            </button>
-          </div>
-        </div>
+      <Modal isOpen={isOpenAddList} closeModal={closeAddList}>        
+        <SelectAddress 
+            address={address} 
+            handleSelect={handleSelect}
+            openAddForm={openAddForm}
+            closeAddList={closeAddList}/>
       </Modal>
 
       <Modal isOpen={isOpenPreCheckout} closeModal={closePreCheckout}>

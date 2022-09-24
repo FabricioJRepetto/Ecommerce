@@ -17,6 +17,7 @@ import { WarningIcon } from "@chakra-ui/icons";
 import { ReactComponent as ArrowRight } from "../../assets/svg/arrow-right2.svg";
 import CopiableText from "../common/CopiableText";
 import AddAddress from "../Profile/AddAddress";
+import SelectAddress from "./SelectAddress";
 
 import "./Cart.css";
 
@@ -444,28 +445,11 @@ const Cart = () => {
       </Modal>
 
       <Modal isOpen={isOpenAddList} closeModal={closeAddList}>
-        <div>
-          <h1>Selecciona una dirección</h1>
-          <div>
-            {address?.map((e) => (
-              <div key={e._id}>
-                {`${e.street_name} ${e.street_number}, ${e.city}`}
-                <button onClick={() => handleSelect(e._id.toString())}>
-                  {" "}
-                  Seleccionar{" "}
-                </button>
-              </div>
-            ))}
-            <button
-              onClick={() => {
-                openAddForm(true);
-                closeAddList();
-              }}
-            >
-              Añadir una nueva
-            </button>
-          </div>
-        </div>
+        <SelectAddress 
+            address={address} 
+            handleSelect={handleSelect}
+            openAddForm={openAddForm}
+            closeAddList={closeAddList}/>
       </Modal>
 
       <Modal isOpen={isOpenPreCheckout} closeModal={closePreCheckout}>

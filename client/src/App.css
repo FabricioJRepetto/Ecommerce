@@ -287,6 +287,13 @@ input.g-input-two-icons {
   font-size: 0.8rem;
 }
 
+/* MENSAJE INFO PARA INPUTS */
+.g-info-input {
+  color: #FFFFFF;
+  font-size: 0.8rem;
+  text-align: right;
+}
+
 /* MENSAJE DE ERROR PARA INPUTS */
 .g-error-input {
   text-align: left;
