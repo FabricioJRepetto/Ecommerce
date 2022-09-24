@@ -58,6 +58,7 @@ function App() {
   axios.interceptors.response.use(
     (response) => response,
     (error) => {
+      console.log(error)
       if (error.response?.data?.expiredToken) {
         signOut();
         notification("Por favor vuelve a iniciar sesión", "/signin", "error");
