@@ -1,6 +1,7 @@
 .product-details-outer-container {
   flex-grow: 1;
   min-height: 95vh;
+  margin-top: 1rem;
 }
 
 .details-head-container {
@@ -9,6 +10,14 @@
   align-items: center;
   overflow: hidden;
   overflow: -moz-hidden-unscrollable;
+}
+
+.bread-crumbs {
+  width: 65vw;
+  height: 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-content: flex-end;
 }
 
 .details-loader-container {
