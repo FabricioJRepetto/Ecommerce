@@ -26,6 +26,10 @@
   transition: all 0.6s cubic-bezier(0.11, 0.05, 0, 1.01);
 }
 
+/* .signin-container .signin-opacity {
+  opacity: 1
+} */
+
 .signin-inner img {
   width: 400px;
 }
@@ -69,31 +73,33 @@
 }
 
 .signin-signs-container {
-    position: relative;
-    height: 100%;
-    padding-top: 2rem;
+  position: relative;
+  height: 100%;
+  padding-top: 2rem;
 }
-.signin-signs-container > form {
-    position: absolute;
-    width: 100%;
+
+.signin-signs-container>form {
+  position: absolute;
+  width: 100%;
 }
 
 .forgot-password-container {
-    position: absolute;
-    padding-left: 1rem;
-    top: 40%;
-    transform: translateY(-50%);
-    transition: all .2s ease;
+  position: absolute;
+  padding-left: 1rem;
+  top: 40%;
+  transform: translateY(-50%);
+  transition: all .2s ease;
 }
 
 .signin-fadein {
-    transform: translate(10%);
-    opacity: 0;
-    transition: all .2s ease-out;
-    pointer-events: none;
+  transform: translate(10%);
+  opacity: 0;
+  transition: all .2s ease-out;
+  pointer-events: none;
 }
+
 .signin-fadeout {
-    transform: translate(0%);
-    opacity: 1;
-    transition: all .2s ease-out;
+  transform: translate(0%);
+  opacity: 1;
+  transition: all .2s ease-out;
 }

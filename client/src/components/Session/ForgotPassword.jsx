@@ -13,7 +13,7 @@ import ReturnButton from "../common/ReturnButton";
 import "./ForgotPassword.css";
 import "../../App.css";
 
-const ForgotPassword = () => {
+const ForgotPassword = ({ openLoader, closeLoader }) => {
   const { session } = useSelector((state) => state.sessionReducer);
   const [response, setResponse] = useState(null);
   const navigate = useNavigate();
@@ -25,7 +25,7 @@ const ForgotPassword = () => {
     setValue: setValueForgot,
     watch: watchForgot,
   } = useForm();
-  const [isOpenLoader, openLoader, closeLoader] = useModal();
+  //const [isOpenLoader, openLoader, closeLoader] = useModal();
 
   const emailRegex = /^[\w-.]+@([\w-])+[.\w-]*$/i;
 
@@ -55,7 +55,7 @@ const ForgotPassword = () => {
         {response ? (
           <>
             <div className="forgot-response">{response}</div>
-            <ReturnButton to={"/"} />
+            {/* <ReturnButton to={"/"} /> */}
           </>
         ) : (
           <form onSubmit={handleSubmitForgot(forgotPassword)}>
@@ -106,13 +106,13 @@ const ForgotPassword = () => {
           </form>
         )}
       </div>
-      <Modal isOpen={isOpenLoader}>
+      {/* <Modal isOpen={isOpenLoader}>
         <div className="signin-container">
           <div className="signin-inner forgot-container">
             <LoaderBars />
           </div>
         </div>
-      </Modal>
+      </Modal> */}
     </div>
   );
 };
