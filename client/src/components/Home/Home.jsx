@@ -32,7 +32,6 @@ const Home = () => {
 
   return (
     <div className="component-fadeIn">
-
       <div className="home-carousel">
         <Carousel
           images={IMAGES}
@@ -52,34 +51,34 @@ const Home = () => {
         <p>Explora Provider Store para ver nuestros productos seleccionados.</p>
       </div> */}
 
-        <div className="storecards-container">
-            <div className="storecards-inner">
-                <CategoryCard
-                    text="COMPUTACIÓN"
-                    image="https://res.cloudinary.com/dsyjj0sch/image/upload/v1663598262/computacion_iczryv.png"
-                    route="MLA1648"
-                    onClick={() => categorySearch("MLA1648")}
-                />
-                <CategoryCard
-                    text="VIDEOJUEGOS"
-                    image="https://res.cloudinary.com/dsyjj0sch/image/upload/v1663598262/videojuegos2_hvufj4.png"
-                    route="MLA1144"
-                    onClick={() => categorySearch("MLA1144")}
-                />
-                <CategoryCard
-                    text="AUDIO VIDEO"
-                    image="https://res.cloudinary.com/dsyjj0sch/image/upload/v1663598262/audio_bbrp2m.png"
-                    route="MLA409810"
-                    onClick={() => categorySearch("MLA1000")}
-                />
-                <CategoryCard
-                    text="CÁMARAS"
-                    image="https://res.cloudinary.com/dsyjj0sch/image/upload/v1663598262/camara_epkefy.png"
-                    route="MLA1039"
-                    onClick={() => categorySearch("MLA1039")}
-                />
-            </div>
+      <div className="storecards-container">
+        <div className="storecards-inner">
+          <CategoryCard
+            text="COMPUTACIÓN"
+            image="https://res.cloudinary.com/dsyjj0sch/image/upload/v1663598262/computacion_iczryv.png"
+            route="MLA1648"
+            onClick={() => categorySearch("MLA1648")}
+          />
+          <CategoryCard
+            text="VIDEOJUEGOS"
+            image="https://res.cloudinary.com/dsyjj0sch/image/upload/v1663598262/videojuegos2_hvufj4.png"
+            route="MLA1144"
+            onClick={() => categorySearch("MLA1144")}
+          />
+          <CategoryCard
+            text="AUDIO Y VIDEO"
+            image="https://res.cloudinary.com/dsyjj0sch/image/upload/v1663598262/audio_bbrp2m.png"
+            route="MLA409810"
+            onClick={() => categorySearch("MLA1000")}
+          />
+          <CategoryCard
+            text="CÁMARAS"
+            image="https://res.cloudinary.com/dsyjj0sch/image/upload/v1663598262/camara_epkefy.png"
+            route="MLA1039"
+            onClick={() => categorySearch("MLA1039")}
+          />
         </div>
+      </div>
 
       <FlashSales />
 
