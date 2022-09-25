@@ -16,7 +16,6 @@ const Suggestions = () => {
             const {data} = await axios.post(`/history/suggestion`, {userId: session ? id : false });
             if (data.length > 4 ) setProducts(data);
             else setProducts(false);
-            console.log(data);
 
             setLoading(false);
         })()

@@ -100,12 +100,13 @@ const PremiumDetails = () => {
       const { data } = await axios(`/product/${id}`);
       if (data.error) {
         setError(data.message)
-      } else if (!data.premium) {
+      } else if (!data.product.premium) {
         setError('ID de producto incorrecta')
       } else {
-        setProduct(data);
+        let product = {...data.product, comments: data.comments, allowComment: data.allowComment }
+        setProduct(product);
 
-        let aux = data.images.map((e) => ({
+        let aux = product.images.map((e) => ({
           img: e.imgURL,
           url: "",
         }));
