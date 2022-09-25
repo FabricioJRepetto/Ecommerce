@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import axios from 'axios'
 import { useNotification } from '../../hooks/useNotification'
 
@@ -6,6 +6,7 @@ const Comments = ({product_id, comments, allowed}) => {
     const notification = useNotification();
     const [calification, setCalification] = useState(0);
     const [text, setText] = useState('');
+    const [yourComment, setYourComment] = useState(false)
 
     const submitHandler = async () => { 
         console.log(calification)
@@ -42,12 +43,22 @@ const Comments = ({product_id, comments, allowed}) => {
                 <button onClick={submitHandler}> Commentar </button>
             </div>}
         <br/>
+        {yourComment && 
+            <div>
+                <div>{yourComment.user_data.name}</div>
+                <div>
+                    <img src={yourComment.user_data.avatar || require('../../assets/avatardefault.png')} alt="your avatar" />
+                </div>
+                <div>{yourComment.comment.calification}</div>
+                <div>{yourComment.comment.text}</div>
+                <div>{yourComment.comment.date}</div>
+            </div>}
         {comments?.length > 0
             ? <div>{comments.map(c => (
                 <div key={c.comment.user_id}>
                     <div>{c.user_data.name}</div>
                     <div>
-                        <img src={c.user_data.avatar || require('../../assets/avatardefault.png')} alt="" />
+                        <img src={c.user_data.avatar || require('../../assets/avatardefault.png')} alt="user avatar" />
                     </div>
                     <div>{c.comment.calification}</div>
                     <div>{c.comment.text}</div>

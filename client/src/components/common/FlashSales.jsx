@@ -42,6 +42,7 @@ const FlashSales = () => {
                     <MiniCard loading={true}/>
                     <MiniCard loading={true}/>
                     <MiniCard loading={true}/>
+                    <MiniCard loading={true}/>
                 </div>
                 : products 
                     ? <div className='flashsales-products-container'>
