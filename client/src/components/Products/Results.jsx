@@ -45,7 +45,7 @@ const Results = () => {
   const [filtersContainerDisplay, setFiltersContainerDisplay] = useState(null);
   const resultsFiltersContainerMobile = useRef(null);
   const filtersMenuMobile = useRef(null);
-
+  
   useEffect(() => {
     const handleWindowSize = () => {
       setWindowHeight(window.innerHeight);

@@ -26,7 +26,7 @@ const PremiumCard = ({ productData, direction }) => {
     };
 
   return (
-    <div className={`premiumcard-container ${
+    <div className={`premiumcard-container component-fadein ${
         direction ? "premiumcard-direct-normal" : "premiumcard-direct-reverse"
       }`}
       onClick={() => navigate(`/premium/${id}`)}

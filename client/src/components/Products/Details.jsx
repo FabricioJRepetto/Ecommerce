@@ -9,6 +9,7 @@ import { priceFormat } from "../../helpers/priceFormat";
 import { useCheckout } from "../../hooks/useCheckout";
 import ReturnButton from "../common/ReturnButton";
 import LoaderBars from "../common/LoaderBars";
+import Comments from "../common/Comments";
 
 import "./Details.css";
 
@@ -98,11 +99,14 @@ const Details = () => {
       if (data.error) {
         setError(data.message);
       } else {
-        if (data.premium) {
+        if (data.product.premium) {
             return navigate(`/premium/${data.id}`)
         }
-        setData(data);
-        setDescription(!!data.description);
+
+        //? new details destructuring
+        let product = {...data.product, comments: data.comments, allowComment: data.allowComment }
+        setData(product);
+        setDescription(!!product.description);
         handleAttributesColumns();
       }
 
@@ -171,6 +175,7 @@ const Details = () => {
                   <div className="details-title-container">
                     <p>{data.brand?.toUpperCase()}</p>
                     <h1>{data.name}</h1>
+                    <p>{parseFloat(data.average_calification) || 'Aún sin calificaciones'}</p>
                   </div>
 
                   <div className="details-price-section">
@@ -271,11 +276,17 @@ const Details = () => {
                           </div>
                         )
                     )
-                  )}
+                  )}                  
                 </div>
               </div>
             )}
           </div>
+
+          {(!/MLA/g.test(data._id)) && <Comments 
+            product_id={data._id}
+            comments={data.comments}
+            allowed={data.allowComment}/>}
+
         </div>
       )}
     </div>

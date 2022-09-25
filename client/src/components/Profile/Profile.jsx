@@ -33,6 +33,7 @@ const Profile = () => {
   const [address, setAddress] = useState([]);
   const [wishlist, setWishlist] = useState([]);
   const [history, setHistory] = useState([]);
+  const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [change, setChange] = useState(true)
 
@@ -56,12 +57,14 @@ const Profile = () => {
           axios(`/address/`),
           axios(`/wishlist/`),
           axios(`/history/`),
+          axios(`/order/userall`),
         ];
         const p = await Promise.allSettled(requests);
 
         p[0].value ? setAddress(p[0].value.data.address) : setAddress([]);
         p[1].value ? setWishlist(p[1].value.data.products) : setWishlist([]);
         p[2].value ? setHistory(p[2].value.data.products) : setHistory([]);
+        p[3].value ? setOrders(p[3].value.data) : setOrders([]);
 
         //? Notifica cuando se eliminaron productos que estaba en favoritos
         p[1].value.data.message &&
@@ -250,7 +253,12 @@ const Profile = () => {
           <ProfileDetails address={address} loading={loading} />
         )}
 
-        {render === "orders" && <Orders />}
+        {render === "orders" && 
+            <Orders 
+                orders={orders} 
+                loading={loading}
+            />
+        }
 
         {render === "address" && (
           <Address
