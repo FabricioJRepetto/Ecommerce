@@ -8,9 +8,9 @@ import { loadQuerys } from "../../Redux/reducer/productsSlice";
 import { priceFormat } from "../../helpers/priceFormat";
 import { useCheckout } from "../../hooks/useCheckout";
 import ReturnButton from "../common/ReturnButton";
+import LoaderBars from "../common/LoaderBars";
 
 import "./Details.css";
-import LoaderBars from "../common/LoaderBars";
 
 const Details = () => {
   let { id } = useParams();

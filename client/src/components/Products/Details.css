@@ -9,6 +9,7 @@
   align-items: center;
   overflow: hidden;
   overflow: -moz-hidden-unscrollable;
+  margin-top: 1rem;
 }
 
 .details-loader-container {
@@ -24,6 +25,7 @@
   flex-direction: row;
   justify-content: space-around;
   width: 65vw;
+  margin-top: 1rem;
 }
 
 .details-title-container {
