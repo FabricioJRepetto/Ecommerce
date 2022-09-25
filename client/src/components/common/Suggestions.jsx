@@ -38,6 +38,7 @@ const Suggestions = () => {
                     <MiniCard loading={true}/>
                     <MiniCard loading={true}/>
                     <MiniCard loading={true}/>
+                    <MiniCard loading={true}/>
                 </div>
                 : products 
                     ? <div className='suggestions-products-container'>
