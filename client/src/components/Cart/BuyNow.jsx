@@ -75,7 +75,7 @@ const BuyNow = () => {
         navigate("/");
       }
     } else {
-      const { data: p } = await axios(`/product/${data.buyNow}`);
+      const { data: {product: p} } = await axios(`/product/${data.buyNow}`);      
       if (p) {
         let aux = [];
         for (const obj of p.images) {
@@ -125,7 +125,7 @@ const BuyNow = () => {
     notification("Serás redirigido a la plataforma de pago", "", "warning");
     setTimeout(() => {
       window.location.replace(data.url);
-    }, 4000);
+    }, 3000);
     return null;
   };
 

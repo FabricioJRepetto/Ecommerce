@@ -1,13 +1,11 @@
 import React, { useState } from "react";
-import { useAxios } from "../../hooks/useAxios";
 import LoaderBars from "../common/LoaderBars";
 import OrderCard from "./OrderCard";
 import OrderDetails from "./OrderDetails";
 import "./Orders.css";
 
-const Orders = () => {
+const Orders = ({orders, loading}) => {
   const [orderDetails, setOrderDetails] = useState(null);
-  const { data: orders, loading } = useAxios("GET", `/order/userall/`);
 
   return (
     <div className="profile-all-orders-container">
@@ -20,7 +18,7 @@ const Orders = () => {
         ) : (
           <>
             <h1>Compras</h1>
-            <div className="profile-orders-container">
+            <div className="profile-orders-container component-fadeIn">
               {orders?.length ? (
                 React.Children.toArray(
                   orders?.map((e) => (
