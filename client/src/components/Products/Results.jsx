@@ -45,7 +45,7 @@ const Results = () => {
   const [filtersContainerDisplay, setFiltersContainerDisplay] = useState(null);
   const resultsFiltersContainerMobile = useRef(null);
   const filtersMenuMobile = useRef(null);
-  
+
   useEffect(() => {
     const handleWindowSize = () => {
       setWindowHeight(window.innerHeight);
@@ -342,18 +342,23 @@ const Results = () => {
                                 )
                             )
                           )}
+
+                          {productsFound?.length > 0 && (
+                            <>
+                              {React.Children.toArray(
+                                productsFound?.map(
+                                  (prod) =>
+                                    prod.available_quantity > 0 && (
+                                      <WishlistCard
+                                        productData={prod}
+                                        fav={wishlist.includes(prod._id)}
+                                      />
+                                    )
+                                )
+                              )}
+                            </>
+                          )}
                         </div>
-                      )}
-                      {React.Children.toArray(
-                        productsFound?.map(
-                          (prod) =>
-                            prod.available_quantity > 0 && (
-                              <WishlistCard
-                                productData={prod}
-                                fav={wishlist.includes(prod._id)}
-                              />
-                            )
-                        )
                       )}
                     </>
                   </div>
