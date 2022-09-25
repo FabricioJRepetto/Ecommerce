@@ -45,38 +45,31 @@ const AddAddress = ({
   // handle submit
   const handleAddress = async (addressData, prop) => {
     if (prop) {
-      const { data } = await axios.post(`/address/`, addressData);
-      setAddress(data.address);
+      try {
+        const { data } = await axios.post(`/address/`, addressData);
+        setAddress(data.address);
 
-      notification(
-        `${
-          data.address
-            ? "Nueva dirección creada correctamente"
-            : "Algo salió mal"
-        }`,
-        "",
-        `${data.address ? "success" : "warning"}`
-      );
+        if (location.pathname !== "/profile/address") {
+          setSelectedAdd(data.address.pop());
+          getAddress();
+        }
 
-      if (location.pathname !== "/profile/address") {
-        setSelectedAdd(data.address.pop());
-        getAddress();
+        notification("Nueva dirección creada correctamente", "", "success");
+      } catch (error) {
+        notification("Algo salió mal", "", "warning");
       }
     } else {
-      const { data } = await axios.put(
-        `/address/${addressToEditId}`,
-        addressData
-      );
-      setAddress(data.address);
-      notification(
-        `${
-          data.address === "OK"
-            ? "Dirección actualizada correctamente"
-            : "Algo salió mal"
-        }`,
-        "",
-        `${data.address ? "success" : "warning"}`
-      );
+      try {
+        const { data } = await axios.put(
+          `/address/${addressToEditId}`,
+          addressData
+        );
+
+        setAddress(data.address);
+        notification("Nueva dirección creada correctamente", "", "success");
+      } catch (error) {
+        notification("Algo salió mal", "", "warning");
+      }
     }
     reset();
     closeAddForm();

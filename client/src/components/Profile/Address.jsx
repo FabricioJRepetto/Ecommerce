@@ -22,37 +22,40 @@ const Address = ({ loading, setLoading, address, setAddress }) => {
   //? ADDRESS
   const deleteAddress = async (id) => {
     setLoading(true);
-    const { data, statusText } = await axios.delete(`/address/${id}`);
-    data.address ? setAddress(data.address) : setAddress([]);
-    setLoading(false);
-    notification(
-      `${statusText === "OK" ? "Dirección eliminada" : "Algo salió mal"}`,
-      "",
-      `${statusText === "OK" ? "success" : "warning"}`
-    );
+    try {
+      const { data } = await axios.delete(`/address/${id}`);
+      data.address ? setAddress(data.address) : setAddress([]);
+
+      notification("Dirección eliminada", "", "success");
+    } catch (error) {
+      notification("Algo salió mal", "", "warning");
+    } finally {
+      setLoading(false);
+    }
   };
 
   // set default address
   const setDefault = async (id) => {
-    const { data, statusText } = await axios.put(`/address/default/${id}`);
-    setAddress(data.address);
-    notification(
-      `${
-        statusText === "OK"
-          ? "Dirección predeterminada establecida"
-          : "Algo salió mal"
-      }`,
-      "",
-      `${statusText === "OK" ? "success" : "warning"}`
-    );
+    try {
+      const { data } = await axios.put(`/address/default/${id}`);
+      setAddress(data.address);
+
+      notification("Dirección predeterminada establecida", "", "success");
+    } catch (error) {
+      notification("Algo salió mal", "", "warning");
+    }
   };
 
   const getAddressToEdit = async (id) => {
-    const { data } = await axios(`/address/`);
-    const addressFound = data.address?.find((e) => e._id === id);
-    setAddressToEdit(addressFound);
-    openAddForm();
-    setAddressToEditId(id);
+    try {
+      const { data } = await axios(`/address/`);
+      const addressFound = data.address?.find((e) => e._id === id);
+      setAddressToEdit(addressFound);
+      openAddForm();
+      setAddressToEditId(id);
+    } catch (error) {
+      console.log(error); //! VOLVER A VER manejo de errores
+    }
   };
 
   return (
