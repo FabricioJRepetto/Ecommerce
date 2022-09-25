@@ -73,9 +73,9 @@ const Signupin = () => {
       if (error?.response?.data) {
         notification(error.response.data, "", "error");
       } else if (error.message) {
-        notification(error.message, '', 'warning');
+        notification(error.message, "", "warning");
       } else {
-        notification('El servidor está fuera de línea', '', 'warning');
+        notification("El servidor está fuera de línea", "", "warning");
       }
     } finally {
       closeLoader();
@@ -106,9 +106,9 @@ const Signupin = () => {
       if (error?.response?.data) {
         notification(error.response.data, "", "error");
       } else if (error.message) {
-        notification(error.message, '', 'warning');
+        notification(error.message, "", "warning");
       } else {
-        notification('El servidor está fuera de línea', '', 'warning');
+        notification("El servidor está fuera de línea", "", "warning");
       }
 
       dispatch(loadingUserData(false));
@@ -167,7 +167,11 @@ const Signupin = () => {
 
   return (
     <div className="signin-container">
-      <div className={`signin-inner ${flag ? "signin-visible" : ""}`}>
+      <div
+        className={`signin-inner${flag ? " signin-visible" : ""}${
+          signSelect === "forgotPassword" ? " signin-opacity" : ""
+        }`}
+      >
         <img
           src={
             "https://res.cloudinary.com/dsyjj0sch/image/upload/v1659650791/PROVIDER_LOGO_glitch_aberration_kt2hyv.png"
@@ -182,7 +186,7 @@ const Signupin = () => {
             signSelect === "forgotPassword" ? "signin-fadeout" : "signin-fadein"
           }`}
         >
-          <ForgotPassword />
+          <ForgotPassword openLoader={openLoader} closeLoader={closeLoader} />
           <ReturnButton to={""} onClick={() => handleSign("signin")} />
         </div>
 
