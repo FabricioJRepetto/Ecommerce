@@ -45,16 +45,17 @@ const AddAddress = ({
   // handle submit
   const handleAddress = async (addressData, prop) => {
     if (prop) {
-      const { data, statusText } = await axios.post(`/address/`, addressData);
+      const { data } = await axios.post(`/address/`, addressData);
       setAddress(data.address);
+
       notification(
         `${
-          statusText === "OK"
-            ? "Nueva dirección creada correctamente."
-            : "Algo salió mal."
+          data.address
+            ? "Nueva dirección creada correctamente"
+            : "Algo salió mal"
         }`,
         "",
-        `${statusText === "OK" ? "success" : "warning"}`
+        `${data.address ? "success" : "warning"}`
       );
 
       if (location.pathname !== "/profile/address") {
@@ -62,19 +63,19 @@ const AddAddress = ({
         getAddress();
       }
     } else {
-      const { data, statusText } = await axios.put(
+      const { data } = await axios.put(
         `/address/${addressToEditId}`,
         addressData
       );
       setAddress(data.address);
       notification(
         `${
-          statusText === "OK"
-            ? "Dirección actualizada correctamente."
-            : "Algo salió mal."
+          data.address === "OK"
+            ? "Dirección actualizada correctamente"
+            : "Algo salió mal"
         }`,
         "",
-        `${statusText === "OK" ? "success" : "warning"}`
+        `${data.address ? "success" : "warning"}`
       );
     }
     reset();
