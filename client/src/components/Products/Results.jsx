@@ -134,7 +134,13 @@ const Results = () => {
   };
 
   return (
-    <div className="results-container component-fadeIn">
+    <div
+      className={`results-container component-fadeIn${
+        loading || productsFound === "loading"
+          ? " results-container-center"
+          : ""
+      }`}
+    >
       {loading || productsFound === "loading" ? (
         <div className="component-fadeIn">
           <LoaderBars />
@@ -244,9 +250,13 @@ const Results = () => {
                       {React.Children.toArray(
                         breadCrumbs.map((c, index) => (
                           <>
-                            <div className="category-arrow-icon">
-                              {index > 0 ? <ChevronRightIcon /> : <></>}
-                            </div>
+                            {index > 0 ? (
+                              <div className="category-arrow-icon">
+                                <ChevronRightIcon />
+                              </div>
+                            ) : (
+                              <></>
+                            )}
                             <span
                               key={c.id}
                               onClick={() =>

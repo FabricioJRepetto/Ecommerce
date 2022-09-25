@@ -31,7 +31,7 @@ const PostSale = () => {
           console.error("no order");
           navigate("/");
         }
-        
+
         setOrder(data);
         setLoading(false);
 
@@ -64,7 +64,7 @@ const PostSale = () => {
             //? vaciar el buynow
             axios.post(`/cart/`, { product_id: "" });
           }
-          
+
           setOrder(data);
           setLoading(false);
 
@@ -111,7 +111,7 @@ const PostSale = () => {
           setTimeout(() => {
             setBackground("postsale-pending animation-loop");
           }, 6000);
-        }        
+        }
       })();
 
     return () => {};
@@ -119,15 +119,15 @@ const PostSale = () => {
   }, []);
 
   const deliveryWaiter = async (id) => {
-      const response = axios(`/order/postsale/${id}`);
-      
-      response.then(r =>{
-        if (r.data.status) {
-            setOrder(r.data);        
-        } else {
-            console.warn(r.data.message);
-        }
-      })
+    const response = axios(`/order/postsale/${id}`);
+
+    response.then((r) => {
+      if (r.data.status) {
+        setOrder(r.data);
+      } else {
+        console.warn(r.data.message);
+      }
+    });
   };
 
   const messageQuantity = () => {
@@ -175,7 +175,6 @@ const PostSale = () => {
                     <Spinner />
                   </div>
                 )}
-                
               </div>
             )}
             {status !== "approved" && (
@@ -191,7 +190,7 @@ const PostSale = () => {
                 </p>
               </div>
             )}
-            <p>{`Estado del pago: ${status}`}</p>
+            {/* <p>{`Estado del pago: ${status}`}</p> */}
             <p>
               Medio de pago:{" "}
               {order?.payment_source === "Stripe"
@@ -202,7 +201,15 @@ const PostSale = () => {
               Id de orden: <i>{order?.id}</i>
             </p>
             <div className="postsale-back-container">
-              <ReturnButton to={status === "approved" ? "/" : order.order_type === "buynow" ? `/details/${order.products[0].product_id}` : "/cart"} />
+              <ReturnButton
+                to={
+                  status === "approved"
+                    ? "/"
+                    : order.order_type === "buynow"
+                    ? `/details/${order.products[0].product_id}`
+                    : "/cart"
+                }
+              />
             </div>
           </div>
         </div>
