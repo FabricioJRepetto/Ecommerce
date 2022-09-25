@@ -16,7 +16,7 @@ const PremiumDetails = () => {
   const [product, setProduct] = useState(false);
   const [images, setImages] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false)
+  const [error, setError] = useState(false);
   const [tabOpen, setTabOpen] = useState(false);
   const { addToCart, buyNow } = useCheckout();
   const { wishlist } = useSelector((state) => state.cartReducer);
@@ -101,7 +101,7 @@ const PremiumDetails = () => {
       if (data.error) {
         setError(data.message)
       } else if (!data.product.premium) {
-        setError('ID de producto incorrecta')
+        setError('ID de producto incorrecto')
       } else {
         let product = {...data.product, comments: data.comments, allowComment: data.allowComment }
         setProduct(product);
@@ -121,12 +121,12 @@ const PremiumDetails = () => {
   return (
     <div className="premiumdetails-container component-fadeIn">
       {loading && <></>}
-      {error && 
+      {error && (
         <div className="premiumdetails-error component-fadeIn">
-            <h1>{error}</h1>
+          <h1>{error}</h1>
         </div>
-      }
-       {product &&(
+      )}
+      {product && (
         <div className="premiumdetails-content component-fadeIn">
           <div className="premiumdetails-head">
             <div className="provider-premium-sign"></div>
