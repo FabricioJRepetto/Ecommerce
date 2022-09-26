@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
@@ -35,15 +35,18 @@ const Profile = () => {
   const [history, setHistory] = useState([]);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [change, setChange] = useState(true)
+  const [change, setChange] = useState(true);
 
   const { wishlist: wl_id } = useSelector((state) => state.cartReducer);
   const { session } = useSelector((state) => state.sessionReducer);
 
+  const [widnowWidth, setWindowWidth] = useState(window.innerWidth);
   const [showMenu, setShowMenu] = useState(false);
+  const [containerDisplay, setContainerDisplay] = useState(null);
+  const profileMenuContainerMobile = useRef(null);
 
   useEffect(() => {
-    setChange(!change)
+    setChange(!change);
     setRender(section || "details");
     // eslint-disable-next-line
   }, [section]);
@@ -77,46 +80,84 @@ const Profile = () => {
   }, [wl_id]);
 
   const sections = [
-    'details',
-    'address',
-    'orders',
-    'wishlist',
-    'history',
-    'password'
+    "details",
+    "address",
+    "orders",
+    "wishlist",
+    "history",
+    "password",
   ];
   const sectionsEsp = {
-    details: 'PERFIL',
-    address: 'DIRECCIONES',
-    orders: 'COMPRAS',
-    wishlist: 'FAVORITOS',
-    history: 'HISTORIAL',
-    password: 'CONTRASEÑA'
+    details: "PERFIL",
+    address: "DIRECCIONES",
+    orders: "COMPRAS",
+    wishlist: "FAVORITOS",
+    history: "HISTORIAL",
+    password: "CONTRASEÑA",
   };
+
+  useEffect(() => {
+    const handleWindowSize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleWindowSize);
+
+    return () => {
+      window.removeEventListener("resize", handleWindowSize);
+      document.documentElement.style.overflowY = "auto";
+    };
+    // eslint-disable-next-line
+  }, []);
+
+  useEffect(() => {
+    if (profileMenuContainerMobile.current) {
+      let menuContainerDisplay = window
+        .getComputedStyle(profileMenuContainerMobile.current)
+        .getPropertyValue("display");
+
+      containerDisplay !== menuContainerDisplay &&
+        setContainerDisplay(menuContainerDisplay);
+    }
+    // eslint-disable-next-line
+  }, [profileMenuContainerMobile.current, widnowWidth]);
+
+  useEffect(() => {
+    if (containerDisplay === "flex" && showMenu) {
+      document.documentElement.style.overflow = "hidden";
+    } else {
+      document.documentElement.style.overflowY = "auto";
+    }
+  }, [containerDisplay, showMenu]);
 
   return (
     <div className="profile-container component-fadeIn">
-      {/* <div
+      <div
         className={`navbar-menu-mobile-background ${
-          !showMenu ? "hide-menu-mobile-background" : ""
+          !showMenu
+            ? "hide-menu-mobile-background"
+            : "profile-menu-mobile-background"
         }`}
         onClick={() => setShowMenu(false)}
-      ></div> */}
-
-      <div className={`profile-section-indicator ${change ? "spt-text" : "spt-textb"}`}>{sectionsEsp[render]}</div>
+      ></div>
 
       <div
-        className={`profile-menu-container profile-menu-container-placeholder profile-menu-container-placeholder-mobile${
-          showMenu
-            ? " profile-menu-container-show"
-            : " profile-menu-container-hide"
+        className={`profile-section-indicator ${
+          change ? "spt-text" : "spt-textb"
         }`}
-      ></div>
+      >
+        {sectionsEsp[render]}
+      </div>
+
+      <div className="profile-menu-container profile-menu-container-placeholder profile-menu-container-placeholder-mobile profile-menu-container-hide"></div>
+
       <div
         className={`profile-menu-container profile-menu-container-fixed profile-menu-container-mobile${
           showMenu
             ? " profile-menu-container-show"
             : " profile-menu-container-hide"
         }`}
+        ref={profileMenuContainerMobile}
       >
         <ul>
           <div style={{ height: "1rem" }}></div>
@@ -248,17 +289,11 @@ const Profile = () => {
       </div>
 
       <div className="profile-option-selected-container">
-
         {render === "details" && (
           <ProfileDetails address={address} loading={loading} />
         )}
 
-        {render === "orders" && 
-            <Orders 
-                orders={orders} 
-                loading={loading}
-            />
-        }
+        {render === "orders" && <Orders orders={orders} loading={loading} />}
 
         {render === "address" && (
           <Address
@@ -280,7 +315,6 @@ const Profile = () => {
         {render === "password" && <UpdatePassword />}
 
         {!sections.includes(section) && <NotFound />}
-
       </div>
     </div>
   );

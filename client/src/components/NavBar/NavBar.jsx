@@ -38,6 +38,43 @@ const NavBar = () => {
   const [showMenu, setShowMenu] = useState(false);
   const location = useLocation();
   const signOut = useSignout();
+  const [widnowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [containerDisplay, setContainerDisplay] = useState(null);
+  const menuMobileContainerMobile = useRef(null);
+
+  useEffect(() => {
+    const handleWindowSize = () => {
+      setWindowWidth(window.innerWidth);
+    };
+
+    window.addEventListener("resize", handleWindowSize);
+
+    return () => {
+      window.removeEventListener("resize", handleWindowSize);
+      document.documentElement.style.overflowY = "auto";
+    };
+    // eslint-disable-next-line
+  }, []);
+
+  useEffect(() => {
+    if (menuMobileContainerMobile.current) {
+      let menuContainerDisplay = window
+        .getComputedStyle(menuMobileContainerMobile.current)
+        .getPropertyValue("display");
+
+      containerDisplay !== menuContainerDisplay &&
+        setContainerDisplay(menuContainerDisplay);
+    }
+    // eslint-disable-next-line
+  }, [menuMobileContainerMobile.current, widnowWidth]);
+
+  useEffect(() => {
+    if (containerDisplay === "flex" && showMenu) {
+      document.documentElement.style.overflow = "hidden";
+    } else {
+      document.documentElement.style.overflowY = "auto";
+    }
+  }, [containerDisplay, showMenu]);
 
   useEffect(() => {
     const glitchLogos = document.querySelectorAll(".little-glitch");
@@ -70,7 +107,7 @@ const NavBar = () => {
       })
     );
 
-    const miniLogo = document.querySelectorAll(".mini-glitch");
+    /* const miniLogo = document.querySelectorAll(".mini-glitch");
     miniLogo.forEach((logo) =>
       PowerGlitch.glitch(logo, {
         imageUrl:
@@ -98,7 +135,7 @@ const NavBar = () => {
           hueRotate: true,
         },
       })
-    );
+    ); */
 
     const controlSubsectionBar = () => {
       window.scrollY > 80 && setShowSubsectionBar(true);
@@ -161,7 +198,7 @@ const NavBar = () => {
               : () => [logoClick(), setShowMenu(false)]
           }
         ></div>
-        <div
+        {/* <div
           className={`mini-glitch glitch-mobile${
             showMenu ? " mini-glitch-show-menu" : ""
           }`}
@@ -171,7 +208,7 @@ const NavBar = () => {
               ? () => navigate("/")
               : () => [logoClick(), setShowMenu(false)]
           }
-        ></div>
+        ></div> */}
       </div>
 
       <div className="navbar">
@@ -483,6 +520,7 @@ const NavBar = () => {
       ></div>
       <div
         className={`navbar-menu-mobile${showMenu ? " show-menu-mobile" : ""}`}
+        ref={menuMobileContainerMobile}
       >
         <ul>
           {!session && (
