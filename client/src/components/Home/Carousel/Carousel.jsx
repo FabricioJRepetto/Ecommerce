@@ -145,7 +145,7 @@ const Slider = (prop) => {
     >
       <div className="slide" style={{ maxWidth: width, maxHeight: height }}>
         <div
-          className="slide-inner"
+          className="slide-inner component-fadeIn"
           style={{ maxWidth: width }}
           id={id}
           ref={slider}

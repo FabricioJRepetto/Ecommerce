@@ -125,7 +125,6 @@ const PostSale = () => {
               }, 6000);
             }
         } catch (error) {
-            console.log(error);
             setError(
                 {
                     message: error?.message || false, 
@@ -172,8 +171,8 @@ const PostSale = () => {
                 <h1>ups!</h1>
                 <h2>{error.dbMessage || error.message}</h2>
                 <br/>
-                <p>{error.status+' '+error.statusText}</p>
-                <p>{error.message}</p>
+                <p>{error.status && error.status+' '+error.statusText && error.statusText}</p>
+                <p>{error.dbMessage && error.message}</p>
                 <ReturnButton to={'/'}/>
                </>
       :<div>{loading && !order ? (
