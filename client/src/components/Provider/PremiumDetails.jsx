@@ -8,6 +8,8 @@ import { resizer } from "../../helpers/resizer";
 import Carousel from "../Home/Carousel/Carousel";
 import { ArrowDownIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import { WishlistButton } from "../Products/WishlistButton";
+import Calification from "../common/Comments/Calification";
+import Comments from "../common/Comments/Comments";
 
 import "./PremiumDetails.css";
 
@@ -108,6 +110,7 @@ const PremiumDetails = () => {
           comments: data.comments,
           allowComment: data.allowComment,
         };
+        console.log(product);
         setProduct(product);
 
         let aux = product.images.map((e) => ({
@@ -163,6 +166,8 @@ const PremiumDetails = () => {
               ) : (
                 <h1 className="premiumdetails-name">{product.name}</h1>
               )}
+
+              <Calification num={product.average_calification}/>
 
               <div className="pd-head-price">
                 <h2>{product.premiumData.miniDescription}</h2>
@@ -392,6 +397,11 @@ const PremiumDetails = () => {
               ></div>
             )}
           </div>
+
+          <Comments 
+            product_id={product.id} 
+            comments={product.comments} 
+            allowed={product.allowComment}/>
 
           <div
             className={`premiumdetails-fixed ${
