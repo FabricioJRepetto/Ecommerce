@@ -328,19 +328,23 @@ const Results = () => {
                   </div>
 
                   <div className="results-inner">
-                    <>
+                    <div className="own-products-container">
                       {productsOwn?.length > 0 && (
-                        <div className="own-products-container">
-                          {React.Children.toArray(
-                            productsOwn?.map(
-                              (prod) =>
-                                prod.available_quantity > 0 && (
-                                  <WishlistCard
-                                    productData={prod}
-                                    fav={wishlist.includes(prod._id)}
-                                  />
+                        <>
+                          {productsOwn?.length > 0 && (
+                            <>
+                              {React.Children.toArray(
+                                productsOwn?.map(
+                                  (prod) =>
+                                    prod.available_quantity > 0 && (
+                                      <WishlistCard
+                                        productData={prod}
+                                        fav={wishlist.includes(prod._id)}
+                                      />
+                                    )
                                 )
-                            )
+                              )}
+                            </>
                           )}
 
                           {productsFound?.length > 0 && (
@@ -358,9 +362,9 @@ const Results = () => {
                               )}
                             </>
                           )}
-                        </div>
+                        </>
                       )}
-                    </>
+                    </div>
                   </div>
                 </div>
               </div>
