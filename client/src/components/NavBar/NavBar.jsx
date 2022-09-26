@@ -70,7 +70,7 @@ const NavBar = () => {
       })
     );
 
-    const miniLogo = document.querySelectorAll(".mini-glitch");
+    /* const miniLogo = document.querySelectorAll(".mini-glitch");
     miniLogo.forEach((logo) =>
       PowerGlitch.glitch(logo, {
         imageUrl:
@@ -98,7 +98,7 @@ const NavBar = () => {
           hueRotate: true,
         },
       })
-    );
+    ); */
 
     const controlSubsectionBar = () => {
       window.scrollY > 80 && setShowSubsectionBar(true);
@@ -161,7 +161,7 @@ const NavBar = () => {
               : () => [logoClick(), setShowMenu(false)]
           }
         ></div>
-        <div
+        {/* <div
           className={`mini-glitch glitch-mobile${
             showMenu ? " mini-glitch-show-menu" : ""
           }`}
@@ -171,7 +171,7 @@ const NavBar = () => {
               ? () => navigate("/")
               : () => [logoClick(), setShowMenu(false)]
           }
-        ></div>
+        ></div> */}
       </div>
 
       <div className="navbar">
