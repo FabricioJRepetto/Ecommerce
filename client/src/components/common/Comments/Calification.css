@@ -1,0 +1,45 @@
+
+.calification-outer {
+    position: relative;
+    top: 0;
+    align-self: center;
+    justify-self: center;
+    min-height: 2rem;
+    -webkit-user-select: none;
+    user-select: none;
+}
+.calification-outer:hover .calification-tooltip{
+    opacity: 1;
+}
+.calification-tooltip {
+    position: absolute;
+    top: -100%;
+    left: 50%;
+    translate: -50%;
+    opacity: 0;
+    font-size: 1rem;
+    padding: .5rem 1rem;
+    text-align: center;
+    pointer-events: none;
+    background-color: #101010;
+    transition: opacity .2s ease;
+}
+
+.calification-container {
+    height: 2rem;
+    width: 10rem;
+    
+    mask-image: url('../../../assets/svg/star.svg');
+    scale: .6;
+}
+.calification-background {
+    height: 100%;
+    background: linear-gradient(45deg,
+        #35a7ff 0%,
+        #7e54de 20%,
+        #f40259 60%,
+        #fea30d 100%);
+    mask-image: url('../../../assets/svg/star.svg');
+    background-size: 400% 100%;
+    animation: gradientTextAnim 10s infinite;
+}

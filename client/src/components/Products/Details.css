@@ -50,7 +50,10 @@
   align-items: center;
   position: relative;
 }
-
+.details-calification {
+    color: #656565;
+    padding-top: .5rem;
+}
 .details-price-section {
   margin-bottom: 1rem;
 }
@@ -62,6 +65,9 @@
 .details-sale-section {
   display: flex;
   justify-content: center;
+}
+.details-sale-section:first-child {
+    color: #656565;
 }
 
 .details-spinner {

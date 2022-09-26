@@ -9,7 +9,8 @@ import { priceFormat } from "../../helpers/priceFormat";
 import { useCheckout } from "../../hooks/useCheckout";
 import ReturnButton from "../common/ReturnButton";
 import LoaderBars from "../common/LoaderBars";
-import Comments from "../common/Comments";
+import Comments from "../common/Comments/Comments";
+import Calification from "../common/Comments/Calification";
 
 import "./Details.css";
 
@@ -95,7 +96,6 @@ const Details = () => {
     (async () => {
       setLoading(true);
       const { data } = await axios(`/product/${id}`);
-
       if (data.error) {
         setError(data.message);
       } else {
@@ -172,10 +172,14 @@ const Details = () => {
               {data && <Galery imgs={data.images} ripple={true} />}
               <div className="details-head-section">
                 <div>
-                  <div className="details-title-container">
-                    <p>{data.brand?.toUpperCase()}</p>
+                  <div className="details-title-container">    
+                    <p style={{color: '#656565'}}>{data.brand?.toUpperCase()}</p>
                     <h1>{data.name}</h1>
-                    <p>{parseFloat(data.average_calification) || 'Aún sin calificaciones'}</p>
+
+                    {data.average_calification && data.average_calification !== '0' 
+                    ? <Calification num={parseFloat(data.average_calification)} hover/>
+                    : <p className="details-calification">Aún sin reseñas</p>}
+
                   </div>
 
                   <div className="details-price-section">
