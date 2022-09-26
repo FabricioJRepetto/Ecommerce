@@ -24,6 +24,13 @@
     justify-content: space-evenly;
 }
 
+.footer-links-container>div {
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
 .footer-links-container ul {
     padding: 1rem 0;
     width: 200px;
@@ -43,4 +50,14 @@
     background-color: #111111;
     padding: 1rem 0;
     border-top: 1px solid #737373
+}
+
+@media (max-width:499px) {
+    .footer-links-container {
+        flex-direction: column-reverse;
+    }
+
+    .footer-links-container>div {
+        padding-bottom: 1.5rem;
+    }
 }

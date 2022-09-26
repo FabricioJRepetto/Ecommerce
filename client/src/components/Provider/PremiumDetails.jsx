@@ -99,11 +99,15 @@ const PremiumDetails = () => {
     (async () => {
       const { data } = await axios(`/product/${id}`);
       if (data.error) {
-        setError(data.message)
+        setError(data.message);
       } else if (!data.product.premium) {
-        setError('ID de producto incorrecto')
+        setError("ID de producto incorrecto");
       } else {
-        let product = {...data.product, comments: data.comments, allowComment: data.allowComment }
+        let product = {
+          ...data.product,
+          comments: data.comments,
+          allowComment: data.allowComment,
+        };
         setProduct(product);
 
         let aux = product.images.map((e) => ({
@@ -177,7 +181,7 @@ const PremiumDetails = () => {
                     </div>
                   ) : (
                     product.free_shipping && (
-                      <p className="provider-text">¡Envío gratis!</p>
+                      <p className="provider-text">Envío gratis</p>
                     )
                   )}
                 </div>
