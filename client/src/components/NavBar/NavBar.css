@@ -95,6 +95,14 @@
 }
 
 @media (max-width: 1023px) {
+  .cart-icon-container {
+    scale: .9;
+  }
+
+  .navbar-search-mobile-button {
+    scale: .9;
+  }
+
   .navbar {
     margin-bottom: 0;
   }
@@ -169,6 +177,10 @@
 
 /*//! DESKTOP */
 @media (min-width: 1024px) {
+  .little-glitch {
+    background-color: #000000;
+  }
+
   .navbar-profile-button {
     display: flex;
   }
@@ -316,7 +328,8 @@
   }
 
   .navbar-central-section {
-    width: 0;
+    display: none;
+    /*   width: 0; */
   }
 
   .navbar-profile-section {
@@ -719,7 +732,6 @@
   padding: 0;
   /*  transform: translateY(2px); */
   z-index: 60;
-  background-color: #000000;
 }
 
 /* .little-glitch-postsale {

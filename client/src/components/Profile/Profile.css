@@ -85,6 +85,10 @@
   width: 3.2rem;
 }
 
+.profile-menu-mobile-background {
+  z-index: 40;
+}
+
 .profile-menu-container-hide .chromatic-text {
   display: none;
 }
@@ -191,13 +195,13 @@
 }
 
 .profile-section-indicator {
-    position: fixed;
-    top: 5%;
-    left: 5%;
-    min-width: 450px;
-    width: 40vw;
-    font-family: HelveticaNeueLTPro-Hv, Poppins;
-    font-size: 15vw;
-    color: #151515;
-    z-index: -1;
+  position: fixed;
+  top: 5%;
+  left: 5%;
+  min-width: 450px;
+  width: 40vw;
+  font-family: HelveticaNeueLTPro-Hv, Poppins;
+  font-size: 15vw;
+  color: #151515;
+  z-index: -1;
 }
