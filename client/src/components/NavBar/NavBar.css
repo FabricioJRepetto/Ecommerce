@@ -95,6 +95,14 @@
 }
 
 @media (max-width: 1023px) {
+  .cart-icon-container {
+    scale: .9;
+  }
+
+  .navbar-search-mobile-button {
+    scale: .9;
+  }
+
   .navbar {
     margin-bottom: 0;
   }
@@ -320,7 +328,8 @@
   }
 
   .navbar-central-section {
-    width: 0;
+    display: none;
+    /*   width: 0; */
   }
 
   .navbar-profile-section {
