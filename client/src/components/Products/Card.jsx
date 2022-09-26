@@ -40,7 +40,7 @@ const Card = ({
 
   const editProduct = (prodId) => {
     dispatch(loadIdProductToEdit(prodId));
-    navigate("/admin/productForm");
+    navigate("/admin/create");
   };
 
   return (

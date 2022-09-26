@@ -46,7 +46,7 @@ const Card = ({
 
   const editProduct = (prodId) => {
     dispatch(loadIdProductToEdit(prodId));
-    navigate("/admin/productForm");
+    navigate("/admin/create");
   };
 
   return (
@@ -120,10 +120,23 @@ const Card = ({
                 </div>
 
                 {on_sale && (
-                  <div className="minicard-sale-section">
-                    <Sale className="onsale-svg" />
-                    <p>{`${Math.round(discount)}% off`}</p>
-                  </div>
+                  <>
+                    <div className="minicard-sale-section">
+                      <Sale className="onsale-svg" />
+                      <p>{`${Math.round(discount)}% off`}</p>
+                    </div>
+                    {location.pathname === "/admin/products" && (
+                      <p
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openRemoveDiscount({ prodId, name });
+                        }}
+                      >
+                        {" "}
+                        X
+                      </p>
+                    )}
+                  </>
                 )}
               </div>
               {available_quantity < 10 && available_quantity > 1 && (
