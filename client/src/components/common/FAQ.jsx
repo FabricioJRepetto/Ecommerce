@@ -128,6 +128,14 @@ const FAQ = () => {
                           que recopila ofertas propias y de Mercadolibre en un
                           solo lugar.
                         </li>
+                        <li>
+                          La posibilidad de dejar <b className="provider-text">reseñas</b>{" "} 
+                          en los productos que has comprado. Estas afectan y 
+                          modifican la calificación general del producto.
+                        </li>
+                        <li>
+                          <b className="provider-text">Ventas</b>{" "} #Sección en construcción#
+                        </li>
                       </ul>
                       En <b>Provider Store</b> podrás navegar solo entre
                       nuestros productos (dejando de lado los de Mercadolibre).
