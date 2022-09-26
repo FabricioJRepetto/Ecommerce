@@ -14,13 +14,15 @@ export const useCheckout = (id) => {
 
   const addToCart = async (id) => {
     if (session) {
-      const { statusText, data } = await axios.post(`/cart/${id}`);
-      statusText === "OK" && !cart.includes(id) && dispatch(addCart(id));
-      notification(
-        data.message,
-        "/cart",
-        `${statusText === "OK" ? "success" : "warning"}`
-      );
+      try {
+        const { data } = await axios.post(`/cart/${id}`);
+
+        data.ok && !cart.includes(id) && dispatch(addCart(id));
+        notification(data.message, "/cart", "success");
+      } catch (error) {
+        console.log(error);
+        notification("Hubo un problema", "/cart", "warning"); //! VOLVER A VER manejo de errores
+      }
     } else {
       notification("Inicia sesión para comprar", "/signin", "warning");
     }
@@ -28,8 +30,12 @@ export const useCheckout = (id) => {
 
   const buyNow = async (id) => {
     if (session) {
-      await axios.post(`/cart/`, { product_id: id });
-      navigate("/buyNow");
+      try {
+        await axios.post(`/cart/`, { product_id: id });
+        navigate("/buyNow");
+      } catch (error) {
+        console.log(error); //! VOLVER A VER manejo de errores
+      }
     } else {
       notification("Inicia sesión para comprar", "/signin", "warning");
     }
