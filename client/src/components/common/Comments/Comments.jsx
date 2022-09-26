@@ -7,17 +7,29 @@ import { useSelector } from 'react-redux'
 import { ReactComponent as Spinner } from "../../../assets/svg/spinner.svg";
 
 import './Comments.css'
+import { useEffect } from 'react'
 
 const Comments = ({product_id, comments, allowed}) => {
     const notification = useNotification();
     const [allowComment, setAllowComment] = useState(allowed)
     const [editMode, setEditMode] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [allComments, setAllComments] = useState(comments);
+    const [allComments, setAllComments] = useState(false);
     const [calification, setCalification] = useState(0);
     const [text, setText] = useState('');
     const [calPreview, setCalPreview] = useState(false)
     const { id, name: userName, avatar } = useSelector((state) => state.sessionReducer);
+
+    useEffect(() => { //? mover el comentario del usuario al principio
+        let index = comments.findIndex(c => c.comment.user_id === id);
+        let aux = [...comments];
+        let target = comments[index]
+        aux.splice(aux.length, 0, target);
+        aux.splice(index, 1);
+
+        setAllComments(aux)
+      // eslint-disable-next-line
+    }, [])
 
     const submitHandler = async () => { 
         if (!text) {
@@ -51,11 +63,8 @@ const Comments = ({product_id, comments, allowed}) => {
                             c.comment.calification = calification;                            
                         }
                     })
-                    //setAllComments()
                     setEditMode(false)
                 } else {
-                    //! @@@@@@@@@@@@@@@@@@@
-                    console.log(`%c ${data.new_id}`, 'color: orange; font-weight: bold;');
                     const newComment = {
                         comment: {
                             text,
@@ -65,12 +74,11 @@ const Comments = ({product_id, comments, allowed}) => {
                             _id: data.new_id
                         },
                         user_data: {
-                            userName,
+                            name: userName,
                             avatar
                         }
                     }
-                    console.log([newComment,...allComments]);
-                    setAllComments([newComment,...allComments]);
+                    setAllComments([...allComments, newComment]);
                     setAllowComment(false)
                 }
 
@@ -90,38 +98,41 @@ const Comments = ({product_id, comments, allowed}) => {
     
   return (
     <div className='comments-section-container component-fadeIn'>
-        {(allowComment || editMode) &&
-            <div className='comments-section-input-box component-fadeIn'>
-                {!loading 
-                ? <>
-                    <h2>Cuentanos algo sobre este producto</h2>
 
-                    <CalificationInput 
-                        calification={calification} 
-                        setCalification={setCalification} 
-                        setCalPreview={setCalPreview} 
-                        calPreview={calPreview}/>
+        <div className='comments-section-header'>
+            <h1>OPINIONES</h1>
+            {
+                <div className={`comments-section-input-box ${(allowComment || editMode) ? 'comment-fadeIn' : 'comment-fadeOut'}`}>
+                    {!loading 
+                    ? <>
+                        <h2>Cuentanos algo sobre este producto</h2>
 
-                    <textarea name="comment-text" maxLength={250} 
-                        placeholder='Escribe una reseña' cols="50" rows="8"
-                        value={text}
-                        onChange={(e)=>setText(e.target.value)}></textarea>
-                    <div>
-                        <button className='g-white-button ' onClick={submitHandler}> Publicar </button>
-                        {editMode && <button className='g-white-button secondary-button' onClick={()=>setEditMode(false)}> Cancelar </button>}
-                    </div>
-                </>
-                : <>
-                    <Spinner />
-                </>
-                }
+                        <CalificationInput 
+                            calification={calification} 
+                            setCalification={setCalification} 
+                            setCalPreview={setCalPreview} 
+                            calPreview={calPreview}/>
 
-            </div>}
-        <br/>        
+                        <textarea name="comment-text" maxLength={250} 
+                            placeholder='Escribe una reseña' cols="50" rows="8"
+                            value={text}
+                            onChange={(e)=>setText(e.target.value)}></textarea>
+                        <div className='comment-button-container'>
+                            <button className='g-white-button ' onClick={submitHandler}> Publicar </button>
+                            {editMode && <button className='g-white-button secondary-button' onClick={()=>setEditMode(false)}> Cancelar </button>}
+                        </div>
+                    </>
+                    : <>
+                        <Spinner className='spinner-test'/>
+                    </>
+                    }
+                </div>}
+        </div>
+
         {allComments?.length > 0
-            ? <div>{allComments.map(c => (
+            ? <div className='comments-container'>{allComments.map(c => (
                 <CommentCard key={c.comment.user_id} props={c} 
-                editable={c.comment.user_id === id} edit={editComment}/>                
+                editable={c.comment.user_id === id} edit={editComment} editing={editMode}/>                
             ))}</div>
             : <h2>Aún sin comentarios</h2>
         }

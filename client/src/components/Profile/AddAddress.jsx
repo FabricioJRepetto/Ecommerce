@@ -235,9 +235,9 @@ const AddAddress = ({
 
         <div className="add-address-buttons-container">
           <button className="g-white-button">
-            {prop ? "Agregar dirección" : "Editar dirección"}
+            {prop ? "Agregar" : "Actualizar"}
           </button>
-          <button onClick={() => closeAddForm(true)} className="g-white-button">
+          <button onClick={() => closeAddForm(true)} className="g-white-button secondary-button">
             Cancelar
           </button>
         </div>

@@ -25,7 +25,7 @@ const CalificationInput = ({setCalPreview, setCalification, calification, calPre
                             onMouseEnter={()=>setCalPreview(5)} 
                             onMouseLeave={()=>setCalPreview(false)}
                             onClick={()=>setCalification(5)}></div>
-                        <Calification num={calPreview || calification} />
+                        <Calification num={calPreview || calification} input/>
                     </div>
                 </div>
   )

@@ -105,7 +105,6 @@ const Details = () => {
 
         //? new details destructuring
         let product = {...data.product, comments: data.comments, allowComment: data.allowComment }
-        console.log(product);
         setData(product);
         setDescription(!!product.description);
         handleAttributesColumns();
