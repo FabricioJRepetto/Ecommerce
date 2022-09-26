@@ -48,9 +48,13 @@
   }
 }
 
-@media (max-height:570px) {
+@media (max-height:599px) {
   .signin-inner .signin-signs-container {
     padding-top: 0;
+  }
+
+  .signin-container {
+    justify-content: flex-start;
   }
 }
 
