@@ -329,7 +329,8 @@ const Results = () => {
 
                   <div className="results-inner">
                     <div className="own-products-container">
-                      {productsOwn?.length > 0 && (
+                      {(productsOwn?.length > 0 ||
+                        productsFound?.length > 0) && (
                         <>
                           {productsOwn?.length > 0 && (
                             <>
