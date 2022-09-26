@@ -401,7 +401,7 @@ const Products = () => {
   }, [filtersContainerMobile.current, widnowWidth]);
 
   useEffect(() => {
-    if (filtersContainerDisplay === "inline" && showFiltersMenu) {
+    if (filtersContainerDisplay === "block" && showFiltersMenu) {
       document.documentElement.style.overflow = "hidden";
     } else {
       document.documentElement.style.overflowY = "auto";

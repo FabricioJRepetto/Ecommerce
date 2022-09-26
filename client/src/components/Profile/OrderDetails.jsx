@@ -19,8 +19,8 @@ const OrderDetails = ({ order, setOrderDetails }) => {
   }, []);
 
   return (
-    <div>
-      <h1>Resumen de la compra</h1>
+    <div className="profile-order-resume-container">
+      <h1>Resúmen</h1>
       <span>
         <div className="order-details-carousel-info-container">
           {order.images.length && order.images.length > 1 ? (

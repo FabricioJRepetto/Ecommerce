@@ -340,8 +340,12 @@
 
   div.wishlist-card-container i.special-card {
     top: 0.2rem;
-    /* left: 4rem; */
   }
+
+  .profile-wishlist-container div.wishlist-card-container i.special-card {
+    left: 4rem;
+  }
+
 }
 
 @media (max-width: 434px) {
@@ -351,7 +355,10 @@
 
   .wishlist-card-container i.special-card {
     top: 0.2rem;
-    /* left: 3rem; */
+  }
+
+  .profile-wishlist-container .wishlist-card-container i.special-card {
+    left: 3rem;
   }
 }
 
