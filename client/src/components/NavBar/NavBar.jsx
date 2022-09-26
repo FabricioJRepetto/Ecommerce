@@ -69,7 +69,6 @@ const NavBar = () => {
   }, [menuMobileContainerMobile.current, widnowWidth]);
 
   useEffect(() => {
-    console.log("containerDisplay", containerDisplay);
     if (containerDisplay === "flex" && showMenu) {
       document.documentElement.style.overflow = "hidden";
     } else {
