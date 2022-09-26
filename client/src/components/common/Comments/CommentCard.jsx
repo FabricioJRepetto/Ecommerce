@@ -1,18 +1,28 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 import Calification from './Calification';
 
-const CommentCard = ({props, editable, edit}) => {
+const CommentCard = ({props, editable, edit, editing}) => {
+    const [visible, setVisible] = useState(true);
 
     const dateGetter = (str) => { 
         var rx = /^\d{1,2}\/\d{1,2}\/\d{4}/g;
         var arr = rx.exec(str);
         return arr[0]; 
      }
+     useEffect(() => {
+       !editing && setVisible(true)
+     }, [editing])
+     
+
+     const editHandler = () => {
+        setVisible(false)
+        edit(props.comment._id)
+      }
 
     return (
-        <div className='comment-card-container'>
+        <div className={`comment-card-container ${visible ? 'comment-fadeIn' : 'comment-fadeOut'}`}>
             {editable && <div className='comment-card-edit-button'
-                onClick={()=>edit(props.comment._id)}></div>}
+                onClick={editHandler}></div>}
 
             <div key={props.comment.user_id}>
                 <div className="comment-card-header">
