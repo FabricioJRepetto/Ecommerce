@@ -16,7 +16,6 @@ export const useCheckout = (id) => {
     if (session) {
       try {
         const { data } = await axios.post(`/cart/${id}`);
-        console.log("data", data);
 
         data.ok && !cart.includes(id) && dispatch(addCart(id));
         notification(data.message, "/cart", "success");
