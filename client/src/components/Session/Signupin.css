@@ -48,6 +48,12 @@
   }
 }
 
+@media (max-height:570px) {
+  .signin-inner .signin-signs-container {
+    padding-top: 0;
+  }
+}
+
 .signin-forgot-visible {
   align-items: center;
 }
