@@ -134,7 +134,7 @@ const Comments = ({product_id, comments, allowed}) => {
                 <CommentCard key={c.comment.user_id} props={c} 
                 editable={c.comment.user_id === id} edit={editComment} editing={editMode}/>                
             ))}</div>
-            : <h2>Este producto aún no tiene opiniones</h2>
+            : <h2 className='comments-no-comments'>Este producto aún no tiene opiniones</h2>
         }
     </div>    
   )

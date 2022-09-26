@@ -2,7 +2,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-bottom: 6rem;
+}
+.comments-no-comments {
+    margin: 6rem 0;
 }
 .comments-section-header {
     height: 21rem;
