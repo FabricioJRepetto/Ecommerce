@@ -15,6 +15,7 @@ const PostSale = () => {
   const [loading, setLoading] = useState(true);
   const [images, setImages] = useState(false);
   const [background, setBackground] = useState("");
+  const [error, setError] = useState(false)
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -23,95 +24,119 @@ const PostSale = () => {
   let status = params.get("status") || "cancelled";
 
   useEffect(() => {
-    !order &&
+
+    if (!id) {
+        setError({message: 'Parece que estás en el momento y lugar equivocados...'})
+        setLoading(false)
+        return
+    }
+
+    (!order && id && status) &&
       (async () => {
-        const { data } = await axios(`/order/${id}`);
 
-        if (!data.products) {
-          console.error("no order");
-          navigate("/");
-        }
-
-        setOrder(data);
-        setLoading(false);
-
-        if (data && !data?.payment_date && status === "approved")
-          deliveryWaiter(id);
-
-        let aux = [];
-        data.products.forEach((e) => {
-          aux.push({ img: e.img, url: "" });
-        });
-        setImages(aux);
-
-        if (data && status === "approved") {
-          //? background effect
-          setBackground("postsale-approved animation-start");
-          setTimeout(() => {
-            setBackground("postsale-approved animation-loop");
-          }, 6000);
-
-          if (data.order_type === "cart") {
-            //? vaciar carrito
-            await axios.delete(`/cart/empty`);
-
-            //? Vaciar el estado de redux onCart
-            dispatch(loadCart([]));
-
-            //? Quitar last_order en el carrito de la db
-            await axios.put(`/cart/order/`);
-          } else {
-            //? vaciar el buynow
-            axios.post(`/cart/`, { product_id: "" });
-          }
-
-          setOrder(data);
-          setLoading(false);
-
-          if (data && !data?.payment_date && status === "approved")
-            deliveryWaiter(id);
-
-          let aux = [];
-          data.products.forEach((e) => {
-            aux.push({ img: e.img, url: "" });
-          });
-          setImages(aux);
-
-          if (data && status === "approved") {
-            //? background effect
-            setBackground("postsale-approved animation-start");
-            setTimeout(() => {
-              setBackground("postsale-approved animation-loop");
-            }, 6000);
-
-            if (data.order_type === "cart") {
-              //? vaciar carrito
-              await axios.delete(`/cart/empty`);
-
-              //? Vaciar el estado de redux onCart
-              dispatch(loadCart([]));
-
-              //? Quitar last_order en el carrito de la db
-              await axios.put(`/cart/order/`);
-            } else {
-              //? vaciar el buynow
-              axios.post(`/cart/`, { product_id: "" });
+        try {    
+            const { data } = await axios(`/order/${id}`);
+            
+            if (!data.products) {
+                console.error("no order");
+                setError({message: 'Orden no encontrada'})
+                setLoading(false)
+                return
             }
-            //? Cambiar el estado a 'processing'
-            await axios.put(`/order/${id}`, {
-              status: "processing",
+    
+            setOrder(data);
+            setLoading(false);
+    
+            if (data && !data?.payment_date && status === "approved")
+              deliveryWaiter(id);
+    
+            let aux = [];
+            data.products.forEach((e) => {
+              aux.push({ img: e.img, url: "" });
             });
-
-            //? en el back (choNotif):
-            // cambia orden a pagada
-            // resta unidades de cada stock
-          }
-        } else {
-          setBackground("postsale-pending animation-start");
-          setTimeout(() => {
-            setBackground("postsale-pending animation-loop");
-          }, 6000);
+            setImages(aux);
+    
+            if (data && status === "approved") {
+              //? background effect
+              setBackground("postsale-approved animation-start");
+              setTimeout(() => {
+                setBackground("postsale-approved animation-loop");
+              }, 6000);
+    
+              if (data.order_type === "cart") {
+                //? vaciar carrito
+                await axios.delete(`/cart/empty`);
+    
+                //? Vaciar el estado de redux onCart
+                dispatch(loadCart([]));
+    
+                //? Quitar last_order en el carrito de la db
+                await axios.put(`/cart/order/`);
+              } else {
+                //? vaciar el buynow
+                axios.post(`/cart/`, { product_id: "" });
+              }
+    
+              setOrder(data);
+              setLoading(false);
+    
+              if (data && !data?.payment_date && status === "approved")
+                deliveryWaiter(id);
+    
+              let aux = [];
+              data.products.forEach((e) => {
+                aux.push({ img: e.img, url: "" });
+              });
+              setImages(aux);
+    
+              if (data && status === "approved") {
+                //? background effect
+                setBackground("postsale-approved animation-start");
+                setTimeout(() => {
+                  setBackground("postsale-approved animation-loop");
+                }, 6000);
+    
+                if (data.order_type === "cart") {
+                  //? vaciar carrito
+                  await axios.delete(`/cart/empty`);
+    
+                  //? Vaciar el estado de redux onCart
+                  dispatch(loadCart([]));
+    
+                  //? Quitar last_order en el carrito de la db
+                  await axios.put(`/cart/order/`);
+                } else {
+                  //? vaciar el buynow
+                  axios.post(`/cart/`, { product_id: "" });
+                }
+                //? Cambiar el estado a 'processing'
+                await axios.put(`/order/${id}`, {
+                  status: "processing",
+                });
+    
+                //? en el back (choNotif):
+                // cambia orden a pagada
+                // resta unidades de cada stock
+              }
+            } else {
+              setBackground("postsale-pending animation-start");
+              setTimeout(() => {
+                setBackground("postsale-pending animation-loop");
+              }, 6000);
+            }
+        } catch (error) {
+            console.log(error);
+            setError(
+                {
+                    message: error?.message || false, 
+                    status: error.response.status, 
+                    statusText: error.response.statusText, 
+                    dbMessage: error.response.data.message
+                }
+            );
+            setLoading(false)
         }
+
       })();
 
     return () => {};
@@ -143,7 +168,15 @@ const PostSale = () => {
 
   return (
     <div className="postsale-container component-fadeIn">
-      {loading && !order ? (
+      {error ? <>
+                <h1>ups!</h1>
+                <h2>{error.dbMessage || error.message}</h2>
+                <br/>
+                <p>{error.status+' '+error.statusText}</p>
+                <p>{error.message}</p>
+                <ReturnButton to={'/'}/>
+               </>
+      :<div>{loading && !order ? (
         <LoaderBars />
       ) : (
         <div className="postsale-inner">
@@ -200,6 +233,20 @@ const PostSale = () => {
             <p>
               Id de orden: <i>{order?.id}</i>
             </p>
+
+            <h2 onClick={()=>
+                    navigate(order.products.length > 1 
+                    ? '' 
+                    : `/details/${order.products[0].product_id}`)}
+                style={order.products.length > 1 
+                    ? {cursor: 'default'} 
+                    : {cursor: 'pointer'}}
+                    className='postsale-comment-reminder'>
+                {`¡No olvides compartir tu opinión sobre ${order.products.length > 1 
+                    ? 'estos productos' 
+                    : 'este producto'}!`}
+            </h2>
+
             <div className="postsale-back-container">
               <ReturnButton
                 to={
@@ -213,7 +260,7 @@ const PostSale = () => {
             </div>
           </div>
         </div>
-      )}
+      )}</div>}
     </div>
   );
 };
