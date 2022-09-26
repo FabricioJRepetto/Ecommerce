@@ -59,8 +59,9 @@ function App() {
         (response) => response,
         (error) => {
             if (error?.response?.data?.expiredToken) {
-                signOut();
+                console.warn("Por favor vuelve a iniciar sesión.")
                 notification("Por favor vuelve a iniciar sesión.", "/signin", "error");
+                signOut();
             }
             return Promise.reject(error);
         }

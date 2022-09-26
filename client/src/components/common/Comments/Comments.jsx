@@ -2,97 +2,126 @@ import React, { useState } from 'react'
 import axios from 'axios'
 import { useNotification } from '../../../hooks/useNotification'
 import CommentCard from './CommentCard'
-import Calification from './Calification'
+import CalificationInput from './CalificationInput'
 import { useSelector } from 'react-redux'
+import { ReactComponent as Spinner } from "../../../assets/svg/spinner.svg";
+
 import './Comments.css'
 
 const Comments = ({product_id, comments, allowed}) => {
     const notification = useNotification();
-    const [editMode, setEditMode] = useState(allowed);
-    const [loading, setLoading] = useState(false)
+    const [allowComment, setAllowComment] = useState(allowed)
+    const [editMode, setEditMode] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [allComments, setAllComments] = useState(comments);
     const [calification, setCalification] = useState(0);
     const [text, setText] = useState('');
     const [calPreview, setCalPreview] = useState(false)
-    const { id } = useSelector((state) => state.sessionReducer);
-    
-    console.log(id);
-    console.log(comments);
+    const { id, name: userName, avatar } = useSelector((state) => state.sessionReducer);
 
     const submitHandler = async () => { 
         if (!text) {
-            notification('No puedes enviar un comentario vacío.')
+            notification('No puedes enviar un comentario vacío.','','warning')
         } else if (text.length < 5) {
-            notification('El texto no puede tener una longitud menor a 5 caracteres.')
+            notification('El texto no puede tener una longitud menor a 5 caracteres.','','warning')
         } else if (text.length > 250) {
-            notification('El texto no puede tener una longitud mayor a 250 caracteres.')
+            notification('El texto no puede tener una longitud mayor a 250 caracteres.','','warning')
         } else if (parseInt(calification) === 0) {
-            notification('No puedes enviar un comentario sin calificación.')            
+            notification('No puedes enviar un comentario sin calificación.','','warning')            
         } else {
             let body = {
                 text,
                 calification,
                 product_id
             }
+
             setLoading(true)
-            const { data } = await axios.post('/comments', body);
-            data && setLoading(false);
+
+            let data = null;
+            if (editMode) ({ data } = await axios.put('/comments', body));
+            else ({ data } = await axios.post('/comments', body));            
+
             notification(data.message, '', data.error ? 'error' : 'success');
+
             if (!data.error) {
-                //: cargar el comentario
+                if (editMode) {
+                    allComments.forEach(c => {
+                        if (c.comment.user_id === id) {
+                            c.comment.text = text;
+                            c.comment.calification = calification;                            
+                        }
+                    })
+                    //setAllComments()
+                    setEditMode(false)
+                } else {
+                    //! @@@@@@@@@@@@@@@@@@@
+                    console.log(`%c ${data.new_id}`, 'color: orange; font-weight: bold;');
+                    const newComment = {
+                        comment: {
+                            text,
+                            calification,
+                            user_id: id,
+                            date: new Date().toLocaleString('es-Ar', { timeZone: "America/Buenos_Aires" }),
+                            _id: data.new_id
+                        },
+                        user_data: {
+                            userName,
+                            avatar
+                        }
+                    }
+                    console.log([newComment,...allComments]);
+                    setAllComments([newComment,...allComments]);
+                    setAllowComment(false)
+                }
+
             }
-            console.log(data);
+            setLoading(false);
         }
      }
 
-    const editComment = () => {
-
-        setCalification()
-        setText()
+    const editComment = (id) => {
+        let target = comments.find(c => c.comment._id === id);
+        
+        setCalification(target.comment.calification)
+        setText(target.comment.text)
 
         setEditMode(true);
     }
     
   return (
     <div className='comments-section-container component-fadeIn'>
-        {allowed &&
+        {(allowComment || editMode) &&
             <div className='comments-section-input-box component-fadeIn'>
-                <h2>Cuentanos algo sobre este producto</h2>
+                {!loading 
+                ? <>
+                    <h2>Cuentanos algo sobre este producto</h2>
 
-                <div className='calification-input-container'>
-                    <div className='calification-input-mode'>
-                        <div className="calification-button cb1" 
-                            onMouseEnter={()=>setCalPreview(1)} 
-                            onMouseLeave={()=>setCalPreview(false)}
-                            onClick={()=>setCalification(1)}></div>
-                        <div className="calification-button cb2" 
-                            onMouseEnter={()=>setCalPreview(2)} 
-                            onMouseLeave={()=>setCalPreview(false)}
-                            onClick={()=>setCalification(2)}></div>
-                        <div className="calification-button cb3" 
-                            onMouseEnter={()=>setCalPreview(3)} 
-                            onMouseLeave={()=>setCalPreview(false)}
-                            onClick={()=>setCalification(3)}></div>
-                        <div className="calification-button cb4" 
-                            onMouseEnter={()=>setCalPreview(4)} 
-                            onMouseLeave={()=>setCalPreview(false)}
-                            onClick={()=>setCalification(4)}></div>
-                        <div className="calification-button cb5" 
-                            onMouseEnter={()=>setCalPreview(5)} 
-                            onMouseLeave={()=>setCalPreview(false)}
-                            onClick={()=>setCalification(5)}></div>
-                        <Calification num={calPreview || calification} />
+                    <CalificationInput 
+                        calification={calification} 
+                        setCalification={setCalification} 
+                        setCalPreview={setCalPreview} 
+                        calPreview={calPreview}/>
+
+                    <textarea name="comment-text" maxLength={250} 
+                        placeholder='Escribe una reseña' cols="50" rows="8"
+                        value={text}
+                        onChange={(e)=>setText(e.target.value)}></textarea>
+                    <div>
+                        <button className='g-white-button ' onClick={submitHandler}> Publicar </button>
+                        {editMode && <button className='g-white-button secondary-button' onClick={()=>setEditMode(false)}> Cancelar </button>}
                     </div>
-                </div>
+                </>
+                : <>
+                    <Spinner />
+                </>
+                }
 
-                <textarea name="comment-text" maxLength={250} placeholder='Escribe una reseña' cols="50" rows="8"
-                    value={text}
-                    onChange={(e)=>setText(e.target.value)}></textarea>
-                <button className='g-white-button ' onClick={submitHandler}> Publicar </button>
             </div>}
         <br/>        
-        {comments?.length > 0
-            ? <div>{comments.map(c => (
-                <CommentCard key={c.comment.user_id} props={c} editable={c.comment.user_id === id} edit={editComment}/>                
+        {allComments?.length > 0
+            ? <div>{allComments.map(c => (
+                <CommentCard key={c.comment.user_id} props={c} 
+                editable={c.comment.user_id === id} edit={editComment}/>                
             ))}</div>
             : <h2>Aún sin comentarios</h2>
         }
