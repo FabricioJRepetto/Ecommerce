@@ -30,7 +30,7 @@ const AdminLayout = () => {
         <Link to="/admin/products">
           <h3>Productos</h3>
         </Link>
-        <Link to="/admin/productForm">
+        <Link to="/admin/create">
           <h3>Crear</h3>
         </Link>
         <Link to="/admin/users">
