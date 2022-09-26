@@ -79,7 +79,7 @@
     align-items: center;
 }
 .comment-user-data h2 {
-    font-size: 1.7rem;
+    font-size: 1.4rem;
     margin: 0 1rem;
 }
 .comment-card-image-container {
@@ -96,7 +96,7 @@
 }
 
 .comment-card-text {
-    padding: 2rem;
+    padding: 2rem;    
 }
 .comment-card-date {
     user-select: none;
