@@ -45,7 +45,7 @@ const Results = () => {
   const [filtersContainerDisplay, setFiltersContainerDisplay] = useState(null);
   const resultsFiltersContainerMobile = useRef(null);
   const filtersMenuMobile = useRef(null);
-  
+
   useEffect(() => {
     const handleWindowSize = () => {
       setWindowHeight(window.innerHeight);
@@ -328,34 +328,44 @@ const Results = () => {
                   </div>
 
                   <div className="results-inner">
-                    <>
-                      {productsOwn?.length > 0 && (
-                        <div className="own-products-container">
-                          {React.Children.toArray(
-                            productsOwn?.map(
-                              (prod) =>
-                                prod.available_quantity > 0 && (
-                                  <WishlistCard
-                                    productData={prod}
-                                    fav={wishlist.includes(prod._id)}
-                                  />
+                    <div className="own-products-container">
+                      {(productsOwn?.length > 0 ||
+                        productsFound?.length > 0) && (
+                        <>
+                          {productsOwn?.length > 0 && (
+                            <>
+                              {React.Children.toArray(
+                                productsOwn?.map(
+                                  (prod) =>
+                                    prod.available_quantity > 0 && (
+                                      <WishlistCard
+                                        productData={prod}
+                                        fav={wishlist.includes(prod._id)}
+                                      />
+                                    )
                                 )
-                            )
+                              )}
+                            </>
                           )}
-                        </div>
+
+                          {productsFound?.length > 0 && (
+                            <>
+                              {React.Children.toArray(
+                                productsFound?.map(
+                                  (prod) =>
+                                    prod.available_quantity > 0 && (
+                                      <WishlistCard
+                                        productData={prod}
+                                        fav={wishlist.includes(prod._id)}
+                                      />
+                                    )
+                                )
+                              )}
+                            </>
+                          )}
+                        </>
                       )}
-                      {React.Children.toArray(
-                        productsFound?.map(
-                          (prod) =>
-                            prod.available_quantity > 0 && (
-                              <WishlistCard
-                                productData={prod}
-                                fav={wishlist.includes(prod._id)}
-                              />
-                            )
-                        )
-                      )}
-                    </>
+                    </div>
                   </div>
                 </div>
               </div>

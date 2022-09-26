@@ -169,7 +169,7 @@ const Signupin = () => {
     <div className="signin-container">
       <div
         className={`signin-inner${flag ? " signin-visible" : ""}${
-          signSelect === "forgotPassword" ? " signin-opacity" : ""
+          signSelect === "forgotPassword" ? " signin-forgot-visible" : ""
         }`}
       >
         <img

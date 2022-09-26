@@ -108,7 +108,7 @@ const ProviderPremium = () => {
         <div className="providerpremium-title">
           <div className="provider-premium-title">
             <p ref={reference}>PREMIUM</p>
-            <p className="providerpremium-title-text">/DELUXE /UNICOS /TUYOS</p>
+            <p className="providerpremium-title-text">/DELUXE /ÙNICOS /TUYOS</p>
           </div>
         </div>
       </div>
@@ -119,7 +119,7 @@ const ProviderPremium = () => {
         </div>
 
         <div className={`providerpremium-title-text-mobile`}>
-          DELUXE UNICOS TUYOS
+          DELUXE ÙNICOS TUYOS
         </div>
 
         {/* <span className="providerpremium-echo-head-mobile">PREMIUM</span> */}
