@@ -18,7 +18,7 @@
 .signin-inner {
   margin-top: 10px;
   opacity: 0;
-  height: 60vh;
+  /* height: 60vh; */
   min-height: 500px;
   display: flex;
   flex-direction: column;
@@ -26,13 +26,42 @@
   transition: all 0.6s cubic-bezier(0.11, 0.05, 0, 1.01);
 }
 
-/* .signin-container .signin-opacity {
+@media (max-width:499px) {
+  .signin-inner {
+    width: 90%;
+  }
+
+  .signin-inner img {
+    margin: auto;
+    width: 90%;
+  }
+
+  .forgot-password-container {
+    width: 90%;
+  }
+}
+
+@media (min-width:500px) {
+  .signin-inner img {
+    margin: auto;
+    width: 400px;
+  }
+}
+
+@media (max-height:570px) {
+  .signin-inner .signin-signs-container {
+    padding-top: 0;
+  }
+}
+
+.signin-forgot-visible {
+  align-items: center;
+}
+
+/* .signin-container .signin-forgot-visible {
   opacity: 1
 } */
 
-.signin-inner img {
-  width: 400px;
-}
 
 .signin-inner form {
   display: flex;
@@ -85,7 +114,6 @@
 
 .forgot-password-container {
   position: absolute;
-  padding-left: 1rem;
   top: 40%;
   transform: translateY(-50%);
   transition: all .2s ease;
