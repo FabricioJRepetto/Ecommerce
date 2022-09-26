@@ -196,7 +196,7 @@ const ProductForm = () => {
         .then(({ data }) => {
           setProductToEdit(idProductToEdit);
           dispatch(loadIdProductToEdit(null));
-          loadInputs(data);
+          loadInputs(data.product);
         })
         .catch((err) => console.error(err)); //!VOLVER A VER manejo de errores
     } else {

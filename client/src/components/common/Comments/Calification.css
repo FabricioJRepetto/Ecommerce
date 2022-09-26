@@ -27,8 +27,7 @@
 
 .calification-container {
     height: 2rem;
-    width: 10rem;
-    
+    width: 10rem;    
     mask-image: url('../../../assets/svg/star.svg');
     scale: .6;
 }

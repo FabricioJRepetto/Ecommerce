@@ -12,7 +12,7 @@ const Calification = ({ num, hover, input }) => {
     return (
     <div className='calification-outer'>
         {hover && num > 0 && <span className='calification-tooltip'>{num}</span>}     
-        <div className='calification-container' style={input ? inputStyle : {background: 'linear-gradient(180deg, rgba(5,5,5,1) 0%, rgba(32,32,32,1) 80%)'}}>
+        <div className='calification-container' style={input ? inputStyle : {background: 'linear-gradient(180deg, rgba(5,5,5,0.3) 0%, rgba(32,32,32,0.5) 80%)'}}>
             <div className='calification-background' style={{width: `${num*2}rem`}}></div>
         </div>
     </div>
