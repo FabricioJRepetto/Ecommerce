@@ -517,11 +517,12 @@
 }
 
 .navbar-profile-button {
+  width: 12rem;
   flex-direction: row;
   align-items: center;
-  margin: 0 1rem 0 2rem;
-  padding-left: 1rem;
-  /*  cursor: pointer; */
+  justify-content: flex-end;
+  /* margin: 0 1rem 0 2rem; */
+  /* padding-left: 1rem; */
 }
 
 .navbar-profile-button svg {
@@ -531,6 +532,8 @@
 .navbar-avatar {
   height: 1.7rem;
   width: 1.7rem;
+  min-height: 1.7rem;
+  min-width: 1.7rem;
   border-radius: 50%;
   overflow: hidden;
   margin: 0 0.2rem;
@@ -551,6 +554,10 @@
 
 .navbar-username {
   font-weight: 400;
+  white-space: nowrap;
+  max-width: 7rem;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
 }
 
 .cart-icon-container {
@@ -650,7 +657,7 @@
 .navbar-modal {
   visibility: hidden;
   position: relative;
-  left: calc(50% - 75px);
+  /* left: calc(0); */
   bottom: -50px;
   width: 10rem;
   border: 1px solid rgb(115, 115, 115);
@@ -663,8 +670,7 @@
 .navbar-modal-visible {
   visibility: visible;
   opacity: 1;
-  max-height: 300px;
-  /* height: fit-content; */
+  max-height: 21rem;
   transition: max-height 0.2s ease;
   overflow-y: hidden;
 }

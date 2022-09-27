@@ -1,33 +1,34 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom'
+import LoaderBars from '../../common/LoaderBars';
+import NotifCard from './NotifCard';
 
-const NotificationsSection = () => {
+const NotificationsSection = ({loading, notif}) => {
     const navigate = useNavigate();
-    const [notif, setNotif] = useState(false);
-    const [loading, setLoading] = useState(true)
+    // const [notif, setNotif] = useState(false);
+    // const [loading, setLoading] = useState(true)
 
     useEffect(() => { //: quizas sea innecesario pedir acá    
-      (async () => {
-        const { data } = await axios('/notifications/');
-        if (data) setNotif(data);
-        console.log(data);
-        setLoading(false);
-      })();
+    //   (async () => {
+    //     const { data } = await axios('/notifications/');
+    //     if (data) setNotif(data);
+    //     console.log(data);
+    //     setLoading(false);
+    //   })();
     }, [])
     
   return (
     <div>
         <h1>Notifications</h1>
-        {notif && !loading 
+        {loading &&
+            <>
+                <LoaderBars />
+            </>}
+        {notif 
         ? <div>
             {notif?.map(n => (
-                <div>
-                    <p>{n.date}</p>
-                    <h2>{n.title}</h2>
-                    <p>{n.description}</p>
-                    <button onClick={()=>navigate(n.link)}></button>
-                </div>
+                <NotifCard props={n}/>
             ))}
         </div>
         : <h1>No tienes notificaciones nuevas</h1>}
