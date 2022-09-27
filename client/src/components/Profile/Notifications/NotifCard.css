@@ -1,0 +1,95 @@
+.notifcard-container {
+    background-color: #070707;
+    margin-bottom: 1rem;
+}
+
+.notifcard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 3rem;
+    padding-right: 1rem;
+    cursor: pointer;
+    transition: all .5s ease;
+    position: relative;
+}
+.notifcard-header div {
+    display: flex;
+    flex-direction: row ;
+    align-items: center;
+}
+.notifcard-header p {
+    color: #505050;
+}
+.notifcard-type {
+    min-height: 0.313rem;
+    height: 0.313rem;
+    min-width: 0.313rem;
+    width: 0.313rem;
+    border-radius: 50%;
+    margin: 1rem;
+}
+.notiftype-circle-blue {
+    background: #1a349d;
+}
+.notiftype-circle-green {
+    background: #64d500;
+}
+.notiftype-circle-orange {
+    background: #eb7711;
+}
+.notiftype-circle-red {
+    background: #d71212;
+}
+
+.notifcard-type-border {
+    height: 1px;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    background: linear-gradient(-90deg, #202020 0%, #00000000 70%);
+}
+.notiftype-blue {
+    background: linear-gradient(-90deg, #1a349d 0%, #00000000 50%);
+}
+.notiftype-green {
+    background: linear-gradient(-90deg, #64d500 0%, #00000000 50%);
+}
+.notiftype-orange {
+    background: linear-gradient(-90deg, #eb7711 0%, #00000000 50%);
+}
+.notiftype-red {
+    background: linear-gradient(-90deg, #d71212 0%, #00000000 50%);
+}
+
+.notifcard-body {
+    height: 0;
+    padding: 0;
+    overflow-y: hidden;
+}
+.notifcard-body-open {
+    height: fit-content;
+}
+
+.notifcard-desc {
+    padding: 1rem 1rem;
+    white-space: wrap;
+    text-align: left;
+}
+
+.notifcard-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    z-index: 20;
+}
+
+.notifcard-buttons > span {
+    margin: 0 2rem;
+    height: 1.5rem;
+    width: 1.5rem;
+    cursor: pointer;
+}
+.notifcard-buttons svg {
+    color: #888888;
+}

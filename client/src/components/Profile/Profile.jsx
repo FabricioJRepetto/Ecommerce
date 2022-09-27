@@ -74,7 +74,7 @@ const Profile = () => {
         p[3].value && setOrders(p[3].value.data);
         p[4].value && setNotif(p[4].value.data);
 
-        //? Notifica cuando se eliminaron productos que estaba en favoritos
+        //? Notifica cuando se eliminaron productos que estaban en favoritos
         p[1].value.data.message &&
           notification(p[1].value.data.message, "", "warning");
 
@@ -332,7 +332,7 @@ const Profile = () => {
         )}
 
         {render === "notifications" && (
-          <NotificationsSection loading={loading} notif={notif} />
+          <NotificationsSection loading={loading} notif={notif} setNotif={setNotif}/>
         )}
 
         {render === "history" && (

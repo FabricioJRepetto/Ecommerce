@@ -20,8 +20,10 @@ import { PowerGlitch } from "powerglitch";
 import { useSignout } from "../../hooks/useSignout";
 import ChromaticText from "../common/ChromaticText";
 import BurgerButton from "../common/BurgerButton";
+import NotificationModal from "./NotificationModal";
 import "./NavBar.css";
 import "../../App.css";
+
 
 const NavBar = () => {
   const { session, username, avatar, role } = useSelector(
@@ -184,9 +186,6 @@ const NavBar = () => {
      avatar = 2,
      nick = 0.523*username.length;
     nick > 7 && (nick = 7)
-//   [·····(---------)]
-//   i_____i
-//      |ooooooooooooooo|
     return `calc(${(max - (avatar + nick))/2}rem)`
    }
 
@@ -438,10 +437,11 @@ const NavBar = () => {
                         </div>
                       </div>
 
-                      <div className="navbar-notification-button navbar-hide-mobile"
+                      {/* <div className="navbar-notification-button navbar-hide-mobile"
                         onClick={()=>navigate('/profile/notifications')}>
                         <Bell className="wishlist-icon" />                        
-                      </div>
+                      </div> */}
+                      <NotificationModal />
 
                       <NavLink to={"cart"} className="cart-icon-container">
                         <Cart className="cart-icon" />
