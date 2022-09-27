@@ -26,9 +26,10 @@ const ModalAdminProducts = ({
 
   const deleteProduct = () => {
     axios
-      .delete(`/admin/product/${productToDelete.prodId}`)
+      .delete(`/product/${productToDelete.prodId}`)
       .then((r) => {
-        r.type === 'success' && dispatch(deleteProductFromState(productToDelete.prodId));
+        r.type === "success" &&
+          dispatch(deleteProductFromState(productToDelete.prodId));
         notification(r.data.message, "", r.data.type);
       })
       .catch((err) => console.error(err)); //! VOLVER A VER manejo de errores
@@ -41,7 +42,7 @@ const ModalAdminProducts = ({
 
   const addDiscount = () => {
     axios
-      .put(`/admin/product/discount/${productToDiscount.prodId}`, discount)
+      .put(`/product/discount/${productToDiscount.prodId}`, discount)
       .then((_) => {
         closeDiscountProduct();
         dispatch(changeReloadFlag(true));
@@ -82,7 +83,7 @@ const ModalAdminProducts = ({
 
   const removeDiscount = () => {
     axios
-      .delete(`/admin/product/discount/${productToRemoveDiscount.prodId}`)
+      .delete(`/product/discount/${productToRemoveDiscount.prodId}`)
       .then((_) => {
         closeRemoveDiscount();
         dispatch(changeReloadFlag(true));

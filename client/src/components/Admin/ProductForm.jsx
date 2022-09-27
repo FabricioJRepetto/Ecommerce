@@ -201,10 +201,10 @@ const ProductForm = () => {
         })
         .catch((err) => console.error(err)); //!VOLVER A VER manejo de errores
     } else {
-    //   appendAttribute({ name: "color", value_name: "amarillo" });
-    //   appendFeature({ value: "piola" });
-    //   appendAttribute({ name: "", value_name: "" });
-    //   appendFeature({ value: "" });
+      //   appendAttribute({ name: "color", value_name: "amarillo" });
+      //   appendFeature({ value: "piola" });
+      appendAttribute({ name: "", value_name: "" });
+      appendFeature({ value: "" });
     }
     setFocusFlag(true);
     // eslint-disable-next-line
@@ -273,7 +273,7 @@ const ProductForm = () => {
       });
 
       const imagesPromises = await Promise.all(imagesRequests);
-      
+
       let images = [];
 
       for (const image of imagesPromises) {
@@ -290,13 +290,13 @@ const ProductForm = () => {
           mainImgIndex,
           newImages: images,
         };
-        await axios.put(`/admin/product/${productToEdit}`, data);
+        await axios.put(`/product/${productToEdit}`, data);
 
         dispatch(changeReloadFlag(true));
         notification("Producto editado exitosamente", "", "success");
         navigate("/admin/products");
       } else {
-        await axios.post("/admin/product/", { ...productData, images });
+        await axios.post("/product/", { ...productData, images });
 
         dispatch(changeReloadFlag(true));
         openCreateProduct();

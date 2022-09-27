@@ -1,6 +1,5 @@
 .postsale-container {
   display: flex;
-  justify-content: center;
   align-items: center;
   flex-direction: column;
   flex-grow: 1;
@@ -85,5 +84,5 @@
 }
 
 .postsale-comment-reminder {
-    margin-top: 2rem;
+  margin-top: 2rem;
 }
