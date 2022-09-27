@@ -201,10 +201,10 @@ const ProductForm = () => {
         })
         .catch((err) => console.error(err)); //!VOLVER A VER manejo de errores
     } else {
-    //   appendAttribute({ name: "color", value_name: "amarillo" });
-    //   appendFeature({ value: "piola" });
-    //   appendAttribute({ name: "", value_name: "" });
-    //   appendFeature({ value: "" });
+      //   appendAttribute({ name: "color", value_name: "amarillo" });
+      //   appendFeature({ value: "piola" });
+      appendAttribute({ name: "", value_name: "" });
+      appendFeature({ value: "" });
     }
     setFocusFlag(true);
     // eslint-disable-next-line
@@ -273,7 +273,7 @@ const ProductForm = () => {
       });
 
       const imagesPromises = await Promise.all(imagesRequests);
-      
+
       let images = [];
 
       for (const image of imagesPromises) {
