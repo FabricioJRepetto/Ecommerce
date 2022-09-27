@@ -110,7 +110,7 @@ const PremiumDetails = () => {
           comments: data.comments,
           allowComment: data.allowComment,
         };
-        console.log(product);
+        
         setProduct(product);
 
         let aux = product.images.map((e) => ({

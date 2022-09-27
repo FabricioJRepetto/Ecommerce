@@ -19,6 +19,7 @@ export const sessionSlice = createSlice({
         filtersApplied: {},
         usersFilteredData: [],
         isUserDataLoading: true,
+        notificationList: []
     },
     reducers: {
         loadUserData: (state, action) => {
@@ -86,6 +87,9 @@ export const sessionSlice = createSlice({
         loadingUserData: (state, action) => {
             state.isUserDataLoading = action.payload;
         },
+        loadNotifications: (state, action) => {
+            state.notificationList = action.payload;
+        }
     },
 });
 
@@ -98,6 +102,7 @@ export const {
     adminUnbanUser,
     adminPromoteUser,
     adminFilterUsers,
+    loadNotifications
 } = sessionSlice.actions;
 
 export default sessionSlice.reducer;
