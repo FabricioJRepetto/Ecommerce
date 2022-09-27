@@ -6,6 +6,8 @@ import { useNotification } from "../../hooks/useNotification";
 import { ReactComponent as Avatar } from "../../assets/svg/avatar.svg";
 import { ReactComponent as Location } from "../../assets/svg/location.svg";
 import { ReactComponent as Bag } from "../../assets/svg/bag.svg";
+import { ReactComponent as Tag } from "../../assets/svg/tag.svg";
+import { ReactComponent as MoneyBag } from "../../assets/svg/money-bag.svg";
 import { ReactComponent as Fav } from "../../assets/svg/fav.svg";
 import { ReactComponent as Logout } from "../../assets/svg/logout.svg";
 import { RepeatClockIcon } from "@chakra-ui/icons";
@@ -170,7 +172,12 @@ const Profile = () => {
             <BurgerButton setShowMenu={setShowMenu} showMenu={showMenu} />
           </div>
           <>
-            <li onClick={() => navigate("/profile/details")}>
+            <li
+              onClick={() => {
+                navigate("/profile/details");
+                setShowMenu(false);
+              }}
+            >
               <span className="profile-svg-container">
                 <Avatar />
               </span>
@@ -178,7 +185,12 @@ const Profile = () => {
                 <ChromaticText text={"Detalles"} size={"1.1rem"} />
               </span>
             </li>
-            <li onClick={() => navigate("/profile/address")}>
+            <li
+              onClick={() => {
+                navigate("/profile/address");
+                setShowMenu(false);
+              }}
+            >
               <span className="profile-svg-container">
                 <Location />
               </span>
@@ -186,7 +198,12 @@ const Profile = () => {
                 <ChromaticText text={"Direcciones"} size={"1.1rem"} />
               </span>
             </li>
-            <li onClick={() => navigate("/profile/orders")}>
+            <li
+              onClick={() => {
+                navigate("/profile/orders");
+                setShowMenu(false);
+              }}
+            >
               <span className="profile-svg-container profile-svg-rescale">
                 <Bag />
               </span>
@@ -194,7 +211,50 @@ const Profile = () => {
                 <ChromaticText text={"Compras"} size={"1.1rem"} />
               </span>
             </li>
-            <li onClick={() => navigate("/profile/wishlist")}>
+            <li
+              onClick={() => {
+                navigate("/profile/sales");
+                setShowMenu(false);
+              }}
+            >
+              <span className="profile-svg-container profile-svg-rescale">
+                <MoneyBag
+                  style={{
+                    width: "32px",
+                    height: "32px",
+                    transform: "scale(.95)",
+                    left: "0.6rem",
+                    top: "0.5rem",
+                  }}
+                />
+              </span>
+              <span className="profile-chromatic-container">
+                <ChromaticText text={"Ventas"} size={"1.1rem"} />
+              </span>
+            </li>
+            <li
+              onClick={() => {
+                navigate("/profile/products");
+                setShowMenu(false);
+              }}
+            >
+              <span className="profile-svg-container profile-svg-rescale">
+                <Tag
+                  style={{
+                    transform: "scale(1.1)",
+                  }}
+                />
+              </span>
+              <span className="profile-chromatic-container">
+                <ChromaticText text={"Publicaciones"} size={"1.1rem"} />
+              </span>
+            </li>
+            <li
+              onClick={() => {
+                navigate("/profile/wishlist");
+                setShowMenu(false);
+              }}
+            >
               <span className="profile-svg-container">
                 <Fav />
               </span>
@@ -202,7 +262,12 @@ const Profile = () => {
                 <ChromaticText text={"Favoritos"} size={"1.1rem"} />
               </span>
             </li>
-            <li onClick={() => navigate("/profile/history")}>
+            <li
+              onClick={() => {
+                navigate("/profile/history");
+                setShowMenu(false);
+              }}
+            >
               <RepeatClockIcon />
               <span className="profile-chromatic-container">
                 <ChromaticText text={"Historial"} size={"1.1rem"} />
@@ -255,6 +320,34 @@ const Profile = () => {
               </span>
               <span className="profile-chromatic-container">
                 <ChromaticText text={"Compras"} size={"1.1rem"} />
+              </span>
+            </li>
+            <li onClick={() => navigate("/profile/sales")}>
+              <span className="profile-svg-container profile-svg-rescale">
+                <MoneyBag
+                  style={{
+                    width: "32px",
+                    height: "32px",
+                    transform: "scale(.95)",
+                    left: "0.6rem",
+                    top: "0.5rem",
+                  }}
+                />
+              </span>
+              <span className="profile-chromatic-container">
+                <ChromaticText text={"Ventas"} size={"1.1rem"} />
+              </span>
+            </li>
+            <li onClick={() => navigate("/profile/products")}>
+              <span className="profile-svg-container profile-svg-rescale">
+                <Tag
+                  style={{
+                    transform: "scale(1.1)",
+                  }}
+                />
+              </span>
+              <span className="profile-chromatic-container">
+                <ChromaticText text={"Publicaciones"} size={"1.1rem"} />
               </span>
             </li>
             <li onClick={() => navigate("/profile/wishlist")}>
