@@ -12,6 +12,7 @@ import {
 import { CloseIcon, SearchIcon } from "@chakra-ui/icons";
 import { ReactComponent as Cart } from "../../assets/svg/cart.svg";
 import { ReactComponent as Fav } from "../../assets/svg/fav.svg";
+import { ReactComponent as Bell } from "../../assets/svg/bell.svg";
 import { ReactComponent as Avatar } from "../../assets/svg/avatar.svg";
 import WishlistModal from "../common/WishlistModal";
 import { avatarResizer } from "../../helpers/resizer";
@@ -32,6 +33,7 @@ const NavBar = () => {
   const searchInput = useRef(null);
   const [profileModal, setProfileModal] = useState(false);
   const [wishModal, setWishModal] = useState(false);
+  const [notifModal, setNotifModal] = useState(false)
   const [productToSearch, setProductToSearch] = useState("");
   const [showSubsectionBar, setShowSubsectionBar] = useState(false);
   const [showSearchBar, setShowSearchBar] = useState(false);
@@ -412,6 +414,11 @@ const NavBar = () => {
                             )}
                           </div>
                         </div>
+                      </div>
+
+                      <div className="navbar-notification-button navbar-hide-mobile"
+                        onClick={()=>navigate('/notifications')}>
+                        <Bell className="wishlist-icon" />                        
                       </div>
 
                       <NavLink to={"cart"} className="cart-icon-container">
