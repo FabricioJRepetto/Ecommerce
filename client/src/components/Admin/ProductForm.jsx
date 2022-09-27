@@ -290,13 +290,13 @@ const ProductForm = () => {
           mainImgIndex,
           newImages: images,
         };
-        await axios.put(`/admin/product/${productToEdit}`, data);
+        await axios.put(`/product/${productToEdit}`, data);
 
         dispatch(changeReloadFlag(true));
         notification("Producto editado exitosamente", "", "success");
         navigate("/admin/products");
       } else {
-        await axios.post("/admin/product/", { ...productData, images });
+        await axios.post("/product/", { ...productData, images });
 
         dispatch(changeReloadFlag(true));
         openCreateProduct();
