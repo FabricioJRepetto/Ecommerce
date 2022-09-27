@@ -43,7 +43,6 @@ import NotFound from "./components/common/NotFound";
 import Unauthorized from "./components/common/Unauthorized";
 import { useLocation } from "react-router-dom";
 import FAQ from "./components/common/FAQ";
-import NotificationsSection from "./components/Profile/Notifications/NotificationsSection";
 
 function App() {
     const dispatch = useDispatch();
@@ -105,7 +104,6 @@ function App() {
                         <Route path="/details/:id" element={<Details />} />
                         <Route path="/faqs" element={<FAQ />} />
                         <Route path="/faqs/:question" element={<FAQ />} />
-                        <Route path="/notifications" element={<NotificationsSection />} />
                         <Route path="/orders/post-sale" element={<PostSale />} />
                         <Route path="/premium" element={<ProviderPremium />} />
                         <Route path="/premium/:id" element={<PremiumDetails />} />
