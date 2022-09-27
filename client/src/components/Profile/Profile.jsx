@@ -85,6 +85,8 @@ const Profile = () => {
     "details",
     "address",
     "orders",
+    "sales",
+    "products",
     "wishlist",
     "history",
     "password",
@@ -93,6 +95,8 @@ const Profile = () => {
     details: "PERFIL",
     address: "DIRECCIONES",
     orders: "COMPRAS",
+    sales: "VENTAS",
+    products: "PUBLICACIONES",
     wishlist: "FAVORITOS",
     history: "HISTORIAL",
     password: "CONTRASEÑA",
@@ -387,6 +391,12 @@ const Profile = () => {
         )}
 
         {render === "orders" && <Orders orders={orders} loading={loading} />}
+
+        {render === "sales" && <Orders orders={orders} loading={loading} />}
+
+        {render === "products" && (
+          <Wishlist loading={loading} wishlist={wishlist} wl_id={wl_id} />
+        )}
 
         {render === "address" && (
           <Address

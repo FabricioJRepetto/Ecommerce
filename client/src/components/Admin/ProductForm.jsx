@@ -170,28 +170,28 @@ const ProductForm = () => {
 
   useEffect(() => {
     //? autocompletados
-    // setValue("brand", "marcaa1");
-    // setValue("name", "nombre1");
-    // setValue("price", 100);
-    // setValue("available_quantity", 10);
-    // setValue("description", "descripcion");
-    // setCategoryPath([
-    //   {
-    //     _id: "62e58e4177ee611ae1369fe6",
-    //     id: "MLA5725",
-    //     name: "Accesorios para Vehículos",
-    //   },
-    //   {
-    //     _id: "62e58e4177ee611ae1369fe7",
-    //     id: "MLA4711",
-    //     name: "Acc. para Motos y Cuatriciclos",
-    //   },
-    //   {
-    //     _id: "62e58e4177ee611ae1369fe8",
-    //     id: "MLA86379",
-    //     name: "Alarmas para Motos",
-    //   },
-    // ]);
+    setValue("brand", "marcaa1");
+    setValue("name", "nombre1");
+    setValue("price", 100);
+    setValue("available_quantity", 10);
+    setValue("description", "descripcion");
+    setCategoryPath([
+      {
+        _id: "62e58e4177ee611ae1369fe6",
+        id: "MLA5725",
+        name: "Accesorios para Vehículos",
+      },
+      {
+        _id: "62e58e4177ee611ae1369fe7",
+        id: "MLA4711",
+        name: "Acc. para Motos y Cuatriciclos",
+      },
+      {
+        _id: "62e58e4177ee611ae1369fe8",
+        id: "MLA86379",
+        name: "Alarmas para Motos",
+      },
+    ]);
     if (idProductToEdit) {
       axios(`/product/${idProductToEdit}`)
         .then(({ data }) => {
@@ -201,10 +201,10 @@ const ProductForm = () => {
         })
         .catch((err) => console.error(err)); //!VOLVER A VER manejo de errores
     } else {
-      //   appendAttribute({ name: "color", value_name: "amarillo" });
-      //   appendFeature({ value: "piola" });
-      appendAttribute({ name: "", value_name: "" });
-      appendFeature({ value: "" });
+      appendAttribute({ name: "color", value_name: "amarillo" });
+      appendFeature({ value: "piola" });
+      /*  appendAttribute({ name: "", value_name: "" });
+      appendFeature({ value: "" }); */
     }
     setFocusFlag(true);
     // eslint-disable-next-line
