@@ -48,7 +48,7 @@
     opacity: 0;
     pointer-events: none;
     transition: height 0.3s ease;
-    background-color: aquamarine;
+    background-color: #202020;
 }
 .notif-modal-container:hover .notif-modal-content {
     height: 30rem;
