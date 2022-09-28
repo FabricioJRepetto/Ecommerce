@@ -152,6 +152,10 @@ const Profile = () => {
     }
   }, [containerDisplay, showMenu]);
 
+  useEffect(() => {
+    console.log("sales", sales);
+  }, [sales]);
+
   return (
     <div className="profile-container component-fadeIn">
       <div
@@ -203,6 +207,19 @@ const Profile = () => {
               </span>
               <span className="profile-chromatic-container">
                 <ChromaticText text={"Detalles"} size={"1.1rem"} />
+              </span>
+            </li>
+            <li
+              onClick={() => {
+                navigate("/profile/notifications");
+                setShowMenu(false);
+              }}
+            >
+              <span className="profile-svg-container">
+                <Bell />
+              </span>
+              <span className="profile-chromatic-container">
+                <ChromaticText text={"Notificaciones"} size={"1.1rem"} />
               </span>
             </li>
             {/* <li
