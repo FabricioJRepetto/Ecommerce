@@ -110,7 +110,7 @@ function App() {
                         <Route path="/create" element={<ProductForm />} />
                         <Route path="/products" element={<Products />} />
                         <Route path="/provider" element={<ProviderStore />} />
-                        <Route path="/profile/" element={<Profile />} />
+                        <Route path="/profile" element={<Profile />} />
                         <Route path="/profile/:section" element={<Profile />} />
                         <Route path="/results" element={<Results />} />
                         <Route path="/sales" element={<SalesResults />} />

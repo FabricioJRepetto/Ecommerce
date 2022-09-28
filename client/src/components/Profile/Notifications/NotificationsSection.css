@@ -6,6 +6,15 @@
     justify-content: flex-start;
     align-items: center;
 }
+.notifications-section-title {
+    position: relative;
+}
+.notifications-section-title svg {
+    position: absolute;
+    top: .2rem;
+    right: -3rem;
+    scale: .7;
+}
 .notifications-section-cards-container {
     display: flex;
     flex-direction: column-reverse;

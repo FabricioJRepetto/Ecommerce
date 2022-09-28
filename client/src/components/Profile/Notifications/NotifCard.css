@@ -41,7 +41,6 @@
 .notiftype-circle-red {
     background: #d71212;
 }
-
 .notifcard-type-border {
     height: 1px;
     width: 100%;
@@ -60,6 +59,14 @@
 }
 .notiftype-red {
     background: linear-gradient(-90deg, #d71212 0%, #00000000 50%);
+}
+
+.notifcard-container-modal {
+    margin-bottom: 0;
+    z-index: 130;
+}
+.notifcard-container-modal:hover > div {
+    background: #303030 !important;
 }
 
 .notifcard-body {

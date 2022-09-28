@@ -7,13 +7,21 @@ import { loadNotifications } from '../../../Redux/reducer/sessionSlice';
 import {ReactComponent as Delete } from '../../../assets/svg/trash.svg';
 
 import './NotifCard.css';
+import { useEffect } from 'react';
 
-const NotifCard = ({props, setNotif, modal = false}) => {
+const NotifCard = ({props, setNotif, modal = false, openByQ}) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [open, setOpen] = useState(false);
     const [seen, setSeen] = useState(props.seen);
-    const [deleting, setDeleting] = useState(false)
+    const [deleting, setDeleting] = useState(false);
+
+    useEffect(() => {
+      if (openByQ) {
+        (openByQ === props._id) && setOpen(true)
+      }
+      // eslint-disable-next-line
+    }, [])
 
     const {
         date,
@@ -42,11 +50,15 @@ const NotifCard = ({props, setNotif, modal = false}) => {
     }
 
     const handleNotifClick = async () => { 
-        setOpen(!open)
-        if (!seen) {
-            setSeen(true)
-            const {data} = await axios.put(`/notifications/${props._id}`)
-            dispatch(loadNotifications(data.notif_list));
+        if (!modal) {
+            setOpen(!open)
+            if (!seen) {
+                setSeen(true)
+                const {data} = await axios.put(`/notifications/${props._id}`)
+                dispatch(loadNotifications(data.notif_list));
+            }
+        } else {
+            navigate(`/profile/notifications?id=${props._id}`)
         }
      }
      const handleNotifDelete = async (e) => {
@@ -64,15 +76,15 @@ const NotifCard = ({props, setNotif, modal = false}) => {
       }
 
     return (
-        <div className={`notifcard-container component-fadeIn ${deleting && 'card-fadein'}`} onClick={handleNotifClick}>
-            <div className='notifcard-header' style={seen ? {background: '#070707'} : unseenStyle }>
+        <div className={`notifcard-container component-fadeIn ${deleting && 'card-fadein'} ${modal && 'notifcard-container-modal'}`} onClick={handleNotifClick}>
+            <div className={`notifcard-header`} style={seen ? {background: '#070707'} : unseenStyle }>
                 <div>
                     <div className={`notifcard-type ${dotType[notif_type]}`}></div>
                     <div className={`notifcard-type-border ${!seen && correctType[notif_type]}`}></div>
                     <h2>{title}</h2>
                 </div>
 
-                <p>{date.replace(', ', ' | ').slice(0,-3)}</p>
+                {!modal && <p>{date.replace(', ', ' | ').slice(0,-3)}</p>}
             </div>
             
             <div className={`notifcard-body ${open && 'notifcard-body-open'}`}>
