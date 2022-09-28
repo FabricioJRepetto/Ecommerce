@@ -180,6 +180,8 @@ const Details = () => {
                     ? <Calification num={parseFloat(data.average_calification)} hover/>
                     : <p className="details-calification">Aún sin reseñas</p>}
 
+                    {data.seller === 'PROVIDER' && <p>vendedor <b className="provider-text">PROVIDER</b></p>}
+
                   </div>
 
                   <div className="details-price-section">
