@@ -31,7 +31,7 @@ const Home = () => {
   };
 
   return (
-    <div className="component-fadeIn">
+    <div className="home-container component-fadeIn">
       <div className="home-carousel">
         <Carousel
           images={IMAGES}
@@ -42,14 +42,6 @@ const Home = () => {
           width="100%"
         />
       </div>
-
-      {/* <div className="providerstore-disclaimer">
-        <p>
-          Encuentra los mejores productos de distintas tiendas especializadas en
-          un solo lugar.
-        </p>
-        <p>Explora Provider Store para ver nuestros productos seleccionados.</p>
-      </div> */}
 
       <div className="storecards-container">
         <div className="storecards-inner">

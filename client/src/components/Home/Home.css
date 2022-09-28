@@ -1,3 +1,7 @@
+.home-container {
+    overflow-x: hidden;
+}
+
 .component-fadeIn {
     opacity: 1;
     animation: ComponentFadeIn .5s;
