@@ -38,6 +38,14 @@ const FAQ = () => {
     }
   };
 
+  const runClick = () => {
+        document.getElementsByName('faq-button-howto-buy')[0].click();        
+    setTimeout(() => {
+    scrollTo();
+    }, 300);
+    return false;
+  }
+
   return (
     <div className="faq-outer-container component-fadeIn">
       <div className="profile-section-indicator">FAQs</div>
@@ -48,6 +56,7 @@ const FAQ = () => {
             <div className="faq-section">
               {typeof active === "number" && (
                 <Accordion defaultIndex={[active < 6 ? active : 0]}>
+                    
                   <AccordionItem>
                     <h2>
                       <AccordionButton
@@ -94,8 +103,7 @@ const FAQ = () => {
                           Pasarelas de pago de{" "}
                           <b className="provider-text">Stripe y Mercadopago</b>.{" "}
                           <br />
-                          <label
-                            htmlFor="accordion-button-:r4:"
+                          <label onClick={runClick}
                             className="faq-link-to-payment"
                           >
                             <i>Más detalles en esta sección.</i>
@@ -215,9 +223,10 @@ const FAQ = () => {
                     </AccordionPanel>
                   </AccordionItem>
 
-                  <AccordionItem ref={questionRef}>
+                  <AccordionItem>
                     <h2>
                       <AccordionButton
+                        name='faq-button-howto-buy'
                         className={`faq-title-btn ${
                           active === 4 && "faq-q-active"
                         }`}
@@ -236,7 +245,7 @@ const FAQ = () => {
                       correspondientes en la pasarela de pagos que desees
                       utilizar.
                       <div className="faq-checkouts">
-                        <div>
+                        <div  ref={questionRef}>
                           <div className="faq-logo">
                             <img
                               src="https://res.cloudinary.com/dsyjj0sch/image/upload/v1663894003/Stripe_Logo-2_otuyhn.png"
@@ -320,23 +329,6 @@ const FAQ = () => {
                     </AccordionPanel>
                   </AccordionItem>
 
-                  {/* <AccordionItem>
-                    <h2>
-                      <AccordionButton
-                        className={`faq-title-btn ${
-                          active === 5 && "faq-q-active"
-                        }`}
-                        onClick={() => setActive(5)}
-                      >
-                        <Box>¿Qué Random no?</Box>
-                        <AccordionIcon />
-                      </AccordionButton>
-                    </h2>
-                    <AccordionPanel className="faq-text-container">
-                      <div className="faq-ponedordeonda"></div>
-                      Sí, diría que sí.
-                    </AccordionPanel>
-                  </AccordionItem> */}
                 </Accordion>
               )}
             </div>
