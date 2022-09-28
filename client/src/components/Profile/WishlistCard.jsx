@@ -6,12 +6,17 @@ import { resizer } from "../../helpers/resizer";
 import { priceFormat } from "../../helpers/priceFormat";
 import { ReactComponent as Sale } from "../../assets/svg/sale.svg";
 import { ReactComponent as AddCart } from "../../assets/svg/addcart.svg";
+import { ReactComponent as Edit } from "../../assets/svg/edit.svg";
+import { ReactComponent as Offer } from "../../assets/svg/offer.svg";
+import { ReactComponent as Pause } from "../../assets/svg/pause.svg";
+import { ReactComponent as Play } from "../../assets/svg/play.svg";
 import { WishlistButton } from "../Products/WishlistButton";
 import { useCheckout } from "../../hooks/useCheckout";
 import "./WishlistCard.css";
 
-const Card = ({
+const WishlistCard = ({
   openDeleteProduct,
+  openReactivateProduct,
   openDiscountProduct,
   openRemoveDiscount,
   productData,
@@ -46,7 +51,9 @@ const Card = ({
 
   const editProduct = (prodId) => {
     dispatch(loadIdProductToEdit(prodId));
-    navigate("/admin/create");
+    location.pathname !== "/admin/products"
+      ? navigate("/create")
+      : navigate("/admin/create");
   };
 
   return (
@@ -56,9 +63,14 @@ const Card = ({
         navigate(premium ? `/premium/${prodId}` : `/details/${prodId}`)
       }
     >
-      {location.pathname !== "/products" && special && (
-        <i className="provider-text special-card">PROVIDER</i>
-      )}
+      {location.pathname !== "/products" &&
+        /* location.pathname !== "/profile/products" && */
+        special && <i className="provider-text special-card">PROVIDER</i>}
+      {(location.pathname === "/admin/products" ||
+        location.pathname === "/profile/products") &&
+        !productData.active && (
+          <div className="wishlist-card-paused-text">PAUSADO</div>
+        )}
 
       <div
         /* key={prodId}
@@ -68,21 +80,6 @@ const Card = ({
           ready ? " wishlist-card-fade-in" : ""
         }`}
       >
-        {session && <WishlistButton fav={fav} prodId={prodId} />}
-
-        {session && !onCart.includes(prodId) && (
-          <div
-            className="wishlist-addcart-container"
-            onClick={(e) => {
-              e.stopPropagation();
-              addToCart(prodId);
-            }}
-          >
-            <AddCart />
-            <div className="wishlist-addcart-gradient"></div>
-          </div>
-        )}
-
         <div className="wishlist-images-data-container">
           <div className="wishlist-product-img-container">
             <img src={resizer(img, 160)} alt="product" onLoad={readySetter} />
@@ -155,39 +152,77 @@ const Card = ({
             <div className="wishlist-free-shipping">
               {available_quantity > 0 && free_shipping && <p>Envío gratis</p>}
             </div>
-            {location.pathname === "/admin/products" && (
-              <>
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    editProduct(prodId);
-                  }}
-                >
-                  EDITAR
-                </button>
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    openDeleteProduct({ prodId, name });
-                  }}
-                >
-                  ELIMINAR
-                </button>
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    openDiscountProduct({ prodId, name, price });
-                  }}
-                >
-                  DESCUENTO
-                </button>
-              </>
-            )}
           </div>
         </div>
+
+        {location.pathname !== "/profile/products" &&
+        location.pathname !== "/admin/products" &&
+        session ? (
+          <>
+            <WishlistButton fav={fav} prodId={prodId} />
+
+            {!onCart.includes(prodId) && (
+              <div
+                className="wishlist-addcart-container"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  addToCart(prodId);
+                }}
+              >
+                <AddCart />
+                <div className="wishlist-addcart-gradient"></div>
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="wishlist-card-buttons-container">
+            <span
+              className="wishlist-edit-button-container"
+              onClick={(e) => {
+                e.stopPropagation();
+                editProduct(prodId);
+              }}
+            >
+              <Edit />
+              <div className="wishlist-edit-gradient"></div>
+            </span>
+
+            <span
+              className="wishlist-offer-button-container"
+              onClick={(e) => {
+                e.stopPropagation();
+                openDiscountProduct({ prodId, name, price });
+              }}
+            >
+              <Offer />
+              <div className="wishlist-offer-gradient"></div>
+            </span>
+
+            {productData.active ? (
+              <span
+                className="wishlist-pause-button-container"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  openDeleteProduct({ prodId, name });
+                }}
+              >
+                <Pause />
+                <div className="wishlist-pause-gradient"></div>
+              </span>
+            ) : (
+              <span
+                className="wishlist-play-button-container"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  openReactivateProduct({ prodId, name });
+                }}
+              >
+                <Play />
+                <div className="wishlist-play-gradient"></div>
+              </span>
+            )}
+          </div>
+        )}
 
         {/* <div className="wishlist-buy-buttons-container">
           <>
@@ -218,4 +253,4 @@ const Card = ({
   );
 };
 
-export default Card;
+export default WishlistCard;

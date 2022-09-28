@@ -12,6 +12,9 @@ const ModalAdminProducts = ({
   isOpenDeleteProduct,
   closeDeleteProduct,
   productToDelete,
+  isOpenReactivateProduct,
+  closeReactivateProduct,
+  productToReactivate,
   isOpenDiscountProduct,
   closeDiscountProduct,
   productToDiscount,
@@ -38,6 +41,21 @@ const ModalAdminProducts = ({
   const handleDeleteProduct = () => {
     deleteProduct();
     closeDeleteProduct();
+  };
+  const reactivateProduct = () => {
+    axios
+      .post(`/product/${productToDelete.prodId}`)
+      .then((r) => {
+        //dispatch(deleteProductFromState(productToDelete.prodId));
+        dispatch(changeReloadFlag(true));
+        notification(r.data.message, "", r.data.type);
+      })
+      .catch((err) => console.error(err)); //! VOLVER A VER manejo de errores
+  };
+
+  const handleReactivateProduct = () => {
+    reactivateProduct();
+    closeReactivateProduct();
   };
 
   const addDiscount = () => {
@@ -125,13 +143,28 @@ const ModalAdminProducts = ({
         closeModal={closeDeleteProduct}
         type="warn"
       >
-        <p>{`¿Eliminar el producto ${
+        <p>{`¿Pausar la publicación ${
           productToDelete ? productToDelete.name : null
         }?`}</p>
         <button type="button" onClick={handleDeleteProduct}>
           Aceptar
         </button>
         <button type="button" onClick={closeDeleteProduct}>
+          Cancelar
+        </button>
+      </Modal>
+      <Modal
+        isOpen={isOpenReactivateProduct}
+        closeModal={closeReactivateProduct}
+        type="warn"
+      >
+        <p>{`¿Reactivar la publicación ${
+          productToReactivate ? productToReactivate.name : null
+        }?`}</p>
+        <button type="button" onClick={handleReactivateProduct}>
+          Aceptar
+        </button>
+        <button type="button" onClick={closeReactivateProduct}>
           Cancelar
         </button>
       </Modal>

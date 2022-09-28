@@ -37,6 +37,7 @@ const ProductForm = () => {
   const [imgsToEdit, setImgsToEdit] = useState([]);
   const [productToEdit, setProductToEdit] = useState(null);
   const { idProductToEdit } = useSelector((state) => state.productsReducer);
+  const { role } = useSelector((state) => state.sessionReducer);
   const dispatch = useDispatch();
   const [warn, setWarn] = useState({
     main_features: "",
@@ -294,7 +295,9 @@ const ProductForm = () => {
 
         dispatch(changeReloadFlag(true));
         notification("Producto editado exitosamente", "", "success");
-        navigate("/admin/products");
+        role === "admin"
+          ? navigate("/admin/products")
+          : navigate("/profile/products");
       } else {
         await axios.post("/product/", { ...productData, images });
 
@@ -330,7 +333,9 @@ const ProductForm = () => {
       clearInputs();
       closeCreateProduct();
     } else {
-      navigate("/admin/products");
+      role === "admin"
+        ? navigate("/admin/products")
+        : navigate("/profile/products");
     }
   };
 
