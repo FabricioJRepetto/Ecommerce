@@ -99,7 +99,7 @@ const Signupin = () => {
         window.localStorage.setItem("loggedTokenEcommerce", data.token);
 
         //? Login con el hook
-        userLogin(data.token);
+        userLogin(data.token, true);
       }
     } catch (error) {
       //! VOLVER A VER manejo de errores
@@ -124,7 +124,7 @@ const Signupin = () => {
     window.localStorage.setItem("loggedTokenEcommerce", googleToken);
 
     //? Login con el hook
-    googleLogin(googleToken, userDecoded);
+    googleLogin(googleToken, userDecoded, true);
   };
 
   useEffect(() => {

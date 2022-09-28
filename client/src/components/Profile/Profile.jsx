@@ -8,6 +8,7 @@ import { ReactComponent as Location } from "../../assets/svg/location.svg";
 import { ReactComponent as Bag } from "../../assets/svg/bag.svg";
 import { ReactComponent as Tag } from "../../assets/svg/tag.svg";
 import { ReactComponent as MoneyBag } from "../../assets/svg/money-bag.svg";
+import { ReactComponent as Bell } from "../../assets/svg/bell.svg";
 import { ReactComponent as Fav } from "../../assets/svg/fav.svg";
 import { ReactComponent as Logout } from "../../assets/svg/logout.svg";
 import { RepeatClockIcon } from "@chakra-ui/icons";
@@ -26,6 +27,7 @@ import NotFound from "../common/NotFound";
 
 import "../../App.css";
 import "./Profile.css";
+import NotificationsSection from "./Notifications/NotificationsSection";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -35,6 +37,7 @@ const Profile = () => {
 
   const [render, setRender] = useState(section);
   const [address, setAddress] = useState([]);
+  const [notif, setNotif] = useState([]);
   const [wishlist, setWishlist] = useState([]);
   const [history, setHistory] = useState([]);
   const [orders, setOrders] = useState([]);
@@ -66,17 +69,17 @@ const Profile = () => {
           axios(`/wishlist/`),
           axios(`/history/`),
           axios(`/order/userall`),
-          //axios(`/notifications/`),
+          axios(`/notifications/`),
           axios(`/user/products`),
         ];
         const p = await Promise.allSettled(requests);
 
-        p[0].value ? setAddress(p[0].value.data.address) : setAddress([]);
-        p[1].value ? setWishlist(p[1].value.data.products) : setWishlist([]);
-        p[2].value ? setHistory(p[2].value.data.products) : setHistory([]);
-        p[3].value ? setOrders(p[3].value.data) : setOrders([]);
-
-        p[4].value ? setPublications(p[4].value.data) : setPublications([]);
+        p[0].value && setAddress(p[0].value.data.address);
+        p[1].value && setWishlist(p[1].value.data.products);
+        p[2].value && setHistory(p[2].value.data.products);
+        p[3].value && setOrders(p[3].value.data);
+        p[4].value && setNotif(p[4].value.data);
+        p[5].value ? setPublications(p[5].value.data) : setPublications([]);
 
         //? Notifica cuando se eliminaron productos que estaba en favoritos
         p[1].value.data.message &&
@@ -96,6 +99,7 @@ const Profile = () => {
     "products",
     "wishlist",
     "history",
+    "notifications",
     "password",
   ];
   const sectionsEsp = {
@@ -106,6 +110,7 @@ const Profile = () => {
     products: "PUBLICACIONES",
     wishlist: "FAVORITOS",
     history: "HISTORIAL",
+    notifications: "NOTIFICACIONES",
     password: "CONTRASEÑA",
   };
 
@@ -334,6 +339,14 @@ const Profile = () => {
                 <ChromaticText text={"Detalles"} size={"1.1rem"} />
               </span>
             </li>
+            <li onClick={() => navigate("/profile/notifications")}>
+              <span className="profile-svg-container">
+                <Bell />
+              </span>
+              <span className="profile-chromatic-container">
+                <ChromaticText text={"Notificaciones"} size={"1.1rem"} />
+              </span>
+            </li>
             <li onClick={() => navigate("/profile/address")}>
               <span className="profile-svg-container">
                 <Location />
@@ -439,6 +452,14 @@ const Profile = () => {
 
         {render === "wishlist" && (
           <Wishlist loading={loading} wishlist={wishlist} wl_id={wl_id} />
+        )}
+
+        {render === "notifications" && (
+          <NotificationsSection
+            loading={loading}
+            notif={notif}
+            setNotif={setNotif}
+          />
         )}
 
         {render === "history" && (

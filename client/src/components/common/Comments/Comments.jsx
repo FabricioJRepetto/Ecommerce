@@ -18,11 +18,7 @@ const Comments = ({ product_id, comments, allowed }) => {
   const [calification, setCalification] = useState(0);
   const [text, setText] = useState("");
   const [calPreview, setCalPreview] = useState(false);
-  const {
-    id,
-    name: userName,
-    avatar,
-  } = useSelector((state) => state.sessionReducer);
+  const { id, username, avatar } = useSelector((state) => state.sessionReducer);
 
   useEffect(() => {
     //? mover el comentario del usuario al principio
@@ -93,7 +89,7 @@ const Comments = ({ product_id, comments, allowed }) => {
               _id: data.new_id,
             },
             user_data: {
-              name: userName,
+              username,
               avatar,
             },
           };

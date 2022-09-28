@@ -45,7 +45,7 @@ const WishlistModal = ({ close }) => {
             </div>
           ) : (
             <p className="modal-wishlist-empty">
-              Aún no tienes productos deseados
+              Aún no tienes productos en favoritos
             </p>
           )}
           <div

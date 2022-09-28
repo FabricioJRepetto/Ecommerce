@@ -1,0 +1,86 @@
+.notif-modal-container {
+    height: 2rem;
+    min-height: 2rem;
+    width: 2rem;
+    min-width: 2rem;
+    margin-top: .25rem;
+    cursor: pointer;
+    position: relative;
+}
+
+.notif-modal-inner {
+  display: flex;
+  flex-direction: column;
+  height: 50vh;
+  padding: 2rem 0 4rem 0;
+  overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.notif-modal-inner::-webkit-scrollbar {
+  display: none;
+}
+
+.notif-modal-header {
+    position: relative;
+    height: 2rem;
+    min-height: 2rem;
+    width: 2rem;
+    min-width: 2rem;
+}
+.notif-dot {
+    height: .5rem;
+    min-height: .5rem;
+    width: .5rem;
+    min-width: .5rem;
+    border-radius: 50%;
+    position: absolute;
+    right: 0;
+    background-color: #d71212;
+}
+.bell-svg {
+    color: #FFFFFF;
+    scale: .85;
+}
+
+.notif-modal-opener {
+    position: absolute;
+    top: 0;
+    height: 2.5rem;
+    min-height: 2.5rem;
+    width: 2rem;
+    min-width: 2rem;
+    z-index: 10;
+}
+.notif-modal-content {
+    position: absolute;
+    top: 2.54rem;
+    left: -1000%;
+    height: 5rem;
+    width: 25rem;
+    opacity: 0;
+    pointer-events: none;
+    cursor: default;
+    transition: height 0.3s ease;
+    background-color: #111111;
+    border: 1px solid #ffffff50;
+}
+.notif-modal-container:hover .notif-modal-content {
+    height: 30rem;
+    opacity: 1;
+    pointer-events: all;
+}
+
+.notif-modal-content-header {
+    position: absolute;
+    z-index: 130;
+    text-align: left;
+    width: 100%;
+    padding: 8px;
+    top: 0;
+}
+.notif-modal-card-container {
+    padding: 1rem 0;
+
+}

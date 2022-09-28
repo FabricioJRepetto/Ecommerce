@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { loadUserData, loadingUserData } from "../Redux/reducer/sessionSlice";
+import { loadUserData, loadingUserData, loadNotifications } from "../Redux/reducer/sessionSlice";
 import { loadCart, loadWishlist } from "../Redux/reducer/cartSlice";
 import { useNotification } from "./useNotification";
 
@@ -10,10 +10,10 @@ export const useUserLogin = (token) => {
   const dispatch = useDispatch();
   const notification = useNotification();
 
-  const userLogin = async (token, notif = true) => {
+  const userLogin = async (token, welcome = false) => {
     try {
       const {
-        data: { user, cart, wish },
+        data: { user, cart, wish, notif },
       } = await axios(`/user/profile/${token}`);
 
       const {
@@ -48,8 +48,9 @@ export const useUserLogin = (token) => {
       );
       dispatch(loadCart(cart));
       dispatch(loadWishlist(wish));
+      dispatch(loadNotifications(notif));
 
-      notif && notification(`Bienvenido, ${username || name}`, "", "welcome");
+      welcome && notification(`Bienvenido, ${username || name}`, "", "welcome");
     } catch (error) {
       console.error("useUserLogin", error);
       window.localStorage.removeItem("loggedTokenEcommerce");
@@ -60,7 +61,7 @@ export const useUserLogin = (token) => {
     }
   };
 
-  const googleLogin = async (token, userData) => {
+  const googleLogin = async (token, userData, notif = false) => {
     const {
       sub,
       email,
@@ -80,7 +81,7 @@ export const useUserLogin = (token) => {
         lastName,
       });
 
-      if (data) userLogin(token);
+      if (data) userLogin(token, notif);
       // else
     } catch (error) {
       console.error("useUserLogin google: catch " + error);

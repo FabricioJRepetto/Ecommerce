@@ -85,7 +85,7 @@ const ProfileDetails = ({ address, loading }) => {
       );
 
       const { data, statusText } = await axios.post("/user/avatar", {
-        url: newAvatarData.url,
+        url: newAvatarData.secure_url,
       });
 
       notification(
