@@ -37,13 +37,14 @@ const WishlistCard = ({
     sale_price,
     discount,
     brand,
+    seller,
     _id: prodId,
     free_shipping,
     on_sale,
     premium,
     available_quantity,
   } = productData;
-  const special = !/MLA/g.test(prodId);
+  const special = seller === 'PROVIDER';
 
   const readySetter = () => {
     setReady(true);
@@ -183,6 +184,7 @@ const WishlistCard = ({
                 editProduct(prodId);
               }}
             >
+              <div className="publication-tootlip">Editar publicación</div>
               <Edit />
               <div className="wishlist-edit-gradient"></div>
             </span>
@@ -194,6 +196,7 @@ const WishlistCard = ({
                 openDiscountProduct({ prodId, name, price });
               }}
             >
+              <div className="publication-tootlip">Agregar descuento</div>
               <Offer />
               <div className="wishlist-offer-gradient"></div>
             </span>
@@ -206,6 +209,7 @@ const WishlistCard = ({
                   openDeleteProduct({ prodId, name });
                 }}
               >
+                <div className="publication-tootlip">Pausar publicación</div>
                 <Pause />
                 <div className="wishlist-pause-gradient"></div>
               </span>
@@ -217,6 +221,7 @@ const WishlistCard = ({
                   openReactivateProduct({ prodId, name });
                 }}
               >
+                <div className="publication-tootlip">Reanudar publicación</div>
                 <Play />
                 <div className="wishlist-play-gradient"></div>
               </span>

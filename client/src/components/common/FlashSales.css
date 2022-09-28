@@ -77,7 +77,6 @@
     margin: 1rem;
 }
 
-
 @media (max-width: 1500px) {
     .flashsales-products-inner {
         grid-template-columns: 1fr 1fr 1fr;
