@@ -5,7 +5,7 @@ import "./History.css";
 
 const History = ({ loading, history, wl_id }) => {
   return (
-    <div>
+    <div className="component-fadeIn">
       {!loading ? (
         <>
           <h1>Historial</h1>

@@ -59,7 +59,7 @@ const Address = ({ loading, setLoading, address, setAddress }) => {
   };
 
   return (
-    <div className="profile-all-address-container">
+    <div className="profile-all-address-container component-fadeIn">
       {!loading ? (
         <>
           <h1>Direcciones</h1>

@@ -4,7 +4,7 @@ import "./UserSales.css";
 
 const UserSales = ({ loading, sales }) => {
   return (
-    <div>
+    <div className="component-fadeIn">
       {!loading ? (
         <div>
           <h1>Ventas</h1>

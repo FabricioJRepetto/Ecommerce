@@ -222,7 +222,7 @@ const ProfileDetails = ({ address, loading }) => {
   }, []);
 
   return (
-    <div className="profile-details-container">
+    <div className="profile-details-container component-fadeIn">
       <h1>Detalles</h1>
 
       <span className="profile-avatar-container">
@@ -319,7 +319,9 @@ const ProfileDetails = ({ address, loading }) => {
           <form onSubmit={handleSubmitUsername(updateDetails)}>
             <>
               {!errorsUsername.username && (
-                <span className="g-info-input">Presiona Enter para guardar cambios</span>
+                <span className="g-info-input">
+                  Presiona Enter para guardar cambios
+                </span>
               )}
               {errorsUsername.username?.type === "required" && (
                 <p className="g-error-input">Ingresa tu nombre de usuario</p>
@@ -385,7 +387,9 @@ const ProfileDetails = ({ address, loading }) => {
             <span>
               <>
                 {!errorsFullname.firstname && (
-                  <span className="g-hidden-placeholder">Presiona Enter para guardar cambios</span>
+                  <span className="g-hidden-placeholder">
+                    Presiona Enter para guardar cambios
+                  </span>
                 )}
                 {errorsFullname.firstname?.type === "pattern" && (
                   <p className="g-error-input">Ingresa un nombre válido</p>
@@ -417,7 +421,9 @@ const ProfileDetails = ({ address, loading }) => {
             <span>
               <>
                 {!errorsFullname.lastname && (
-                  <span className="g-info-input">Presiona Enter para guardar cambios</span>
+                  <span className="g-info-input">
+                    Presiona Enter para guardar cambios
+                  </span>
                 )}
                 {errorsFullname.lastname?.type === "pattern" && (
                   <p className="g-error-input">Ingresa un apellido válido</p>
