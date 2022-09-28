@@ -5,18 +5,18 @@ import "./UserSales.css";
 
 const UserSales = ({ loading, sales }) => {
   return (
-    <div className="component-fadeIn">
+    <div className="profile-all-orders-container component-fadeIn">
       {!loading ? (
-        <div>
+        <>
           <h1>Ventas</h1>
-          <div>
+          <div className="profile-orders-container component-fadeIn">
             {sales?.length ? (
               React.Children.toArray(sales.map((s) => <SaleCard sale={s} />))
             ) : (
               <p>Aún no has vendido ningún produco</p>
             )}
           </div>
-        </div>
+        </>
       ) : (
         <LoaderBars />
       )}
