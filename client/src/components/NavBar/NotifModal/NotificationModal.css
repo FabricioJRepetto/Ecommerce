@@ -8,6 +8,20 @@
     position: relative;
 }
 
+.notif-modal-inner {
+  display: flex;
+  flex-direction: column;
+  height: 50vh;
+  padding: 2rem 0 4rem 0;
+  overflow-y: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.notif-modal-inner::-webkit-scrollbar {
+  display: none;
+}
+
 .notif-modal-header {
     position: relative;
     height: 2rem;
@@ -41,17 +55,32 @@
 }
 .notif-modal-content {
     position: absolute;
-    top: 2.4rem;
+    top: 2.54rem;
     left: -1000%;
-    height: 0rem;
+    height: 5rem;
     width: 25rem;
     opacity: 0;
     pointer-events: none;
+    cursor: default;
     transition: height 0.3s ease;
-    background-color: aquamarine;
+    background-color: #111111;
+    border: 1px solid #ffffff50;
 }
 .notif-modal-container:hover .notif-modal-content {
     height: 30rem;
     opacity: 1;
     pointer-events: all;
+}
+
+.notif-modal-content-header {
+    position: absolute;
+    z-index: 130;
+    text-align: left;
+    width: 100%;
+    padding: 8px;
+    top: 0;
+}
+.notif-modal-card-container {
+    padding: 1rem 0;
+
 }

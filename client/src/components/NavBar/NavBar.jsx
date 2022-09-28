@@ -12,7 +12,6 @@ import {
 import { CloseIcon, SearchIcon } from "@chakra-ui/icons";
 import { ReactComponent as Cart } from "../../assets/svg/cart.svg";
 import { ReactComponent as Fav } from "../../assets/svg/fav.svg";
-import { ReactComponent as Bell } from "../../assets/svg/bell.svg";
 import { ReactComponent as Avatar } from "../../assets/svg/avatar.svg";
 import WishlistModal from "../common/WishlistModal";
 import { avatarResizer } from "../../helpers/resizer";
@@ -20,7 +19,7 @@ import { PowerGlitch } from "powerglitch";
 import { useSignout } from "../../hooks/useSignout";
 import ChromaticText from "../common/ChromaticText";
 import BurgerButton from "../common/BurgerButton";
-import NotificationModal from "./NotificationModal";
+import NotificationModal from "./NotifModal/NotificationModal";
 import "./NavBar.css";
 import "../../App.css";
 
