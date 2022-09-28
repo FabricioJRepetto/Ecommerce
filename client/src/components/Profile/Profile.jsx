@@ -7,7 +7,7 @@ import { ReactComponent as Avatar } from "../../assets/svg/avatar.svg";
 import { ReactComponent as Location } from "../../assets/svg/location.svg";
 import { ReactComponent as Bag } from "../../assets/svg/bag.svg";
 import { ReactComponent as Tag } from "../../assets/svg/tag.svg";
-import { ReactComponent as MoneyBag } from "../../assets/svg/money-bag.svg";
+import { ReactComponent as MoneyBag } from "../../assets/svg/money-bag-bold.svg";
 import { ReactComponent as Bell } from "../../assets/svg/bell.svg";
 import { ReactComponent as Fav } from "../../assets/svg/fav.svg";
 import { ReactComponent as Logout } from "../../assets/svg/logout.svg";
@@ -42,6 +42,7 @@ const Profile = () => {
   const [history, setHistory] = useState([]);
   const [orders, setOrders] = useState([]);
   const [publications, setPublications] = useState([]);
+  const [sales, setSales] = useState([]);
   const [loading, setLoading] = useState(true);
   const [change, setChange] = useState(true);
 
@@ -79,7 +80,10 @@ const Profile = () => {
         p[2].value && setHistory(p[2].value.data.products);
         p[3].value && setOrders(p[3].value.data);
         p[4].value && setNotif(p[4].value.data);
-        p[5].value ? setPublications(p[5].value.data) : setPublications([]);
+        if (p[5].value) {
+          setPublications(p[5].value.data.publications);
+          setSales(p[5].value.data.sales);
+        }
 
         //? Notifica cuando se eliminaron productos que estaba en favoritos
         p[1].value.data.message &&
@@ -274,6 +278,7 @@ const Profile = () => {
                       transform: "scale(.95)",
                       left: "0.6rem",
                       top: "0.5rem",
+                      fill: "white",
                     }}
                   />
                 </span>
@@ -387,6 +392,7 @@ const Profile = () => {
                       transform: "scale(.95)",
                       left: "0.6rem",
                       top: "0.5rem",
+                      fill: "white",
                     }}
                   />
                 </span>
@@ -434,7 +440,7 @@ const Profile = () => {
         {render === "orders" && <Orders orders={orders} loading={loading} />}
 
         {role === "client" && render === "sales" && (
-          <UserSales sales={publications.sales} loading={loading} />
+          <UserSales sales={sales} loading={loading} />
         )}
 
         {role === "client" && render === "products" && (

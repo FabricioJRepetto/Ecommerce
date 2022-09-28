@@ -1,5 +1,6 @@
 import React from "react";
 import LoaderBars from "../common/LoaderBars";
+import SaleCard from "./SaleCard";
 import "./UserSales.css";
 
 const UserSales = ({ loading, sales }) => {
@@ -9,7 +10,11 @@ const UserSales = ({ loading, sales }) => {
         <div>
           <h1>Ventas</h1>
           <div>
-            {sales?.length ? <></> : <p>Aún no has vendido ningún produco</p>}
+            {sales?.length ? (
+              React.Children.toArray(sales.map((s) => <SaleCard sale={s} />))
+            ) : (
+              <p>Aún no has vendido ningún produco</p>
+            )}
           </div>
         </div>
       ) : (
