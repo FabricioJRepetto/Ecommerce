@@ -60,14 +60,14 @@ const NotificationModal = () => {
                         )}
                         </div>
                      : <p className="modal-wishlist-empty">
-                        Aún no tienes productos en favoritos
+                        No tienes notificaciones
                         </p>
                      }
                         <div
                             onClick={() => navigate("/profile/notifications")}
                             className="modal-card-all-favs pointer all-favs-text-container"
                         >
-                            <ChromaticText text="Ver todos los productos deseados" />
+                            <ChromaticText text="Ver todas las notificaciones" />
                         </div>
                   </div>}
 
