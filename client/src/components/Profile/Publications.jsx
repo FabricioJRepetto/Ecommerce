@@ -3,10 +3,12 @@ import LoaderBars from "../common/LoaderBars";
 import WishlistCard from "./WishlistCard";
 import { useModal } from "../../hooks/useModal";
 import ModalAdminProducts from "../Admin/ModalAdminProducts";
+import { useNavigate } from "react-router-dom";
 
 import "./Publications.css";
 
 const Publications = ({ loading, publications }) => {
+  const navigate = useNavigate();
   const [
     isOpenDeleteProduct,
     openDeleteProduct,
@@ -35,7 +37,7 @@ const Publications = ({ loading, publications }) => {
   return (
     <>
       {!loading ? (
-        <div className="profile-wishlist-container">
+        <div className="profile-wishlist-container component-fadeIn">
           <h1>Publicaciones</h1>
           <div>
             {publications?.length ? (
@@ -54,6 +56,14 @@ const Publications = ({ loading, publications }) => {
               <p>Aún no has publicado ningún produco</p>
             )}
           </div>
+          <button
+            className="g-white-button"
+            onClick={() => {
+              navigate("/create");
+            }}
+          >
+            Publicar
+          </button>
         </div>
       ) : (
         <LoaderBars />

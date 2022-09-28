@@ -196,7 +196,7 @@ const Profile = () => {
                 <ChromaticText text={"Detalles"} size={"1.1rem"} />
               </span>
             </li>
-            <li
+            {/* <li
               onClick={() => {
                 navigate("/create");
                 setShowMenu(false);
@@ -208,7 +208,7 @@ const Profile = () => {
               <span className="profile-chromatic-container">
                 <ChromaticText text={"Publicar"} size={"1.1rem"} />
               </span>
-            </li>
+            </li> */}
             <li
               onClick={() => {
                 navigate("/profile/address");
