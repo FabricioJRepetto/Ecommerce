@@ -53,40 +53,21 @@ const NotificationModal = () => {
                     <div className="notif-modal-content-header">Notificaciones</div>
                     {data.length > 0 
                         ? <div className="notif-modal-card-container">
-                        {React.Children.toArray(
-                            data.map((e) => (
-                            <NotifCard props={e} modal />
-                            ))
-                        )}
+                            {React.Children.toArray(
+                                data.map((e) => (
+                                <NotifCard props={e} modal />
+                                ))
+                            )}
                         </div>
-                     : <p className="modal-wishlist-empty">
-                        No tienes notificaciones
-                        </p>
-                     }
-                        <div
-                            onClick={() => navigate("/profile/notifications")}
-                            className="modal-card-all-favs pointer all-favs-text-container"
-                        >
+                        : <p className="modal-wishlist-empty">
+                            No tienes notificaciones
+                            </p>}
+
+                        <div onClick={() => navigate("/profile/notifications")}
+                            className="modal-card-all-favs pointer all-favs-text-container">
                             <ChromaticText text="Ver todas las notificaciones" />
                         </div>
                   </div>}
-
-
-
-
-
-            {/* // {data && data.length > 0
-            //     ? <div>
-            //         <h2>notificaciones</h2>
-            //         <div>
-            //             {data.map(n => (
-            //                 <NotifCard key={n._id} props={n} modal/>
-            //             ))}
-            //         </div>
-            //     </div>
-            //     : <div>
-            //         <h2>No tienes notificaciones</h2>
-            //     </div>} */}
         </div>
 
     </div>
