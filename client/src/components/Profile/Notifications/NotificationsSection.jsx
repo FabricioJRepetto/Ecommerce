@@ -26,7 +26,7 @@ const NotificationsSection = ({loading, notif, setNotif}) => {
     <div className='notifications-section-container'>
         <div className='notifications-section-title'>
             <h1>Notificaciones</h1>    
-            {loading && <Spinner/>}        
+            {loading && <Spinner/>}
         </div>
         
         {loadSource && loadSource.length > 0 &&
