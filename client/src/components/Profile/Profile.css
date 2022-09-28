@@ -9,13 +9,13 @@
 
 @media (max-width: 899px) {
   .profile-menu-container-show {
-    width: 170px;
+    width: 195px;
   }
 }
 
 @media (min-width: 900px) {
   .profile-menu-container-show {
-    width: 20vw;
+    width: 22vw;
     max-width: 250px;
   }
 }
@@ -36,7 +36,7 @@
   .profile-menu-container-desktop {
     display: flex;
     width: 10vw;
-    min-width: 170px;
+    min-width: 195px;
   }
 
   .profile-menu-container-placeholder-desktop {
@@ -131,7 +131,7 @@
 }
 
 .profile-svg-container {
-  position: absolute;
+  /*  position: absolute; */
 }
 
 .profile-svg-container svg {

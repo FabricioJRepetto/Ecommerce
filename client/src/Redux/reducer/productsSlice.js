@@ -143,7 +143,6 @@ export const productsSlice = createSlice({
         }
       }
 
-      state.reloadFlag = true;
       productsToShowFunction(state);
     },
 

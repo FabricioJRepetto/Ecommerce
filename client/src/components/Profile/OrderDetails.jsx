@@ -19,7 +19,7 @@ const OrderDetails = ({ order, setOrderDetails }) => {
   }, []);
 
   return (
-    <div className="profile-order-resume-container">
+    <div className="profile-order-resume-container component-fadeIn">
       <h1>Resúmen</h1>
       <span>
         <div className="order-details-carousel-info-container">

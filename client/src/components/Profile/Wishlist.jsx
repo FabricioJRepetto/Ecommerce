@@ -7,7 +7,7 @@ const Wishlist = ({ loading, wishlist, wl_id }) => {
   return (
     <>
       {!loading ? (
-        <div className="profile-wishlist-container">
+        <div className="profile-wishlist-container component-fadeIn">
           <h1>Favoritos</h1>
           <div>
             {wishlist?.length ? (

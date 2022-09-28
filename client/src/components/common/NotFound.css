@@ -6,6 +6,7 @@
    background-image: url('https://res.cloudinary.com/dsyjj0sch/image/upload/v1663797565/static-noise_jrlwul.webp');
    background-size: cover;
    flex-grow: 1;
+   z-index: 10;
 }
 
 .not-found-container h1 {

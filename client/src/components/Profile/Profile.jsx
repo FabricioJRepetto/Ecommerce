@@ -6,6 +6,8 @@ import { useNotification } from "../../hooks/useNotification";
 import { ReactComponent as Avatar } from "../../assets/svg/avatar.svg";
 import { ReactComponent as Location } from "../../assets/svg/location.svg";
 import { ReactComponent as Bag } from "../../assets/svg/bag.svg";
+import { ReactComponent as Tag } from "../../assets/svg/tag.svg";
+import { ReactComponent as MoneyBag } from "../../assets/svg/money-bag-bold.svg";
 import { ReactComponent as Bell } from "../../assets/svg/bell.svg";
 import { ReactComponent as Fav } from "../../assets/svg/fav.svg";
 import { ReactComponent as Logout } from "../../assets/svg/logout.svg";
@@ -13,6 +15,8 @@ import { RepeatClockIcon } from "@chakra-ui/icons";
 import ProfileDetails from "./ProfileDetails";
 import Orders from "./Orders";
 import Address from "./Address";
+import Publications from "./Publications";
+import UserSales from "./UserSales";
 import Wishlist from "./Wishlist";
 import History from "./History";
 import UpdatePassword from "../Session/UpdatePassword";
@@ -37,11 +41,13 @@ const Profile = () => {
   const [wishlist, setWishlist] = useState([]);
   const [history, setHistory] = useState([]);
   const [orders, setOrders] = useState([]);
+  const [publications, setPublications] = useState([]);
+  const [sales, setSales] = useState([]);
   const [loading, setLoading] = useState(true);
   const [change, setChange] = useState(true);
 
   const { wishlist: wl_id } = useSelector((state) => state.cartReducer);
-  const { session } = useSelector((state) => state.sessionReducer);
+  const { session, role } = useSelector((state) => state.sessionReducer);
 
   const [widnowWidth, setWindowWidth] = useState(window.innerWidth);
   const [showMenu, setShowMenu] = useState(false);
@@ -64,7 +70,8 @@ const Profile = () => {
           axios(`/wishlist/`),
           axios(`/history/`),
           axios(`/order/userall`),
-          axios('/notifications/')
+          axios(`/notifications/`),
+          axios(`/user/products`),
         ];
         const p = await Promise.allSettled(requests);
 
@@ -73,8 +80,12 @@ const Profile = () => {
         p[2].value && setHistory(p[2].value.data.products);
         p[3].value && setOrders(p[3].value.data);
         p[4].value && setNotif(p[4].value.data);
+        if (p[5].value) {
+          setPublications(p[5].value.data.publications);
+          setSales(p[5].value.data.sales);
+        }
 
-        //? Notifica cuando se eliminaron productos que estaban en favoritos
+        //? Notifica cuando se eliminaron productos que estaba en favoritos
         p[1].value.data.message &&
           notification(p[1].value.data.message, "", "warning");
 
@@ -88,6 +99,8 @@ const Profile = () => {
     "details",
     "address",
     "orders",
+    "sales",
+    "products",
     "wishlist",
     "history",
     "notifications",
@@ -97,6 +110,8 @@ const Profile = () => {
     details: "PERFIL",
     address: "DIRECCIONES",
     orders: "COMPRAS",
+    sales: "VENTAS",
+    products: "PUBLICACIONES",
     wishlist: "FAVORITOS",
     history: "HISTORIAL",
     notifications: "NOTIFICACIONES",
@@ -177,7 +192,12 @@ const Profile = () => {
             <BurgerButton setShowMenu={setShowMenu} showMenu={showMenu} />
           </div>
           <>
-            <li onClick={() => navigate("/profile/details")}>
+            <li
+              onClick={() => {
+                navigate("/profile/details");
+                setShowMenu(false);
+              }}
+            >
               <span className="profile-svg-container">
                 <Avatar />
               </span>
@@ -185,15 +205,25 @@ const Profile = () => {
                 <ChromaticText text={"Detalles"} size={"1.1rem"} />
               </span>
             </li>
-            <li onClick={() => navigate("/profile/notifications")}>
-              <span className="profile-svg-container">
-                <Bell />
+            {/* <li
+              onClick={() => {
+                navigate("/create");
+                setShowMenu(false);
+              }}
+            >
+              <span className="profile-svg-container profile-svg-rescale">
+                <Bag />
               </span>
               <span className="profile-chromatic-container">
-                <ChromaticText text={"Notificaciones"} size={"1.1rem"} />
+                <ChromaticText text={"Publicar"} size={"1.1rem"} />
               </span>
-            </li>
-            <li onClick={() => navigate("/profile/address")}>
+            </li> */}
+            <li
+              onClick={() => {
+                navigate("/profile/address");
+                setShowMenu(false);
+              }}
+            >
               <span className="profile-svg-container">
                 <Location />
               </span>
@@ -201,7 +231,12 @@ const Profile = () => {
                 <ChromaticText text={"Direcciones"} size={"1.1rem"} />
               </span>
             </li>
-            <li onClick={() => navigate("/profile/orders")}>
+            <li
+              onClick={() => {
+                navigate("/profile/orders");
+                setShowMenu(false);
+              }}
+            >
               <span className="profile-svg-container profile-svg-rescale">
                 <Bag />
               </span>
@@ -209,7 +244,55 @@ const Profile = () => {
                 <ChromaticText text={"Compras"} size={"1.1rem"} />
               </span>
             </li>
-            <li onClick={() => navigate("/profile/wishlist")}>
+            {role === "client" && (
+              <li
+                onClick={() => {
+                  navigate("/profile/products");
+                  setShowMenu(false);
+                }}
+              >
+                <span className="profile-svg-container profile-svg-rescale">
+                  <Tag
+                    style={{
+                      transform: "scale(1.1)",
+                    }}
+                  />
+                </span>
+                <span className="profile-chromatic-container">
+                  <ChromaticText text={"Publicaciones"} size={"1.1rem"} />
+                </span>
+              </li>
+            )}
+            {role === "client" && (
+              <li
+                onClick={() => {
+                  navigate("/profile/sales");
+                  setShowMenu(false);
+                }}
+              >
+                <span className="profile-svg-container profile-svg-rescale">
+                  <MoneyBag
+                    style={{
+                      width: "32px",
+                      height: "32px",
+                      transform: "scale(.95)",
+                      left: "0.6rem",
+                      top: "0.5rem",
+                      fill: "white",
+                    }}
+                  />
+                </span>
+                <span className="profile-chromatic-container">
+                  <ChromaticText text={"Ventas"} size={"1.1rem"} />
+                </span>
+              </li>
+            )}
+            <li
+              onClick={() => {
+                navigate("/profile/wishlist");
+                setShowMenu(false);
+              }}
+            >
               <span className="profile-svg-container">
                 <Fav />
               </span>
@@ -217,7 +300,12 @@ const Profile = () => {
                 <ChromaticText text={"Favoritos"} size={"1.1rem"} />
               </span>
             </li>
-            <li onClick={() => navigate("/profile/history")}>
+            <li
+              onClick={() => {
+                navigate("/profile/history");
+                setShowMenu(false);
+              }}
+            >
               <RepeatClockIcon />
               <span className="profile-chromatic-container">
                 <ChromaticText text={"Historial"} size={"1.1rem"} />
@@ -280,6 +368,39 @@ const Profile = () => {
                 <ChromaticText text={"Compras"} size={"1.1rem"} />
               </span>
             </li>
+            {role === "client" && (
+              <li onClick={() => navigate("/profile/products")}>
+                <span className="profile-svg-container profile-svg-rescale">
+                  <Tag
+                    style={{
+                      transform: "scale(1.1)",
+                    }}
+                  />
+                </span>
+                <span className="profile-chromatic-container">
+                  <ChromaticText text={"Publicaciones"} size={"1.1rem"} />
+                </span>
+              </li>
+            )}
+            {role === "client" && (
+              <li onClick={() => navigate("/profile/sales")}>
+                <span className="profile-svg-container profile-svg-rescale">
+                  <MoneyBag
+                    style={{
+                      width: "32px",
+                      height: "32px",
+                      transform: "scale(.95)",
+                      left: "0.6rem",
+                      top: "0.5rem",
+                      fill: "white",
+                    }}
+                  />
+                </span>
+                <span className="profile-chromatic-container">
+                  <ChromaticText text={"Ventas"} size={"1.1rem"} />
+                </span>
+              </li>
+            )}
             <li onClick={() => navigate("/profile/wishlist")}>
               <span className="profile-svg-container">
                 <Fav />
@@ -318,6 +439,14 @@ const Profile = () => {
 
         {render === "orders" && <Orders orders={orders} loading={loading} />}
 
+        {role === "client" && render === "sales" && (
+          <UserSales sales={sales} loading={loading} />
+        )}
+
+        {role === "client" && render === "products" && (
+          <Publications loading={loading} publications={publications} />
+        )}
+
         {render === "address" && (
           <Address
             loading={loading}
@@ -332,7 +461,11 @@ const Profile = () => {
         )}
 
         {render === "notifications" && (
-          <NotificationsSection loading={loading} notif={notif} setNotif={setNotif}/>
+          <NotificationsSection
+            loading={loading}
+            notif={notif}
+            setNotif={setNotif}
+          />
         )}
 
         {render === "history" && (

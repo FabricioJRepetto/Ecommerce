@@ -213,9 +213,11 @@ const Products = () => {
   };
 
   useEffect(() => {
-    reloadFunction();
-    dispatch(changeReloadFlag(false));
-    setLoading(false);
+    if (reloadFlag) {
+      reloadFunction();
+      dispatch(changeReloadFlag(false));
+      setLoading(false);
+    }
     // eslint-disable-next-line
   }, [reloadFlag]);
 
