@@ -44,9 +44,9 @@ const ModalAdminProducts = ({
   };
   const reactivateProduct = () => {
     axios
-      .post(`/product/${productToDelete.prodId}`)
+      .post(`/product/${productToReactivate.prodId}`)
       .then((r) => {
-        //dispatch(deleteProductFromState(productToDelete.prodId));
+        //dispatch(deleteProductFromState(productToReactivate.prodId));
         dispatch(changeReloadFlag(true));
         notification(r.data.message, "", r.data.type);
       })

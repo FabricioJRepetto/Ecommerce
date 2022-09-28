@@ -1,0 +1,11 @@
+/* .profile-sale-card .profile-price-desktop {
+   display: inline;
+} */
+
+@media (max-width: 720px) {
+   .profile-sale-card .profile-price-mobile {
+      display: inline;
+      text-align: center;
+      padding-right: 1rem;
+   }
+}

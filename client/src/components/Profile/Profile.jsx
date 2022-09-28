@@ -209,6 +209,19 @@ const Profile = () => {
                 <ChromaticText text={"Detalles"} size={"1.1rem"} />
               </span>
             </li>
+            <li
+              onClick={() => {
+                navigate("/profile/notifications");
+                setShowMenu(false);
+              }}
+            >
+              <span className="profile-svg-container">
+                <Bell />
+              </span>
+              <span className="profile-chromatic-container">
+                <ChromaticText text={"Notificaciones"} size={"1.1rem"} />
+              </span>
+            </li>
             {/* <li
               onClick={() => {
                 navigate("/create");
