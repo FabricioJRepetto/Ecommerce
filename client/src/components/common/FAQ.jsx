@@ -56,7 +56,7 @@ const FAQ = () => {
             <div className="faq-section">
               {typeof active === "number" && (
                 <Accordion defaultIndex={[active < 6 ? active : 0]}>
-                    
+
                   <AccordionItem>
                     <h2>
                       <AccordionButton
@@ -239,93 +239,74 @@ const FAQ = () => {
                     <AccordionPanel className="faq-text-container">
                       <div className="faq-ponedordeonda"></div>
                       Todas las transacciones en Provider están en{" "}
-                      <b className="provider-text">modo prueba</b>, se simula el
+                      <b className="provider-text" ref={questionRef}>modo prueba</b>, se simula el
                       pago en la plataforma que selecciones (Stripe o
                       Mercadopago). Para esto, es necesario introducir los datos
                       correspondientes en la pasarela de pagos que desees
                       utilizar.
+
                       <div className="faq-checkouts">
-                        <div  ref={questionRef}>
-                          <div className="faq-logo">
-                            <img
-                              src="https://res.cloudinary.com/dsyjj0sch/image/upload/v1663894003/Stripe_Logo-2_otuyhn.png"
-                              alt="stripe logo"
-                            />
-                          </div>
-                          <div>
-                            <ul>
-                              <li>
-                                Número de tarjeta:
-                                <br />
-                                <CopiableText text={"4242 4242 4242 4242"} />
-                              </li>
-                              <li>
-                                Fecha de expiración:
-                                <br />
-                                <b>Cualquier fecha mayor a la actual</b>
-                              </li>
-                              <li>
-                                cvc:
-                                <br />
-                                <CopiableText text={"123"} />
-                              </li>
-                              <li>
-                                E-mail:
-                                <br />
-                                <b>Cualquiera</b>
-                              </li>
-                              <li>
-                                Nombre:
-                                <br />
-                                <b>Cualquiera</b>
-                              </li>
-                            </ul>
-                          </div>
+                        <div>
+                            <div className="cart-modal-logo">
+                                <img src="https://res.cloudinary.com/dsyjj0sch/image/upload/v1663894003/Stripe_Logo-2_otuyhn.png" alt="stripe logo" />
+                            </div>
+                            <div>
+                                <ul>
+                                    <li>
+                                        Número de tarjeta:<br/>
+                                        <CopiableText text={'4242 4242 4242 4242'}/>
+                                    </li>
+                                    <li>
+                                        Fecha de expiración:<br/><b>Cualquier fecha mayor a la actual</b>
+                                    </li>
+                                    <li>
+                                        cvc:<br/>
+                                        <CopiableText text={'123'}/>
+                                    </li>
+                                    <li>
+                                        E-mail:<br/><b>Cualquiera</b>
+                                    </li>
+                                    <li>
+                                        Nombre:<br/><b>Cualquiera</b>
+                                    </li>
+                                </ul>                                        
+                            </div>
                         </div>
 
-                        <div>
-                          <div className="faq-logo">
-                            <img
-                              src="https://res.cloudinary.com/dsyjj0sch/image/upload/v1663894003/Mercadopago_Logo-2_anidpy.png"
-                              alt="Mercadopago logo"
-                            />
-                          </div>
-                          <div>
-                            <ul>
-                              <li>
-                                Número de tarjeta:
-                                <br />
-                                <CopiableText text={"5416 7526 0258 2580"} />
-                              </li>
-                              <li>
-                                Fecha de expiración:
-                                <br />
-                                <CopiableText text={"11/25"} />
-                              </li>
-                              <li>
-                                cvc:
-                                <br />
-                                <CopiableText text={"123"} />
-                              </li>
-                              <li>
-                                Nombre:
-                                <br />
-                                <CopiableText text={"APRO"} />
-                              </li>
-                              <li>
-                                dni:
-                                <br />
-                                <CopiableText text={"12345678"} />
-                              </li>
-                              <li>
-                                E-mail:
-                                <br />
-                                <b>Cualquier email argentino (importante)</b>
-                              </li>
-                            </ul>
-                          </div>
+                        <div>                
+                            <div className='cart-modal-logo'>
+                                <img src="https://res.cloudinary.com/dsyjj0sch/image/upload/v1663894003/Mercadopago_Logo-2_anidpy.png" alt="Mercadopago logo" />
+                            </div>
+                            <div>
+                                <ul>
+                                    <li>
+                                        Número de tarjeta:<br/>
+                                        <CopiableText text={'5416 7526 0258 2580'}/>
+                                    </li>
+                                    <li>
+                                        Fecha de expiración:<br/>
+                                        <CopiableText text={'11/25'}/>
+                                    </li>
+                                    <li>
+                                        cvc:<br/>
+                                        <CopiableText text={'123'}/>
+                                    </li>
+                                    <li>
+                                        Nombre:<br/>
+                                        <CopiableText text={'APRO'}/>
+                                    </li>
+                                    <li>
+                                        dni:<br/>
+                                        <CopiableText text={'12345678'}/>
+                                    </li>
+                                    <li>
+                                        E-mail:<br/>
+                                        <b>Cualquier email argentino (importante)</b>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
-                      </div>
+                    </div>
                     </AccordionPanel>
                   </AccordionItem>
 
