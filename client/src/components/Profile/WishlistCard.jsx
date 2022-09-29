@@ -149,78 +149,80 @@ const WishlistCard = ({
           </div>
         </div>
 
-        {location.pathname !== "/profile/products" &&
-        location.pathname !== "/admin/products" &&
-        session ? (
-          <>
-            <WishlistButton fav={fav} prodId={prodId} />
+        {session &&
+          (location.pathname !== "/profile/products" &&
+          location.pathname !== "/admin/products" ? (
+            <>
+              <WishlistButton fav={fav} prodId={prodId} />
 
-            {!onCart.includes(prodId) && (
-              <div
-                className="wishlist-addcart-container"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  addToCart(prodId);
-                }}
-              >
-                <AddCart />
-                <div className="wishlist-addcart-gradient"></div>
-              </div>
-            )}
-          </>
-        ) : (
-          <div className="wishlist-card-buttons-container">
-            <span
-              className="wishlist-edit-button-container"
-              onClick={(e) => {
-                e.stopPropagation();
-                editProduct(prodId);
-              }}
-            >
-              <div className="publication-tootlip">Editar publicación</div>
-              <Edit />
-              <div className="wishlist-edit-gradient"></div>
-            </span>
-
-            <span
-              className="wishlist-offer-button-container"
-              onClick={(e) => {
-                e.stopPropagation();
-                openDiscountProduct({ prodId, name, price, on_sale });
-              }}
-            >
-              <div className="publication-tootlip">Actualizar descuento</div>
-              <Offer />
-              <div className="wishlist-offer-gradient"></div>
-            </span>
-
-            {productData.active ? (
+              {!onCart.includes(prodId) && (
+                <div
+                  className="wishlist-addcart-container"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    addToCart(prodId);
+                  }}
+                >
+                  <AddCart />
+                  <div className="wishlist-addcart-gradient"></div>
+                </div>
+              )}
+            </>
+          ) : (
+            <div className="wishlist-card-buttons-container">
               <span
-                className="wishlist-pause-button-container"
+                className="wishlist-edit-button-container"
                 onClick={(e) => {
                   e.stopPropagation();
-                  openDeleteProduct({ prodId, name });
+                  editProduct(prodId);
                 }}
               >
-                <div className="publication-tootlip">Pausar publicación</div>
-                <Pause />
-                <div className="wishlist-pause-gradient"></div>
+                <div className="publication-tootlip">Editar publicación</div>
+                <Edit />
+                <div className="wishlist-edit-gradient"></div>
               </span>
-            ) : (
+
               <span
-                className="wishlist-play-button-container"
+                className="wishlist-offer-button-container"
                 onClick={(e) => {
                   e.stopPropagation();
-                  openReactivateProduct({ prodId, name });
+                  openDiscountProduct({ prodId, name, price, on_sale });
                 }}
               >
-                <div className="publication-tootlip">Reanudar publicación</div>
-                <Play />
-                <div className="wishlist-play-gradient"></div>
+                <div className="publication-tootlip">Actualizar descuento</div>
+                <Offer />
+                <div className="wishlist-offer-gradient"></div>
               </span>
-            )}
-          </div>
-        )}
+
+              {productData.active ? (
+                <span
+                  className="wishlist-pause-button-container"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    openDeleteProduct({ prodId, name });
+                  }}
+                >
+                  <div className="publication-tootlip">Pausar publicación</div>
+                  <Pause />
+                  <div className="wishlist-pause-gradient"></div>
+                </span>
+              ) : (
+                <span
+                  className="wishlist-play-button-container"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    openReactivateProduct({ prodId, name });
+                  }}
+                >
+                  <div className="publication-tootlip">
+                    Reanudar publicación
+                  </div>
+                  <Play />
+                  <div className="wishlist-play-gradient"></div>
+                </span>
+              )}
+            </div>
+          ))}
 
         {/* <div className="wishlist-buy-buttons-container">
           <>
