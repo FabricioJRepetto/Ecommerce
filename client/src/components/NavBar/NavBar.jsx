@@ -444,13 +444,13 @@ const NavBar = () => {
 
                       <NavLink to={"cart"} className="cart-icon-container">
                         <Cart className="cart-icon" />
-                        <div className="cart-number">
+                        {cart && <div className="cart-number">
                           {cart.length > 0
                             ? cart.length < 10
                               ? cart.length
                               : "9+"
                             : ""}
-                        </div>
+                        </div>}
                       </NavLink>
                     </>
                   )}
