@@ -30,7 +30,6 @@ const CartCard = ({ on_cart, productData, buyLater, deleteP, buyNow, source, loa
   const [moving, setMoving] = useState(false)
 
     useEffect(() => {
-        console.log(prodId);
         setTimeout(() => {
             setMounted(true)            
         }, 100);

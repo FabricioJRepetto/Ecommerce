@@ -58,11 +58,8 @@ const Cart = () => {
 
   useEffect(() => {    
     if (rawTotal) {
-        console.log(`%c rawTotal `, 'background-color: #ffbf47; color: #000000; font-weight: bold;');
-        console.log(rawTotal);
         let total = 0; 
         rawTotal.map(prod => total += prod.amount);
-        console.log(`%c ${total} `, 'background-color: #b8ff47; color: #000000; font-weight: bold;');
         setTotal(total);
     }
   }, [rawTotal])
@@ -75,8 +72,6 @@ const Cart = () => {
   const getCart = async () => {
     const { data } = await axios("/cart/");
     if (data) {
-      console.log(`%c ${data.total} `, 'background-color: #ffbf47; color: #000000; font-weight: bold;');
-
       setCart(data);
       setflash_shipping(data.flash_shipping || false);
       data.last_order?.length && setOrderId(data.last_order);
@@ -89,8 +84,6 @@ const Cart = () => {
             amount: p.quantity * (p.on_sale ? p.sale_price : p.price)
         }
       ))
-      console.log('get cart, total parseado: ');
-      console.log(aux);
       dispatch(fullCartTotal(aux));
       dispatch(loadCart(data.id_list));
     }
