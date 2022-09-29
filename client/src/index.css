@@ -349,6 +349,35 @@ code {
   background: #404040;
 }
 
+.load-font {
+    opacity: 0;
+    pointer-events: none;
+}
+.font-1 {
+    font-family: HelveticaNeueLTPro-Bd;
+}
+.font-2 {
+    font-family: HelveticaNeueLTPro-BdIt;
+}
+.font-3 {
+    font-family: HelveticaNeueLTPro-BdOu;
+}
+.font-4 {
+    font-family: HelveticaNeueLTPro-Blk;
+}
+.font-5 {
+    font-family: HelveticaNeueLTPro-Hv;
+}
+.font-6 {
+    font-family: HelveticaNeueLTPro-HvIt;
+}
+.font-7 {
+    font-family: HelveticaNeueLTPro-Roman;
+}
+.font-8 {
+    font-family: HelveticaNeueLTPro-Th;
+}
+
 /*RIPPLE*/
 @keyframes ripple-effect {
   0% {

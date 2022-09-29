@@ -14,6 +14,15 @@ const NotificationMaster = () => {
                      e.status === 'new' && <Notification {...e}/>
                 ))}
             </div>
+            {/* PRUEBA CARGA FUENTES // INDEX.CSS LINEA 352 */}            
+            <span className='load-font font-1'>P</span>
+            <span className='load-font font-2'>R</span>
+            <span className='load-font font-3'>O</span>
+            <span className='load-font font-4'>V</span>
+            <span className='load-font font-5'>I</span>
+            <span className='load-font font-6'>D</span>
+            <span className='load-font font-7'>E</span>
+            <span className='load-font font-8'>R</span>
         </div>
     )
 }

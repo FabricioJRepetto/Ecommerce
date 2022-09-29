@@ -1,0 +1,35 @@
+.publications-modal-pause-resume div {
+    display: flex;    
+    width: fit-content;
+}
+.publications-modal-pause-resume button {
+    margin: 1rem;
+}
+
+.publications-modal-discount button {
+    margin: 1rem 1rem 0 1rem;
+}
+
+.modal-discount-header {
+    margin: 1rem;
+}
+
+.modal-discount-checks label {
+    margin: 1rem;
+}
+
+.modal-discount-input {
+    margin: 1rem 0;
+}
+.modal-discount-input input {
+    width: 6rem;
+    height: 2rem;
+    text-align: center;
+}
+.modal-discount-input input:focus {
+    outline: none;
+}
+.modal-discount-input-result {
+    min-height: 2.4rem;
+    padding-top: .7rem;
+}

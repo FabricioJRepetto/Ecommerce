@@ -12,6 +12,16 @@ export const cartSlice = createSlice({
             state.onCart = action.payload;
         },
         cartTotal: (state, action) => {
+            let flag = state.total.find(e => e.id === action.payload.id)
+            if (flag) {
+                let aux = state.total.filter(e => e.id !== action.payload.id);
+                aux.push(action.payload)
+                state.total = aux;
+            } else {
+                state.total = [...state.total, action.payload];
+            }
+        },
+        fullCartTotal: (state, action) => {
             state.total = action.payload;
         },
         addCart: (state, action) => {
@@ -31,10 +41,11 @@ export const cartSlice = createSlice({
 
 export const {
     cartTotal,
+    fullCartTotal,
     addCart,
     loadCart,
     loadWishlist,
-    resetCartSlice,
+    resetCartSlice
 } = cartSlice.actions;
 
 export default cartSlice.reducer;

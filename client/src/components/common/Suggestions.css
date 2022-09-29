@@ -25,8 +25,14 @@
     margin: 0 .7rem;
     inline-size: max-content;
 }
+.suggestions-header div {
+    width: 20rem;
+    height: 2px;
+    margin: 0 1.5rem;
+    background-color: #ffffff;
+}
 
-.siggestion-eye {
+.suggestion-eye {
     height: 2.7rem;
     width: 2.7rem;
     background: linear-gradient(45deg,
@@ -46,13 +52,11 @@
 }
 
 .suggestions-products-container {
-    width: fit-content;
-    min-height: 350px;
-    min-width: 1342px;
-    position: relative;
+    height: fit-content;
     padding: 0 1rem 3rem 1rem;
+    margin: 0 auto;
     user-select: none;
-    overflow-x: auto;
+    overflow-x: hidden;
 }
 
 .suggestions-products-inner {

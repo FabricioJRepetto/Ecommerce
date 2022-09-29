@@ -6,7 +6,7 @@ import CartCard from "../Products/CartCard";
 import Modal from "../common/Modal";
 import { useModal } from "../../hooks/useModal";
 import { useNotification } from "../../hooks/useNotification";
-import { cartTotal, loadCart } from "../../Redux/reducer/cartSlice";
+import { fullCartTotal, loadCart } from "../../Redux/reducer/cartSlice";
 import { priceFormat } from "../../helpers/priceFormat";
 import { ReactComponent as Arrow } from "../../assets/svg/arrow-right.svg";
 import { ReactComponent as Pin } from "../../assets/svg/location.svg";
@@ -35,7 +35,8 @@ const Cart = () => {
   const [selectedAdd, setSelectedAdd] = useState(null);
   const [loadingPayment, setLoadingPayment] = useState(false);
   const [loading, setLoading] = useState(true);
-  const { total } = useSelector((state) => state.cartReducer);
+  const { total: rawTotal } = useSelector((state) => state.cartReducer);
+  const [total, setTotal] = useState(0)
 
   const [isOpenAddForm, openAddForm, closeAddForm, prop] = useModal();
   const [isOpenAddList, openAddList, closeAddList] = useModal();
@@ -44,7 +45,7 @@ const Cart = () => {
 
   const SHIP_COST = 500;
 
-  useEffect(() => {
+  useEffect(() => {    
     (async () => {
       await getCart();
       await getAddress();
@@ -54,6 +55,15 @@ const Cart = () => {
     })();
     // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {    
+    if (rawTotal) {
+        let total = 0; 
+        rawTotal.map(prod => total += prod.amount);
+        setTotal(total);
+    }
+  }, [rawTotal])
+  
 
   useEffect(() => { 
     setRender(section || 'cart');
@@ -66,7 +76,15 @@ const Cart = () => {
       setflash_shipping(data.flash_shipping || false);
       data.last_order?.length && setOrderId(data.last_order);
       data.message && notification(data.message, "", "warning");
-      dispatch(cartTotal(data.total));
+
+      //! cambiar esto, cargar el total de cada prod con su id
+      let aux = data.products.map(p => (
+        {
+            id: p._id,
+            amount: p.quantity * (p.on_sale ? p.sale_price : p.price)
+        }
+      ))
+      dispatch(fullCartTotal(aux));
       dispatch(loadCart(data.id_list));
     }
   };
@@ -227,7 +245,7 @@ const Cart = () => {
                         <div>
                         {cart.buyLater.map((p) => (
                             <CartCard
-                            key={p._id}
+                                key={p._id}
                                 on_cart={true}
                                 productData={p}
                                 buyLater={buyLater}
@@ -250,7 +268,7 @@ const Cart = () => {
                             {cart.products.map((p) => (
                             <CartCard
                                 key={p._id}
-                                on_cart={true}
+                                on_cart={false}
                                 productData={p}
                                 buyLater={buyLater}
                                 deleteP={deleteProduct}
@@ -488,7 +506,7 @@ const Cart = () => {
                             Fecha de expiración:<br/><b>Cualquier fecha mayor a la actual</b>
                         </li>
                         <li>
-                            cvc:<br/>
+                            CVV:<br/>
                             <CopiableText text={'123'}/>
                         </li>
                         <li>
@@ -530,7 +548,7 @@ const Cart = () => {
                             <CopiableText text={'11/25'}/>
                         </li>
                         <li>
-                            cvc:<br/>
+                            CVV:<br/>
                             <CopiableText text={'123'}/>
                         </li>
                         <li>

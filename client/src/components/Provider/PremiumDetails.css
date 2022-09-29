@@ -167,6 +167,7 @@
     font-size: 4rem;
     width: 30vw;
     min-width: 400px;
+    font-family: HelveticaNeueLTPro-Blk;
 }
 
 .premiumdetails-section p {
@@ -258,7 +259,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin: 5rem;
+    margin: 1rem 5rem 0 5rem;
 }
 
 .pd-logo-footer div {

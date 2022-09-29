@@ -45,7 +45,7 @@ const Card = ({
 
   return (
     <div style={{ position: "relative" }}>
-      {special && <i className="provider-text special-card">PROVIDER</i>}
+      {special && <b className="special-card">PRO</b>}
 
       <div
         key={prodId}

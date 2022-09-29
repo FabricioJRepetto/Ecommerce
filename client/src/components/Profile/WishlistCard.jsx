@@ -64,9 +64,13 @@ const WishlistCard = ({
         navigate(premium ? `/premium/${prodId}` : `/details/${prodId}`)
       }
     >
-      {location.pathname !== "/products" &&
-        /* location.pathname !== "/profile/products" && */
-        special && <i className="provider-text special-card">PROVIDER</i>}
+      {location.pathname !== "/products" && special && 
+        <>
+            {premium
+                ? <div className="special-card-premium"></div>
+                : <b className="special-card">PROVIDER</b>
+            }
+        </>}
       {(location.pathname === "/admin/products" ||
         location.pathname === "/profile/products") &&
         !productData.active && (
