@@ -1,3 +1,10 @@
+.publications-modal-pause-resume {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
 .publications-modal-pause-resume div {
     display: flex;
     width: fit-content;

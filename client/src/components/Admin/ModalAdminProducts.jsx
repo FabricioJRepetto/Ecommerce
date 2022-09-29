@@ -27,10 +27,11 @@ const ModalAdminProducts = ({
   const notification = useNotification();
 
   const deleteProduct = () => {
+    console.log("productToDelete.prodId", productToDelete.prodId);
     axios
       .delete(`/product/${productToDelete.prodId}`)
       .then((r) => {
-        dispatch(deleteProductFromState(productToDelete.prodId));
+        //dispatch(deleteProductFromState(productToDelete.prodId));
         dispatch(changeReloadFlag(true));
         notification(r.data.message, "", r.data.type);
       })
@@ -169,19 +170,28 @@ const ModalAdminProducts = ({
         isOpen={isOpenReactivateProduct}
         closeModal={closeReactivateProduct}
         type="warn"
-        className="publications-modal-pause-resume"
       >
-        <p>{`¿Reactivar la publicación ${
-          productToReactivate ? productToReactivate.name : null
-        }?`}</p>
+        <div className="publications-modal-pause-resume">
+          <p>{`¿Reactivar la publicación ${
+            productToReactivate ? productToReactivate.name : null
+          }?`}</p>
 
-        <div>
-          <button type="button" onClick={handleReactivateProduct}>
-            Aceptar
-          </button>
-          <button type="button" onClick={closeReactivateProduct}>
-            Cancelar
-          </button>
+          <div>
+            <button
+              type="button"
+              onClick={handleReactivateProduct}
+              className="g-white-button"
+            >
+              Aceptar
+            </button>
+            <button
+              type="button"
+              onClick={closeReactivateProduct}
+              className="g-white-button secondary-button"
+            >
+              Cancelar
+            </button>
+          </div>
         </div>
       </Modal>
 
@@ -277,7 +287,7 @@ const ModalAdminProducts = ({
               <button
                 type="button"
                 onClick={removeDiscount}
-                className="g-white-button secondary-button"
+                className="g-white-button"
               >
                 Remover descuento
               </button>
