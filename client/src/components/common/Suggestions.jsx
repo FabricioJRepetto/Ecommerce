@@ -27,8 +27,10 @@ const Suggestions = () => {
             <div className='suggestions-container'>
 
             <div className='suggestions-header'>
+                <div></div>
                 <p>Quizás te interese...</p>
-                <div className='siggestion-eye'></div>
+                <span className='suggestion-eye'></span>
+                <div></div>
             </div>
 
             {loading

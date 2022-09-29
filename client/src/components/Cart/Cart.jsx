@@ -488,7 +488,7 @@ const Cart = () => {
                             Fecha de expiración:<br/><b>Cualquier fecha mayor a la actual</b>
                         </li>
                         <li>
-                            cvc:<br/>
+                            CVV:<br/>
                             <CopiableText text={'123'}/>
                         </li>
                         <li>
@@ -530,7 +530,7 @@ const Cart = () => {
                             <CopiableText text={'11/25'}/>
                         </li>
                         <li>
-                            cvc:<br/>
+                            CVV:<br/>
                             <CopiableText text={'123'}/>
                         </li>
                         <li>
