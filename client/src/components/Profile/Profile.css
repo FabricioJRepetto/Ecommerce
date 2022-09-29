@@ -44,6 +44,10 @@
     width: 10vw;
     min-width: 170px;
   }
+
+  .profile-menu-container-fixed {
+    background: #00000090;
+  }
 }
 
 @media (max-width: 1023px) {
@@ -62,6 +66,10 @@
   .profile-menu-container-placeholder-mobile {
     display: flex;
   }
+
+  .profile-menu-container-fixed {
+    background: #000000;
+  }
 }
 
 .profile-menu-container-fixed {
@@ -69,7 +77,6 @@
   position: fixed;
   /* min-height: 300px; */
   height: 100%;
-  background: #00000090;
   top: 0;
 }
 
