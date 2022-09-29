@@ -744,7 +744,7 @@ const ProductForm = () => {
         {/* IMÁGENES */}
         <>
           <label
-            htmlFor="filesButton"
+            htmlFor={`${waitingResponse ? "" : "filesButton"}`}
             className={`g-white-button upload-images${
               productImg?.length + imgsToEdit?.length >= 8 || waitingResponse
                 ? " upload-images-disabled"
@@ -894,13 +894,14 @@ const ProductForm = () => {
               "Publicar"
             )}
           </button>
-          <input
+          <button
             type="button"
-            value="Resetear"
             onClick={clearInputs}
             className="g-white-button secondary-button"
             disabled={waitingResponse}
-          />
+          >
+            Resetear
+          </button>
         </div>
       </form>
 
@@ -920,7 +921,8 @@ const ProductForm = () => {
         type="warn"
       >
         <div className="create-another-container">
-          <p>Producto creado exitosamente ¿Crear otro producto?</p>
+          <p>Producto creado exitosamente </p>
+          <p>¿Crear otro producto?</p>
           <div className="create-another-buttons-container">
             <button
               type="button"
