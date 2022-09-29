@@ -173,6 +173,10 @@
   .navbar-profile-section {
     width: 2rem;
   }
+
+  .navbar-profile-button {
+    justify-content: flex-end;
+  }
 }
 
 /*//! DESKTOP */
@@ -183,6 +187,7 @@
 
   .navbar-profile-button {
     display: flex;
+    justify-content: center;
   }
 
   .navbar-wishlist-button {
@@ -218,7 +223,7 @@
   }
 
   .cart-icon-container {
-    margin: 0 1rem;
+    margin: 0 .5rem;
   }
 
   .little-glitch {
@@ -239,6 +244,7 @@
 
   .navbar-profile-section {
     width: 248px;
+    padding-left: 1rem;
   }
 }
 
@@ -431,6 +437,9 @@
 }
 
 @media (min-width: 1240px) {
+  .navbar-profile-button {
+    width: 8rem;
+  }
 
   /* .navbar input[type="text"] {
     width: 35vw;
@@ -449,16 +458,20 @@
   }
 
   .navbar-profile-section {
-    width: 328px;
+    width: 400px;
   }
 
   .little-glitch {
-    width: 328px;
+    width: 400px;
     background-color: #000000;
   }
 }
 
 @media (max-width: 1239px) {
+  .navbar-profile-button {
+    width: 3rem;
+  }
+
   .navbar-username {
     display: none;
   }
@@ -517,10 +530,11 @@
 }
 
 .navbar-profile-button {
-  width: 12rem;
+  margin-left: .5rem;
+  margin-right: .5rem;
   flex-direction: row;
   align-items: center;
-  justify-content: flex-end;
+  /* justify-content: flex-end; */
   /* margin: 0 1rem 0 2rem; */
   /* padding-left: 1rem; */
 }
@@ -563,7 +577,7 @@
 .cart-icon-container {
   position: relative;
   height: 2.5rem;
-  width: 2.5rem;
+  width: 3rem;
 }
 
 .cart-icon {
@@ -601,7 +615,7 @@
   justify-content: center;
   width: 3rem;
   position: relative;
-  margin: 0 1rem;
+  margin: 0 .5rem;
   /*  cursor: pointer; */
 }
 

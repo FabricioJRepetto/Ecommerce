@@ -7,7 +7,7 @@ const SaleCard = ({ sale }) => {
   const { buyer, product, price, quantity, delivery_date, payment_date } = sale;
 
   return (
-    <div className="profile-order-card-container">
+    <div className="profile-order-card-container profile-sale-card-container">
       <span className="profile-details-price-mobile profile-sale-card">
         <div className="profile-order-products-details">
           <div className="profile-order-carousel-container profile-order-img-container">
@@ -28,11 +28,11 @@ const SaleCard = ({ sale }) => {
         </h3>
       </span>
 
-      <div>
+      <span>
         <p>{buyer.name}</p>
         <p>{buyer.email}</p>
         <p>Pagado el {formatDate(Number(payment_date))}</p>
-      </div>
+      </span>
       {/* {delivery_date && <DeliveryProgress order={order} />} */}
 
       <h3 className="profile-price-desktop">

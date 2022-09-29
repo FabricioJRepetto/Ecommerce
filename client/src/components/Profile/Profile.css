@@ -172,6 +172,7 @@
   align-items: center;
   margin: 2rem 0;
   position: relative;
+  /* flex-grow: 1; */
 }
 
 .profile-option-selected-container h1 {
