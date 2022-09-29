@@ -23,40 +23,46 @@ const ModalAdminProducts = ({
 }) => {
   const [discount, setDiscount] = useState({ type: "", number: "" });
   const [priceOff, setPriceOff] = useState("");
+  const [waitingResponse, setWaitingResponse] = useState(false);
   const dispatch = useDispatch();
   const notification = useNotification();
 
-  const deleteProduct = () => {
-    console.log("productToDelete.prodId", productToDelete.prodId);
-    axios
-      .delete(`/product/${productToDelete.prodId}`)
-      .then((r) => {
-        //dispatch(deleteProductFromState(productToDelete.prodId));
-        dispatch(changeReloadFlag(true));
-        notification(r.data.message, "", r.data.type);
-      })
-      .catch((error) => {
-        console.error(error);
-        notification("Algo anduvo mal", "", "warn");
-      }); //! VOLVER A VER manejo de errores
+  const deleteProduct = async () => {
+    setWaitingResponse(true);
+    try {
+      const { data } = await axios.delete(`/product/${productToDelete.prodId}`);
+      //dispatch(deleteProductFromState(productToDelete.prodId));
+      dispatch(changeReloadFlag(true));
+      notification(data.message, "", data.type);
+    } catch (error) {
+      console.error(error);
+      notification("Algo anduvo mal", "", "warn");
+      //! VOLVER A VER manejo de errores
+    } finally {
+      setWaitingResponse(false);
+    }
   };
 
   const handleDeleteProduct = () => {
     deleteProduct();
     closeDeleteProduct();
   };
-  const reactivateProduct = () => {
-    axios
-      .post(`/product/${productToReactivate.prodId}`)
-      .then((r) => {
-        //dispatch(deleteProductFromState(productToReactivate.prodId));
-        dispatch(changeReloadFlag(true));
-        notification(r.data.message, "", r.data.type);
-      })
-      .catch((error) => {
-        console.error(error);
-        notification("Algo anduvo mal", "", "warn");
-      }); //! VOLVER A VER manejo de errores
+  const reactivateProduct = async () => {
+    setWaitingResponse(true);
+    try {
+      const { data } = await axios.post(
+        `/product/${productToReactivate.prodId}`
+      );
+      //dispatch(deleteProductFromState(productToReactivate.prodId));
+      dispatch(changeReloadFlag(true));
+      notification(data.message, "", data.type);
+    } catch (error) {
+      console.error(error);
+      notification("Algo anduvo mal", "", "warn");
+      //! VOLVER A VER manejo de errores
+    } finally {
+      setWaitingResponse(false);
+    }
   };
 
   const handleReactivateProduct = () => {
@@ -64,18 +70,23 @@ const ModalAdminProducts = ({
     closeReactivateProduct();
   };
 
-  const addDiscount = () => {
-    axios
-      .put(`/product/discount/${productToDiscount.prodId}`, discount)
-      .then((_) => {
-        closeDiscountProduct();
-        dispatch(changeReloadFlag(true));
-        notification("Descuento aplicado exitosamente", "", "success");
-      })
-      .catch((error) => {
-        console.error(error);
-        notification("Algo anduvo mal", "", "warn");
-      }); //! VOLVER A VER manejo de errores
+  const addDiscount = async () => {
+    setWaitingResponse(true);
+    try {
+      await axios.put(
+        `/product/discount/${productToDiscount.prodId}`,
+        discount
+      );
+      closeDiscountProduct();
+      dispatch(changeReloadFlag(true));
+      notification("Descuento aplicado exitosamente", "", "success");
+    } catch (error) {
+      console.error(error);
+      notification("Algo anduvo mal", "", "warn");
+      //! VOLVER A VER manejo de errores
+    } finally {
+      setWaitingResponse(false);
+    }
   };
 
   const handleAddDiscount = (e) => {
@@ -108,18 +119,20 @@ const ModalAdminProducts = ({
     });
   };
 
-  const removeDiscount = () => {
-    axios
-      .delete(`/product/discount/${productToDiscount.prodId}`)
-      .then((_) => {
-        closeDiscountProduct();
-        dispatch(changeReloadFlag(true));
-        notification("Descuento removido exitosamente", "", "success");
-      })
-      .catch((error) => {
-        console.error(error);
-        notification("Algo anduvo mal", "", "warn");
-      }); //! VOLVER A VER manejo de errores
+  const removeDiscount = async () => {
+    setWaitingResponse(true);
+    try {
+      await axios.delete(`/product/discount/${productToDiscount.prodId}`);
+      closeDiscountProduct();
+      dispatch(changeReloadFlag(true));
+      notification("Descuento removido exitosamente", "", "success");
+    } catch (error) {
+      console.error(error);
+      notification("Algo anduvo mal", "", "warn");
+      //! VOLVER A VER manejo de errores
+    } finally {
+      setWaitingResponse(false);
+    }
   };
 
   const handleRadio = (e) => {
@@ -165,6 +178,7 @@ const ModalAdminProducts = ({
               type="button"
               onClick={handleDeleteProduct}
               className="g-white-button"
+              disabled={waitingResponse}
             >
               Aceptar
             </button>
@@ -172,6 +186,7 @@ const ModalAdminProducts = ({
               type="button"
               onClick={closeDeleteProduct}
               className="g-white-button secondary-button"
+              disabled={waitingResponse}
             >
               Cancelar
             </button>
@@ -193,6 +208,7 @@ const ModalAdminProducts = ({
               type="button"
               onClick={handleReactivateProduct}
               className="g-white-button"
+              disabled={waitingResponse}
             >
               Aceptar
             </button>
@@ -200,6 +216,7 @@ const ModalAdminProducts = ({
               type="button"
               onClick={closeReactivateProduct}
               className="g-white-button secondary-button"
+              disabled={waitingResponse}
             >
               Cancelar
             </button>
@@ -300,6 +317,7 @@ const ModalAdminProducts = ({
                 type="button"
                 onClick={removeDiscount}
                 className="g-white-button"
+                disabled={waitingResponse}
               >
                 Remover descuento
               </button>
@@ -312,6 +330,7 @@ const ModalAdminProducts = ({
                 type="button"
                 onClick={addDiscount}
                 className="g-white-button details-button"
+                disabled={waitingResponse}
               >
                 Aceptar
               </button>
@@ -320,6 +339,7 @@ const ModalAdminProducts = ({
               type="button"
               onClick={closeDiscountProduct}
               className="g-white-button secondary-button details-button"
+              disabled={waitingResponse}
             >
               Cancelar
             </button>
