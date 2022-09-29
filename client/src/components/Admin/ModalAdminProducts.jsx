@@ -8,7 +8,7 @@ import {
 } from "../../Redux/reducer/productsSlice";
 import Checkbox from "../common/Checkbox";
 import { useNotification } from "../../hooks/useNotification";
-import './ModalAdminProducts.css';
+import "./ModalAdminProducts.css";
 
 const ModalAdminProducts = ({
   isOpenDeleteProduct,
@@ -20,9 +20,6 @@ const ModalAdminProducts = ({
   isOpenDiscountProduct,
   closeDiscountProduct,
   productToDiscount,
-  isOpenRemoveDiscount,
-  closeRemoveDiscount,
-  productToRemoveDiscount,
 }) => {
   const [discount, setDiscount] = useState({ type: "", number: "" });
   const [priceOff, setPriceOff] = useState("");
@@ -103,9 +100,9 @@ const ModalAdminProducts = ({
 
   const removeDiscount = () => {
     axios
-      .delete(`/product/discount/${productToRemoveDiscount.prodId}`)
+      .delete(`/product/discount/${productToDiscount.prodId}`)
       .then((_) => {
-        closeRemoveDiscount();
+        closeDiscountProduct();
         dispatch(changeReloadFlag(true));
         notification("Descuento removido exitosamente", "", "success");
       })
@@ -146,24 +143,32 @@ const ModalAdminProducts = ({
         type="warn"
       >
         <div className="publications-modal-pause-resume">
-            <p>{`¿Pausar la publicación ${
+          <p>{`¿Pausar la publicación ${
             productToDelete ? productToDelete.name : null
-            }?`}</p>
+          }?`}</p>
 
-            <div>
-                <button type="button" onClick={handleDeleteProduct} className='g-white-button'>
-                Aceptar
-                </button>
-                <button type="button" onClick={closeDeleteProduct} className='g-white-button secondary-button'>
-                Cancelar
-                </button>
-            </div>
+          <div>
+            <button
+              type="button"
+              onClick={handleDeleteProduct}
+              className="g-white-button"
+            >
+              Aceptar
+            </button>
+            <button
+              type="button"
+              onClick={closeDeleteProduct}
+              className="g-white-button secondary-button"
+            >
+              Cancelar
+            </button>
+          </div>
         </div>
       </Modal>
       <Modal
         isOpen={isOpenReactivateProduct}
         closeModal={closeReactivateProduct}
-        type="warn" 
+        type="warn"
         className="publications-modal-pause-resume"
       >
         <p>{`¿Reactivar la publicación ${
@@ -171,110 +176,112 @@ const ModalAdminProducts = ({
         }?`}</p>
 
         <div>
-            <button type="button" onClick={handleReactivateProduct}>
+          <button type="button" onClick={handleReactivateProduct}>
             Aceptar
-            </button>
-            <button type="button" onClick={closeReactivateProduct}>
+          </button>
+          <button type="button" onClick={closeReactivateProduct}>
             Cancelar
-            </button>
+          </button>
         </div>
-
       </Modal>
 
       <Modal
         isOpen={isOpenDiscountProduct}
         closeModal={closeDiscountProduct}
         type="warn"
-      >        
+      >
         <div className="publications-modal-discount">
+          <div className="modal-discount-header">
+            <h2>{`Actualizar descuento de ${
+              productToDiscount && productToDiscount.name
+            }`}</h2>
+            <h2>
+              Precio de lista: $
+              {`${productToDiscount && productToDiscount.price}`}
+            </h2>
+          </div>
 
-            <div className="modal-discount-header">
-                <h2>{`Aplicar descuento a ${
-                    productToDiscount && productToDiscount.name
-                }`}</h2>
-                <h2>
-                    Precio de lista: ${`${productToDiscount && productToDiscount.price}`}
-                </h2>
+          <div className="modal-discount-checks">
+            <label>
+              <input
+                type="radio"
+                value="percent"
+                name="discount_type"
+                defaultChecked={discount.type === "percent"}
+                onChange={handleRadio}
+              />
+              Porcentaje
+            </label>
+            <label>
+              <input
+                type="radio"
+                value="fixed"
+                name="discount_type"
+                checked={discount.type === "fixed"}
+                onChange={handleRadio}
+              />
+              Fijo
+            </label>
+          </div>
+
+          {discount.type && (
+            <div className="modal-discount-input">
+              <div>
+                <span>
+                  ${`${productToDiscount && productToDiscount.price}`} -{" "}
+                </span>
+                {discount.type === "percent" ? (
+                  <span> % </span>
+                ) : (
+                  <span> $ </span>
+                )}
+                <input
+                  type="text"
+                  pattern="[0-9]*"
+                  placeholder="Descuento"
+                  value={discount.number}
+                  onChange={handleAddDiscount}
+                />
+              </div>
+
+              <div className="modal-discount-input-result">
+                {priceOff && <h2>Precio final: ${`${priceOff}`}</h2>}
+              </div>
             </div>
+          )}
 
-            <div className="modal-discount-checks">
-                <label>
-                    <input
-                    type="radio"
-                    value="percent"
-                    name="discount_type"
-                    defaultChecked={discount.type === "percent"}
-                    onChange={handleRadio}
-                    />
-                    Porcentaje
-                </label>
-                <label>
-                    <input
-                    type="radio"
-                    value="fixed"
-                    name="discount_type"
-                    checked={discount.type === "fixed"}
-                    onChange={handleRadio}
-                    />
-                    Fijo
-                </label>
-            </div>
-
-            {discount.type && (
-                <div className="modal-discount-input">
-                    <div>
-                        <span>
-                        ${`${productToDiscount && productToDiscount.price}`} -{" "}
-                        </span>
-                        {discount.type === "percent" ? (
-                        <span> % </span>
-                        ) : (
-                        <span> $ </span>
-                        )}
-                        <input
-                        type="text"
-                        pattern="[0-9]*"
-                        placeholder="Descuento"
-                        value={discount.number}
-                        onChange={handleAddDiscount}
-                        />
-                    </div>
-                    
-                    <div className="modal-discount-input-result">
-                        {priceOff && <h2>Precio final: ${`${priceOff}`}</h2>}
-                    </div>
-                    
-                </div>
-            )}
-
+          {productToDiscount?.on_sale && (
             <div>
-                <button type="button" onClick={addDiscount} className='g-white-button details-button'>
-                    Aceptar
-                </button>
-                <button type="button" onClick={closeDiscountProduct} className='g-white-button secondary-button details-button'>
-                    Cancelar
-                </button>
+              <button
+                type="button"
+                onClick={removeDiscount}
+                className="g-white-button secondary-button"
+              >
+                Remover descuento
+              </button>
             </div>
+          )}
 
+          <div>
+            {discount.number && (
+              <button
+                type="button"
+                onClick={addDiscount}
+                className="g-white-button details-button"
+              >
+                Aceptar
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={closeDiscountProduct}
+              className="g-white-button secondary-button details-button"
+            >
+              Cancelar
+            </button>
+          </div>
         </div>
       </Modal>
-
-      <Modal
-        isOpen={isOpenRemoveDiscount}
-        closeModal={closeRemoveDiscount}
-        type="warn"
-      >
-        <p>{`¿Remover descuento de ${
-          productToRemoveDiscount ? productToRemoveDiscount.name : null
-        }?`}</p>
-        <button type="button" onClick={removeDiscount}>
-          Aceptar
-        </button>
-        <button type="button" onClick={closeRemoveDiscount}>
-          Cancelar
-        </button>
-      </Modal>
-
     </div>
   );
 };
