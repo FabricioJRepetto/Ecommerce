@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNotification } from "../../../hooks/useNotification";
 import CommentCard from "./CommentCard";
@@ -7,7 +7,6 @@ import { useSelector } from "react-redux";
 import { ReactComponent as Spinner } from "../../../assets/svg/spinner.svg";
 
 import "./Comments.css";
-import { useEffect } from "react";
 
 const Comments = ({ product_id, comments, allowed }) => {
   const notification = useNotification();

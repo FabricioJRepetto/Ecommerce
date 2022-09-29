@@ -167,7 +167,7 @@ const PremiumDetails = () => {
                 <h1 className="premiumdetails-name">{product.name}</h1>
               )}
 
-              <Calification num={product.average_calification}/>
+              <Calification num={product.average_calification} hover/>
 
               <div className="pd-head-price">
                 <h2>{product.premiumData.miniDescription}</h2>
@@ -273,8 +273,9 @@ const PremiumDetails = () => {
             product.premiumData.extraText.map((e) => (
               <div
                 className="premiumdetails-section"
-                style={{ backgroundColor: e.bgColor, justifyContent: "center" }}
-              >
+                style={e.soloImg 
+                        ? { backgroundColor: e.bgColor, justifyContent: "center", overflow: 'hidden' } 
+                        : {backgroundColor: e.bgColor, justifyContent: "center"}}>
                 <div
                   className="pd-text-container-mobile"
                   style={{
@@ -287,11 +288,11 @@ const PremiumDetails = () => {
                         ? e.soloText
                           ? "unset"
                           : "0%"
-                        : e.textPos?.top || false,
+                        : e.textPos?.top || false                        
                   }}
                 >
-                  <h2>{e.title}</h2>
-                  <p>{e.text}</p>
+                  <h2 style={{width: e.soloText ? '100%' : ''}}>{e.title}</h2>
+                  <p style={{width: e.soloText ? '100%' : ''}}>{e.text}</p>
                 </div>
 
                 {e.img && (
@@ -330,13 +331,10 @@ const PremiumDetails = () => {
               <Carousel
                 images={product.premiumData.carouselImg}
                 indicators
-                pausable={false}
+                interval={4000}
                 width={windowWidth < 1100 ? "100%" : "50vw"}
                 id="instructions"
               />
-              <h1>
-                Cómo usar <br /> Polaroid Go.
-              </h1>
             </div>
           )}
 
