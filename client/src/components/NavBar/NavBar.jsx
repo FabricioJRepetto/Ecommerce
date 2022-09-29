@@ -275,6 +275,7 @@ const NavBar = () => {
                   <div
                     className="navbar-search-mobile-button"
                     onClick={handleSearchBar}
+                    id="open-searchbar-button"
                   >
                     <SearchIcon />
                   </div>
@@ -533,13 +534,15 @@ const NavBar = () => {
                 className="g-input-two-icons navbar-searchbar"
                 ref={searchInput}
                 onChange={(e) => setProductToSearch(e.target.value)}
-                onBlur={() => setShowSearchBar(false)}
                 value={productToSearch}
               />
               <>
                 <div
                   className="g-input-icon-container g-input-x-button"
-                  onClick={() => setShowSearchBar(false)}
+                  onClick={() => {
+                    setShowSearchBar(false);
+                    setProductToSearch("");
+                  }}
                 >
                   <CloseIcon />
                 </div>

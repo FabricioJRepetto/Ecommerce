@@ -493,13 +493,22 @@
     padding-left: 4rem;
   }
 
-  div.wishlist-card-container i.special-card {
+  div.wishlist-card-container b.special-card {
     top: 0.2rem;
   }
 
-  .profile-wishlist-container div.wishlist-card-container i.special-card {
+  .profile-wishlist-container div.wishlist-card-container b.special-card {
     left: 4rem;
   }
+
+  div.wishlist-card-container div.special-card-premium {
+    top: 0.2rem;
+  }
+
+  .profile-wishlist-container div.wishlist-card-container div.special-card-premium {
+    left: 4rem;
+  }
+
 
 }
 
@@ -508,11 +517,19 @@
     padding-left: 3rem;
   }
 
-  .wishlist-card-container i.special-card {
+  .wishlist-card-container b.special-card {
     top: 0.2rem;
   }
 
-  .profile-wishlist-container .wishlist-card-container i.special-card {
+  .wishlist-card-container div.special-card-premium {
+    top: 0.2rem;
+  }
+
+  .profile-wishlist-container .wishlist-card-container b.special-card {
+    left: 3rem;
+  }
+
+  .profile-wishlist-container .wishlist-card-container div.special-card-premium {
     left: 3rem;
   }
 }
@@ -540,6 +557,12 @@
     scale: .8;
     top: 0.2rem;
     left: 2rem;
+  }
+
+  .wishlist-card-container .special-card-premium {
+    scale: .9;
+    top: 0.2rem;
+    left: 1.5rem;
   }
 
   .wishlist-images-data-container {

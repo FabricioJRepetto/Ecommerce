@@ -27,12 +27,6 @@ const Publications = ({ loading, publications }) => {
     closeDiscountProduct,
     productToDiscount,
   ] = useModal();
-  const [
-    isOpenRemoveDiscount,
-    openRemoveDiscount,
-    closeRemoveDiscount,
-    productToRemoveDiscount,
-  ] = useModal();
 
   return (
     <>
@@ -48,7 +42,6 @@ const Publications = ({ loading, publications }) => {
                     openDeleteProduct={openDeleteProduct}
                     openReactivateProduct={openReactivateProduct}
                     openDiscountProduct={openDiscountProduct}
-                    openRemoveDiscount={openRemoveDiscount}
                   />
                 ))
               )
@@ -75,12 +68,9 @@ const Publications = ({ loading, publications }) => {
         closeReactivateProduct={closeReactivateProduct}
         isOpenDiscountProduct={isOpenDiscountProduct}
         closeDiscountProduct={closeDiscountProduct}
-        isOpenRemoveDiscount={isOpenRemoveDiscount}
-        closeRemoveDiscount={closeRemoveDiscount}
         productToDelete={productToDelete}
         productToReactivate={productToReactivate}
         productToDiscount={productToDiscount}
-        productToRemoveDiscount={productToRemoveDiscount}
       />
     </>
   );

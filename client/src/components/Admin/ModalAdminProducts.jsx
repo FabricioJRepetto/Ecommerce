@@ -8,7 +8,7 @@ import {
 } from "../../Redux/reducer/productsSlice";
 import Checkbox from "../common/Checkbox";
 import { useNotification } from "../../hooks/useNotification";
-import './ModalAdminProducts.css';
+import "./ModalAdminProducts.css";
 
 const ModalAdminProducts = ({
   isOpenDeleteProduct,
@@ -20,39 +20,49 @@ const ModalAdminProducts = ({
   isOpenDiscountProduct,
   closeDiscountProduct,
   productToDiscount,
-  isOpenRemoveDiscount,
-  closeRemoveDiscount,
-  productToRemoveDiscount,
 }) => {
   const [discount, setDiscount] = useState({ type: "", number: "" });
   const [priceOff, setPriceOff] = useState("");
+  const [waitingResponse, setWaitingResponse] = useState(false);
   const dispatch = useDispatch();
   const notification = useNotification();
 
-  const deleteProduct = () => {
-    axios
-      .delete(`/product/${productToDelete.prodId}`)
-      .then((r) => {
-        dispatch(deleteProductFromState(productToDelete.prodId));
-        dispatch(changeReloadFlag(true));
-        notification(r.data.message, "", r.data.type);
-      })
-      .catch((err) => console.error(err)); //! VOLVER A VER manejo de errores
+  const deleteProduct = async () => {
+    setWaitingResponse(true);
+    try {
+      const { data } = await axios.delete(`/product/${productToDelete.prodId}`);
+      //dispatch(deleteProductFromState(productToDelete.prodId));
+      dispatch(changeReloadFlag(true));
+      notification(data.message, "", data.type);
+    } catch (error) {
+      console.error(error);
+      notification("Algo anduvo mal", "", "warn");
+      //! VOLVER A VER manejo de errores
+    } finally {
+      setWaitingResponse(false);
+    }
   };
 
   const handleDeleteProduct = () => {
     deleteProduct();
     closeDeleteProduct();
   };
-  const reactivateProduct = () => {
-    axios
-      .post(`/product/${productToReactivate.prodId}`)
-      .then((r) => {
-        //dispatch(deleteProductFromState(productToReactivate.prodId));
-        dispatch(changeReloadFlag(true));
-        notification(r.data.message, "", r.data.type);
-      })
-      .catch((err) => console.error(err)); //! VOLVER A VER manejo de errores
+  const reactivateProduct = async () => {
+    setWaitingResponse(true);
+    try {
+      const { data } = await axios.post(
+        `/product/${productToReactivate.prodId}`
+      );
+      //dispatch(deleteProductFromState(productToReactivate.prodId));
+      dispatch(changeReloadFlag(true));
+      notification(data.message, "", data.type);
+    } catch (error) {
+      console.error(error);
+      notification("Algo anduvo mal", "", "warn");
+      //! VOLVER A VER manejo de errores
+    } finally {
+      setWaitingResponse(false);
+    }
   };
 
   const handleReactivateProduct = () => {
@@ -60,15 +70,23 @@ const ModalAdminProducts = ({
     closeReactivateProduct();
   };
 
-  const addDiscount = () => {
-    axios
-      .put(`/product/discount/${productToDiscount.prodId}`, discount)
-      .then((_) => {
-        closeDiscountProduct();
-        dispatch(changeReloadFlag(true));
-        notification("Descuento aplicado exitosamente", "", "success");
-      })
-      .catch((error) => console.error(error)); //! VOLVER A VER manejo de errores
+  const addDiscount = async () => {
+    setWaitingResponse(true);
+    try {
+      await axios.put(
+        `/product/discount/${productToDiscount.prodId}`,
+        discount
+      );
+      closeDiscountProduct();
+      dispatch(changeReloadFlag(true));
+      notification("Descuento aplicado exitosamente", "", "success");
+    } catch (error) {
+      console.error(error);
+      notification("Algo anduvo mal", "", "warn");
+      //! VOLVER A VER manejo de errores
+    } finally {
+      setWaitingResponse(false);
+    }
   };
 
   const handleAddDiscount = (e) => {
@@ -101,15 +119,20 @@ const ModalAdminProducts = ({
     });
   };
 
-  const removeDiscount = () => {
-    axios
-      .delete(`/product/discount/${productToRemoveDiscount.prodId}`)
-      .then((_) => {
-        closeRemoveDiscount();
-        dispatch(changeReloadFlag(true));
-        notification("Descuento removido exitosamente", "", "success");
-      })
-      .catch((error) => console.error(error)); //! VOLVER A VER manejo de errores
+  const removeDiscount = async () => {
+    setWaitingResponse(true);
+    try {
+      await axios.delete(`/product/discount/${productToDiscount.prodId}`);
+      closeDiscountProduct();
+      dispatch(changeReloadFlag(true));
+      notification("Descuento removido exitosamente", "", "success");
+    } catch (error) {
+      console.error(error);
+      notification("Algo anduvo mal", "", "warn");
+      //! VOLVER A VER manejo de errores
+    } finally {
+      setWaitingResponse(false);
+    }
   };
 
   const handleRadio = (e) => {
@@ -146,135 +169,183 @@ const ModalAdminProducts = ({
         type="warn"
       >
         <div className="publications-modal-pause-resume">
-            <p>{`¿Pausar la publicación ${
+          <p>{`¿Pausar la publicación ${
             productToDelete ? productToDelete.name : null
-            }?`}</p>
+          }?`}</p>
 
-            <div>
-                <button type="button" onClick={handleDeleteProduct} className='g-white-button'>
-                Aceptar
-                </button>
-                <button type="button" onClick={closeDeleteProduct} className='g-white-button secondary-button'>
-                Cancelar
-                </button>
-            </div>
+          <div>
+            <button
+              type="button"
+              onClick={handleDeleteProduct}
+              className="g-white-button"
+              disabled={waitingResponse}
+            >
+              Aceptar
+            </button>
+            <button
+              type="button"
+              onClick={closeDeleteProduct}
+              className="g-white-button secondary-button"
+              disabled={waitingResponse}
+            >
+              Cancelar
+            </button>
+          </div>
         </div>
       </Modal>
       <Modal
         isOpen={isOpenReactivateProduct}
         closeModal={closeReactivateProduct}
-        type="warn" 
-        className="publications-modal-pause-resume"
+        type="warn"
       >
-        <p>{`¿Reactivar la publicación ${
-          productToReactivate ? productToReactivate.name : null
-        }?`}</p>
+        <div className="publications-modal-pause-resume">
+          <p>{`¿Reactivar la publicación ${
+            productToReactivate ? productToReactivate.name : null
+          }?`}</p>
 
-        <div>
-            <button type="button" onClick={handleReactivateProduct}>
-            Aceptar
+          <div>
+            <button
+              type="button"
+              onClick={handleReactivateProduct}
+              className="g-white-button"
+              disabled={waitingResponse}
+            >
+              Aceptar
             </button>
-            <button type="button" onClick={closeReactivateProduct}>
-            Cancelar
+            <button
+              type="button"
+              onClick={closeReactivateProduct}
+              className="g-white-button secondary-button"
+              disabled={waitingResponse}
+            >
+              Cancelar
             </button>
+          </div>
         </div>
-
       </Modal>
 
       <Modal
         isOpen={isOpenDiscountProduct}
         closeModal={closeDiscountProduct}
         type="warn"
-      >        
-        <div className="publications-modal-discount">
+      >
+        <div className="modal-discount-container">
+          <div className="modal-discount-header">
+            <h2>{`Actualizar descuento de ${
+              productToDiscount && productToDiscount.name
+            }`}</h2>
+            <h2>
+              Precio de lista: $
+              {`${productToDiscount && productToDiscount.price}`}
+            </h2>
+          </div>
 
-            <div className="modal-discount-header">
-                <h2>{`Aplicar descuento a ${
-                    productToDiscount && productToDiscount.name
-                }`}</h2>
-                <h2>
-                    Precio de lista: ${`${productToDiscount && productToDiscount.price}`}
-                </h2>
+          <div className="modal-discount-checks">
+            <label className="form-shipping-input">
+              <Checkbox
+                isChecked={discount.type === "percent"}
+                extraStyles={{
+                  border: true,
+                  rounded: true,
+                  innerBorder: true,
+                  margin: ".05rem",
+                  size: "1.2",
+                }}
+              />
+              <input
+                type="radio"
+                value="percent"
+                name="discount_type"
+                defaultChecked={discount.type === "percent"}
+                onChange={handleRadio}
+              />
+              <span>Porcentaje</span>
+            </label>
+            <label className="form-shipping-input">
+              <Checkbox
+                isChecked={discount.type === "fixed"}
+                extraStyles={{
+                  border: true,
+                  rounded: true,
+                  innerBorder: true,
+                  margin: ".05rem",
+                  size: "1.2",
+                }}
+              />
+              <input
+                type="radio"
+                value="fixed"
+                name="discount_type"
+                checked={discount.type === "fixed"}
+                onChange={handleRadio}
+              />
+              <span>Fijo</span>
+            </label>
+          </div>
+
+          {discount.type ? (
+            <div className="modal-discount-input">
+              <div>
+                <span>
+                  ${`${productToDiscount && productToDiscount.price}`} -{" "}
+                </span>
+                {discount.type === "percent" ? (
+                  <span> % </span>
+                ) : (
+                  <span> $ </span>
+                )}
+                <input
+                  type="text"
+                  pattern="[0-9]*"
+                  placeholder="Descuento"
+                  value={discount.number}
+                  onChange={handleAddDiscount}
+                />
+              </div>
+
+              <div className="modal-discount-input-result">
+                {priceOff && <h2>Precio final: ${`${priceOff}`}</h2>}
+              </div>
             </div>
+          ) : (
+            <div className="modal-discount-placeholder"></div>
+          )}
 
-            <div className="modal-discount-checks">
-                <label>
-                    <input
-                    type="radio"
-                    value="percent"
-                    name="discount_type"
-                    defaultChecked={discount.type === "percent"}
-                    onChange={handleRadio}
-                    />
-                    Porcentaje
-                </label>
-                <label>
-                    <input
-                    type="radio"
-                    value="fixed"
-                    name="discount_type"
-                    checked={discount.type === "fixed"}
-                    onChange={handleRadio}
-                    />
-                    Fijo
-                </label>
-            </div>
-
-            {discount.type && (
-                <div className="modal-discount-input">
-                    <div>
-                        <span>
-                        ${`${productToDiscount && productToDiscount.price}`} -{" "}
-                        </span>
-                        {discount.type === "percent" ? (
-                        <span> % </span>
-                        ) : (
-                        <span> $ </span>
-                        )}
-                        <input
-                        type="text"
-                        pattern="[0-9]*"
-                        placeholder="Descuento"
-                        value={discount.number}
-                        onChange={handleAddDiscount}
-                        />
-                    </div>
-                    
-                    <div className="modal-discount-input-result">
-                        {priceOff && <h2>Precio final: ${`${priceOff}`}</h2>}
-                    </div>
-                    
-                </div>
-            )}
-
+          {productToDiscount?.on_sale && (
             <div>
-                <button type="button" onClick={addDiscount} className='g-white-button details-button'>
-                    Aceptar
-                </button>
-                <button type="button" onClick={closeDiscountProduct} className='g-white-button secondary-button details-button'>
-                    Cancelar
-                </button>
+              <button
+                type="button"
+                onClick={removeDiscount}
+                className="g-white-button"
+                disabled={waitingResponse}
+              >
+                Remover descuento
+              </button>
             </div>
+          )}
 
+          <div>
+            {discount.number && (
+              <button
+                type="button"
+                onClick={addDiscount}
+                className="g-white-button details-button"
+                disabled={waitingResponse}
+              >
+                Aceptar
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={closeDiscountProduct}
+              className="g-white-button secondary-button details-button"
+              disabled={waitingResponse}
+            >
+              Cancelar
+            </button>
+          </div>
         </div>
       </Modal>
-
-      <Modal
-        isOpen={isOpenRemoveDiscount}
-        closeModal={closeRemoveDiscount}
-        type="warn"
-      >
-        <p>{`¿Remover descuento de ${
-          productToRemoveDiscount ? productToRemoveDiscount.name : null
-        }?`}</p>
-        <button type="button" onClick={removeDiscount}>
-          Aceptar
-        </button>
-        <button type="button" onClick={closeRemoveDiscount}>
-          Cancelar
-        </button>
-      </Modal>
-
     </div>
   );
 };

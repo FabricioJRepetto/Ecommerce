@@ -12,7 +12,6 @@ import { WishlistButton as Fav } from "./WishlistButton";
 const Card = ({
   openDeleteProduct,
   openDiscountProduct,
-  openRemoveDiscount,
   productData,
   fav,
   outOfStock,
@@ -89,12 +88,6 @@ const Card = ({
                   <div className="minicard-sale-section">
                     <Sale className="onsale-svg" />
                     <p>{`${Math.round(discount)}% off`}</p>
-                    {location.pathname === "/admin/products" && (
-                      <p onClick={() => openRemoveDiscount({ prodId, name })}>
-                        {" "}
-                        X
-                      </p>
-                    )}
                   </div>
                 )}
               </div>

@@ -69,12 +69,6 @@ const Products = () => {
     closeDiscountProduct,
     productToDiscount,
   ] = useModal();
-  const [
-    isOpenRemoveDiscount,
-    openRemoveDiscount,
-    closeRemoveDiscount,
-    productToRemoveDiscount,
-  ] = useModal();
 
   useEffect(() => {
     reloadFunction();
@@ -624,7 +618,6 @@ const Products = () => {
                       fav={wishlist.includes(product._id)}
                       openDeleteProduct={openDeleteProduct}
                       openDiscountProduct={openDiscountProduct}
-                      openRemoveDiscount={openRemoveDiscount}
                     />
                   )
               )
@@ -806,11 +799,8 @@ const Products = () => {
         closeDeleteProduct={closeDeleteProduct}
         isOpenDiscountProduct={isOpenDiscountProduct}
         closeDiscountProduct={closeDiscountProduct}
-        isOpenRemoveDiscount={isOpenRemoveDiscount}
-        closeRemoveDiscount={closeRemoveDiscount}
         productToDelete={productToDelete}
         productToDiscount={productToDiscount}
-        productToRemoveDiscount={productToRemoveDiscount}
       />
     </div>
   );

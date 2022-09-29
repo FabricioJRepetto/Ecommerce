@@ -18,7 +18,6 @@ const WishlistCard = ({
   openDeleteProduct,
   openReactivateProduct,
   openDiscountProduct,
-  openRemoveDiscount,
   productData,
   fav,
 }) => {
@@ -36,7 +35,6 @@ const WishlistCard = ({
     price,
     sale_price,
     discount,
-    brand,
     seller,
     _id: prodId,
     free_shipping,
@@ -44,7 +42,7 @@ const WishlistCard = ({
     premium,
     available_quantity,
   } = productData;
-  const special = seller === 'PROVIDER';
+  const special = seller === "PROVIDER";
 
   const readySetter = () => {
     setReady(true);
@@ -64,13 +62,15 @@ const WishlistCard = ({
         navigate(premium ? `/premium/${prodId}` : `/details/${prodId}`)
       }
     >
-      {location.pathname !== "/products" && special && 
+      {location.pathname !== "/products" && special && (
         <>
-            {premium
-                ? <div className="special-card-premium"></div>
-                : <b className="special-card">PROVIDER</b>
-            }
-        </>}
+          {premium ? (
+            <div className="special-card-premium"></div>
+          ) : (
+            <b className="special-card">PROVIDER</b>
+          )}
+        </>
+      )}
       {(location.pathname === "/admin/products" ||
         location.pathname === "/profile/products") &&
         !productData.active && (
@@ -127,17 +127,6 @@ const WishlistCard = ({
                       <Sale className="onsale-svg" />
                       <p>{`${Math.round(discount)}% off`}</p>
                     </div>
-                    {location.pathname === "/admin/products" && (
-                      <p
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          openRemoveDiscount({ prodId, name });
-                        }}
-                      >
-                        {" "}
-                        X
-                      </p>
-                    )}
                   </>
                 )}
               </div>
@@ -197,10 +186,10 @@ const WishlistCard = ({
               className="wishlist-offer-button-container"
               onClick={(e) => {
                 e.stopPropagation();
-                openDiscountProduct({ prodId, name, price });
+                openDiscountProduct({ prodId, name, price, on_sale });
               }}
             >
-              <div className="publication-tootlip">Agregar descuento</div>
+              <div className="publication-tootlip">Actualizar descuento</div>
               <Offer />
               <div className="wishlist-offer-gradient"></div>
             </span>
