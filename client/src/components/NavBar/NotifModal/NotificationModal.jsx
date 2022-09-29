@@ -27,12 +27,14 @@ const NotificationModal = () => {
     }, [notificationList])
 
     const notifGetter = async () => { 
-        setLoading(true)
-        const {data} = await axios('/notifications/')
-        if (data) {
-            dispatch(loadNotifications(data));
-        }           
-        setLoading(false)
+        if (!loading) {
+            setLoading(true)
+            const {data} = await axios('/notifications/')
+            if (data) {
+                dispatch(loadNotifications(data));
+            }           
+            setLoading(false)
+        }
     };
 
   return (
