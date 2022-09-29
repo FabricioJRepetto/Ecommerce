@@ -21,6 +21,7 @@ import LoaderBars from "../common/LoaderBars";
 import FunnelButton from "../common/FunnelButton";
 
 import "./Results.css";
+import ReturnButton from "../common/ReturnButton";
 
 const Results = () => {
   const [loading, setLoading] = useState(true);
@@ -45,6 +46,8 @@ const Results = () => {
   const [filtersContainerDisplay, setFiltersContainerDisplay] = useState(null);
   const resultsFiltersContainerMobile = useRef(null);
   const filtersMenuMobile = useRef(null);
+
+  const [queryBackUp, setQueryBackUp] = useState(false);
 
   useEffect(() => {
     const handleWindowSize = () => {
@@ -95,26 +98,33 @@ const Results = () => {
   }, [filtersContainerDisplay, showFiltersMenu]);
 
   useEffect(() => {
+    console.log(querys);
     (async () => {
       const category = params.get("category");
 
-      let newQuery = "";
-      Object.entries(querys).forEach(([key, value]) => {
-        newQuery += key + "=" + value + "&";
-      });
+      let aux = Object.entries(querys).length
+      console.log(aux);
+      //? si hay querys realiza petición
+      if (aux) {
+        let newQuery = "";
+        Object.entries(querys).forEach(([key, value]) => {
+            newQuery += key + "=" + value + "&";
+        });        
+        const { data } = await axios(`/product/search/?${newQuery}`);
 
-      const { data } = await axios(`/product/search/?${newQuery}`);
+        dispatch(loadProductsOwn(data.db));
+        !category && dispatch(loadProductsFound(data.meli));
+        dispatch(loadFilters(data.filters));
+        dispatch(loadApplied(data.applied));
+        dispatch(loadBreadCrumbs(data.breadCrumbs));
 
-      // const { data } = await axios(`/product/provider/?category=${category}`)
-      // aux = data;
+        //? y guarda un backup de las querys
+        setQueryBackUp(querys);
+      } else {
+        //? si no hay querys tira error, pero tenemos el backup
+        //: manejar posible error
+      }
 
-      // const { data } = await axios(`/product/promos`)
-
-      dispatch(loadProductsOwn(data.db));
-      !category && dispatch(loadProductsFound(data.meli));
-      dispatch(loadFilters(data.filters));
-      dispatch(loadApplied(data.applied));
-      dispatch(loadBreadCrumbs(data.breadCrumbs));
       setLoading(false);
     })();
 
@@ -128,10 +138,18 @@ const Results = () => {
   };
 
   const removeFilter = async (filter) => {
-    let aux = { ...querys };
-    delete aux[filter];
-    dispatch(loadQuerys(aux));
+    if (filter === 'category'&& !querys.q ) {
+        console.log('nooo... no tocá');
+    } else {
+        let aux = { ...querys };
+        delete aux[filter];
+        dispatch(loadQuerys(aux));        
+    }
   };
+
+  const restoreQuerys = () => { 
+        dispatch(loadQuerys({ queryBackUp }));
+   }
 
   return (
     <div
@@ -141,7 +159,8 @@ const Results = () => {
           : ""
       }`}
     >
-      {loading || productsFound === "loading" ? (
+      {loading || productsFound === "loading" 
+      ? (
         <div className="component-fadeIn">
           <LoaderBars />
         </div>
@@ -373,6 +392,7 @@ const Results = () => {
           ) : (
             <div>
               <h1>No hubieron resultados</h1>
+              <ReturnButton to='' onClick={restoreQuerys}/>
             </div>
           )}
         </>

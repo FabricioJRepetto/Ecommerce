@@ -153,7 +153,6 @@ const NavBar = () => {
   const handleSearch = async (e) => {
     e.preventDefault();
     if (session) {
-      //: logear busqueda en el historial
       axios.post(`/history/search/${productToSearch}`);
     }
     dispatch(loadProductsOwn("loading"));
