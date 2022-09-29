@@ -4,12 +4,15 @@ import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { ReactComponent as Bell } from '../../../assets/svg/bell.svg'
 import { ReactComponent as Spinner } from '../../../assets/svg/spinner.svg'
+import { loadNotifications } from '../../../Redux/reducer/sessionSlice'
 import ChromaticText from '../../common/ChromaticText'
 import NotifCard from '../../Profile/Notifications/NotifCard'
+
 import './NotificationModal.css'
+
 const NotificationModal = () => {
     const navigate = useNavigate();
-    const [data, setData] = useState(false);
+    // const [data, setData] = useState(false);
     const [loading, setLoading] = useState(true);
     const [redDot, setRedDot] = useState(false)
     const { notificationList } = useSelector((state) => state.sessionReducer);
@@ -20,22 +23,20 @@ const NotificationModal = () => {
             if (aux) setRedDot(true)
             else setRedDot(false)
         }
-    }, [data, notificationList])
-    
+    }, [notificationList])
 
-    useEffect(() => {
-        (async ()=>{
-            const {data} = await axios('/notifications/')
-            if (data) setData(data)
-            
-            setLoading(false)
-        })()
-    }, [])
-    
+    const notifGetter = async () => { 
+        setLoading(true)
+        const {data} = await axios('/notifications/')
+        if (data) {
+            loadNotifications(data)
+        }           
+        setLoading(false)
+    };
 
   return (
 
-    <div className='notif-modal-container'>
+    <div className='notif-modal-container' onMouseEnter={notifGetter}>
 
         <div className='notif-modal-opener'></div>
 
@@ -50,11 +51,15 @@ const NotificationModal = () => {
                     <Spinner />
                 </div>
                 : <div className="notif-modal-inner">
-                    <div className="notif-modal-content-header">Notificaciones</div>
-                    {data.length > 0 
+                    <div className="notif-modal-content-header">Notificaciones 
+                        {loading && <span>
+                            <Spinner style={{height: '1rem', transform: 'translateY(10%)'}}/>
+                        </span>}
+                    </div>
+                    {notificationList.length > 0 
                         ? <div className="notif-modal-card-container">
                             {React.Children.toArray(
-                                data.map((e) => (
+                                notificationList.map((e) => (
                                 <NotifCard props={e} modal />
                                 ))
                             )}

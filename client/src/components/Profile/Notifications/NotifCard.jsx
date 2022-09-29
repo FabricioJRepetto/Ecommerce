@@ -16,13 +16,6 @@ const NotifCard = ({props, setNotif, modal = false, openByQ}) => {
     const [seen, setSeen] = useState(props.seen);
     const [deleting, setDeleting] = useState(false);
 
-    useEffect(() => {
-      if (openByQ) {
-        (openByQ === props._id) && setOpen(true)
-      }
-      // eslint-disable-next-line
-    }, [])
-
     const {
         date,
         title,
@@ -53,6 +46,8 @@ const NotifCard = ({props, setNotif, modal = false, openByQ}) => {
         if (!modal) {
             setOpen(!open)
             if (!seen) {
+            console.log(`%c marked as seen `, 'background-color: #39f0a4; color: #000000; font-weight: bold;');
+
                 setSeen(true)
                 const {data} = await axios.put(`/notifications/${props._id}`)
                 dispatch(loadNotifications(data.notif_list));
@@ -74,6 +69,16 @@ const NotifCard = ({props, setNotif, modal = false, openByQ}) => {
         }
         
       }
+
+      useEffect(() => {
+      if (openByQ) {
+        if (openByQ === props._id) {
+            handleNotifClick();
+            console.log(`%c open by query `, 'background-color: #8ef039; color: #000000; font-weight: bold;');
+        }
+      }
+      // eslint-disable-next-line
+    }, [])
 
     return (
         <div className={`notifcard-container component-fadeIn ${deleting && 'card-fadein'} ${modal && 'notifcard-container-modal'}`} onClick={handleNotifClick}>
