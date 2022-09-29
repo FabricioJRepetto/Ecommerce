@@ -35,7 +35,10 @@ const ModalAdminProducts = ({
         dispatch(changeReloadFlag(true));
         notification(r.data.message, "", r.data.type);
       })
-      .catch((err) => console.error(err)); //! VOLVER A VER manejo de errores
+      .catch((error) => {
+        console.error(error);
+        notification("Algo anduvo mal", "", "warn");
+      }); //! VOLVER A VER manejo de errores
   };
 
   const handleDeleteProduct = () => {
@@ -50,7 +53,10 @@ const ModalAdminProducts = ({
         dispatch(changeReloadFlag(true));
         notification(r.data.message, "", r.data.type);
       })
-      .catch((err) => console.error(err)); //! VOLVER A VER manejo de errores
+      .catch((error) => {
+        console.error(error);
+        notification("Algo anduvo mal", "", "warn");
+      }); //! VOLVER A VER manejo de errores
   };
 
   const handleReactivateProduct = () => {
@@ -66,7 +72,10 @@ const ModalAdminProducts = ({
         dispatch(changeReloadFlag(true));
         notification("Descuento aplicado exitosamente", "", "success");
       })
-      .catch((error) => console.error(error)); //! VOLVER A VER manejo de errores
+      .catch((error) => {
+        console.error(error);
+        notification("Algo anduvo mal", "", "warn");
+      }); //! VOLVER A VER manejo de errores
   };
 
   const handleAddDiscount = (e) => {
@@ -107,7 +116,10 @@ const ModalAdminProducts = ({
         dispatch(changeReloadFlag(true));
         notification("Descuento removido exitosamente", "", "success");
       })
-      .catch((error) => console.error(error)); //! VOLVER A VER manejo de errores
+      .catch((error) => {
+        console.error(error);
+        notification("Algo anduvo mal", "", "warn");
+      }); //! VOLVER A VER manejo de errores
   };
 
   const handleRadio = (e) => {
