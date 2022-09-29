@@ -190,7 +190,7 @@ const ModalAdminProducts = ({
         closeModal={closeDiscountProduct}
         type="warn"
       >
-        <div className="publications-modal-discount">
+        <div className="modal-discount-container">
           <div className="modal-discount-header">
             <h2>{`Actualizar descuento de ${
               productToDiscount && productToDiscount.name
@@ -202,7 +202,17 @@ const ModalAdminProducts = ({
           </div>
 
           <div className="modal-discount-checks">
-            <label>
+            <label className="form-shipping-input">
+              <Checkbox
+                isChecked={discount.type === "percent"}
+                extraStyles={{
+                  border: true,
+                  rounded: true,
+                  innerBorder: true,
+                  margin: ".05rem",
+                  size: "1.2",
+                }}
+              />
               <input
                 type="radio"
                 value="percent"
@@ -210,9 +220,19 @@ const ModalAdminProducts = ({
                 defaultChecked={discount.type === "percent"}
                 onChange={handleRadio}
               />
-              Porcentaje
+              <span>Porcentaje</span>
             </label>
-            <label>
+            <label className="form-shipping-input">
+              <Checkbox
+                isChecked={discount.type === "fixed"}
+                extraStyles={{
+                  border: true,
+                  rounded: true,
+                  innerBorder: true,
+                  margin: ".05rem",
+                  size: "1.2",
+                }}
+              />
               <input
                 type="radio"
                 value="fixed"
@@ -220,11 +240,11 @@ const ModalAdminProducts = ({
                 checked={discount.type === "fixed"}
                 onChange={handleRadio}
               />
-              Fijo
+              <span>Fijo</span>
             </label>
           </div>
 
-          {discount.type && (
+          {discount.type ? (
             <div className="modal-discount-input">
               <div>
                 <span>
@@ -248,6 +268,8 @@ const ModalAdminProducts = ({
                 {priceOff && <h2>Precio final: ${`${priceOff}`}</h2>}
               </div>
             </div>
+          ) : (
+            <div className="modal-discount-placeholder"></div>
           )}
 
           {productToDiscount?.on_sale && (
