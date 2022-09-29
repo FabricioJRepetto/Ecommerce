@@ -89,6 +89,10 @@
   z-index: 40;
 }
 
+.profile-option-selected-container .loader-bars-container {
+  z-index: 30;
+}
+
 .profile-menu-container-hide {
   width: 3.2rem;
 }
