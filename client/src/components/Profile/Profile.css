@@ -7,7 +7,7 @@
   min-height: 95vh;
 }
 
-@media (max-width: 899px) {
+@media (max-width: 899.999px) {
   .profile-menu-container-show {
     width: 195px;
   }
@@ -50,7 +50,7 @@
   }
 }
 
-@media (max-width: 1023px) {
+@media (max-width: 1023.999px) {
   .profile-menu-container-desktop {
     display: none;
   }

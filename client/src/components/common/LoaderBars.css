@@ -13,7 +13,7 @@
   z-index: 140;
 }
 
-@media(max-width:499px) {
+@media(max-width:499.999px) {
   .oscillating-bar {
     width: 10em;
   }

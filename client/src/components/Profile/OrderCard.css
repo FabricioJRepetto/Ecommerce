@@ -136,7 +136,7 @@
   }
 }
 
-@media (max-width: 1239px) {
+@media (max-width: 1239.999px) {
   .profile-order-card-container {
     flex-direction: column;
     height: 16rem;

@@ -308,7 +308,7 @@ h3.g-gradient-text {
    }
 }
 
-@media (max-width: 1023px) {
+@media (max-width: 1023.999px) {
    .products-results-container {
       width: 85%;
    }
