@@ -5,9 +5,9 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { loadNotifications } from '../../../Redux/reducer/sessionSlice';
 import {ReactComponent as Delete } from '../../../assets/svg/trash.svg';
+import { useEffect } from 'react';
 
 import './NotifCard.css';
-import { useEffect } from 'react';
 
 const NotifCard = ({props, setNotif, modal = false, openByQ}) => {
     const dispatch = useDispatch();
@@ -86,7 +86,7 @@ const NotifCard = ({props, setNotif, modal = false, openByQ}) => {
                 <div>
                     <div className={`notifcard-type ${dotType[notif_type]}`}></div>
                     <div className={`notifcard-type-border ${!seen && correctType[notif_type]}`}></div>
-                    <h2>{title}</h2>
+                    <h2 style={modal ? {maxWidth: '75%'} : {}}>{title}</h2>
                 </div>
 
                 {!modal && <p>{date.replace(', ', ' | ').slice(0,-3)}</p>}

@@ -20,7 +20,7 @@ const NotificationsSection = ({loading, notif, setNotif}) => {
             setLoadSource(notificationList);
         };
       // eslint-disable-next-line
-    }, [])
+    }, [notif])
 
   return (
     <div className='notifications-section-container'>

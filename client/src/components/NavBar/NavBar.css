@@ -558,8 +558,8 @@
 
 .navbar-username {
   font-weight: 400;
-  white-space: nowrap;
   max-width: 7rem;
+  white-space: nowrap;
   overflow-x: hidden;
   text-overflow: ellipsis;
 }

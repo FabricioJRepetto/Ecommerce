@@ -2,6 +2,11 @@
     background-color: #070707;
     margin-bottom: 1rem;
 }
+.notifcard-container h2 {
+    white-space: nowrap;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+}
 
 .notifcard-header {
     display: flex;
