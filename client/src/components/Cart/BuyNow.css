@@ -161,18 +161,21 @@
     top: 2%;
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1023.999px) {
     .buynow-inner {
         flex-direction: column;
     }
+
     .buynow-product-details {
         flex-direction: row;
         justify-content: space-evenly;
     }
+
     .buynow-img-container {
         width: 40vw;
         height: auto;
     }
+
     .buynow-total-container {
         margin: 2rem 0 0 0;
     }
@@ -182,5 +185,5 @@
     .buynow-inner {
         padding: 50px 0;
     }
-    
+
 }

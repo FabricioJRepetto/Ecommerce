@@ -92,16 +92,16 @@
 
 }
 
-@media (max-width: 1023px) {
+@media (max-width: 1023.999px) {
     .notif-modal-container {
         margin-left: 0;
         margin-right: 0;
     }
 }
 
-@media (max-width: 899px) {
+@media (max-width: 899.999px) {
     .notif-modal-container {
-        margin-bottom: 2px;
+        margin-bottom: 4px;
         scale: .9;
         padding-left: 3px;
     }

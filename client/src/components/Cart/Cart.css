@@ -254,6 +254,7 @@
     margin: 1rem auto;
     padding: .5rem .9rem;
 }
+
 .cart-warning-message svg {
     margin-right: .7rem;
 }
@@ -265,7 +266,8 @@
     text-align: left;
     margin: 2rem;
 }
-.cart-modal-checkouts > div {
+
+.cart-modal-checkouts>div {
     background-color: #050505;
     margin: 1rem;
     min-width: 400px;
@@ -273,7 +275,8 @@
     height: 100%;
     padding: 0 1rem 1rem 1rem;
 }
-.cart-modal-checkouts > div div + div {    
+
+.cart-modal-checkouts>div div+div {
     height: 80%;
     display: flex;
     flex-direction: column;
@@ -287,6 +290,7 @@
     height: 6rem;
     border-bottom: 1px solid #151515;
 }
+
 .cart-modal-logo img {
     max-width: 100%;
     max-height: 100%;
@@ -298,10 +302,12 @@
     padding-left: 2rem;
     max-width: 25rem;
 }
+
 .cart-modal-checkouts li {
     margin-bottom: .3rem;
     font-weight: 100;
 }
+
 .cart-modal-checkouts button {
     display: block;
     height: 3rem;
@@ -324,40 +330,43 @@
     justify-content: center;
     align-items: center;
 }
+
 .continue-button svg {
     display: inline;
     color: white;
     scale: .8;
 }
+
 .continue-button:hover svg {
     display: none;
 }
+
 .arrow-right-gradient {
-  height: 1.5rem;
-  width: 1.5rem;
-  background: linear-gradient(
-    45deg,
-    #35a7ff 0%,
-    #7e54de 20%,
-    #f40259 60%,
-    #fea30d 100%
-  );
-  mask-image: url("../../assets/svg/arrow-right2.svg");
-  background-size: 800%;
-  animation: gradientTextAnim 10s infinite;
-  display: none;
-  scale: .8;
+    height: 1.5rem;
+    width: 1.5rem;
+    background: linear-gradient(45deg,
+            #35a7ff 0%,
+            #7e54de 20%,
+            #f40259 60%,
+            #fea30d 100%);
+    mask-image: url("../../assets/svg/arrow-right2.svg");
+    background-size: 800%;
+    animation: gradientTextAnim 10s infinite;
+    display: none;
+    scale: .8;
 }
+
 .continue-button:hover .arrow-right-gradient {
     display: inline;
 }
 
 
-@media (max-width: 1024px) {
+@media (max-width: 1023.999px) {
     .cart-inner {
         min-width: 100vw;
     }
 }
+
 @media (max-width: 930px) {
     .cart-modal-checkouts {
         grid-template-columns: 1fr;

@@ -52,7 +52,7 @@
     border-top: 1px solid #737373
 }
 
-@media (max-width:499px) {
+@media (max-width:499.99px) {
     .footer-links-container {
         flex-direction: column-reverse;
     }
