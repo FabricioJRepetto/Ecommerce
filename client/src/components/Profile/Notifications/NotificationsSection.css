@@ -1,13 +1,14 @@
 .notifications-section-container {
     margin-top: 20rem;
     min-height: 100%;
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
 }
 .notifications-section-container h2 {
-    color: #7e7e7e;
+    color: #7e7e7e;    
 }
 .notifications-section-title {
     position: relative;

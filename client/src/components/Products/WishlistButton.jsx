@@ -1,13 +1,15 @@
 import React from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { loadWishlist } from "../../Redux/reducer/cartSlice";
 import { useNotification } from "../../hooks/useNotification";
-import "./WishlistButton.css";
 
 import { DeleteIcon } from "@chakra-ui/icons";
 import { ReactComponent as Heart } from "../../assets/svg/fav.svg";
 import { ReactComponent as BrokenHeart } from "../../assets/svg/unfav.svg";
+
+import "./WishlistButton.css";
 
 export const WishlistButton = ({
   prodId: id,
@@ -19,10 +21,13 @@ export const WishlistButton = ({
   const dispatch = useDispatch();
   const { wishlist } = useSelector((state) => state.cartReducer);
   const { session } = useSelector((state) => state.sessionReducer);
+  const [disabled, setDisabled] = useState(false)
   const notification = useNotification();
 
   const addToWish = async (e, id) => {
     e.stopPropagation();
+    setDisabled(true);
+    
     if (session) {
       if (!wishlist.includes(id)) {
         const { data } = await axios.post(`/wishlist/${id}`);
@@ -47,7 +52,10 @@ export const WishlistButton = ({
         "/signin",
         "warning"
       );
-    }
+    };
+    setTimeout(() => {
+        setDisabled(false);
+    }, 2000);
   };
 
   return (
@@ -57,6 +65,7 @@ export const WishlistButton = ({
       }`}
     >
       <button
+        disabled={disabled}
         style={{ height: size, width: size }}
         onClick={(e) => addToWish(e, id)}
       >
@@ -74,7 +83,6 @@ export const WishlistButton = ({
             />
           </>
         )}
-        {/*!modal && <StarIcon color={fav ? '#ffd000' : '#7d7d7d'}/>*/}
         {modal && <DeleteIcon color="#ffffff" />}
       </button>
     </div>

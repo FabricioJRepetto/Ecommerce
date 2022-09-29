@@ -5,9 +5,9 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { loadNotifications } from '../../../Redux/reducer/sessionSlice';
 import {ReactComponent as Delete } from '../../../assets/svg/trash.svg';
+import { useEffect } from 'react';
 
 import './NotifCard.css';
-import { useEffect } from 'react';
 
 const NotifCard = ({props, setNotif, modal = false, openByQ}) => {
     const dispatch = useDispatch();
@@ -15,13 +15,6 @@ const NotifCard = ({props, setNotif, modal = false, openByQ}) => {
     const [open, setOpen] = useState(false);
     const [seen, setSeen] = useState(props.seen);
     const [deleting, setDeleting] = useState(false);
-
-    useEffect(() => {
-      if (openByQ) {
-        (openByQ === props._id) && setOpen(true)
-      }
-      // eslint-disable-next-line
-    }, [])
 
     const {
         date,
@@ -53,6 +46,8 @@ const NotifCard = ({props, setNotif, modal = false, openByQ}) => {
         if (!modal) {
             setOpen(!open)
             if (!seen) {
+            console.log(`%c marked as seen `, 'background-color: #39f0a4; color: #000000; font-weight: bold;');
+
                 setSeen(true)
                 const {data} = await axios.put(`/notifications/${props._id}`)
                 dispatch(loadNotifications(data.notif_list));
@@ -75,13 +70,23 @@ const NotifCard = ({props, setNotif, modal = false, openByQ}) => {
         
       }
 
+      useEffect(() => {
+      if (openByQ) {
+        if (openByQ === props._id) {
+            handleNotifClick();
+            console.log(`%c open by query `, 'background-color: #8ef039; color: #000000; font-weight: bold;');
+        }
+      }
+      // eslint-disable-next-line
+    }, [])
+
     return (
         <div className={`notifcard-container component-fadeIn ${deleting && 'card-fadein'} ${modal && 'notifcard-container-modal'}`} onClick={handleNotifClick}>
             <div className={`notifcard-header`} style={seen ? {background: '#070707'} : unseenStyle }>
                 <div>
                     <div className={`notifcard-type ${dotType[notif_type]}`}></div>
                     <div className={`notifcard-type-border ${!seen && correctType[notif_type]}`}></div>
-                    <h2>{title}</h2>
+                    <h2 style={modal ? {maxWidth: '75%'} : {}}>{title}</h2>
                 </div>
 
                 {!modal && <p>{date.replace(', ', ' | ').slice(0,-3)}</p>}
