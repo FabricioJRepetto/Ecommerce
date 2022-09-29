@@ -6,6 +6,21 @@
    .profile-sale-card .profile-price-mobile {
       display: inline;
       text-align: center;
-      padding-right: 1rem;
+      padding: 1rem;
+   }
+
+   .profile-sale-card {
+      flex-direction: column;
+   }
+
+   .profile-sale-card-container {
+      height: 18.5rem;
+   }
+}
+
+@media (min-width: 401px) and (max-width: 450px) {
+   .profile-orders-container .profile-sale-card-container {
+      padding: 0 0 0.5rem 1rem;
+      height: 16.5rem;
    }
 }
