@@ -904,7 +904,15 @@ const ProductForm = () => {
         </div>
       </form>
 
-      <ReturnButton to={productToEdit ? "/admin/products" : "/admin"} />
+      <ReturnButton
+        to={
+          (role === "admin" || role === "superadmin") && productToEdit
+            ? "/admin/products"
+            : role === "admin" || role === "superadmin"
+            ? "/admin"
+            : "/profile/products"
+        }
+      />
 
       <Modal
         isOpen={isOpenCreateProduct}
