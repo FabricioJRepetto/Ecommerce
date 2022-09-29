@@ -179,13 +179,13 @@ const NavBar = () => {
     !showSearchBar && searchInput.current.focus();
   };
 
-  const modalCorrectPosition = () => {
+  /* const modalCorrectPosition = () => {
     let max = 10,
       avatar = 2,
       nick = 0.523 * username.length;
     nick > 7 && (nick = 7);
     return `calc(${(max - (avatar + nick)) / 2}rem)`;
-  };
+  }; */
 
   return (
     <>
@@ -316,7 +316,7 @@ const NavBar = () => {
                                 ? " navbar-modal-visible"
                                 : " navbar-modal-hide"
                             }`}
-                            style={{ left: modalCorrectPosition() }}
+                            /* style={{ left: modalCorrectPosition() }} */
                           >
                             <div className="navbar-modal-menu-container">
                               <div
@@ -455,13 +455,15 @@ const NavBar = () => {
 
                       <NavLink to={"cart"} className="cart-icon-container">
                         <Cart className="cart-icon" />
-                        {cart && <div className="cart-number">
-                          {cart.length > 0
-                            ? cart.length < 10
-                              ? cart.length
-                              : "9+"
-                            : ""}
-                        </div>}
+                        {cart && (
+                          <div className="cart-number">
+                            {cart.length > 0
+                              ? cart.length < 10
+                                ? cart.length
+                                : "9+"
+                              : ""}
+                          </div>
+                        )}
                       </NavLink>
                     </>
                   )}
