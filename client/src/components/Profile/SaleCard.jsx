@@ -4,7 +4,7 @@ import { priceFormat } from "../../helpers/priceFormat";
 import "./SaleCard.css";
 
 const SaleCard = ({ sale }) => {
-  const { buyer, product, price, quantity, delivery_date, payment_date } = sale;
+  const { buyer, product, price, quantity, payment_date } = sale;
 
   return (
     <div className="profile-order-card-container profile-sale-card-container">

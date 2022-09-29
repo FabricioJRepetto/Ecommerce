@@ -11,7 +11,7 @@ import "./CartCard.css";
 const CartCard = ({ on_cart, productData, buyLater, deleteP, buyNow, source, loading }) => {
   const {
     thumbnail: img,
-    premium,
+    // premium,
     name,
     price,
     sale_price,
@@ -30,9 +30,11 @@ const CartCard = ({ on_cart, productData, buyLater, deleteP, buyNow, source, loa
   const [moving, setMoving] = useState(false)
 
     useEffect(() => {
+        console.log(prodId);
         setTimeout(() => {
             setMounted(true)            
         }, 100);
+        // eslint-disable-next-line
     }, [])
 
     const willUnmount = (del) => {
@@ -60,7 +62,7 @@ const CartCard = ({ on_cart, productData, buyLater, deleteP, buyNow, source, loa
         
             <div className="product-cart-card-head">
                 <div onClick={() =>
-                    navigate(premium ? `/premium/${prodId}` : `/details/${prodId}`)
+                    navigate(`/details/${prodId}`)
                 }
                 className="product-cart-image-container pointer"
                 >
@@ -106,15 +108,15 @@ const CartCard = ({ on_cart, productData, buyLater, deleteP, buyNow, source, loa
       </div>
 
       <div className="cartcard-tail-section">
-        {on_cart && (
-            <QuantityInput
-                prodId={prodId}
-                price={on_sale ? sale_price : price}
-                stock={stock}
-                prodQuantity={prodQuantity}
-                loading={loading}
-                />
-        )}
+        
+        <QuantityInput
+            prodId={prodId}
+            price={on_sale ? sale_price : price}
+            stock={stock}
+            prodQuantity={prodQuantity}
+            loading={loading}
+            on_cart={on_cart}
+            />
 
         <div className="cart-card-price">
             {on_sale && 

@@ -16,6 +16,8 @@ import "./Details.css";
 
 const Details = () => {
   let { id } = useParams();
+      console.log(`%c ${id} `, 'background-color: #47a0ff; color: #000000; font-weight: bold;');
+
   const { wishlist } = useSelector((state) => state.cartReducer);
   const { session } = useSelector((state) => state.sessionReducer);
   const querys = useSelector((state) => state.productsReducer.searchQuerys);
@@ -100,7 +102,7 @@ const Details = () => {
         setError(data.message);
       } else {
         if (data.product.premium) {
-            return navigate(`/premium/${data.id}`)
+            return navigate(`/premium/${id}`)
         }
 
         //? new details destructuring
