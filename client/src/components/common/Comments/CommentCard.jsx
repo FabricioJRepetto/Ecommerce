@@ -29,7 +29,7 @@ const CommentCard = ({props, editable, edit, editing}) => {
 
                     <div className='comment-user-data'>
                         <div className='comment-card-image-container'>
-                            <img src={props.user_data.avatar || require('../../../assets/avatardefault.png')} alt="user avatar" />
+                            <img src={props.user_data.avatar || require('../../../assets/avatardefault.png')} referrerPolicy="no-referrer" alt="user avatar" />
                         </div>
                         <h2>{props.user_data.name}</h2>
                     </div>

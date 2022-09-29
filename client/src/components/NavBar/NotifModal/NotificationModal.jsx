@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { ReactComponent as Bell } from '../../../assets/svg/bell.svg'
 import { ReactComponent as Spinner } from '../../../assets/svg/spinner.svg'
@@ -12,9 +12,10 @@ import './NotificationModal.css'
 
 const NotificationModal = () => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     // const [data, setData] = useState(false);
     const [loading, setLoading] = useState(true);
-    const [redDot, setRedDot] = useState(false)
+    const [redDot, setRedDot] = useState(false);
     const { notificationList } = useSelector((state) => state.sessionReducer);
 
     useEffect(() => {
@@ -29,7 +30,7 @@ const NotificationModal = () => {
         setLoading(true)
         const {data} = await axios('/notifications/')
         if (data) {
-            loadNotifications(data)
+            dispatch(loadNotifications(data));
         }           
         setLoading(false)
     };
