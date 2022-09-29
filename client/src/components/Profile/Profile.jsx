@@ -152,10 +152,6 @@ const Profile = () => {
     }
   }, [containerDisplay, showMenu]);
 
-  useEffect(() => {
-    console.log("sales", sales);
-  }, [sales]);
-
   return (
     <div className="profile-container component-fadeIn">
       <div

@@ -23,7 +23,6 @@ import NotificationModal from "./NotifModal/NotificationModal";
 import "./NavBar.css";
 import "../../App.css";
 
-
 const NavBar = () => {
   const { session, username, avatar, role } = useSelector(
     (state) => state.sessionReducer
@@ -109,7 +108,7 @@ const NavBar = () => {
       })
     );
 
-    /* const miniLogo = document.querySelectorAll(".mini-glitch");
+    const miniLogo = document.querySelectorAll(".mini-glitch");
     miniLogo.forEach((logo) =>
       PowerGlitch.glitch(logo, {
         imageUrl:
@@ -137,7 +136,7 @@ const NavBar = () => {
           hueRotate: true,
         },
       })
-    ); */
+    );
 
     const controlSubsectionBar = () => {
       window.scrollY > 80 && setShowSubsectionBar(true);
@@ -182,11 +181,11 @@ const NavBar = () => {
 
   const modalCorrectPosition = () => {
     let max = 10,
-     avatar = 2,
-     nick = 0.523*username.length;
-    nick > 7 && (nick = 7)
-    return `calc(${(max - (avatar + nick))/2}rem)`
-   }
+      avatar = 2,
+      nick = 0.523 * username.length;
+    nick > 7 && (nick = 7);
+    return `calc(${(max - (avatar + nick)) / 2}rem)`;
+  };
 
   return (
     <>
@@ -208,7 +207,7 @@ const NavBar = () => {
               : () => [logoClick(), setShowMenu(false)]
           }
         ></div>
-        {/* <div
+        <div
           className={`mini-glitch glitch-mobile${
             showMenu ? " mini-glitch-show-menu" : ""
           }`}
@@ -218,7 +217,7 @@ const NavBar = () => {
               ? () => navigate("/")
               : () => [logoClick(), setShowMenu(false)]
           }
-        ></div> */}
+        ></div>
       </div>
 
       <div className="navbar">
@@ -295,20 +294,19 @@ const NavBar = () => {
                         onMouseEnter={() => setProfileModal(true)}
                         onMouseLeave={() => setProfileModal(false)}
                       >
-                        
                         {avatar ? (
-                        <div className="navbar-avatar">
+                          <div className="navbar-avatar">
                             <img
-                            src={avatarResizer(avatar)}
-                            referrerPolicy="no-referrer"
-                            alt="navbar-avatar"
+                              src={avatarResizer(avatar)}
+                              referrerPolicy="no-referrer"
+                              alt="navbar-avatar"
                             />
-                        </div>
+                          </div>
                         ) : (
-                        <Avatar className="navbar-avatar-svg" />
+                          <Avatar className="navbar-avatar-svg" />
                         )}
                         <p className="navbar-username">
-                        {username || "Profile"}
+                          {username || "Profile"}
                         </p>
 
                         <div className="navbar-modal-container">
@@ -318,7 +316,7 @@ const NavBar = () => {
                                 ? " navbar-modal-visible"
                                 : " navbar-modal-hide"
                             }`}
-                            style={{left: modalCorrectPosition()}}
+                            style={{ left: modalCorrectPosition() }}
                           >
                             <div className="navbar-modal-menu-container">
                               <div
@@ -355,7 +353,30 @@ const NavBar = () => {
                                 className="profile-modal-option"
                                 onClick={() => setProfileModal(false)}
                               >
-                                <ChromaticText text="Carrito" route="/cart" />
+                                <ChromaticText
+                                  text="Publicaciones"
+                                  route="/profile/products"
+                                />
+                              </div>
+
+                              <div
+                                className="profile-modal-option"
+                                onClick={() => setProfileModal(false)}
+                              >
+                                <ChromaticText
+                                  text="Ventas"
+                                  route="/profile/sales"
+                                />
+                              </div>
+
+                              <div
+                                className="profile-modal-option"
+                                onClick={() => setProfileModal(false)}
+                              >
+                                <ChromaticText
+                                  text="Publicar"
+                                  route="/create"
+                                />
                               </div>
 
                               <div
@@ -375,16 +396,6 @@ const NavBar = () => {
                                 <ChromaticText
                                   text="Compras"
                                   route="/profile/orders"
-                                />
-                              </div>
-
-                              <div
-                                className="profile-modal-option"
-                                onClick={() => setProfileModal(false)}
-                              >
-                                <ChromaticText
-                                  text="Direcciones"
-                                  route="/profile/address"
                                 />
                               </div>
 
@@ -584,14 +595,20 @@ const NavBar = () => {
                   size={"1.1rem"}
                 />
               </li>
-              <li onClick={() => setShowMenu(false)}>
+              <li
+                onClick={() => setShowMenu(false)}
+                className="profile-minimobile-option-hide"
+              >
                 <ChromaticText
                   text="Notificaciones"
                   route="/profile/notifications"
                   size={"1.1rem"}
                 />
               </li>
-              <li onClick={() => setShowMenu(false)}>
+              <li
+                onClick={() => setShowMenu(false)}
+                className="profile-superminimobile-option-hide"
+              >
                 <ChromaticText
                   text="Favoritos"
                   route="/profile/wishlist"
@@ -600,9 +617,33 @@ const NavBar = () => {
               </li>
               <li
                 onClick={() => setShowMenu(false)}
-                className="navbar-mobile-option-hide"
+                className="profile-superminimobile-option-hide"
               >
-                <ChromaticText text="Carrito" route="/cart" size={"1.1rem"} />
+                <ChromaticText
+                  text="Publicaciones"
+                  route="/profile/products"
+                  size={"1.1rem"}
+                />
+              </li>
+              <li
+                onClick={() => setShowMenu(false)}
+                className="profile-minimobile-option-hide"
+              >
+                <ChromaticText
+                  text="Ventas"
+                  route="/profile/sales"
+                  size={"1.1rem"}
+                />
+              </li>
+              <li
+                onClick={() => setShowMenu(false)}
+                className="profile-superminimobile-option-hide"
+              >
+                <ChromaticText
+                  text="Publicar"
+                  route="/create"
+                  size={"1.1rem"}
+                />
               </li>
               <li
                 onClick={() => setShowMenu(false)}
@@ -621,16 +662,6 @@ const NavBar = () => {
                 <ChromaticText
                   text="Compras"
                   route="/profile/orders"
-                  size={"1.1rem"}
-                />
-              </li>
-              <li
-                onClick={() => setShowMenu(false)}
-                className="navbar-mobile-option-hide"
-              >
-                <ChromaticText
-                  text="Direcciones"
-                  route="/profile/address"
                   size={"1.1rem"}
                 />
               </li>

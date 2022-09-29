@@ -44,6 +44,10 @@
     width: 10vw;
     min-width: 170px;
   }
+
+  .profile-menu-container-fixed {
+    background: #00000090;
+  }
 }
 
 @media (max-width: 1023px) {
@@ -62,6 +66,10 @@
   .profile-menu-container-placeholder-mobile {
     display: flex;
   }
+
+  .profile-menu-container-fixed {
+    background: #000000;
+  }
 }
 
 .profile-menu-container-fixed {
@@ -69,7 +77,6 @@
   position: fixed;
   /* min-height: 300px; */
   height: 100%;
-  background: #00000090;
   top: 0;
 }
 
@@ -80,6 +87,10 @@
   transition: 0.1s ease-in-out;
   /* background-color: #00000040; */
   z-index: 40;
+}
+
+.profile-option-selected-container .loader-bars-container {
+  z-index: 30;
 }
 
 .profile-menu-container-hide {
