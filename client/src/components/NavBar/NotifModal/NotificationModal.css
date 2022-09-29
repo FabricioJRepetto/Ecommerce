@@ -7,7 +7,7 @@
 
     cursor: pointer;
     position: relative;
-    margin: .25rem .5rem 0;
+    margin: .25rem .3rem 0 .7rem;
 }
 
 .notif-modal-inner {
@@ -90,4 +90,19 @@
 .notif-modal-card-container {
     padding: 1rem 0;
 
+}
+
+@media (max-width: 1023px) {
+    .notif-modal-container {
+        margin-left: 0;
+        margin-right: 0;
+    }
+}
+
+@media (max-width: 899px) {
+    .notif-modal-container {
+        margin-bottom: 2px;
+        scale: .9;
+        padding-left: 3px;
+    }
 }
