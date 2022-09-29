@@ -353,7 +353,30 @@ const NavBar = () => {
                                 className="profile-modal-option"
                                 onClick={() => setProfileModal(false)}
                               >
-                                <ChromaticText text="Carrito" route="/cart" />
+                                <ChromaticText
+                                  text="Publicaciones"
+                                  route="/profile/products"
+                                />
+                              </div>
+
+                              <div
+                                className="profile-modal-option"
+                                onClick={() => setProfileModal(false)}
+                              >
+                                <ChromaticText
+                                  text="Ventas"
+                                  route="/profile/sales"
+                                />
+                              </div>
+
+                              <div
+                                className="profile-modal-option"
+                                onClick={() => setProfileModal(false)}
+                              >
+                                <ChromaticText
+                                  text="Publicar"
+                                  route="/create"
+                                />
                               </div>
 
                               <div
@@ -373,16 +396,6 @@ const NavBar = () => {
                                 <ChromaticText
                                   text="Compras"
                                   route="/profile/orders"
-                                />
-                              </div>
-
-                              <div
-                                className="profile-modal-option"
-                                onClick={() => setProfileModal(false)}
-                              >
-                                <ChromaticText
-                                  text="Direcciones"
-                                  route="/profile/address"
                                 />
                               </div>
 
@@ -582,14 +595,20 @@ const NavBar = () => {
                   size={"1.1rem"}
                 />
               </li>
-              <li onClick={() => setShowMenu(false)}>
+              <li
+                onClick={() => setShowMenu(false)}
+                className="profile-minimobile-option-hide"
+              >
                 <ChromaticText
                   text="Notificaciones"
                   route="/profile/notifications"
                   size={"1.1rem"}
                 />
               </li>
-              <li onClick={() => setShowMenu(false)}>
+              <li
+                onClick={() => setShowMenu(false)}
+                className="profile-superminimobile-option-hide"
+              >
                 <ChromaticText
                   text="Favoritos"
                   route="/profile/wishlist"
@@ -598,9 +617,33 @@ const NavBar = () => {
               </li>
               <li
                 onClick={() => setShowMenu(false)}
-                className="navbar-mobile-option-hide"
+                className="profile-superminimobile-option-hide"
               >
-                <ChromaticText text="Carrito" route="/cart" size={"1.1rem"} />
+                <ChromaticText
+                  text="Publicaciones"
+                  route="/profile/products"
+                  size={"1.1rem"}
+                />
+              </li>
+              <li
+                onClick={() => setShowMenu(false)}
+                className="profile-minimobile-option-hide"
+              >
+                <ChromaticText
+                  text="Ventas"
+                  route="/profile/sales"
+                  size={"1.1rem"}
+                />
+              </li>
+              <li
+                onClick={() => setShowMenu(false)}
+                className="profile-superminimobile-option-hide"
+              >
+                <ChromaticText
+                  text="Publicar"
+                  route="/create"
+                  size={"1.1rem"}
+                />
               </li>
               <li
                 onClick={() => setShowMenu(false)}
@@ -619,16 +662,6 @@ const NavBar = () => {
                 <ChromaticText
                   text="Compras"
                   route="/profile/orders"
-                  size={"1.1rem"}
-                />
-              </li>
-              <li
-                onClick={() => setShowMenu(false)}
-                className="navbar-mobile-option-hide"
-              >
-                <ChromaticText
-                  text="Direcciones"
-                  route="/profile/address"
                   size={"1.1rem"}
                 />
               </li>

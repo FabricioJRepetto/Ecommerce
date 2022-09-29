@@ -45,7 +45,7 @@
   user-select: none;
 }
 
-@media (max-height: 549px) {
+@media (max-height: 595px) {
   .navbar-mobile-option-hide {
     display: none;
   }
@@ -770,11 +770,16 @@
   padding: 0.5rem 1rem 0.5rem 1.5rem;
 }
 
-@media (max-height:399px) {
-  .profile-menu-container>ul>.profile-mobile-option-hide {
+@media (max-height:465px) {
+  .profile-minimobile-option-hide {
     display: none;
   }
+}
 
+@media (max-height:380px) {
+  .profile-superminimobile-option-hide {
+    display: none;
+  }
 }
 
 @media (max-width:399px) {
