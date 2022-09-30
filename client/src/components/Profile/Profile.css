@@ -87,6 +87,7 @@
   transition: 0.1s ease-in-out;
   /* background-color: #00000040; */
   z-index: 40;
+  overflow: hidden;
 }
 
 .profile-option-selected-container .loader-bars-container {
@@ -165,6 +166,14 @@
   left: 0.8rem;
   top: 0.8rem;
   font-size: 1.5rem;
+}
+
+.profile-burger-container-hide {
+  width: 50px;
+}
+
+.profile-burger-container-hide>.hamburger {
+  right: 2px;
 }
 
 .profile-menu-container>ul>li:hover,
