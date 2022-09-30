@@ -331,7 +331,15 @@
   .navbar-profile-section {
     width: 135px;
     align-items: center;
+  }
+
+  .navbar-profile-section-session {
+
     justify-content: space-between;
+  }
+
+  .navbar-profile-section-no-session {
+    justify-content: space-around;
   }
 
   .navbar-central-section>form {
