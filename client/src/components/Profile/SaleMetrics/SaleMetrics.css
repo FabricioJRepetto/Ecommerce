@@ -71,6 +71,11 @@
     opacity: 1;
 }
 
+.publication-card-switch {
+    height: 2rem;
+    width: 4rem;
+}
+
 .publication-card-calification {
     display: flex;
     align-items: center;

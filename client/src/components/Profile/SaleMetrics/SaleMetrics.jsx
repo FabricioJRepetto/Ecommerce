@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { loadIdProductToEdit } from '../../../Redux/reducer/productsSlice';
@@ -9,7 +9,11 @@ import { ReactComponent as Edit } from "../../../assets/svg/edit.svg";
 import { ReactComponent as Offer } from "../../../assets/svg/offer.svg";
 import { ReactComponent as Pause } from "../../../assets/svg/pause.svg";
 import { ReactComponent as Play } from "../../../assets/svg/play.svg";
-import { useEffect } from 'react';
+import { 
+    FormControl,
+    FormLabel,
+    Switch 
+} from '@chakra-ui/react'
 
 import './SaleMetrics.css'
 
@@ -22,7 +26,7 @@ const SaleMetrics = (data) => {
     const [minSale, setMinSale] = useState(false);
     const [maxSale, setMaxSale] = useState(false);
     const [totalRevenue, setTotalRevenue] = useState(false)
-
+    
     const {
         props, 
         openDeleteProduct, 
@@ -30,7 +34,7 @@ const SaleMetrics = (data) => {
         openDiscountProduct
     } = data;
 
-    const { prodId, name, price, thumbnail, active, average_calification, available_quantity } = props.product;
+    const { _id: prodId, on_sale, sale_price, discount, name, price, thumbnail, active, average_calification, available_quantity } = props.product;
     
     useEffect(() => {
         let maxSale = 0;
@@ -76,6 +80,23 @@ const SaleMetrics = (data) => {
                 </div>
                 <div>
                     <p>{name}</p>
+                    {on_sale && <div className="card-price-container c-mrgn">
+                        <div className="card-original-price">
+                            {on_sale && <del>${priceFormat(price).int}</del>}
+                        </div>
+                        <div className="card-price-section">
+                            <div className="minicard-price-section-inner">
+                            <h2>${priceFormat(on_sale ? sale_price : price).int}</h2>
+                            <p>{priceFormat(on_sale ? sale_price : price).cents}</p>
+                            </div>
+
+                            {on_sale && (
+                            <div className="minicard-sale-section">
+                                <p>{`${Math.round(discount)}% off`}</p>
+                            </div>
+                            )}
+                        </div>
+                    </div>}
                     <p>${priceFormat(price).int}</p>
                 </div>
                 <p onClick={()=>setOpen(!open)}>Ver más detalles</p>
@@ -129,6 +150,15 @@ const SaleMetrics = (data) => {
                         </span>}
                 </div>
 
+                <div>
+                </div>
+                    <Switch className='publication-card-switch'/>
+                    {/* <FormControl display='flex' alignItems='center'>
+                        <FormLabel htmlFor='email-alerts' mb='0'>
+                            ¿Activar envíos gratis?
+                        </FormLabel>
+                    </FormControl> */}
+
                 <div className='publication-card-calification'>
                     <p>Calificación actual: </p>
                     <Calification hover input
@@ -146,6 +176,7 @@ const SaleMetrics = (data) => {
                             style={{height: `${percenter(s.price * s.quantity)}%`, background: `#64d500${percenter(s.price * s.quantity)}`}}>
                                 <div className='metrics-tooltip'>
                                     <p>{`Total: $${priceFormat(s.price*s.quantity).int}`}</p>
+                                    <p>{`Unidades: ${s.quantity}`}</p>
                                     <p>{`${new Date(parseInt(s.payment_date)).toLocaleDateString('es-Ar')}`}</p>
                                 </div>
                         </div>
