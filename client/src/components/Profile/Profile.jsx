@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useNotification } from "../../hooks/useNotification";
@@ -24,6 +24,7 @@ import { useSignout } from "../../hooks/useSignout";
 import ChromaticText from "../common/ChromaticText";
 import BurgerButton from "../common/BurgerButton";
 import NotFound from "../common/NotFound";
+import { changeReloadFlag } from "../../Redux/reducer/productsSlice";
 
 import "../../App.css";
 import "./Profile.css";
@@ -48,11 +49,13 @@ const Profile = () => {
 
   const { wishlist: wl_id } = useSelector((state) => state.cartReducer);
   const { session, role } = useSelector((state) => state.sessionReducer);
+  const { reloadFlag } = useSelector((state) => state.productsReducer);
 
   const [widnowWidth, setWindowWidth] = useState(window.innerWidth);
   const [showMenu, setShowMenu] = useState(false);
   const [containerDisplay, setContainerDisplay] = useState(null);
   const profileMenuContainerMobile = useRef(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setChange(!change);
@@ -94,6 +97,27 @@ const Profile = () => {
     }
     // eslint-disable-next-line
   }, [wl_id]);
+
+  const reloadFunction = async () => {
+    setLoading(true);
+    try {
+      const { data } = await axios(`/user/products`);
+      setPublications(data.publications);
+      setSales(data.sales);
+    } catch (error) {
+      console.log(error); //! VOLVER A VER manejo de errores
+    } finally {
+      dispatch(changeReloadFlag(false));
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (reloadFlag) {
+      reloadFunction();
+    }
+    // eslint-disable-next-line
+  }, [reloadFlag]);
 
   const sections = [
     "details",

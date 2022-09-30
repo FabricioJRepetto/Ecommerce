@@ -27,12 +27,6 @@ const Publications = ({ loading, publications }) => {
     closeDiscountProduct,
     productToDiscount,
   ] = useModal();
-  const [
-    isOpenRemoveDiscount,
-    openRemoveDiscount,
-    closeRemoveDiscount,
-    productToRemoveDiscount,
-  ] = useModal();
 
   return (
     <div className="profile-publications-section">
@@ -56,14 +50,25 @@ const Publications = ({ loading, publications }) => {
                         openDeleteProduct={openDeleteProduct}
                         openReactivateProduct={openReactivateProduct}
                         openDiscountProduct={openDiscountProduct}
-                        openRemoveDiscount={openRemoveDiscount}
                         />
                 ))
               )
             ) : (
               <p>Aún no has publicado ningún produco</p>
             )}
-          </div>          
+
+          </div>
+
+          <div className="profile-publish-button-container">
+            <button
+              className="g-white-button"
+              onClick={() => {
+                navigate("/create");
+              }}
+            >
+              Publicar
+            </button>
+          </div>
         </div>
       ) : (
         <LoaderBars />
@@ -75,12 +80,9 @@ const Publications = ({ loading, publications }) => {
         closeReactivateProduct={closeReactivateProduct}
         isOpenDiscountProduct={isOpenDiscountProduct}
         closeDiscountProduct={closeDiscountProduct}
-        isOpenRemoveDiscount={isOpenRemoveDiscount}
-        closeRemoveDiscount={closeRemoveDiscount}
         productToDelete={productToDelete}
         productToReactivate={productToReactivate}
         productToDiscount={productToDiscount}
-        productToRemoveDiscount={productToRemoveDiscount}
       />
     </div>
   );

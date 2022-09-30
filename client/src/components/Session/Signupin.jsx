@@ -29,7 +29,7 @@ const Signupin = () => {
   const [viewPassword, setViewPassword] = useState({
     signin: false,
     signup: false,
-    signupRepeat: false,
+    signupRep: false,
   });
   const { userLogin, googleLogin } = useUserLogin();
 
@@ -151,7 +151,7 @@ const Signupin = () => {
       theme: "filled_black",
       shape: "square",
     });
-    google.accounts.id.prompt();
+    //google.accounts.id.prompt();
     // eslint-disable-next-line
   }, [session]);
 
@@ -246,17 +246,25 @@ const Signupin = () => {
 
             <span className="g-input-with-button">
               <input
-                type="password"
+                type={`${
+                  watchSignin("password") === undefined ||
+                  watchSignin("password") === ""
+                    ? "text"
+                    : viewPassword.signin
+                    ? "text"
+                    : "password"
+                }`}
                 autoComplete="on"
                 placeholder="Contraseña"
-                className={`g-input-two-icons${
+                className="g-input-two-icons"
+                /* className={`g-input-two-icons${
                   watchSignin("password") === undefined ||
                   watchSignin("password") === ""
                     ? ""
                     : viewPassword.signin
                     ? ""
                     : " g-password"
-                }`}
+                }`} */
                 {...registerSignin("password", {
                   required: true,
                 })}
@@ -375,17 +383,17 @@ const Signupin = () => {
 
             <span className="g-input-with-button">
               <input
-                type="text"
-                placeholder="Contraseña"
-                autoComplete="off"
-                className={`g-input-two-icons${
+                type={`${
                   watchSignup("password") === undefined ||
                   watchSignup("password") === ""
-                    ? ""
+                    ? "text"
                     : viewPassword.signup
-                    ? ""
-                    : " g-password"
+                    ? "text"
+                    : "password"
                 }`}
+                placeholder="Contraseña"
+                autoComplete="off"
+                className="g-input-two-icons"
                 {...registerSignup("password", {
                   required: true,
                   minLength: 6,
@@ -437,17 +445,17 @@ const Signupin = () => {
 
             <span className="g-input-with-button">
               <input
-                type="text"
-                placeholder="Repite tu contraseña"
-                autoComplete="off"
-                className={`g-input-two-icons${
+                type={`${
                   watchSignup("repPassword") === undefined ||
                   watchSignup("repPassword") === ""
-                    ? ""
+                    ? "text"
                     : viewPassword.signupRep
-                    ? ""
-                    : " g-password"
+                    ? "text"
+                    : "password"
                 }`}
+                placeholder="Repite tu contraseña"
+                autoComplete="off"
+                className="g-input-two-icons"
                 onPaste={(e) => {
                   e.preventDefault();
                   return false;

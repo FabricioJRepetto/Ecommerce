@@ -122,16 +122,16 @@ const ResetPassword = () => {
 
             <span className="g-input-with-button">
               <input
-                type="text"
+                type={`${
+                  watch("password") === undefined || watch("password") === ""
+                    ? "text"
+                    : viewPassword.password
+                    ? "text"
+                    : "password"
+                }`}
                 placeholder="Contraseña"
                 autoComplete="off"
-                className={`g-input-two-icons${
-                  watch("password") === undefined || watch("password") === ""
-                    ? ""
-                    : viewPassword.password
-                    ? ""
-                    : " g-password"
-                }`}
+                className="g-input-two-icons"
                 {...register("password", {
                   required: true,
                   minLength: 6,
@@ -183,17 +183,17 @@ const ResetPassword = () => {
 
             <span className="g-input-with-button">
               <input
-                type="text"
-                placeholder="Repite tu contraseña"
-                autoComplete="off"
-                className={`g-input-two-icons${
+                type={`${
                   watch("repPassword") === undefined ||
                   watch("repPassword") === ""
-                    ? ""
+                    ? "text"
                     : viewPassword.repPassword
-                    ? ""
-                    : " g-password"
+                    ? "text"
+                    : "password"
                 }`}
+                placeholder="Repite tu contraseña"
+                autoComplete="off"
+                className="g-input-two-icons"
                 onPaste={(e) => {
                   e.preventDefault();
                   return false;

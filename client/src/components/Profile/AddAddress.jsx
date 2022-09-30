@@ -237,7 +237,10 @@ const AddAddress = ({
           <button className="g-white-button">
             {prop ? "Agregar" : "Actualizar"}
           </button>
-          <button onClick={() => closeAddForm(true)} className="g-white-button secondary-button">
+          <button
+            onClick={() => closeAddForm(true)}
+            className="g-white-button secondary-button"
+          >
             Cancelar
           </button>
         </div>

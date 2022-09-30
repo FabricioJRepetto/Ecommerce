@@ -8,6 +8,7 @@
     width: 100%;
     position: relative;
     margin-top: .5rem;
+    overflow: hidden;
 }
 
 .results-container-center {
@@ -75,7 +76,7 @@
 }
 
 .results-filters {
-    width: 17rem;
+    min-width: 17rem;
     margin-right: 1rem;
 }
 

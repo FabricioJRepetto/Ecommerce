@@ -15,5 +15,11 @@
 .profile-publications-header > button{
     position: absolute;
     top: -1rem;
-    right: 5%;    
+    right: 5%;
+}
+
+@media (max-width:400px) {
+   .profile-publish-button-container {
+      margin-left: 3rem;
+   }
 }

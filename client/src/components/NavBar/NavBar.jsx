@@ -163,6 +163,7 @@ const NavBar = () => {
     navigate("/results");
     dispatch(loadQuerys({ q: productToSearch }));
     setShowSearchBar(false);
+    searchInput.current.blur();
   };
 
   const logoClick = () => {
@@ -178,13 +179,13 @@ const NavBar = () => {
     !showSearchBar && searchInput.current.focus();
   };
 
-  const modalCorrectPosition = () => {
+  /* const modalCorrectPosition = () => {
     let max = 10,
       avatar = 2,
       nick = 0.523 * username.length;
     nick > 7 && (nick = 7);
     return `calc(${(max - (avatar + nick)) / 2}rem)`;
-  };
+  }; */
 
   return (
     <>
@@ -270,10 +271,17 @@ const NavBar = () => {
                   </form>
                 </div>
 
-                <div className="navbar-profile-section">
+                <div
+                  className={`navbar-profile-section ${
+                    !session
+                      ? "navbar-profile-section-no-session"
+                      : "navbar-profile-section-session"
+                  }`}
+                >
                   <div
                     className="navbar-search-mobile-button"
                     onClick={handleSearchBar}
+                    id="open-searchbar-button"
                   >
                     <SearchIcon />
                   </div>
@@ -315,7 +323,7 @@ const NavBar = () => {
                                 ? " navbar-modal-visible"
                                 : " navbar-modal-hide"
                             }`}
-                            style={{ left: modalCorrectPosition() }}
+                            /* style={{ left: modalCorrectPosition() }} */
                           >
                             <div className="navbar-modal-menu-container">
                               <div
@@ -454,13 +462,15 @@ const NavBar = () => {
 
                       <NavLink to={"cart"} className="cart-icon-container">
                         <Cart className="cart-icon" />
-                        {cart && <div className="cart-number">
-                          {cart.length > 0
-                            ? cart.length < 10
-                              ? cart.length
-                              : "9+"
-                            : ""}
-                        </div>}
+                        {cart && (
+                          <div className="cart-number">
+                            {cart.length > 0
+                              ? cart.length < 10
+                                ? cart.length
+                                : "9+"
+                              : ""}
+                          </div>
+                        )}
                       </NavLink>
                     </>
                   )}
@@ -530,13 +540,15 @@ const NavBar = () => {
                 className="g-input-two-icons navbar-searchbar"
                 ref={searchInput}
                 onChange={(e) => setProductToSearch(e.target.value)}
-                onBlur={() => setShowSearchBar(false)}
                 value={productToSearch}
               />
               <>
                 <div
                   className="g-input-icon-container g-input-x-button"
-                  onClick={() => setShowSearchBar(false)}
+                  onClick={() => {
+                    setShowSearchBar(false);
+                    setProductToSearch("");
+                  }}
                 >
                   <CloseIcon />
                 </div>

@@ -102,7 +102,7 @@
 
 @media (max-width: 899px) {
     .notif-modal-container {
-        margin-bottom: 2px;
+        margin-bottom: 4px;
         scale: .9;
         padding-left: 3px;
     }
