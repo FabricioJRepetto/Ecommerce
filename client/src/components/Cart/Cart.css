@@ -361,7 +361,7 @@
 }
 
 
-@media (max-width: 1023.999px) {
+@media (max-width: 1024px) {
     .cart-inner {
         min-width: 100vw;
     }
