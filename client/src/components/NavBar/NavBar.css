@@ -257,7 +257,6 @@
   .navbar-profile-section {
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
     margin: 0;
   }
 }
@@ -401,6 +400,14 @@
 
   .navbar-profile-section {
     padding-left: 1rem;
+  }
+
+  .navbar-central-section>form {
+    display: inline;
+  }
+
+  .navbar-profile-section {
+    justify-content: flex-start;
   }
 }
 
