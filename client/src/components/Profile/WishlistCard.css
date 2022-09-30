@@ -455,6 +455,7 @@
 
   .wishlist-images-data-container {
     height: 7.2rem;
+    /*  max-width: 90%; */
   }
 
   .wishlist-free-shipping>p {
@@ -485,6 +486,7 @@
   .wishlist-card-buttons-container {
     flex-direction: row;
     align-items: flex-end;
+    margin-top: 10px;
   }
 }
 

@@ -7,21 +7,31 @@
     justify-content: flex-start;
     align-items: center;
 }
+
 .notifications-section-container h2 {
-    color: #7e7e7e;    
+    color: #7e7e7e;
 }
+
 .notifications-section-title {
     position: relative;
 }
+
 .notifications-section-title svg {
     position: absolute;
     top: .2rem;
     right: -3rem;
     scale: .7;
 }
+
 .notifications-section-cards-container {
     display: flex;
     flex-direction: column-reverse;
     width: 80%;
     min-width: 450px;
+}
+
+@media (max-width:400px) {
+    .notifications-section-title>h1 {
+        margin-left: 3rem;
+    }
 }
