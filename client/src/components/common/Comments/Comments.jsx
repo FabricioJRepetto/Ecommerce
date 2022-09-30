@@ -92,9 +92,6 @@ const Comments = ({ product_id, comments, allowed }) => {
               avatar,
             },
           };
-          console.log(`%c ${data.new_id} `, 'background-color: #40fad5; color: #000000; font-weight: bold;');
-          console.log(`%c ${username} `, 'background-color: #faf740; color: #000000; font-weight: bold;');
-          console.log(newComment);
           setAllComments([...allComments, newComment]);
           setAllowComment(false);
         }
@@ -104,8 +101,6 @@ const Comments = ({ product_id, comments, allowed }) => {
   };
 
   const editComment = (id) => {
-    console.log('editComment');
-    console.log(comments);
     let target = allComments.find((c) => c.comment._id === id);
 
     setCalification(target.comment.calification);

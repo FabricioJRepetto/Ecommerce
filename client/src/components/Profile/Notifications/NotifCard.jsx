@@ -46,7 +46,6 @@ const NotifCard = ({props, setNotif, modal = false, openByQ}) => {
         if (!modal) {
             setOpen(!open)
             if (!seen) {
-            console.log(`%c marked as seen `, 'background-color: #39f0a4; color: #000000; font-weight: bold;');
 
                 setSeen(true)
                 const {data} = await axios.put(`/notifications/${props._id}`)
@@ -74,7 +73,6 @@ const NotifCard = ({props, setNotif, modal = false, openByQ}) => {
       if (openByQ) {
         if (openByQ === props._id) {
             handleNotifClick();
-            console.log(`%c open by query `, 'background-color: #8ef039; color: #000000; font-weight: bold;');
         }
       }
       // eslint-disable-next-line

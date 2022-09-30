@@ -16,7 +16,6 @@ import "./Details.css";
 
 const Details = () => {
   let { id } = useParams();
-      console.log(`%c ${id} `, 'background-color: #47a0ff; color: #000000; font-weight: bold;');
 
   const { wishlist } = useSelector((state) => state.cartReducer);
   const { session } = useSelector((state) => state.sessionReducer);
