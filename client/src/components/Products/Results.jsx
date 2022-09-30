@@ -33,6 +33,7 @@ const Results = () => {
     (state) => state.productsReducer.productsAppliedFilters
   );
   const { productsFilters } = useSelector((state) => state.productsReducer);
+  console.log(productsFilters);
   const { breadCrumbs } = useSelector((state) => state.productsReducer);
 
   const [params] = useSearchParams();
@@ -98,7 +99,7 @@ const Results = () => {
   }, [filtersContainerDisplay, showFiltersMenu]);
 
   useEffect(() => {
-    console.log(querys);
+    setLoading(true);    
     (async () => {
       const category = params.get("category");
 
@@ -127,7 +128,6 @@ const Results = () => {
 
       setLoading(false);
     })();
-
     // eslint-disable-next-line
   }, [querys]);
 
@@ -219,7 +219,7 @@ const Results = () => {
                           productsFilters?.length > 0 &&
                           React.Children.toArray(
                             productsFilters?.map((f) => (
-                              <div
+                            <div
                                 key={f.id}
                                 className={`results-filter-container ${
                                   open === f.id && "open-filter"
@@ -313,7 +313,7 @@ const Results = () => {
                       productsFilters?.length > 0 &&
                       React.Children.toArray(
                         productsFilters?.map((f) => (
-                          <div
+                        <div
                             key={f.id}
                             className={`results-filter-container ${
                               open === f.id && "open-filter"
