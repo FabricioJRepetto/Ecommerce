@@ -270,7 +270,13 @@ const NavBar = () => {
                   </form>
                 </div>
 
-                <div className="navbar-profile-section">
+                <div
+                  className={`navbar-profile-section ${
+                    !session
+                      ? "navbar-profile-section-no-session"
+                      : "navbar-profile-section-session"
+                  }`}
+                >
                   <div
                     className="navbar-search-mobile-button"
                     onClick={handleSearchBar}

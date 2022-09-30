@@ -35,18 +35,18 @@ const ModalAdminProducts = ({
       dispatch(changeReloadFlag(true));
       notification(data.message, "", data.type);
     } catch (error) {
-      console.error(error);
+      console.log(error);
       notification("Algo anduvo mal", "", "warn");
       //! VOLVER A VER manejo de errores
     } finally {
       setWaitingResponse(false);
     }
   };
-
   const handleDeleteProduct = () => {
     deleteProduct();
     closeDeleteProduct();
   };
+
   const reactivateProduct = async () => {
     setWaitingResponse(true);
     try {
@@ -57,14 +57,13 @@ const ModalAdminProducts = ({
       dispatch(changeReloadFlag(true));
       notification(data.message, "", data.type);
     } catch (error) {
-      console.error(error);
+      console.log(error);
       notification("Algo anduvo mal", "", "warn");
       //! VOLVER A VER manejo de errores
     } finally {
       setWaitingResponse(false);
     }
   };
-
   const handleReactivateProduct = () => {
     reactivateProduct();
     closeReactivateProduct();
@@ -81,7 +80,7 @@ const ModalAdminProducts = ({
       dispatch(changeReloadFlag(true));
       notification("Descuento aplicado exitosamente", "", "success");
     } catch (error) {
-      console.error(error);
+      console.log(error);
       notification("Algo anduvo mal", "", "warn");
       //! VOLVER A VER manejo de errores
     } finally {
@@ -127,7 +126,7 @@ const ModalAdminProducts = ({
       dispatch(changeReloadFlag(true));
       notification("Descuento removido exitosamente", "", "success");
     } catch (error) {
-      console.error(error);
+      console.log(error);
       notification("Algo anduvo mal", "", "warn");
       //! VOLVER A VER manejo de errores
     } finally {

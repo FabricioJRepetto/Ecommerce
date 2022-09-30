@@ -95,17 +95,17 @@ const UpdatePassword = () => {
 
             <span className="g-input-with-button">
               <input
-                type="text"
-                placeholder="Contraseña"
-                autoComplete="off"
-                className={`g-input-two-icons${
+                type={`${
                   watch("oldPassword") === undefined ||
                   watch("oldPassword") === ""
-                    ? ""
+                    ? "text"
                     : viewPassword.oldPassword
-                    ? ""
-                    : " g-password"
+                    ? "text"
+                    : "password"
                 }`}
+                placeholder="Contraseña"
+                autoComplete="off"
+                className="g-input-two-icons"
                 {...register("oldPassword", {
                   required: true,
                 })}
@@ -171,16 +171,16 @@ const UpdatePassword = () => {
 
             <span className="g-input-with-button">
               <input
-                type="text"
+                type={`${
+                  watch("password") === undefined || watch("password") === ""
+                    ? "text"
+                    : viewPassword.password
+                    ? "text"
+                    : "password"
+                }`}
                 placeholder="Nueva contraseña"
                 autoComplete="off"
-                className={`g-input-two-icons${
-                  watch("password") === undefined || watch("password") === ""
-                    ? ""
-                    : viewPassword.password
-                    ? ""
-                    : " g-password"
-                }`}
+                className="g-input-two-icons"
                 {...register("password", {
                   required: true,
                   minLength: 6,
@@ -232,17 +232,17 @@ const UpdatePassword = () => {
 
             <span className="g-input-with-button">
               <input
-                type="text"
-                placeholder="Repite la contraseña"
-                autoComplete="off"
-                className={`g-input-two-icons${
+                type={`${
                   watch("repPassword") === undefined ||
                   watch("repPassword") === ""
-                    ? ""
+                    ? "text"
                     : viewPassword.repPassword
-                    ? ""
-                    : " g-password"
+                    ? "text"
+                    : "password"
                 }`}
+                placeholder="Repite la contraseña"
+                autoComplete="off"
+                className="g-input-two-icons"
                 onPaste={(e) => {
                   e.preventDefault();
                   return false;

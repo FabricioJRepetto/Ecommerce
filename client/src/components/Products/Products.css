@@ -6,8 +6,12 @@
    position: relative;
    padding-top: 3.5rem;
    overflow: hidden;
-   min-height: 95vh;
+   min-height: 90vh;
    flex-grow: 1;
+}
+
+.products-container-loading {
+   align-items: center;
 }
 
 .products-no-coincidences {

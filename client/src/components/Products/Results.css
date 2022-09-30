@@ -75,7 +75,7 @@
 }
 
 .results-filters {
-    width: 17rem;
+    min-width: 17rem;
     margin-right: 1rem;
 }
 

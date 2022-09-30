@@ -50,7 +50,11 @@ const ForgotPassword = ({ openLoader, closeLoader }) => {
   };
 
   return (
-    <div className="forgot-outer-container">
+    <div
+      className={`forgot-outer-container${
+        response ? " forgot-outer-height" : ""
+      }`}
+    >
       <div className="forgot-inner forgot-container">
         {response ? (
           <>
