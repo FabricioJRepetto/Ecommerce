@@ -6,8 +6,10 @@ import ModalAdminProducts from "../Admin/ModalAdminProducts";
 import { useNavigate } from "react-router-dom";
 
 import "./Publications.css";
+import SaleMetrics from "./SaleMetrics/SaleMetrics";
 
 const Publications = ({ loading, publications }) => {
+    console.log(publications);
   const navigate = useNavigate();
   const [
     isOpenDeleteProduct,
@@ -42,14 +44,17 @@ const Publications = ({ loading, publications }) => {
           <div>
             {publications?.length ? (
               React.Children.toArray(
-                publications?.map(({ product }) => (
-                  <WishlistCard
-                    productData={product}
-                    openDeleteProduct={openDeleteProduct}
-                    openReactivateProduct={openReactivateProduct}
-                    openDiscountProduct={openDiscountProduct}
-                    openRemoveDiscount={openRemoveDiscount}
-                  />
+                // publications?.map(({ product }) => (
+                //   <WishlistCard
+                //     productData={product}
+                //     openDeleteProduct={openDeleteProduct}
+                //     openReactivateProduct={openReactivateProduct}
+                //     openDiscountProduct={openDiscountProduct}
+                //     openRemoveDiscount={openRemoveDiscount}
+                //   />
+                // ))
+                publications?.map(p => (
+                    <SaleMetrics props={p}/>
                 ))
               )
             ) : (

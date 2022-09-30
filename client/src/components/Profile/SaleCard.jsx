@@ -1,6 +1,7 @@
 import React from "react";
 import { formatDate } from "../../helpers/formatDate";
 import { priceFormat } from "../../helpers/priceFormat";
+
 import "./SaleCard.css";
 
 const SaleCard = ({ sale }) => {

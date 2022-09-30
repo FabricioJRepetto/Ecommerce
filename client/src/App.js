@@ -54,7 +54,6 @@ function App() {
         (state) => state.sessionReducer.isUserDataLoading
     );
 
-
     //? Intercepta las respuestas de "token vencido" y cierra sesión
     axios.interceptors.response.use(
         (response) => response,
@@ -84,7 +83,7 @@ function App() {
     }, []);
 
     return (
-        <div className="App" id="scroller">
+        <div className="App" id="scroller" >
             <NotificationMaster />
             {isUserDataLoading ? (
                 <div className="g-container-totalvh">

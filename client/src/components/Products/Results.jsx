@@ -33,7 +33,6 @@ const Results = () => {
     (state) => state.productsReducer.productsAppliedFilters
   );
   const { productsFilters } = useSelector((state) => state.productsReducer);
-  console.log(productsFilters);
   const { breadCrumbs } = useSelector((state) => state.productsReducer);
 
   const [params] = useSearchParams();
@@ -104,7 +103,6 @@ const Results = () => {
       const category = params.get("category");
 
       let aux = Object.entries(querys).length
-      console.log(aux);
       //? si hay querys realiza petición
       if (aux) {
         let newQuery = "";
@@ -139,7 +137,6 @@ const Results = () => {
 
   const removeFilter = async (filter) => {
     if (filter === 'category'&& !querys.q ) {
-        console.log('nooo... no tocá');
     } else {
         let aux = { ...querys };
         delete aux[filter];

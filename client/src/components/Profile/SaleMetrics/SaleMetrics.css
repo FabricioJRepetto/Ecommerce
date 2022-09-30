@@ -1,0 +1,26 @@
+
+.sales-metrics-graph {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    height: 20rem;
+    width: 60rem;
+    padding: 2rem 2rem 0 2rem;
+    overflow-x: scroll;
+    border: 1px solid #aaaaaa;
+}
+.sales-metrics-graph-bar {
+    width: 1rem;
+    background: #FFFFFF;
+    /* background: #64d500; */
+    margin: 0 2px;
+    border: 2px solid #aaaaaa;
+    border-bottom: none;
+    border-radius: .5rem .5rem 0 0;
+    overflow: hidden;
+    transition: all .2s ease;
+    color: transparent;
+}
+.sales-metrics-graph-bar:hover {
+    border: 2px solid #ffffff;
+}
