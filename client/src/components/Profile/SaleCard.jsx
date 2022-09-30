@@ -12,7 +12,7 @@ const SaleCard = ({ sale }) => {
       <span className="profile-details-price-mobile profile-sale-card">
         <div className="profile-order-products-details">
           <div className="profile-order-carousel-container profile-order-img-container">
-            <img src={product.images[0].imgURL} alt={"product"} />
+            <img src={product.thumbnail} alt={"product"} />
             <div className="card-image-back-style"></div>
           </div>
 

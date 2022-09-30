@@ -1,0 +1,19 @@
+.profile-publications-section {
+    margin-top: 10rem;
+    min-height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+.profile-publications-header {
+    position: relative;
+    width: 100%;
+    text-align: center;
+}
+.profile-publications-header > button{
+    position: absolute;
+    top: -1rem;
+    right: 5%;    
+}
