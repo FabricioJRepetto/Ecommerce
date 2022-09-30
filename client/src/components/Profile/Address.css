@@ -115,7 +115,7 @@ div.profile-all-address-container>h1 {
 .address-pin-gradient {
   display: none;
   height: 2rem;
-  width: 2rem;
+  min-width: 2rem;
   background: linear-gradient(45deg,
       #35a7ff 0%,
       #7e54de 20%,

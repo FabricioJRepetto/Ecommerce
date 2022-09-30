@@ -27,6 +27,8 @@
   }
 }
 
-/* .wishlist-product-img-container {
-  scale: .8;
-} */
+@media (max-width:400px) {
+  .profile-wishlist-container>h1 {
+    margin-left: 3rem;
+  }
+}

@@ -34,7 +34,7 @@
   }
 }
 
-@media (max-width: 799.999px) {
+@media (max-width: 799px) {
   .order-details-products-price-container>div>.order-details-product-quantity+p {
     margin: auto 0;
     /*  display: flex;
@@ -148,7 +148,7 @@
   justify-content: center;
 }
 
-@media (max-width: 749.999px) {
+@media (max-width: 749px) {
   .order-details-info-container-desktop {
     display: none;
   }

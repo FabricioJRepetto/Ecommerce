@@ -163,6 +163,7 @@ const NavBar = () => {
     navigate("/results");
     dispatch(loadQuerys({ q: productToSearch }));
     setShowSearchBar(false);
+    searchInput.current.blur();
   };
 
   const logoClick = () => {

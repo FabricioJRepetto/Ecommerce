@@ -353,7 +353,7 @@
   }
 }
 
-@media (max-width: 1239.999px) {
+@media (max-width: 1239px) {
   .wishlist-product-price-desktop {
     display: none;
   }
@@ -423,7 +423,7 @@
   }
 }
 
-@media (max-width: 699.999px) {
+@media (max-width: 699px) {
   .wishlist-product-header>p {
     /*  display: flex; */
     margin-right: 3rem;
@@ -455,6 +455,7 @@
 
   .wishlist-images-data-container {
     height: 7.2rem;
+    /*  max-width: 90%; */
   }
 
   .wishlist-free-shipping>p {
@@ -485,6 +486,7 @@
   .wishlist-card-buttons-container {
     flex-direction: row;
     align-items: flex-end;
+    margin-top: 10px;
   }
 }
 
@@ -540,7 +542,7 @@
   }
 }
 
-@media (max-width: 449.999px) {
+@media (max-width: 449px) {
   .wishlist-product-img-container {
     width: 5rem;
     height: 5rem;

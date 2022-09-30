@@ -93,14 +93,14 @@
     flex-direction: column-reverse;
 }
 
-@media (max-width: 1023.999px) {
+@media (max-width: 1023px) {
     .notif-modal-container {
         margin-left: 0;
         margin-right: 0;
     }
 }
 
-@media (max-width: 899.999px) {
+@media (max-width: 899px) {
     .notif-modal-container {
         margin-bottom: 4px;
         scale: .9;

@@ -94,7 +94,7 @@
   right: 0;
 }
 
-@media (max-width: 1023.999px) {
+@media (max-width: 1023px) {
   .cart-icon-container {
     scale: .9;
   }
@@ -246,7 +246,7 @@
   }
 }
 
-@media (max-width: 799.999px) {
+@media (max-width: 799px) {
   .navbar-profile-section {
     /* display: none; */
     display: flex;
@@ -261,7 +261,7 @@
   }
 }
 
-@media (max-width: 899.999px) {
+@media (max-width: 899px) {
   a.cart-icon-container svg {
     width: 40px;
     display: block;
@@ -472,7 +472,7 @@
   }
 }
 
-@media (max-width: 1239.999px) {
+@media (max-width: 1239px) {
   .navbar-profile-button {
     width: 3rem;
   }
@@ -797,7 +797,7 @@
   }
 }
 
-@media (max-width:399.999px) {
+@media (max-width:399px) {
   .little-glitch {
     display: none;
   }
@@ -819,7 +819,7 @@
   }
 }
 
-@media (min-width:400px) and (max-width:899.999px) {
+@media (min-width:400px) and (max-width:899px) {
   .glitch-mobile-container>.little-glitch.glitch-mobile {
     display: flex;
   }
