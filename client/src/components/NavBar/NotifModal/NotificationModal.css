@@ -1,10 +1,8 @@
 .notif-modal-container {
     height: 2rem;
     min-height: 2rem;
-    /*  width: 2rem; */
     width: 2.5rem;
     min-width: 2.5rem;
-
     cursor: pointer;
     position: relative;
     margin: .25rem .3rem 0 .7rem;
@@ -65,9 +63,10 @@
     height: 5rem;
     width: 25rem;
     opacity: 0;
+    overflow: hidden;
     pointer-events: none;
     cursor: default;
-    transition: height 0.3s ease;
+    transition: height .3s ease;
     background-color: #111111;
     border: 1px solid #ffffff50;
 }
