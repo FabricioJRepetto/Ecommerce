@@ -356,35 +356,39 @@ const NavBar = () => {
                                 />
                               </div>
 
-                              <div
-                                className="profile-modal-option"
-                                onClick={() => setProfileModal(false)}
-                              >
-                                <ChromaticText
-                                  text="Publicaciones"
-                                  route="/profile/products"
-                                />
-                              </div>
+                              {role === "client" && (
+                                <>
+                                  <div
+                                    className="profile-modal-option"
+                                    onClick={() => setProfileModal(false)}
+                                  >
+                                    <ChromaticText
+                                      text="Publicaciones"
+                                      route="/profile/products"
+                                    />
+                                  </div>
 
-                              <div
-                                className="profile-modal-option"
-                                onClick={() => setProfileModal(false)}
-                              >
-                                <ChromaticText
-                                  text="Ventas"
-                                  route="/profile/sales"
-                                />
-                              </div>
+                                  <div
+                                    className="profile-modal-option"
+                                    onClick={() => setProfileModal(false)}
+                                  >
+                                    <ChromaticText
+                                      text="Ventas"
+                                      route="/profile/sales"
+                                    />
+                                  </div>
 
-                              <div
-                                className="profile-modal-option"
-                                onClick={() => setProfileModal(false)}
-                              >
-                                <ChromaticText
-                                  text="Publicar"
-                                  route="/create"
-                                />
-                              </div>
+                                  <div
+                                    className="profile-modal-option"
+                                    onClick={() => setProfileModal(false)}
+                                  >
+                                    <ChromaticText
+                                      text="Publicar"
+                                      route="/create"
+                                    />
+                                  </div>
+                                </>
+                              )}
 
                               <div
                                 className="profile-modal-option"
@@ -626,36 +630,40 @@ const NavBar = () => {
                   size={"1.1rem"}
                 />
               </li>
-              <li
-                onClick={() => setShowMenu(false)}
-                className="profile-superminimobile-option-hide"
-              >
-                <ChromaticText
-                  text="Publicaciones"
-                  route="/profile/products"
-                  size={"1.1rem"}
-                />
-              </li>
-              <li
-                onClick={() => setShowMenu(false)}
-                className="profile-minimobile-option-hide"
-              >
-                <ChromaticText
-                  text="Ventas"
-                  route="/profile/sales"
-                  size={"1.1rem"}
-                />
-              </li>
-              <li
-                onClick={() => setShowMenu(false)}
-                className="profile-superminimobile-option-hide"
-              >
-                <ChromaticText
-                  text="Publicar"
-                  route="/create"
-                  size={"1.1rem"}
-                />
-              </li>
+              {session && role === "client" && (
+                <>
+                  <li
+                    onClick={() => setShowMenu(false)}
+                    className="profile-superminimobile-option-hide"
+                  >
+                    <ChromaticText
+                      text="Publicaciones"
+                      route="/profile/products"
+                      size={"1.1rem"}
+                    />
+                  </li>
+                  <li
+                    onClick={() => setShowMenu(false)}
+                    className="profile-minimobile-option-hide"
+                  >
+                    <ChromaticText
+                      text="Ventas"
+                      route="/profile/sales"
+                      size={"1.1rem"}
+                    />
+                  </li>
+                  <li
+                    onClick={() => setShowMenu(false)}
+                    className="profile-superminimobile-option-hide"
+                  >
+                    <ChromaticText
+                      text="Publicar"
+                      route="/create"
+                      size={"1.1rem"}
+                    />
+                  </li>
+                </>
+              )}
               <li
                 onClick={() => setShowMenu(false)}
                 className="navbar-mobile-option-hide"
