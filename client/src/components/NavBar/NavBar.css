@@ -689,7 +689,7 @@
 .navbar-modal-visible {
   visibility: visible;
   opacity: 1;
-  max-height: 21rem;
+  max-height: 23rem;
   transition: max-height 0.2s ease;
   overflow-y: hidden;
 }

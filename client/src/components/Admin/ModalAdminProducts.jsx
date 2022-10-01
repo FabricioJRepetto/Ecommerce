@@ -72,13 +72,13 @@ const ModalAdminProducts = ({
   const addDiscount = async () => {
     setWaitingResponse(true);
     try {
-      await axios.put(
+      const { data } = await axios.put(
         `/product/discount/${productToDiscount.prodId}`,
         discount
       );
       closeDiscountProduct();
       dispatch(changeReloadFlag(true));
-      notification("Descuento aplicado exitosamente", "", "success");
+      notification(data.message, "", data.type);
     } catch (error) {
       console.log(error);
       notification("Algo anduvo mal", "", "warn");
@@ -121,10 +121,12 @@ const ModalAdminProducts = ({
   const removeDiscount = async () => {
     setWaitingResponse(true);
     try {
-      await axios.delete(`/product/discount/${productToDiscount.prodId}`);
+      const { data } = await axios.delete(
+        `/product/discount/${productToDiscount.prodId}`
+      );
       closeDiscountProduct();
       dispatch(changeReloadFlag(true));
-      notification("Descuento removido exitosamente", "", "success");
+      notification(data.message, "", data.type);
     } catch (error) {
       console.log(error);
       notification("Algo anduvo mal", "", "warn");

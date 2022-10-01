@@ -65,6 +65,12 @@ const Products = () => {
     productToDelete,
   ] = useModal();
   const [
+    isOpenReactivateProduct,
+    openReactivateProduct,
+    closeReactivateProduct,
+    productToReactivate,
+  ] = useModal();
+  const [
     isOpenDiscountProduct,
     openDiscountProduct,
     closeDiscountProduct,
@@ -632,6 +638,7 @@ const Products = () => {
                           productData={product}
                           fav={wishlist.includes(product._id)}
                           openDeleteProduct={openDeleteProduct}
+                          openReactivateProduct={openReactivateProduct}
                           openDiscountProduct={openDiscountProduct}
                         />
                       )
@@ -814,9 +821,12 @@ const Products = () => {
           <ModalAdminProducts
             isOpenDeleteProduct={isOpenDeleteProduct}
             closeDeleteProduct={closeDeleteProduct}
+            isOpenReactivateProduct={isOpenReactivateProduct}
+            closeReactivateProduct={closeReactivateProduct}
             isOpenDiscountProduct={isOpenDiscountProduct}
             closeDiscountProduct={closeDiscountProduct}
             productToDelete={productToDelete}
+            productToReactivate={productToReactivate}
             productToDiscount={productToDiscount}
           />
         </>
