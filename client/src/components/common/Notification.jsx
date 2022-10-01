@@ -47,8 +47,8 @@ const Notification = (props) => {
             sound = 'soundSuccess'
             break;
         case 'welcome':
-            sound = 'soundWelcome'
             color = '#ffffff';
+            sound = 'soundWelcome'
             break;
         default: color = 'blue';
                  sound = 'soundSuccess';
@@ -81,7 +81,6 @@ const Notification = (props) => {
      };
 
     const closeNotification = (click) => {
-        // url && click && navigate(url);
         setIsOpen(false);
         clearTimeout(timeout.current);
 
@@ -111,7 +110,7 @@ const Notification = (props) => {
             <div className={`notification-container${isOpen ? ' notif-open':''}`}
                 onClick={() => closeNotification(true)}>
                 <div className='notification-inner'>
-                    {type !== 'error' && <div className={`notification-timer${isOpen ? ' timer-active':''}`}></div>}
+                    <div className={`notification-timer${isOpen ? ' timer-active':''}`}></div>
                     {url && <div onClick={()=>navigate(url)} className={`notification-seemore${isOpen ? ' seemore-visible':''}`}>
                             <ExternalLinkIcon />
                             <p>ir...</p>
