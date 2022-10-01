@@ -214,11 +214,12 @@ const BuyNow = () => {
             </div>
             <div className="bn-quantity-container">
               <QuantityInput
+                prodId={product.id}
+                price={product.on_sale ? product.sale_price : product.price}
                 stock={product.available_quantity}
-                prodQuantity={1}
                 bnMode
-                setQ={setQuantity}
                 loading={loadingPayment}
+                setQ={setQuantity}
               />
             </div>
           </div>
