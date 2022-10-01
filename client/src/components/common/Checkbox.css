@@ -14,21 +14,21 @@
 .checkbox-inner {
     height: 100%;
     width: 200%;
-    background: rgba(102, 51, 153, 0);
-
     position: absolute;
     top: 0%;
-    left: 0%;
-    
-    transition: all .3s ease;
+    left: 0%;    
+    /* transition: all .3s ease; */
 }
 
 .checkbox-on {   
     width: 50%;
     height: 100%;
     opacity: 1;
-    transition: opacity .6s ease;
+    transition: all .6s ease;
 }
 .checkbox-off {
+    width: 50%;
+    height: 100%;
     opacity: 0;
+    transition: all .6s ease;
 }

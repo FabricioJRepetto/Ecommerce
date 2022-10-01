@@ -55,19 +55,7 @@ const Publications = ({ loading, publications }) => {
             ) : (
               <p>Aún no has publicado ningún produco</p>
             )}
-
-          </div>
-
-          <div className="profile-publish-button-container">
-            <button
-              className="g-white-button"
-              onClick={() => {
-                navigate("/create");
-              }}
-            >
-              Publicar
-            </button>
-          </div>
+          </div>          
         </div>
       ) : (
         <LoaderBars />
