@@ -13,7 +13,6 @@ import './NotificationModal.css'
 const NotificationModal = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    // const [data, setData] = useState(false);
     const [loading, setLoading] = useState(false);
     const [redDot, setRedDot] = useState(false);
     const { notificationList } = useSelector((state) => state.sessionReducer);
