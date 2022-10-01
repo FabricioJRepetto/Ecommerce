@@ -49,8 +49,7 @@ const Publications = ({ loading, publications }) => {
                         props={p}
                         openDeleteProduct={openDeleteProduct}
                         openReactivateProduct={openReactivateProduct}
-                        openDiscountProduct={openDiscountProduct}
-                        />
+                        openDiscountProduct={openDiscountProduct}/>
                 ))
               )
             ) : (

@@ -4,6 +4,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { loadIdProductToEdit } from '../../../Redux/reducer/productsSlice';
 import { priceFormat } from '../../../helpers/priceFormat';
 import Calification from '../../common/Comments/Calification';
+import { useNotification } from '../../../hooks/useNotification';
 
 import { ReactComponent as Edit } from "../../../assets/svg/edit.svg";
 import { ReactComponent as Offer } from "../../../assets/svg/offer.svg";
@@ -16,13 +17,15 @@ import {
 } from '@chakra-ui/react'
 
 import './SaleMetrics.css'
+import axios from 'axios';
 
 const SaleMetrics = (data) => {
     const dispatch= useDispatch();
     const location = useLocation();
     const navigate = useNavigate();
+    const notification = useNotification();
     const [open, setOpen] = useState(false);
-    const [loading, setLoading] = useState(true);
+    const [product, setproduct] = useState(data.props.product || false)
     const [minSale, setMinSale] = useState(false);
     const [maxSale, setMaxSale] = useState(false);
     const [totalRevenue, setTotalRevenue] = useState(false)
@@ -34,7 +37,7 @@ const SaleMetrics = (data) => {
         openDiscountProduct
     } = data;
 
-    const { _id: prodId, on_sale, sale_price, discount, name, price, thumbnail, active, average_calification, available_quantity } = props.product;
+    const { _id: prodId, on_sale, sale_price, discount, name, price, thumbnail, active, average_calification, available_quantity } = product;
     
     useEffect(() => {
         let maxSale = 0;
@@ -48,7 +51,6 @@ const SaleMetrics = (data) => {
         setMinSale(minSale);
         setMaxSale(maxSale);
         setTotalRevenue(totalRevenue);
-        setLoading(false);
       // eslint-disable-next-line
     }, [data])
     
@@ -64,11 +66,20 @@ const SaleMetrics = (data) => {
         }
     }
 
-    const editProduct = (prodId) => {
+    const editProduct = () => {
         dispatch(loadIdProductToEdit(prodId));
         location.pathname !== "/admin/products"
         ? navigate("/create")
         : navigate("/admin/create");
+    };
+
+    const updateShipping = async (e) => { 
+        e.preventDefault()
+        e.target.disabled = true;        
+        const {data} = await axios.put(`/product/shipping/${prodId}`);
+        if (data?.product) setproduct(data.product);
+        notification(data.message, '', data.type);
+        e.target.disabled = false;
     };
     
     return (
@@ -86,15 +97,12 @@ const SaleMetrics = (data) => {
                         </div>
                         <div className="card-price-section">
                             <div className="minicard-price-section-inner">
-                            <h2>${priceFormat(on_sale ? sale_price : price).int}</h2>
-                            <p>{priceFormat(on_sale ? sale_price : price).cents}</p>
+                                <h2>${priceFormat(on_sale ? sale_price : price).int}</h2>
                             </div>
 
-                            {on_sale && (
-                            <div className="minicard-sale-section">
-                                <p>{`${Math.round(discount)}% off`}</p>
-                            </div>
-                            )}
+                            {on_sale && <div className="minicard-sale-section">
+                                            <p>{`${Math.round(discount)}% off`}</p>
+                                        </div>}
                         </div>
                     </div>}
                     <p>${priceFormat(price).int}</p>
@@ -102,13 +110,13 @@ const SaleMetrics = (data) => {
                 <p onClick={()=>setOpen(!open)}>Ver más detalles</p>
             </div>
 
-            {!loading && <div className={`publication-card-details ${open && 'metrics-open'}`}>
+            {data && <div className={`publication-card-details ${open && 'metrics-open'}`}>
 
                 <div className='publication-card-buttons'>
                     <span className="wishlist-edit-button-container publication-card-button"
                         onClick={(e) => {
                             e.stopPropagation();
-                            editProduct(prodId);
+                            editProduct();
                         }}
                         >
                         <div className="publication-tootlip">Editar publicación</div>
@@ -151,13 +159,10 @@ const SaleMetrics = (data) => {
                 </div>
 
                 <div>
+                    <button onClick={updateShipping}>Envío gratis</button>
+                    <button onClick={()=>navigate(`/details/${prodId}`)}>Ver en la tienda</button>
                 </div>
-                    <Switch className='publication-card-switch'/>
-                    {/* <FormControl display='flex' alignItems='center'>
-                        <FormLabel htmlFor='email-alerts' mb='0'>
-                            ¿Activar envíos gratis?
-                        </FormLabel>
-                    </FormControl> */}
+                    
 
                 <div className='publication-card-calification'>
                     <p>Calificación actual: </p>
