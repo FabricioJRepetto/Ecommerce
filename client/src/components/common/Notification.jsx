@@ -59,7 +59,7 @@ const Notification = (props) => {
         clearTimeout(timeout.current);
         startTimeout();
 
-        soundType[sound].volume = type === 'welcome' ? 1 : 0.5;
+        soundType[sound].volume = type === 'welcome' ? 1 : 0.4;
         soundType[sound].play();
 
         setTimeout(() => {
@@ -73,6 +73,10 @@ const Notification = (props) => {
             timeout.current = setTimeout(() => {
                 closeNotification();
             }, 6000);
+        } else {
+            timeout.current = setTimeout(() => {
+                closeNotification();
+            }, 10000);
         }
      };
 

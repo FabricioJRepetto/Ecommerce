@@ -10,11 +10,10 @@ import { ReactComponent as Edit } from "../../../assets/svg/edit.svg";
 import { ReactComponent as Offer } from "../../../assets/svg/offer.svg";
 import { ReactComponent as Pause } from "../../../assets/svg/pause.svg";
 import { ReactComponent as Play } from "../../../assets/svg/play.svg";
-import { 
-    FormControl,
-    FormLabel,
-    Switch 
-} from '@chakra-ui/react'
+import { ReactComponent as Ship } from "../../../assets/svg/ship.svg";
+
+import { ChevronDownIcon, WarningTwoIcon as Warn } from "@chakra-ui/icons";
+import Checkbox from '../../common/Checkbox';
 
 import './SaleMetrics.css'
 import axios from 'axios';
@@ -24,6 +23,7 @@ const SaleMetrics = (data) => {
     const location = useLocation();
     const navigate = useNavigate();
     const notification = useNotification();
+    const [loading, setLoading] = useState(false)
     const [open, setOpen] = useState(false);
     const [product, setproduct] = useState(data.props.product || false)
     const [minSale, setMinSale] = useState(false);
@@ -37,7 +37,7 @@ const SaleMetrics = (data) => {
         openDiscountProduct
     } = data;
 
-    const { _id: prodId, on_sale, sale_price, discount, name, price, thumbnail, active, average_calification, available_quantity } = product;
+    const { _id: prodId, on_sale, sale_price, free_shipping, discount, name, price, thumbnail, active, average_calification, available_quantity } = product;
     
     useEffect(() => {
         let maxSale = 0;
@@ -73,13 +73,13 @@ const SaleMetrics = (data) => {
         : navigate("/admin/create");
     };
 
-    const updateShipping = async (e) => { 
-        e.preventDefault()
-        e.target.disabled = true;        
+    const updateShipping = async () => {
+        setLoading(true)
         const {data} = await axios.put(`/product/shipping/${prodId}`);
         if (data?.product) setproduct(data.product);
+        console.log(data.product.free_shipping);
         notification(data.message, '', data.type);
-        e.target.disabled = false;
+        setLoading(false)
     };
     
     return (
@@ -91,28 +91,64 @@ const SaleMetrics = (data) => {
                 </div>
                 <div>
                     <p>{name}</p>
-                    {on_sale && <div className="card-price-container c-mrgn">
-                        <div className="card-original-price">
+                    {on_sale && 
+                    <div className="card-price-container c-mrgn">
+                        <div className="publication-card-original-price">
                             {on_sale && <del>${priceFormat(price).int}</del>}
                         </div>
-                        <div className="card-price-section">
+                        <div className="publication-card-price-section">
                             <div className="minicard-price-section-inner">
                                 <h2>${priceFormat(on_sale ? sale_price : price).int}</h2>
                             </div>
 
-                            {on_sale && <div className="minicard-sale-section">
-                                            <p>{`${Math.round(discount)}% off`}</p>
-                                        </div>}
+                            {on_sale && 
+                                <div className="publication-card-discount-section">
+                                    <p>{`${Math.round(discount)}% off`}</p>
+                                </div>}
                         </div>
                     </div>}
-                    <p>${priceFormat(price).int}</p>
                 </div>
-                <p onClick={()=>setOpen(!open)}>Ver más detalles</p>
+
+                <div className='publication-card-header-indicators'>
+                    {free_shipping && <span className='publication-card-header-indicator-container'>
+                            <div className='pc-indicator-tooltip'>Envíos gratis activos</div>
+                            <Ship className='pc-indicator-ship'/>
+                        </span>}
+                    {on_sale && <span className='publication-card-header-indicator-container'>
+                            <div className='pc-indicator-tooltip'>Descuento activo</div>
+                            <Offer className='pc-indicator'/>                        
+                        </span>}
+                    {!active && <span className='publication-card-header-indicator-container'>
+                            <div className='pc-indicator-tooltip'> Publicación pausada</div>
+                            <Pause className='pc-indicator-pause'/>
+                        </span>}
+                    {available_quantity < 1 && <span className='publication-card-header-indicator-container'>
+                            <div className='pc-indicator-tooltip'>Sin stock</div>
+                            <Warn className='pc-indicator-stock'/>
+                        </span>}
+                </div>
+                <p onClick={()=>setOpen(!open)}>Más información <ChevronDownIcon className={` arrow-publi-card ${open && 'arrow-publi-card-close'}`}/></p>
             </div>
 
-            {data && <div className={`publication-card-details ${open && 'metrics-open'}`}>
+            {data && 
+            <div className={`publication-card-details ${open && 'publication-card-open'}`}>
 
                 <div className='publication-card-buttons'>
+                    <span className={`publication-card-shipping ${loading && 'publication-card-shipping-disabled'}`} onClick={updateShipping}>
+                        ¿Envío Gratis?
+                        <Checkbox id={'metric-shipping'+prodId}
+                                isChecked={free_shipping}
+                                isDisabled={loading}
+                                extraStyles={{  color: '#64d500',
+                                                border: true,
+                                                borderColor: '#888888',
+                                                rounded: true,
+                                                innerBorder: true,
+                                                margin: "1rem",
+                                                size: "1.2",
+                                                }}/>
+                    </span>
+
                     <span className="wishlist-edit-button-container publication-card-button"
                         onClick={(e) => {
                             e.stopPropagation();
@@ -155,30 +191,25 @@ const SaleMetrics = (data) => {
                             <div className="publication-tootlip">Reanudar publicación</div>
                             <Play />
                             <div className="wishlist-play-gradient  metric-card-svg"></div>
-                        </span>}
+                        </span>}                        
                 </div>
-
-                <div>
-                    <button onClick={updateShipping}>Envío gratis</button>
-                    <button onClick={()=>navigate(`/details/${prodId}`)}>Ver en la tienda</button>
-                </div>
-                    
 
                 <div className='publication-card-calification'>
                     <p>Calificación actual: </p>
                     <Calification hover input
                         num={average_calification}/>                
                 </div>
-                <p>Ventas: {props.sales.length}</p>
-                <p>Ganancias totales: ${priceFormat(totalRevenue).int}</p>
-                <p>Stock: {available_quantity}</p>
+                <p className='publication-card-go-store' onClick={()=>navigate(`/details/${prodId}`)}>Ver en la tienda</p>
+                <p>Ganancias totales: <b>${priceFormat(totalRevenue).int}</b></p>
+                <p>Ventas: <b>{props.sales.length}</b></p>
+                <p>Stock: <b>{available_quantity}</b></p>
                 <br/>
 
-                <p>Últimas ventas:</p>
                 <div className='sales-metrics-graph'>
+                    <span>Últimas ventas:</span>
                     {React.Children.toArray(props?.sales.map(s => (
                         <div className='sales-metrics-graph-bar'
-                            style={{height: `${percenter(s.price * s.quantity)}%`, background: `#64d500${percenter(s.price * s.quantity)}`}}>
+                            style={{height: `${percenter(s.price * s.quantity)}%`, background: `rgb(100, 213, 0, ${percenter(s.price * s.quantity)/100})`}}>
                                 <div className='metrics-tooltip'>
                                     <p>{`Total: $${priceFormat(s.price*s.quantity).int}`}</p>
                                     <p>{`Unidades: ${s.quantity}`}</p>
@@ -186,10 +217,10 @@ const SaleMetrics = (data) => {
                                 </div>
                         </div>
                     )))}
-                    <div className='metric-graph-max-indicator' >${
+                    <div className='metric-graph-indicator' >${
                         priceFormat(maxSale).int
                     }</div>
-                    {minSale !== maxSale && <div className='metric-graph-max-indicator' style={{top: `calc(4rem + ${84 - percenter(minSale)}%)`}}>${
+                    {minSale !== maxSale && <div className='metric-graph-indicator' style={{top: `calc(4rem + ${84 - percenter(minSale)}%)`}}>${
                         priceFormat(minSale).int
                     }</div>}
                 </div>
