@@ -16,25 +16,24 @@ import "./assets/fonts/HelveticaNeueLTProHvIt.otf";
 import "./assets/fonts/HelveticaNeueLTProRoman.otf";
 
 import "./index.css";
-
 //? cosas de axios
 axios.interceptors.request.use(function (config) {
-  if (config.url !== "https://api.cloudinary.com/v1_1/dsyjj0sch/image/upload") {
-    config.baseURL = BACK_URL;
-    let token = localStorage.getItem("loggedTokenEcommerce");
-    token &&
-      (config.headers.Authorization =
-        config.headers.Authorization || `Bearer ${token}`);
-  }
+    if (config.url !== "https://api.cloudinary.com/v1_1/dsyjj0sch/image/upload") {
+        config.baseURL = BACK_URL;
+        let token = localStorage.getItem("loggedTokenEcommerce");
+        token &&
+            (config.headers.Authorization =
+                config.headers.Authorization || `Bearer ${token}`);
+    }
 
-  return config;
+    return config;
 });
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <Provider store={store}>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </Provider>
+    <Provider store={store}>
+        <BrowserRouter>
+            <App />
+        </BrowserRouter>
+    </Provider>
 );

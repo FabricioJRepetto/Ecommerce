@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Routes, Route } from "react-router-dom";
-import { loadingUserData } from "./Redux/reducer/sessionSlice";
+import { reconnectNeeded, loadingUserData } from "./Redux/reducer/sessionSlice";
 import "./App.css";
 
 import GlobalCover from "../src/components/common/GlobalCover";
@@ -37,7 +37,6 @@ import PremiumDetails from "./components/Provider/PremiumDetails";
 import { useUserLogin } from "./hooks/useUserLogin";
 
 import axios from "axios";
-import { useNotification } from "./hooks/useNotification";
 import { useSignout } from "./hooks/useSignout";
 import NotFound from "./components/common/NotFound";
 import Unauthorized from "./components/common/Unauthorized";
@@ -48,24 +47,28 @@ function App() {
     const dispatch = useDispatch();
     const { userLogin } = useUserLogin();
     const { pathname } = useLocation();
-    const notification = useNotification();
     const signOut = useSignout();
-    const isUserDataLoading = useSelector(
-        (state) => state.sessionReducer.isUserDataLoading
-    );
+    const { isUserDataLoading, isTokenExpired } = useSelector((state) => state.sessionReducer);
 
     //? Intercepta las respuestas de "token vencido" y cierra sesión
     axios.interceptors.response.use(
         (response) => response,
         (error) => {
             if (error?.response?.data?.expiredToken) {
-                console.warn("Por favor vuelve a iniciar sesión");
-                notification("Por favor vuelve a iniciar sesión", "/signin", "error");
-                signOut();
+                dispatch(reconnectNeeded(true));
             }
             return Promise.reject(error);
         }
     );
+    useEffect(() => {
+        if (isTokenExpired) {
+            setTimeout(() => {
+                signOut(true);
+            }, 1000);
+        }
+        // eslint-disable-next-line
+    }, [isTokenExpired])
+
 
     //? Evitar que el scroll quede desubicado al cambiar de página
     useEffect(() => {

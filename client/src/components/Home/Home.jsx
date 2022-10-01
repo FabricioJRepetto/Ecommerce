@@ -15,6 +15,7 @@ import Suggestions from "../common/Suggestions";
 import CategoryCard from "../Provider/CategoryCard";
 
 import "./Home.css";
+import axios from "axios";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -30,8 +31,13 @@ const Home = () => {
     dispatch(loadQuerys({ category }));
   };
 
+  const first = async () => { 
+    await axios('/sales/set_new_sales')
+   }
+
   return (
     <div className="home-container component-fadeIn">
+        <button onClick={first}>test</button>
       <div className="home-carousel">
         <Carousel
           images={IMAGES}
