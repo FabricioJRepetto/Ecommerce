@@ -6,16 +6,19 @@ import {ReactComponent as Spinner} from '../../assets/svg/spinner.svg';
 
 import "./QuantityInput.css";
 
-const QuantityInput = ({
-  prodId: id,
-  prodQuantity,
-  stock,
-  price,
-  bnMode = false,
-  setQ,
-  loading,
-  on_cart
-}) => {
+const QuantityInput = (props) => {
+
+    const {
+        prodId: id,
+        prodQuantity = 1,
+        stock,
+        price,
+        bnMode = false,
+        setQ,
+        loading,
+        on_cart
+    } = props;
+
   const [quantity, setQuantity] = useState(stock > prodQuantity ? prodQuantity : stock);
   const [sendingData, setSendingData] = useState(false)
   const dispatch = useDispatch();
@@ -55,16 +58,16 @@ const QuantityInput = ({
       bnMode && setQ(1);
       validatedValue = 1;
       //! dispatch del total    
-      dispatch(cartTotal({id, amount: price}));
+      !bnMode && dispatch(cartTotal({id, amount: price}));
     } else if (validatedValue > stock) {
       setQuantity(stock);
       bnMode && setQ(stock);
       validatedValue = stock;
       //! dispatch del total    
-      dispatch(cartTotal({id, amount: stock * price}));
+      !bnMode && dispatch(cartTotal({id, amount: stock * price}));
     } else {
       //! dispatch del total    
-      dispatch(cartTotal({id, amount: validatedValue * price}));
+      !bnMode && dispatch(cartTotal({id, amount: validatedValue * price}));
       setQuantity(validatedValue);
       bnMode && setQ(validatedValue);
 

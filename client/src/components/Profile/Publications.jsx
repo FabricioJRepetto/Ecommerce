@@ -1,9 +1,9 @@
 import React from "react";
 import LoaderBars from "../common/LoaderBars";
-import WishlistCard from "./WishlistCard";
 import { useModal } from "../../hooks/useModal";
 import ModalAdminProducts from "../Admin/ModalAdminProducts";
 import { useNavigate } from "react-router-dom";
+import SaleMetrics from "./SaleMetrics/SaleMetrics";
 
 import "./Publications.css";
 
@@ -29,25 +29,33 @@ const Publications = ({ loading, publications }) => {
   ] = useModal();
 
   return (
-    <>
+    <div className="profile-publications-section">
+        <div className="profile-publications-header">
+            <h1>Publicaciones</h1>
+            <button className="g-white-button"
+                onClick={() => {
+                navigate("/create");
+                }}>
+                Crear nueva publucación
+            </button>
+        </div>
       {!loading ? (
         <div className="profile-wishlist-container component-fadeIn">
-          <h1>Publicaciones</h1>
           <div>
             {publications?.length ? (
-              React.Children.toArray(
-                publications?.map(({ product }) => (
-                  <WishlistCard
-                    productData={product}
-                    openDeleteProduct={openDeleteProduct}
-                    openReactivateProduct={openReactivateProduct}
-                    openDiscountProduct={openDiscountProduct}
-                  />
+              React.Children.toArray(                
+                publications?.map(p => (
+                    <SaleMetrics 
+                        props={p}
+                        openDeleteProduct={openDeleteProduct}
+                        openReactivateProduct={openReactivateProduct}
+                        openDiscountProduct={openDiscountProduct}/>
                 ))
               )
             ) : (
               <p>Aún no has publicado ningún produco</p>
             )}
+
           </div>
 
           <div className="profile-publish-button-container">
@@ -75,7 +83,7 @@ const Publications = ({ loading, publications }) => {
         productToReactivate={productToReactivate}
         productToDiscount={productToDiscount}
       />
-    </>
+    </div>
   );
 };
 
