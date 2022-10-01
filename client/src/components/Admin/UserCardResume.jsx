@@ -1,17 +1,17 @@
-import axios from "axios";
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
 import Card from "../Products/Card";
 import AddressCard from "../Profile/AddressCard";
 import OrderCardAdmin from "./OrderCardAdmin";
-import "./UserCard.css";
+import "./UserCardResume.css";
 
-const UserCard = ({ user, openBanUser, openUnbanUser, openPromoteUser }) => {
-  const [addresses, setAddresses] = useState([]);
-  const [orders, setOrders] = useState([]);
-  const [wishlist, setWishlist] = useState([]);
-  const [showAddresses, setShowAddresses] = useState(false);
-  const [showOrders, setShowOrders] = useState(false);
-  const [showWishlist, setShowWishlist] = useState(false);
+const UserCardResume = ({
+  user,
+  openBanUser,
+  openUnbanUser,
+  openPromoteUser,
+}) => {
   const {
     name,
     email,
@@ -23,7 +23,7 @@ const UserCard = ({ user, openBanUser, openUnbanUser, openPromoteUser }) => {
     googleEmail,
   } = user;
 
-  const getAddresses = (_id) => {
+  /*   const getAddresses = (_id) => {
     axios
       .post("/admin/user/getAddresses", { _id, isGoogleUser })
       .then(({ data }) => {
@@ -51,7 +51,7 @@ const UserCard = ({ user, openBanUser, openUnbanUser, openPromoteUser }) => {
         setShowWishlist(true);
       })
       .catch((err) => console.error(err)); //! VOLVER A VER manejo de errores;
-  };
+  }; */
 
   return (
     <div className="component-fadeIn">
@@ -84,52 +84,13 @@ const UserCard = ({ user, openBanUser, openUnbanUser, openPromoteUser }) => {
             Activar cuenta
           </button>
         )}
-        {showAddresses ? (
-          !addresses.length ? (
-            <h4>No se encontraron direcciones</h4>
-          ) : (
-            <>
-              <h4>Direcciones</h4>
-              {React.Children.toArray(
-                addresses.map((address) => <AddressCard address={address} />)
-              )}
-            </>
-          )
-        ) : (
-          <button onClick={() => getAddresses(_id)}>Obtener Direcciones</button>
-        )}
-        {showOrders ? (
-          !orders.length ? (
-            <h4> No se encontraron órdenes</h4>
-          ) : (
-            <>
-              <h4>Compras</h4>
-              {React.Children.toArray(
-                orders.map((order) => <OrderCardAdmin order={order} />)
-              )}
-            </>
-          )
-        ) : (
-          <button onClick={() => getOrders(_id)}>Obtener Compras</button>
-        )}
-        {showWishlist ? (
-          !wishlist.length ? (
-            <h4> No se encontraron Favoritos</h4>
-          ) : (
-            <>
-              <h4>Favoritos</h4>
-              {React.Children.toArray(
-                wishlist.map((product) => <Card productData={product} />)
-              )}
-            </>
-          )
-        ) : (
-          <button onClick={() => getWishlist(_id)}>Obtener Favoritos</button>
-        )}
+        <Link to={`/admin/users/${_id}`}>
+          <button className="g-white-button">Ver detalles</button>
+        </Link>
       </div>
       <hr />
     </div>
   );
 };
 
-export default UserCard;
+export default UserCardResume;
