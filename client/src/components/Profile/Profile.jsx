@@ -67,6 +67,11 @@ const Profile = () => {
   useEffect(() => {
     if (!session) {
       navigate("/signin");
+      notification(
+        "Inicia sesión por favor",
+        "/signin",
+        "warning"
+      );
     } else {
       (async () => {
 

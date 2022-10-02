@@ -27,11 +27,31 @@
     100% {opacity: 1;}
 }
 
+.storecards-container {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    z-index: 40;
+    /* scale: .7; */
+}
+.storecards-inner {
+    font-family: HelveticaNeueLTPro-Hv;
+    margin: 3rem 3rem 2rem 3rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+.storecards-inner>* {
+    margin: 0 1rem;
+}
 
 /* : PRO STORE BANNER : */
 .providerstore-banner {
     height: 18vw;
     width: 100%;
+    margin: 3rem 0;
     position: relative;
     user-select: none;
     cursor: pointer;
@@ -39,15 +59,18 @@
 .providerstore-banner h1 {
     position: absolute;
     top: 8%;
-    left: 2%;
+    right: 2%;
+    text-align: right;
+    letter-spacing: 0;
     line-height: 75%;
     color: #000000;
     z-index: 10;
     font-size: 16vw;
     font-weight: 600;
     font-family: Oswald-HeavyItalic;
+    transition: all .3s ease;
 }
-.providerstore-banner h2 {
+.providerstore-banner h1 + h2 {
     position: absolute;
     bottom: 8%;
     left: 29%;
@@ -59,15 +82,33 @@
     font-weight: 600;
     white-space: nowrap;
 }
-.providerstore-banner-hover1 {
+.providerstore-banner-hover-h2 {
+    font-size: 3vw;
+    font-family: HelveticaNeueLTPro-Blk;
+    line-height: 75%;
+    font-weight: 600;
+    white-space: nowrap;
     position: absolute;
-    bottom: 8%;
-    right: 23%;
-    opacity: 0;
+    top: 0%;
+    right: 3.55vw;
+    opacity: 1;
+    color: #ffffff;
 }
-.providerstore-banner-hover1 h2 {
-    background-color: #000000;  
-    color: #FFFFFF;
+.providerstore-banner-hover-div {
+    position: absolute;
+    z-index: 12;
+    bottom: 8%;
+    right: 0%;
+    opacity: 1;
+    height: 2.3vw;
+    width: 0%;
+    background: #000000;
+    overflow: hidden;
+    transition: width .3s ease;
+}
+.hover-2 {
+    right: 72%;
+    transform: skew(-5deg);
 }
 
 #ps-header-bg-video {
@@ -78,15 +119,20 @@
     height: 100%;
     object-fit: cover;
 }
-.providerstore-banner:hover .providerstore-banner-hover1 {
-   opacity: 1;
+.providerstore-banner:hover .providerstore-banner-hover-div {
+    width: 23%;
+}
+
+.providerstore-banner:hover h1 {
+   letter-spacing: 3rem;
 }
 
 
 /* : PREMIUM BANNER : */
 .providerpremium-banner {
     position: relative;
-    margin: 4rem;
+    margin-top: 10rem;
+    margin-bottom: 5rem;
     width: 100vw;
     height: 18vw;
     display: flex;
@@ -145,6 +191,7 @@
     font-family: Oswald-HeavyItalic;
     font-size: 3rem;
     margin-right: 2rem;
+    user-select: none;
 }
 .sales-seer > div {
     width: fit-content;
@@ -156,4 +203,33 @@
     margin: 0 1rem;
     height: 3.5rem;
     width: 14rem;
+}
+.ps-button-container {
+    position: relative;
+}
+.ps-button-container div {
+    z-index: 5;
+    position: absolute !important;
+    transition: opacity .1s ease;
+    pointer-events: none;
+    opacity: 0;
+
+    background: linear-gradient(45deg,
+            #35a7ff 0%,
+            #7e54de 20%,
+            #f40259 60%,
+            #fea30d 100%);
+    animation: gradientTextAnim 10s infinite;
+    background-size: 400%;
+}
+#ps-button02 {
+    mask-image: url("https://res.cloudinary.com/dsyjj0sch/image/upload/v1663605199/button_frame-02_snkgmz.png");
+    height: 220%;
+    width: 135%;
+    scale: 0.8;
+    top: -67.5%;
+    left: -11.5%;
+}
+.ps-button-container:hover div {
+    opacity: 1;
 }

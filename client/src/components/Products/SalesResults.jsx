@@ -21,8 +21,9 @@ const SalesResults = () => {
     }, [])
     
   return (
-    <div>
-        <h1>Ofertas!</h1>
+    <>
+        <h1 className='sales-results-title'>Ofertas</h1>
+        <h1 className="profile-section-indicator">OFERTAS</h1>
         {loading
         ? <div className='sales-results'>
             <LoaderBars/>
@@ -36,7 +37,7 @@ const SalesResults = () => {
             )))}
             
         </div>}
-    </div>
+    </>
     
   )
 }

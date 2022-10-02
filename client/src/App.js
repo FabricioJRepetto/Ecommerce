@@ -17,7 +17,6 @@ import Cart from "./components/Cart/Cart";
 import BuyNow from "./components/Cart/BuyNow";
 import PostSale from "./components/Cart/PostSale";
 import Products from "./components/Products/Products";
-import ProviderStore from "./components/Provider/ProviderStore";
 import ProviderPremium from "./components/Provider/ProviderPremium";
 import ProductForm from "./components/Admin/ProductForm";
 import Details from "./components/Products/Details";
@@ -86,6 +85,16 @@ function App() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  //? Inicia sesión automaticamente si hay un token valido en el localStorage
+  useEffect(() => {
+    if (window.localStorage.getItem("loggedTokenEcommerce")) {
+      userLogin(window.localStorage.getItem("loggedTokenEcommerce"), false);
+    } else {
+      dispatch(loadingUserData(false));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <div className="App" id="scroller">
       <NotificationMaster />
@@ -112,7 +121,6 @@ function App() {
             <Route path="/premium/:id" element={<PremiumDetails />} />
             <Route path="/create" element={<ProductForm />} />
             <Route path="/products" element={<Products />} />
-            <Route path="/provider" element={<ProviderStore />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/profile/:section" element={<Profile />} />
             <Route path="/results" element={<Results />} />
