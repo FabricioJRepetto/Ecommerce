@@ -1,3 +1,8 @@
+.sales-results-title {
+    margin-top: 8rem;
+    /* color: transparent; */
+    user-select: none;
+}
 .sales-results {
     display: flex;
     flex-direction: row;
