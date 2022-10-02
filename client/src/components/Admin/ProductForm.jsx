@@ -388,7 +388,6 @@ const ProductForm = () => {
   };
   const inputEnterHandler = (e, feature) => {
     if (e.code === 'NumpadEnter' || e.code === 'Enter') {
-        console.log(`%c Enter `, 'background-color: #ffcc4b; color: #000000; font-weight: bold;');
         feature ? handleAddFeature() : handleAddAttribute();
     }
   }

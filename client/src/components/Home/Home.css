@@ -1,7 +1,6 @@
 .home-container {
     overflow-x: hidden;
 }
-
 .component-fadeIn {
     opacity: 1;
     animation: ComponentFadeIn .5s;
@@ -23,8 +22,138 @@
     justify-content: center;
     margin: 1rem 0;
 }
-
 @keyframes ComponentFadeIn {
     0% {opacity: 0;}
     100% {opacity: 1;}
-} 
+}
+
+
+/* : PRO STORE BANNER : */
+.providerstore-banner {
+    height: 18vw;
+    width: 100%;
+    position: relative;
+    user-select: none;
+    cursor: pointer;
+}
+.providerstore-banner h1 {
+    position: absolute;
+    top: 8%;
+    left: 2%;
+    line-height: 75%;
+    color: #000000;
+    z-index: 10;
+    font-size: 16vw;
+    font-weight: 600;
+    font-family: Oswald-HeavyItalic;
+}
+.providerstore-banner h2 {
+    position: absolute;
+    bottom: 8%;
+    left: 29%;
+    line-height: 75%;
+    color: #000000;
+    z-index: 10;
+    font-size: 3vw;
+    font-family: HelveticaNeueLTPro-Blk;
+    font-weight: 600;
+    white-space: nowrap;
+}
+.providerstore-banner-hover1 {
+    position: absolute;
+    bottom: 8%;
+    right: 23%;
+    opacity: 0;
+}
+.providerstore-banner-hover1 h2 {
+    background-color: #000000;  
+    color: #FFFFFF;
+}
+
+#ps-header-bg-video {
+    z-index: -1;
+    filter: brightness(5) invert();
+    /* filter: hue-rotate(150deg) invert() saturate(4); */
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.providerstore-banner:hover .providerstore-banner-hover1 {
+   opacity: 1;
+}
+
+
+/* : PREMIUM BANNER : */
+.providerpremium-banner {
+    position: relative;
+    margin: 4rem;
+    width: 100vw;
+    height: 18vw;
+    display: flex;
+    align-items: center;
+    text-align: left;
+    background: no-repeat center url('https://cdn11.bigcommerce.com/s-k11cg5mzh9/content/pdp_images/9471_16407.jpg');
+    background-size: 100% auto;
+    user-select: none;
+    cursor: pointer;
+}
+.premium-banner-special-text {
+    font-family: Oswald-HeavyItalic;
+}
+.providerpremium-banner>div {
+    margin: auto 5rem;
+    width: 700px;
+}
+.provider-store-sign {
+    position: absolute;
+    top: 32%;
+    left: 0%;
+    z-index: 50;
+    height: 5.2rem;
+    width: 14rem;
+    margin: 0 20rem;
+    filter: drop-shadow(2px 4px 6px black);
+    background: #ffffff;
+    mask-image: url('../../assets/svg/PremiumSign.svg');
+    background-size: 400%;
+    animation: gradientTextAnim 6s infinite;
+}
+.providerpremium-banner div>img {
+    position: absolute;
+    top: 30%;
+    left: 12rem;
+    transform: scale(.5) translateY(-50%);
+    filter: invert() drop-shadow(2px 4px 6px black);
+}
+.providerpremium-banner div>p {
+    font-size: 1.5rem;
+}
+.providerpremium-banner div>h2 {
+    color: #ededed;
+    font-size: 6rem;
+    margin-bottom: 2rem;
+}
+
+/* : OFERTAS : */
+.sales-seer {
+    margin: 5rem 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.sales-seer > h2 {
+    font-family: Oswald-HeavyItalic;
+    font-size: 3rem;
+    margin-right: 2rem;
+}
+.sales-seer > div {
+    width: fit-content;
+}
+
+.sales-seer div>button {
+    font-family: HelveticaNeueLTPro-Bd, Poppins;
+    font-weight: 800;
+    margin: 0 1rem;
+    height: 3.5rem;
+    width: 14rem;
+}

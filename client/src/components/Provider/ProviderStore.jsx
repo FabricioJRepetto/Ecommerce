@@ -77,10 +77,12 @@ const ProviderStore = () => {
       </div>
 
       <div className="providerstore-header">
-        <video id="ps-header-bg-video" autoPlay loop muted>
+        <video autoPlay loop muted
+            // id="ps-header-bg-video" 
+        >
           <source
             src={
-              "https://res.cloudinary.com/dsyjj0sch/video/upload/v1663453572/videos/production_ID_4990245_gcrvm2.mp4"
+              "https://res.cloudinary.com/dsyjj0sch/video/upload/v1664668716/videos/STORE_croped_fggzrx.mp4"
             }
             type="video/mp4"
           />
