@@ -51,6 +51,9 @@ export const sessionSlice = createSlice({
     adminLoadUsers: (state, action) => {
       state.allUsersData = action.payload;
     },
+    adminLoadUserDetails: (state, action) => {
+      state.adminUserDetails = action.payload;
+    },
     adminBanUser: (state, action) => {
       state.allUsersData = state.allUsersData.map((user) => {
         if (user._id === action.payload) return { ...user, role: "banned" };
@@ -102,6 +105,7 @@ export const {
   loadingUserData,
   sessionActive,
   adminLoadUsers,
+  adminLoadUserDetails,
   adminBanUser,
   adminUnbanUser,
   adminPromoteUser,
