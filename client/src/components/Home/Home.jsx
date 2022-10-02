@@ -115,13 +115,14 @@ const Home = () => {
         onClick={() => navigate("/products")}>
         <h1>||||||PROVIDER</h1>
         <h2>VER TODOS LOS PRODUCTOS ORIGINALES</h2>
-        <div className="providerstore-banner-hover1">
-            <h2>ORIGINALES</h2>
+        <div className="providerstore-banner-hover-div hover-2"></div>
+        <div className="providerstore-banner-hover-div">
+            <h2 className="providerstore-banner-hover-h2">ORIGINALES</h2>
         </div>
         <video id="ps-header-bg-video" autoPlay loop muted>
             <source
             src={
-                "https://res.cloudinary.com/dsyjj0sch/video/upload/v1664668716/videos/STORE_croped_fggzrx.mp4"
+                "https://res.cloudinary.com/dsyjj0sch/video/upload/v1664729307/videos/STORE_croped_mini_juipok.mp4"
             }
             type="video/mp4"
             />
