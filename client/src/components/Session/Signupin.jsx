@@ -64,8 +64,8 @@ const Signupin = () => {
 
       if (data.error && data.message && Array.isArray(data.message)) {
         data.message.forEach((error) => notification(error, "", "warning"));
-      } else {
-        data.ok && setSignSelect("signin");
+      } else if (data.ok) {
+        setSignSelect("signin");
         notification(data.message, "", "");
       }
     } catch (error) {
@@ -93,6 +93,8 @@ const Signupin = () => {
 
       if (data.error && data.message && Array.isArray(data.message)) {
         data.message.forEach((error) => notification(error, "", "warning"));
+      } else if (data.error) {
+        notification(data.message, "", "error");
       }
 
       if (data.user) {
@@ -112,6 +114,8 @@ const Signupin = () => {
       }
 
       dispatch(loadingUserData(false));
+    } finally {
+      dispatch(loadingUserData(false));
     }
   };
 
@@ -119,12 +123,13 @@ const Signupin = () => {
   const handleCallbackResponse = async (response) => {
     dispatch(loadingUserData(true));
     //response.credential = Google user token
-    const googleToken = "google" + response.credential;
     const userDecoded = jwt_decode(response.credential);
-    window.localStorage.setItem("loggedTokenEcommerce", googleToken);
+    const googleToken = "google" + response.credential;
 
     //? Login con el hook
     googleLogin(googleToken, userDecoded, true);
+
+    window.localStorage.setItem("loggedTokenEcommerce", googleToken);
   };
 
   useEffect(() => {

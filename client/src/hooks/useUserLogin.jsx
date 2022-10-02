@@ -1,7 +1,11 @@
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { loadUserData, loadingUserData, loadNotifications } from "../Redux/reducer/sessionSlice";
+import {
+  loadUserData,
+  loadingUserData,
+  loadNotifications,
+} from "../Redux/reducer/sessionSlice";
 import { loadCart, loadWishlist } from "../Redux/reducer/cartSlice";
 import { useNotification } from "./useNotification";
 
@@ -54,7 +58,6 @@ export const useUserLogin = (token) => {
     } catch (error) {
       console.error("useUserLogin", error);
       window.localStorage.removeItem("loggedTokenEcommerce");
-      dispatch(loadingUserData(false));
       navigate("/");
     } finally {
       dispatch(loadingUserData(false));
@@ -81,19 +84,28 @@ export const useUserLogin = (token) => {
         lastName,
       });
 
-      if (data) userLogin(token, notif);
+      console.log(data);
+
+      if (data.error) {
+        console.log(data);
+        window.localStorage.removeItem("loggedTokenEcommerce");
+        return notification(data.message, "", "error");
+      } else if (data) {
+        userLogin(token, notif);
+      }
       // else
     } catch (error) {
       console.error("useUserLogin google: catch " + error);
+      console.log("entra", error);
 
       if (error?.response?.data) {
         notification(error.response.data, "", "error");
       } else if (error.message) {
-        notification(error.message, '', 'warning');
+        notification(error.message, "", "warning");
       } else {
-        notification('El servidor está fuera de línea', '', 'warning');
+        notification("El servidor está fuera de línea", "", "warning");
       }
-      
+    } finally {
       dispatch(loadingUserData(false));
     }
   };

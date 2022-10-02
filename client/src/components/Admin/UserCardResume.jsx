@@ -54,18 +54,8 @@ const UserCardResume = ({
   }; */
 
   return (
-    <div className="component-fadeIn">
-      <div>
-        <h2>{name}</h2>
-        <h4>Email: {isGoogleUser ? googleEmail : email}</h4>
-        <h4>Cuenta de Google: {isGoogleUser ? "si" : "no"}</h4>
-        <h4>Verificado: {emailVerified ? "si" : "no"}</h4>
-        <h4>Rol: {role}</h4>
-        {role === "client" && !isGoogleUser && (
-          <button onClick={() => openPromoteUser({ _id, name })}>
-            Promover a Administrador
-          </button>
-        )}
+    <div className="usercard-resume-container component-fadeIn">
+      <div className="usercard-main-data-container">
         {avatar ? (
           <img
             src={avatar}
@@ -74,21 +64,44 @@ const UserCardResume = ({
             alt={`${name}`}
           />
         ) : (
-          <h4>Sin avatar</h4>
+          <div className="usercard-no-avatar-placeholder">NO AVATAR</div>
         )}
-        {role === "client" && (
-          <button onClick={() => openBanUser({ _id, name })}>Suspender</button>
-        )}
-        {role === "banned" && (
-          <button onClick={() => openUnbanUser({ _id, name })}>
-            Activar cuenta
-          </button>
-        )}
-        <Link to={`/admin/users/${_id}`}>
-          <button className="g-white-button">Ver detalles</button>
-        </Link>
+
+        <div className="usercard-text-data-container">
+          <h3>{name}</h3>
+          <h4>Email: {isGoogleUser ? googleEmail : email}</h4>
+          <h4>Cuenta de Google: {isGoogleUser ? "si" : "no"}</h4>
+          <h4>Verificado: {emailVerified ? "si" : "no"}</h4>
+          <h4>Rol: {role}</h4>
+        </div>
       </div>
-      <hr />
+      {role === "client" && !isGoogleUser && (
+        <button
+          onClick={() => openPromoteUser({ _id, name })}
+          className="g-white-button"
+        >
+          Promover a Administrador
+        </button>
+      )}
+      {role === "client" && (
+        <button
+          onClick={() => openBanUser({ _id, name })}
+          className="g-white-button"
+        >
+          Suspender
+        </button>
+      )}
+      {role === "banned" && (
+        <button
+          onClick={() => openUnbanUser({ _id, name })}
+          className="g-white-button"
+        >
+          Activar cuenta
+        </button>
+      )}
+      <Link to={`/admin/users/${_id}`}>
+        <button className="g-white-button">Ver detalles</button>
+      </Link>
     </div>
   );
 };

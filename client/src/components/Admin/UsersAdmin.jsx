@@ -12,6 +12,7 @@ import {
   adminFilterUsers,
 } from "../../Redux/reducer/sessionSlice";
 import ModalAdminUsers from "./ModalAdminUsers";
+import "./UsersAdmin.css";
 
 const UsersAdmin = () => {
   const { allUsersData, usersFilteredData } = useSelector(
@@ -96,8 +97,9 @@ const UsersAdmin = () => {
             (location.pathname === "/admin/users" ||
               location.pathname === "/admin/users/") &&
             usersToShow &&
-            usersToShow.length && (
-              <>
+            usersToShow.length &&
+            usersToShow[0] !== null && (
+              <div className="admin-all-users-container">
                 {React.Children.toArray(
                   usersToShow?.map((user) => (
                     <UserCardResume
@@ -108,7 +110,7 @@ const UsersAdmin = () => {
                     />
                   ))
                 )}
-              </>
+              </div>
             )}
 
           {!error &&
