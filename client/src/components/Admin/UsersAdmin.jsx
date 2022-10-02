@@ -15,7 +15,7 @@ import ModalAdminUsers from "./ModalAdminUsers";
 import "./UsersAdmin.css";
 
 const UsersAdmin = () => {
-  const { allUsersData, usersFilteredData } = useSelector(
+  const { allUsersData, usersFilteredData, adminUserDetails } = useSelector(
     (state) => state.sessionReducer
   );
   const [nameSearch, setNameSearch] = useState("");
@@ -76,21 +76,22 @@ const UsersAdmin = () => {
   }, [nameSearch]);
 
   return (
-    <div className="component-fadeIn">
+    <div className="users-admin-outer-container component-fadeIn">
       {!loading ? (
-        <div>
+        <div className="users-admin-middle-container">
           {!error && location.pathname === "/admin/users" && (
-            <input
-              type="text"
-              placeholder="Buscar por nombre"
-              value={nameSearch}
-              onChange={handleNameSearch}
-            />
+            <div className="g-input-with-button">
+              <input
+                type="text"
+                placeholder="Buscar por nombre"
+                value={nameSearch}
+                onChange={handleNameSearch}
+              />
+            </div>
           )}
           {usersToShow && usersToShow[0] === null && (
-            <h4>No hubieron coincidencias</h4>
+            <h1>No hubieron coincidencias</h1>
           )}
-
           {error && <h1>{error}</h1>}
 
           {!error &&
@@ -115,7 +116,9 @@ const UsersAdmin = () => {
 
           {!error &&
             location.pathname !== "/admin/users" &&
-            location.pathname !== "/admin/users/" && (
+            location.pathname !== "/admin/users/" &&
+            adminUserDetails &&
+            Object.keys(adminUserDetails).length && (
               <UserCardDetails
                 openBanUser={openBanUser}
                 openUnbanUser={openUnbanUser}

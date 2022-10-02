@@ -11,6 +11,7 @@
     z-index: 50;
     position: relative;
 }
+
 .footer-container h1 {
     position: absolute;
     font-size: 8rem;
@@ -21,15 +22,18 @@
     color: #090909;
     user-select: none;
 }
+
 .footer-container input {
     border: none;
     height: 2rem;
     width: 20rem;
     padding: 1rem;
 }
+
 .footer-container input:focus {
     outline: none;
 }
+
 .footer-container img {
     height: 4rem;
 }
@@ -47,7 +51,6 @@
 }
 
 .footer-links-container>div {
-    width: 200px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -55,7 +58,6 @@
 
 .footer-links-container ul {
     padding: 1rem 0;
-    width: 200px;
     text-align: left;
 }
 
@@ -74,7 +76,7 @@
     padding: 1rem 0;
 }
 
-@media (max-width:499px) {
+@media (max-width:850px) {
     .footer-links-container {
         flex-direction: column-reverse;
     }
