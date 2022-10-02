@@ -14,6 +14,7 @@ import "./assets/fonts/HelveticaNeueLTProBlkIt.otf";
 import "./assets/fonts/HelveticaNeueLTProHv.otf";
 import "./assets/fonts/HelveticaNeueLTProHvIt.otf";
 import "./assets/fonts/HelveticaNeueLTProRoman.otf";
+import "./assets/fonts/Oswald-HeavyItalic.ttf";
 
 import "./index.css";
 //? cosas de axios
