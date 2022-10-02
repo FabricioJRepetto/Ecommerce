@@ -14,6 +14,10 @@ const IMAGES = [
         url: "/provider",
     },
     {
+        img: "https://res.cloudinary.com/dsyjj0sch/image/upload/v1664723662/Slider%20Home/slider-5_tkkab2.jpg",
+        url: "/profile/products",
+    },
+    {
         img: "https://res.cloudinary.com/dsyjj0sch/image/upload/v1663277258/Slider%20Home/slider-2_1_ahdqm0.jpg",
         url: "/premium",
     },

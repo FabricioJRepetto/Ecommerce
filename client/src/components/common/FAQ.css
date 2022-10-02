@@ -109,9 +109,26 @@
     color: #BBBBBB;
     border-bottom: 1px dashed #ffffff84;
 }
+.faq-link-to-payment:hover {    
+    color: #FFFFFF;
+}
 .faq-link-to-about {
     cursor: pointer;
     border-bottom: 1px dashed #ffffff84;
+}
+
+.faq-technologies {
+    display: grid;
+    grid-template-columns: 3rem 3rem 3rem 3rem 3rem 3rem;
+    gap: 1rem;
+    width: 100%;
+    justify-content: center;
+    margin-top: 1rem;
+    filter: invert();
+}
+.faq-technologies > img {
+    max-width: 3rem;
+    max-height: 3rem;
 }
 
 @media (max-width: 1550px) {

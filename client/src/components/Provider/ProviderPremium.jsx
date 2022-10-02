@@ -5,6 +5,7 @@ import LoaderBars from "../common/LoaderBars";
 import PremiumCard from "./PremiumCard";
 
 import "./ProviderPremium.css";
+import "./ProviderStore.css";
 
 const ProviderPremium = () => {
   const [loading, setLoading] = useState(true);
