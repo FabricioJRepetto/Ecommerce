@@ -16,11 +16,11 @@ export const sessionSlice = createSlice({
     role: null,
     isGoogleUser: null,
     allUsersData: [],
-    adminUserDetails: {},
     filtersApplied: {},
     usersFilteredData: [],
     isUserDataLoading: true,
     notificationList: [],
+    isTokenExpired: false,
   },
   reducers: {
     loadUserData: (state, action) => {
@@ -50,9 +50,6 @@ export const sessionSlice = createSlice({
     },
     adminLoadUsers: (state, action) => {
       state.allUsersData = action.payload;
-    },
-    adminLoadUserDetails: (state, action) => {
-      state.adminUserDetails = action.payload;
     },
     adminBanUser: (state, action) => {
       state.allUsersData = state.allUsersData.map((user) => {
@@ -94,6 +91,9 @@ export const sessionSlice = createSlice({
     loadNotifications: (state, action) => {
       state.notificationList = action.payload;
     },
+    reconnectNeeded: (state, action) => {
+      state.isTokenExpired = action.payload;
+    },
   },
 });
 
@@ -102,12 +102,12 @@ export const {
   loadingUserData,
   sessionActive,
   adminLoadUsers,
-  adminLoadUserDetails,
   adminBanUser,
   adminUnbanUser,
   adminPromoteUser,
   adminFilterUsers,
   loadNotifications,
+  reconnectNeeded,
 } = sessionSlice.actions;
 
 export default sessionSlice.reducer;

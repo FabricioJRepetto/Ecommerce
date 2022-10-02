@@ -60,6 +60,12 @@
     url("./assets/fonts/HelveticaNeueLTProTh.otf") format("truetype");
   /* font-weight: bold; */
 }
+@font-face {
+  font-family: "Oswald-HeavyItalic";
+  src: local("Oswald-HeavyItalic"),
+    url("./assets/fonts/Oswald-HeavyItalic.ttf") format("truetype");
+  /* font-weight: bold; */
+}
 
 /* Normalize 8.0.1 */
 

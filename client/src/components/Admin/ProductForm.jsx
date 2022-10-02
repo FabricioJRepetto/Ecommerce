@@ -386,7 +386,11 @@ const ProductForm = () => {
       i < productImg.length && setMainImgIndex(i);
     }
   };
-
+  const inputEnterHandler = (e, feature) => {
+    if (e.code === 'NumpadEnter' || e.code === 'Enter') {
+        feature ? handleAddFeature() : handleAddAttribute();
+    }
+  }
   return (
     <div className="form-width-test component-fadeIn">
       <h2>{productToEdit ? "Editar" : "Publicar"} producto</h2>
@@ -562,9 +566,9 @@ const ProductForm = () => {
             {React.Children.toArray(
               fieldsFeatures.map((_, i) => (
                 <>
-                  <div className="input-with-trash">
+                  <div className="input-with-trash" onKeyDown={(e) => inputEnterHandler(e, true)}>
                     <div className="g-input-with-button">
-                      <input
+                      <input                        
                         type="text"
                         autoComplete="off"
                         id={`main_feature_value_${i}`}
@@ -624,7 +628,7 @@ const ProductForm = () => {
             <div className="input-title">Atributos</div>
             {React.Children.toArray(
               fieldsAttributes.map((_, i) => (
-                <div className="form-attribute-container">
+                <div className="form-attribute-container" onKeyDown={inputEnterHandler}>
                   <div className="form-attributename-with-error">
                     <div className="g-input-with-button">
                       <input

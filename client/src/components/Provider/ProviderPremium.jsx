@@ -138,7 +138,9 @@ const ProviderPremium = () => {
 
       <div className="providerpremium-cardscontainer">
         {loading || !products ? (
-          <></>
+          <>
+            <LoaderBars/>
+          </>
         ) : (
           React.Children.toArray(
             products.map((e, index) => (

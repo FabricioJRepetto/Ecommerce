@@ -45,6 +45,7 @@ const Profile = () => {
   const [publications, setPublications] = useState([]);
   const [sales, setSales] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingPubli, setLoadingPubli] = useState(true);
   const [change, setChange] = useState(true);
 
   const { wishlist: wl_id } = useSelector((state) => state.cartReducer);
@@ -68,31 +69,40 @@ const Profile = () => {
       navigate("/signin");
     } else {
       (async () => {
+
         const requests = [
           axios(`/address/`),
           axios(`/wishlist/`),
           axios(`/history/`),
           axios(`/order/userall`),
-          axios(`/notifications/`),
-          axios(`/user/products`),
+          axios(`/notifications/`)
         ];
+        const publicationReq = [
+          axios(`/user/products`)
+        ];
+
         const p = await Promise.allSettled(requests);
+        const publi = await Promise.allSettled(publicationReq);
 
         p[0].value && setAddress(p[0].value.data.address);
         p[1].value && setWishlist(p[1].value.data.products);
         p[2].value && setHistory(p[2].value.data.products);
         p[3].value && setOrders(p[3].value.data);
         p[4].value && setNotif(p[4].value.data);
-        if (p[5].value) {
-          setPublications(p[5].value.data.publications);
-          setSales(p[5].value.data.sales);
-        }
 
         //? Notifica cuando se eliminaron productos que estaba en favoritos
         p[1].value.data.message &&
           notification(p[1].value.data.message, "", "warning");
 
         setLoading(false);
+
+        if (publi[0].value) {
+          setPublications(publi[0].value.data.publications);
+          setSales(publi[0].value.data.sales);
+        }
+
+        setLoadingPubli(false);
+
       })();
     }
     // eslint-disable-next-line
@@ -477,11 +487,11 @@ const Profile = () => {
         {render === "orders" && <Orders orders={orders} loading={loading} />}
 
         {role === "client" && render === "sales" && (
-          <UserSales sales={sales} loading={loading} />
+          <UserSales sales={sales} loading={loadingPubli} />
         )}
 
         {role === "client" && render === "products" && (
-          <Publications loading={loading} publications={publications} />
+          <Publications loading={loadingPubli} publications={publications} />
         )}
 
         {render === "address" && (
