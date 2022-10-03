@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import AddressCard from "../Profile/AddressCard";
 import OrderCardAdmin from "./OrderCardAdmin";
 import { adminLoadUserDetails } from "../../Redux/reducer/sessionSlice";
+import UserCardResume from "./UserCardResume";
 import WishlistCard from "../Profile/WishlistCard";
 import OrderDetails from "../Profile/OrderDetails";
 import ReturnButton from "../common/ReturnButton";
@@ -52,45 +53,12 @@ const UserDetails = ({ openBanUser, openUnbanUser, openPromoteUser }) => {
   return (
     <div className="admin-user-details-container">
       <div className="admin-user-details-main-data">
-        <h2>{user.name}</h2>
-        <h4>Email: {user.isGoogleUser ? user.googleEmail : user.email}</h4>
-        <h4>Cuenta de Google: {user.isGoogleUser ? "si" : "no"}</h4>
-        <h4>Verificado: {user.emailVerified ? "si" : "no"}</h4>
-        <h4>Rol: {user.role}</h4>
-        {user.role === "client" && !user.isGoogleUser && (
-          <button
-            onClick={() => openPromoteUser({ _id: user._id, name: user.name })}
-            className="g-white-button"
-          >
-            Promover a Administrador
-          </button>
-        )}
-        {user.avatar ? (
-          <img
-            src={user.avatar}
-            className="admin-usercard-img"
-            referrerPolicy="no-referrer"
-            alt={`${user.name}`}
-          />
-        ) : (
-          <h4>Sin avatar</h4>
-        )}
-        {user.role === "client" && (
-          <button
-            onClick={() => openBanUser({ _id: user._id, name: user.name })}
-            className="g-white-button"
-          >
-            Suspender
-          </button>
-        )}
-        {user.role === "banned" && (
-          <button
-            onClick={() => openUnbanUser({ _id: user._id, name: user.name })}
-            className="g-white-button"
-          >
-            Activar cuenta
-          </button>
-        )}
+        <UserCardResume
+          user={user}
+          openBanUser={openBanUser}
+          openUnbanUser={openUnbanUser}
+          openPromoteUser={openPromoteUser}
+        />
       </div>
 
       {Object.keys(orderDetails).length > 0 ? (

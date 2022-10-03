@@ -1,0 +1,49 @@
+.admin-metrics-container {
+   min-height: 85vh;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+}
+
+.admin-metrics-container>h1 {
+   margin-bottom: 1.5rem;
+}
+
+.admin-metrics-all-charts-container {
+   display: flex;
+   align-items: flex-end;
+   justify-content: space-evenly;
+   flex-wrap: wrap;
+}
+
+.admin-metrics-chart-container {
+   display: flex;
+   flex-direction: column;
+   width: fit-content;
+   height: 280px;
+   align-items: center;
+   justify-content: space-between;
+   margin-top: 1.5rem;
+}
+
+.admin-metrics-text-boxes-container {
+   margin-top: 1.5rem;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+}
+
+.admin-metrics-text-box {
+   width: 85%;
+   display: flex;
+   justify-content: space-between;
+   height: 3rem;
+   background-color: #111111;
+   margin: .2rem;
+   align-items: center;
+   padding: 0 1rem;
+}
+
+.admin-metrics-text-box p {
+   font-size: 1.3rem;
+}
