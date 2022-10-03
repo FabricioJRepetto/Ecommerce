@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
 import axios from "axios";
 import UserCardResume from "./UserCardResume";
-import UserCardDetails from "./UserCardDetails";
+import UserDetails from "./UserDetails";
 import LoaderBars from "../common/LoaderBars";
 import { useModal } from "../../hooks/useModal";
 import {
@@ -79,6 +79,8 @@ const UsersAdmin = () => {
     <div className="users-admin-outer-container component-fadeIn">
       {!loading ? (
         <div className="users-admin-middle-container">
+          <h1>Usuarios</h1>
+
           {!error && location.pathname === "/admin/users" && (
             <div className="g-input-with-button">
               <input
@@ -90,9 +92,9 @@ const UsersAdmin = () => {
             </div>
           )}
           {usersToShow && usersToShow[0] === null && (
-            <h1>No hubieron coincidencias</h1>
+            <h2>No hubieron coincidencias</h2>
           )}
-          {error && <h1>{error}</h1>}
+          {error && <h2>{error}</h2>}
 
           {!error &&
             (location.pathname === "/admin/users" ||
@@ -119,7 +121,7 @@ const UsersAdmin = () => {
             location.pathname !== "/admin/users/" &&
             adminUserDetails &&
             Object.keys(adminUserDetails).length && (
-              <UserCardDetails
+              <UserDetails
                 openBanUser={openBanUser}
                 openUnbanUser={openUnbanUser}
                 openPromoteUser={openPromoteUser}

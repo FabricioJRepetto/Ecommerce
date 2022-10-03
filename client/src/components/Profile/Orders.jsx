@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import LoaderBars from "../common/LoaderBars";
 import OrderCard from "./OrderCard";
 import OrderDetails from "./OrderDetails";
+import ReturnButton from "../common/ReturnButton";
 import "./Orders.css";
 
 const Orders = ({ orders, loading }) => {
@@ -11,10 +12,18 @@ const Orders = ({ orders, loading }) => {
     <div className="profile-all-orders-container component-fadeIn">
       {!loading ? (
         orderDetails ? (
-          <OrderDetails
-            order={orderDetails}
-            setOrderDetails={setOrderDetails}
-          />
+          <>
+            {" "}
+            <h1>Resúmen</h1>
+            <OrderDetails
+              order={orderDetails}
+              removeOrderDetails={() => setOrderDetails(null)}
+            />
+            <ReturnButton
+              to={"/profile/orders"}
+              onClick={() => setOrderDetails(null)}
+            />
+          </>
         ) : (
           <>
             <h1>Compras</h1>

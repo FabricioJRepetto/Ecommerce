@@ -85,3 +85,9 @@
         padding-bottom: 1.5rem;
     }
 }
+
+@media (max-width:1024px) {
+    .footer-container h1 {
+        display: none;
+    }
+}

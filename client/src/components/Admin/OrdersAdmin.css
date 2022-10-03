@@ -1,0 +1,41 @@
+.admin-all-orders-outer-container {
+   min-height: 90vh;
+   display: flex;
+   flex-direction: column;
+}
+
+.admin-all-orders-outer-container-loading {
+   align-items: center;
+   justify-content: center;
+}
+
+.admin-orders-checkboxes-container {
+   display: flex;
+   justify-content: center;
+}
+
+.admin-orders-checkboxes-container label {
+   display: flex;
+   padding: 1rem;
+}
+
+.admin-orders-checkboxes-container label input {
+   display: none;
+   margin-left: .5rem;
+}
+
+.admin-orders-checkboxes-container label span {
+   margin-left: .5rem;
+}
+
+.admin-all-orders-container-inner {
+   display: flex;
+   flex-wrap: wrap;
+   justify-content: center;
+}
+
+.admin-order-details-container {
+   width: 85%;
+   min-width: 350px;
+   max-width: 900px;
+}

@@ -4,6 +4,7 @@ import axios from "axios";
 import Card from "../Products/Card";
 import AddressCard from "../Profile/AddressCard";
 import OrderCardAdmin from "./OrderCardAdmin";
+import { ReactComponent as Ban } from "../../assets/svg/ban.svg";
 import "./UserCardResume.css";
 
 const UserCardResume = ({
@@ -99,12 +100,15 @@ const UserCardResume = ({
           </button>
         )}
         {role === "client" && (
-          <button
-            onClick={() => openBanUser({ _id, name })}
-            className="g-white-button"
-          >
-            Suspender
-          </button>
+          <>
+            <div className="pc-indicator-tooltip"> Suspender usuario</div>
+            <button
+              onClick={() => openBanUser({ _id, name })}
+              className="g-white-button"
+            >
+              Suspender
+            </button>
+          </>
         )}
         {role === "banned" && (
           <button

@@ -7,11 +7,11 @@ import AddressCard from "../Profile/AddressCard";
 import OrderCardAdmin from "./OrderCardAdmin";
 import { adminLoadUserDetails } from "../../Redux/reducer/sessionSlice";
 
-import "./UserCardDetails.css";
+import "./UserDetails.css";
 import OrderCard from "../Profile/OrderCard";
 import WishlistCard from "../Profile/WishlistCard";
 
-const UserCardDetails = ({ openBanUser, openUnbanUser, openPromoteUser }) => {
+const UserDetails = ({ openBanUser, openUnbanUser, openPromoteUser }) => {
   const [user, setUser] = useState({});
   const [addresses, setAddresses] = useState([]);
   const [orders, setOrders] = useState([]);
@@ -46,7 +46,6 @@ const UserCardDetails = ({ openBanUser, openUnbanUser, openPromoteUser }) => {
 
   return (
     <div>
-      UserCardDetails
       <div>
         <h2>{user.name}</h2>
         <h4>Email: {user.isGoogleUser ? user.googleEmail : user.email}</h4>
@@ -102,7 +101,7 @@ const UserCardDetails = ({ openBanUser, openUnbanUser, openPromoteUser }) => {
             {React.Children.toArray(
               orders.map((order) => (
                 <div className="usercard-details-wishlist-card-container">
-                  <OrderCard order={order} />
+                  <OrderCardAdmin order={order} />
                 </div>
               ))
             )}{" "}
@@ -141,4 +140,4 @@ const UserCardDetails = ({ openBanUser, openUnbanUser, openPromoteUser }) => {
   );
 };
 
-export default UserCardDetails;
+export default UserDetails;

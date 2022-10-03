@@ -3,24 +3,22 @@ import { useNavigate } from "react-router-dom";
 import { formatDate } from "../../helpers/formatDate";
 import { priceFormat } from "../../helpers/priceFormat";
 import DeliveryProgress from "../common/DeliveryProgress";
-import ReturnButton from "../common/ReturnButton";
 import Carousel from "../Home/Carousel/Carousel";
 import { ReactComponent as Sale } from "../../assets/svg/sale.svg";
 import "./OrderDetails.css";
 
-const OrderDetails = ({ order, setOrderDetails }) => {
+const OrderDetails = ({ order, removeOrderDetails }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
     return () => {
-      setOrderDetails(null);
+      removeOrderDetails();
     };
     // eslint-disable-next-line
   }, []);
 
   return (
     <div className="profile-order-resume-container component-fadeIn">
-      <h1>Resúmen</h1>
       <span>
         <div className="order-details-carousel-info-container">
           {order.images.length && order.images.length > 1 ? (
@@ -174,11 +172,6 @@ const OrderDetails = ({ order, setOrderDetails }) => {
 
         {order.delivery_date && <DeliveryProgress order={order} />}
       </div>
-
-      <ReturnButton
-        to={"/profile/orders"}
-        onClick={() => setOrderDetails(null)}
-      />
     </div>
   );
 };

@@ -1,0 +1,36 @@
+.admin-order-card-container {
+   background-color: #111111;
+   margin: .4rem;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   width: 400px;
+   height: 290px;
+   align-items: center;
+   transition: background-color .2s ease;
+   cursor: pointer;
+}
+
+.admin-order-card-container:hover {
+   background-color: #333333;
+}
+
+.admin-order-card-userid {
+   margin-bottom: 1rem;
+}
+
+.admin-order-card-userid a:hover {
+   color: #888888;
+}
+
+.admin-order-card-data-container {
+   display: flex;
+   flex-direction: column;
+   align-items: flex-start;
+   margin-top: .5rem;
+}
+
+.admin-order-card-total {
+   align-self: flex-end;
+   margin-bottom: .5rem;
+}
