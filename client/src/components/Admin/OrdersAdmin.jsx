@@ -93,7 +93,9 @@ const OrdersAdmin = () => {
       }`}
     >
       {!loading ? (
-        Object.keys(orderDetails).length ? (
+        error ? (
+          <h1>{error}</h1>
+        ) : Object.keys(orderDetails).length ? (
           <>
             <h1>Resúmen de compra</h1>
             {orderComplementaryData && (

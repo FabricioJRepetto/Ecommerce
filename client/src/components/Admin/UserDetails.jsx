@@ -1,15 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import axios from "axios";
-import Card from "../Products/Card";
 import AddressCard from "../Profile/AddressCard";
 import OrderCardAdmin from "./OrderCardAdmin";
 import { adminLoadUserDetails } from "../../Redux/reducer/sessionSlice";
-
-import "./UserDetails.css";
-import OrderCard from "../Profile/OrderCard";
 import WishlistCard from "../Profile/WishlistCard";
+import OrderDetails from "../Profile/OrderDetails";
+import ReturnButton from "../common/ReturnButton";
+import SaleMetrics from "../Profile/SaleMetrics/SaleMetrics";
+import {
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
+  Box,
+} from "@chakra-ui/react";
+import "./UserDetails.css";
 
 const UserDetails = ({ openBanUser, openUnbanUser, openPromoteUser }) => {
   const [user, setUser] = useState({});
@@ -17,11 +23,10 @@ const UserDetails = ({ openBanUser, openUnbanUser, openPromoteUser }) => {
   const [orders, setOrders] = useState([]);
   const [wishlist, setWishlist] = useState([]);
   const [publications, setPublications] = useState([]);
-  const [showAddresses, setShowAddresses] = useState(false);
-  const [showOrders, setShowOrders] = useState(false);
-  const [showWishlist, setShowWishlist] = useState(false);
   const dispatch = useDispatch();
   const { adminUserDetails } = useSelector((state) => state.sessionReducer);
+  const [orderDetails, setOrderDetails] = useState({});
+  const [active, setActive] = useState();
 
   const { userData, addressData, ordersData, wishlistData, publicationsData } =
     adminUserDetails;
@@ -33,20 +38,22 @@ const UserDetails = ({ openBanUser, openUnbanUser, openPromoteUser }) => {
       setOrders(ordersData);
       setWishlist(wishlistData);
       setPublications(publicationsData);
-    }
+    } // eslint-disable-next-line
   }, [adminUserDetails]);
 
-  console.log(userData);
+  console.log(publicationsData);
+
+  const placeholder = async (id) => {};
 
   useEffect(() => {
     return () => {
       dispatch(adminLoadUserDetails({}));
-    };
+    }; // eslint-disable-next-line
   }, []);
 
   return (
-    <div>
-      <div>
+    <div className="admin-user-details-container">
+      <div className="admin-user-details-main-data">
         <h2>{user.name}</h2>
         <h4>Email: {user.isGoogleUser ? user.googleEmail : user.email}</h4>
         {/* <h4>Cuenta de Google: {user.isGoogleUser ? "si" : "no"}</h4> */}
@@ -84,57 +91,115 @@ const UserDetails = ({ openBanUser, openUnbanUser, openPromoteUser }) => {
           </button>
         )}
       </div>
-      {addresses && addresses.length ? (
-        <>
-          <h1>Direcciones</h1>
-          {React.Children.toArray(
-            addresses.map((address) => <AddressCard address={address} />)
-          )}
-        </>
+
+      {Object.keys(orderDetails).length ? (
+        <div className="admin-order-details-container">
+          <OrderDetails
+            order={orderDetails}
+            removeOrderDetails={() => setOrderDetails({})}
+          />
+          <ReturnButton
+            to={`/admin/users/${userData._id}`}
+            onClick={() => setOrderDetails({})}
+          />
+        </div>
       ) : (
-        <h1>Este usuario aún no agregó direcciones</h1>
-      )}
-      {orders && orders.length ? (
-        <>
-          <h1>Compras</h1>
-          <div className="usercard-details-wishlist-container">
-            {React.Children.toArray(
-              orders.map((order) => (
-                <div className="usercard-details-wishlist-card-container">
-                  <OrderCardAdmin order={order} />
-                </div>
-              ))
-            )}{" "}
-          </div>
-        </>
-      ) : (
-        <h1>Este usuario aún no efectuó compras</h1>
-      )}
-      {publications && publications.length ? (
-        <>
-          <h1>Publicaciones</h1>
-          {/* {React.Children.toArray(
-            publications.map((product) => <Card product={product} />)
-          )} */}
-        </>
-      ) : (
-        <h1>Este usuario aún no hizo publicaciones</h1>
-      )}
-      {wishlist && wishlist.length ? (
-        <>
-          <h1>Favoritos</h1>
-          <div className="usercard-details-wishlist-container">
-            {React.Children.toArray(
-              wishlist.map((product) => (
-                <div className="usercard-details-wishlist-card-container">
-                  <WishlistCard productData={product} />
-                </div>
-              ))
+        <div className="admin-user-details-complementary-data">
+          <Accordion defaultIndex={[active < 4 ? active : 0]}>
+            {addresses && addresses.length ? (
+              <AccordionItem>
+                <h1>
+                  <AccordionButton onClick={() => setActive(0)}>
+                    <Box>Direcciones</Box>
+                    <AccordionIcon />
+                  </AccordionButton>
+                </h1>
+                <AccordionPanel>
+                  {React.Children.toArray(
+                    addresses.map((address) => (
+                      <AddressCard address={address} />
+                    ))
+                  )}{" "}
+                </AccordionPanel>
+              </AccordionItem>
+            ) : (
+              <h1>Este usuario aún no agregó direcciones</h1>
             )}
-          </div>
-        </>
-      ) : (
-        <h1>Este usuario aún no agregó productos a favoritos</h1>
+            {orders && orders.length ? (
+              <AccordionItem>
+                <h1>
+                  <AccordionButton onClick={() => setActive(1)}>
+                    <Box>Órdenes</Box>
+                    <AccordionIcon />
+                  </AccordionButton>
+                </h1>
+                <AccordionPanel>
+                  <div className="usercard-details-wishlist-container">
+                    {React.Children.toArray(
+                      orders.map((order) => (
+                        <OrderCardAdmin
+                          order={order}
+                          setOrderDetails={setOrderDetails}
+                          getUserData={placeholder}
+                        />
+                      ))
+                    )}
+                  </div>
+                </AccordionPanel>
+              </AccordionItem>
+            ) : (
+              <h1>Este usuario aún no efectuó compras</h1>
+            )}
+            {publications && publications.length ? (
+              <div className="admin-user-details-publications-container">
+                <AccordionItem>
+                  <h1>
+                    <AccordionButton onClick={() => setActive(2)}>
+                      <Box>Publicaciones</Box>
+                      <AccordionIcon />
+                    </AccordionButton>
+                  </h1>
+                  <AccordionPanel>
+                    {publications?.map((p) => (
+                      <SaleMetrics
+                        props={p}
+                        /*  openDeleteProduct={openDeleteProduct}
+                  openReactivateProduct={openReactivateProduct}
+                  openDiscountProduct={openDiscountProduct} */
+                      />
+                    ))}
+                  </AccordionPanel>
+                </AccordionItem>
+              </div>
+            ) : (
+              <h1>Este usuario aún no hizo publicaciones</h1>
+            )}
+            {wishlist && wishlist.length ? (
+              <AccordionItem>
+                <h1>
+                  <AccordionButton onClick={() => setActive(3)}>
+                    <Box>Favoritos</Box>
+                    <AccordionIcon />
+                  </AccordionButton>
+                </h1>
+                <AccordionPanel>
+                  <div className="usercard-details-wishlist-container">
+                    {React.Children.toArray(
+                      wishlist.map((product) => (
+                        <div className="usercard-details-wishlist-card-container">
+                          <WishlistCard productData={product} />
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </AccordionPanel>
+              </AccordionItem>
+            ) : (
+              <h1>Este usuario aún no agregó productos a favoritos</h1>
+            )}
+          </Accordion>
+          <ReturnButton to={`/admin/users`} />
+        </div>
       )}
     </div>
   );
