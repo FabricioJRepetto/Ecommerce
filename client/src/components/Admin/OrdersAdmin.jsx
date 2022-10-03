@@ -87,7 +87,7 @@ const OrdersAdmin = () => {
   return (
     <div
       className={`admin-all-orders-outer-container component-fadeIn${
-        loading || Object.keys(orderDetails).length
+        loading || Object.keys(orderDetails).length > 0
           ? " admin-all-orders-outer-container-loading"
           : ""
       }`}
@@ -95,7 +95,7 @@ const OrdersAdmin = () => {
       {!loading ? (
         error ? (
           <h1>{error}</h1>
-        ) : Object.keys(orderDetails).length ? (
+        ) : Object.keys(orderDetails).length > 0 ? (
           <>
             <h1>Resúmen de compra</h1>
             {orderComplementaryData && (
@@ -190,7 +190,7 @@ const OrdersAdmin = () => {
               </label>
             </div>
 
-            {ordersToShow.length ? (
+            {ordersToShow.length > 0 ? (
               ordersToShow[0] === null ? (
                 <h2>No hubieron coincidencias</h2>
               ) : (

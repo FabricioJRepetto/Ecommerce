@@ -100,7 +100,7 @@ const UsersAdmin = () => {
             (location.pathname === "/admin/users" ||
               location.pathname === "/admin/users/") &&
             usersToShow &&
-            usersToShow.length &&
+            usersToShow.length > 0 &&
             usersToShow[0] !== null && (
               <div className="admin-all-users-container">
                 {React.Children.toArray(
@@ -120,7 +120,7 @@ const UsersAdmin = () => {
             location.pathname !== "/admin/users" &&
             location.pathname !== "/admin/users/" &&
             adminUserDetails &&
-            Object.keys(adminUserDetails).length && (
+            Object.keys(adminUserDetails).length > 0 && (
               <UserDetails
                 openBanUser={openBanUser}
                 openUnbanUser={openUnbanUser}

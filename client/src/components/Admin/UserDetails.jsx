@@ -92,7 +92,7 @@ const UserDetails = ({ openBanUser, openUnbanUser, openPromoteUser }) => {
         )}
       </div>
 
-      {Object.keys(orderDetails).length ? (
+      {Object.keys(orderDetails).length > 0 ? (
         <div className="admin-order-details-container">
           <OrderDetails
             order={orderDetails}
@@ -106,7 +106,7 @@ const UserDetails = ({ openBanUser, openUnbanUser, openPromoteUser }) => {
       ) : (
         <div className="admin-user-details-complementary-data">
           <Accordion defaultIndex={[active < 4 ? active : 0]}>
-            {addresses && addresses.length ? (
+            {addresses && addresses.length > 0 && (
               <AccordionItem>
                 <h1>
                   <AccordionButton onClick={() => setActive(0)}>
@@ -122,10 +122,8 @@ const UserDetails = ({ openBanUser, openUnbanUser, openPromoteUser }) => {
                   )}{" "}
                 </AccordionPanel>
               </AccordionItem>
-            ) : (
-              <h1>Este usuario aún no agregó direcciones</h1>
             )}
-            {orders && orders.length ? (
+            {orders && orders.length > 0 && (
               <AccordionItem>
                 <h1>
                   <AccordionButton onClick={() => setActive(1)}>
@@ -147,10 +145,8 @@ const UserDetails = ({ openBanUser, openUnbanUser, openPromoteUser }) => {
                   </div>
                 </AccordionPanel>
               </AccordionItem>
-            ) : (
-              <h1>Este usuario aún no efectuó compras</h1>
             )}
-            {publications && publications.length ? (
+            {publications && publications.length > 0 && (
               <div className="admin-user-details-publications-container">
                 <AccordionItem>
                   <h1>
@@ -171,10 +167,8 @@ const UserDetails = ({ openBanUser, openUnbanUser, openPromoteUser }) => {
                   </AccordionPanel>
                 </AccordionItem>
               </div>
-            ) : (
-              <h1>Este usuario aún no hizo publicaciones</h1>
             )}
-            {wishlist && wishlist.length ? (
+            {wishlist && wishlist.length > 0 && (
               <AccordionItem>
                 <h1>
                   <AccordionButton onClick={() => setActive(3)}>
@@ -194,8 +188,6 @@ const UserDetails = ({ openBanUser, openUnbanUser, openPromoteUser }) => {
                   </div>
                 </AccordionPanel>
               </AccordionItem>
-            ) : (
-              <h1>Este usuario aún no agregó productos a favoritos</h1>
             )}
           </Accordion>
           <ReturnButton to={`/admin/users`} />
