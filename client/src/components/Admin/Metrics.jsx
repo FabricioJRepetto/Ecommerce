@@ -181,7 +181,7 @@ const Metrics = () => {
 
           <div className="admin-metrics-text-boxes-container">
             <div className="admin-metrics-text-box">
-              <p>Ofertas activas PROPIAS </p>
+              <p>Ofertas activas PROVIDER </p>
               <p>{metrics.productsOnSale}</p>
             </div>
 
