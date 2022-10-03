@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
@@ -18,6 +18,7 @@ const AddAddress = ({
   setSelectedAdd,
   getAddress,
 }) => {
+  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -44,6 +45,7 @@ const AddAddress = ({
 
   // handle submit
   const handleAddress = async (addressData, prop) => {
+    setLoading(true);
     if (prop) {
       try {
         const { data } = await axios.post(`/address/`, addressData);
@@ -57,6 +59,8 @@ const AddAddress = ({
         notification("Nueva dirección creada correctamente", "", "success");
       } catch (error) {
         notification("Algo salió mal", "", "warning");
+      } finally {
+        setLoading(false);
       }
     } else {
       try {
@@ -69,6 +73,8 @@ const AddAddress = ({
         notification("Nueva dirección creada correctamente", "", "success");
       } catch (error) {
         notification("Algo salió mal", "", "warning");
+      } finally {
+        setLoading(false);
       }
     }
     reset();
@@ -76,7 +82,7 @@ const AddAddress = ({
   };
 
   return (
-    <div className="add-address-container">
+    <div className="add-address-container component-fadeIn">
       <h1>{prop ? "Agregar dirección" : "Editar dirección"}</h1>
       <form
         onSubmit={handleSubmit((data) => handleAddress(data, prop))}
@@ -234,12 +240,13 @@ const AddAddress = ({
         </span>
 
         <div className="add-address-buttons-container">
-          <button className="g-white-button">
+          <button className="g-white-button" disabled={loading}>
             {prop ? "Agregar" : "Actualizar"}
           </button>
           <button
             onClick={() => closeAddForm(true)}
             className="g-white-button secondary-button"
+            disabled={loading}
           >
             Cancelar
           </button>

@@ -33,6 +33,7 @@ const ResetPassword = () => {
   });
 
   useEffect(() => {
+    openLoader();
     (async () => {
       try {
         await axios.put(
@@ -44,12 +45,13 @@ const ResetPassword = () => {
             },
           }
         );
-        setLoading(false);
       } catch (error) {
         //! VOLVER A VER manejo de errores
         console.error("error", error);
         notification("Link de recuperación vencido", "", "error");
         session ? navigate("/") : navigate("/signin");
+      } finally {
+        closeLoader();
       }
     })();
     // eslint-disable-next-line
@@ -84,10 +86,8 @@ const ResetPassword = () => {
     }
   };
 
-  return loading ? (
-    <></>
-  ) : (
-    <div className="reset-container">
+  return (
+    <div className="reset-container component-fadeIn">
       <div className="reset-inner">
         <img
           src={require("../../assets/provider-logo.png")}
@@ -240,14 +240,18 @@ const ResetPassword = () => {
               )}
             </span>
 
-            <input
+            {/* <input
               type="submit"
               value="Cambiar contraseña"
               className="g-white-button"
-            />
+            /> */}
+            <button type="submit" className="g-white-button">
+              Cambiar contraseña
+            </button>
           </form>
         )}
       </div>
+
       <Modal isOpen={isOpenLoader}>
         <div className="reset-container">
           <div className="reset-inner loader-container">
