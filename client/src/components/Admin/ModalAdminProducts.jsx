@@ -72,7 +72,7 @@ const ModalAdminProducts = ({
   const addDiscount = async () => {
     setWaitingResponse(true);
     try {
-      const {data} = await axios.put(
+      const { data } = await axios.put(
         `/product/discount/${productToDiscount.prodId}`,
         discount
       );
@@ -121,10 +121,12 @@ const ModalAdminProducts = ({
   const removeDiscount = async () => {
     setWaitingResponse(true);
     try {
-      await axios.delete(`/product/discount/${productToDiscount.prodId}`);
+      const { data } = await axios.delete(
+        `/product/discount/${productToDiscount.prodId}`
+      );
       closeDiscountProduct();
       dispatch(changeReloadFlag(true));
-      notification("Descuento removido exitosamente", "", "success");
+      notification(data.message, "", data.type);
     } catch (error) {
       console.log(error);
       notification("Algo anduvo mal", "", "warn");
@@ -198,28 +200,34 @@ const ModalAdminProducts = ({
         type="warn"
       >
         <div className="publications-modal-pause-resume">
-          <p>{`¿Reactivar la publicación ${
-            productToReactivate ? productToReactivate.name : null
-          }?`}</p>
+          {productToReactivate && productToReactivate.available_quantity ? (
+            <>
+              <p>{`¿Reactivar la publicación ${
+                productToReactivate ? productToReactivate.name : null
+              }?`}</p>
 
-          <div>
-            <button
-              type="button"
-              onClick={handleReactivateProduct}
-              className="g-white-button"
-              disabled={waitingResponse}
-            >
-              Aceptar
-            </button>
-            <button
-              type="button"
-              onClick={closeReactivateProduct}
-              className="g-white-button secondary-button"
-              disabled={waitingResponse}
-            >
-              Cancelar
-            </button>
-          </div>
+              <div>
+                <button
+                  type="button"
+                  onClick={handleReactivateProduct}
+                  className="g-white-button"
+                  disabled={waitingResponse}
+                >
+                  Aceptar
+                </button>
+                <button
+                  type="button"
+                  onClick={closeReactivateProduct}
+                  className="g-white-button secondary-button"
+                  disabled={waitingResponse}
+                >
+                  Cancelar
+                </button>
+              </div>
+            </>
+          ) : (
+            <p>Debes reponer stock para poder reactivar la publicación</p>
+          )}
         </div>
       </Modal>
 

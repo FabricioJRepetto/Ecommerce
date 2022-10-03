@@ -71,7 +71,7 @@ const OrderCard = ({ order, setOrderDetails }) => {
                     {prod.product_name}
                   </p>
                 ) : i === order.products.length - 1 ? (
-                  <p className="g-text-button">{`+${i - 4} productos...`}</p>
+                  <p>{`+${i - 4} productos...`}</p>
                 ) : (
                   <></>
                 )

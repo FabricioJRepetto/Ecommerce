@@ -211,7 +211,7 @@ const WishlistCard = ({
                   className="wishlist-play-button-container"
                   onClick={(e) => {
                     e.stopPropagation();
-                    openReactivateProduct({ prodId, name });
+                    openReactivateProduct({ prodId, name, available_quantity });
                   }}
                 >
                   <div className="publication-tootlip">

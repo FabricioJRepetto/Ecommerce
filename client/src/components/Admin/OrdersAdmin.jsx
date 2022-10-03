@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import OrderCardAdmin from "./OrderCardAdmin";
+import Checkbox from "../common/Checkbox";
+import LoaderBars from "../common/LoaderBars";
+import OrderDetails from "../Profile/OrderDetails";
+import ReturnButton from "../common/ReturnButton";
+import "./OrdersAdmin.css";
 
 const ordersCheckboxesInitial = {
   approved: false,
@@ -10,7 +16,11 @@ const ordersCheckboxesInitial = {
 
 const OrdersAdmin = () => {
   const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [ordersFiltered, setOrdersFiltered] = useState([]);
+  const [orderDetails, setOrderDetails] = useState({});
+  const [orderComplementaryData, setOrderComplementaryData] = useState(null);
+  const [error, setError] = useState(null);
   const [ordersCheckboxes, setOrdersCheckboxes] = useState(
     ordersCheckboxesInitial
   );
@@ -21,11 +31,17 @@ const OrdersAdmin = () => {
     : (ordersToShow = orders);
 
   useEffect(() => {
-    axios("/admin/order/getAll")
-      .then(({ data }) => {
+    setLoading(true);
+    (async () => {
+      try {
+        const { data } = await axios("/admin/order/getAll");
         setOrders(data);
-      })
-      .catch((err) => console.error(err)); //! VOLVER A VER manejo de errores
+      } catch (error) {
+        console.log(error); //! VOLVER A VER manejo de errores
+      } finally {
+        setLoading(false);
+      }
+    })(); // eslint-disable-next-line
   }, []);
 
   const handleOrders = (e) => {
@@ -48,51 +64,155 @@ const OrdersAdmin = () => {
       ordersAfterFilter.length === 0
         ? setOrdersFiltered([null])
         : setOrdersFiltered(ordersAfterFilter);
-    }
-    
+    } // eslint-disable-next-line
   }, [ordersCheckboxes]);
 
-  return (
-    <div className="component-fadeIn">
-      <h2>ÓRDENES</h2>
-      <label>
-        <input
-          type="checkbox"
-          name="approved"
-          checked={ordersCheckboxes.approved}
-          onChange={handleOrders}
-        />
-        Aprobadas
-      </label>
-      <label>
-        <input
-          type="checkbox"
-          name="expired"
-          checked={ordersCheckboxes.expired}
-          onChange={handleOrders}
-        />
-        Expiradas
-      </label>
-      <label>
-        <input
-          type="checkbox"
-          name="pending"
-          checked={ordersCheckboxes.pending}
-          onChange={handleOrders}
-        />
-        Pendientes
-      </label>
+  const getUserData = async (id) => {
+    setLoading(true);
+    try {
+      const { data } = await axios(`/admin/order/user/${id}`);
+      if (data.error) {
+        setError(data.message);
+      } else {
+        setOrderComplementaryData(data);
+      }
+    } catch (error) {
+      console.log(error);
+      //! VOLVER A VER manejo de errores
+    } finally {
+      setLoading(false);
+    }
+  };
 
-      {ordersToShow.length ? (
-        ordersToShow[0] === null ? (
-          <h2>No hubieron coincidencias</h2>
+  return (
+    <div
+      className={`admin-all-orders-outer-container component-fadeIn${
+        loading || Object.keys(orderDetails).length > 0
+          ? " admin-all-orders-outer-container-loading"
+          : ""
+      }`}
+    >
+      {!loading ? (
+        error ? (
+          <h1>{error}</h1>
+        ) : Object.keys(orderDetails).length > 0 ? (
+          <>
+            <h1>Resúmen de compra</h1>
+            {orderComplementaryData && (
+              <div>
+                <div className="admin-order-card-userid">
+                  <Link to={`/admin/users/${orderComplementaryData._id}`}>
+                    <h3>Usuario {orderComplementaryData._id}</h3>
+                  </Link>
+                  <h3>{orderComplementaryData.name}</h3>
+                  <h3>
+                    {orderComplementaryData.isGoogleUser
+                      ? orderComplementaryData.googleEmail
+                      : orderComplementaryData.email}
+                  </h3>
+                </div>
+              </div>
+            )}
+            <div className="admin-order-details-container">
+              <OrderDetails
+                order={orderDetails}
+                removeOrderDetails={() => {
+                  setOrderDetails({});
+                  setOrderComplementaryData(null);
+                }}
+              />
+              <ReturnButton
+                to={"/admin/orders"}
+                onClick={() => setOrderDetails({})}
+              />
+            </div>
+          </>
         ) : (
-          React.Children.toArray(
-            ordersToShow.map((order) => <OrderCardAdmin order={order} />)
-          )
+          <>
+            <h1>Órdenes</h1>
+            <div className="admin-orders-checkboxes-container component-fadeIn">
+              <label>
+                <Checkbox
+                  isChecked={ordersCheckboxes.approved}
+                  extraStyles={{
+                    border: true,
+                    rounded: true,
+                    innerBorder: true,
+                    margin: ".05rem",
+                    size: "1.2",
+                  }}
+                />
+                <input
+                  type="checkbox"
+                  name="approved"
+                  checked={ordersCheckboxes.approved}
+                  onChange={handleOrders}
+                />
+                <span>Aprobadas</span>
+              </label>
+              <label>
+                <Checkbox
+                  isChecked={ordersCheckboxes.expired}
+                  extraStyles={{
+                    border: true,
+                    rounded: true,
+                    innerBorder: true,
+                    margin: ".05rem",
+                    size: "1.2",
+                  }}
+                />
+                <input
+                  type="checkbox"
+                  name="expired"
+                  checked={ordersCheckboxes.expired}
+                  onChange={handleOrders}
+                />
+                <span>Expiradas</span>
+              </label>
+              <label>
+                <Checkbox
+                  isChecked={ordersCheckboxes.pending}
+                  extraStyles={{
+                    border: true,
+                    rounded: true,
+                    innerBorder: true,
+                    margin: ".05rem",
+                    size: "1.2",
+                  }}
+                />
+                <input
+                  type="checkbox"
+                  name="pending"
+                  checked={ordersCheckboxes.pending}
+                  onChange={handleOrders}
+                />
+                <span>Pendientes</span>
+              </label>
+            </div>
+
+            {ordersToShow.length > 0 ? (
+              ordersToShow[0] === null ? (
+                <h2>No hubieron coincidencias</h2>
+              ) : (
+                <div className="admin-all-orders-container-inner component-fadeIn">
+                  {React.Children.toArray(
+                    ordersToShow.map((order) => (
+                      <OrderCardAdmin
+                        order={order}
+                        setOrderDetails={setOrderDetails}
+                        getUserData={getUserData}
+                      />
+                    ))
+                  )}
+                </div>
+              )
+            ) : (
+              <p>Aún no hay órdenes</p>
+            )}
+          </>
         )
       ) : (
-        <p>Aún no hay órdenes</p>
+        <LoaderBars />
       )}
     </div>
   );

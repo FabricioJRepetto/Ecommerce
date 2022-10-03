@@ -30,32 +30,35 @@ const Publications = ({ loading, publications }) => {
 
   return (
     <div className="profile-publications-section">
-        <div className="profile-publications-header">
-            <h1>Publicaciones</h1>
-            <button className="g-white-button"
-                onClick={() => {
-                navigate("/create");
-                }}>
-                Crear nueva publucación
-            </button>
-        </div>
+      <div className="profile-publications-header">
+        <h1>Publicaciones</h1>
+        <button
+          className="g-white-button"
+          onClick={() => {
+            navigate("/create");
+          }}
+        >
+          Crear nueva publucación
+        </button>
+      </div>
       {!loading ? (
         <div className="profile-wishlist-container component-fadeIn">
           <div>
             {publications?.length ? (
-              React.Children.toArray(                
-                publications?.map(p => (
-                    <SaleMetrics 
-                        props={p}
-                        openDeleteProduct={openDeleteProduct}
-                        openReactivateProduct={openReactivateProduct}
-                        openDiscountProduct={openDiscountProduct}/>
+              React.Children.toArray(
+                publications?.map((p) => (
+                  <SaleMetrics
+                    props={p}
+                    openDeleteProduct={openDeleteProduct}
+                    openReactivateProduct={openReactivateProduct}
+                    openDiscountProduct={openDiscountProduct}
+                  />
                 ))
               )
             ) : (
               <p>Aún no has publicado ningún produco</p>
             )}
-          </div>          
+          </div>
         </div>
       ) : (
         <LoaderBars />

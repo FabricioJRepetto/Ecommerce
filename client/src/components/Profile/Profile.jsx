@@ -67,24 +67,17 @@ const Profile = () => {
   useEffect(() => {
     if (!session) {
       navigate("/signin");
-      notification(
-        "Inicia sesión por favor",
-        "/signin",
-        "warning"
-      );
+      notification("Inicia sesión por favor", "/signin", "warning");
     } else {
       (async () => {
-
         const requests = [
           axios(`/address/`),
           axios(`/wishlist/`),
           axios(`/history/`),
           axios(`/order/userall`),
-          axios(`/notifications/`)
+          axios(`/notifications/`),
         ];
-        const publicationReq = [
-          axios(`/user/products`)
-        ];
+        const publicationReq = [axios(`/user/products`)];
 
         const p = await Promise.allSettled(requests);
         const publi = await Promise.allSettled(publicationReq);
@@ -107,7 +100,6 @@ const Profile = () => {
         }
 
         setLoadingPubli(false);
-
       })();
     }
     // eslint-disable-next-line

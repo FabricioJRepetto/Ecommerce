@@ -211,11 +211,6 @@
   flex-direction: column-reverse;
 }
 
-.profile-img-orders-container img {
-  max-width: 96px;
-  max-height: 96px;
-}
-
 .profile-section-indicator {
   position: fixed;
   top: 5%;

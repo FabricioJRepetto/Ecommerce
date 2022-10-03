@@ -2,20 +2,25 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useParams } from "react-router-dom";
 import axios from "axios";
-import UserCard from "./UserCard";
+import UserCardResume from "./UserCardResume";
+import UserDetails from "./UserDetails";
+import LoaderBars from "../common/LoaderBars";
 import { useModal } from "../../hooks/useModal";
 import {
   adminLoadUsers,
+  adminLoadUserDetails,
   adminFilterUsers,
 } from "../../Redux/reducer/sessionSlice";
 import ModalAdminUsers from "./ModalAdminUsers";
+import "./UsersAdmin.css";
 
 const UsersAdmin = () => {
-  const { allUsersData, usersFilteredData } = useSelector(
+  const { allUsersData, usersFilteredData, adminUserDetails } = useSelector(
     (state) => state.sessionReducer
   );
   const [nameSearch, setNameSearch] = useState("");
-  const [error, setError] = useState(false)
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
   const location = useLocation();
   const { id } = useParams();
   const [isOpenBanUser, openBanUser, closeBanUser, userToBan] = useModal();
@@ -29,25 +34,37 @@ const UsersAdmin = () => {
     usersFilteredData.length > 0 ? usersFilteredData : allUsersData;
 
   useEffect(() => {
+    setLoading(true);
     dispatch(adminLoadUsers(null));
-    if (location.pathname === "/admin/users") {
-      axios("/admin/user/getAll")
-        .then(({ data }) => {
+    (async () => {
+      try {
+        if (
+          location.pathname === "/admin/users" ||
+          location.pathname === "/admin/users/"
+        ) {
+          const { data } = await axios("/admin/user/getAll");
           dispatch(adminLoadUsers(data));
-        })
-        .catch((err) => console.error(err)); //! VOLVER A VER manejo de errores
-    } else {
-      axios(`/admin/user/${id}`)
-        .then(({ data }) => {
+        } else {
+          const { data } = await axios(`/admin/user/${id}`);
           if (data.error) {
-            setError(data.message)
+            setError(data.message);
           } else {
-            dispatch(adminLoadUsers(data));
-          }          
-        })
-        .catch((err) => console.error(err)); //! VOLVER A VER manejo de errores
-    } // eslint-disable-next-line
+            dispatch(adminLoadUserDetails(data));
+          }
+        }
+      } catch (error) {
+        console.log(error); //! VOLVER A VER manejo de errores
+      } finally {
+        setLoading(false);
+      }
+    })(); // eslint-disable-next-line
   }, [location.pathname]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(adminLoadUsers([]));
+    };
+  }, []);
 
   const handleNameSearch = (e) => {
     setNameSearch(e.target.value);
@@ -59,34 +76,62 @@ const UsersAdmin = () => {
   }, [nameSearch]);
 
   return (
-    <div className="component-fadeIn">
-      <div>
-        {location.pathname === "/admin/users" && (
-          <input
-            type="text"
-            placeholder="Buscar por nombre"
-            value={nameSearch}
-            onChange={handleNameSearch}
-          />
-        )}
-        {usersToShow && usersToShow[0] === null && <h4>No hubieron coincidencias</h4>}
-        
-        {error && <h1>{error}hola</h1>}
+    <div className="users-admin-outer-container component-fadeIn">
+      {!loading ? (
+        <div className="users-admin-middle-container">
+          <h1>Usuarios</h1>
 
-        {usersToShow && usersToShow.length &&
-            <div>{
-                React.Children.toArray(
-                usersToShow?.map((user) => (
-                <UserCard
-                    user={user}
-                    openBanUser={openBanUser}
-                    openUnbanUser={openUnbanUser}
-                    openPromoteUser={openPromoteUser}
-                />
-                ))
-            )
-          }</div>}
-      </div>
+          {!error && location.pathname === "/admin/users" && (
+            <div className="g-input-with-button">
+              <input
+                type="text"
+                placeholder="Buscar por nombre"
+                value={nameSearch}
+                onChange={handleNameSearch}
+              />
+            </div>
+          )}
+          {usersToShow && usersToShow[0] === null && (
+            <h2>No hubieron coincidencias</h2>
+          )}
+          {error && <h2>{error}</h2>}
+
+          {!error &&
+            (location.pathname === "/admin/users" ||
+              location.pathname === "/admin/users/") &&
+            usersToShow &&
+            usersToShow.length > 0 &&
+            usersToShow[0] !== null && (
+              <div className="admin-all-users-container">
+                {React.Children.toArray(
+                  usersToShow?.map((user) => (
+                    <UserCardResume
+                      user={user}
+                      openBanUser={openBanUser}
+                      openUnbanUser={openUnbanUser}
+                      openPromoteUser={openPromoteUser}
+                    />
+                  ))
+                )}
+              </div>
+            )}
+
+          {!error &&
+            location.pathname !== "/admin/users" &&
+            location.pathname !== "/admin/users/" &&
+            adminUserDetails &&
+            Object.keys(adminUserDetails).length > 0 && (
+              <UserDetails
+                openBanUser={openBanUser}
+                openUnbanUser={openUnbanUser}
+                openPromoteUser={openPromoteUser}
+              />
+            )}
+        </div>
+      ) : (
+        <LoaderBars />
+      )}
+
       <ModalAdminUsers
         isOpenBanUser={isOpenBanUser}
         closeBanUser={closeBanUser}

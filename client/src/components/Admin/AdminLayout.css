@@ -1,4 +1,130 @@
 .admin-layout-container {
    flex-grow: 1;
-   min-height: 90vh;
+   min-height: 95vh;
+   display: flex;
+   position: relative;
+}
+
+.admin-option-selected-container {
+   margin: 2rem auto;
+   width: 100%;
+}
+
+.admin-option-selected-container .products-container {
+   padding-top: 0;
+}
+
+.admin-option-selected-container .products-container .funnel {
+   top: -8px
+}
+
+.admin-option-selected-container .products-container .products-filters-menu {
+   top: 2rem
+}
+
+.admin-menu {
+   position: fixed;
+   height: 90%;
+   display: flex;
+   flex-direction: row;
+   align-items: center;
+   background-color: black;
+   min-width: 10rem;
+}
+
+
+.admin-menu-options-container {
+   display: flex;
+   flex-direction: column;
+}
+
+.admin-menu a {
+   width: 100%;
+   text-align: left;
+   padding: .5rem 0 .5rem 1rem;
+}
+
+.admin-menu a:hover {
+   background: linear-gradient(90deg, rgba(34, 34, 34, 1) 0%, rgba(17, 17, 17, 1) 24%, rgba(34, 34, 34, 1) 100%);
+}
+
+.admin-menu-open-button {
+   display: none;
+}
+
+@media (min-width: 1024px) {
+   .admin-menu {
+      border-right: 1px solid white;
+   }
+
+   .admin-menu-placeholder {
+      min-width: 10rem;
+   }
+
+   .admin-menu-options-container {
+      width: 10rem;
+   }
+}
+
+@media (max-width: 1023px) {
+   .admin-menu-placeholder {
+      width: 2rem;
+   }
+
+   .admin-menu-options-container {
+      width: 8rem;
+   }
+
+   .admin-menu-open-button {
+      height: 100%;
+      width: 2rem;
+      background-color: #111111;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background-color .2s ease;
+   }
+
+   .admin-menu-open-button:hover {
+      background-color: #333333;
+   }
+
+   .admin-menu-top-arrow,
+   .admin-menu-bottom-arrow {
+      height: 50px;
+      width: 2px;
+      background-color: white;
+      border-radius: 1px;
+      transition: all 0.3s ease-out;
+   }
+
+   .admin-menu-top-arrow {
+      transform: translate(0, 2px) rotate(-20deg);
+   }
+
+   .admin-menu-bottom-arrow {
+      transform: translate(0, -2px) rotate(20deg);
+   }
+
+   .admin-menu-top-arrow-open {
+      transform: translate(-2px, 2px) rotate(20deg);
+   }
+
+   .admin-menu-bottom-arrow-open {
+      transform: translate(-2px, -2px) rotate(-20deg);
+   }
+
+   .admin-menu {
+      position: fixed;
+      height: 100%;
+      left: -8rem;
+      transition: left 0.2s ease;
+      z-index: 40;
+   }
+
+   .admin-menu-opened {
+      left: 0;
+   }
 }

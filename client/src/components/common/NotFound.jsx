@@ -9,7 +9,7 @@ const NotFound = () => {
   return (
     <div className="not-found-container component-fadeIn">
       <h1>Sitio no encontrado</h1>
-      <Link to={hasPreviousState ? -2 : "/"}>
+      <Link to={hasPreviousState ? -1 : "/"}>
         <ArrowBack />
         <h2>regresar</h2>
       </Link>
