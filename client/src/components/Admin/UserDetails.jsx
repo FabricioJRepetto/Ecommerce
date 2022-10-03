@@ -41,8 +41,6 @@ const UserDetails = ({ openBanUser, openUnbanUser, openPromoteUser }) => {
     } // eslint-disable-next-line
   }, [adminUserDetails]);
 
-  console.log(publicationsData);
-
   const placeholder = async (id) => {};
 
   useEffect(() => {
@@ -56,12 +54,13 @@ const UserDetails = ({ openBanUser, openUnbanUser, openPromoteUser }) => {
       <div className="admin-user-details-main-data">
         <h2>{user.name}</h2>
         <h4>Email: {user.isGoogleUser ? user.googleEmail : user.email}</h4>
-        {/* <h4>Cuenta de Google: {user.isGoogleUser ? "si" : "no"}</h4> */}
+        <h4>Cuenta de Google: {user.isGoogleUser ? "si" : "no"}</h4>
         <h4>Verificado: {user.emailVerified ? "si" : "no"}</h4>
         <h4>Rol: {user.role}</h4>
         {user.role === "client" && !user.isGoogleUser && (
           <button
             onClick={() => openPromoteUser({ _id: user._id, name: user.name })}
+            className="g-white-button"
           >
             Promover a Administrador
           </button>
@@ -79,6 +78,7 @@ const UserDetails = ({ openBanUser, openUnbanUser, openPromoteUser }) => {
         {user.role === "client" && (
           <button
             onClick={() => openBanUser({ _id: user._id, name: user.name })}
+            className="g-white-button"
           >
             Suspender
           </button>
@@ -86,6 +86,7 @@ const UserDetails = ({ openBanUser, openUnbanUser, openPromoteUser }) => {
         {user.role === "banned" && (
           <button
             onClick={() => openUnbanUser({ _id: user._id, name: user.name })}
+            className="g-white-button"
           >
             Activar cuenta
           </button>
@@ -108,12 +109,12 @@ const UserDetails = ({ openBanUser, openUnbanUser, openPromoteUser }) => {
           <Accordion defaultIndex={[active < 4 ? active : 0]}>
             {addresses && addresses.length > 0 && (
               <AccordionItem>
-                <h1>
+                <h2>
                   <AccordionButton onClick={() => setActive(0)}>
                     <Box>Direcciones</Box>
                     <AccordionIcon />
                   </AccordionButton>
-                </h1>
+                </h2>
                 <AccordionPanel>
                   {React.Children.toArray(
                     addresses.map((address) => (
@@ -125,12 +126,12 @@ const UserDetails = ({ openBanUser, openUnbanUser, openPromoteUser }) => {
             )}
             {orders && orders.length > 0 && (
               <AccordionItem>
-                <h1>
+                <h2>
                   <AccordionButton onClick={() => setActive(1)}>
                     <Box>Órdenes</Box>
                     <AccordionIcon />
                   </AccordionButton>
-                </h1>
+                </h2>
                 <AccordionPanel>
                   <div className="usercard-details-wishlist-container">
                     {React.Children.toArray(
@@ -149,12 +150,12 @@ const UserDetails = ({ openBanUser, openUnbanUser, openPromoteUser }) => {
             {publications && publications.length > 0 && (
               <div className="admin-user-details-publications-container">
                 <AccordionItem>
-                  <h1>
+                  <h2>
                     <AccordionButton onClick={() => setActive(2)}>
                       <Box>Publicaciones</Box>
                       <AccordionIcon />
                     </AccordionButton>
-                  </h1>
+                  </h2>
                   <AccordionPanel>
                     {publications?.map((p) => (
                       <SaleMetrics
@@ -170,12 +171,12 @@ const UserDetails = ({ openBanUser, openUnbanUser, openPromoteUser }) => {
             )}
             {wishlist && wishlist.length > 0 && (
               <AccordionItem>
-                <h1>
+                <h2>
                   <AccordionButton onClick={() => setActive(3)}>
                     <Box>Favoritos</Box>
                     <AccordionIcon />
                   </AccordionButton>
-                </h1>
+                </h2>
                 <AccordionPanel>
                   <div className="usercard-details-wishlist-container">
                     {React.Children.toArray(
@@ -190,7 +191,9 @@ const UserDetails = ({ openBanUser, openUnbanUser, openPromoteUser }) => {
               </AccordionItem>
             )}
           </Accordion>
-          <ReturnButton to={`/admin/users`} />
+          <div className="admin-user-details-return-container">
+            <ReturnButton to={`/admin/users`} />
+          </div>
         </div>
       )}
     </div>

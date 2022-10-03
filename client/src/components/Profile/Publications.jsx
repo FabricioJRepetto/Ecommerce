@@ -46,10 +46,9 @@ const Publications = ({ loading, publications }) => {
           <div>
             {publications?.length ? (
               React.Children.toArray(
-                publications?.map((p, i) => (
+                publications?.map((p) => (
                   <SaleMetrics
                     props={p}
-                    key={i}
                     openDeleteProduct={openDeleteProduct}
                     openReactivateProduct={openReactivateProduct}
                     openDiscountProduct={openDiscountProduct}

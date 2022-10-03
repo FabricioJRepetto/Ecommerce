@@ -6,6 +6,16 @@
    justify-content: flex-start;
 }
 
+.admin-user-details-complementary-data {
+   width: 85%;
+}
+
+.admin-user-details-complementary-data h2 button {
+   background-color: #333333;
+   color: white;
+   padding: .5rem;
+}
+
 .usercard-details-wishlist-container {
    display: flex;
    flex-wrap: wrap;
@@ -22,4 +32,8 @@
 
 .admin-user-details-publications-container .publication-card-buttons {
    display: none;
+}
+
+.admin-user-details-return-container {
+   margin-top: 1rem;
 }

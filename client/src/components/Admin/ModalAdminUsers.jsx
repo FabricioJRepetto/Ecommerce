@@ -8,6 +8,7 @@ import {
   adminUnbanUser,
   adminPromoteUser,
 } from "../../Redux/reducer/sessionSlice";
+import "./ModalAdminUsers.css";
 
 const ModalAdminUsers = ({
   isOpenBanUser,
@@ -74,27 +75,51 @@ const ModalAdminUsers = ({
   };
 
   return (
-    <div>
+    <div className="modal-admin-users-outer-container component-fadeIn">
       <Modal isOpen={isOpenBanUser} closeModal={closeBanUser} type="warn">
-        <p>{`¿Suspender al usuario ${userToBan ? userToBan.name : null}?`}</p>
-        <button type="button" onClick={() => handleBanUser()}>
-          Aceptar
-        </button>
-        <button type="button" onClick={closeBanUser}>
-          Cancelar
-        </button>
+        <div className="modal-admin-users">
+          <p>{`¿Suspender al usuario ${userToBan ? userToBan.name : null}?`}</p>
+          <div className="modal-admin-users-button-container">
+            <button
+              type="button"
+              onClick={() => handleBanUser()}
+              className="g-white-button"
+            >
+              Aceptar
+            </button>
+            <button
+              type="button"
+              onClick={closeBanUser}
+              className="g-white-button"
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
       </Modal>
 
       <Modal isOpen={isOpenUnbanUser} closeModal={closeUnbanUser} type="warn">
-        <p>{`¿Volver a activar al usuario ${
-          userToUnban ? userToUnban.name : null
-        }?`}</p>
-        <button type="button" onClick={() => handleUnbanUser()}>
-          Aceptar
-        </button>
-        <button type="button" onClick={closeUnbanUser}>
-          Cancelar
-        </button>
+        <div className="modal-admin-users">
+          <p>{`¿Volver a activar al usuario ${
+            userToUnban ? userToUnban.name : null
+          }?`}</p>
+          <div className="modal-admin-users-button-container">
+            <button
+              type="button"
+              onClick={() => handleUnbanUser()}
+              className="g-white-button"
+            >
+              Aceptar
+            </button>
+            <button
+              type="button"
+              onClick={closeUnbanUser}
+              className="g-white-button"
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
       </Modal>
 
       <Modal
@@ -102,16 +127,28 @@ const ModalAdminUsers = ({
         closeModal={closePromoteUser}
         type="warn"
       >
-        <p>{`¿Promover al usuario ${
-          userToPromote ? userToPromote.name : null
-        } a Administrador?`}</p>
-        <p>Este cambio no puede ser revertido</p>
-        <button type="button" onClick={() => handlePromoteUser()}>
-          Aceptar
-        </button>
-        <button type="button" onClick={closePromoteUser}>
-          Cancelar
-        </button>
+        <div className="modal-admin-users">
+          <p>{`¿Promover al usuario ${
+            userToPromote ? userToPromote.name : null
+          } a Administrador?`}</p>
+          <p>Este cambio no puede ser revertido</p>{" "}
+          <div className="modal-admin-users-button-container">
+            <button
+              type="button"
+              onClick={() => handlePromoteUser()}
+              className="g-white-button"
+            >
+              Aceptar
+            </button>
+            <button
+              type="button"
+              onClick={closePromoteUser}
+              className="g-white-button"
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
       </Modal>
     </div>
   );
