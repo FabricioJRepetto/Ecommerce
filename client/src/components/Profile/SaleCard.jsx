@@ -32,7 +32,7 @@ const SaleCard = ({ sale }) => {
       <span>
         <p>{buyer.name}</p>
         <p>{buyer.email}</p>
-        <p>Pagado el {formatDate(Number(payment_date))}</p>
+        <p>Pagó el {formatDate(Number(payment_date))}</p>
       </span>
       {/* {delivery_date && <DeliveryProgress order={order} />} */}
 

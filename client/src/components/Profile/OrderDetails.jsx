@@ -56,7 +56,7 @@ const OrderDetails = ({ order, removeOrderDetails }) => {
                 : "MercadoPago"}
             </h3>
             {order.status === "approved" && (
-              <h3>Pagado el {formatDate(order.payment_date)}</h3>
+              <h3>Pagó el {formatDate(order.payment_date)}</h3>
             )}
           </span>
           <span className="order-details-info-container order-details-info-container-mobile">
@@ -69,7 +69,7 @@ const OrderDetails = ({ order, removeOrderDetails }) => {
                 : "MercadoPago"}
             </p>
             {order.status === "approved" && (
-              <p>Pagado el {formatDate(order.payment_date)}</p>
+              <p>Pagó el {formatDate(order.payment_date)}</p>
             )}
           </span>
         </div>
