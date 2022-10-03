@@ -12,6 +12,7 @@
 .admin-orders-checkboxes-container {
    display: flex;
    justify-content: center;
+   margin-top: 1rem;
 }
 
 .admin-orders-checkboxes-container label {
@@ -38,4 +39,8 @@
    width: 85%;
    min-width: 350px;
    max-width: 900px;
+}
+
+.admin-order-details-user-data {
+   margin-top: 1.5rem;
 }
