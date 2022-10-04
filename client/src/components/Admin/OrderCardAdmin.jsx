@@ -10,6 +10,7 @@ const OrderCardAdmin = ({ order, setOrderDetails, getUserData }) => {
   //! VOLVER A VER agregar ordenamiento y filtros
   const location = useLocation();
   const [productsImages, setProductsImages] = useState(false);
+  const [waitingResponse, setWaitingResponse] = useState(false);
   const {
     products,
     user,
