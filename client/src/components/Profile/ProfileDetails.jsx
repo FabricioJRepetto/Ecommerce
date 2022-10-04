@@ -22,6 +22,8 @@ const ProfileDetails = ({ address, loading }) => {
   });
   const [focusFlag, setFocusFlag] = useState(false);
   const [loadingAvatar, setLoadingAvatar] = useState(false);
+  const [loadingUsername, setLoadingUsername] = useState(false);
+  const [loadingName, setLoadingName] = useState(false);
   const [avatarFlag, setAvatarFlag] = useState(false);
   const [avatarError, setAvatarError] = useState(null);
   const {
@@ -104,13 +106,16 @@ const ProfileDetails = ({ address, loading }) => {
   };
 
   const updateDetails = async (updateData) => {
+    const propertyToEdit = Object.keys(updateData);
+
+    if (propertyToEdit[0] === "username") setLoadingUsername(true);
+    if (propertyToEdit.includes("firstname")) setLoadingName(true);
+
     try {
       const { data, statusText } = await axios.put(
         "/user/editProfile",
         updateData
       );
-
-      const propertyToEdit = Object.keys(updateData);
 
       if (propertyToEdit[0] === "username") {
         if (data.error) {
@@ -160,6 +165,9 @@ const ProfileDetails = ({ address, loading }) => {
         username: false,
         full_name: false,
       });
+    } finally {
+      if (propertyToEdit[0] === "username") setLoadingUsername(false);
+      if (propertyToEdit.includes("firstname")) setLoadingName(false);
     }
   };
 
@@ -318,10 +326,14 @@ const ProfileDetails = ({ address, loading }) => {
         ) : (
           <form onSubmit={handleSubmitUsername(updateDetails)}>
             <>
-              {!errorsUsername.username && (
+              {!errorsUsername.username && !loadingUsername ? (
                 <span className="g-info-input">
                   Presiona Enter para guardar cambios
                 </span>
+              ) : (
+                <p className="g-hidden-placeholder">
+                  Presiona Enter para guardar cambios
+                </p>
               )}
               {errorsUsername.username?.type === "required" && (
                 <p className="g-error-input">Ingresa tu nombre de usuario</p>
@@ -338,6 +350,7 @@ const ProfileDetails = ({ address, loading }) => {
                 type="text"
                 placeholder="Nombre de usuario"
                 autoComplete="off"
+                disabled={loadingUsername}
                 {...registerUsername("username", {
                   required: true,
                   maxLength: 15,
@@ -357,7 +370,7 @@ const ProfileDetails = ({ address, loading }) => {
               onClick={() => handleOpenInputs("full_name")}
             >
               {!full_name.first && !full_name.last ? (
-                <span>--- ---</span>
+                <span>--- ----</span>
               ) : (
                 <>
                   <span>{full_name.first}</span>
@@ -384,7 +397,9 @@ const ProfileDetails = ({ address, loading }) => {
             onSubmit={handleSubmitFullname(updateDetails)}
             className="profile-detail-name-container"
           >
-            {!errorsFullname.lastname && !errorsFullname.firstname ? (
+            {!errorsFullname.lastname &&
+            !errorsFullname.firstname &&
+            !loadingName ? (
               <span className="g-info-input">
                 Presiona Enter para guardar cambios
               </span>
@@ -417,6 +432,7 @@ const ProfileDetails = ({ address, loading }) => {
                     type="text"
                     placeholder="Nombre"
                     autoComplete="off"
+                    disabled={loadingName}
                     {...registerFullname("firstname", {
                       pattern: onlyLettersRegex,
                       required: true,
@@ -449,6 +465,7 @@ const ProfileDetails = ({ address, loading }) => {
                     type="text"
                     placeholder="Apellido"
                     autoComplete="off"
+                    disabled={loadingName}
                     {...registerFullname("lastname", {
                       patter: onlyLettersRegex,
                       required: true,
