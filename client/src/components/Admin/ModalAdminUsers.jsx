@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { useNotification } from "../../hooks/useNotification";
@@ -22,56 +22,53 @@ const ModalAdminUsers = ({
   userToPromote,
 }) => {
   const dispatch = useDispatch();
-
   const notification = useNotification();
+  const [loading, setLoading] = useState(false);
 
-  const handleBanUser = () => {
-    banUser();
-    closeBanUser();
+  const banUser = async () => {
+    setLoading(true);
+    try {
+      await axios.delete(`/admin/user/${userToBan._id}`);
+      dispatch(adminBanUser(userToBan._id));
+      notification("Cuenta suspendida exitosamente", "", "success");
+    } catch (error) {
+      console.log(error); //! VOLVER A VER manejo de errores
+    } finally {
+      setLoading(false);
+      closeBanUser();
+    }
   };
 
-  const banUser = () => {
-    axios
-      .delete(`/admin/user/${userToBan._id}`)
-      .then((_) => {
-        dispatch(adminBanUser(userToBan._id));
-        notification("Cuenta suspendida exitosamente", "", "success");
-      })
-      .catch((err) => console.error(err));
+  const unbanUser = async () => {
+    setLoading(true);
+    try {
+      await axios.put(`/admin/user/${userToUnban._id}`);
+      dispatch(adminUnbanUser(userToUnban._id));
+      notification("Cuenta activada exitosamente", "", "success");
+    } catch (error) {
+      console.log(error); //! VOLVER A VER manejo de errores
+    } finally {
+      setLoading(false);
+      closeUnbanUser();
+    }
   };
 
-  const handleUnbanUser = () => {
-    unbanUser();
-    closeUnbanUser();
-  };
-
-  const unbanUser = () => {
-    axios
-      .put(`/admin/user/${userToUnban._id}`)
-      .then((_) => {
-        dispatch(adminUnbanUser(userToUnban._id));
-        notification("Cuenta activada exitosamente", "", "success");
-      })
-      .catch((err) => console.error(err));
-  };
-
-  const handlePromoteUser = () => {
-    promoteToAdmin();
-    closePromoteUser();
-  };
-
-  const promoteToAdmin = () => {
-    axios
-      .put(`/admin/user/promote/${userToPromote._id}`)
-      .then((_) => {
-        dispatch(adminPromoteUser(userToPromote._id));
-        notification(
-          `Usuario ${userToPromote.name} promovido a administrador`,
-          "",
-          "success"
-        );
-      })
-      .catch((err) => console.error(err));
+  const promoteToAdmin = async () => {
+    setLoading(true);
+    try {
+      await axios.put(`/admin/user/promote/${userToPromote._id}`);
+      dispatch(adminPromoteUser(userToPromote._id));
+      notification(
+        `Usuario ${userToPromote.name} promovido a administrador`,
+        "",
+        "success"
+      );
+    } catch (error) {
+      console.log(error); //! VOLVER A VER manejo de errores
+    } finally {
+      setLoading(false);
+      closePromoteUser();
+    }
   };
 
   return (
@@ -82,8 +79,9 @@ const ModalAdminUsers = ({
           <div className="modal-admin-users-button-container">
             <button
               type="button"
-              onClick={() => handleBanUser()}
+              onClick={banUser}
               className="g-white-button"
+              disabled={loading}
             >
               Aceptar
             </button>
@@ -91,6 +89,7 @@ const ModalAdminUsers = ({
               type="button"
               onClick={closeBanUser}
               className="g-white-button"
+              disabled={loading}
             >
               Cancelar
             </button>
@@ -106,8 +105,9 @@ const ModalAdminUsers = ({
           <div className="modal-admin-users-button-container">
             <button
               type="button"
-              onClick={() => handleUnbanUser()}
+              onClick={unbanUser}
               className="g-white-button"
+              disabled={loading}
             >
               Aceptar
             </button>
@@ -115,6 +115,7 @@ const ModalAdminUsers = ({
               type="button"
               onClick={closeUnbanUser}
               className="g-white-button"
+              disabled={loading}
             >
               Cancelar
             </button>
@@ -135,8 +136,9 @@ const ModalAdminUsers = ({
           <div className="modal-admin-users-button-container">
             <button
               type="button"
-              onClick={() => handlePromoteUser()}
+              onClick={promoteToAdmin}
               className="g-white-button"
+              disabled={loading}
             >
               Aceptar
             </button>
@@ -144,6 +146,7 @@ const ModalAdminUsers = ({
               type="button"
               onClick={closePromoteUser}
               className="g-white-button"
+              disabled={loading}
             >
               Cancelar
             </button>

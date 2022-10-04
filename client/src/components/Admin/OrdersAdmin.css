@@ -12,11 +12,25 @@
 .admin-orders-checkboxes-container {
    display: flex;
    justify-content: center;
+   margin-top: 1rem;
 }
 
 .admin-orders-checkboxes-container label {
    display: flex;
    padding: 1rem;
+}
+
+.admin-orders-checkboxes-container label:hover {
+   background: linear-gradient(45deg,
+         #35a7ff 0%,
+         #7e54de 20%,
+         #f40259 60%,
+         #fea30d 100%);
+   -webkit-background-clip: text;
+   background-clip: text;
+   color: transparent;
+   background-size: 400%;
+   animation: gradientTextAnim 10s infinite;
 }
 
 .admin-orders-checkboxes-container label input {
@@ -38,4 +52,8 @@
    width: 85%;
    min-width: 350px;
    max-width: 900px;
+}
+
+.admin-order-details-user-data {
+   margin-top: 1.5rem;
 }

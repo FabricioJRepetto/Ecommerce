@@ -10,6 +10,7 @@ import { ReactComponent as Edit } from "../../assets/svg/edit.svg";
 import { ReactComponent as Offer } from "../../assets/svg/offer.svg";
 import { ReactComponent as Pause } from "../../assets/svg/pause.svg";
 import { ReactComponent as Play } from "../../assets/svg/play.svg";
+import { ReactComponent as Spinner } from "../../assets/svg/spinner.svg";
 import { WishlistButton } from "../Products/WishlistButton";
 import { useCheckout } from "../../hooks/useCheckout";
 import "./WishlistCard.css";
@@ -28,6 +29,7 @@ const WishlistCard = ({
   const [ready, setReady] = useState(false);
   const dispatch = useDispatch();
   const location = useLocation();
+  const [wishDisabled, setWishDisabled] = useState(false);
 
   const {
     thumbnail: img,
@@ -156,16 +158,29 @@ const WishlistCard = ({
               <WishlistButton fav={fav} prodId={prodId} />
 
               {!onCart.includes(prodId) && (
-                <div
-                  className="wishlist-addcart-container"
+                <button
+                  className={`wishlist-addcart-container${
+                    wishDisabled ? " wishlist-addcart-container-show-svg" : ""
+                  }`}
+                  disabled={wishDisabled}
                   onClick={(e) => {
+                    setWishDisabled(true);
                     e.stopPropagation();
                     addToCart(prodId);
+                    setTimeout(() => {
+                      setWishDisabled(false);
+                    }, 3000);
                   }}
                 >
-                  <AddCart />
-                  <div className="wishlist-addcart-gradient"></div>
-                </div>
+                  {wishDisabled ? (
+                    <Spinner className="cho-svg" />
+                  ) : (
+                    <>
+                      <AddCart />
+                      <div className="wishlist-addcart-gradient"></div>
+                    </>
+                  )}
+                </button>
               )}
             </>
           ) : (

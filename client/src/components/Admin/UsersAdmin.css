@@ -13,6 +13,10 @@
    width: 100%;
 }
 
+.users-admin-middle-container>h1 {
+   margin-bottom: 1.5rem;
+}
+
 .admin-all-users-container {
    display: flex;
    flex-wrap: wrap;

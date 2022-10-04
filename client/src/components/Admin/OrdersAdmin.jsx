@@ -99,7 +99,7 @@ const OrdersAdmin = () => {
           <>
             <h1>Resúmen de compra</h1>
             {orderComplementaryData && (
-              <div>
+              <div className="admin-order-details-user-data">
                 <div className="admin-order-card-userid">
                   <Link to={`/admin/users/${orderComplementaryData._id}`}>
                     <h3>Usuario {orderComplementaryData._id}</h3>

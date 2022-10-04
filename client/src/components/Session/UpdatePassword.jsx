@@ -52,6 +52,7 @@ const UpdatePassword = () => {
   const forgotPassword = async () => {
     if (waitingResponse) return;
     setWaitingResponse(true);
+    setLoading(true);
     try {
       const { data } = await axios.put("/user/forgotPassword", { email });
 
@@ -66,6 +67,7 @@ const UpdatePassword = () => {
       console.error(error);
       //! VOLVER A VER manejo de errores
     } finally {
+      setLoading(false);
       setWaitingResponse(false);
     }
   };
@@ -76,13 +78,18 @@ const UpdatePassword = () => {
         <LoaderBars />
       ) : response ? (
         <>
-          <div className="change-password-response">{response}</div>
+          <div className="change-password-response component-fadeIn">
+            {response}
+          </div>
           <ReturnButton to={"/profile/details"} />
         </>
       ) : (
         <>
-          <h1>Cambiar contraseña</h1>
-          <form onSubmit={handleSubmit(updatePassword)}>
+          <h1 className="component-fadeIn">Cambiar contraseña</h1>
+          <form
+            onSubmit={handleSubmit(updatePassword)}
+            className="component-fadeIn"
+          >
             <div className="title-text">Ingresa tu actual contraseña</div>
             <>
               {!errors.oldPassword && (

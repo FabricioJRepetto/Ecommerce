@@ -1,10 +1,9 @@
 import "./LoaderBars.css";
 
 const LoaderBars = () => {
-
-    //: HACER ANIMATIONE
+  //: HACER ANIMATIONE
   return (
-    <div className="loader-bars-container">
+    <div className="loader-bars-container component-fadeIn">
       <hr className="oscillating-bar" />
       <hr className="oscillating-bar" />
       <hr className="oscillating-bar" />

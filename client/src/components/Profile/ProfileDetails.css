@@ -164,7 +164,7 @@
 
 .profile-detail-name-container {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 }
 
 .profile-detail-name-container span:first-child span input {
@@ -260,13 +260,46 @@
   padding-right: 1rem;
 }
 
+.profile-details-name-inputs-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.profile-detail-container form input:disabled {
+  background-color: #777777;
+  color: black;
+  cursor: not-allowed;
+}
+
+
+@media (min-width: 675px) {
+  .hidden-placeholder-mobile {
+    display: none;
+  }
+}
+
+@media (max-width: 674px) {
+  .profile-details-name-inputs-container {
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  .profile-detail-name-container span:first-child span input {
+    margin-right: 0;
+  }
+
+  div.profile-detail-name-box-container {
+    height: 10rem;
+  }
+}
+
 @media (max-width: 719px) {
   .profile-detail-container {
     flex-direction: column;
     justify-content: space-evenly;
     min-width: 320px;
     width: 75%;
-    height: 6rem;
+    height: 6.5rem;
   }
 
   .profile-detail-button-data {
@@ -281,10 +314,11 @@
   .profile-detail-container form {
     display: flex;
     /* align-self: auto; */
+    flex-direction: column;
   }
 
   .profile-details-container>div.profile-detail-container:last-child {
-    justify-content: flex-end;
+    /* justify-content: flex-end; */
   }
 
   .profile-details-container>div.profile-detail-container:last-child>.profile-password-button {

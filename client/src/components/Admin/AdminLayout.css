@@ -10,6 +10,10 @@
    width: 100%;
 }
 
+.admin-option-selected-container h1 {
+   font-family: HelveticaNeueLTPro-Bd, Poppins;
+}
+
 .admin-option-selected-container .products-container {
    padding-top: 0;
 }

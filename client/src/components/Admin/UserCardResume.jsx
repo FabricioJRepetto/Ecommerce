@@ -1,9 +1,4 @@
-import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import axios from "axios";
-import Card from "../Products/Card";
-import AddressCard from "../Profile/AddressCard";
-import OrderCardAdmin from "./OrderCardAdmin";
 import { ReactComponent as Ban } from "../../assets/svg/ban.svg";
 import "./UserCardResume.css";
 

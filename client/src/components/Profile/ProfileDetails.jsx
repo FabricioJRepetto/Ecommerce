@@ -22,6 +22,8 @@ const ProfileDetails = ({ address, loading }) => {
   });
   const [focusFlag, setFocusFlag] = useState(false);
   const [loadingAvatar, setLoadingAvatar] = useState(false);
+  const [loadingUsername, setLoadingUsername] = useState(false);
+  const [loadingName, setLoadingName] = useState(false);
   const [avatarFlag, setAvatarFlag] = useState(false);
   const [avatarError, setAvatarError] = useState(null);
   const {
@@ -104,13 +106,16 @@ const ProfileDetails = ({ address, loading }) => {
   };
 
   const updateDetails = async (updateData) => {
+    const propertyToEdit = Object.keys(updateData);
+
+    if (propertyToEdit[0] === "username") setLoadingUsername(true);
+    if (propertyToEdit.includes("firstname")) setLoadingName(true);
+
     try {
       const { data, statusText } = await axios.put(
         "/user/editProfile",
         updateData
       );
-
-      const propertyToEdit = Object.keys(updateData);
 
       if (propertyToEdit[0] === "username") {
         if (data.error) {
@@ -160,6 +165,9 @@ const ProfileDetails = ({ address, loading }) => {
         username: false,
         full_name: false,
       });
+    } finally {
+      if (propertyToEdit[0] === "username") setLoadingUsername(false);
+      if (propertyToEdit.includes("firstname")) setLoadingName(false);
     }
   };
 
@@ -318,10 +326,15 @@ const ProfileDetails = ({ address, loading }) => {
         ) : (
           <form onSubmit={handleSubmitUsername(updateDetails)}>
             <>
-              {!errorsUsername.username && (
+              {!errorsUsername.username && !loadingUsername && (
                 <span className="g-info-input">
                   Presiona Enter para guardar cambios
                 </span>
+              )}
+              {loadingUsername && (
+                <p className="g-hidden-placeholder">
+                  Presiona Enter para guardar cambios
+                </p>
               )}
               {errorsUsername.username?.type === "required" && (
                 <p className="g-error-input">Ingresa tu nombre de usuario</p>
@@ -338,6 +351,7 @@ const ProfileDetails = ({ address, loading }) => {
                 type="text"
                 placeholder="Nombre de usuario"
                 autoComplete="off"
+                disabled={loadingUsername}
                 {...registerUsername("username", {
                   required: true,
                   maxLength: 15,
@@ -348,7 +362,7 @@ const ProfileDetails = ({ address, loading }) => {
         )}
       </div>
 
-      <div className="profile-detail-container">
+      <div className="profile-detail-container profile-detail-name-box-container">
         <h3>Nombre</h3>
         {!openInput.full_name ? (
           <span className="profile-detail-button-container profile-detail-name">
@@ -357,7 +371,7 @@ const ProfileDetails = ({ address, loading }) => {
               onClick={() => handleOpenInputs("full_name")}
             >
               {!full_name.first && !full_name.last ? (
-                <span>--- ---</span>
+                <span>--- ----</span>
               ) : (
                 <>
                   <span>{full_name.first}</span>
@@ -384,73 +398,85 @@ const ProfileDetails = ({ address, loading }) => {
             onSubmit={handleSubmitFullname(updateDetails)}
             className="profile-detail-name-container"
           >
-            <span>
-              <>
-                {!errorsFullname.firstname && (
-                  <span className="g-hidden-placeholder">
-                    Presiona Enter para guardar cambios
-                  </span>
-                )}
-                {errorsFullname.firstname?.type === "pattern" && (
-                  <p className="g-error-input">Ingresa un nombre válido</p>
-                )}
-                {errorsFullname.firstname?.type === "required" && (
-                  <p className="g-error-input">Ingresa tu nombre</p>
-                )}
-                {errorsFullname.firstname?.type === "maxLength" && (
-                  <p className="g-error-input">
-                    Se aceptan 15 caracteres como máximo
-                  </p>
-                )}
-              </>
+            {!errorsFullname.lastname &&
+              !errorsFullname.firstname &&
+              !loadingName && (
+                <span className="g-info-input">
+                  Presiona Enter para guardar cambios
+                </span>
+              )}
+            <div className="profile-details-name-inputs-container">
+              <span>
+                <>
+                  {errorsFullname.lastname && !errorsFullname.firstname && (
+                    <p className="g-hidden-placeholder">hidden</p>
+                  )}
+                  {errorsFullname.firstname?.type === "pattern" && (
+                    <p className="g-error-input">Ingresa un nombre válido</p>
+                  )}
+                  {errorsFullname.firstname?.type === "required" && (
+                    <p className="g-error-input">Ingresa tu nombre</p>
+                  )}
+                  {errorsFullname.firstname?.type === "maxLength" && (
+                    <p className="g-error-input">
+                      Se aceptan 15 caracteres como máximo
+                    </p>
+                  )}
+                </>
 
-              <span className="g-input-with-button">
-                <input
-                  type="text"
-                  placeholder="Nombre"
-                  autoComplete="off"
-                  {...registerFullname("firstname", {
-                    pattern: onlyLettersRegex,
-                    required: true,
-                    maxLength: 15,
-                  })}
-                />
+                <span className="g-input-with-button">
+                  <input
+                    type="text"
+                    placeholder="Nombre"
+                    autoComplete="off"
+                    disabled={loadingName}
+                    {...registerFullname("firstname", {
+                      pattern: onlyLettersRegex,
+                      required: true,
+                      maxLength: 15,
+                    })}
+                  />
+                </span>
               </span>
-            </span>
 
-            <span>
-              <>
-                {!errorsFullname.lastname && (
-                  <span className="g-info-input">
-                    Presiona Enter para guardar cambios
-                  </span>
-                )}
-                {errorsFullname.lastname?.type === "pattern" && (
-                  <p className="g-error-input">Ingresa un apellido válido</p>
-                )}
-                {errorsFullname.lastname?.type === "required" && (
-                  <p className="g-error-input">Ingresa tu apellido</p>
-                )}
-                {errorsFullname.lastname?.type === "maxLength" && (
-                  <p className="g-error-input">
-                    Se aceptan 15 caracteres como máximo
-                  </p>
-                )}
-              </>
+              <span>
+                <>
+                  {errorsFullname.firstname && !errorsFullname.lastname && (
+                    <p className="g-hidden-placeholder">hidden</p>
+                  )}
+                  {!errorsFullname.firstname && !errorsFullname.lastname && (
+                    <p className="g-hidden-placeholder hidden-placeholder-mobile">
+                      hidden
+                    </p>
+                  )}
+                  {errorsFullname.lastname?.type === "pattern" && (
+                    <p className="g-error-input">Ingresa un apellido válido</p>
+                  )}
+                  {errorsFullname.lastname?.type === "required" && (
+                    <p className="g-error-input">Ingresa tu apellido</p>
+                  )}
+                  {errorsFullname.lastname?.type === "maxLength" && (
+                    <p className="g-error-input">
+                      Se aceptan 15 caracteres como máximo
+                    </p>
+                  )}
+                </>
 
-              <span className="g-input-with-button">
-                <input
-                  type="text"
-                  placeholder="Apellido"
-                  autoComplete="off"
-                  {...registerFullname("lastname", {
-                    patter: onlyLettersRegex,
-                    required: true,
-                    maxLength: 15,
-                  })}
-                />
+                <span className="g-input-with-button">
+                  <input
+                    type="text"
+                    placeholder="Apellido"
+                    autoComplete="off"
+                    disabled={loadingName}
+                    {...registerFullname("lastname", {
+                      pattern: onlyLettersRegex,
+                      required: true,
+                      maxLength: 15,
+                    })}
+                  />
+                </span>
               </span>
-            </span>
+            </div>
 
             <input
               type="submit"
