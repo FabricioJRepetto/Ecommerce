@@ -326,11 +326,12 @@ const ProfileDetails = ({ address, loading }) => {
         ) : (
           <form onSubmit={handleSubmitUsername(updateDetails)}>
             <>
-              {!errorsUsername.username && !loadingUsername ? (
+              {!errorsUsername.username && !loadingUsername && (
                 <span className="g-info-input">
                   Presiona Enter para guardar cambios
                 </span>
-              ) : (
+              )}
+              {loadingUsername && (
                 <p className="g-hidden-placeholder">
                   Presiona Enter para guardar cambios
                 </p>
@@ -398,20 +399,16 @@ const ProfileDetails = ({ address, loading }) => {
             className="profile-detail-name-container"
           >
             {!errorsFullname.lastname &&
-            !errorsFullname.firstname &&
-            !loadingName ? (
-              <span className="g-info-input">
-                Presiona Enter para guardar cambios
-              </span>
-            ) : (
-              <p className="g-hidden-placeholder">
-                Presiona Enter para guardar cambios
-              </p>
-            )}
+              !errorsFullname.firstname &&
+              !loadingName && (
+                <span className="g-info-input">
+                  Presiona Enter para guardar cambios
+                </span>
+              )}
             <div className="profile-details-name-inputs-container">
               <span>
                 <>
-                  {!errorsFullname.firstname && (
+                  {errorsFullname.lastname && !errorsFullname.firstname && (
                     <p className="g-hidden-placeholder">hidden</p>
                   )}
                   {errorsFullname.firstname?.type === "pattern" && (
@@ -444,7 +441,7 @@ const ProfileDetails = ({ address, loading }) => {
 
               <span>
                 <>
-                  {!errorsFullname.lastname && (
+                  {errorsFullname.firstname && !errorsFullname.lastname && (
                     <p className="g-hidden-placeholder">hidden</p>
                   )}
                   {errorsFullname.lastname?.type === "pattern" && (
@@ -467,7 +464,7 @@ const ProfileDetails = ({ address, loading }) => {
                     autoComplete="off"
                     disabled={loadingName}
                     {...registerFullname("lastname", {
-                      patter: onlyLettersRegex,
+                      pattern: onlyLettersRegex,
                       required: true,
                       maxLength: 15,
                     })}
