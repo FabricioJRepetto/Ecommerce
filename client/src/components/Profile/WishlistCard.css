@@ -158,6 +158,9 @@
   top: 6rem;
   right: 1.2rem;
   scale: 1.2;
+  border: none;
+  background: none;
+  cursor: pointer;
 }
 
 .wishlist-addcart-container svg {
@@ -166,9 +169,10 @@
   display: none;
 }
 
-/* .wishlist-addcart-container:hover svg {
-  color: red;
-} */
+.wishlist-addcart-container-show-svg svg {
+  display: block;
+  transform: translate(3px, -3px) scale(0.6);
+}
 
 .wishlist-addcart-gradient {
   height: 1.5rem;
