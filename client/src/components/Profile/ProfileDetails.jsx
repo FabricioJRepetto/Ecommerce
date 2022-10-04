@@ -444,6 +444,11 @@ const ProfileDetails = ({ address, loading }) => {
                   {errorsFullname.firstname && !errorsFullname.lastname && (
                     <p className="g-hidden-placeholder">hidden</p>
                   )}
+                  {!errorsFullname.firstname && !errorsFullname.lastname && (
+                    <p className="g-hidden-placeholder hidden-placeholder-mobile">
+                      hidden
+                    </p>
+                  )}
                   {errorsFullname.lastname?.type === "pattern" && (
                     <p className="g-error-input">Ingresa un apellido válido</p>
                   )}

@@ -272,6 +272,12 @@
 }
 
 
+@media (min-width: 675px) {
+  .hidden-placeholder-mobile {
+    display: none;
+  }
+}
+
 @media (max-width: 674px) {
   .profile-details-name-inputs-container {
     justify-content: center;
