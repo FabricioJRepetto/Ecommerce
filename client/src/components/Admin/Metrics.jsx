@@ -37,7 +37,7 @@ const Metrics = () => {
     })();
   }, []);
 
-  const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+  const COLORS = ["#8d1aab", "#1355dd", "#d56428"];
   const RADIAN = Math.PI / 180;
   const renderCustomizedLabel = ({
     cx,
@@ -74,8 +74,8 @@ const Metrics = () => {
             <div className="admin-metrics-chart-container">
               <h3>Productos publicados</h3>
               <div>
-                <p style={{ color: "#0088FE" }}>Provider</p>
-                <p style={{ color: "#00C49F" }}>Usuarios</p>
+                <p style={{ color: "#8d1aab" }}>Provider</p>
+                <p style={{ color: "#1355dd" }}>Usuarios</p>
               </div>
               <PieChart width={190} height={190}>
                 <Pie
@@ -108,9 +108,9 @@ const Metrics = () => {
             <div className="admin-metrics-chart-container">
               <h3>Órdenes</h3>
               <div>
-                <p style={{ color: "#0088FE" }}>Completadas</p>
-                <p style={{ color: "#00C49F" }}>Pendientes</p>
-                <p style={{ color: "#FFBB28" }}>Expiradas</p>
+                <p style={{ color: "#8d1aab" }}>Completadas</p>
+                <p style={{ color: "#1355dd" }}>Pendientes</p>
+                <p style={{ color: "#d56428" }}>Expiradas</p>
               </div>
               <PieChart width={190} height={190}>
                 <Pie
@@ -147,8 +147,8 @@ const Metrics = () => {
             <div className="admin-metrics-chart-container">
               <h3>Usuarios registrados</h3>
               <div>
-                <p style={{ color: "#0088FE" }}>Email</p>
-                <p style={{ color: "#00C49F" }}>Google</p>
+                <p style={{ color: "#8d1aab" }}>Email</p>
+                <p style={{ color: "#1355dd" }}>Google</p>
               </div>
               <PieChart width={190} height={190}>
                 <Pie
