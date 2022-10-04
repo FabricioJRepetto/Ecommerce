@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { CloseIcon } from "@chakra-ui/icons";
+import { ReactComponent as Spinner } from "../../assets/svg/spinner.svg";
 import { useNotification } from "../../hooks/useNotification";
 import { avoidEnterSubmit } from "../../helpers/AvoidEnterSubmit";
 import "../../App.css";
@@ -241,7 +242,13 @@ const AddAddress = ({
 
         <div className="add-address-buttons-container">
           <button className="g-white-button" disabled={loading}>
-            {prop ? "Agregar" : "Actualizar"}
+            {loading ? (
+              <Spinner className="cho-svg" />
+            ) : prop ? (
+              "Agregar"
+            ) : (
+              "Actualizar"
+            )}
           </button>
           <button
             onClick={() => closeAddForm(true)}

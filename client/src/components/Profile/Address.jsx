@@ -36,6 +36,7 @@ const Address = ({ loading, setLoading, address, setAddress }) => {
 
   // set default address
   const setDefault = async (id) => {
+    setLoading(true);
     try {
       const { data } = await axios.put(`/address/default/${id}`);
       setAddress(data.address);
@@ -43,10 +44,13 @@ const Address = ({ loading, setLoading, address, setAddress }) => {
       notification("Dirección predeterminada establecida", "", "success");
     } catch (error) {
       notification("Algo salió mal", "", "warning");
+    } finally {
+      setLoading(false);
     }
   };
 
   const getAddressToEdit = async (id) => {
+    setLoading(true);
     try {
       const { data } = await axios(`/address/`);
       const addressFound = data.address?.find((e) => e._id === id);
@@ -55,6 +59,8 @@ const Address = ({ loading, setLoading, address, setAddress }) => {
       setAddressToEditId(id);
     } catch (error) {
       console.log(error); //! VOLVER A VER manejo de errores
+    } finally {
+      setLoading(false);
     }
   };
 
