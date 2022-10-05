@@ -38,7 +38,7 @@ const Publications = ({ loading, publications }) => {
             navigate("/create");
           }}
         >
-          Crear nueva publucación
+          Publicar
         </button>
       </div>
       {!loading ? (
@@ -56,7 +56,7 @@ const Publications = ({ loading, publications }) => {
                 ))
               )
             ) : (
-              <p>Aún no has publicado ningún produco</p>
+              <p>Aún no has publicado ningún producto</p>
             )}
           </div>
         </div>
