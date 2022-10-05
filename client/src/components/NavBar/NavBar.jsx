@@ -578,13 +578,16 @@ const NavBar = () => {
       >
         <ul>
           {!session && (
-            <li onClick={() => setShowMenu(false)}>
-              <ChromaticText
-                text={"Iniciar sesión"}
-                route={"signin"}
-                size={"1.1rem"}
-              />
-            </li>
+            <>
+              <li onClick={() => setShowMenu(false)}>
+                <ChromaticText
+                  text={"Iniciar sesión"}
+                  route={"signin"}
+                  size={"1.1rem"}
+                />
+              </li>
+              <div></div>
+            </>
           )}
           <li onClick={() => setShowMenu(false)}>
             <ChromaticText
@@ -702,10 +705,14 @@ const NavBar = () => {
               size={"1.1rem"}
             />
           </li>
-          <div></div>
-          <li onClick={() => [signOut(), setShowMenu(false)]}>
-            <ChromaticText text="Salir" size={"1.1rem"} />
-          </li>
+          {session && (
+            <>
+              <div></div>
+              <li onClick={() => [signOut(), setShowMenu(false)]}>
+                <ChromaticText text="Salir" size={"1.1rem"} />
+              </li>
+            </>
+          )}
         </ul>
       </div>
     </>
