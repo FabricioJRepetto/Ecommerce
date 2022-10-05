@@ -84,10 +84,7 @@ export const useUserLogin = (token) => {
         lastName,
       });
 
-      console.log(data);
-
       if (data.error) {
-        console.log(data);
         window.localStorage.removeItem("loggedTokenEcommerce");
         return notification(data.message, "", "error");
       } else if (data) {
@@ -96,8 +93,6 @@ export const useUserLogin = (token) => {
       // else
     } catch (error) {
       console.error("useUserLogin google: catch " + error);
-      console.log("entra", error);
-
       if (error?.response?.data) {
         notification(error.response.data, "", "error");
       } else if (error.message) {
