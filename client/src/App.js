@@ -46,7 +46,7 @@ function App() {
   const dispatch = useDispatch();
   const { userLogin } = useUserLogin();
   const { pathname } = useLocation();
-  const signOut = useSignout();
+  const { signOut } = useSignout();
   const { isUserDataLoading, isTokenExpired } = useSelector(
     (state) => state.sessionReducer
   );
@@ -97,6 +97,8 @@ function App() {
 
   return (
     <div className="App" id="scroller">
+      <div id="white-board"></div>
+
       <NotificationMaster />
       {isUserDataLoading ? (
         <div className="g-container-totalvh">

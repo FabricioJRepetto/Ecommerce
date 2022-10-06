@@ -88,9 +88,6 @@ const Signupin = () => {
     try {
       const { data } = await axios.post(`/user/signin`, signinData);
 
-      if (!data) {
-      }
-
       if (data.error && data.message && Array.isArray(data.message)) {
         data.message.forEach((error) => notification(error, "", "warning"));
       } else if (data.error) {
@@ -101,7 +98,7 @@ const Signupin = () => {
         window.localStorage.setItem("loggedTokenEcommerce", data.token);
 
         //? Login con el hook
-        userLogin(data.token, true);
+        await userLogin(data.token, true);
       }
     } catch (error) {
       //! VOLVER A VER manejo de errores
@@ -112,8 +109,6 @@ const Signupin = () => {
       } else {
         notification("El servidor está fuera de línea", "", "warning");
       }
-
-      dispatch(loadingUserData(false));
     } finally {
       dispatch(loadingUserData(false));
     }
@@ -121,15 +116,22 @@ const Signupin = () => {
 
   //? LOGIN CON GOOGLE
   const handleCallbackResponse = async (response) => {
-    dispatch(loadingUserData(true));
-    //response.credential = Google user token
-    const userDecoded = jwt_decode(response.credential);
-    const googleToken = "google" + response.credential;
+    try {
+      dispatch(loadingUserData(true));
+      //response.credential = Google user token
+      const userDecoded = jwt_decode(response.credential);
+      const googleToken = "google" + response.credential;
 
-    //? Login con el hook
-    googleLogin(googleToken, userDecoded, true);
+      //? Login con el hook
+      googleLogin(googleToken, userDecoded, true);
 
-    window.localStorage.setItem("loggedTokenEcommerce", googleToken);
+      window.localStorage.setItem("loggedTokenEcommerce", googleToken);
+    } catch (error) {
+      console.log(error);
+      //! VOLVER A VER manejo de errores
+    } finally {
+      dispatch(loadingUserData(false));
+    }
   };
 
   useEffect(() => {

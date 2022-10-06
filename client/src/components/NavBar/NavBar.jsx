@@ -38,7 +38,7 @@ const NavBar = () => {
   const [showSearchBar, setShowSearchBar] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const location = useLocation();
-  const signOut = useSignout();
+  const { signOut, handleOff } = useSignout();
   const [widnowWidth, setWindowWidth] = useState(window.innerWidth);
   const [containerDisplay, setContainerDisplay] = useState(null);
   const menuMobileContainerMobile = useRef(null);
@@ -428,6 +428,7 @@ const NavBar = () => {
                                   onClick={() => [
                                     setProfileModal(false),
                                     signOut(),
+                                    handleOff(),
                                   ]}
                                 >
                                   <ChromaticText text="Salir" />
@@ -578,13 +579,16 @@ const NavBar = () => {
       >
         <ul>
           {!session && (
-            <li onClick={() => setShowMenu(false)}>
-              <ChromaticText
-                text={"Iniciar sesión"}
-                route={"signin"}
-                size={"1.1rem"}
-              />
-            </li>
+            <>
+              <li onClick={() => setShowMenu(false)}>
+                <ChromaticText
+                  text={"Iniciar sesión"}
+                  route={"signin"}
+                  size={"1.1rem"}
+                />
+              </li>
+              <div></div>
+            </>
           )}
           <li onClick={() => setShowMenu(false)}>
             <ChromaticText
@@ -702,10 +706,20 @@ const NavBar = () => {
               size={"1.1rem"}
             />
           </li>
-          <div></div>
-          <li onClick={() => [signOut(), setShowMenu(false)]}>
-            <ChromaticText text="Salir" size={"1.1rem"} />
-          </li>
+          {session && (
+            <>
+              <div></div>
+              <li
+                onClick={() => {
+                  signOut();
+                  handleOff();
+                  setShowMenu(false);
+                }}
+              >
+                <ChromaticText text="Salir" size={"1.1rem"} />
+              </li>
+            </>
+          )}
         </ul>
       </div>
     </>

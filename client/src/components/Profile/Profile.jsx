@@ -34,7 +34,7 @@ const Profile = () => {
   const navigate = useNavigate();
   const notification = useNotification();
   const { section } = useParams();
-  const signOut = useSignout();
+  const { signOut, handleOff } = useSignout();
 
   const [render, setRender] = useState(section);
   const [address, setAddress] = useState([]);
@@ -360,6 +360,7 @@ const Profile = () => {
               onClick={() => {
                 navigate("/");
                 signOut();
+                handleOff();
               }}
             >
               <span className="profile-svg-container profile-svg-rescale">
@@ -463,6 +464,7 @@ const Profile = () => {
               onClick={() => {
                 navigate("/");
                 signOut();
+                handleOff();
               }}
             >
               <span className="profile-svg-container profile-svg-rescale">
