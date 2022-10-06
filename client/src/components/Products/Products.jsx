@@ -55,7 +55,7 @@ const Products = () => {
     reloadFlag,
     brandsFlag,
   } = stateProductsReducer;
-  const { wishlist } = useSelector((state) => state.cartReducer);
+  const wishlist = useSelector((state) => state.cartReducer.wishlist);
   const location = useLocation();
 
   const [
@@ -636,7 +636,7 @@ const Products = () => {
                         location.pathname === "/admin/products") && (
                         <WishlistCard
                           productData={product}
-                          fav={wishlist.includes(product._id)}
+                          fav={wishlist?.includes(product._id)}
                           openDeleteProduct={openDeleteProduct}
                           openReactivateProduct={openReactivateProduct}
                           openDiscountProduct={openDiscountProduct}
