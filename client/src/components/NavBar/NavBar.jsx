@@ -593,7 +593,7 @@ const NavBar = () => {
           <li onClick={() => setShowMenu(false)}>
             <ChromaticText
               text={"Provider Store"}
-              route={"provider"}
+              route={"products"}
               size={"1.1rem"}
             />
           </li>

@@ -9,25 +9,33 @@
 
 .profile-publications-header {
     position: relative;
-    width: 100%;
+    width: 85%;
     text-align: center;
-    /* display: flex; */
-}
-
-.profile-publications-header>button {
-    margin-top: 0;
+    max-width: 900px;
 }
 
 .profile-publications-header>button {
     position: absolute;
-    top: -1rem;
-    right: 5%;
+    margin-top: 0;
+    top: 0;
+    right: 0;
 }
 
-@media (max-width: 1024px) {
-    .profile-publications-header>button {
-        top: -5rem;
-        right: 50%;
-        transform: translateX(50%);
+@media (max-width: 799px) {
+    .profile-publications-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
     }
+
+    .profile-option-selected-container .profile-publications-header h1 {
+        margin-bottom: 1rem;
+    }
+
+    .profile-publications-header>button {
+        position: relative;
+        align-self: flex-end;
+    }
+
 }
