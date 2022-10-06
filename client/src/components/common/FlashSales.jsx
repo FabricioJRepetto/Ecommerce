@@ -1,66 +1,70 @@
-import axios from 'axios'
-import React, { useEffect, useState } from 'react'
-import MiniCard from '../Products/MiniCard'
-import { useSelector } from 'react-redux'
-import CountDown from './CountDown'
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import MiniCard from "../Products/MiniCard";
+import { useSelector } from "react-redux";
+import CountDown from "./CountDown";
 
-import './FlashSales.css'
+import "./FlashSales.css";
 
 const FlashSales = () => {
-    const [loading, setLoading] = useState(true)
-    const [products, setProducts] = useState(false)
-    const {wishlist} = useSelector(state => state.cartReducer)
-    
-    useEffect(() => {
-        (async () => {
-            const { data } = await axios("/sales");
-            if (data) {
-                setProducts(data);
-                setLoading(false);
-            }
-        })();
-    }, [])
+  const [loading, setLoading] = useState(true);
+  const [products, setProducts] = useState(false);
+  const { wishlist } = useSelector((state) => state.cartReducer);
 
-    return (
-        <div className='flashsales-outter'>
-            <div className='flashsales-container'>
+  useEffect(() => {
+    (async () => {
+      const { data } = await axios("/sales");
+      if (data) {
+        setProducts(data);
+        setLoading(false);
+      }
+    })();
+  }, []);
 
-            <div className='flashsales-header'>
-                <div></div>
-                <p>Flash Sales</p>
-                <span className='bolt-container'>
-                    <span className='bolt-svg'></span>
-                </span>
-                <CountDown />
-                <div></div>
-            </div>
-
-            {loading
-                ? <div className='flashsales-products-inner'>
-                    <MiniCard loading={true}/>
-                    <MiniCard loading={true}/>
-                    <MiniCard loading={true}/>
-                    <MiniCard loading={true}/>
-                    <MiniCard loading={true}/>
-                    <MiniCard loading={true}/>
-                </div>
-                : products 
-                    ? <div className='flashsales-products-container'>
-                        <div className='flashsales-products-inner'>
-                            {React.Children.toArray(products.map(e => 
-                                <MiniCard
-                                    productData={e}
-                                    fav={wishlist.includes(e?._id)}
-                                    loading={false}/>
-                            ))}
-                        </div>
-                    </div>
-                  : <h1>Parece que estás en el momento y lugar equivocados... 👀</h1>                    
-                }
-
-            </div>
+  return !loading && !products ? (
+    <></>
+  ) : (
+    <div className="flashsales-outter">
+      <div className="flashsales-container">
+        <div className="flashsales-header">
+          <div></div>
+          <p>Flash Sales</p>
+          <span className="bolt-container">
+            <span className="bolt-svg"></span>
+          </span>
+          <CountDown />
+          <div></div>
         </div>
-    )
-}
 
-export default FlashSales
+        {loading ? (
+          <div className="flashsales-products-inner">
+            <MiniCard loading={true} />
+            <MiniCard loading={true} />
+            <MiniCard loading={true} />
+            <MiniCard loading={true} />
+            <MiniCard loading={true} />
+            <MiniCard loading={true} />
+          </div>
+        ) : (
+          products && (
+            <div className="flashsales-products-container">
+              <div className="flashsales-products-inner">
+                {React.Children.toArray(
+                  products.map((e) => (
+                    <MiniCard
+                      productData={e}
+                      fav={wishlist.includes(e?._id)}
+                      loading={false}
+                    />
+                  ))
+                )}
+              </div>
+            </div>
+          )
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default FlashSales;
