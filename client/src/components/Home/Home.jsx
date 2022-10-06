@@ -78,8 +78,8 @@ const Home = () => {
         />
       </div>
 
-    <div className="storecards-container">
-      <div className="storecards-inner">
+      <div className="storecards-container">
+        <div className="storecards-inner">
           <CategoryCard
             text="COMPUTACIÓN"
             image="https://res.cloudinary.com/dsyjj0sch/image/upload/v1663598262/computacion_iczryv.png"
@@ -108,61 +108,63 @@ const Home = () => {
             onClick={() => categorySearch("MLA1039")}
             hover
           />
-        </div>      
-    </div>
+        </div>
+      </div>
 
-    <div className="providerstore-banner"
-        onClick={() => navigate("/products")}>
+      <div
+        className="providerstore-banner"
+        onClick={() => navigate("/products")}
+      >
         <h1>||||||PROVIDER</h1>
         <h2>VER TODOS LOS PRODUCTOS ORIGINALES</h2>
         <div className="providerstore-banner-hover-div hover-2"></div>
         <div className="providerstore-banner-hover-div">
-            <h2 className="providerstore-banner-hover-h2">ORIGINALES</h2>
+          <h2 className="providerstore-banner-hover-h2">ORIGINALES</h2>
         </div>
         <video id="ps-header-bg-video" autoPlay loop muted>
-            <source
+          <source
             src={
-                "https://res.cloudinary.com/dsyjj0sch/video/upload/v1664729307/videos/STORE_croped_mini_juipok.mp4"
+              "https://res.cloudinary.com/dsyjj0sch/video/upload/v1664729307/videos/STORE_croped_mini_juipok.mp4"
             }
             type="video/mp4"
-            />
+          />
         </video>
-    </div>
+      </div>
 
       <FlashSales />
 
-      <div className="sales-seer">          
-         <h2>¿Te sientes con suerte?</h2>
-          <div className="ps-button-container">
-            <div name="ps-button-hover" id="ps-button02"></div>
-            <button
-              className="g-white-button"
-              onClick={() => navigate("/sales")}
-            >
-              BUSCADOR DE OFERTAS
-            </button>
-          </div>
+      <div className="sales-seer">
+        <h2>¿Te sientes con suerte?</h2>
+        <div className="ps-button-container">
+          <div name="ps-button-hover" id="ps-button02"></div>
+          <button className="g-white-button" onClick={() => navigate("/sales")}>
+            BUSCADOR DE OFERTAS
+          </button>
         </div>
+      </div>
 
       <Suggestions />
 
-      <div className="providerpremium-banner"
-            onClick={()=>navigate('/premium')}>
-          <div>
-            <h2 className="premium-banner-special-text">PROVIDER</h2>
-            <img
-              src="https://res.cloudinary.com/dsyjj0sch/image/upload/v1663041222/premium-02_ymsk9h.png"
-              alt=""
-            />
-            <p>
-              Pasamos cientos de horas diseñando, probando y perfeccionando cada
-              producto especialmente para ti. <br/>Si lo que buscas es algo único... <span className="provider-text">Provider Premium</span>.
-            </p>
-          </div>
+      <div
+        className="providerpremium-banner"
+        onClick={() => navigate("/premium")}
+      >
+        <div>
+          <h2 className="premium-banner-special-text">PROVIDER</h2>
+          <img
+            src="https://res.cloudinary.com/dsyjj0sch/image/upload/v1663041222/premium-02_ymsk9h.png"
+            alt=""
+          />
+          <p>
+            Pasamos cientos de horas diseñando, probando y perfeccionando cada
+            producto especialmente para ti. <br />
+            Si lo que buscas es algo único...{" "}
+            <span className="provider-text">Provider Premium</span>.
+          </p>
         </div>
+      </div>
 
       <PremiumPreview />
-
     </div>
   );
 };

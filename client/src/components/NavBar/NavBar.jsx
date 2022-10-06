@@ -38,7 +38,7 @@ const NavBar = () => {
   const [showSearchBar, setShowSearchBar] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const location = useLocation();
-  const signOut = useSignout();
+  const { signOut, handleOff } = useSignout();
   const [widnowWidth, setWindowWidth] = useState(window.innerWidth);
   const [containerDisplay, setContainerDisplay] = useState(null);
   const menuMobileContainerMobile = useRef(null);
@@ -428,6 +428,7 @@ const NavBar = () => {
                                   onClick={() => [
                                     setProfileModal(false),
                                     signOut(),
+                                    handleOff(),
                                   ]}
                                 >
                                   <ChromaticText text="Salir" />
@@ -708,7 +709,13 @@ const NavBar = () => {
           {session && (
             <>
               <div></div>
-              <li onClick={() => [signOut(), setShowMenu(false)]}>
+              <li
+                onClick={() => {
+                  signOut();
+                  handleOff();
+                  setShowMenu(false);
+                }}
+              >
                 <ChromaticText text="Salir" size={"1.1rem"} />
               </li>
             </>
