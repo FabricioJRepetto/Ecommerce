@@ -13,6 +13,7 @@ import { CloseIcon, ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 import ReturnButton from "../common/ReturnButton";
 import { useUserLogin } from "../../hooks/useUserLogin";
 import ForgotPassword from "./ForgotPassword";
+import { WarningIcon } from "@chakra-ui/icons";
 
 import "./Signupin.css";
 import "../../App.css";
@@ -64,9 +65,14 @@ const Signupin = () => {
 
       if (data.error && data.message && Array.isArray(data.message)) {
         data.message.forEach((error) => notification(error, "", "warning"));
+      } else if (data.error) {
+        notification(data.message, "", "warning");
       } else if (data.ok) {
         setSignSelect("signin");
         notification(data.message, "", "");
+        setValueSignup("email", "");
+        setValueSignup("password", "");
+        setValueSignup("repPassword", "");
       }
     } catch (error) {
       //! VOLVER A VER manejo de errores
@@ -172,6 +178,11 @@ const Signupin = () => {
     }, 300);
   };
 
+  const handleGuestUser = () => {
+    setValueSignin("email", "usuario@provider.com");
+    setValueSignin("password", "usuario@provider.com");
+  };
+
   return (
     <div className="signin-container">
       <div
@@ -210,6 +221,17 @@ const Signupin = () => {
               signSelect === "signin" ? "signin-fadeout" : "signin-fadein"
             }`}
           >
+            <div
+              onClick={handleGuestUser}
+              className="signin-guest-user-container"
+            >
+              <WarningIcon />
+              <p className="signin-guest-user-text">
+                Haz click aquí si quieres utilizar una cuenta ya creada
+                anteriormente por nosotros
+              </p>
+            </div>
+
             <>
               {!errorsSignin.email && (
                 <p className="g-hidden-placeholder">hidden</p>
@@ -545,7 +567,11 @@ const Signupin = () => {
 
       <Modal isOpen={isOpenLoader}>
         <div className="signin-container">
-          <div className="signin-inner forgot-container">
+          <div
+            className={`signin-inner forgot-container${
+              isOpenLoader ? " loader-opacity" : ""
+            }`}
+          >
             <LoaderBars />
           </div>
         </div>

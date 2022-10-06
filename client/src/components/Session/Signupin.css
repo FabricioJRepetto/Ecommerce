@@ -26,6 +26,10 @@
   transition: all 0.6s cubic-bezier(0.11, 0.05, 0, 1.01);
 }
 
+.loader-opacity {
+  opacity: 1;
+}
+
 @media (max-width:499px) {
   .signin-inner {
     width: 90%;
@@ -134,4 +138,25 @@
   transform: translate(0%);
   opacity: 1;
   transition: all .2s ease-out;
+}
+
+.signin-guest-user-container {
+  color: rgb(255, 187, 0);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: color .2s ease;
+}
+
+.signin-guest-user-container svg {
+  scale: 1.3;
+  margin-left: .5rem;
+}
+
+.signin-guest-user-text {
+  margin-left: .2rem;
+}
+
+.signin-guest-user-container:hover {
+  color: rgba(255, 187, 0, 0.603);
 }

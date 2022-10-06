@@ -106,16 +106,17 @@ const Profile = () => {
   }, [wl_id]);
 
   const reloadFunction = async () => {
-    setLoading(true);
+    setLoadingPubli(true);
     try {
       const { data } = await axios(`/user/products`);
+      console.log(data);
       setPublications(data.publications);
       setSales(data.sales);
     } catch (error) {
       console.log(error); //! VOLVER A VER manejo de errores
     } finally {
       dispatch(changeReloadFlag(false));
-      setLoading(false);
+      setLoadingPubli(false);
     }
   };
 

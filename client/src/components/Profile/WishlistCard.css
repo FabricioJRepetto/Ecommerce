@@ -150,7 +150,37 @@
   position: absolute;
   top: 1rem;
   left: 1rem;
+  width: fit-content;
+  padding: .2rem .2rem .1rem .2rem;
+  transform: skew(-5deg) scale(.8) translate(-10%, 50%);
   z-index: 20;
+  font-family: HelveticaNeueLTPro-Blk;
+  color: #111111;
+  background: linear-gradient(45deg,
+      #35a7ff 0%,
+      #7e54de 20%,
+      #f40259 60%,
+      #fea30d 100%);
+  background-size: 400%;
+  animation: gradientTextAnim 10s infinite;
+}
+
+.special-card-premium {
+  top: .2rem;
+  left: 1rem;
+  position: absolute;
+  z-index: 20;
+  height: 2rem;
+  width: 5.5rem;
+  transform: scale(1.3) translate(7%, 0%);
+  background: linear-gradient(45deg,
+      #35a7ff 0%,
+      #7e54de 20%,
+      #f40259 60%,
+      #fea30d 100%);
+  mask-image: url('../../assets/svg/PremiumSign.svg');
+  background-size: 400%;
+  animation: gradientTextAnim 15s infinite;
 }
 
 .wishlist-addcart-container {

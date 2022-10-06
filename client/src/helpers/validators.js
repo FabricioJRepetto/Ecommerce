@@ -67,7 +67,7 @@ export const validationProductFormSchema = yup.object().shape({
   price: yup
     .string()
     .required("Ingresa el precio")
-    .max(15, "El precio debe tener como máximo 15 dígitos")
+    .max(6, "El precio debe tener como máximo 6 dígitos")
     .test(
       "price",
       "El precio debe ser un número válido (ej: '1234.56')",

@@ -101,11 +101,15 @@ const Details = () => {
         setError(data.message);
       } else {
         if (data.product.premium) {
-            return navigate(`/premium/${id}`)
+          return navigate(`/premium/${id}`);
         }
 
         //? new details destructuring
-        let product = {...data.product, comments: data.comments, allowComment: data.allowComment }
+        let product = {
+          ...data.product,
+          comments: data.comments,
+          allowComment: data.allowComment,
+        };
         setData(product);
         setDescription(!!product.description);
         handleAttributesColumns();
@@ -173,16 +177,27 @@ const Details = () => {
               {data && <Galery imgs={data.images} ripple={true} />}
               <div className="details-head-section">
                 <div>
-                  <div className="details-title-container">    
-                    <p style={{color: '#656565'}}>{data.brand?.toUpperCase()}</p>
+                  <div className="details-title-container">
+                    <p style={{ color: "#656565" }}>
+                      {data.brand?.toUpperCase()}
+                    </p>
                     <h1>{data.name}</h1>
 
-                    {data.average_calification && data.average_calification !== '0' 
-                    ? <Calification num={parseFloat(data.average_calification)} hover/>
-                    : <p className="details-calification">Aún sin reseñas</p>}
+                    {data.average_calification &&
+                    data.average_calification !== "0" ? (
+                      <Calification
+                        num={parseFloat(data.average_calification)}
+                        hover
+                      />
+                    ) : (
+                      <p className="details-calification">Aún sin reseñas</p>
+                    )}
 
-                    {data.seller === 'PROVIDER' && <p>vendedor <b className="provider-text">PROVIDER</b></p>}
-
+                    {data.seller === "PROVIDER" && (
+                      <p>
+                        Vendedor <b className="provider-text">PROVIDER</b>
+                      </p>
+                    )}
                   </div>
 
                   <div className="details-price-section">
@@ -283,17 +298,19 @@ const Details = () => {
                           </div>
                         )
                     )
-                  )}                  
+                  )}
                 </div>
               </div>
             )}
           </div>
 
-          {(!/MLA/g.test(data._id)) && <Comments 
-            product_id={data._id}
-            comments={data.comments}
-            allowed={data.allowComment}/>}
-
+          {!/MLA/g.test(data._id) && (
+            <Comments
+              product_id={data._id}
+              comments={data.comments}
+              allowed={data.allowComment}
+            />
+          )}
         </div>
       )}
     </div>
