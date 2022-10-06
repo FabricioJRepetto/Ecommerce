@@ -64,9 +64,14 @@ const Signupin = () => {
 
       if (data.error && data.message && Array.isArray(data.message)) {
         data.message.forEach((error) => notification(error, "", "warning"));
+      } else if (data.error) {
+        notification(data.message, "", "warning");
       } else if (data.ok) {
         setSignSelect("signin");
         notification(data.message, "", "");
+        setValueSignup("email", "");
+        setValueSignup("password", "");
+        setValueSignup("repPassword", "");
       }
     } catch (error) {
       //! VOLVER A VER manejo de errores
@@ -545,7 +550,11 @@ const Signupin = () => {
 
       <Modal isOpen={isOpenLoader}>
         <div className="signin-container">
-          <div className="signin-inner forgot-container">
+          <div
+            className={`signin-inner forgot-container${
+              isOpenLoader ? " loader-opacity" : ""
+            }`}
+          >
             <LoaderBars />
           </div>
         </div>
