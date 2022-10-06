@@ -2,27 +2,15 @@ import React, { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 import { useVerifyAdmin } from "../../hooks/useVerifyAdmin";
 import "./AdminLayout.css";
+//import { useNotification } from "../../hooks/useNotification";
 
 const AdminLayout = () => {
   useVerifyAdmin();
   const [openMenu, setOpenMenu] = useState(false);
+  // const notification = useNotification();
 
   return (
     <div className="admin-layout-container component-fadeIn">
-      {/* <button onClick={() => notification("test notif standard", "", "")}>
-        Standard
-      </button>
-      <button onClick={() => notification("test notif success", "", "success")}>
-        Success
-      </button>
-      <button
-        onClick={() => notification("test notif error", "/admin", "error")}
-      >
-        Error
-      </button>
-      <button onClick={() => notification("test notif warning", "", "warning")}>
-        Warning
-      </button> */}
       <div
         className={`navbar-menu-mobile-background ${
           !openMenu
@@ -66,6 +54,28 @@ const AdminLayout = () => {
           ></div>
         </div>
       </div>
+
+      {/* <div className="buttonssss">
+        <button onClick={() => notification("test notif standard", "", "")}>
+          Standard
+        </button>
+        <button
+          onClick={() => notification("test notif success", "", "success")}
+        >
+          Success
+        </button>
+        <button
+          onClick={() => notification("test notif error", "/admin", "error")}
+        >
+          Error
+        </button>
+        <button
+          onClick={() => notification("test notif warning", "", "warning")}
+        >
+          Warning
+        </button>
+      </div> */}
+
       <div className="admin-option-selected-container">
         <Outlet />
       </div>

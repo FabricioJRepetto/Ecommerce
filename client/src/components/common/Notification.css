@@ -10,6 +10,10 @@
   width: 250px;
 }
 
+.notification-master-container-hide {
+  z-index: -1;
+}
+
 .notification-master-inner {
   position: relative;
   height: 100%;
